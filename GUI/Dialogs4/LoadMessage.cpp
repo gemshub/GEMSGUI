@@ -4,7 +4,6 @@
 // Implementation of LoadMessage class
 //
 // Copyright (C) 1996-2009  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -137,29 +136,29 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
                      break;
      }
 
-    pProgress->setToolTip( trUtf8( "Shows number of steps" ) );
+    pProgress->setToolTip( "Shows number of steps" );
     mainBox->addWidget( pProgress );
     
     QHBoxLayout* buttonBox = new QHBoxLayout();
  
     pStopStep = new QPushButton( "&Step", this );
-    pStopStep->setToolTip( trUtf8( "Make next iteration in Stepwise mode" ) );
+    pStopStep->setToolTip( "Make next iteration in Stepwise mode");
     connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStep()) );
     buttonBox->addWidget(pStopStep);
 
     pResume = new QPushButton( "&Resume", this );
-    pResume->setToolTip( trUtf8( "Make next iteration not in Stepwise mode" ) );
+    pResume->setToolTip("Make next iteration not in Stepwise mode" );
     connect( pResume, SIGNAL(clicked()), this, SLOT(CmResume()) );
     //pResume->hide();
     buttonBox->addWidget(pResume);
 
     pClose = new QPushButton( "&Cancel", this );
-    pClose->setToolTip( trUtf8( "Cancel calculations" ) );
+    pClose->setToolTip( "Cancel calculations" );
     connect( pClose, SIGNAL( clicked() ), this, SLOT( CmClose() ) );
     buttonBox->addWidget(pClose);
 
     pBreak = new QPushButton( "&Break", this );
-    pBreak->setToolTip( trUtf8( "Break calculations" ) );
+    pBreak->setToolTip( "Break calculations"  );
     connect( pBreak, SIGNAL( clicked() ), this, SLOT( CmBreak() ) );
     buttonBox->addWidget(pBreak);
 
@@ -189,7 +188,7 @@ void ProcessProgressDialog::slQuestion( void *result, QWidget* par, QString titl
 {
   cout << "Question " <<QThread::currentThreadId() << "  " << pThread   << endl;
   *((int *)result) = vfQuestion( par, 
-		  (const char*)title.toLatin1().data(), (const char*)mess.toLatin1().data());	
+          (const char*)title.toStdString(), (const char*)mess.toStdString());
   ThreadControl::wakeOne();	// let's calc
 }
 */

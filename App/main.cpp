@@ -4,7 +4,6 @@
 // Implementation and Declaration of TIntegApp class, function main()
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva, A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -60,7 +59,7 @@ TIntegApp::TIntegApp(int& c, char** v):
       argv(v)
 {
     //cout << "QSqlDatabase: available drivers:" <<
-    //      QSqlDatabase::drivers().join(QLatin1String(" ")).toLatin1().data() << endl;
+    //      QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString() << endl;
 
     shMemory.setKey("gems3");
     if( shMemory.attach())
@@ -110,14 +109,14 @@ main(int argc, char* argv[])
     try
     {
 //        cout << "QSqlDatabase: available drivers: %s" <<
-//              QSqlDatabase::drivers().join(QLatin1String(" ")).toLatin1().data() << endl;
+//              QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString() << endl;
         IntegApp.InitMainWindow();
         int res = IntegApp.exec();
         // clear static arrays in our order because they're interdependent
         // and static variables are destructed at random order
-        aMod.Clear();
-        rt.Clear();
-        aObj.Clear();
+        aMod.clear();
+        rt.clear();
+        aObj.clear();
 
         delete pVisorImp;
 

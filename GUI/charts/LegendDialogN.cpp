@@ -102,8 +102,9 @@ void LegendDialog::CmBackground()
     QColor cl = QColorDialog::getColor(backgroundColor, this);
 
     if( cl.isValid() )
-    {   QPalette pl = ui->pColor->palette();
-        pl.setColor( QPalette::Background, cl);
+    {
+        QPalette pl = ui->pColor->palette();
+        pl.setColor( QPalette::Window, cl );
         ui->pColor->setPalette(pl);
         backgroundColor = cl;
     }

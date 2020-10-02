@@ -4,7 +4,6 @@
 // Implementation of GEM2MTWizard class
 //
 // Copyright (C) 2005-2007  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -213,7 +212,7 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[32],
     TTable = nullptr;
    //    setFinishEnabled( WizardPage2, true);
     setupUi(this);
-    gstring str1= "GEM-Selektor GEM2MT Setup:  ";
+    string str1= "GEM-Selektor GEM2MT Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
@@ -327,6 +326,7 @@ pTaustep->setValue(Tau[2]);
     switch( flgs[30] )
     {
       case '3': moveGas->setChecked( true );
+               [[fallthrough]];
       case '1': moveAq->setChecked( true );
                break;
       case '2': moveGas->setChecked( true );
@@ -865,14 +865,14 @@ static equatSetupData eqMT( "xt", "yt", "qc", "qc" );
 void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData1;
 
-    GetListsnRT( -2, pgData,  scalarsList );
-    GetListsnRT( RT_GEM2MT, pgData,  scalarsList );
+    GetListsnRT( -2, pgData1,  scalarsList );
+    GetListsnRT( RT_GEM2MT, pgData1,  scalarsList );
 
     pageScript = new EquatSetup( page_6, eqMT,
-              RT_GEM2MT, pgData, scalarsList, outScript.c_str(), aXname, aYname  );
+              RT_GEM2MT, pgData1, scalarsList, outScript.c_str(), aXname, aYname  );
     verticalLayout_9->addWidget(pageScript);
 
 
@@ -886,38 +886,38 @@ void GEM2MTWizard::resetVTKList()
     uint jj;
     int nO;
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> scalarsList2;
-    TIArray<pagesSetupData> wnData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> scalarsList2;
+    std::vector<pagesSetupData> wnData;
 
     for(int ii=0; ii<38; ii++ )
-       scalarsList.Add( new pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
+       scalarsList.push_back( pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
     GetListsnRT( -2, wnData,  scalarsList2 );
 
-    pNdx.Add(f_bIC);
-    pNdx.Add(f_uIC);
-    pNdx.Add(f_xDC);
-    pNdx.Add(f_gam);
-    pNdx.Add(f_xPH);
-    pNdx.Add(f_mPS);
-    pNdx.Add(f_vPS);
-    pNdx.Add(f_xPA);
-    pNdx.Add(f_bSP);
-    pNdx.Add(f_aPH);
-    pNdx.Add(f_rMB);
-    pNdx.Add(f_dll);
-    pNdx.Add(f_dul);
-        pNdx.Add(f_amrl);
-        pNdx.Add(f_amru);
-    pNdx.Add(f_mPH);
-    pNdx.Add(f_vPH);
-    pNdx.Add(f_m_t);
-    pNdx.Add(f_con);
-    pNdx.Add(f_mju);
-    pNdx.Add(f_lga);
+    pNdx.push_back(f_bIC);
+    pNdx.push_back(f_uIC);
+    pNdx.push_back(f_xDC);
+    pNdx.push_back(f_gam);
+    pNdx.push_back(f_xPH);
+    pNdx.push_back(f_mPS);
+    pNdx.push_back(f_vPS);
+    pNdx.push_back(f_xPA);
+    pNdx.push_back(f_bSP);
+    pNdx.push_back(f_aPH);
+    pNdx.push_back(f_rMB);
+    pNdx.push_back(f_dll);
+    pNdx.push_back(f_dul);
+        pNdx.push_back(f_amrl);
+        pNdx.push_back(f_amru);
+    pNdx.push_back(f_mPH);
+    pNdx.push_back(f_vPH);
+    pNdx.push_back(f_m_t);
+    pNdx.push_back(f_con);
+    pNdx.push_back(f_mju);
+    pNdx.push_back(f_lga);
 
 
-    pNdx.Add(f_bPS);
+    pNdx.push_back(f_bPS);
 
     QString str;
     QListWidgetItem* item1;
@@ -927,29 +927,29 @@ void GEM2MTWizard::resetVTKList()
 
     // delete old data
     cPage = 0;
-    pgData.Add( new pagesSetupData("Scalars", -1));
+    pgData.push_back( pagesSetupData("Scalars", -1));
     pLists.append( listStatic  );
 
     listStatic->clear();
-    for(uint  ii=0; ii<scalarsList.GetCount(); ii++ )
+    for(size_t  ii=0; ii<scalarsList.size(); ii++ )
     {
-      stData.Add( new pagesSetupData(scalarsList[ii]));
+      stData.push_back( pagesSetupData(scalarsList[ii]));
       item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),  listStatic);
       item1->setToolTip( DataBR_fields[ii].comment.c_str() );
     }
 
 
     // init new pages
-    for(uint ii=0; ii<wnData.GetCount(); ii++ )
+    for(size_t ii=0; ii<wnData.size(); ii++ )
     {
         nO = wnData[ii].nObj;
 
         TCStringArray lst;
         TProfil::pm->getNamesList( nO, lst);
-        if( lst.GetCount() < 1 )  // undefined indexation
+        if( lst.size() < 1 )  // undefined indexation
           continue;
 
-        pgData.Add( new pagesSetupData(wnData[ii]));
+        pgData.push_back( pagesSetupData(wnData[ii]));
         str = QString("%1").arg( wnData[ii].pageName.c_str());
         item1 = new QListWidgetItem( str,  keywdList);
 
@@ -964,7 +964,7 @@ void GEM2MTWizard::resetVTKList()
         winStac->addWidget(page1);
 
         // insert items to list of indexes
-        for(  jj=0; jj<lst.GetCount(); jj++ )
+        for(  jj=0; jj<lst.size(); jj++ )
         {
           item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
         }
@@ -993,7 +993,7 @@ void GEM2MTWizard::changePage( int nPage )
     if( cPage <= 0 )
      lDesc->setText( "Static Objects List ");
     else
-      lDesc->setText( aObj[pgData[nPage].nObj].GetDescription(0,0).c_str());
+      lDesc->setText( aObj[pgData[nPage].nObj]->GetDescription(0,0).c_str());
 }
 
 void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelection & deselected)
@@ -1004,7 +1004,7 @@ void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelec
   // added selected
   foreach( ndx,  selected.indexes()  )
   {
-    gstring stt = ndx.data(Qt::DisplayRole).toString().toLatin1().data();
+    string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
     tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
   }
   // delete deselected
@@ -1020,7 +1020,7 @@ void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelec
 int GEM2MTWizard::tableFindRow( int nO, int ndx)
 {
   int nRow = -1;
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  for(size_t ii=0; ii<scriptData.size(); ii++ )
   {
    if(scriptData[ii].nObj == nO && scriptData[ii].nIdx == ndx )
       { nRow = ii; break; }
@@ -1031,12 +1031,12 @@ int GEM2MTWizard::tableFindRow( int nO, int ndx)
 void GEM2MTWizard::tableInsertRow( int nO, int ndx, const char * andName )
 {
      if(cPage == 0)
-     {  scriptData.Add( new scriptSetupData( cPage, nO, andName,
+     {  scriptData.push_back(  scriptSetupData( cPage, nO, andName,
              ndx, andName, "" ));
      }
        else
         {
-           scriptData.Add( new scriptSetupData( cPage, nO, aObj[nO].GetKeywd(),
+           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO]->GetKeywd(),
              ndx, andName, "" ));
        }
      listUpdate();
@@ -1045,7 +1045,7 @@ void GEM2MTWizard::tableInsertRow( int nO, int ndx, const char * andName )
 
 void GEM2MTWizard::tableDeleteRow( int nRow )
 {
-   scriptData.Remove(nRow);
+   scriptData.erase(scriptData.begin()+nRow);
     listUpdate();
 }
 
@@ -1059,7 +1059,7 @@ void GEM2MTWizard::listUpdate()
   QString buf;
 
   listVTK->clear();
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  for(size_t ii=0; ii<scriptData.size(); ii++ )
   {
       if( scriptData[ii].nObj >= 0 )
           buf = QString("%1(%2)").arg(
@@ -1078,7 +1078,7 @@ inline int GEM2MTWizard::findVTKarr( int vtk1  )
   //if( vtk1 == f_bPS )
   // return po strokam
 
-  for( uint ii=0; ii<pNdx.GetCount(); ii++ )
+  for( size_t ii=0; ii<pNdx.size(); ii++ )
    if( pNdx[ii] == vtk1 )
      return ii+1;
 
@@ -1088,32 +1088,32 @@ inline int GEM2MTWizard::findVTKarr( int vtk1  )
 void GEM2MTWizard::setVTK( TCIntArray vtk1, TCIntArray vtk2  )
 {
 
-  scriptData.Clear();
+  scriptData.clear();
 
-  for(uint ii=0; ii<vtk1.GetCount(); ii++ )
+  for(size_t ii=0; ii<vtk1.size(); ii++ )
   {
-    int cPage;
+    int cPage1;
     int ndx;
 
     if( vtk1[ii] < f_bIC )
-     { cPage = 0;
+     { cPage1 = 0;
        ndx = vtk1[ii];
      }
     else
       {
-         cPage =  findVTKarr( vtk1[ii] );
+         cPage1 =  findVTKarr( vtk1[ii] );
          ndx = vtk2[ii];
 
          if(vtk1[ii] == f_bPS) // bPS
-         { cPage +=  vtk2[ii]/TMulti::sm->GetPM()->N;
+         { cPage1 +=  vtk2[ii]/TMulti::sm->GetPM()->N;
            ndx = vtk2[ii]%TMulti::sm->GetPM()->N;
-           cPage = min(cPage, pLists.count()-1);
+           cPage1 = min(cPage1, pLists.count()-1);
          }
       }
 
-    if( cPage >=0 && ndx >=0 )
-    {       keywdList->setCurrentItem(keywdList->item(cPage ));
-            pLists[cPage]->item(ndx)->setSelected(true);
+    if( cPage1 >=0 && ndx >=0 )
+    {       keywdList->setCurrentItem(keywdList->item(cPage1 ));
+            pLists[cPage1]->item(ndx)->setSelected(true);
     }
   }
 }
@@ -1122,36 +1122,36 @@ void GEM2MTWizard::getVTK( TCIntArray& vtk1, TCIntArray& vtk2  )
 {
   uint page_;
   int vt_1;
-  vtk1.Clear();
-  vtk2.Clear();
+  vtk1.clear();
+  vtk2.clear();
   if( !c_PvnVTK->isChecked() )
    return; // select all
 
-  for(uint ii=0; ii<scriptData.GetCount(); ii++ )
+  for(size_t ii=0; ii<scriptData.size(); ii++ )
   {
       if( scriptData[ii].nObj >= 0 )
       {
         page_ = scriptData[ii].nWin;
-        if(page_ > pNdx.GetCount() )
+        if(page_ > pNdx.size() )
           vt_1 = f_bPS;
         else vt_1 = pNdx[page_-1];
 
 
         if( vt_1 == f_bPS ) //bPs
         {
-           vtk1.Add( vt_1 );
-           vtk2.Add(scriptData[ii].nIdx + pgData[page_].ndx*TMulti::sm->GetPM()->N);
+           vtk1.push_back( vt_1 );
+           vtk2.push_back(scriptData[ii].nIdx + pgData[page_].ndx*TMulti::sm->GetPM()->N);
         }
         else
         {
-           vtk1.Add( vt_1 );
-           vtk2.Add(scriptData[ii].nIdx);
+           vtk1.push_back( vt_1 );
+           vtk2.push_back(scriptData[ii].nIdx);
          }
       }
       else
       {
-        vtk1.Add( scriptData[ii].nIdx );
-        vtk2.Add( 0 );
+        vtk1.push_back( scriptData[ii].nIdx );
+        vtk2.push_back( 0 );
       }
   }
 
@@ -1167,7 +1167,7 @@ void GEM2MTWizard::setupPTArrays()
    //init P array
    getPdata( Pai );
    nP = getNpoints( Pai );
-   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
+   arP = static_cast<double *>(aObj[ o_mtpval]->Alloc( nP, 1, D_));
    cP = Pai[START_];
    for( ii=0; ii<nP; ii++ )
    {
@@ -1178,7 +1178,7 @@ void GEM2MTWizard::setupPTArrays()
    //init T array
    getTdata( Tai );
    nT = getNpoints( Tai );
-   arT = static_cast<double *>( aObj[ o_mtpval].Alloc( nT, 1, D_) );
+   arT = static_cast<double *>( aObj[ o_mtpval]->Alloc( nT, 1, D_) );
    cT = Tai[START_];
    for( ii=0; ii<nT; ii++ )
    {
@@ -1196,8 +1196,8 @@ void GEM2MTWizard::definePArray()
 
    nP = pPPoints->value();
   //init P array
-   nPs = aObj[ o_mtpval].GetN();
-   arP = static_cast<double *>(aObj[ o_mtpval].Alloc( nP, 1, D_));
+   nPs = aObj[ o_mtpval]->GetN();
+   arP = static_cast<double *>(aObj[ o_mtpval]->Alloc( nP, 1, D_));
 
    if( nPs==1 && nP>1 )
    {
@@ -1264,8 +1264,8 @@ void GEM2MTWizard::defineTArray()
        nT = pTPoints->value();
 
    //init T array
-   nTs =aObj[ o_mttval].GetN();
-   arT = static_cast<double *>(aObj[ o_mttval].Alloc( nT, 1, D_));
+   nTs =aObj[ o_mttval]->GetN();
+   arT = static_cast<double *>(aObj[ o_mttval]->Alloc( nT, 1, D_));
 
    if( nTs == 1 && nT >1 )
    {

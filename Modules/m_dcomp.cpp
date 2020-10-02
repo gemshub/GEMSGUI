@@ -46,10 +46,10 @@ TDComp::TDComp( uint nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("Phase state code of Dependent Component { a g f p s l m c i z y h }");
-    aFldKeysHelp.Add("ID of a group to which this Dependent Component belongs");
-    aFldKeysHelp.Add("Name of this Dependent Component (chemical species)");
-    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
+    aFldKeysHelp.push_back("Phase state code of Dependent Component { a g f p s l m c i z y h }");
+    aFldKeysHelp.push_back("ID of a group to which this Dependent Component belongs");
+    aFldKeysHelp.push_back("Name of this Dependent Component (chemical species)");
+    aFldKeysHelp.push_back("Thermodynamic data subset (TDS) code (e.g. database ID)");
     dcp=&dc[1];
     set_def(1);
     dcp=&dc[0];
@@ -61,70 +61,70 @@ TDComp::TDComp( uint nrt ):
 // link values to objects
 void TDComp::ods_link( int q)
 {
-    // aObj[ o_dcpst ].SetPtr( dc[q].pstate );
-    // aObj[ o_dcps ].SetPtr( dc[q].psymb );
-    // aObj[ o_dcn  ].SetPtr( dc[q].dcn );
-    // aObj[ o_dcatc ].SetPtr( dc[q].atyp );
+    // aObj[ o_dcpst ]->SetPtr( dc[q].pstate );
+    // aObj[ o_dcps ]->SetPtr( dc[q].psymb );
+    // aObj[ o_dcn  ]->SetPtr( dc[q].dcn );
+    // aObj[ o_dcatc ]->SetPtr( dc[q].atyp );
     // if( dcp == &dc[q] )   return;
-    aObj[ o_dcpct ].SetPtr( dc[q].pct );
-    aObj[ o_dcpdc ].SetPtr( &dc[q].PdcC );
-    aObj[ o_dcrmtm ].SetPtr( dc[q].rmtm );
-    aObj[ o_dczz ].SetPtr( &dc[q].Zz );
-    aObj[ o_dcmwt ].SetPtr( &dc[q].mwt );
-    aObj[ o_dcmvs ].SetPtr( dc[q].mVs );
-    aObj[ o_dcgs ].SetPtr( dc[q].Gs );
-    aObj[ o_dchs ].SetPtr( dc[q].Hs );
-    aObj[ o_dcss ].SetPtr( dc[q].Ss );
-    aObj[ o_dccps ].SetPtr( dc[q].Cps );
-    aObj[ o_dcptst ].SetPtr( &dc[q].Pst );
-    aObj[ o_dcstlam ].SetPtr(&dc[q].Smax );
-    aObj[ o_dcbeal ].SetPtr( &dc[q].Comp );
-    aObj[ o_dcder ].SetPtr( &dc[q].Der );
+    aObj[ o_dcpct ]->SetPtr( dc[q].pct );
+    aObj[ o_dcpdc ]->SetPtr( &dc[q].PdcC );
+    aObj[ o_dcrmtm ]->SetPtr( dc[q].rmtm );
+    aObj[ o_dczz ]->SetPtr( &dc[q].Zz );
+    aObj[ o_dcmwt ]->SetPtr( &dc[q].mwt );
+    aObj[ o_dcmvs ]->SetPtr( dc[q].mVs );
+    aObj[ o_dcgs ]->SetPtr( dc[q].Gs );
+    aObj[ o_dchs ]->SetPtr( dc[q].Hs );
+    aObj[ o_dcss ]->SetPtr( dc[q].Ss );
+    aObj[ o_dccps ]->SetPtr( dc[q].Cps );
+    aObj[ o_dcptst ]->SetPtr( &dc[q].Pst );
+    aObj[ o_dcstlam ]->SetPtr(&dc[q].Smax );
+    aObj[ o_dcbeal ]->SetPtr( &dc[q].Comp );
+    aObj[ o_dcder ]->SetPtr( &dc[q].Der );
     // Basic
-    aObj[ o_dcstr ].SetPtr( dc[q].pct );
-    aObj[ o_dcname ].SetPtr( dc[q].name );
-    aObj[ o_dcform ].SetPtr( dc[q].form );
-    aObj[ o_dcdim ].SetPtr( &dc[q].NeCp );
-    aObj[ o_dcfloat1 ].SetPtr( &dc[q].Zz );
-    aObj[ o_dcdbl1 ].SetPtr( dc[q].Gs );
-    aObj[ o_dcfloat2 ].SetPtr(dc[q].Ss );
+    aObj[ o_dcstr ]->SetPtr( dc[q].pct );
+    aObj[ o_dcname ]->SetPtr( dc[q].name );
+    aObj[ o_dcform ]->SetPtr( dc[q].form );
+    aObj[ o_dcdim ]->SetPtr( &dc[q].NeCp );
+    aObj[ o_dcfloat1 ]->SetPtr( &dc[q].Zz );
+    aObj[ o_dcdbl1 ]->SetPtr( dc[q].Gs );
+    aObj[ o_dcfloat2 ]->SetPtr(dc[q].Ss );
     // Dynamic
     // if( dc[q].NeCp > 0 ){
-    aObj[ o_dccpint ].SetPtr( dc[q].TCint );
-    aObj[ o_dccpint ].SetDim( 2, dc[q].NeCp );
-    aObj[ o_dccp ].SetPtr( dc[q].Cp );
-        aObj[ o_dccp ].SetDim( MAXCPCOEF, dc[q].NeCp );
+    aObj[ o_dccpint ]->SetPtr( dc[q].TCint );
+    aObj[ o_dccpint ]->SetDim( 2, dc[q].NeCp );
+    aObj[ o_dccp ]->SetPtr( dc[q].Cp );
+        aObj[ o_dccp ]->SetDim( MAXCPCOEF, dc[q].NeCp );
     // }
-    aObj[ o_dccpfs ].SetPtr( dc[q].CpFS );
-        aObj[ o_dccpfs ].SetDim( MAXCPFSCOEF, 1 );
-    aObj[ o_dchkf ].SetPtr( dc[q].HKFc );
-        aObj[ o_dchkf ].SetDim( MAXHKFCOEF, 1 );
-    aObj[ o_dcvt ].SetPtr( dc[q].Vt );
-        aObj[ o_dcvt ].SetDim( MAXVTCOEF, 1 );
-    aObj[ o_dccritpg ].SetPtr( dc[q].CPg );
-        aObj[ o_dccritpg ].SetDim( MAXCRITPARAM, 1 );
-    aObj[ o_dcodc ].SetPtr( dc[q].ODc );
-        aObj[ o_dcodc ].SetDim( MAXODCOEF, 1 );
+    aObj[ o_dccpfs ]->SetPtr( dc[q].CpFS );
+        aObj[ o_dccpfs ]->SetDim( MAXCPFSCOEF, 1 );
+    aObj[ o_dchkf ]->SetPtr( dc[q].HKFc );
+        aObj[ o_dchkf ]->SetDim( MAXHKFCOEF, 1 );
+    aObj[ o_dcvt ]->SetPtr( dc[q].Vt );
+        aObj[ o_dcvt ]->SetDim( MAXVTCOEF, 1 );
+    aObj[ o_dccritpg ]->SetPtr( dc[q].CPg );
+        aObj[ o_dccritpg ]->SetDim( MAXCRITPARAM, 1 );
+    aObj[ o_dcodc ]->SetPtr( dc[q].ODc );
+        aObj[ o_dcodc ]->SetDim( MAXODCOEF, 1 );
     //if( dc[q].Nft > 0 ) {
-    aObj[ o_dcftp ].SetPtr( dc[q].FtP );
-        aObj[ o_dcftp ].SetDim( 5, dc[q].Nft );
-    aObj[ o_dcftpb ].SetPtr( dc[q].FtBer );
-        // aObj[ o_dcftpb ].SetDim( 3, dc[q].Nft );  // only 1 Landau transition
-        aObj[ o_dcftpb ].SetDim( 3, 1 );
-    aObj[ o_dcfttyp ].SetPtr( dc[q].FtTyp );
-        aObj[ o_dcfttyp ].SetDim( 1, dc[q].Nft );
+    aObj[ o_dcftp ]->SetPtr( dc[q].FtP );
+        aObj[ o_dcftp ]->SetDim( 5, dc[q].Nft );
+    aObj[ o_dcftpb ]->SetPtr( dc[q].FtBer );
+        // aObj[ o_dcftpb ]->SetDim( 3, dc[q].Nft );  // only 1 Landau transition
+        aObj[ o_dcftpb ]->SetDim( 3, 1 );
+    aObj[ o_dcfttyp ]->SetPtr( dc[q].FtTyp );
+        aObj[ o_dcfttyp ]->SetDim( 1, dc[q].Nft );
     //}
     //if( dc[q].Nemp > 0 ) {
-    aObj[ o_dccemp ].SetPtr( dc[q].Cemp );
+    aObj[ o_dccemp ]->SetPtr( dc[q].Cemp );
     if( dc[q].Nemp > 0 )
-      aObj[ o_dccemp ].SetDim( dc[q].Nemp, 1 );
-      // aObj[ o_dccemp ].SetDim( dc[q].Nemp, MAXEOSPARAM );
+      aObj[ o_dccemp ]->SetDim( dc[q].Nemp, 1 );
+      // aObj[ o_dccemp ]->SetDim( dc[q].Nemp, MAXEOSPARAM );
     //}
     //if( dc[q].Nsd > 0 ) {
-    aObj[ o_dcsdref ].SetPtr( dc[q].sdref );
-        aObj[ o_dcsdref ].SetDim( dc[q].Nsd, 1 );
-    aObj[ o_dcsdval ].SetPtr( dc[q].sdval );
-        aObj[ o_dcsdval ].SetDim( dc[q].Nsd, 1 );
+    aObj[ o_dcsdref ]->SetPtr( dc[q].sdref );
+        aObj[ o_dcsdref ]->SetDim( dc[q].Nsd, 1 );
+    aObj[ o_dcsdval ]->SetPtr( dc[q].sdval );
+        aObj[ o_dcsdval ]->SetDim( dc[q].Nsd, 1 );
     //}
     dcp=&dc[q];
 }
@@ -135,37 +135,37 @@ void TDComp::dyn_set(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
              "E00DCrem: Invalid access to dc in dyn_set()");
-    memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
-    dc[q].TCint= (float *)aObj[ o_dccpint ].GetPtr();
-    dc[q].Cp =   (float *)aObj[ o_dccp ].GetPtr();
-    dc[q].CpFS = (float *)aObj[ o_dccpfs ].GetPtr();
-    dc[q].HKFc = (float *)aObj[ o_dchkf ].GetPtr();
-    dc[q].Vt =   (float *)aObj[ o_dcvt ].GetPtr();
-    dc[q].CPg =  (float *)aObj[ o_dccritpg ].GetPtr();
-    dc[q].ODc =  (float *)aObj[ o_dcodc ].GetPtr();
-    dc[q].FtP =  (float *)aObj[ o_dcftp ].GetPtr();
-    dc[q].FtBer =(float *)aObj[ o_dcftpb ].GetPtr();
-    dc[q].Cemp = (float *)aObj[ o_dccemp ].GetPtr();
-    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ].GetPtr();
-    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].GetPtr();
-    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].GetPtr();
+    memcpy( dcp->pstate, rt[nRT]->UnpackKey(), DC_RKLEN );
+    dc[q].TCint= (float *)aObj[ o_dccpint ]->GetPtr();
+    dc[q].Cp =   (float *)aObj[ o_dccp ]->GetPtr();
+    dc[q].CpFS = (float *)aObj[ o_dccpfs ]->GetPtr();
+    dc[q].HKFc = (float *)aObj[ o_dchkf ]->GetPtr();
+    dc[q].Vt =   (float *)aObj[ o_dcvt ]->GetPtr();
+    dc[q].CPg =  (float *)aObj[ o_dccritpg ]->GetPtr();
+    dc[q].ODc =  (float *)aObj[ o_dcodc ]->GetPtr();
+    dc[q].FtP =  (float *)aObj[ o_dcftp ]->GetPtr();
+    dc[q].FtBer =(float *)aObj[ o_dcftpb ]->GetPtr();
+    dc[q].Cemp = (float *)aObj[ o_dccemp ]->GetPtr();
+    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ]->GetPtr();
+    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->GetPtr();
+    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->GetPtr();
 
-    if( dc[q].Cp && aObj[ o_dccp ].GetN() != MAXCPCOEF )
+    if( dc[q].Cp && aObj[ o_dccp ]->GetN() != MAXCPCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Cp (remake needed)" );
 
-    if( dc[q].CpFS && aObj[ o_dccpfs ].GetN() != MAXCPFSCOEF )
+    if( dc[q].CpFS && aObj[ o_dccpfs ]->GetN() != MAXCPFSCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of aiCpFS (remake needed)" );
 
-    if( dc[q].HKFc && aObj[ o_dchkf ].GetN() != MAXHKFCOEF )
+    if( dc[q].HKFc && aObj[ o_dchkf ]->GetN() != MAXHKFCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_HKF (remake needed)" );
 
-    if( dc[q].Vt && aObj[ o_dcvt ].GetN() != MAXVTCOEF )
+    if( dc[q].Vt && aObj[ o_dcvt ]->GetN() != MAXVTCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_Vtp (remake needed)" );
 
-    if( dc[q].CPg && aObj[ o_dccritpg ].GetN() != MAXCRITPARAM )
+    if( dc[q].CPg && aObj[ o_dccritpg ]->GetN() != MAXCRITPARAM )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of CritPg (remake needed)" );
 
-    if( dc[q].ODc && aObj[ o_dcodc ].GetN() != MAXODCOEF )
+    if( dc[q].ODc && aObj[ o_dcodc ]->GetN() != MAXODCOEF )
         vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size of ai_ODc (remake needed)" );
 
 }
@@ -176,20 +176,20 @@ void TDComp::dyn_kill(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
              "E02DCrem: Invalid access to dc in dyn_kill()");
-    dc[q].TCint= (float *)aObj[ o_dccpint ].Free();
-    dc[q].Cp =    (float *)aObj[ o_dccp ].Free();
-    dc[q].CpFS =  (float *)aObj[ o_dccpfs ].Free();
-    dc[q].HKFc =  (float *)aObj[ o_dchkf ].Free();
-    dc[q].Vt =    (float *)aObj[ o_dcvt ].Free();
-    dc[q].CPg =   (float *)aObj[ o_dccritpg ].Free();
-    dc[q].ODc =   (float *)aObj[ o_dcodc ].Free();
-    dc[q].FtP =   (float *)aObj[ o_dcftp ].Free();
-    dc[q].FtBer = (float *)aObj[ o_dcftpb ].Free();
-    dc[q].Cemp =  (float *)aObj[ o_dccemp ].Free();
-    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ].Free();
-    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].Free();
-    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].Free();
-    dc[q].tprn = (char *)aObj[ o_dctprn ].Free();
+    dc[q].TCint= (float *)aObj[ o_dccpint ]->Free();
+    dc[q].Cp =    (float *)aObj[ o_dccp ]->Free();
+    dc[q].CpFS =  (float *)aObj[ o_dccpfs ]->Free();
+    dc[q].HKFc =  (float *)aObj[ o_dchkf ]->Free();
+    dc[q].Vt =    (float *)aObj[ o_dcvt ]->Free();
+    dc[q].CPg =   (float *)aObj[ o_dccritpg ]->Free();
+    dc[q].ODc =   (float *)aObj[ o_dcodc ]->Free();
+    dc[q].FtP =   (float *)aObj[ o_dcftp ]->Free();
+    dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Free();
+    dc[q].Cemp =  (float *)aObj[ o_dccemp ]->Free();
+    dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ]->Free();
+    dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->Free();
+    dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->Free();
+    dc[q].tprn = (char *)aObj[ o_dctprn ]->Free();
 }
 
 
@@ -206,80 +206,80 @@ void TDComp::dyn_new(int q)
 
     if( dc[q].PdcMK == S_OFF )
     {
-        dc[q].TCint = (float *)aObj[ o_dccpint ].Free();
-        dc[q].Cp = (float *)aObj[ o_dccp ].Free();
+        dc[q].TCint = (float *)aObj[ o_dccpint ]->Free();
+        dc[q].Cp = (float *)aObj[ o_dccp ]->Free();
     }
     else
     {
-        dc[q].TCint = (float *)aObj[ o_dccpint ].Alloc( 2, dc[q].NeCp, F_ );
-        dc[q].Cp = (float *)aObj[ o_dccp ].Alloc( MAXCPCOEF, dc[q].NeCp, F_ );
+        dc[q].TCint = (float *)aObj[ o_dccpint ]->Alloc( 2, dc[q].NeCp, F_ );
+        dc[q].Cp = (float *)aObj[ o_dccp ]->Alloc( MAXCPCOEF, dc[q].NeCp, F_ );
     }
 
     if( dc[q].PdcFT == S_OFF )
     {
-        dc[q].FtP = (float *)aObj[ o_dcftp ].Free();
-        dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ].Free();
+        dc[q].FtP = (float *)aObj[ o_dcftp ]->Free();
+        dc[q].FtTyp = (char (*)[MAXSYMB])aObj[ o_dcfttyp ]->Free();
         // if( CE == CTM_BER )
-        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ].Free();
+        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Free();
     }
     else
     {
-        dc[q].FtP = (float *)aObj[ o_dcftp ].Alloc( 5, dc[q].Nft, F_ );
-        dc[q].FtTyp=(char (*)[MAXSYMB])aObj[ o_dcfttyp ].Alloc( 1, dc[q].Nft, MAXSYMB );
+        dc[q].FtP = (float *)aObj[ o_dcftp ]->Alloc( 5, dc[q].Nft, F_ );
+        dc[q].FtTyp=(char (*)[MAXSYMB])aObj[ o_dcfttyp ]->Alloc( 1, dc[q].Nft, MAXSYMB );
         // if( CE == CTM_BER )
-        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ].Alloc( 3, dc[q].Nft, F_ );
+        //    dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Alloc( 3, dc[q].Nft, F_ );
     }
 
     if ( CM == CTPM_CPT && (CE == CTM_CHP || CE == CTM_BER) )  // added 26.02.2011 (TW)
-        dc[q].FtBer = (float *)aObj[ o_dcftpb ].Alloc( 3, 1, F_ );
+        dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Alloc( 3, 1, F_ );
     else
-        dc[q].FtBer = (float *)aObj[ o_dcftpb ].Free();
+        dc[q].FtBer = (float *)aObj[ o_dcftpb ]->Free();
 
     if( dc[q].Nemp <= 0 )
-        dc[q].Cemp = (float *)aObj[ o_dccemp ].Free();
+        dc[q].Cemp = (float *)aObj[ o_dccemp ]->Free();
     else
-        // dc[q].Cemp = (float *)aObj[ o_dccemp ].Alloc( MAXEOSPARAM, 1, F_ );
-      dc[q].Cemp = (float *)aObj[ o_dccemp ].Alloc( dc[q].Nemp, 1, F_ );
+        // dc[q].Cemp = (float *)aObj[ o_dccemp ]->Alloc( MAXEOSPARAM, 1, F_ );
+      dc[q].Cemp = (float *)aObj[ o_dccemp ]->Alloc( dc[q].Nemp, 1, F_ );
 
     if( dc[q].Nsd == 0 )
     {
-        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].Free();
-        dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].Free();
+        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->Free();
+        dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->Free();
     }
     else
     {
-        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ].Alloc( dc[q].Nsd, 1, V_SD_RKLEN );
-        dc[q].sdval=(char (*)[V_SD_VALEN])aObj[ o_dcsdval ].Alloc( dc[q].Nsd, 1, V_SD_VALEN );
+        dc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_dcsdref ]->Alloc( dc[q].Nsd, 1, V_SD_RKLEN );
+        dc[q].sdval=(char (*)[V_SD_VALEN])aObj[ o_dcsdval ]->Alloc( dc[q].Nsd, 1, V_SD_VALEN );
     }
 
     if( CM == CTPM_CPT && CV == CPM_AKI )
-        dc[q].CpFS = (float *)aObj[ o_dccpfs ].Alloc( MAXCPFSCOEF, 1, F_ );
+        dc[q].CpFS = (float *)aObj[ o_dccpfs ]->Alloc( MAXCPFSCOEF, 1, F_ );
     else
-        dc[q].CpFS = (float *)aObj[ o_dccpfs ].Free();
+        dc[q].CpFS = (float *)aObj[ o_dccpfs ]->Free();
 
     if( dc[q].PdcHKF == S_OFF )
-        dc[q].HKFc = (float *)aObj[ o_dchkf ].Free();
+        dc[q].HKFc = (float *)aObj[ o_dchkf ]->Free();
     else
-        dc[q].HKFc = (float *)aObj[ o_dchkf ].Alloc( MAXHKFCOEF, 1, F_ );
+        dc[q].HKFc = (float *)aObj[ o_dchkf ]->Alloc( MAXHKFCOEF, 1, F_ );
 
     if( dc[q].PdcVT == S_OFF  )
-        dc[q].Vt = (float *)aObj[ o_dcvt ].Free();
+        dc[q].Vt = (float *)aObj[ o_dcvt ]->Free();
     else
-        dc[q].Vt = (float *)aObj[ o_dcvt].Alloc( MAXVTCOEF, 1, F_ );
+        dc[q].Vt = (float *)aObj[ o_dcvt]->Alloc( MAXVTCOEF, 1, F_ );
 
     if( CV == CPM_GAS || CV == CPM_PRSV || CV == CPM_SRK || CV == CPM_PR78
             || CV == CPM_CORK || CV == CPM_STP )  // PRSV, SRK, PR78, CORK and STP fluid models
-        dc[q].CPg = (float *)aObj[ o_dccritpg ].Alloc( MAXCRITPARAM, 1, F_ );
+        dc[q].CPg = (float *)aObj[ o_dccritpg ]->Alloc( MAXCRITPARAM, 1, F_ );
     else
-        dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
+        dc[q].CPg = (float *)aObj[ o_dccritpg ]->Free();
 
     if( CV == CPM_VBM )     // Birch-Murnaghan coeffs, 04.04.2003
-        dc[q].ODc = (float *)aObj[ o_dcodc ].Alloc( MAXODCOEF, 1, F_ );
+        dc[q].ODc = (float *)aObj[ o_dcodc ]->Alloc( MAXODCOEF, 1, F_ );
     else
-        dc[q].ODc = (float *)aObj[ o_dcodc ].Free();
+        dc[q].ODc = (float *)aObj[ o_dcodc ]->Free();
 
     // if( dc[q].tprn == 0 )
-    //   dc[q].tprn = (char *)aObj[ o_dctprn ].Alloc( 1, 256, S_ );
+    //   dc[q].tprn = (char *)aObj[ o_dctprn ]->Alloc( 1, 256, S_ );
 }
 
 
@@ -288,7 +288,7 @@ void TDComp::set_def( int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
              "E04DCrem: Invalid access to dc in set_def()");
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     memcpy( dc[q].pct, aPa->pa.DCpct, 6 );
     memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );
     dc[q].Pst = aPa->pa.DRpst;
@@ -296,7 +296,7 @@ void TDComp::set_def( int q)
     dc[q].NeCp = 1;
     dc[q].Nft = dc[q].Nemp = 0;
     dc[q].Nsd = 1;
-    strncpy( dc[q].name, rt[rtNum()].FldKey(2), MAXDCNAME );
+    strncpy( dc[q].name, rt[rtNum()]->FldKey(2), MAXDCNAME );
     dc[q].name[MAXDCNAME] = '\0';
     if( dc[q].pstate[0] == CP_AQU )
     {
@@ -395,7 +395,7 @@ int TDComp::RecBuild( const char *key, int mode  )
     int CM, CE, CV;
     //  int q=0;
 
-    memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
+    memcpy( dcp->pstate, rt[nRT]->UnpackKey(), DC_RKLEN );
     switch( dcp->pstate[0] )
     {
     case  CP_LIQID: // EoS liquid component
@@ -496,7 +496,7 @@ AGAIN:
 
 
 // LROUND macro for Parcor algorithm
-#define LROUND(x)      ((long)((x)+.5))
+#define LROUND(x)      ( static_cast<float>(static_cast<long>((x)+.5)))
 
 
 //Recalculation of DComp record
@@ -600,10 +600,8 @@ NEXT:
             if( fabs( (S_1 - S)/S ) >= DEF_REL_DEV )
             {
                 G = H - T * ( S - foS );
-                vstr Msgb(20);
-                gstring s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
-                sprintf( Msgb, "%g", G );
-                s += gstring(Msgb);
+                std::string s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
+                s += std::to_string(G);
                 if( vfQuestion( window(), GetName(), s.c_str() ))
                     dcp->Gs[0] = G;
                 else
@@ -992,7 +990,7 @@ void TDComp::DCthermo( int q, int p )
 
 // #define LROUND(x)      ((long)((x)+.5))
 
-void TDComp::ParCor(  )
+void TDComp::ParCor()
 {
     double z, /*g, h,*/ s, v, cp, ak, rx, sigma, polar, Q, x, y, xN,
             conv, tr, theta, pfunk, eta, wabsh, gamma, alphaz=0.,  re,
@@ -1012,6 +1010,7 @@ void TDComp::ParCor(  )
 
     ak = 0.0;
     rx = 0.0;
+    re = 0.0;
     sigma = 0.0;
     polar = 2.0;
     Q = 5.903e-07;
@@ -1031,7 +1030,7 @@ void TDComp::ParCor(  )
     else
         gamma = 0.0;
 
-    if(z != 0.0)
+    if( noZero(z) )
     {
 
 /*        if(abs((int)z) == 1.0) alphaz = 72.;    // ???? 1/12/2006
@@ -1039,13 +1038,13 @@ void TDComp::ParCor(  )
         if(abs((int)z) == 3.0) alphaz = 211.;
         if(abs((int)z) == 4.0) alphaz = 286.;
 */
-        if(fabs(z) == 1.0) alphaz = 72.;    // ???? 1/12/2006
-        if(fabs(z) == 2.0) alphaz = 141.;
-        if(fabs(z) == 3.0) alphaz = 211.;
-        if(fabs(z) == 4.0) alphaz = 286.;
-        if(s != 0.0)
+        if( approximatelyEqual( fabs(z), 1.0) ) alphaz = 72.;    // ???? 1/12/2006
+        if( approximatelyEqual( fabs(z), 2.0) ) alphaz = 141.;
+        if( approximatelyEqual( fabs(z), 3.0) ) alphaz = 211.;
+        if( approximatelyEqual( fabs(z), 4.0) ) alphaz = 286.;
+        if(  noZero(s) )
         {
-            if(rx != 0.0)
+            if( noZero(rx) )
                 re = rx+z*gamma;
             else
             {
@@ -1057,12 +1056,11 @@ void TDComp::ParCor(  )
         }
         else
         {
-            if(rx != 0.0)
+            if( noZero( rx ))
             {
                 re = rx+z*gamma;
                 // s = z*z* (eta* y - 100.) / re + alphaz;
             }
-
             else
                 Error("E15DCrun: PARCOR error",  "If Z!=0, either S or Rx must be given!" );
         }
@@ -1071,7 +1069,7 @@ void TDComp::ParCor(  )
     }
     else
     {
-        if( polar == 2.)
+        if( approximatelyEqual( polar, 2.) )
             wcon = -0.038*100000.;
     }
 
@@ -1089,11 +1087,11 @@ void TDComp::ParCor(  )
     // sn = s-ss;
 
     // the correlations for EOS parameters begin
-    if(ak != 0.0)
+    if( noZero( ak ) )
     {
         aks=wcon*xN*conv;
         akn=ak-aks;
-        if(sigma != 0.0)
+        if( noZero( sigma ) )
         {
             a2 = 17.19e4 * akn+421.1;
 
@@ -1119,7 +1117,7 @@ void TDComp::ParCor(  )
     }
     else
     {
-        if(sigma != 0.0)
+        if( noZero(sigma) )
         {
             a1 = (1.3684e-2)*vn + 0.1765;
             ia1 = LROUND(a1*100000.);
@@ -1193,11 +1191,10 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
     if( ! MessageToSave() )
 	return;
 
-    vstr key( db->KeyLen(), key_);
     TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key);
+    dbKey.SetKey(key_);
     dbKey.SetFldKey(3,"*");
-    gstring str_key( dbKey.UnpackKey(), 0, db->KeyLen());
+    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
     std::string msg;
 
@@ -1206,6 +1203,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
     case MANY_:    // Get Key list
         db->GetKeyList(  str_key.c_str(), aDclist, anRDc );
         db->Get(anRDc[0]);
+        [[fallthrough]];
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();
@@ -1218,16 +1216,16 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += std::string( key.p, 0, db->KeyLen() );
+            msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
-            if(pVisor->ProfileMode == true)
+            if( pVisor->ProfileMode )
                 Error( GetName(), msg.c_str() );
             msg +=  "Create a new record?";
             if( !vfQuestion(0, GetName(), msg ))
                 Error( GetName(), "E17DCrun: New record creation dismissed...");
-            gstring str = key.p;
+            std::string str = key_;
 
-            if( str.find_first_of("*?" ) != gstring::npos)  // pattern
+            if( str.find_first_of("*?" ) != std::string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
                                       "Enter a new record key, please ", KEY_NEW);
             if(  str.empty() )
@@ -1235,8 +1233,8 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), " E19DCrun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT,0,true);
-            vstr str1( db->KeyLen(), db->UnpackKey());
-            check_input( str1 );
+            auto str1 = string( db->UnpackKey(), 0, db->KeyLen());
+            check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString(" W20DCrun: Remake of the new record finished OK. "
                       " It is recommended to re-calculate the data.");
@@ -1250,7 +1248,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
-        msg += std::string( key.p, 0, db->KeyLen() );
+        msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }
@@ -1258,7 +1256,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
 
 
 void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
- elmWindowData el_data, dcSetupData st_data, TCStringArray& SDlist)
+ elmWindowData el_data, dcSetupData st_data, std::set<std::string>& SDlist)
 {
     TCIntArray anR;
     TCStringArray aDCkey;
@@ -1269,19 +1267,17 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
 
      // delete the equvalent keys
      TCStringArray aICkey_new;         // 30/11/2006
-     aICkey_new.Clear();
+     aICkey_new.clear();
 
    // get list of records
     db->GetKeyList( "*:*:*:*:", aDCkey, anR );
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i;
-    int itmpl;
-    uint j;
+    size_t i, j, itmpl;
     TFormula aFo;
 
-    for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
+    for(size_t ii=0; ii<aDCkey.size(); ii++ )
     {
 
      // Phase Filters
@@ -1310,11 +1306,11 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
       continue;
 
       // test the same component (overload) 30/11/2006
-      gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
-      for( j=0; j<aICkey_new.GetCount(); j++ )
+      std::string stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
+      for( j=0; j<aICkey_new.size(); j++ )
          if( stt ==  aICkey_new[j])
             break;
-      if( j<aICkey_new.GetCount() )
+      if( j<aICkey_new.size() )
             continue;
 
      RecInput( aDCkey[ii].c_str() );
@@ -1323,14 +1319,14 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
      itmpl=0;
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           break;
-       if( j == el_data.ICrds.GetCount() )
+       if( j == el_data.ICrds.size() )
         break;
 
        //template
-       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+       for( j=0; j<el_data.oldIComps.size(); j++ )
         if( !memcmp( el_data.oldIComps[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           { itmpl++;
             break;
@@ -1342,12 +1338,12 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
      // add cnt
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           cnt[j]++;
      }
      // test Vol
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), "Vol", 3 ) )
           cnt[j]++;
 
@@ -1355,33 +1351,33 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
         continue;
 
      // changing record key
-     gstring str= gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+     std::string str= std::string(db->FldKey( 3 ), 0, db->FldLen( 3 ));
     ChangeforTempl( str,  st_data.from_templ,
                     st_data.to_templ, db->FldLen( 3 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
      // Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
-     {  aICkey_new.Add( stt );  // 30/11/2006
+     {  aICkey_new.push_back( stt );  // 30/11/2006
         for(int isd=0; isd<dcp->Nsd; isd++)
-        { gstring sdkey = gstring( dcp->sdref[isd], 0,V_SD_RKLEN);
-          sdkey.strip();
-          SDlist.AddUnique( sdkey );
+        { std::string sdkey = std::string( dcp->sdref[isd], 0,V_SD_RKLEN);
+          strip( sdkey );
+          SDlist.insert( sdkey );
         }
      }
    }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 

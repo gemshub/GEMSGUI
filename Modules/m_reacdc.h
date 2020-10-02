@@ -194,7 +194,7 @@ public:
     void RCthermo( int q, int p );
 
     void CopyRecords( const char * prfName, TCIntArray& cnt,
-    elmWindowData el_data, rdSetupData st_data, TCStringArray& SDlist );
+    elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist );
 
 };
 

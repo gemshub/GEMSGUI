@@ -4,7 +4,6 @@
 // Implementation of TValBase, TVal and its templates
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -191,6 +190,53 @@ template<> const char* TVal<char>::PATTERN_SET()
     return  "%c%s";
 }
 
+template<>
+bool TVal<double>::IsAny(int ndx) const
+{
+    if( approximatelyEqual( static_cast<double*>(ptr)[ndx], ANY() ) )
+        return true;
+    return false;
+}
+
+template<>
+bool TVal<double>::IsEmpty(int ndx) const
+{
+    if( approximatelyEqual( static_cast<double*>(ptr)[ndx], EMPTY()) )
+        return true;
+    return false;
+}
+
+template<>
+bool TVal<float>::IsAny(int ndx) const
+{
+    if( approximatelyEqual( static_cast<float*>(ptr)[ndx], ANY() ) )
+        return true;
+    return false;
+}
+
+template<>
+bool TVal<float>::IsEmpty(int ndx) const
+{
+    if( approximatelyEqual( static_cast<float*>(ptr)[ndx], EMPTY()) )
+        return true;
+    return false;
+}
+
+template<>
+string
+TVal<double>::GetString(int ndx) const
+{
+    if( IsEmpty(ndx) )
+        return S_EMPTY;
+    if( IsAny(ndx) )
+        return S_ANY;
+
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
+    sprintf(vbuf, "%.*lg" , doublePrecision, static_cast<double*>(ptr)[ndx]);
+
+    return vbuf;
+}
+
 // explicit instantiation of the templates
 
 //template struct TVal<short>;
@@ -221,7 +267,7 @@ TValFixString::SetString(const char* s, int ndx)
 bool
 TValString::SetString(const char* s, int )
 {
-    int l = strlen(s);
+    int l = static_cast<int>( strlen(s) );
     if( l > size && dynamic )
         Alloc(l);
 
@@ -244,7 +290,7 @@ template<>
 bool
 TVal<unsigned char>::SetString(const char* s, int ndx)
 {
-    gstring ss = s;
+    string ss = s;
     ss.strip();
     if( *ss.empty() ||* ss==S_EMPTY )
     {
@@ -258,7 +304,7 @@ TVal<unsigned char>::SetString(const char* s, int ndx)
         return true;
     }
 
-    vstr sv(strlen(s)+1);
+    vvstr sv(strlen(s)+1);
     unsigned short v;
     if( sscanf(ss.c_str(), "%hu%s", &v, sv.p ) != 1 )
         return false;
@@ -275,8 +321,8 @@ template<>
 bool
 TVal<signed char>::SetString(const char* s, int ndx)
 {
-    gstring ss = s;
-    ss.strip();
+    string ss = s;
+    strip( ss );
     if( /*ss.empty() ||*/ ss==S_EMPTY )
     {
         static_cast<signed char*>(ptr)[ndx] = EMPTY();
@@ -289,9 +335,9 @@ TVal<signed char>::SetString(const char* s, int ndx)
         return true;
     }
 
-    vstr sv(strlen(s)+1);
+    auto sv = std::make_shared<char>( ss.length()+3 );
     signed short v;
-    if( sscanf(ss.c_str(), "%hd%s", &v, sv.p ) != 1 )
+    if( sscanf(ss.c_str(), "%hd%s", &v, sv.get() ) != 1 )
         return false;
     if( v<-127 || v>127 )
         return false;
@@ -304,7 +350,7 @@ TVal<signed char>::SetString(const char* s, int ndx)
 /*
 template<>
 inline
-gstring
+string
 TVal<double>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
@@ -312,10 +358,10 @@ TVal<double>::GetString(int ndx) const
     if( IsAny(ndx) )
         return S_ANY;
 
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     sprintf(vbuf, "%.*lg" , doublePrecision, ((double*)ptr)[ndx]);
 
-    return vbuf.p;
+    return vbuf;
 }*/
 #endif
 

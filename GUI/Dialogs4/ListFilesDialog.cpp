@@ -4,7 +4,6 @@
 // Implementation of ListFilesDialog class
 //
 // Copyright (C) 1996-2007  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -33,7 +32,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
     setupUi(this);
 
     //setWindowTitle(prfName);
-    gstring label = "Please, check database files to be linked to Modeling Project ";
+    string label = "Please, check database files to be linked to Modeling Project ";
              label += prfName;
     pLabel->setText( tr(label.c_str()) );
 
@@ -55,20 +54,20 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
     QTreeWidgetItem* pFile;
     size_t pos1, pos2;
 
-    for( i=0; i<aMod.GetCount(); i++)
+    for( i=0; i<aMod.size(); i++)
     {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pkern );
-        pMod->setText(0, rt[i].GetKeywd());
+        pMod->setText(0, rt[i]->GetKeywd());
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
-        rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
-        for( ii=0; ii<names.GetCount(); ii++ )
+        rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
+        for( ii=0; ii<names.size(); ii++ )
         {
           // select only DB.default files
-          if( names[ii].find( pVisor->sysDBDir())== gstring::npos )
+          if( names[ii].find( pVisor->sysDBDir())== string::npos )
               continue;
           // get 2 colums
           pos1 = names[ii].find_first_of(" ");
@@ -76,25 +75,25 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
           pFile = new QTreeWidgetItem( pMod );
           pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
           pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
-          if( sel.Find(indx[ii]) >= 0 )
+          if( findIndex<int>( sel, indx[ii]) >= 0 )
                pFile->setSelected( true );
         }
     }
 
-    for( i=0; i<aMod.GetCount(); i++)
+    for( i=0; i<aMod.size(); i++)
     {
-        if( aMod[i].IsSubModule() )
+        if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pprf);
-        pMod->setText(0, rt[i].GetKeywd());
+        pMod->setText(0, rt[i]->GetKeywd());
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
-        rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
-        for( ii=0; ii<names.GetCount(); ii++ )
+        rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
+        for( ii=0; ii<names.size(); ii++ )
         {
           // select only Projecte files
-          if( names[ii].find( prfName/*Path*/ ) == gstring::npos )
+          if( names[ii].find( prfName/*Path*/ ) == string::npos )
               continue;
           // get 2 colums
           pos1 = names[ii].find_first_of(" ");
@@ -102,7 +101,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
           pFile = new QTreeWidgetItem( pMod );
           pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
           pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
-          if( sel.Find(indx[ii]) >= 0 )
+          if(  findIndex<int>( sel, indx[ii] ) >= 0 )
                pFile->setSelected( true );
         }
     }
@@ -130,8 +129,8 @@ void ListFilesDialog::CmHelp()
 void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
 {
 
-    aFls.Clear();
-    aCnt.Clear();
+    aFls.clear();
+    aCnt.clear();
 
     int ii, jj, nF, cnt = 0;
     int npMod1 = pkern->childCount();
@@ -152,9 +151,9 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         gstring col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toStdString();
          cnt++;
-         aFls.Add( col.c_str() );
+         aFls.push_back( col.c_str() );
        }
       }
 
@@ -165,12 +164,12 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
         pFile = pMod->child( jj );
        if( pFile->isSelected() )
        {
-         gstring col =pFile->text( 0 ).toLatin1().data();
+         string col =pFile->text( 0 ).toStdString();
          cnt++;
-         aFls.Add( col.c_str() );
+         aFls.push_back( col.c_str() );
        }
       }
-      aCnt.Add( cnt );
+      aCnt.push_back( cnt );
 
     }
 

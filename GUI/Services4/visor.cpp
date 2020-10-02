@@ -4,7 +4,6 @@
 // Implementation of TVisor class, setup and config functions
 //
 // Copyright (C) 1996-2012 A.Rysin,S.Dmytriyeva,D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -19,8 +18,11 @@
 //
 #include <qapplication.h>
 #include <iostream>
+#ifdef __unix
 #include <unistd.h>
-//using namespace std;
+//#else
+//#include <io.h>
+#endif
 
 #include <QDir>
 #include <QString>
@@ -91,10 +93,10 @@ TVisor::TVisor(int c, char *v[]):
         strcpy(rest, RESOURCES_DIR);
 
 		if( work_path[0] == '.' && work_path[1] == '/' )
-			SysGEMDir = gstring(cur_dir) + (work_path+1);
+            SysGEMDir = string(cur_dir) + (work_path+1);
 		else
 		if( work_path[0] != '/' )
-			SysGEMDir = (gstring(cur_dir) + "/") + work_path;
+            SysGEMDir = (string(cur_dir) + "/") + work_path;
 		else
 			SysGEMDir = work_path;
 	}
@@ -109,13 +111,13 @@ TVisor::TVisor(int c, char *v[]):
        // By default: /Resources in the same dir as the exe file;
        //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
-    SysGEMDir = dirExe.toLatin1().data();
+    SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
-    ServerGems3Dir = dirExe.toLatin1().data();
+    ServerGems3Dir = dirExe.toStdString();
     QDir dirUp(dirExe);
     if( dirUp.cdUp() )
          dirExe = dirUp.path(); // + QDir::separator();
-    LocalDir = dirExe.toLatin1().data();
+    LocalDir = dirExe.toStdString();
     UserGEMDir = localDir() + DEFAULT_USER_DIR;
 #endif // __unix
 
@@ -124,12 +126,12 @@ TVisor::TVisor(int c, char *v[]):
       // By default: /Resources in the same dir as the exe file;
       //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
-    SysGEMDir = dirExe.toLatin1().data();
+    SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
     QDir dirUp(dirExe);
     if( dirUp.cdUp() )
          dirExe = dirUp.path();
-    LocalDir = dirExe.toLatin1().data();
+    LocalDir = dirExe.toStdString();
     UserGEMDir = localDir() + DEFAULT_USER_DIR;
 // cout << SysGEMDir.c_str() << endl;
 // cout << UserGEMDir.c_str() << endl;
@@ -208,8 +210,8 @@ TVisor::TVisor(int c, char *v[]):
 
 	// let's try to find resources by path of the executable
 	getcwd(cur_dir, PATH_MAX);
-	LocalDocDir = gstring(cur_dir) + gstring(LocalDocDir,1);
-        RemoteHTML = gstring(cur_dir) + gstring(RemoteHTML,1);
+    LocalDocDir = string(cur_dir) + string(LocalDocDir,1);
+        RemoteHTML = string(cur_dir) + string(RemoteHTML,1);
      }
 #endif
 #endif
@@ -268,7 +270,7 @@ TVisor::Setup()
     }
 
     // check home dir
-    gstring dir = userGEMDir();
+    string dir = userGEMDir();
     QDir userGEM(dir.c_str());
 
     bool firstTimeStart = !userGEM.exists();
@@ -281,9 +283,9 @@ TVisor::Setup()
 
 //#ifdef __unix
          // build Library
-        gstring dirUp = gstring( dir,0, dir.length()-1);
+        string dirUp = string( dir,0, dir.length()-1);
         size_t pos = dirUp.rfind("/");
-        if( pos != gstring::npos )
+        if( pos != string::npos )
         {
           dirUp = dirUp.substr(0,pos);
           QDir userGEMUP(dirUp.c_str());
@@ -301,7 +303,7 @@ TVisor::Setup()
             throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
 
         // copy default project
-        gstring cmd;
+        string cmd;
 
 #ifdef __unix
         cmd = "cp -r ";
@@ -311,8 +313,8 @@ TVisor::Setup()
 
         cout << "Creating GEMS user directory:  " << userProfDir().c_str() << endl;
 #else
-gstring sprdir = sysProfDir();
-gstring uprdir = userProfDir();
+string sprdir = sysProfDir();
+string uprdir = userProfDir();
 QDir sysProjD( sprdir.c_str() );
 QDir usrProjD( uprdir.c_str() );
 QString sPD = sysProjD.absolutePath();
@@ -325,7 +327,7 @@ QString uPD = usrProjD.absolutePath();
         cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
         cmd += "\" /e /y";
 
-        gstring fname = pVisor->userGEMDir();
+        string fname = pVisor->userGEMDir();
                 fname += "out.log";
         ofstream fdbg(fname.c_str());
         fdbg << "Creating GEMS user directory:  " << cmd.c_str() << endl;
@@ -341,18 +343,18 @@ QString uPD = usrProjD.absolutePath();
     else
         fromDAT(default_config, default_settings);
 
-    aObj[o_n0w_mps].SetPtr(0);
-    aObj[o_n1w_mps].SetPtr(0);
-    aObj[o_n0w_vps].SetPtr(0);
-    aObj[o_n1w_vps].SetPtr(0);
-    aObj[o_n0w_m_t].SetPtr(0);
-    aObj[o_n1w_m_t].SetPtr(0);
-    aObj[o_n0w_con].SetPtr(0);
-    aObj[o_n1w_con].SetPtr(0);
-    aObj[o_n0w_mju].SetPtr(0);
-    aObj[o_n1w_mju].SetPtr(0);
-    aObj[o_n0w_lga].SetPtr(0);
-    aObj[o_n1w_lga].SetPtr(0);
+    aObj[o_n0w_mps]->SetPtr(0);
+    aObj[o_n1w_mps]->SetPtr(0);
+    aObj[o_n0w_vps]->SetPtr(0);
+    aObj[o_n1w_vps]->SetPtr(0);
+    aObj[o_n0w_m_t]->SetPtr(0);
+    aObj[o_n1w_m_t]->SetPtr(0);
+    aObj[o_n0w_con]->SetPtr(0);
+    aObj[o_n1w_con]->SetPtr(0);
+    aObj[o_n0w_mju]->SetPtr(0);
+    aObj[o_n1w_mju]->SetPtr(0);
+    aObj[o_n0w_lga]->SetPtr(0);
+    aObj[o_n1w_lga]->SetPtr(0);
 
     // Sveta permission to change data in special DB files
     if (option_f)
@@ -367,7 +369,7 @@ const char SigEND[lnWINSIG + 1] = "sX";
 void
 TVisor::load()
 {
-    gstring fname = sysGEMDir() + OBJECT_INI;
+    string fname = sysGEMDir() + OBJECT_INI;
 // cout << "fname: " << fname.c_str() << endl;
     aObj.load(fname.c_str());
 
@@ -381,16 +383,10 @@ TVisor::load()
     fname = sysGEMDir();
     fname += VISOR_INI;
 
-#ifdef __unix
-    TConfig cnf(fname.c_str(), ' ');
-#else
-    TConfig& cnf = *new TConfig(fname.c_str(), ' ');
-#endif
+    TConfig cnf( fname, ' ');
+    for (size_t ii = 0; ii < aMod.size(); ii++)
+     aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
 
-    for (uint ii = 0; ii < aMod.GetCount(); ii++)
-     aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
-
-    cnf.close(); // close vis_cn.dat file after reading it
     toDAT();
     toModCFG();
     toWinCFG();
@@ -399,7 +395,7 @@ TVisor::load()
 void
 TVisor::toDAT()
 {
-    gstring fname = sysGEMDir();
+    string fname = sysGEMDir();
     fname += VISOBJ_DAT;
 
     ofstream obj_dat(fname.c_str(), ios::binary | ios::out);
@@ -417,10 +413,10 @@ TVisor::toDAT()
     // begin signature
     visor_dat << SigBEG;
 
-    int n = aMod.GetCount();
+    int n = aMod.size(); // Do not change type, used in configuration
     visor_dat.write((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aWinInfo[ii].toDAT(visor_dat);
+        aWinInfo[ii]->toDAT(visor_dat);
 
     // end signature
     visor_dat << SigEND;
@@ -437,7 +433,7 @@ const char *vSigTITLE = "Configurator";
 void
 TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_v*/)
 {
-    gstring fname = sysGEMDir() + VISOBJ_DAT;
+    string fname = sysGEMDir() + VISOBJ_DAT;
 
     // objects' DAT
     ifstream obj_dat(fname.c_str(), ios::binary | ios::in);
@@ -494,9 +490,9 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
     // if( n!= aMod.GetCount() )
     //   throw TError();
 
-    aWinInfo.Clear(n + 4);
+    aWinInfo.clear();
     for (int ii = 0; ii < n; ii++)
-        aWinInfo.Add(new CWinInfo(aMod[ii], visor_dat));
+        aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], visor_dat));
 
     visor_dat.read(sg, sizeof sg);
     if (sg[0] != SigEND[0] || sg[1] != SigEND[1])
@@ -514,7 +510,7 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
 void
 TVisor::toModCFG()
 {
-    gstring fname = userProfDir();//userGEMDir();
+    string fname = userProfDir();//userGEMDir();
     fname += GEM_CONF;
 
     fstream f_gems(fname.c_str(), ios::out /*| ios::binary*/);
@@ -529,7 +525,7 @@ TVisor::toModCFG()
 void
 TVisor::fromModCFG()
 {
-    gstring fname = userProfDir();//userGEMDir();
+    string fname = userProfDir();//userGEMDir();
     fname += GEM_CONF;
 
     fstream f_gems(fname.c_str(), ios::in | ios::binary );
@@ -544,7 +540,7 @@ TVisor::fromModCFG()
 void
 TVisor::toWinCFG()
 {
-    gstring fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
     fstream f_win_ini(fname_ini.c_str(), ios::out );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
@@ -556,12 +552,12 @@ TVisor::toWinCFG()
 
 //    if( pVisorImp->getCellFont() != pVisorImp->getDefaultFont() ) //Qt3to4
 	f_win_ini << "general_font_string\t=\t\"" << 
-	           pVisorImp->getCellFont().toString().toLatin1().data() << "\"" << endl;
+               pVisorImp->getCellFont().toString().toStdString() << "\"" << endl;
 //    if( pVisorImp->getAxisLabelFont() != pVisorImp->getDefaultFont() ) //Qt3to4
 	f_win_ini << "axis_label_font_string\t=\t\"" << 
-	       pVisorImp->getAxisLabelFont().toString().toLatin1().data() << "\"" << endl;
+           pVisorImp->getAxisLabelFont().toString().toStdString() << "\"" << endl;
 
-    int win_num = aWinInfo.GetCount();
+    auto win_num = aWinInfo.size();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
     f_win_ini << "config_autosave\t=\t" << pVisorImp->getConfigAutosave() << endl;
 
@@ -571,8 +567,8 @@ TVisor::toWinCFG()
     f_win_ini << "local_doc\t=\t" << LocalDoc << endl;   // obsolete
     f_win_ini << "current_mode\t=\t" << ProfileMode << endl;
     f_win_ini << "default_built_in_TDB\t=\t\"" << DefaultBuiltinTDB.c_str() << "\"" << endl;
-    f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM].PackKey() << "\""  << endl;
-    f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ].PackKey() << "\""  << endl;
+    f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM]->PackKey() << "\""  << endl;
+    f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ]->PackKey() << "\""  << endl;
     f_win_ini.close();
 
     // Window-specific settings
@@ -582,8 +578,8 @@ TVisor::toWinCFG()
             "Error writing configurator file (windows.conf)" );
 
 //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
-    for (int ii = 0; ii < win_num; ii++)
-        aWinInfo[ii].toWinCFG(f_win_ini);
+    for (size_t ii = 0; ii < win_num; ii++)
+        aWinInfo[ii]->toWinCFG(f_win_ini);
 
     f_win_ini.close();
 }
@@ -591,16 +587,11 @@ TVisor::toWinCFG()
 void
 TVisor::fromWinCFG()
 {
-    gstring fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
-#ifdef __unix
-    TConfig visor_conf( fname_ini.c_str() );
-#else
-    TConfig& visor_conf = *new TConfig( fname_ini.c_str() );
-#endif
-
+    TConfig visor_conf( fname_ini );
     //int win_num = 0;
-    gstring name = visor_conf.getFirst();
+    string name = visor_conf.getFirst();
 
     while ( !name.empty() )
     {
@@ -613,17 +604,17 @@ TVisor::fromWinCFG()
             }
             else if( name == "general_font_string" ) {
                     visor_conf.getcStr(name);
-                    name.strip();
-		    QFont cellFont;
+                    strip( name );
+                    QFont cellFont;
                     cellFont.fromString( name.c_str() );
-		    pVisorImp->setCellFont(cellFont);
+                    pVisorImp->setCellFont(cellFont);
                 }
         	else if( name == "axis_label_font_string" ) {
                     visor_conf.getcStr(name);
-                    name.strip();
-		    QFont axisLabelFont;
+                    strip( name );
+                    QFont axisLabelFont;
                     axisLabelFont.fromString( name.c_str() );
-		    pVisorImp->setAxisLabelFont(axisLabelFont);
+                    pVisorImp->setAxisLabelFont(axisLabelFont);
                 }
                 else if( name == "number_of_windows" ) {
                     //win_num = visor_conf.getcInt();
@@ -632,17 +623,17 @@ TVisor::fromWinCFG()
 				pVisorImp->setConfigAutosave(visor_conf.getcInt());
 			}
             	else if( name == "local_dir" ) {
-				gstring gstr;
+                string gstr;
 				visor_conf.getcStr(gstr);
 				setLocalDir(gstr);
 			}
             	else if( name == "local_doc_dir" ) {
-				gstring gstr;
+                string gstr;
 				visor_conf.getcStr(gstr);
 				setLocalDocDir(gstr);
 			}
             	else if( name == "remote_doc_url" ) {
-				gstring gstr;
+                string gstr;
 				visor_conf.getcStr(gstr);
                                 setRemoteHTML(gstr);
 			}
@@ -653,7 +644,7 @@ TVisor::fromWinCFG()
                ProfileMode = visor_conf.getcInt();
             }
             else if( name == "default_built_in_TDB" ) {
-                gstring gstr;
+                string gstr;
                 visor_conf.getcStr(gstr);
                 setDefaultBuiltinTDB(gstr);
             }
@@ -668,17 +659,16 @@ TVisor::fromWinCFG()
     }
 
     // Window-specific settings
-    gstring fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
+    string fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
     ifstream f_win_ini(fwin_ini_name.c_str() );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error reading configurator file (windows.conf)" );
 
- //   vstr name_str(256);
     // error Sveta 13/06/2001 reads only #
  //   f_win_ini >> name_str.p; // Don't compile in BCB5 without .p
 
-    for (uint ii = 0; ii < aWinInfo.GetCount(); ii++)
-        aWinInfo[ii].fromWinCFG(f_win_ini);
+    for (size_t ii = 0; ii < aWinInfo.size(); ii++)
+        aWinInfo[ii]->fromWinCFG(f_win_ini);
 }
 
 //  Reorganized by KD on E.Curti' comment 04.04.01
@@ -711,19 +701,19 @@ TVisor::Update(bool force)
 }
 
 
-void
-TVisor::addModule(TCModule * pm, bool selectFiles)
-{
-    aMod.Add(pm);
-    pm->ods_link();
-    //  pm->dyn_set();
+//void
+//TVisor::addModule( TCModule* pm, bool selectFiles)
+//{
+//    aMod.push_back( std::shared_ptr<TCModule>(pm));
+//    pm->ods_link();
+//    //  pm->dyn_set();
 
-    TCIntArray arr;
-    if (selectFiles)
-        arr = pm->SelectFileList(openf | closef);
-    rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
-    rt[pm->rtNum()].SetKey(ALLKEY);
-}
+//    TCIntArray arr;
+//    if (selectFiles)
+//        arr = pm->SelectFileList(openf | closef);
+//    rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
+//    rt[pm->rtNum()]->SetKey(ALLKEY);
+//}
 
 //Init work structures
 void
@@ -782,16 +772,16 @@ TVisor::Exit()
 
         toModCFG();
         toWinCFG();
-        aObj[o_wo_bfc3].SetPtr(0);
-        aObj[ o_neqtxt].SetPtr(0);
-        aObj[ o_dtnam_nr].SetPtr(0);
-        aObj[ o_dtres].SetPtr(0);
-        aObj[ o_unpmr].SetPtr(0);
-        aObj[ o_nlich].SetPtr(0);
-        aObj[ o_nldch].SetPtr(0);
-        aObj[ o_nldcvs].SetPtr(0);
-        aObj[ o_nldchs].SetPtr(0);
-        aObj[ o_nlphh].SetPtr(0);
+        aObj[o_wo_bfc3]->SetPtr(0);
+        aObj[ o_neqtxt]->SetPtr(0);
+        aObj[ o_dtnam_nr]->SetPtr(0);
+        aObj[ o_dtres]->SetPtr(0);
+        aObj[ o_unpmr]->SetPtr(0);
+        aObj[ o_nlich]->SetPtr(0);
+        aObj[ o_nldch]->SetPtr(0);
+        aObj[ o_nldcvs]->SetPtr(0);
+        aObj[ o_nldchs]->SetPtr(0);
+        aObj[ o_nlphh]->SetPtr(0);
         TGEM2MT::pm->FreeNa();
 
     }
@@ -813,124 +803,124 @@ TVisor::defaultCFG()
 
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "projec", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "projec", true, true,
                          o_spppar, 15, 0, 2, param_rkfrm));      // 12.12.12 added new object to Project record
 
     // RT_ICOMP default
     unsigned char icomp_rkfrm[3] = { MAXICNAME, MAXSYMB, MAXICGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "icomp", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "icomp", false, true,
                          o_icsst, 6, 0, 3, icomp_rkfrm));
     // RT_DCOMP default
     unsigned char dcomp_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
-    rt.Add(new TDataBase(rt.GetCount(), "dcomp", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "dcomp", false, true,
                          o_dcstr, 20, 0, 4, dcomp_rkfrm));
 
     // RT_COMPOS default
     unsigned char compos_rkfrm[3] = { MAXCMPNAME, MAXSYMB, MAXCMPGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "compos", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "compos", false, true,
                          o_bcpcc, 20, 0, 3, compos_rkfrm));
 
     // RT_REACDC default
     unsigned char reacdc_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
-    rt.Add(new TDataBase(rt.GetCount(), "reacdc", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "reacdc", false, true,
                          o_restr, 20, 0, 4, reacdc_rkfrm));
 
     // RT_RTPARM default
     unsigned char rtparm_rkfrm[6] =
         { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB, MAXNV, MAXRTNAME };
-    rt.Add(new TDataBase(rt.GetCount(), "rtparm", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "rtparm", true, true,
                          o_rtname, 27, 0, 6, rtparm_rkfrm));
 
     // RT_PHASE default
     unsigned char phase_rkfrm[5] =
         { MAXSYMB, MAXPHSYMB, MAXPHNAME, MAXSYMB, MAXPHGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "phase", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "phase", true, true,
                          o_phstr, 22+38/*13/06/13*/, 0, 5, phase_rkfrm));
 
     // RT_SYSEQ default
     unsigned char syseq_rkfrm[8] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
                                      MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV
                                    };
-    rt.Add(new TDataBase(rt.GetCount(), "syseq", false, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "syseq", false, true,
                          o_ssphst, 71, 0, 8, syseq_rkfrm));
 
     // RT_PROCES default
     unsigned char proces_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
                                        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                      };
-    rt.Add(new TDataBase(rt.GetCount(), "proces", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "proces", true, true,
                          o_pestr, 26+14/*11/03/02*/, 0, 10, proces_rkfrm));
 
     // RT_UNSPACE default
     unsigned char unspace_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
                  MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                        };
-    rt.Add(new TDataBase(rt.GetCount(), "unspac", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "unspac", true, true,
                          o_unname, 70, 0, 10, unspace_rkfrm));
 
 
     // RT_GTDEMO default
     unsigned char gtdemo_rkfrm[5] =
         { MAXMUNAME, MAXDATATYPE, MAXGTDCODE, MAXNV, MAXGDGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "gtdemo", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "gtdemo", true, true,
                          o_gdps, 27, 0, 5, gtdemo_rkfrm));
 
     // RT_DUALTH default
     unsigned char dualth_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
-    rt.Add(new TDataBase(rt.GetCount(), "dualth", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "dualth", true, true,
                          o_dtname, 53, 0, 10, dualth_rkfrm));
 
     // RT_GEM2MT default
     unsigned char gem2mt_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
-    rt.Add(new TDataBase(rt.GetCount(), "gem2mt", true, true,
+    rt.push_back( std::make_shared<TDataBase>(rt.size(), "gem2mt", true, true,
                          o_mtname, 67, 0, 10, gem2mt_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");
     //  readPDBDir(pVisor->userProfDir().c_str());
 
-    for (uint jj = 0; jj < rt.GetCount(); jj++)
+    for (size_t jj = 0; jj < rt.size(); jj++)
     {
         int cnt = 0;
-         for (uint ii = 0; ii < aDBFiles.GetCount(); ii++)
-        { gstring flnm = gstring(aDBFiles[ii], 0, aDBFiles[ii].find("."));
-            if ( flnm == rt[jj].GetKeywd() ||
+         for (size_t ii = 0; ii < aDBFiles.size(); ii++)
+        { string flnm = string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
+            if ( flnm == rt[jj]->GetKeywd() ||
                  ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                  ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
             {
-                gstring path = pVisor->sysDBDir();
+                string path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
-                rt[jj].AddFile(path.c_str());
+                rt[jj]->AddFile(path.c_str());
                 cnt++;
             }
         }
-        rt[jj].specialFilesNum = cnt;
+        rt[jj]->specialFilesNum = cnt;
     }
 
     // reading project dirs
     TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
-    for (uint ii = 0; ii < aDBDirs.GetCount(); ii++)
+    for (size_t ii = 0; ii < aDBDirs.size(); ii++)
     {
-        gstring dir(pVisor->userProfDir());
+        string dir(pVisor->userProfDir());
         dir += aDBDirs[ii];
         aDBFiles = readPDBDir(dir.c_str(), "*.pdb");
 
-        for (uint jj = 0; jj < rt.GetCount(); jj++)
+        for (size_t jj = 0; jj < rt.size(); jj++)
         {
-          for (uint kk = 0; kk < aDBFiles.GetCount(); kk++)
-          { gstring flnm = gstring(aDBFiles[kk], 0, aDBFiles[kk].find("."));
-            if ( flnm == rt[jj].GetKeywd() ||
+          for (size_t kk = 0; kk < aDBFiles.size(); kk++)
+          { string flnm = string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
+            if ( flnm == rt[jj]->GetKeywd() ||
                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
                 {
-                    gstring path(dir);
+                    string path(dir);
                     path += "/";
                     path += aDBFiles[kk];
-                    rt[jj].AddFile(path.c_str());
+                    rt[jj]->AddFile(path.c_str());
                 }
           }
         }
@@ -961,7 +951,7 @@ TCStringArray readDirs(const char *dir)
         if (f.isDir() && f.fileName() != "." && f.fileName() != "..")
         {
             //          cout << "Adding dir: " << f->fileName() << endl;
-            aFiles.Add((const char *) f.fileName().toLatin1().data());
+            aFiles.push_back( f.fileName().toStdString());
         }
         // else 'special file'
     }
@@ -1007,8 +997,8 @@ TVisor::deleteDBDir(const char *dir)
         f = it.next();;
         if (f.isSymLink() || f.isFile())
         {
-            //cout << "Adding file: " << f.fileName().toLatin1().data() << endl;
-            aFiles.Add((const char *) f.fileName().toLatin1().data());
+            //cout << "Adding file: " << f.fileName().toStdString() << endl;
+            aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
     }
@@ -1016,21 +1006,21 @@ TVisor::deleteDBDir(const char *dir)
     //--QDir::setCurrent(dir);
     // delete files in module list
     std::string path;
-    for (uint ii = 0; ii < aFiles.GetCount(); ii++)
+    for (size_t ii = 0; ii < aFiles.size(); ii++)
     {
-        if (gstring(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
+        if (string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
         {
-            for (uint jj = 0; jj < rt.GetCount(); jj++)
-                if (gstring(aFiles[ii], 0, aFiles[ii].find("."))
-                        == rt[jj].GetKeywd())
+            for (size_t jj = 0; jj < rt.size(); jj++)
+                if (string(aFiles[ii], 0, aFiles[ii].find("."))
+                        == rt[jj]->GetKeywd())
                 {
                     path = dir;
                     path += "/";
-                    path += aFiles[ii].c_str();
+                    path += aFiles[ii];
                     //cout << path << endl;
-                    rt[jj].Close();
-                    rt[jj].DelFile(path);
-                    rt[jj].Open(true, UPDATE_DBV, 0);
+                    rt[jj]->Close();
+                    rt[jj]->DelFile(path);
+                    rt[jj]->Open(true, UPDATE_DBV, {});
                 }
         }
         path = dir;
@@ -1115,7 +1105,7 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
         if (f.isSymLink() || f.isFile())
         {
             // cout << "Adding file: " << f->fileName() << endl;
-            aFiles.Add((const char *) f.fileName().toLatin1().data());
+            aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
     }

@@ -140,8 +140,8 @@ void TMulti::multi_sys_dc()
     short jj, jja, ja, kk;
     double a, *A; // , Vv =0.;
     double mm;
-    TIArray<TFormula> aFo;
-    gstring form;
+    std::vector<TFormula> aFo;
+    string form;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 
@@ -155,7 +155,7 @@ void TMulti::multi_sys_dc()
         // load formulae
         for( ii=0; ii<mup->L; ii++ )
         {
-            aFo.Add( new TFormula() );
+            aFo.push_back(  TFormula() );
             form = aFo[ii].form_extr( ii, mup->L, mup->DCF );
             aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
         }
@@ -164,7 +164,7 @@ void TMulti::multi_sys_dc()
         fillValue(A, 0., (mup->N*mup->L) );
         for( ii=0; ii<mup->L; ii++ )
             aFo[ii].Stm_line( mup->N, A+ii*mup->N, (char *)mup->SB, mup->Val );
-        aFo.Clear();
+        aFo.clear();
         // loading data for dependent components
         for( L=0, j=-1, jj=0; jj<mup->L; jj++ )
         {
@@ -431,7 +431,7 @@ bool TMulti::CompressPhaseIpxt( int kPH )
 {
   int jj, jb, cnt=0;
   TCIntArray  aDCused;
-  TPhase* aPH=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
+  TPhase* aPH=dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
   RMULTS* mup = TRMults::sm->GetMU();
   TCStringArray form_array;
   TFormula aFo;
@@ -442,12 +442,12 @@ bool TMulti::CompressPhaseIpxt( int kPH )
   for( jj=0, cnt = 0; jj<mup->Ll[kPH]; jj++ )
   {
      if( TSyst::sm->GetSY()->Dcl[jj+jb] == S_OFF )
-          aDCused.Add(-1);
+          aDCused.push_back(-1);
      else
      {
-         aDCused.Add(cnt);
+         aDCused.push_back(cnt);
          cnt++;
-         form_array.Add(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
+         form_array.push_back(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
      }
   }
 
@@ -465,12 +465,11 @@ void TMulti::multi_sys_ph()
     int k, i;
     bool non_sorption_phase, is_ss;
     short kk, j, je, jb, ja=0;
-    //vstr pkey(MAXRKEYLEN);
     time_t crt;
 //    double G;
     double PMM;  // Phase mean mol. mass
     int Cjs, car_l[32], car_c=0; // current index carrier sorbent
-    TPhase* aPH=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
+    TPhase* aPH=dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 
@@ -562,7 +561,7 @@ long int
                 // build formula list
                 for( int jj=0; jj<mup->Ll[k]; jj++ )
                 {
-                  form_array.Add(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
+                  form_array.push_back(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
                 }
 
                 // get moiety full structure from phase
@@ -768,6 +767,7 @@ PARLOAD: if( k < syp->Fis )
 /* End extension */
             case DC_SOL_MAJOR: case DC_SOL_MAJDEP:
                 Cjs = j;
+                [[fallthrough]];
             case DC_SOL_MINOR: case DC_SOL_MINDEP: case DC_SOL_IDEAL:
                 PMM += pm.MM[j]; is_ss = false;
                 break;
@@ -815,6 +815,7 @@ PARLOAD: if( k < syp->Fis )
                     PMM = pm.MM[Cjs];
                     pm.FWGT[k] = PMM;
                 }
+                 [[fallthrough]];
                 /*  leave normalized to 1 gram pm.ln1Na[k] *= PMM; */
             case PH_AQUEL:
                 if( pm.FWGT[k] < 1e-33 )   // bugfix 26.04.13 DK

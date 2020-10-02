@@ -4,7 +4,6 @@
 // Implementation of TObject and TObjList classes
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva, A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -77,7 +76,7 @@ TObjList aObj;
 
 // DOD list element explicit ctor
 TObject::TObject( const char* name, ObjType t, int n,
-                  int m, bool dyn, char indexCode, const gstring desc):
+                  int m, bool dyn, char indexCode, const string desc):
         Dynamic(dyn),   // Flag of dynamic/static data
         N(n), M(m),     // Dimensions N,M
         Descr(desc),    // Description (tooltip) line
@@ -111,11 +110,11 @@ TObject::ToCFG(ostream& f)
     write(f);
 }
 
-gstring
+string
 TObject::GetFullName(int aN, int aM)
 {
-  vstr v(15);
-  gstring item = GetKeywd();
+  char v[15];
+  string item = GetKeywd();
   if( N > 1 )
   {
     sprintf(v, "[%u]", aN );
@@ -129,10 +128,10 @@ TObject::GetFullName(int aN, int aM)
   return item;
 }
 
-gstring TObject::GetHelpLink(int aN, int aM)
+string TObject::GetHelpLink(int aN, int aM)
 {
-  vstr v(15);
-  gstring item = GetKeywd();
+  char v[15];
+  string item = GetKeywd();
   if( !(N<=1 || Descr[0] == '|') )
   {
     sprintf(v, "_%u", aN );
@@ -149,29 +148,29 @@ gstring TObject::GetHelpLink(int aN, int aM)
 
 // Gets description line from Ni line of DOD list
 //    e.g., for displaying a tooltip
-const gstring
+const string
 TObject::GetDescription(int Ni, int Mi)
 {
     size_t prev_pos = 0;
     size_t pos = Descr.find('\n');
 
-    if( pos == gstring::npos )
+    if( pos == string::npos )
         return Descr;
 
     int NMi = Ni;   // Description by lines
     if( N <= 1 || Descr[0] == '|' )     // Decriptions by colums
            NMi = Mi;
 
-    for(int ii=0;  ii < NMi /*&& pos != gstring::npos*/; ii++ )
+    for(int ii=0;  ii < NMi /*&& pos != string::npos*/; ii++ )
     {
         prev_pos = pos + 1;
 
         if( prev_pos >= Descr.length() )
-            return gstring("TObject:E01 -bad description line in DOD-");
+            return string("TObject:E01 -bad description line in DOD-");
 
         pos = Descr.find("\n", prev_pos);
-        if( pos == gstring::npos )
-            return Descr.substr(prev_pos, gstring::npos);
+        if( pos == string::npos )
+            return Descr.substr(prev_pos, string::npos);
     }
     return Descr.substr(prev_pos, pos-prev_pos-1);
 }
@@ -342,7 +341,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     }
     else if( newType > 0  )  // Added by Sveta 16/09/99
     {
-        gstring str( newType, ' ' );
+        string str( newType, ' ' );
         // cout << (int)newType << ' ' << Keywd << " T" << str.c_str() << "T" << endl;
         for( int ii=0; ii<newN; ii++ )
             for( int jj=0; jj<newM; jj++ )
@@ -373,7 +372,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
                         pV1->Put(v, ii*newM + jj);
                     }
             }
-            else // gstrings copying
+            else // strings copying
             {
                 if( Type == S_ )
                     pV1->SetString( GetString(0).c_str(), 0 );
@@ -381,7 +380,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
                     for( int ii=0; ii<n; ii++ )
                         for( int jj=0; jj<m; jj++ )
                         {
-                            gstring str = pV->GetString(ndx(ii,jj));
+                            string str = pV->GetString(ndx(ii,jj));
                             pV1->SetString( str.c_str(), ii*newM+jj );
                         }
             }
@@ -415,12 +414,12 @@ TObject::Free()
 }
 
 
-// puts gstring into data object cell
+// puts string into data object cell
 bool
 TObject::SetString(const char *vbuf, int aN, int aM)
 {
     check_dim( aN, aM);
-    ErrorIf( !vbuf, GetKeywd(),"TObject:W06 Cannot set empty gstring to object");
+    ErrorIf( !vbuf, GetKeywd(),"TObject:W06 Cannot set empty string to object");
     //???
 
     if( !pV->SetString(vbuf, ndx(aN,aM)) )
@@ -703,9 +702,9 @@ int  TObject::ofDB( GemDataStream& f )
     switch( cmp )
     {
     case  1: // old size > new size
-         if( !IsDynamic() )
+        if( !IsDynamic() )
             break;
-
+        [[fallthrough]];
     case -1:  // old size < new size
     case -2: // old Type != new Type
         if( IsDynamic() )
@@ -716,11 +715,11 @@ int  TObject::ofDB( GemDataStream& f )
         }
         else
         {
-           if( Otype == S_ && cmp == -1 )
-            error_S_ = true;
-          else
-            ErrorIf( cmp!=1, GetKeywd(),
-                     "TObject:E07 Invalid type/size on getting static data object");
+            if( Otype == S_ && cmp == -1 )
+                error_S_ = true;
+            else
+                ErrorIf( cmp!=1, GetKeywd(),
+                         "TObject:E07 Invalid type/size on getting static data object");
         }
         break;
     case  2: //size of new object is 0
@@ -803,7 +802,6 @@ int  TObject::ofDB( GemDataStream& f )
 void TObject::toTXT( fstream& to )
 {
     int dimM, i, j;
-    vstr sbuf(150);
 
     dimM = M;
     if( IsDynamic() )
@@ -841,23 +839,18 @@ void TObject::toTXT( fstream& to )
         {
             for( j=0; j < M; j++ )
             {
-                strcpy(sbuf, GetString(i,j).c_str() );
+                auto sbuf = GetString(i,j);
                 if( Type > 0 )
                     to << "\"";
-                 switch( *sbuf )
-                 {
-                    case 0:
-                        sbuf[0] = '`';
-                        sbuf[1] = 0;
-                        break;
-                    case ' ':
-                        sbuf[0] = ' '/*'�'*/;
-                        sbuf[1] = 0;
-                        break;
-                    default:
-                        break;
-                  }
-                  to << sbuf;
+                if( sbuf.empty() )
+                {
+                    sbuf = "`";
+                }
+                else if( sbuf[0] == ' ' )
+                {
+                    sbuf = " ";
+                }
+                 to << sbuf;
                   if( Type > 0 )
                     to << "\" ";
                   else
@@ -872,7 +865,7 @@ void TObject::ofTXT( fstream& of )
 {
     int rdimN, rdimM, i, j;
     int r_otype;
-    vstr sbuf(160);
+    char sbuf[160];
 
     do
     {
@@ -970,7 +963,7 @@ void TObject::ofTXT( fstream& of )
                               "TObject:E16 Bad format or character when reading text object from TXT");
                 }
                 else
-                   of >> sbuf.p;
+                   of >> sbuf;
 
                 if( Type == A_ || Type == B_ )
                     switch( *sbuf )
@@ -1001,18 +994,18 @@ void TObject::ofTXT( fstream& of )
 int
 TObjList::Find(const char* s)
 {
-    for( uint ii=0; ii< GetCount(); ii++ )
-        if( strcmp(s, elem(ii).GetKeywd() )==0 )
-            return ii;
+    for( size_t ii=0; ii< size(); ii++ )
+        if( strcmp(s, at(ii)->GetKeywd() )==0 )
+            return static_cast<int>(ii);
 
     return -1;
 }
 
-const int N_OBJECTS = 1000;
+//const int N_OBJECTS = 1000;
 
 // default DOD list configuration
 TObjList::TObjList():
-        TIArrayF<TObject>(N_OBJECTS, 30 )
+        std::vector<std::shared_ptr<TObject>>()
 {
     //  load( "viz_od.ini", MINVISOROBJECTS );
 }
@@ -1020,7 +1013,7 @@ TObjList::TObjList():
 // Reads DOD list configuration from file
 
 TObjList::TObjList(istream& f):
-        TIArrayF<TObject>(N_OBJECTS, 30 )
+        std::vector<std::shared_ptr<TObject>>()
 {
     fromDAT(f);
 }
@@ -1031,13 +1024,13 @@ void
 TObjList::toDAT(ostream& f)
 {
     double Value = 0.0;
-    auto nObj = GetCount();
+    auto nObj = size();
 
     f << '@';
     f.write(reinterpret_cast<char*>(&Value), sizeof(double) );
     f.write(reinterpret_cast<char*>(&nObj), sizeof(int) );
-    for(uint ii=0; ii<nObj; ii++)
-        elem(ii).ToCFG( f );
+    for(size_t ii=0; ii<nObj; ii++)
+        at(ii)->ToCFG( f );
 }
 
 // Reads DOD configuration from config file
@@ -1046,13 +1039,13 @@ TObjList::fromDAT(istream& f)
 {
     double Value;	// not used
 
-    Clear();
+    clear();
     int nObj;
     f.get(); // '@' marker
     f.read(reinterpret_cast<char*>(&Value), sizeof(double) );
     f.read(reinterpret_cast<char*>(&nObj), sizeof(int) );
     for(int ii=0; ii<nObj; ii++)
-        Add( new TObject(f) );
+        push_back( std::make_shared<TObject>(f) );
 }
 
 
@@ -1065,30 +1058,25 @@ static char OBtype[nTypes][3] =
 void
 TObjList::load(const char* f_obj, int /* maxN */ )
 {
-#ifndef __unix
-    // normal notation somehow causes crash on Win32 - workaround to work with pointer
-    // Is it memory leak?
-//    TConfig cnf(f_obj,' ');
-    TConfig& cnf = *new TConfig(f_obj,' ', 55 );
-#else
-TConfig cnf(f_obj,' ');
-#endif
-    gstring par;
+    TConfig cnf(f_obj,' ');
+
+    string par;
     int N;
     int M;
     ObjType objectType = 0;
     char indexationCode;
-    gstring astr[6];
+    string astr[6];
 
     par = cnf.getFirst();
 
     while( !par.empty() )
     {
+        //cout << par << endl;
         cnf.getcStrings(6, astr);
 
         sscanf( astr[2].c_str(),"%d", &N);
         sscanf( astr[3].c_str(),"%d", &M);
-	indexationCode = astr[4][0];
+        indexationCode = astr[4][0];
 
         if( isdigit(astr[1][0]) )
         {
@@ -1120,11 +1108,11 @@ TConfig cnf(f_obj,' ');
                        "TObject:E18 This data object is already defined");
         }
         // cout <<  astr[0].c_str() <<  "  " << objectType<< endl;
-        Add( new TObject(astr[0].c_str(), objectType, abs(N), M, N<0,
+        push_back( std::make_shared<TObject>(astr[0].c_str(), objectType, abs(N), M, N<0,
 		     indexationCode, astr[5]) );
         par = cnf.getNext();
     }
-    cnf.close();
+
 }
 
 //--------------------- End of v_object.cpp ---------------------------

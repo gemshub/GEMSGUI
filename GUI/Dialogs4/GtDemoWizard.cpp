@@ -44,7 +44,8 @@ void GtDemoWizard::CmNext()
     int ndx = stackedWidget->currentIndex();
     auto nLines = pageScript->getScriptLinesNum();
     if( ndx == 1 && nLines > 0)
-    {        pGraphY->setValue( nLines );
+    {
+             pGraphY->setValue( nLines );
              pGraphX->setValue( pageScript->getAbscissaNum() );
     }
 
@@ -86,7 +87,7 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[8], const char *ascript,
 {
     setupUi(this);
 
-    gstring str1= "GEM-Selektor GtDemo Setup:  ";
+    string str1= "GEM-Selektor GtDemo Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
@@ -209,10 +210,10 @@ void GtDemoWizard::CmChangePage2(int)
    resetPageList(  newRT );
 }
 
-gstring
+string
 GtDemoWizard::getPrKey()
 {
-  gstring str = lineEditProcesKey->text().toLatin1().data();
+  string str = lineEditProcesKey->text().toStdString();
   return str;
 }
 
@@ -231,8 +232,8 @@ equatSetupData eqd( "x0", "y0", "jR", "jR", true );
 void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYname )
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData;
 
     if( nRT == newRT )
       return;
@@ -241,11 +242,11 @@ void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYna
 
     if( nRT >= RT_SYSEQ ) // read first record in DB
     {
-        if(  rt[RT_SYSEQ].GetStatus() != ONEF_)
+        if(  rt[RT_SYSEQ]->GetStatus() != ONEF_)
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

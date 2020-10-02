@@ -4,7 +4,6 @@
 // Declaration of miscellaneous utility functions and classes
 //
 // Copyright (C) 1996-2001 A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -25,39 +24,40 @@
 #include <cmath>
 #include "v_user.h"
 
+char chLowUp(char ch);
 double NormDoubleRound(double aVal, int digits)
 {
     double val;
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     sprintf(vbuf, "%.*le" , digits , aVal);
-    sscanf(vbuf.p, "%le", &val );
+    sscanf(vbuf, "%le", &val );
 	return val;
 }
 
 void NormDoubleRound(double *aArr, int size, int digits)
 {
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     
 	for(int ii=0; ii<size; ii++ )
     { sprintf(vbuf, "%.*le" , digits, aArr[ii]);
-      sscanf(vbuf.p, "%le", &aArr[ii] );
+      sscanf(vbuf, "%le", &aArr[ii] );
     }  
 }
 
 void NormFloatRound(float *aArr, int size, int digits)
 {
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
     
 	for(int ii=0; ii<size; ii++ )
     { sprintf(vbuf, "%.*e" , digits, aArr[ii]);
-      sscanf(vbuf.p, "%e", &aArr[ii] );
+      sscanf(vbuf, "%e", &aArr[ii] );
     }  
 }
 
 
 
 istream&
-u_getline(istream& is, gstring& str, char delim)
+u_getline(istream& is, string& str, char delim)
 {
     char ch;
     is.get(ch);
@@ -98,7 +98,7 @@ u_getline(istream& is, gstring& str, char delim)
 // cant digits in either printf(3) F format or E format.
 void Gcvt(double number, size_t ndigit, char *buf)
 {
-    vstr internalbuf(40);
+    char internalbuf[40];
     int dg = 6;
      do{
           sprintf(internalbuf, "%.*g", dg, number);
@@ -109,65 +109,7 @@ void Gcvt(double number, size_t ndigit, char *buf)
 }
 
 
-const int bGRAN = 20;
-
-// Get Path of file and Reading list of file names from it, return number of files
-char  (* f_getfiles(const char *f_name, char *Path, 
-		long int& nElem, char delim ))[fileNameLength]
-{
-  int ii, bSize = bGRAN;
-  char  (*filesList)[fileNameLength];
-  char  (*filesListNew)[fileNameLength];
-  filesList = new char[bSize][fileNameLength];
-  std::string name;
-
-// Get path
-   std::string path_;
-   std::string flst_name = f_name;
-   size_t pos = flst_name.rfind("/");
-   path_ = "";
-   if( pos < gstring::npos )
-      path_ = flst_name.substr(0, pos+1);
-   strncpy( Path, path_.c_str(), 256-fileNameLength);
-   Path[255] = '\0';
-     
-//  open file stream for the file names list file
-   fstream f_lst( f_name/*flst_name.c_str()*/, ios::in );
-   ErrorIf( !f_lst.good(), f_name, "Fileopen error");
-
-// Reading list of names from file	
-  nElem = 0;
-  while( !f_lst.eof() )
-  {
-	f_getline( f_lst, name, delim);
-    if( nElem >= bSize )
-    {    bSize = bSize+bGRAN;
-         filesListNew = new char[bSize][fileNameLength];
-         for( ii=0; ii<nElem-1; ii++ )
-		   strncpy( filesListNew[ii], filesList[ii], fileNameLength);
-	     delete[] filesList;
-		 filesList =  filesListNew;
-	}
-    strncpy( filesList[nElem], name.c_str(), fileNameLength);
-	filesList[nElem][fileNameLength-1] = '\0';
-    nElem++; 
-  }
-  
-  // Realloc memory for reading size
-  if( nElem != bSize )
-  {    
-    filesListNew = new char[nElem][fileNameLength];
-    for(  ii=0; ii<nElem; ii++ )
-	  strncpy( filesListNew[ii], filesList[ii], fileNameLength);
-	delete[] filesList;
-	filesList =  filesListNew;
-  }
-
-  return filesList;	
-}
-
-
-gstring curDate()
+string curDate()
 {
     struct tm *time_now;
     time_t secs_now;
@@ -176,13 +118,13 @@ gstring curDate()
     time(&secs_now);
     time_now = localtime(&secs_now);
 
-    vstr tstr(40);
+    char tstr[40];
 
     strftime(tstr, 11,
              "%d/%m/%Y",
              time_now);
 
-    return tstr.p;
+    return tstr;
 }
 
 std::string curDateSmol(char ch )
@@ -194,17 +136,16 @@ std::string curDateSmol(char ch )
     time(&secs_now);
     time_now = localtime(&secs_now);
 
-    vstr tstr(40);
+    char tstr[40];
 
     std::string frm = "%d" + std::string(1,ch)+ "%m" + std::string(1,ch) + "%y";
-    strftime(tstr, 9, frm.c_str(),
-             // "%d/%m/%y",
+    strftime(tstr, 9, frm.c_str(),  // "%d/%m/%y",
              time_now);
 
-    return tstr.p;
+    return tstr;
 }
 
-gstring curTime()
+string curTime()
 {
     struct tm *time_now;
     time_t secs_now;
@@ -213,20 +154,20 @@ gstring curTime()
     time(&secs_now);
     time_now = localtime(&secs_now);
 
-    vstr tstr(40);
+    char tstr[40];
 
     strftime(tstr, 6,
              "%H:%M",
              time_now);
 
-    return tstr.p;
+    return tstr;
 }
 
 
 
-void StripLine(gstring& line)
+void StripLine(string& line)
 {
-   line.strip();
+   strip( line );
 }
 
 //void strip(string& str)
@@ -322,25 +263,25 @@ char chLowUp(char ch)
 //        n
 
 void
-  ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
-                  const gstring& to_templ1, uint len_ )
+  ChangeforTempl( string& data_str,  const string& from_templ1,
+                  const string& to_templ1, uint len_ )
 {
     if( data_str.empty() )
         return;
 
 
-    gstring  from_templ = from_templ1;
-    gstring  to_templ = to_templ1;
+    string  from_templ = from_templ1;
+    string  to_templ = to_templ1;
     bool inv_case = false;
     size_t ii;
-    data_str.strip();
-    gstring old_str = data_str;
+    strip( data_str );
+    string old_str = data_str;
 
-    if( from_templ.equals("*") ) // all key
+    if( from_templ =="*" ) // all key
     {
-      if( to_templ.find("invcase") != gstring::npos )
+      if( to_templ.find("invcase") != string::npos )
       {
-          if( to_templ.equals("invcase") )
+          if( to_templ == "invcase" )
             for( ii=0; ii<data_str.length(); ii++)
               data_str[ii] = chLowUp( data_str[ii]);
           else goto PART;
@@ -349,32 +290,32 @@ void
         if( to_templ[0] == '*' )
         {
          if( data_str.length() >= len_ )
-          data_str = gstring( data_str, 0, len_-1 );
-         data_str += gstring(to_templ, 1);
+          data_str = string( data_str, 0, len_-1 );
+         data_str += string(to_templ, 1);
         }
         else
-          if(to_templ.find("*") != gstring::npos) // no all case
+          if(to_templ.find("*") != string::npos) // no all case
             goto PART;
           else
             data_str = to_templ;
 
-      data_str.substr(0, len_);
+      data_str = data_str.substr(0, len_);
       if( data_str == old_str )
       {
-       size_t ii = data_str.length()-1;
-       if( data_str[ii] == '9' )
-        data_str[ii] = '_';
-       else
-        data_str[ii] = '9';
+          size_t ii1 = data_str.length()-1;
+          if( data_str[ii1] == '9' )
+              data_str[ii1] = '_';
+          else
+              data_str[ii1] = '9';
       }
       return;
     }
 
     PART:
     // Changed first n symbols
-    if( gstring( to_templ, 0, 7).equals("invcase") )
+    if( string( to_templ, 0, 7) == "invcase" )
     {  inv_case = true;
-       to_templ = gstring( to_templ, 7 );
+       to_templ = string( to_templ, 7 );
     }
 
     ii=0;
@@ -395,29 +336,29 @@ void
        Error( from_templ.c_str(), "Error (1): Invalid character in template ");
      ii++;
    }
-   data_str = gstring( data_str, k );
+   data_str = string( data_str, k );
    pos_to = to_templ.find( "*" );
-   data_str = gstring( to_templ, 0, pos_to) + data_str;
-   if( pos_to  == gstring::npos )
+   data_str = string( to_templ, 0, pos_to) + data_str;
+   if( pos_to  == string::npos )
     to_templ = "";
    else
-    to_templ = gstring( to_templ, pos_to+1);
+    to_templ = string( to_templ, pos_to+1);
    pos_to = from_templ.find( "*" );
-   if( pos_to  == gstring::npos )
+   if( pos_to  == string::npos )
     from_templ = "";
    else
-    from_templ = gstring( from_templ, pos_to+1);
+    from_templ = string( from_templ, pos_to+1);
 
    // Changed last n symbols
    inv_case = false;
-   if( to_templ.equals("invcase") )
+   if( to_templ == "invcase" )
    {  inv_case = true;
       to_templ = "";
    }
 //   size_t jj, ik;
    int jj, ik;      // Bugfix 11.04.2006
-    jj = from_templ.length()-1;
-    ik = data_str.length()-1;
+    jj = static_cast<int>(from_templ.length())-1;
+    ik = static_cast<int>(data_str.length())-1;
     k =  data_str.length();
     while( jj >= 0 && ik >= 0  )
     {
@@ -435,43 +376,43 @@ void
      ik--;
      jj--;
    }
-   data_str = gstring( data_str, 0, k );
+   data_str = string( data_str, 0, k );
    data_str += to_templ;
-   data_str.substr(0, len_);
+   data_str = data_str.substr(0, len_);
    if( data_str == old_str )
    {
-       size_t ii = data_str.length()-1;
-       if( data_str[ii] == '9' )
-        data_str[ii] = '_';
+       size_t ii1 = data_str.length()-1;
+       if( data_str[ii1] == '9' )
+        data_str[ii1] = '_';
        else
-        data_str[ii] = '9';
+        data_str[ii1] = '9';
     }
 }
 
 // "a;b;c" to array { "a", "b", "c" }
-TCStringArray split(const gstring& str, const gstring& delimiters)
+TCStringArray split(const string& str, const string& delimiters)
 {
     TCStringArray v;
-    gstring vv;
+    string vv;
 
     if( str.empty() )
         return v;
 
     string::size_type start = 0;
     auto pos = str.find_first_of(delimiters.c_str(), start);
-    while(pos != gstring::npos)
+    while(pos != string::npos)
     {
-        vv = gstring(str, start, pos - start);
-        vv.strip();
-        v.Add( vv );
+        vv = string(str, start, pos - start);
+        strip( vv );
+        v.push_back( vv );
         start = pos + 1;
         pos = str.find_first_of(delimiters.c_str(), start);
     }
 
-    vv = gstring (str, start, str.length() - start);
-    vv.strip();
+    vv = string (str, start, str.length() - start);
+    strip( vv );
     if( !vv.empty() )
-        v.Add( vv );
+        v.push_back( vv );
     return v;
 }
 

@@ -76,7 +76,7 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecSave( const char *key, bool onOld ); // Added 09.04.03 KD
     void RecordPrint( const char *key=0 ); //sddata key
-    void CopyRecords( const char * prfName, TCStringArray& SDlist );
+    void CopyRecords( const char * prfName, std::set<std::string>& SDlist );
     void TryRecInp( const char *key_, time_t& time_s, int q );
 
 

@@ -4,7 +4,6 @@
 // Implementation of TFile class
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -17,6 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#include <memory>
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
@@ -43,11 +43,8 @@ char TFile::pa[9]="01041999";
 void
 TFile::write( fstream& out_stream )
 {
-//    os.write( Keywd, MAX_FILENAME_LEN );
     out_stream << Keywd << "  "; // endl;
     int ln = Path.length() + 1;
-//    os.write((const char*)&ln, sizeof ln);
-//    os.write(Path.c_str(), ln);
     out_stream << ln << ' '; // endl;
     out_stream << Path.c_str() << endl;
 
@@ -58,16 +55,13 @@ TFile::write( fstream& out_stream )
 void *
 TFile::read( fstream& in_stream )
 {
-//    is.read( Keywd, MAX_FILENAME_LEN );
-// we should put length here !!
+    //    is.read( Keywd, MAX_FILENAME_LEN );
+    // we should put length here !!
     in_stream >> Keywd;
     int ln;
-//    is.read((char*)&ln, sizeof ln);
     in_stream >> ln;
-    vstr sss(ln);
-//    is.read(sss.p, ln);
-    in_stream >> sss.p;  // without .p does not compile in BCC32 5.1
-      sss.p[ln] = '\0';
+    string sss;
+    in_stream >> sss;
 
     Path = sss;
     u_splitpath(Path, dir, name, ext);

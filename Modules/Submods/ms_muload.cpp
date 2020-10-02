@@ -50,8 +50,7 @@ void TMulti::KinMetModLoad( )
     int kk, k, j, jj, kf, kfe=0, kp, kpe=0, ka, kae=0, ks, kse=0,
     JB, JE=0, /*jb,*/ je=0, kc, kd, kce=0, kde=0, /*kx, kxe=0,*/ ki, kie=0;
     long int jphl=0, jlphc=0;
-    //vstr pkey(MAXRKEYLEN);
-    vstr modT(164);
+    char modT[164];
     //char *kMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;
@@ -89,7 +88,7 @@ void TMulti::KinMetModLoad( )
         memcpy( pmp->kMod[k], modT, MAXKEYWD );
         //kMod = pmp->kMod[k];
         pmp->PfFact[k] = 1.;   // temporary
-if( aPH->php->h0p && aPH->php->R0p )
+if( noZero(aPH->php->h0p) && noZero(aPH->php->R0p) )
     pmp->PfFact[k] = aPH->php->h0p/aPH->php->R0p;
 /*
 if(kMod[0] != KM_UNDEF )
@@ -107,8 +106,8 @@ if(kMod[0] != KM_UNDEF )
             //  Copying the PR opcode array from Phase to MULTI
             if( aPH->php->ocPRk )
             {
-               if( pmp->ocPRkC == nullptr || kp+pmp->LsKin[k*6] > aObj[ o_wi_ocprkc ].GetN() )
-                  pmp->ocPRkC = static_cast<long int (*)[2]>(aObj[ o_wi_ocprkc ].Alloc(
+               if( pmp->ocPRkC == nullptr || kp+pmp->LsKin[k*6] > aObj[ o_wi_ocprkc ]->GetN() )
+                  pmp->ocPRkC = static_cast<long int (*)[2]>(aObj[ o_wi_ocprkc ]->Alloc(
                      kp+pmp->LsKin[k*6], 2, L_ ));
                ErrorIf( pmp->ocPRkC == nullptr, "KinMetModLoad",
                         "Error in reallocating memory for pmp->ocPRk" );
@@ -124,8 +123,8 @@ if(kMod[0] != KM_UNDEF )
 
             if( aPH->php->feSAr )
             {
-                if( pmp->feSArC == nullptr || kf+pmp->LsKin[k*6] > aObj[ o_wi_fsac ].GetN() )
-                   pmp->feSArC = static_cast<double *>( aObj[ o_wi_fsac ].Alloc(
+                if( pmp->feSArC == nullptr || kf+pmp->LsKin[k*6] > aObj[ o_wi_fsac ]->GetN() )
+                   pmp->feSArC = static_cast<double *>( aObj[ o_wi_fsac ]->Alloc(
                      (kf+pmp->LsKin[k*6]), 1, D_ ));
                 ErrorIf( pmp->feSArC == nullptr, "KinMetModLoad",
                          "Error in reallocating memory for pmp->feSArC." );
@@ -137,8 +136,8 @@ if(kMod[0] != KM_UNDEF )
             if( aPH->php->rpCon )
             {
                 if( pmp->rpConC == nullptr ||
-                    kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2] > aObj[ o_wi_krpc ].GetN() )
-                 pmp->rpConC = static_cast<double *>( aObj[ o_wi_krpc ].Alloc(
+                    kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2] > aObj[ o_wi_krpc ]->GetN() )
+                 pmp->rpConC = static_cast<double *>( aObj[ o_wi_krpc ]->Alloc(
                    (kc+pmp->LsKin[k*6]*pmp->LsKin[k*6+2]), 1, D_ ));
                 ErrorIf( pmp->rpConC == nullptr, "KinMetModLoad",
                        "Error in reallocating memory for pmp->rpConC." );
@@ -150,9 +149,9 @@ if(kMod[0] != KM_UNDEF )
 
             if( aPH->php->Ascp )
             {
-                if( pmp->AscpC == nullptr || ks+pmp->LsKin[k*6+4] > aObj[ o_wi_ascpc ].GetN() )
+                if( pmp->AscpC == nullptr || ks+pmp->LsKin[k*6+4] > aObj[ o_wi_ascpc ]->GetN() )
 //                  (int)(sizeof( pmp->AscpC )/sizeof(double)))
-                 pmp->AscpC = static_cast<double *>( aObj[ o_wi_ascpc ].Alloc(
+                 pmp->AscpC = static_cast<double *>( aObj[ o_wi_ascpc ]->Alloc(
                    ks+pmp->LsKin[k*6+4], 1, D_ ));
                 ErrorIf( pmp->AscpC == nullptr, "KinMetModLoad",
                        "Error in reallocating memory for pmp->AscpC." );
@@ -164,16 +163,16 @@ if(kMod[0] != KM_UNDEF )
 
             if( aPH->php->lDCr && aPH->php->apCon)
             { // List of DC names involved in PR activity products
-                if( pmp->xSKrC == nullptr || kd+pmp->LsKin[k*6+1] > aObj[ o_wi_jcrdc ].GetN() )
+                if( pmp->xSKrC == nullptr || kd+pmp->LsKin[k*6+1] > aObj[ o_wi_jcrdc ]->GetN() )
 //                  (int)(sizeof( pmp->xSKrC )/sizeof(long int)))
-                 pmp->xSKrC = static_cast<long int *>(aObj[ o_wi_jcrdc ].Alloc(
+                 pmp->xSKrC = static_cast<long int *>(aObj[ o_wi_jcrdc ]->Alloc(
                    kd+pmp->LsKin[k*6+1], 1, L_ ));
                 ErrorIf( pmp->xSKrC == nullptr, "KinMetModLoad",
                        "Error in reallocating memory for pmp->xSKrC." );
                 if(  pmp->apConC == nullptr || ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3]
-                     > aObj[ o_wi_apconc ].GetN() )
+                     > aObj[ o_wi_apconc ]->GetN() )
    //               (int)(sizeof( pmp->apConC )/sizeof(double)))
-                 pmp->apConC = static_cast<double *>(aObj[ o_wi_apconc ].Alloc(
+                 pmp->apConC = static_cast<double *>(aObj[ o_wi_apconc ]->Alloc(
                    (ka+pmp->LsKin[k*6+1] *pmp->LsKin[k*6]*pmp->LsKin[k*6+3]), 1, D_ ));
                 ErrorIf( pmp->apConC == nullptr, "KinMetModLoad",
                        "Error in reallocating memory for pmp->apConC." );
@@ -212,15 +211,15 @@ if(kMod[0] != KM_UNDEF )
           if( aPH->php->lPhc /*&& aPH->php->IsoC*/ )
           {
               char ibuf[2] = "";
-              if( pmp->lPhc == nullptr || jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1] > aObj[ o_wi_lphc ].GetN() )
+              if( pmp->lPhc == nullptr || jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1] > aObj[ o_wi_lphc ]->GetN() )
     //             > (int)(sizeof( pmp->lPhc )/sizeof(double)))
-                pmp->lPhc = static_cast<double *>(aObj[ o_wi_lphc ].Alloc(
+                pmp->lPhc = static_cast<double *>(aObj[ o_wi_lphc ]->Alloc(
                    jlphc+pm.LsPhl[k*2]*pm.LsPhl[k*2+1], 1, D_ ));
             ErrorIf( pmp->lPhc == nullptr, "KinMetModLoad",
                     "Error in reallocating memory for pmp->lPhc." );
-            if( pmp->PhLin == nullptr || jphl+pm.LsPhl[k*2]  > aObj[ o_wi_phlin ].GetN() )
+            if( pmp->PhLin == nullptr || jphl+pm.LsPhl[k*2]  > aObj[ o_wi_phlin ]->GetN() )
    //                 > (int)(sizeof( pmp->PhLin )/sizeof(long int (*)[2])))
-                pmp->PhLin = static_cast<long int (*)[2]>(aObj[ o_wi_phlin ].Alloc(
+                pmp->PhLin = static_cast<long int (*)[2]>(aObj[ o_wi_phlin ]->Alloc(
                    jphl+pm.LsPhl[k*2], 2, L_ ));
             ErrorIf( pmp->PhLin == nullptr, "KinMetModLoad",
                     "Error in reallocating memory for pmp->PhLin." );
@@ -257,8 +256,8 @@ if(kMod[0] != KM_UNDEF )
             int icph=0, icInd = 0;
             char ICname[MAXICNAME+2];
 
-            if( pmp->xICuC == nullptr || ki+pmp->LsUpt[k*2+1] > aObj[ o_wi_xicuc ].GetN() )
-                pmp->xICuC = static_cast<long int *>(aObj[ o_wi_xicuc ].Alloc( ki+pmp->LsUpt[k*2+1], 1, L_ ));
+            if( pmp->xICuC == nullptr || ki+pmp->LsUpt[k*2+1] > aObj[ o_wi_xicuc ]->GetN() )
+                pmp->xICuC = static_cast<long int *>(aObj[ o_wi_xicuc ]->Alloc( ki+pmp->LsUpt[k*2+1], 1, L_ ));
             ErrorIf( pmp->xICuC == nullptr, "KinMetModLoad",
                     "Error in reallocating memory for pmp->xICuC." );
             // For now, no compression of IC name list (and other stuff in TKinMet). TBD!!!
@@ -313,8 +312,7 @@ void TMulti::SolModLoad( )
     int kk, k, j, jj, jp, jkd, ku, kue=0,
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, kx, kxe=0, ksn = 0, ksf=0, Type=0;
     long int jdqfc=0,  jrcpc=0;
-    //vstr pkey(MAXRKEYLEN);
-    vstr modT(164);
+    char modT[164];
     //char *sMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;
@@ -327,8 +325,8 @@ void TMulti::SolModLoad( )
     // reallocating arrays for script calculations
     if( pmp->pIPN <= 0 )
     {
-        qEp.Clear();
-        qEd.Clear();
+        qEp.clear();
+        qEd.clear();
     }
     // Data extraction from Phase records
     for( kk=0, k=-1; kk<mup->Fis; kk++ )
@@ -360,7 +358,7 @@ void TMulti::SolModLoad( )
 
             // build formula list
             for( jj=jb, j=JB; j < JE; j++ )
-                form_array.Add( aFo.form_extr( j, mup->L, mup->DCF ) );
+                form_array.push_back( aFo.form_extr( j, mup->L, mup->DCF ) );
 
             // get moiety full structure from phase
             aPH->MakeSublatticeLists( form_array );
@@ -382,10 +380,10 @@ void TMulti::SolModLoad( )
            pmp->LsMdc[k*3+2] = aPH->php->nMoi;
 
            // realloc memory
-           if( ksn+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k] > aObj[ o_wi_moisn ].GetN()
+           if( ksn+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k] > aObj[ o_wi_moisn ]->GetN()
                    || pmp->MoiSN == nullptr )
 //                   (int)(sizeof( pmp->MoiSN )/sizeof(double)))
-              pmp->MoiSN = static_cast<double *>(aObj[ o_wi_moisn ].Alloc(
+              pmp->MoiSN = static_cast<double *>(aObj[ o_wi_moisn ]->Alloc(
                      (ksn+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k]), 1, D_ ));
            ErrorIf( pmp->MoiSN == nullptr, "SolModLoad",
                          "Error in reallocating memory for pmp->MoiSN." );
@@ -403,10 +401,10 @@ void TMulti::SolModLoad( )
               }
            } /* jj */
            // realloc memory for the collection of site fractions arrays
-           if( ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2] > aObj[ o_wo_sitfr ].GetN()
+           if( ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2] > aObj[ o_wo_sitfr ]->GetN()
                    || pmp->SitFr == nullptr )
 //                   (int)(sizeof( pmp->SitFr )/sizeof(double)))
-              pmp->SitFr = static_cast<double *>(aObj[ o_wo_sitfr ].Alloc(
+              pmp->SitFr = static_cast<double *>(aObj[ o_wo_sitfr ]->Alloc(
                      (ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]), 1, D_ ));
            ErrorIf( pmp->SitFr == nullptr, "SolModLoad",
                          "Error in reallocating memory for pmp->SitFr." );
@@ -433,69 +431,69 @@ void TMulti::SolModLoad( )
                pmp->LsMdc[k*3] = aPH->php->nscM; // changed 07.12.2006  KD
             /*     if( !pm_GC_ods_link( q, k, jb, kc, kd ))
                  { iRet = AMW_FE; goto WRONG; }  */
-            aObj[ o_ntc ].SetPtr( &pmp->TCc );
-            aObj[ o_ntk ].SetPtr( &pmp->Tc );
-            aObj[ o_np  ].SetPtr(  &pmp->Pc );
-            aObj[ o_nis ].SetPtr( &pmp->IC );
-            aObj[ o_ni  ].SetPtr(  &pmp->is );
-            aObj[ o_njs ].SetPtr(  &pmp->js );
-            aObj[ o_nnext ].SetPtr( &pmp->next );
-            aObj[ o_nrt ].SetPtr( &pmp->RT );
-            aObj[ o_nlnrt ].SetPtr(&pmp->FRT );
-            aObj[ o_nqp ].SetPtr( pmp->Qp+k*QPSIZE );
-            aObj[ o_nqd ].SetPtr( pmp->Qd+k*QDSIZE );  // QDSIZE cells per phase
-//      aObj[ o_nncp].SetPtr( pmp->LsMod+k );  changes 07.12.2006  KD
-            aObj[ o_nncp].SetPtr( pmp->LsMod+k*3 );
-            aObj[ o_nncp].SetDim( 1, 3 );
-            aObj[ o_nncd].SetPtr( pmp->LsMdc+k*3 );
-            aObj[ o_nncd].SetDim( 1, 1 );
-            aObj[ o_ndc ].SetPtr( pmp->L1+k );
-            aObj[ o_nez ].SetPtr( pmp->EZ+jb );
-            aObj[o_nez].SetN( pmp->L1[k]);
+            aObj[ o_ntc ]->SetPtr( &pmp->TCc );
+            aObj[ o_ntk ]->SetPtr( &pmp->Tc );
+            aObj[ o_np  ]->SetPtr(  &pmp->Pc );
+            aObj[ o_nis ]->SetPtr( &pmp->IC );
+            aObj[ o_ni  ]->SetPtr(  &pmp->is );
+            aObj[ o_njs ]->SetPtr(  &pmp->js );
+            aObj[ o_nnext ]->SetPtr( &pmp->next );
+            aObj[ o_nrt ]->SetPtr( &pmp->RT );
+            aObj[ o_nlnrt ]->SetPtr(&pmp->FRT );
+            aObj[ o_nqp ]->SetPtr( pmp->Qp+k*QPSIZE );
+            aObj[ o_nqd ]->SetPtr( pmp->Qd+k*QDSIZE );  // QDSIZE cells per phase
+//      aObj[ o_nncp]->SetPtr( pmp->LsMod+k );  changes 07.12.2006  KD
+            aObj[ o_nncp]->SetPtr( pmp->LsMod+k*3 );
+            aObj[ o_nncp]->SetDim( 1, 3 );
+            aObj[ o_nncd]->SetPtr( pmp->LsMdc+k*3 );
+            aObj[ o_nncd]->SetDim( 1, 1 );
+            aObj[ o_ndc ]->SetPtr( pmp->L1+k );
+            aObj[ o_nez ]->SetPtr( pmp->EZ+jb );
+            aObj[o_nez]->SetN( pmp->L1[k]);
 
-//            aObj[ o_npcv].SetPtr( pmp->PMc+kc );
-//            aObj[o_npcv].SetDim( 1, pmp->LsMod[k]);  // Changed 07.12.2006 KD
-            aObj[ o_npcv].SetPtr( pmp->PMc+kc );
-            aObj[o_npcv].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+2]);
+//            aObj[ o_npcv]->SetPtr( pmp->PMc+kc );
+//            aObj[o_npcv]->SetDim( 1, pmp->LsMod[k]);  // Changed 07.12.2006 KD
+            aObj[ o_npcv]->SetPtr( pmp->PMc+kc );
+            aObj[o_npcv]->SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+2]);
             //  Object for indexation of interaction parameters
-            aObj[ o_nu].SetPtr( pmp->IPx+kx );
-            aObj[o_nu].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+1]);
+            aObj[ o_nu]->SetPtr( pmp->IPx+kx );
+            aObj[o_nu]->SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+1]);
 
-            aObj[ o_ndcm].SetPtr( pmp->DMc+kd );
-            aObj[o_ndcm].SetDim( pmp->L1[k], pmp->LsMdc[k*3]);
+            aObj[ o_ndcm]->SetPtr( pmp->DMc+kd );
+            aObj[o_ndcm]->SetDim( pmp->L1[k], pmp->LsMdc[k*3]);
 
-            aObj[ o_nmvol].SetPtr(pmp->Vol+jb );
-            aObj[o_nmvol].SetN( pmp->L1[k]);
-            aObj[ o_nppar].SetPtr(pmp->G0+jb );   // Changed 10.12.2008 by DK
-            aObj[ o_nppar].SetN( pmp->L1[k]);
-//            aObj[ o_ngtn].SetPtr( pmp->G0+jb );
-            aObj[ o_ngtn].SetPtr( pmp->fDQF+jb );     // changed 15.06.2011 by DK
-            aObj[ o_ngtn].SetN( pmp->L1[k]);
-            aObj[ o_ngam].SetPtr( pmp->Gamma+jb );
-            aObj[ o_ngam].SetN( pmp->L1[k]);
-            aObj[ o_nlngam].SetPtr( pmp->lnGam+jb );
-            aObj[ o_nlngam].SetN( pmp->L1[k]);
-            aObj[ o_nas].SetPtr(  pmp->A+pmp->N*jb );
-            aObj[ o_nas].SetDim( pmp->L1[k], pmp->N);
-            aObj[ o_nxa].SetPtr( pmp->XF+k );
-            aObj[ o_nxaa ].SetPtr(  pmp->XFA+k );
+            aObj[ o_nmvol]->SetPtr(pmp->Vol+jb );
+            aObj[o_nmvol]->SetN( pmp->L1[k]);
+            aObj[ o_nppar]->SetPtr(pmp->G0+jb );   // Changed 10.12.2008 by DK
+            aObj[ o_nppar]->SetN( pmp->L1[k]);
+//            aObj[ o_ngtn]->SetPtr( pmp->G0+jb );
+            aObj[ o_ngtn]->SetPtr( pmp->fDQF+jb );     // changed 15.06.2011 by DK
+            aObj[ o_ngtn]->SetN( pmp->L1[k]);
+            aObj[ o_ngam]->SetPtr( pmp->Gamma+jb );
+            aObj[ o_ngam]->SetN( pmp->L1[k]);
+            aObj[ o_nlngam]->SetPtr( pmp->lnGam+jb );
+            aObj[ o_nlngam]->SetN( pmp->L1[k]);
+            aObj[ o_nas]->SetPtr(  pmp->A+pmp->N*jb );
+            aObj[ o_nas]->SetDim( pmp->L1[k], pmp->N);
+            aObj[ o_nxa]->SetPtr( pmp->XF+k );
+            aObj[ o_nxaa ]->SetPtr(  pmp->XFA+k );
             if( pmp->FIat > 0 )
             {
-                aObj[ o_nxast].SetPtr( pmp->XFTS[k] );
-                aObj[ o_nxcec].SetPtr( pmp->Xetaf[k] );
+                aObj[ o_nxast]->SetPtr( pmp->XFTS[k] );
+                aObj[ o_nxcec]->SetPtr( pmp->Xetaf[k] );
             }
             else
             {
-                aObj[ o_nxast].SetPtr( nullptr );
-                aObj[ o_nxcec].SetPtr( nullptr );
+                aObj[ o_nxast]->SetPtr( nullptr );
+                aObj[ o_nxcec]->SetPtr( nullptr );
             }
-            aObj[ o_nbmol].SetPtr(pmp->FVOL+k ); // Phase volume
-            aObj[ o_nxx].SetPtr(  pmp->X+jb );
-            aObj[o_nxx].SetN( pmp->L1[k]);
-            aObj[ o_nwx].SetPtr(  pmp->Wx+jb );
-            aObj[o_nwx].SetN( pmp->L1[k]);
-            aObj[ o_nmju].SetPtr( pmp->Fx+jb );
-            aObj[o_nmju].SetN( pmp->L1[k]);
+            aObj[ o_nbmol]->SetPtr(pmp->FVOL+k ); // Phase volume
+            aObj[ o_nxx]->SetPtr(  pmp->X+jb );
+            aObj[o_nxx]->SetN( pmp->L1[k]);
+            aObj[ o_nwx]->SetPtr(  pmp->Wx+jb );
+            aObj[o_nwx]->SetN( pmp->L1[k]);
+            aObj[ o_nmju]->SetPtr( pmp->Fx+jb );
+            aObj[o_nmju]->SetN( pmp->L1[k]);
             break;
         default: // error - invalid code of the mixing model
             Error( "SolModLoad", "Wrong code of the model of mixing" );
@@ -511,7 +509,7 @@ void TMulti::SolModLoad( )
         }
         if( aPH->php->pEq && *aPH->php->pEq && modT[SPHAS_DEP] != SM_UNDEF )
         { // translate expressions in the non-ideality model for the whole phase
-            aObj[ o_neqtxt].SetPtr( aPH->php->pEq );
+            aObj[ o_neqtxt]->SetPtr( aPH->php->pEq );
             Type = 0;
             if( pmp->PHC[k] != PH_SORPTION && pmp->PHC[k] != PH_POLYEL )
                 sm_text_analyze( k, Type, JB, JE, jb, je );
@@ -524,12 +522,12 @@ void TMulti::SolModLoad( )
         { // translate expressions in the non-ideality model for components
             if( modT[DCE_LINK] == SM_PUBLIC )
             { // one group of expressions for all components
-                aObj[ o_neqtxt].SetPtr( aPH->php->dEq );
+                aObj[ o_neqtxt]->SetPtr( aPH->php->dEq );
                 Type = 1;
             }
             else
             { // separate group of expressions for each component
-                aObj[ o_neqtxt].SetPtr( nullptr );
+                aObj[ o_neqtxt]->SetPtr( nullptr );
                 Type = 2;
             }
         }
@@ -547,10 +545,10 @@ LOAD_NIDMCOEF:
         { // loading interaction parameters - rewritten 07.12.2006 by KD
           if( aPH->php->pnc )
           {
-              if( kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2] > aObj[ o_wi_pmc ].GetN()
+              if( kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2] > aObj[ o_wi_pmc ]->GetN()
                       || pmp->PMc == nullptr )
 //                  (int)(sizeof( pmp->PMc )/sizeof(double)))
-                 pmp->PMc = static_cast<double *>(aObj[ o_wi_pmc ].Alloc(
+                 pmp->PMc = static_cast<double *>(aObj[ o_wi_pmc ]->Alloc(
                    (kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2]), 1, D_ ));
               ErrorIf( pmp->PMc == nullptr, "SolModLoad",
                        "Error in reallocating memory for pmp->PMc." );
@@ -563,10 +561,10 @@ LOAD_NIDMCOEF:
           //  Copying the IP index array from Phase to MULTI
           if( aPH->php->ipxt )
           {
-             if( kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1] > aObj[ o_wi_ipxpm ].GetN()
+             if( kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1] > aObj[ o_wi_ipxpm ]->GetN()
                      || pmp->IPx == nullptr )
 //                (int)(sizeof( pmp->IPx )/sizeof(long int)))
-             pmp->IPx = static_cast<long int *>(aObj[ o_wi_ipxpm ].Alloc(
+             pmp->IPx = static_cast<long int *>(aObj[ o_wi_ipxpm ]->Alloc(
                 (kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1]), 1, L_ ));
              ErrorIf( pmp->IPx == nullptr, "SolModLoad",
                       "Error in reallocating memory for pmp->IPx" );
@@ -580,10 +578,10 @@ LOAD_NIDMCOEF:
         {   // coefficients for end member components
           if( aPH->php->scoef )
           {
-            if( kd+pmp->LsMdc[k*3]*pmp->L1[k] > aObj[ o_wi_dmc ].GetN()
+            if( kd+pmp->LsMdc[k*3]*pmp->L1[k] > aObj[ o_wi_dmc ]->GetN()
                     || pmp->DMc == nullptr )
 //                 > (int)(sizeof( pmp->DMc )/sizeof(double)))
-                pmp->DMc = static_cast<double *>(aObj[ o_wi_dmc ].Alloc(
+                pmp->DMc = static_cast<double *>(aObj[ o_wi_dmc ]->Alloc(
                    kd+pmp->LsMdc[k*3]*pmp->L1[k], 1, D_ ));
             ErrorIf( pmp->DMc == nullptr, "SolModLoad",
                     "Error in reallocating memory for pmp->DMc." );
@@ -607,10 +605,10 @@ LOAD_NIDMCOEF:
         {   // coefficients for of DQF parameters for DCs in phases
           if( aPH->php->DQFc )
           {
-            if( jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k] > aObj[ o_wi_dqfc ].GetN()
+            if( jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k] > aObj[ o_wi_dqfc ]->GetN()
                     || pmp->DQFc == nullptr )
 //                 > (int)(sizeof( pmp->DQFc )/sizeof(double)))
-                pmp->DQFc = static_cast<double *>(aObj[ o_wi_dqfc ].Alloc(
+                pmp->DQFc = static_cast<double *>(aObj[ o_wi_dqfc ]->Alloc(
                    jdqfc+pmp->LsMdc2[k*3]*pmp->L1[k], 1, D_ ));
             ErrorIf( pmp->DQFc == nullptr, "SolModLoad",
                     "Error in reallocating memory for pmp->DQFc." );
@@ -631,10 +629,10 @@ LOAD_NIDMCOEF:
         {   // coefficients of reciprocal parameters for DCs in phases
           if( aPH->php->rcpc )
           {
-            if( jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k] > aObj[ o_wi_rcpc ].GetN()
+            if( jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k] > aObj[ o_wi_rcpc ]->GetN()
                     || pmp->rcpc == nullptr )
 //                 > (int)(sizeof( pmp->rcpc )/sizeof(double)))
-                pmp->rcpc = (double *) aObj[ o_wi_rcpc ].Alloc(
+                pmp->rcpc = (double *) aObj[ o_wi_rcpc ]->Alloc(
                    jrcpc+pmp->LsMdc2[k*3+1]*pmp->L1[k], 1, D_ );
             ErrorIf( pmp->rcpc == nullptr, "SolModLoad",
                     "Error in reallocating memory for pmp->rcpc." );
@@ -676,10 +674,10 @@ LOAD_NIDMCOEF:
 // new: load uptake kinetics model parameters here  !!! compression of phase DCs not yet implemented !!!
         if( aPH->php->umpCon )
         {
-            if( ku+pmp->LsUpt[k*2]*pmp->L1[k] > aObj[ o_wi_umpc ].GetN()
+            if( ku+pmp->LsUpt[k*2]*pmp->L1[k] > aObj[ o_wi_umpc ]->GetN()
                     || pmp->UMpcC == nullptr )
 //              (int)(sizeof( pmp->UMpcC )/sizeof(double)))
-             pmp->UMpcC = static_cast<double *>(aObj[ o_wi_umpc ].Alloc(
+             pmp->UMpcC = static_cast<double *>(aObj[ o_wi_umpc ]->Alloc(
                ku+pmp->LsUpt[k*2]*pmp->L1[k], 1, D_ ));
             ErrorIf( pmp->UMpcC == nullptr, "SolModLoad",
                    "Error in reallocating memory for pmp->UMpcC." );
@@ -708,27 +706,27 @@ void TMulti::sm_text_analyze( int nph, int Type,
                                int JB, int JE, int jb, int je )
 {
     char *erscan = nullptr;
-    gstring save;
+    string save;
 
-    erscan = static_cast<char *>(aObj[ o_nwtext].Alloc(  1, 2048, S_ ));
+    erscan = static_cast<char *>(aObj[ o_nwtext]->Alloc(  1, 2048, S_ ));
     //AGAIN: // translate equations
     try
     {
         if( Type == 2 )
         {
             save = PressSolMod(nph );
-            aObj[ o_neqtxt ].SetPtr( const_cast<char *>(save.c_str()) );
+            aObj[ o_neqtxt ]->SetPtr( const_cast<char *>(save.c_str()) );
         }
         ET_translate( o_nwtext, o_neqtxt, JB, JE, jb, je );
         if( Type )
         {
-            qEd.AddAt( new IPNCalc(), nph );
-            qEd[nph].GetEquat( static_cast<char *>(aObj[o_nwtext].GetPtr()) );
+            qEd.insert( qEd.begin()+nph, std::make_shared<IPNCalc>() );
+            qEd[nph]->GetEquat( static_cast<char *>(aObj[o_nwtext]->GetPtr()) );
         }
         else
         {
-            qEp.AddAt( new IPNCalc(), nph );
-            qEp[nph].GetEquat( static_cast<char *>(aObj[o_nwtext].GetPtr() ));
+            qEp.insert( qEp.begin()+nph, std::make_shared<IPNCalc>() );
+            qEp[nph]->GetEquat( static_cast<char *>(aObj[o_nwtext]->GetPtr() ));
         }
     }
     catch( TError& xcpt )
@@ -741,23 +739,24 @@ void TMulti::sm_text_analyze( int nph, int Type,
         Error(  "SolModLoad", xcpt.mess.c_str() );
     }
     /* if( Type ) // print results to rpn_log.txt
-        qEd[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
+        qEd[nph].PrintEquat( (char *)aObj[o_neqtxt]->GetPtr(), fstream& f);
        else
-        qEp[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
+        qEp[nph].PrintEquat( (char *)aObj[o_neqtxt]->GetPtr(), fstream& f);
      */
 }
 
 //--------------------------------------------------------------------
 // Packs the script of PRIVATE type of solution phase
 //
-gstring TMulti::PressSolMod( int nP )
+string TMulti::PressSolMod( int nP )
 {
-    int j, jp, k, ks, jb=0, je=0, EGlen;
+    int j, jp, k, ks, jb=0, je=0;
+    size_t EGlen;
     char *EGb;
     TPhase* aPH=TPhase::pm;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
-    gstring etext;
+    string etext;
 
     for( k=0,ks=-1; k < mup->Fis && ks < nP; k++ )
     {  // calculating indexes
@@ -777,12 +776,12 @@ gstring TMulti::PressSolMod( int nP )
         jp = mup->Pl[j];  // index component in phase
         EGlen = 0;
         // get equation number jp in  PHASE
-        EGb = ExtractEG( aPH->php->dEq, jp, &EGlen, aPH->php->nDC );
+        EGb = ExtractEG( aPH->php->dEq, jp, EGlen, aPH->php->nDC );
         ErrorIf( !EGb,
          "E12MSPrep:", "SolModLoad(): Missing operators group for a phase endmember." );
         if( EGlen )
         {  // set text to buffer
-            etext += gstring( EGb, 0, EGlen );
+            etext += string( EGb, 0, EGlen );
             etext +=  "\n" ;
         }
     }
@@ -793,7 +792,7 @@ gstring TMulti::PressSolMod( int nP )
 //Get groop of equations number jp from Etext
 // Returns *EGlen=0 if there is no equations for the group jp
 //
-char *TMulti::ExtractEG( char *Etext, int jp, int *EGlen, int Nes )
+char *TMulti::ExtractEG( char *Etext, int jp, size_t& EGlen, int Nes )
 {
     int j;
     char *begin, *end;
@@ -820,19 +819,19 @@ AgainE:
     /*   if( !end && jp < Nes-1 ) can be < eqns than DC! final \@ */
     if( !end && jp >= 0 && jp < Nes-1 )
     {
-        *EGlen = 0;
+        EGlen = 0;
         return begin;
     }
     if( !end && jp == Nes-1 )
     {
-        *EGlen = strlen( begin );
+        EGlen = strlen( begin );
         return begin;
     }
     end++;
     if( *end != EQSET_DELIM )
         goto AgainE;
     end++;
-    *EGlen = end-begin;
+    EGlen = end-begin;
     return begin;
 }
 
@@ -844,13 +843,13 @@ AgainE:
 int TMulti::find_icnum( char *name, int LNmode )
 {
     int i;
-    vstr ICs(IC_RKLEN+10);
+    char ICs[IC_RKLEN+10];
     char *nbg, *nend;
     TFormula aFo;
 
     nbg = name;
     nend = name+strlen(name)-1;
-    fillValue( ICs.p, ' ', IC_RKLEN );
+    fillValue( ICs, ' ', IC_RKLEN );
     ICs[/*MAXSYMB*/IC_RKLEN] = 0;
     if( isdigit( name[0] ))
 { /* this is isotope 34S */ MOVEDIGIT:
@@ -877,7 +876,7 @@ int TMulti::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, pmp->SB[i], MAXICNAME/*+MAXSYMB*/ ))
                 return i;
         }
-        Error( ICs.p, "E04MSPrep: IC name cannot be found in GEM IPM work data lists..." );
+        Error( ICs, "E04MSPrep: IC name cannot be found in GEM IPM work data lists..." );
     }
     if( LNmode == 0 )
     {
@@ -887,9 +886,9 @@ int TMulti::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, mup->SB[i], MAXICNAME+MAXSYMB ))
                 return i;
         }
-        Error( ICs.p, "E14MSPrep: IC name cannot be found in Project system definition lists..." );
+        Error( ICs, "E14MSPrep: IC name cannot be found in Project system definition lists..." );
     }
-    Error( ICs.p, "E09MSPrep: Invalid IC search mode parameter..." );
+    Error( ICs, "E09MSPrep: Invalid IC search mode parameter..." );
     return -1;
 }
 
@@ -902,7 +901,6 @@ int TMulti::find_icnum( char *name, int LNmode )
 int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
 {
     int j, jf[20], ii=0, jj;
-    //vstr pbuf(164);
 
     auto len = strlen( name );
     if( LNmode == 1 )
@@ -948,7 +946,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
     if( ii == 1 )
         return( jf[0] );
 
-    gstring pbuf = "Please, select DC index for the DC name ";
+    string pbuf = "Please, select DC index for the DC name ";
             pbuf += name;
             pbuf += "\n in the first script statement below \n";
             pbuf += stmt;
@@ -1031,8 +1029,8 @@ int TMulti::find_phnum( char *name, int LNmode )
     if( ii == 1 )
         return( kf[0] );
     /* more then one useful index */
-    vstr pbuf_(164);
-    gstring pbuf;
+    char pbuf_[164];
+    string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of Phase indices found for the phase name ";
@@ -1070,11 +1068,10 @@ int TMulti::find_acnum( char *name, int LNmode )
     if( ii == 1 )
         return( jf[0] );
     /* more then one matching index */
-    //vstr pbuf(164);
     //sprintf( pbuf, "%d of PCO indices found for the PCO name %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    vstr pbuf_(164);
-    gstring pbuf;
+    char pbuf_[164];
+    string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of PCO indices found for the PCO name ";
@@ -1109,22 +1106,22 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     int i=0, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
       *prev, *last, *stmt, iCode, odlab[MAXKEYWD+2];
-    vstr name(164), nbuf(164);
+    char name[164], nbuf[164];
 
-    etext = static_cast<char *>(aObj[ nOet ].GetPtr());
+    etext = static_cast<char *>(aObj[ nOet ]->GetPtr());
     /*if( etext )
-        eLen = aObj[ nOet ].GetM();
+        eLen = aObj[ nOet ]->GetM();
     else eLen =0;*/
-    pexpr = static_cast<char *>(aObj[ nOpex ].GetPtr());
+    pexpr = static_cast<char *>(aObj[ nOpex ]->GetPtr());
 
     ls = strlen( pexpr );
     if( !ls )
       return;
     end = pexpr+ls;
     //if( ls+1 > eLen )
-    //    etext = (char *)aObj[ nOet ].Alloc( 1, ls+ls/6, S_ );
-    aObj[ nOet ].Free();
-    etext = static_cast<char *>(aObj[ nOet ].Alloc( 1, ls+ls/6, S_ ));
+    //    etext = (char *)aObj[ nOet ]->Alloc( 1, ls+ls/6, S_ );
+    aObj[ nOet ]->Free();
+    etext = static_cast<char *>(aObj[ nOet ]->Alloc( 1, ls+ls/6, S_ ));
     ecur = etext;
     cur = pexpr;
     next = cur;
@@ -1204,13 +1201,13 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             ii = aObj.Find( odlab );
             if( ii<0 )
             { // wrong data object name
-                gstring err = "Identifier (variable) ";
+                string err = "Identifier (variable) ";
                 err += odlab;
                 err += " is not known.";
                 Error( "E00MSPrep: ", err.c_str() );
             }
             nO = ii;
-            iCode = aObj[ii].GetIndexationCode();
+            iCode = aObj[ii]->GetIndexationCode();
             // Getting new indexation code  KD 30.03.01
             switch( iCode )
             {  // analyze indexation code
@@ -1251,7 +1248,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             }
             cstate = iCode;
             // preparing for getting species/phase/icomp/compos name in
-            fillValue( name.p, ' ', 63 );
+            fillValue( name, ' ', 63 );
             name[63] = 0;
             cc = 1;
             cur++;
@@ -1392,62 +1389,62 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
 // Build list names of index for object
 void TMulti::getNamesList( int nO, TCStringArray& lst )
 {
-   lst.Clear();
+   lst.clear();
 
-   int i, iCode = aObj[nO].GetIndexationCode();
+   int i, iCode = aObj[nO]->GetIndexationCode();
    RMULTS* mup = TRMults::sm->GetMU();
 
-   long int nOsz = aObj[nO].GetN();
+   long int nOsz = aObj[nO]->GetN();
 
     // Getting new indexation code
    switch( iCode )
    {  // analyze indexation code
        default: //break;
-          Error( "E01MSWin: Unknown indexation base for data object",aObj[nO].GetKeywd()  );
+          Error( "E01MSWin: Unknown indexation base for data object",aObj[nO]->GetKeywd()  );
           break;
        case A_icx:
                   for( i=0; i<pmp->N; i++ )
-                     lst.Add( gstring( pmp->SB[i], 0, MAXICNAME ));
+                     lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
                   break;
        case A_dcx:
        case A_dcxicx:
                    for( i=0; i<min(pmp->L,nOsz); i++ )
-                       lst.Add( gstring( pmp->SM[i],0, MAXDCNAME) );
+                       lst.push_back( string( pmp->SM[i],0, MAXDCNAME) );
                    break;
        case A_dcsx:
                    for( i=pmp->Ls + pmp->Lads; i<pmp->L; i++ )
-                       lst.Add( gstring( pmp->SM[i],0, MAXDCNAME) );
+                       lst.push_back( string( pmp->SM[i],0, MAXDCNAME) );
                    break;
        case A_phx:
                    for( i=0; i<min(pmp->FI,nOsz); i++ )
-                     lst.Add( gstring( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                     lst.push_back( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
                    break;
        case A_phxicx:
                    for( i=0; i<pmp->N; i++ )
-                      lst.Add( gstring( pmp->SB[i], 0, MAXICNAME ));
+                      lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
                    break;
                    //for( i=0; i<pmp->FIs; i++ )
-                   //  lst.Add( gstring( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                   //  lst.Add( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
                    //break;
        case A_ICx:
                   for( i=0; i<mup->N; i++ )
-                       lst.Add( gstring( mup->SB[i], 0, MAXICNAME ));
+                       lst.push_back( string( mup->SB[i], 0, MAXICNAME ));
                    break;
        case A_ACx:
                   for( i=0; i<mup->La; i++ )
-                      lst.Add( gstring( mup->SA[i], 0, MAXCMPNAME ));
+                      lst.push_back( string( mup->SA[i], 0, MAXCMPNAME ));
                    break;
        case A_DCx:
                    for( i=0; i<mup->L; i++ )
-                      lst.Add( gstring( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
+                      lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
                    break;
        case A_DCSx:
                   for( i=mup->Ls+mup->Lads; i<mup->L; i++ )
-                    lst.Add( gstring( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
+                    lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
                   break;
        case A_PHx:
                    for( i=0; i<mup->Fi; i++ )
-                       lst.Add( gstring( mup->SF[i]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME));
+                       lst.push_back( string( mup->SF[i]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME));
                    break;
    }
 }

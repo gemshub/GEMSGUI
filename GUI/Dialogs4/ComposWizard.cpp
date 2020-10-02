@@ -4,7 +4,6 @@
 // Implementation of ComposWizard class
 //
 // Copyright (C) 2005-2007  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -78,7 +77,7 @@ ComposWizard::ComposWizard( const char* pkey, char flgs[6], int size[2],
     QDialog( parent )
 {
     setupUi(this);
-    gstring str1= "GEM-Selektor Compos Setup:  ";
+    string str1= "GEM-Selektor Compos Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
     QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
@@ -135,7 +134,7 @@ double   ComposWizard::getR2()
 {
  double r=lineEdit1->text().toDouble();
 
- if( r == 0. && checkBox2_2_2->isChecked() )
+ if( approximatelyZero(r) && checkBox2_2_2->isChecked() )
        r = 1.;
   return r;
 }

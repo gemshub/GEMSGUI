@@ -4,7 +4,6 @@
 // Implementation of AutoPhaseDialog class
 //
 // Copyright (C) 2003,2010 SD, DK
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -62,7 +61,7 @@ AutoPhaseDialog::AutoPhaseDialog (
 {
     
     setupUi(this);
-    gstring str= "Setup of aqueous and gas phases in project:  ";
+    string str= "Setup of aqueous and gas phases in project:  ";
             str += pr_key;
             setWindowTitle( str.c_str() );
 
@@ -158,13 +157,13 @@ AutoPhaseDialog::get_acode()
 }
 
 void
-AutoPhaseDialog::get_akey( gstring& a_key )
+AutoPhaseDialog::get_akey( string& a_key )
 {
    a_key = aqu_key;
 }
 
 void
-AutoPhaseDialog::set_akey( gstring& a_key )
+AutoPhaseDialog::set_akey( string& a_key )
 {
   aqu_key = a_key;
 /*  if( aselU->isChecked())
@@ -211,13 +210,13 @@ char AutoPhaseDialog::get_gcode()
 }
 
 void
-AutoPhaseDialog::get_gkey( gstring& g_key )
+AutoPhaseDialog::get_gkey( string& g_key )
 {
    g_key = gas_key;
 }
 
 void
-AutoPhaseDialog::set_gkey( gstring& g_key )
+AutoPhaseDialog::set_gkey( string& g_key )
 {
   gas_key = g_key;
 
@@ -244,8 +243,8 @@ void
 AutoPhaseDialog::CmCheck()
 {
   float par[16];
-  gstring a_key = aqu_key;
-  gstring g_key = gas_key;
+  string a_key = aqu_key;
+  string g_key = gas_key;
 
   if( a_key.empty()  )
       a_key = "a:*:*:*:*:";

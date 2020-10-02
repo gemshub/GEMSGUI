@@ -19,7 +19,7 @@
 
 #include <cmath>
 #include <cstdio>
-#ifdef use_omp
+#ifdef useOMP
 #include <omp.h>
 #endif
 
@@ -171,7 +171,7 @@ void  TGEM2MT::NewNodeArray()
     }  // ii    end of node iteration loop
 
     /* test output generated structure
-    ProcessProgressFunction messageF = [](const gstring& , long ){
+    ProcessProgressFunction messageF = [](const std::string& , long ){
         //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
         return false;
     };
@@ -253,7 +253,7 @@ long int TGEM2MT::CheckPIAinNodes1D( char IAmode, long int start_node, long int 
 	     // checking pair of adjacent nodes for phase assemblage differences
          for( long int kk=0; kk<CH->nPHb; kk++ )
 	     {
-	    	if( C0[ii]->xPH[kk] == 0.0 && C0[ii-1]->xPH[kk] == 0.0 )
+            if( approximatelyZero( C0[ii]->xPH[kk] ) && approximatelyZero( C0[ii-1]->xPH[kk] ) )
 	    		continue;    // Phase kk is absent in both node systems
 	    	if( C0[ii]->xPH[kk] > 0.0 && C0[ii-1]->xPH[kk] > 0.0 )
 	    		continue;    // Phase kk is present in both node systems
@@ -326,7 +326,7 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
    na->CalcIPM_List( TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez ), start_node, end_node, diffile );
 
    /* test output generated structure
-   ProcessProgressFunction messageF = [](const gstring& , long ){
+   ProcessProgressFunction messageF = [](const std::string& , long ){
        //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
        return false;
    };
@@ -459,8 +459,8 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     	    	 node1_xDC( ii, jc ) -= dc;			 
             	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
             	 {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
             		     node1_bIC(ii, ic) -= aji * dc;
             	 }
     	     }
@@ -469,8 +469,8 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     	    	 dc = c0/fmolal - mtp->cez;
     	    	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
             	 {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
             		     node1_bIC(ii, ic) -= aji * dc;
             	 }
     	     }	 
@@ -569,8 +569,8 @@ void TGEM2MT::MassTransCraNicStep( bool CompMode )
                  node1_xDC( ii, jc ) -= dc;
                  for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
                  {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
                          node1_bIC(ii, ic) -= aji * dc;
                  }
              }
@@ -579,8 +579,8 @@ void TGEM2MT::MassTransCraNicStep( bool CompMode )
                  dc = c0/fmolal - mtp->cez;
                  for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
                  {
-                         aji = na->DCaJI( jc, ic );
-                     if( aji != 0.0 )
+                     aji = na->DCaJI( jc, ic );
+                     if( noZero( aji ) )
                          node1_bIC(ii, ic) -= aji * dc;
                  }
              }
@@ -729,7 +729,7 @@ bool TGEM2MT::Trans1D( char mode )
   bool CompMode = false;   // Component transport mode: true: DC; false: IC
   long int nStart = 0, nEnd = mtp->nC;
   // long int NodesSetToAIA;
-// gstring Vmessage;
+// std::string Vmessage;
 
 FILE* logfile = nullptr;
 FILE* ph_file = nullptr;
@@ -746,7 +746,7 @@ if( mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON )  // Set of IC transport using re
 
 if( mtp->PsMO != S_OFF )
 {
-    gstring fname;
+    std::string fname;
 #ifndef IPMGEMPLUGIN
     fname = pVisor->userGEMDir();
 #endif

@@ -4,7 +4,6 @@
 // Implementation of SettingsDialog class
 //
 // Copyright (C) 1996-2007  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -97,10 +96,10 @@ SettingsDialog::CmApply()
     pVisorImp->setConfigAutosave( pConfigAutosave->isChecked() );
     pVisor->setElemPrMode(rbNewPrMode->isChecked());
 
-    pVisor->setLocalDocDir(pLocalDocDir->text().toLatin1().data());
-    pVisor->setRemoteHTML(pRemoteHTML->text().toLatin1().data());
+    pVisor->setLocalDocDir(pLocalDocDir->text().toStdString());
+    pVisor->setRemoteHTML(pRemoteHTML->text().toStdString());
 
-    pVisor->setDefaultBuiltinTDB(pBuiltinTDB->text().toLatin1().data());
+    pVisor->setDefaultBuiltinTDB(pBuiltinTDB->text().toStdString());
 
     //pVisor->setLocalDoc(pLocalDoc->isChecked());
 
@@ -156,8 +155,8 @@ void SettingsDialog::CmHelpGenerate()
                         ;
 
                     pVisorImp->proc->start(app, args);
-                    cout << app.toLatin1().data() << endl;
-                    cout << args[2].toLatin1().data() << endl;
+                    cout << app.toStdString() << endl;
+                    cout << args[2].toStdString() << endl;
             
                     if (!pVisorImp->proc->waitForStarted()) 
                     {

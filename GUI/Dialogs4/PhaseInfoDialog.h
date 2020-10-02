@@ -4,7 +4,6 @@
 // Declaration of PhaseInfoDialog class
 //
 // Copyright (C) 2013  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -25,7 +24,6 @@
 #include <QButtonGroup>
 
 #include "ui_PhaseInfoDialog4.h"
-#include "gstring.h"
 
 class PhaseInfoDialog : public QDialog, public Ui::PhaseInfoDialogData
 {
@@ -40,8 +38,8 @@ protected slots:
     void help();
     
 public:
-    PhaseInfoDialog(QWidget* wpar, bool system,  int xph, gstring phname,
-                    vector<int>& xdclist, vector<gstring>& dcnames, int xdc);
+    PhaseInfoDialog(QWidget* wpar, bool system,  int xph, std::string phname,
+                    std::vector<int>& xdclist, std::vector<std::string>& dcnames, int xdc);
     virtual ~PhaseInfoDialog();
 
 

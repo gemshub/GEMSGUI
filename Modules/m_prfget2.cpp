@@ -76,12 +76,12 @@ void TProfil::DeleteOldList()
 
 // push element to the list - refurbished by DK on 15.02.2012
 //
-void TProfil::Push( TIArray<CompItem>& aList, int aLine,
-                    short aDelta, const char* dbKeywd, gstring aKey )
+void TProfil::Push( std::vector<CompItem>& aList, int aLine,
+                    short aDelta, const char* dbKeywd, std::string aKey )
 {
    if( comp_change_all == false )
    {
-       gstring stt = aKey;
+       std::string stt = aKey;
        if( aDelta < 0 )
           stt += " record to be deleted from the project system. Action?";
        else stt += " record to be inserted into project system. Action?";
@@ -94,17 +94,18 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
                     break;
        case VF3_2:  // Do it for all
                     comp_change_all = true;
+                    [[fallthrough]];
        case VF3_1:  // Do it for this item
-                    aList.Add( new CompItem( aLine, aDelta));
+                    aList.push_back(CompItem( aLine, aDelta));
        }
    }
    else
-       aList.Add( new CompItem( aLine, aDelta));
+       aList.push_back( CompItem( aLine, aDelta));
 }
 
 
 // Compare IComp keys lists
-void TProfil::ICcompare( TIArray<CompItem>& aIComp)
+void TProfil::ICcompare( std::vector<CompItem>& aIComp)
 {
     int i, j, l;
     RMULTS* mup = rmults->GetMU();
@@ -122,29 +123,29 @@ void TProfil::ICcompare( TIArray<CompItem>& aIComp)
         else
             if( l<0 )
             {
-                Push( aIComp, i, -1, "IComp", gstring(SBold[i], 0, IC_RKLEN) );
+                Push( aIComp, i, -1, "IComp", std::string(SBold[i], 0, IC_RKLEN) );
                 i++;
             }
             else
             {
-                Push( aIComp, i, 1, "IComp", gstring(mup->SB[j], 0, IC_RKLEN) );
+                Push( aIComp, i, 1, "IComp", std::string(mup->SB[j], 0, IC_RKLEN) );
                 j++;
             }
     }
     while( i<Nold  )
     {
-        Push( aIComp, i, -1, "IComp", gstring(SBold[i], 0, IC_RKLEN) );
+        Push( aIComp, i, -1, "IComp", std::string(SBold[i], 0, IC_RKLEN) );
         i++;
     }
     while( j<mup->N )
     {
-        Push( aIComp, i, 1, "IComp", gstring(mup->SB[j], 0, IC_RKLEN) );
+        Push( aIComp, i, 1, "IComp", std::string(mup->SB[j], 0, IC_RKLEN) );
         j++;
     }
 }
 
 // Compare Compos keys lists
-void TProfil::COMPcompare( TIArray<CompItem>& aCompos)
+void TProfil::COMPcompare( std::vector<CompItem>& aCompos)
 {
     int i, j, l;
     RMULTS* mup = rmults->GetMU();
@@ -162,29 +163,29 @@ void TProfil::COMPcompare( TIArray<CompItem>& aCompos)
         else
             if( l<0 )
             {
-                Push( aCompos, i, -1, "Compos", gstring(SAold[i], 0, BC_RKLEN) );
+                Push( aCompos, i, -1, "Compos", std::string(SAold[i], 0, BC_RKLEN) );
                 i++;
             }
             else
             {
-                Push( aCompos, i, 1, "Compos", gstring(mup->SA[j], 0, BC_RKLEN) );
+                Push( aCompos, i, 1, "Compos", std::string(mup->SA[j], 0, BC_RKLEN) );
                 j++;
             }
     }
     while( i<Laold  )
     {
-        Push( aCompos, i, -1, "Compos", gstring(SAold[i], 0, BC_RKLEN) );
+        Push( aCompos, i, -1, "Compos", std::string(SAold[i], 0, BC_RKLEN) );
         i++;
     }
     while( j<mup->La )
     {
-        Push( aCompos, i, 1, "Compos", gstring(mup->SA[j], 0, BC_RKLEN) );
+        Push( aCompos, i, 1, "Compos", std::string(mup->SA[j], 0, BC_RKLEN) );
         j++;
     }
 }
 
 // compare DCOMP&REACT keys lists to one phase
-void TProfil::DCcompare( TIArray<CompItem>& aList, int& i,
+void TProfil::DCcompare( std::vector<CompItem>& aList, int& i,
                          int& j, int nI, int nJ)
 {
     int l;
@@ -201,30 +202,30 @@ void TProfil::DCcompare( TIArray<CompItem>& aList, int& i,
         else
             if( l<0 )
             {
-                Push( aList, i, -1, "DComp/ReacDC", gstring(SMold[i], 0, DC_RKLEN) );
+                Push( aList, i, -1, "DComp/ReacDC", std::string(SMold[i], 0, DC_RKLEN) );
                 i++;
             }
             else
             {
-                Push( aList, i, 1, "DComp/ReacDC", gstring(mup->SM[j], 0, DC_RKLEN) );
+                Push( aList, i, 1, "DComp/ReacDC", std::string(mup->SM[j], 0, DC_RKLEN) );
                 j++;
             }
     }
     while( i<nI  )
     {
-        Push( aList, i, -1, "DComp/ReacDC", gstring(SMold[i], 0, DC_RKLEN) );
+        Push( aList, i, -1, "DComp/ReacDC", std::string(SMold[i], 0, DC_RKLEN) );
         i++;
     }
     while( j<nJ )
     {
-        Push( aList, i, 1, "DComp/ReacDC", gstring(mup->SM[j], 0, DC_RKLEN) );
+        Push( aList, i, 1, "DComp/ReacDC", std::string(mup->SM[j], 0, DC_RKLEN) );
         j++;
     }
 }
 
 // Compare Phase and DComp&React keys lists
-void TProfil::PHcompare( TIArray<CompItem>& aPhase,
-                         TIArray<CompItem>& aDComp)
+void TProfil::PHcompare( std::vector<CompItem>& aPhase,
+                         std::vector<CompItem>& aDComp)
 {
     int i, j, l;
     int id =0, jd=0;
@@ -244,34 +245,34 @@ void TProfil::PHcompare( TIArray<CompItem>& aPhase,
         else
             if( l<0 )
             {
-                Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+                Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
                 for( int ii=id; ii<id+Llold[i]; ii++)
-                    Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+                    Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
                 id += Llold[i];
                 i++;
             }
             else
             {
-                Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+                Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
                 for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-                    Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+                    Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
                 jd += mup->Ll[j];
                 j++;
             }
     }
     while( i<Fisold  )
     {
-        Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+        Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
         for( int ii=id; ii<id+Llold[i]; ii++)
-            Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+            Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
         id += Llold[i];
         i++;
     }
     while( j<mup->Fis )
     {
-        Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+        Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
         for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-            Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+            Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
         jd += mup->Ll[j];
         j++;
     }
@@ -293,34 +294,34 @@ void TProfil::PHcompare( TIArray<CompItem>& aPhase,
         else
             if( l<0 )
             {
-                Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+                Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
                 for( int ii=id; ii<id+Llold[i]; ii++)
-                    Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+                    Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
                 id += Llold[i];
                 i++;
             }
             else
             {
-                Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+                Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
                 for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-                    Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+                    Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
                 jd += mup->Ll[j];
                 j++;
             }
     }
     while( i<Fiold  )
     {
-        Push( aPhase, i, -1, "Phase", gstring(SFold[i], 0, PH_RKLEN) );
+        Push( aPhase, i, -1, "Phase", std::string(SFold[i], 0, PH_RKLEN) );
         for( int ii=id; ii<id+Llold[i]; ii++)
-            Push( aDComp, ii, -1, "DComp/ReacDC", gstring(SMold[ii], 0, DC_RKLEN) );
+            Push( aDComp, ii, -1, "DComp/ReacDC", std::string(SMold[ii], 0, DC_RKLEN) );
         id += Llold[i];
         i++;
     }
     while( j<mup->Fi )
     {
-        Push( aPhase, i, 1, "Phase", gstring(mup->SF[j], 0, PH_RKLEN) );
+        Push( aPhase, i, 1, "Phase", std::string(mup->SF[j], 0, PH_RKLEN) );
         for( int jj=jd; jj<jd+mup->Ll[j]; jj++)
-            Push( aDComp, id, 1, "DComp/ReacDC", gstring(mup->SM[jj], 0, DC_RKLEN) );
+            Push( aDComp, id, 1, "DComp/ReacDC", std::string(mup->SM[jj], 0, DC_RKLEN) );
         jd += mup->Ll[j];
         j++;
     }
@@ -329,48 +330,48 @@ void TProfil::PHcompare( TIArray<CompItem>& aPhase,
 // test and insert changes to data base file
 void TProfil::TestChangeProfile()
 {
-    vstr pkey(81);
+    char pkey[81];
 
     comp_change_all = false;
     // compare ICOMP list
-    TIArray<CompItem> aIComp(10, 5);  // list of IC changes
+    std::vector<CompItem> aIComp;  // list of IC changes
     ICcompare( aIComp);
     // compare COMPOS list
-    TIArray<CompItem> aCompos(10, 5);  // list of Compos changes
+    std::vector<CompItem> aCompos;  // list of Compos changes
     COMPcompare( aCompos );
     // compare PHASE list
-    TIArray<CompItem> aPhase(10, 5);  // list of Phase changes
-    TIArray<CompItem> aDComp(10, 5);  // list of DComp changes
+    std::vector<CompItem> aPhase;  // list of Phase changes
+    std::vector<CompItem> aDComp;  // list of DComp changes
     PHcompare( aPhase, aDComp );
 
-    if( aIComp.GetCount()<1 && aCompos.GetCount()<1 &&
-            aPhase.GetCount()<1 && aDComp.GetCount()<1 )
+    if( aIComp.size()<1 && aCompos.size()<1 &&
+            aPhase.size()<1 && aDComp.size()<1 )
         return;
 
     TCStringArray aList;
     TCIntArray anR;
 
-    TSysEq* aSE= dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     aSE->ods_link(0);
 
 
     // Insert changes to GEM2MT ( do it before Insert changes to SYSEQ  30/06/2011 )
-    if( aIComp.GetCount()>=1 || aPhase.GetCount()>=1 || aDComp.GetCount()>=1 )
+    if( aIComp.size()>=1 || aPhase.size()>=1 || aDComp.size()>=1 )
     {
-      aList.Clear();
-      anR.Clear();
+      aList.clear();
+      anR.clear();
 
-       rt[RT_GEM2MT].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+       rt[RT_GEM2MT]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-       rt[RT_GEM2MT].GetKeyList( pkey, aList, anR );
+       rt[RT_GEM2MT]->GetKeyList( pkey, aList, anR );
 
-       TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(&aMod[RT_GEM2MT]);
+       TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(aMod[RT_GEM2MT].get());
        aMT->ods_link(0);
-       for(uint i=0; i< aList.GetCount(); i++)
+       for(uint i=0; i< aList.size(); i++)
        {
          aMT->RecInput( aList[i].c_str() );
          //Get base SysEq key from TGEM2MT key
-         rt[RT_SYSEQ].MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+         rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
                                 RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
                                 RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
          // read SysEq record
@@ -380,15 +381,15 @@ void TProfil::TestChangeProfile()
        }
     }
 
-    aList.Clear();
-    anR.Clear();
+    aList.clear();
+    anR.clear();
 
     // Insert changes to SYSEQ
-    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
 
-    for(uint i=0; i< aList.GetCount(); i++)
+    for(uint i=0; i< aList.size(); i++)
     {
         //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
         aSE->RecInput( aList[i].c_str() );
@@ -400,18 +401,18 @@ void TProfil::TestChangeProfile()
     }
 
     // Insert changes to DUALTH
-    if( aIComp.GetCount()>=1  )
+    if( aIComp.size()>=1  )
     {
-      aList.Clear();
-      anR.Clear();
+      aList.clear();
+      anR.clear();
 
-       rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+       rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-       rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
+       rt[RT_DUALTH]->GetKeyList( pkey, aList, anR );
 
-       TDualTh* aDU= dynamic_cast<TDualTh *>(&aMod[RT_DUALTH]);
+       TDualTh* aDU= dynamic_cast<TDualTh *>(aMod[RT_DUALTH].get());
        aDU->ods_link(0);
-       for(uint i=0; i< aList.GetCount(); i++)
+       for(size_t i=0; i< aList.size(); i++)
        {
          aDU->RecInput( aList[i].c_str() );
          aDU->InsertChanges( aIComp  );
@@ -421,18 +422,18 @@ void TProfil::TestChangeProfile()
     }
 
     // Insert changes to RT_UNSPACE
-    if( aIComp.GetCount()<1 &&  aPhase.GetCount()<1 && aDComp.GetCount()<1 )
+    if( aIComp.size()<1 &&  aPhase.size()<1 && aDComp.size()<1 )
         return;
-    aList.Clear();
-    anR.Clear();
-    rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    aList.clear();
+    anR.clear();
+    rt[RT_UNSPACE]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
+    rt[RT_UNSPACE]->GetKeyList( pkey, aList, anR );
 
-    TUnSpace* aPB=dynamic_cast<TUnSpace *>(&aMod[RT_UNSPACE]);
+    TUnSpace* aPB=dynamic_cast<TUnSpace *>(aMod[RT_UNSPACE].get());
     aPB->ods_link(-1); //0
-    if( aList.GetCount() > 0 )
-    {  for(uint i=0; i< aList.GetCount(); i++)
+    if( aList.size() > 0 )
+    {  for(size_t i=0; i< aList.size(); i++)
        {
     //    aPB->ods_link(0);
         aPB->RecInput( aList[i].c_str() );
@@ -450,7 +451,7 @@ int TProfil::indPH( int i )
     if( isSysEq == false )
         return i;
 
-    for( uint ii=0; ii<PHon.GetCount(); ii++)
+    for( size_t ii=0; ii<PHon.size(); ii++)
         if( i == PHon[ii])
             return static_cast<int>(ii);
 
@@ -461,7 +462,7 @@ int TProfil::indDC( int i )
 {
     if( isSysEq == false )
         return i;
-    for( uint ii=0; ii<DCon.GetCount(); ii++)
+    for( size_t ii=0; ii<DCon.size(); ii++)
         if( i == DCon[ii])
             return static_cast<int>(ii);
     return -1;
@@ -470,8 +471,8 @@ int TProfil::indDC( int i )
 void TProfil::CalcAllSystems( int makeDump )
 {
     double ccTime = 0.;
-    vstr pkey(81);
-    vstr tbuf(150);
+    char pkey[81];
+    char tbuf[150];
     std::string str_file;
 	TCStringArray aList;
     TCIntArray anR;
@@ -480,9 +481,9 @@ void TProfil::CalcAllSystems( int makeDump )
     int iRet;
     double dTime=0.; int kTimeStep =0; double kTime=0.;
 
-    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
 
     //get file name
     std::string ProfName(pkey);
@@ -515,15 +516,15 @@ AGAIN:
 
     pVisor->CloseMessage();
     MULTI *pmp = multi->GetPM();
-    TSysEq* aSE= dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     aSE->ods_link(0);
-    for(nbad =0,  i=0; i< aList.GetCount(); i++)
+    for(nbad =0,  i=0; i< aList.size(); i++)
     {
 
       //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
       //
         sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf.p, i, aList.GetCount() );
+        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf, i, aList.size() );
       if( iRet )
         break;
 
@@ -553,7 +554,7 @@ AGAIN:
     {
       fstream ff1(str_file.c_str(), ios::out|ios::app);
       sprintf( tbuf, "\n\nProject: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-      ff1 << tbuf.p << endl;
+      ff1 << tbuf << endl;
     }
 
 }
@@ -561,7 +562,7 @@ AGAIN:
 //Show IComp, DComp or other reactions from list
 void TProfil::ShowDBWindow( const char *objName, int nLine )
 {
-    gstring s;
+    std::string s;
     RMULTS* mup = rmults->GetMU();
      MULTI *pmp = multi->GetPM();
     time_t tr;
@@ -570,42 +571,42 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     switch( *objName )
     {
     case 'I': // Icomp : IC_v__ or ICnam
-        if( strncmp(objName, aObj[o_musb].GetKeywd(), MAXKEYWD)==0)
-            s = gstring( mup->SB[nLine], 0, IC_RKLEN );
-        else  if( strncmp(objName, aObj[o_wd_sb].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_w_sbh].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SB[pmp->mui[nLine]], 0, IC_RKLEN );
+        if( strncmp(objName, aObj[o_musb]->GetKeywd(), MAXKEYWD)==0)
+            s = std::string( mup->SB[nLine], 0, IC_RKLEN );
+        else  if( strncmp(objName, aObj[o_wd_sb]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_w_sbh]->GetKeywd(), MAXKEYWD)==0 )
+            s = std::string( mup->SB[pmp->mui[nLine]], 0, IC_RKLEN );
         else break;
         TIComp::pm->RecInput( s.c_str() );
         TIComp::pm->Show(window(), title, false/*true*/);
         break;
     case 'C': // Compod : CC_v__
-        if( strncmp(objName, aObj[o_musa].GetKeywd(), MAXKEYWD)==0)
-            s = gstring( mup->SA[nLine], 0, BC_RKLEN );
+        if( strncmp(objName, aObj[o_musa]->GetKeywd(), MAXKEYWD)==0)
+            s = std::string( mup->SA[nLine], 0, BC_RKLEN );
         else break;
         TCompos::pm->RecInput( s.c_str() );
         TCompos::pm->Show(window(), title, false/*true*/);
         break;
     case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
-        if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SF[nLine], 0, PH_RKLEN );
-        else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SF[pmp->muk[nLine]], 0, PH_RKLEN );
+        if( strncmp(objName, aObj[o_musf]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musf2]->GetKeywd(), MAXKEYWD)==0 )
+            s = std::string( mup->SF[nLine], 0, PH_RKLEN );
+        else  if( strncmp(objName, aObj[o_wd_sf]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sf2]->GetKeywd(), MAXKEYWD)==0 )
+            s = std::string( mup->SF[pmp->muk[nLine]], 0, PH_RKLEN );
         else break;
         TPhase::pm->RecInput( s.c_str() );
         TPhase::pm->Show(window(), title, false/*true*/);
         break;
     case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
-        if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
-            s = gstring( mup->SM[nLine], 0, DC_RKLEN );
-        else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
+        if( strncmp(objName, aObj[o_musm]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musm2]->GetKeywd(), MAXKEYWD)==0 )
+            s = std::string( mup->SM[nLine], 0, DC_RKLEN );
+        else  if( strncmp(objName, aObj[o_wd_sm]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sm2]->GetKeywd(), MAXKEYWD)==0 )
         {
             nLine = pmp->muj[nLine];
-            s = gstring( mup->SM[nLine], 0, DC_RKLEN );
+            s = std::string( mup->SM[nLine], 0, DC_RKLEN );
         }
         else break;
         if( mup->DCS[nLine] == SRC_DCOMP )
@@ -632,18 +633,18 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     uint ii;
     setFiltersData sf_data;
     elmWindowData  elm_data;
-    TCStringArray SDlist;
-    SDlist.Clear();
+    std::set<std::string> SDlist;
+    SDlist.clear();
 
 //    Save list of phases from template profile:
     TCStringArray names1;
-    names1.Add(prfName);
-    rt[RT_ICOMP].OpenOnlyFromList(names1);
-    rt[RT_PHASE].OpenOnlyFromList(names1);
+    names1.push_back(prfName);
+    rt[RT_ICOMP]->OpenOnlyFromList(names1);
+    rt[RT_PHASE]->OpenOnlyFromList(names1);
 
    TCStringArray PHkeys;
    TCIntArray    ICcnt;
-   rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", PHkeys, ICcnt );
+   rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", PHkeys, ICcnt );
 
 
    // get template project configuration
@@ -658,8 +659,8 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
       return false;
 
 // save built-in default configuration
-     internalBufer = static_cast<char *>(aObj[ o_sptext].Alloc( 1, elm_data.aSelNames.length()+10, S_));
-     aObj[o_sptext].SetString( elm_data.aSelNames.c_str(),0,0);
+     internalBufer = static_cast<char *>(aObj[ o_sptext]->Alloc( 1, elm_data.aSelNames.length()+10, S_));
+     aObj[o_sptext]->SetString( elm_data.aSelNames.c_str(),0,0);
 
 
 //    elm_data.flNames.Add(prfName);
@@ -670,51 +671,51 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     // and copy to it selected records
     // add to last key field first symbol from prfname
     // close all kernel files
-    TIComp* aICdata=  dynamic_cast<TIComp *>(&aMod[RT_ICOMP]);
+    TIComp* aICdata=  dynamic_cast<TIComp *>(aMod[RT_ICOMP].get());
     aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
-    ICcnt.Clear();
-    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
-       ICcnt.Add(0);
+    ICcnt.clear();
+    for( ii=0; ii<elm_data.ICrds.size(); ii++ )
+       ICcnt.push_back(0);
 
     //compos
-    TCompos* aCOdata=dynamic_cast<TCompos *>(&aMod[RT_COMPOS]);
+    TCompos* aCOdata=dynamic_cast<TCompos *>(aMod[RT_COMPOS].get());
     TCStringArray aCMnoused;
     aCOdata->CopyRecords( prfName, aCMnoused, elm_data, sf_data.cm_d, SDlist );
 
     //dcomp
-    TDComp* aDCdata=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
+    TDComp* aDCdata=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
     aDCdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.dc_d, SDlist );
 
     //reacds
-    TReacDC* aRDdata= dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    TReacDC* aRDdata= dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     aRDdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.rd_d, SDlist );
 
     //phase
-    TPhase* aPHdata=dynamic_cast<TPhase *>(&aMod[RT_PHASE]);
+    TPhase* aPHdata=dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
     TCStringArray aPHnoused;
     aPHdata->CopyRecords( prfName, aPHnoused, PHkeys, elm_data, sf_data.ph_d, SDlist );
 
     //sdref
-    TSData* aSDat= dynamic_cast<TSData *>(&aMod[RT_SDATA]);
+    TSData* aSDat= dynamic_cast<TSData *>(aMod[RT_SDATA].get());
     aSDat->CopyRecords( prfName, SDlist );
 
     //const for future
-    TConst* aConst= dynamic_cast<TConst *>(&aMod[RT_CONST]);
+    TConst* aConst= dynamic_cast<TConst *>(aMod[RT_CONST].get());
     aConst->CopyRecords( prfName );
 
     //show errors
     TCStringArray aICnoused;
-    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
+    for( ii=0; ii<elm_data.ICrds.size(); ii++ )
        if( ICcnt[ii] == 0 )
-         aICnoused.Add(elm_data.ICrds[ii]);
+         aICnoused.push_back(elm_data.ICrds[ii]);
 
-    if( aICnoused.GetCount() > 0 )
+    if( aICnoused.size() > 0 )
       vfChoice(  window(), aICnoused, "List of unused Independent Components" );
 
-    if( aPHnoused.GetCount() > 0 || aCMnoused.GetCount() > 0)
+    if( aPHnoused.size() > 0 || aCMnoused.size() > 0)
     {  // List of Phases or Compos with some species discarded
         ios::openmode mod = ios::out;
-        gstring filename = pVisor->userGEMDir();
+        std::string filename = pVisor->userGEMDir();
                 filename +=  "DiscardedRecords.txt";
 // This question is not needed anymore  DK 27.10.2005
 /*      if( !(::access( filename, 0 )) ) //file exists
@@ -735,10 +736,10 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
         fstream f( filename.c_str(), mod );
         ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
         f <<   "Discarded Phase records\n";
-        for( ii=0; ii<aPHnoused.GetCount(); ii++ )
+        for( ii=0; ii<aPHnoused.size(); ii++ )
              f << aPHnoused[ii].c_str() <<  "\n";
         f <<   "\n\nDiscarded Compos records\n";
-        for( ii=0; ii<aCMnoused.GetCount(); ii++ )
+        for( ii=0; ii<aCMnoused.size(); ii++ )
              f << aCMnoused[ii].c_str() <<  "\n";
         f <<   "\n";
         ErrorIf( !f.good() , filename.c_str(), "Writefile error");
@@ -767,168 +768,168 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
     SYSTEM *syp = syst->GetSY();
 
     // define window
-    TIArray<windowSetupData> wnData;
+    std::vector<windowSetupData> wnData;
     // define table
-    TIArray<tableSetupData> tbData;
+    std::vector<tableSetupData> tbData;
     // define scalars
-    TIArray<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> scalarsList;
 
     // add bulk chemical composition from COMPOS
     if( syp->PbAC != S_OFF && mup->La )
     {
-        wnData.Add( new windowSetupData( "Compos",
+        wnData.push_back( windowSetupData( "Compos",
                    o_syxea, 5, o_syxaun, o_syacl,  0., QUAN_GRAM) );
         for( j=0; j<mup->La; j++ )
         {
-            if( syp->Acl[j] == S_OFF || !syp->XeA[j] || IsDoubleEmpty( syp->XeA[j] ))
+            if( syp->Acl[j] == S_OFF || approximatelyZero(syp->XeA[j]) || IsDoubleEmpty( syp->XeA[j] ))
                 continue;
-            tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syxea,
-                  aObj[o_syxea].GetKeywd(), j, "",  syp->XeA[j], syp->XAun[j] ));
+            tbData.push_back(  tableSetupData( wnData.size()-1, o_syxea,
+                  aObj[o_syxea]->GetKeywd(), j, "",  syp->XeA[j], syp->XAun[j] ));
         } //  j
     }
 
     // add compositions from DCOMP/REACDC
     if( syp->PbDC != S_OFF )
     {
-        wnData.Add( new windowSetupData( "DComp",
+        wnData.push_back( windowSetupData( "DComp",
                 o_syxed, 5, o_syxdun, o_sydcl, 0., QUAN_MOL) );
         for( j=0; j<mup->L; j++ )
         {
-            if( syp->Dcl[j] == S_OFF || !syp->XeD[j] || IsDoubleEmpty( syp->XeD[j] ))
+            if( syp->Dcl[j] == S_OFF || approximatelyZero(syp->XeD[j]) || IsDoubleEmpty( syp->XeD[j] ))
                 continue;
-            tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syxed,
-                aObj[o_syxed].GetKeywd(), j, "",  syp->XeD[j], syp->XDun[j] ));
+            tbData.push_back( tableSetupData( wnData.size()-1, o_syxed,
+                aObj[o_syxed]->GetKeywd(), j, "",  syp->XeD[j], syp->XDun[j] ));
 
         } //  j
     }
 
     if( syp->PbIC != S_OFF )
     { //  add bulk chemical composition from IComp
-        wnData.Add( new windowSetupData( "IComp",
+        wnData.push_back( windowSetupData( "IComp",
                        o_sybi, 5, o_sybiun, o_syicl, 0.,QUAN_MOL) );
         for( i=0; i<mup->N; i++ )
         {
-            if( syp->Icl[i] == S_OFF || !syp->BI[i] || IsDoubleEmpty(syp->BI[i] ))
+            if( syp->Icl[i] == S_OFF || approximatelyZero(syp->BI[i]) || IsDoubleEmpty(syp->BI[i] ))
                 continue;
-            tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sybi,
-                   aObj[o_sybi].GetKeywd(), i, "",  syp->BI[i], syp->BIun[i] ));
+            tbData.push_back( tableSetupData( wnData.size()-1, o_sybi,
+                   aObj[o_sybi]->GetKeywd(), i, "",  syp->BI[i], syp->BIun[i] ));
         }
     }
 
     // add bulk chemical composition from phases
     if( syp->PbPH != S_OFF )
     {
-      wnData.Add( new windowSetupData( "Phase",
+      wnData.push_back( windowSetupData( "Phase",
                      o_syphm, 5, o_syxpun, o_sypcl, 0.,QUAN_GRAM) );
       for( i=0; i<mup->Fi; i++ )
       {
-         if( syp->Pcl[i] == S_OFF || !syp->Phm[i] || IsDoubleEmpty(syp->XPun[i] ))
+         if( syp->Pcl[i] == S_OFF || approximatelyZero(syp->Phm[i]) || IsDoubleEmpty(syp->XPun[i] ))
           continue;
-        tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syphm,
-             aObj[o_syphm].GetKeywd(), i, "",  syp->Phm[i], syp->XPun[i] ));
+        tbData.push_back( tableSetupData( wnData.size()-1, o_syphm,
+             aObj[o_syphm]->GetKeywd(), i, "",  syp->Phm[i], syp->XPun[i] ));
       }
     }
 
     // and other dll, dul, Gex
     if(  syp->DLLim != S_OFF  )
     {
-        wnData.Add( new windowSetupData( "Kin.lower",
+        wnData.push_back( windowSetupData( "Kin.lower",
             o_sydll, 4, o_syrsc, o_sydcl, 0., QUAN_MOL ) );
         for( i=0; i<mup->L; i++ )
         {
           if(  syp->Dcl[i] != S_OFF && syp->DLL[i] > 0 )
-           tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sydll,
-                 aObj[o_sydll].GetKeywd(), i, "",  syp->DLL[i], syp->RSC[i] ));
+           tbData.push_back( tableSetupData( wnData.size()-1, o_sydll,
+                 aObj[o_sydll]->GetKeywd(), i, "",  syp->DLL[i], syp->RSC[i] ));
         }
     }
     if(  syp->DULim != S_OFF  )
     {
-        wnData.Add( new windowSetupData( "Kin.upper",
+        wnData.push_back( windowSetupData( "Kin.upper",
                 o_sydul, 4, o_syrsc, o_sydcl, 1e+006, QUAN_MOL) );
         for( i=0; i<mup->L; i++ )
         {
           if( syp->Dcl[i] != S_OFF && syp->DUL[i] < 1e6 )
-           tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sydul,
-                 aObj[o_sydul].GetKeywd(), i, "",  syp->DUL[i], syp->RSC[i] ));
+           tbData.push_back( tableSetupData( wnData.size()-1, o_sydul,
+                 aObj[o_sydul]->GetKeywd(), i, "",  syp->DUL[i], syp->RSC[i] ));
         }
     }
     if( syp->PGEX != S_OFF )
     {
-      wnData.Add( new windowSetupData( "G0 shift",
+      wnData.push_back(  windowSetupData( "G0 shift",
                o_sygex, 7, -1, o_sydcl, 0.,'J' ) );
       for( i=0; i<mup->L; i++ )
       {
         if(  syp->Dcl[i] != S_OFF && fabs(syp->GEX[i]) > 0  )
-         tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sygex,
-               aObj[o_sygex].GetKeywd(), i, "",  syp->GEX[i], 'J' ));
+         tbData.push_back( tableSetupData( wnData.size()-1, o_sygex,
+               aObj[o_sygex]->GetKeywd(), i, "",  syp->GEX[i], 'J' ));
       }
     }
 
     // add static list
-    wnData.Add( new windowSetupData( "Other Inputs", -1, 0, -1, -1, 0.,'_' ) );
+    wnData.push_back(  windowSetupData( "Other Inputs", -1, 0, -1, -1, 0.,'_' ) );
     // build scalar list
-    scalarsList.Add( new pagesSetupData("g Solids(MbXs)", o_symsolids)); // Total mass of solids (g) from another equilibrium (bXs object) to add to the recipe
- //   scalarsList.Add( new pagesSetupData("Reserved", o_symass,0)); // Molality of reference electrolyte
-    scalarsList.Add( new pagesSetupData("kg H2O-solvent", o_symass,1)); // Anticipated mass (kg) of water-solvent
-    scalarsList.Add( new pagesSetupData("kg System", o_symass,2)); // Anticipated total mass of the system (kg)
-    scalarsList.Add( new pagesSetupData("kg Aqueous(Maq)", o_symass,3)); // Anticipated mass of aqueous phase Maq (kg)
- //   scalarsList.Add( new pagesSetupData("kg Total (MBX)", o_symass,4)); // Final total mass of the system MBX (kg)_
- //   scalarsList.Add( new pagesSetupData("Total IC moles (NMS)", o_symass,5)); // Total number of IC moles in the system NMS  (for mole %% calculations)
-    scalarsList.Add( new pagesSetupData("dm3 System(Vsys)", o_syvol,0)); // Anticipated volume Vsys of the system
-    scalarsList.Add( new pagesSetupData("dm3 Aqueous(Vaq)", o_syvol,1)); // Anticipated volume Vaq  of aqueous phase (L) for molarities
-    scalarsList.Add( new pagesSetupData("P_Min,bar", o_sypmm,0)); // min, max, increment for the pressure interpolation
-    scalarsList.Add( new pagesSetupData("P_Max,bar", o_sypmm,1));
-    scalarsList.Add( new pagesSetupData("P_Step,bar", o_sypmm,2));
-    scalarsList.Add( new pagesSetupData("T_Min,C", o_sytmm,0)); // min, max, increment for the temperature interpolation
-    scalarsList.Add( new pagesSetupData("T_Max,C", o_sytmm,1));
-    scalarsList.Add( new pagesSetupData("T_Step,C", o_sytmm,2));
+    scalarsList.push_back(  pagesSetupData("g Solids(MbXs)", o_symsolids)); // Total mass of solids (g) from another equilibrium (bXs object) to add to the recipe
+ //   scalarsList.push_back(  pagesSetupData("Reserved", o_symass,0)); // Molality of reference electrolyte
+    scalarsList.push_back(  pagesSetupData("kg H2O-solvent", o_symass,1)); // Anticipated mass (kg) of water-solvent
+    scalarsList.push_back(  pagesSetupData("kg System", o_symass,2)); // Anticipated total mass of the system (kg)
+    scalarsList.push_back(  pagesSetupData("kg Aqueous(Maq)", o_symass,3)); // Anticipated mass of aqueous phase Maq (kg)
+ //   scalarsList.push_back(  pagesSetupData("kg Total (MBX)", o_symass,4)); // Final total mass of the system MBX (kg)_
+ //   scalarsList.push_back(  pagesSetupData("Total IC moles (NMS)", o_symass,5)); // Total number of IC moles in the system NMS  (for mole %% calculations)
+    scalarsList.push_back(  pagesSetupData("dm3 System(Vsys)", o_syvol,0)); // Anticipated volume Vsys of the system
+    scalarsList.push_back(  pagesSetupData("dm3 Aqueous(Vaq)", o_syvol,1)); // Anticipated volume Vaq  of aqueous phase (L) for molarities
+    scalarsList.push_back(  pagesSetupData("P_Min,bar", o_sypmm,0)); // min, max, increment for the pressure interpolation
+    scalarsList.push_back(  pagesSetupData("P_Max,bar", o_sypmm,1));
+    scalarsList.push_back(  pagesSetupData("P_Step,bar", o_sypmm,2));
+    scalarsList.push_back(  pagesSetupData("T_Min,C", o_sytmm,0)); // min, max, increment for the temperature interpolation
+    scalarsList.push_back(  pagesSetupData("T_Max,C", o_sytmm,1));
+    scalarsList.push_back(  pagesSetupData("T_Step,C", o_sytmm,2));
     // add static values for table
     if(  fabs( syp->Msolids ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symsolids,
-           aObj[o_symass].GetKeywd(), 0, "",  syp->Msolids, '_' ));
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symsolids,
+           aObj[o_symass]->GetKeywd(), 0, "",  syp->Msolids, '_' ));
 //    if(  fabs( syp->Mbel ) > 0  )
-//     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
-//           aObj[o_symass].GetKeywd(), 0, "",  syp->Mbel, '_' ));
-if(  fabs( syp->Mwat ) != 1.f  )  // Fixed for new defaults by DK 27.02.2012
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
-           aObj[o_symass].GetKeywd(), 1, "",  syp->Mwat, '_' ));
-if(  fabs( syp->Msys ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
-           aObj[o_symass].GetKeywd(), 2, "",  syp->Msys, '_' ));
-if(  fabs( syp->Maq ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
-           aObj[o_symass].GetKeywd(), 3, "",  syp->Maq, '_' ));
+//     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
+//           aObj[o_symass]->GetKeywd(), 0, "",  syp->Mbel, '_' ));
+if(  !approximatelyEqual( fabs( syp->Mwat ), 1.f ) )  // Fixed for new defaults by DK 27.02.2012
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
+           aObj[o_symass]->GetKeywd(), 1, "",  syp->Mwat, '_' ));
+if(  !approximatelyEqual( fabs( syp->Msys ), 1.f)  )
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
+           aObj[o_symass]->GetKeywd(), 2, "",  syp->Msys, '_' ));
+if(  !approximatelyEqual( fabs( syp->Maq ), 1.f )  )
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
+           aObj[o_symass]->GetKeywd(), 3, "",  syp->Maq, '_' ));
 //   if(  fabs( syp->MBX ) > 0  )
-//     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
-//           aObj[o_symass].GetKeywd(), 4, "",  syp->MBX, '_' ));
+//     tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
+//           aObj[o_symass]->GetKeywd(), 4, "",  syp->MBX, '_' ));
 //    if(  fabs( syp->R1 ) > 0  )
-//    tbData.Add( new tableSetupData( wnData.GetCount()-1, o_symass,
-//          aObj[o_symass].GetKeywd(), 5, "",  syp->R1, '_' ));
-if(  fabs( syp->Vsys ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
-           aObj[o_syvol].GetKeywd(), 0, "",  syp->Vsys, '_' ));
-if(  fabs( syp->Vaq ) != 1.f  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_syvol,
-           aObj[o_syvol].GetKeywd(), 1, "",  syp->Vaq, '_' ));
+//    tbData.push_back(  tableSetupData( wnData.size()-1, o_symass,
+//          aObj[o_symass]->GetKeywd(), 5, "",  syp->R1, '_' ));
+if(  !approximatelyEqual( fabs( syp->Vsys ), 1.f)  )
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
+           aObj[o_syvol]->GetKeywd(), 0, "",  syp->Vsys, '_' ));
+if(  !approximatelyEqual( fabs( syp->Vaq),  1.f)  )
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_syvol,
+           aObj[o_syvol]->GetKeywd(), 1, "",  syp->Vaq, '_' ));
     if(  fabs( syp->Pmin ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
-           aObj[o_sypmm].GetKeywd(), 0, "",  syp->Pmin, '_' ));
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
+           aObj[o_sypmm]->GetKeywd(), 0, "",  syp->Pmin, '_' ));
     if(  fabs( syp->Pmax ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
-           aObj[o_sypmm].GetKeywd(), 1, "",  syp->Pmax, '_' ));
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
+           aObj[o_sypmm]->GetKeywd(), 1, "",  syp->Pmax, '_' ));
     if(  fabs( syp->Pinc ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sypmm,
-           aObj[o_sypmm].GetKeywd(), 2, "",  syp->Pinc, '_' ));
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sypmm,
+           aObj[o_sypmm]->GetKeywd(), 2, "",  syp->Pinc, '_' ));
 
     if(  fabs( syp->Tmin ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
-           aObj[o_sytmm].GetKeywd(), 0, "",  syp->Tmin, '_' ));
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
+           aObj[o_sytmm]->GetKeywd(), 0, "",  syp->Tmin, '_' ));
     if(  fabs( syp->Tmax ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
-           aObj[o_sytmm].GetKeywd(), 1, "",  syp->Tmax, '_' ));
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
+           aObj[o_sytmm]->GetKeywd(), 1, "",  syp->Tmax, '_' ));
     if(  fabs( syp->Tinc ) > 0  )
-     tbData.Add( new tableSetupData( wnData.GetCount()-1, o_sytmm,
-           aObj[o_sytmm].GetKeywd(), 2, "",  syp->Tinc, '_' ));
+     tbData.push_back(  tableSetupData( wnData.size()-1, o_sytmm,
+           aObj[o_sytmm]->GetKeywd(), 2, "",  syp->Tinc, '_' ));
 
    // change bulk chemical composition
     if( !vfSystemInput( par, p_key, wnData, tbData, scalarsList ))
@@ -986,20 +987,20 @@ if(  fabs( syp->Vaq ) != 1.f  )
     syp->Tinc = 0.;
 
     // inset data from tbData
-    for(uint ii=0; ii< tbData.GetCount() ; ii++)
+    for(size_t ii=0; ii< tbData.size() ; ii++)
     {
      uint nO = tbData[ii].nObj;
-     if( aObj[nO].GetN() > 1 )
-         aObj[ nO ].Put( tbData[ii].val, tbData[ii].nIdx, 0 );
+     if( aObj[nO]->GetN() > 1 )
+         aObj[ nO ]->Put( tbData[ii].val, tbData[ii].nIdx, 0 );
      else
-         aObj[ nO ].Put( tbData[ii].val, 0, tbData[ii].nIdx );
+         aObj[ nO ]->Put( tbData[ii].val, 0, tbData[ii].nIdx );
 
      int nOunit = wnData[ tbData[ii].nWin].nOunit;
      if(nOunit >=0 )
-        aObj[ nOunit ].SetString( &tbData[ii].unit, tbData[ii].nIdx, 0);
+        aObj[ nOunit ]->SetString( &tbData[ii].unit, tbData[ii].nIdx, 0);
      int nOswitch = wnData[ tbData[ii].nWin].nSwitch;
      if(nOswitch >=0 )
-        aObj[ nOswitch ].SetString("+",tbData[ii].nIdx, 0);
+        aObj[ nOswitch ]->SetString("+",tbData[ii].nIdx, 0);
     }
 
     TSysEq::pm->CellChanged();
@@ -1031,25 +1032,25 @@ int TProfil::PhIndexforDC( int xdc, bool system )
   return k;
 }
 
-gstring TProfil::PhNameforDC( int xdc, bool system )
+std::string TProfil::PhNameforDC( int xdc, bool system )
 {
   int k = PhIndexforDC( xdc, system );
 
   if( system )
-   return gstring( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
+   return std::string( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
   else
-   return gstring( multi->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+   return std::string( multi->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
 }
 
 
-gstring TProfil::PhNameforDC( int xdc, int& xph, bool system )
+std::string TProfil::PhNameforDC( int xdc, int& xph, bool system )
 {
   xph = PhIndexforDC( xdc, system );
 
   if( system )
-   return gstring( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+   return std::string( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
   else
-   return gstring( multi->GetPM()->SF[xph], 0, MAXPHNAME+MAXSYMB);
+   return std::string( multi->GetPM()->SF[xph], 0, MAXPHNAME+MAXSYMB);
 }
 
 TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
@@ -1059,7 +1060,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   RMULTS* mup = rmults->GetMU();
   MULTI*  pmp = multi->GetPM();
   TCStringArray DCnames;
-  gstring dcstr;
+  std::string dcstr;
 
   if( system )
   { for( k=0; k<mup->Fi; k++ )
@@ -1070,9 +1071,9 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
     }
     for( j= DCx; j<DCx+mup->Ll[k];j++ )
       {
-        dcstr = gstring( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
-        dcstr.strip();
-        DCnames.Add(dcstr);
+        dcstr = std::string( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
+        strip( dcstr );
+        DCnames.push_back(dcstr);
       }
   }
   else
@@ -1083,15 +1084,15 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
        DCx += pmp->L1[k];
     }
     for( j= DCx; j<DCx+pmp->L1[k];j++ )
-    {   dcstr =  gstring( pmp->SM[j],0, MAXDCNAME );
-        dcstr.strip();
-        DCnames.Add(dcstr);
+    {   dcstr =  std::string( pmp->SM[j],0, MAXDCNAME );
+        strip( dcstr );
+        DCnames.push_back(dcstr);
     }
   }
   return DCnames;
 }
 
-void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstring>& dcnames)
+void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::string>& dcnames)
 {
     int k, j, DCx = 0;
     RMULTS* mup = rmults->GetMU();
@@ -1103,7 +1104,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstri
       for( j= DCx; j<DCx+mup->Ll[xph];j++ )
         {
           xdc.push_back(j);
-          dcnames.push_back( gstring( mup->SM[j], 0, DC_RKLEN ));
+          dcnames.push_back( std::string( mup->SM[j], 0, DC_RKLEN ));
         }
     }
     else
@@ -1113,7 +1114,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<gstri
       for( j= DCx; j<DCx+pmp->L1[k];j++ )
       {
           xdc.push_back(j);
-          dcnames.push_back( gstring( pmp->SM[j],0, MAXDCNAME ));
+          dcnames.push_back( std::string( pmp->SM[j],0, MAXDCNAME ));
       }
     }
 
@@ -1124,19 +1125,19 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
 {
     bool system = true;
     int  xph, xdc = -1;
-    gstring phname;
+    std::string phname;
     vector<int> xdclist;
-    vector<gstring> dcnames;
+    vector<std::string> dcnames;
 
     switch( *objName )
     {
     case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
         xdc = nLine;
-        if( strncmp(objName, aObj[o_musm].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musm2].GetKeywd(), MAXKEYWD)==0 )
+        if( strncmp(objName, aObj[o_musm]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musm2]->GetKeywd(), MAXKEYWD)==0 )
            system = true;
-        else  if( strncmp(objName, aObj[o_wd_sm].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sm2].GetKeywd(), MAXKEYWD)==0 )
+        else  if( strncmp(objName, aObj[o_wd_sm]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sm2]->GetKeywd(), MAXKEYWD)==0 )
                    system = false;
                else
                   return;
@@ -1145,16 +1146,16 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
     case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
         xph = nLine;
         xdc = -1;
-        if( strncmp(objName, aObj[o_musf].GetKeywd(), MAXKEYWD)==0 ||
-                strncmp(objName, aObj[o_musf2].GetKeywd(), MAXKEYWD)==0 )
+        if( strncmp(objName, aObj[o_musf]->GetKeywd(), MAXKEYWD)==0 ||
+                strncmp(objName, aObj[o_musf2]->GetKeywd(), MAXKEYWD)==0 )
         {    system = true;
-             phname = gstring( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+             phname = std::string( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
         }
-        else  if( strncmp(objName, aObj[o_wd_sf].GetKeywd(), MAXKEYWD)==0 ||
-                  strncmp(objName, aObj[o_wd_sf2].GetKeywd(), MAXKEYWD)==0 )
+        else  if( strncmp(objName, aObj[o_wd_sf]->GetKeywd(), MAXKEYWD)==0 ||
+                  strncmp(objName, aObj[o_wd_sf2]->GetKeywd(), MAXKEYWD)==0 )
              {
                 system = false;
-                phname = gstring( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
+                phname = std::string( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
              }
             else
                 return;
@@ -1189,7 +1190,7 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
     na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, add_mui );
 }
 
-void TProfil::System2GEMS3K( const gstring key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui )
+void TProfil::System2GEMS3K( const std::string key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui )
 {
     loadSystat( key.c_str() );
 
@@ -1217,34 +1218,33 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
 {
     pVisor->CloseMessage();
 
-    vstr pkey(200);
-    //vstr tbuf(150);
+    char pkey[200];
     TCStringArray aList;
     TCIntArray anR;
-    gstring packkey;
-    std::string systemname, recordPath;
+    std::string packkey;
+    std::string systemname;
 
-    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
 
-    aMod[RT_SYSEQ].ods_link(0);
+    aMod[RT_SYSEQ]->ods_link(0);
 
-    for( uint ii=0; ii< aList.GetCount(); ii++)
+    for( size_t ii=0; ii< aList.size(); ii++)
     {
         // test exists
-        if( rt[RT_SYSEQ].Find( aList[ii].c_str() ) < 0 )
+        if( rt[RT_SYSEQ]->Find( aList[ii].c_str() ) < 0 )
             continue;
         // get key in pack form
-        packkey = rt[RT_SYSEQ].PackKey();
+        packkey = rt[RT_SYSEQ]->PackKey();
 
         //test :000: in last field
-        if( gstring(rt[RT_SYSEQ].FldKey(7)).find("000") != gstring::npos )
+        if( std::string(rt[RT_SYSEQ]->FldKey(7)).find("000") != std::string::npos )
             continue;
         // test output before
-        if( savedSystems.Find( packkey ) >= 0)
+        if( std::find(savedSystems.begin(), savedSystems.end(), packkey) != savedSystems.end()  )
             continue;
-        savedSystems.Add(packkey);
+        savedSystems.push_back(packkey);
 
         // generate name and create directory
         systemname = packkey.c_str();
@@ -1261,7 +1261,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey.p, ii, aList.GetCount() ))
+         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey, ii, aList.size() ))
             break;
     }
 }
@@ -1270,31 +1270,30 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
 {
     pVisor->CloseMessage();
 
-    vstr pkey(200);
-    //vstr tbuf(150);
+    char pkey[200];
     TCStringArray aList;
     TCIntArray anR;
-    std::string process_name, recordPath;
+    std::string process_name;
 
-    rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_PROCES]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROCES].GetKeyList( pkey, aList, anR );
-    aMod[RT_PROCES].ods_link(0);
+    rt[RT_PROCES]->GetKeyList( pkey, aList, anR );
+    aMod[RT_PROCES]->ods_link(0);
 
 
-    if( aList.GetCount() > 0 )
+    if( aList.size() > 0 )
         vfMakeDirectory( nullptr, files_dir.c_str(), 2 );
 
-    for( uint ii=0; ii< aList.GetCount(); ii++)
+    for( size_t ii=0; ii< aList.size(); ii++)
     {
         // test exists
-        if( rt[RT_PROCES].Find( aList[ii].c_str() ) < 0 )
+        if( rt[RT_PROCES]->Find( aList[ii].c_str() ) < 0 )
             continue;
 
         TProcess::pm->RecInput( aList[ii].c_str() );
 
         // generate name and create directory
-        process_name = rt[RT_PROCES].PackKey();
+        process_name = rt[RT_PROCES]->PackKey();
         strip( process_name );
         KeyToName(process_name);
         std::string recordPath = files_dir + process_name + "/";
@@ -1308,7 +1307,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey.p, ii, aList.GetCount() ))
+         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey, ii, aList.size() ))
             break;
     }
 }

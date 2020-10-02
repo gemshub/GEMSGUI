@@ -4,7 +4,6 @@
 // Declaration of TSubModule, TModule and TModList classes
 //
 // Copyright (C) 1996-2001 A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -44,7 +43,7 @@ class TSubModule
     // friend TCModuleImp;
 
 private:
-    gstring state;
+    string state;
 
     TSubModule(const TSubModule&);
     const TSubModule& operator=(const TSubModule&);
@@ -53,7 +52,7 @@ protected:
     uint nRT;
     uint startKeyEdit;
     bool contentsChanged;     // needs to save
-    gstring iconFileName;
+    string iconFileName;
 
     // Events part
     virtual void CloseWin();
@@ -131,7 +130,7 @@ public:
     void Show(QWidget* parent, const char *str=nullptr, bool viewmode=false );
 
     void Update(bool force=true);
-    virtual const gstring& GetString()
+    virtual const string& GetString()
     {
         return state;
     }
@@ -144,7 +143,7 @@ public:
 
 
     //-- Module manipulation
-    virtual gstring  GetKeyofRecord( const char */*oldKey*/, const char */*strTitle*/,
+    virtual string  GetKeyofRecord( const char* /*oldKey*/, const char* /*strTitle*/,
                                      int /*keyType*/ )
     { return"";}
 
@@ -189,10 +188,10 @@ protected:
 
     TDataBase* db;
     int nQ;                // number of DB structures
-    gstring Filter;
+    string Filter;
 
-    TCStringArray aFldKeysHelp;      // gstring help of fields
-    gstring start_title;
+    TCStringArray aFldKeysHelp;      // string help of fields
+    string start_title;
 
     virtual void Setup();
     virtual bool EvClose();
@@ -289,9 +288,9 @@ public:
     virtual void MakeQuery();
 
     //-- Module manipulation
-    virtual gstring  GetKeyofRecord( const char *oldKey, const char *strTitle,
+    virtual string  GetKeyofRecord( const char *oldKey, const char *strTitle,
                                      int keyType );
-    virtual gstring  makeKeyFilter();
+    virtual string  makeKeyFilter();
     virtual bool  testKeyFilter();
     const char *getFilter()
     {
@@ -305,13 +304,13 @@ public:
     }
 
 
-    //  const gstring& GetFldHelp( int Ni ) const { return aFldKeysHelp[Ni];}
+    //  const string& GetFldHelp( int Ni ) const { return aFldKeysHelp[Ni];}
     bool  CheckEqText( const char *erscan, const char *msg=nullptr );
 
     //-- Module Information
     size_t NumberOpenFils() const
     {
-        return rt[nRT].GetOpenFiles().GetCount();
+        return rt[nRT]->GetOpenFiles().size();
     }
     const char* GetFldHelp( uint Ni ) const
     {
@@ -327,11 +326,11 @@ public:
 
 // TSubModule and TCModule container
 class TModuleList:
-            public TIArray<TSubModule>
+            public std::vector<std::shared_ptr<TSubModule>>
 {
 public:
     TModuleList():
-            TIArray<TSubModule>(40)
+          std::vector<std::shared_ptr<TSubModule>>()
     {}
 
     ~TModuleList();

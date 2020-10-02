@@ -201,7 +201,7 @@ public:
     void DCthermo( int q, int p);
 
     void CopyRecords( const char * prfName, TCIntArray& cnt,
-     elmWindowData el_data, dcSetupData st_data, TCStringArray& SDlist );
+     elmWindowData el_data, dcSetupData st_data, std::set<std::string>& SDlist );
 
 };
 

@@ -26,12 +26,15 @@
 #ifndef _v_user_h_
 #define _v_user_h_
 
+#include <set>
+#include <vector>
 #include <algorithm>
+
 #include <iostream>
+#include <cstring>
 using namespace std;
 #include "GEMS3K/v_detail.h"
-#include "array.h"
-#include "gstring.h"
+
 
 #ifdef __APPLE__
 
@@ -45,7 +48,21 @@ using namespace std;
 typedef unsigned int uint;
 #endif
 
+// added for convenience because of frequent use
+typedef vector<string> TCStringArray;
+// Added for convenience
+typedef vector<int> TCIntArray;
 const int MAXKEYWD = 6+1;
+
+template <class T>
+int findIndex( const std::vector<T>arr, const T& val )
+{
+    auto pos =  std::find(arr.begin(), arr.end(), val);
+    if( pos != arr.end()  )
+        return static_cast<int>(pos-arr.begin());
+    else
+        return -1;
+}
 
 #ifndef  __unix
 
@@ -59,46 +76,39 @@ double NormDoubleRound(double aVal, int digits);
 void NormDoubleRound(double *aArr, int size, int digits);
 void NormFloatRound(float *aArr, int size, int digits);
 
-inline
-int ROUND(double x )
-{
-    return int((x)+.5);
-}
-
-
 inline bool IsSpace(char ch)
 {
     return ( (ch == ' ') || (ch == '\t') );
 }
 
-void StripLine(gstring& line);
+void StripLine(string& line);
 void KeyToName(std::string& line);
-TCStringArray split(const gstring& str, const gstring& delimiters);
+TCStringArray split(const string& str, const string& delimiters);
 
 // Added by SD on 22/12/2001
 // Change string on templates
 void
-ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
-                const gstring& to_templ1, uint len_ );
+ChangeforTempl( string& data_str,  const string& from_templ1,
+                const string& to_templ1, uint len_ );
 
 // Returns string representation of current date in dd/mm/yyyy format
-gstring curDate();
+string curDate();
 
 // Returns string representation of current date in dd/mm/yy format
 std::string curDateSmol(char ch = '/');
 
 // Returns string representation of current time in HH:MM  format
-gstring curTime();
+string curTime();
 
 // Returns string representation of current date and time
 inline
-gstring curDateTime()
+string curDateTime()
 {
     return curDate() + curTime();
 }
 
-// reads line to gstring class from istream with a delimiter
-istream& u_getline(istream& instream, gstring& dst_string, char delimit = '\n');
+// reads line to string class from istream with a delimiter
+istream& u_getline(istream& instream, string& dst_string, char delimit = '\n');
 istream& f_getline(istream& is, std::string& str, char delim);
 
 
@@ -112,44 +122,6 @@ inline char* gcvt(double num, int digit, char* buf)
 
 #endif  // __FreeBSD
 
-
-// dynamically allocates temporary 'char*'
-// for simple string manipulations
-// (used instead of stack char[] allocation to avoid stack problems)
-struct vstr
-{
-    char* p;
-    vstr(int ln): p(new char[ln+1])
-    { }
-
-    vstr(int ln, const char* s): p(new char[ln+1])    {
-        strncpy(p, s, ln);
-        p[ln]='\0';
-    }
-
-    vstr(const char* s): p(new char[strlen(s)+1])    {
-       strcpy(p, s);
-    }
-
-    ~vstr()    {
-        delete[] p;
-    }
-
-    operator char* ()    {
-        return p;
-    }
-
-private:
-    vstr (const vstr&);
-    const vstr& operator= (const vstr&);
-
-};
-
-
-#define fileNameLength 64
-/// Get Path of file and Reading list of file names from it, return number of files
-char  (* f_getfiles(const char *f_name, char *Path, 
-		long int& nElem, char delim ))[fileNameLength];
 
 
 

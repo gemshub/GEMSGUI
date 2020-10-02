@@ -9,10 +9,10 @@ DEFINES         += NODEARRAYLEVEL
 #DEFINES += NOPARTICLEARRAY
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
-#DEFINES  += NO_JSON_OUT
+#DEFINES  += USE_OLD_KV_IO_FILES
 
 CONFIG+=sdk_no_version_check
-CONFIG += c++11
+CONFIG += c++14
 CONFIG += warn_on
 #CONFIG += warn_off
 #CONFIG += help
@@ -38,6 +38,14 @@ greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 #    QMAKE_CFLAGS_RELEASE = -O3
 #    QMAKE_CXXFLAGS_RELEASE = -O3
 #  }
+
+QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
+
+QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
+   -Wmissing-declarations -Winline -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral \
+   -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
+   -Wfloat-equal -pedantic -ansi
+
 }
 
 macx-g++ {

@@ -4,7 +4,6 @@
 // Declaration of TValBase class and value constants
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -20,7 +19,7 @@
 #ifndef _v_vals_h_
 #define _v_vals_h_
 
-#include "gstring.h"
+#include <string>
 
 class GemDataStream;
 
@@ -63,8 +62,7 @@ struct TValBase
     virtual bool IsAny(int ndx) const = 0;
     virtual bool IsEmpty(int ndx) const = 0;
 
-    virtual gstring GetString(int ndx) const = 0;
-    //  virtual bool VerifyString(const char* s)=0;
+    virtual std::string GetString(int ndx) const = 0;
     virtual bool SetString(const char* s, int ndx) = 0;
 
     virtual void write(GemDataStream& s, int size) = 0;
@@ -87,12 +85,12 @@ extern const char* S_ANY;
 #define SHORT_ANY   	    32767
 #define USHORT_EMPTY         0
 #define USHORT_ANY           65535
-#define LONG_EMPTY             -2147483648L //Int 32 -2,147,483,648 / 2,147,483,647
+#define LONG_EMPTY             -2147483647L //Int 32 -2,147,483,648 / 2,147,483,647
 #define LONG_ANY               2147483647L
 #define ULONG_EMPTY   0UL
 #define ULONG_ANY     4294967295UL
 #define FLOAT_EMPTY	          1.17549435e-38F
-#define FLOAT_ANY             3.40282347e+38F
+#define FLOAT_ANY             3.40282346e+38F   // was 3.40282347e+38F - fixed because of MSVC 15.0
 #define DOUBLE_EMPTY         2.2250738585072014e-308
 #define DOUBLE_ANY           1.7976931348623157e+308
 #define UCHAR_EMPTY   0

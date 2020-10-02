@@ -5,7 +5,6 @@
 // ( Provides stream input/output for  visual elements )
 //
 // Copyright (C) 1996-2001  A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -97,16 +96,16 @@ struct PageInfo
     /*const */CWinInfo& rWinInfo;
 //    TCPage* pPage;
 
-    TIArray<FieldInfo> aFieldInfo;
-    gstring name;
+    std::vector<std::shared_ptr<FieldInfo>> aFieldInfo;
+    string name;
 
-    static eFieldType GetType(const gstring& s);
+    static eFieldType GetType(const string& s);
 
     TCWindow& GetWin();
 
-    PageInfo(/*const */CWinInfo& wi, istream& is);
-    PageInfo(/*const */CWinInfo& wi, TConfig& cnf, gstring name);
-    void load(TConfig& c);
+    PageInfo( CWinInfo& wi, istream& is);
+    PageInfo( CWinInfo& wi, TConfig& cnf, string name);
+    void load(TConfig& cnf);
 
     void toDAT(ostream& os);
     void fromDAT(istream& os);	// must be protected
@@ -128,14 +127,14 @@ struct CWinInfo
     TCWindow* pWin;
 
     TSubModule& rM;
-    TIArray<PageInfo> aPageInfo;
+   std::vector<std::shared_ptr<PageInfo>> aPageInfo;
 
     int init_width;
     int init_height;
 
     CWinInfo(TSubModule& r, istream& is);
     CWinInfo(TSubModule& r, TConfig& cnf);
-    void load(TConfig& c);
+    void load(TConfig& cnf);
 
     void toDAT(ostream& os);
     void fromDAT(istream& is);	// must be protected
@@ -155,6 +154,6 @@ PageInfo::GetWin()
 }
 
 
-extern TIArray<CWinInfo> aWinInfo;
+extern std::vector<std::shared_ptr<CWinInfo>> aWinInfo;
 
 #endif  // _page_s_h

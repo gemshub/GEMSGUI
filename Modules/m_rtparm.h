@@ -137,7 +137,7 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void RecordPlot( const char *key );
-    virtual gstring  GetKeyofRecord( const char *oldKey,
+    virtual std::string  GetKeyofRecord( const char *oldKey,
        const char *strTitle, int keyType );
 
     //void CmHelp();

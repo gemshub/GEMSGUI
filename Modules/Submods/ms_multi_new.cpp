@@ -98,10 +98,10 @@ void TMulti::GasParcP()
         return;
 
     char (*SMbuf)[MAXDCNAME] =
-            (char (*)[MAXDCNAME])aObj[ o_w_tprn].Alloc( pm.PG, 1, MAXDCNAME );
-    pm.Fug = (double *)aObj[ o_wd_fug].Alloc( pm.PG, 1, D_ );
-    pm.Fug_l = (double *)aObj[ o_wd_fugl].Alloc( pm.PG, 1, D_ );
-    pm.Ppg_l = (double *)aObj[ o_wd_ppgl].Alloc( pm.PG, 1, D_ );
+            (char (*)[MAXDCNAME])aObj[ o_w_tprn]->Alloc( pm.PG, 1, MAXDCNAME );
+    pm.Fug = (double *)aObj[ o_wd_fug]->Alloc( pm.PG, 1, D_ );
+    pm.Fug_l = (double *)aObj[ o_wd_fugl]->Alloc( pm.PG, 1, D_ );
+    pm.Ppg_l = (double *)aObj[ o_wd_ppgl]->Alloc( pm.PG, 1, D_ );
 
     for( k=0, je=0; k<pm.FIs; k++ ) // phase
     {
@@ -138,64 +138,64 @@ void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb
 {
 
     ErrorIf( k < 0 || k >= pm.FIs , "CalculateActivityCoefficients():", "Invalid link: k=0||>FIs" );
-    aObj[ o_nsmod].SetPtr( pm.sMod[k] );
-    aObj[ o_nncp].SetPtr( pm.LsMod+k*3 );
-    aObj[ o_nncd].SetPtr( pm.LsMdc+k*3 );
-    aObj[ o_ndc].SetPtr(  pm.L1+k );
-    aObj[ o_nez].SetPtr( pm.EZ+jb );
-    aObj[o_nez].SetN(  pm.L1[k]);
-    aObj[ o_npcv].SetPtr( pm.PMc+jpb );
-    aObj[o_npcv].SetDim( pm.LsMod[k*3], pm.LsMod[k*3+2]);
+    aObj[ o_nsmod]->SetPtr( pm.sMod[k] );
+    aObj[ o_nncp]->SetPtr( pm.LsMod+k*3 );
+    aObj[ o_nncd]->SetPtr( pm.LsMdc+k*3 );
+    aObj[ o_ndc]->SetPtr(  pm.L1+k );
+    aObj[ o_nez]->SetPtr( pm.EZ+jb );
+    aObj[o_nez]->SetN(  pm.L1[k]);
+    aObj[ o_npcv]->SetPtr( pm.PMc+jpb );
+    aObj[o_npcv]->SetDim( pm.LsMod[k*3], pm.LsMod[k*3+2]);
     //  Object for indexation of interaction parameters
-    aObj[ o_nu].SetPtr( pm.IPx+ipb ); // added 07.12.2006  KD
-    aObj[o_nu].SetDim( pm.LsMod[k*3], pm.LsMod[k*3+1]);
+    aObj[ o_nu]->SetPtr( pm.IPx+ipb ); // added 07.12.2006  KD
+    aObj[o_nu]->SetDim( pm.LsMod[k*3], pm.LsMod[k*3+1]);
     //
-    aObj[ o_ndcm].SetPtr( pm.DMc+jdb );
-    aObj[o_ndcm].SetDim( pm.L1[k], pm.LsMdc[k*3] );
-    aObj[ o_nmvol].SetPtr( pm.Vol+jb );
-    aObj[o_nmvol].SetN( pm.L1[k]);
-    aObj[ o_nppar].SetPtr(pm.G0+jb );  // changed 10.12.2008 by DK
-    aObj[o_nppar].SetN(  pm.L1[k]);
-    //    aObj[ o_ngtn].SetPtr( pm.G0+jb );
-    aObj[ o_ngtn].SetPtr( pm.fDQF+jb );     // changed 05.12.2006 by DK
-    aObj[o_ngtn].SetN( pm.L1[k] );
-    aObj[ o_ngam].SetPtr( pm.Gamma+jb ); // Gamma calculated
-    aObj[o_ngam].SetN( pm.L1[k] );
-    aObj[ o_nlngam].SetPtr( pm.lnGam+jb ); // ln Gamma calculated
-    aObj[o_nlngam].SetN( pm.L1[k]);
-    aObj[ o_nas].SetPtr(  pm.A+pm.N*jb );
-    aObj[o_nas].SetDim(  pm.L1[k], pm.N );
-    aObj[ o_nxa].SetPtr(  pm.XF+k );
-    aObj[ o_nxaa].SetPtr(  pm.XFA+k );
+    aObj[ o_ndcm]->SetPtr( pm.DMc+jdb );
+    aObj[o_ndcm]->SetDim( pm.L1[k], pm.LsMdc[k*3] );
+    aObj[ o_nmvol]->SetPtr( pm.Vol+jb );
+    aObj[o_nmvol]->SetN( pm.L1[k]);
+    aObj[ o_nppar]->SetPtr(pm.G0+jb );  // changed 10.12.2008 by DK
+    aObj[o_nppar]->SetN(  pm.L1[k]);
+    //    aObj[ o_ngtn]->SetPtr( pm.G0+jb );
+    aObj[ o_ngtn]->SetPtr( pm.fDQF+jb );     // changed 05.12.2006 by DK
+    aObj[o_ngtn]->SetN( pm.L1[k] );
+    aObj[ o_ngam]->SetPtr( pm.Gamma+jb ); // Gamma calculated
+    aObj[o_ngam]->SetN( pm.L1[k] );
+    aObj[ o_nlngam]->SetPtr( pm.lnGam+jb ); // ln Gamma calculated
+    aObj[o_nlngam]->SetN( pm.L1[k]);
+    aObj[ o_nas]->SetPtr(  pm.A+pm.N*jb );
+    aObj[o_nas]->SetDim(  pm.L1[k], pm.N );
+    aObj[ o_nxa]->SetPtr(  pm.XF+k );
+    aObj[ o_nxaa]->SetPtr(  pm.XFA+k );
     if( pm.FIat > 0 )
     {
-        aObj[ o_nxast].SetPtr( pm.XFTS[k] );
-        aObj[ o_nxcec].SetPtr( pm.MASDT[k] );
+        aObj[ o_nxast]->SetPtr( pm.XFTS[k] );
+        aObj[ o_nxcec]->SetPtr( pm.MASDT[k] );
     }
     else
     {
-        aObj[ o_nxast].SetPtr( 0 );
-        aObj[ o_nxcec].SetPtr( 0 );
+        aObj[ o_nxast]->SetPtr( 0 );
+        aObj[ o_nxcec]->SetPtr( 0 );
     }
     //
-    aObj[ o_nbmol].SetPtr( pm.FVOL+k );  // phase volume
-    aObj[ o_nxx].SetPtr(  pm.X+jb );
-    aObj[o_nxx].SetN( pm.L1[k]);
-    aObj[ o_nwx].SetPtr(  pm.Wx+jb );
-    aObj[o_nwx].SetN( pm.L1[k]);
-    aObj[ o_nmju].SetPtr( pm.Fx+jb );
-    aObj[o_nmju].SetN( pm.L1[k]);
-    aObj[ o_nqp].SetPtr( pm.Qp+k*QPSIZE );
-    aObj[ o_nqd].SetPtr( pm.Qd+k*QDSIZE );   // Fixed 7.12.04 by KD
+    aObj[ o_nbmol]->SetPtr( pm.FVOL+k );  // phase volume
+    aObj[ o_nxx]->SetPtr(  pm.X+jb );
+    aObj[o_nxx]->SetN( pm.L1[k]);
+    aObj[ o_nwx]->SetPtr(  pm.Wx+jb );
+    aObj[o_nwx]->SetN( pm.L1[k]);
+    aObj[ o_nmju]->SetPtr( pm.Fx+jb );
+    aObj[o_nmju]->SetN( pm.L1[k]);
+    aObj[ o_nqp]->SetPtr( pm.Qp+k*QPSIZE );
+    aObj[ o_nqd]->SetPtr( pm.Qd+k*QDSIZE );   // Fixed 7.12.04 by KD
 
     // phase excess properties
-    aObj[o_ngte].SetPtr( &pm.GPh[k][0] );
-    aObj[o_nhte].SetPtr( &pm.HPh[k][0] );
-    aObj[o_nste].SetPtr( &pm.SPh[k][0] );
-    aObj[o_nvte].SetPtr( &pm.VPh[k][0] );
-    aObj[o_ncpte].SetPtr( &pm.CPh[k][0] );
-    aObj[o_nate].SetPtr( &pm.APh[k][0] );
-    aObj[o_nute].SetPtr( &pm.UPh[k][0] );
+    aObj[o_ngte]->SetPtr( &pm.GPh[k][0] );
+    aObj[o_nhte]->SetPtr( &pm.HPh[k][0] );
+    aObj[o_nste]->SetPtr( &pm.SPh[k][0] );
+    aObj[o_nvte]->SetPtr( &pm.VPh[k][0] );
+    aObj[o_ncpte]->SetPtr( &pm.CPh[k][0] );
+    aObj[o_nate]->SetPtr( &pm.APh[k][0] );
+    aObj[o_nute]->SetPtr( &pm.UPh[k][0] );
 }
 
 
@@ -246,20 +246,20 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
     switch( LinkMode )
     { // check the calculation mode
     case LINK_TP_MODE: // running TP-dependent scripts
-        if(( sMod[SPHAS_DEP] == SM_TPDEP || sMod[SPHAS_DEP] == SM_UXDEP ) && qEp[k].nEquat() )
+        if(( sMod[SPHAS_DEP] == SM_TPDEP || sMod[SPHAS_DEP] == SM_UXDEP ) && qEp[k]->nEquat() )
         {	// Changed on 26.02.2008 to try TW DQF scripts - DK
-            qEp[k].CalcEquat();
+            qEp[k]->CalcEquat();
         }
-        if((sMod[DCOMP_DEP] == SM_TPDEP || sMod[DCOMP_DEP] == SM_UXDEP) && qEd[k].nEquat() )
+        if((sMod[DCOMP_DEP] == SM_TPDEP || sMod[DCOMP_DEP] == SM_UXDEP) && qEd[k]->nEquat() )
         {
             switch( sMod[DCE_LINK] )
             {
             case SM_PUBLIC:  // one script for all species
                 for( pm.js=0, pm.is=0; pm.js<pm.L1[k]; pm.js++ )
-                    qEd[k].CalcEquat();
+                    qEd[k]->CalcEquat();
                 break;
             case SM_PRIVATE_: // separate group of equations per species
-                qEd[k].CalcEquat();
+                qEd[k]->CalcEquat();
                 break;
             }
         }
@@ -324,19 +324,19 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
             return false;
         } // end switch
 
-        if( sMod[SPHAS_DEP] == SM_UXDEP && qEp[k].nEquat() )
+        if( sMod[SPHAS_DEP] == SM_UXDEP && qEp[k]->nEquat() )
             // Equations for the whole phase
-            qEp[k].CalcEquat();
-        if( sMod[DCOMP_DEP] == SM_UXDEP && qEd[k].nEquat() )
+            qEp[k]->CalcEquat();
+        if( sMod[DCOMP_DEP] == SM_UXDEP && qEd[k]->nEquat() )
         {  // Equations for species
             switch( sMod[DCE_LINK] )
             {
             case SM_PUBLIC:  // one script for all species
                 for( pm.js=0, pm.is=0; pm.js<pm.L1[k]; pm.js++ )
-                    qEd[k].CalcEquat();
+                    qEd[k]->CalcEquat();
                 break;
             case SM_PRIVATE_:  // separate group of equations for each species
-                qEd[k].CalcEquat();
+                qEd[k]->CalcEquat();
                 break;
             }
         }
@@ -374,7 +374,7 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
 
     // Allocating list of phases currently present in non-zero quantities
     if( !pm.SFs )
-        pm.SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
+        pm.SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs]->Alloc(
                     pm.FI, 1, MAXPHNAME+MAXSYMB );
 
     // no old solution => must be simplex
@@ -488,9 +488,9 @@ void TMulti::DC_LoadThermodynamicData()
   //  }
   //  if( pmp->pTPD <= 1 )
   //  {
-      int xVol=0.;
-      if( tpp->PtvVm == S_ON && pmp->PV == VOL_CONSTR )
-        xVol = getXvolume();
+        int xVol=0.;
+        if( tpp->PtvVm == S_ON && pmp->PV == VOL_CONSTR )
+            xVol = getXvolume();
 
         for( k=0; k<pmp->FI; k++ )
         {
@@ -506,7 +506,7 @@ void TMulti::DC_LoadThermodynamicData()
                     Gg = syp->Guns[jj];    // User-set increment to G0 from project system
                 if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
                     Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
-    // !!!!!!! Insert here a case that checks units of measurement for the G0 increment
+                // !!!!!!! Insert here a case that checks units of measurement for the G0 increment
                 pmp->G0[j] = ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
                 Vv = 0.;
                 //  loading Vol
@@ -515,13 +515,14 @@ void TMulti::DC_LoadThermodynamicData()
                     { // loading molar volumes of components into the A matrix
                     case VOL_CONSTR:
                         if( syp->Vuns )
-                           Vv = syp->Vuns[jj];
+                            Vv = syp->Vuns[jj];
                         if( xVol >= 0 )
                             pmp->A[j*pmp->N+xVol] = tpp->Vm[jj]+Vv;
+                         [[fallthrough]];
                     case VOL_CALC:
                     case VOL_UNDEF:
                         if( syp->Vuns )
-                           Vv = syp->Vuns[jj];
+                            Vv = syp->Vuns[jj];
                         pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;
                         break;
                     }
@@ -549,93 +550,93 @@ void TMulti::get_PAalp_PSigm( char& PAalp, char& PSigm)
 
 void TMulti::alloc_IPx( long int LsIPxSum )
 {
-    pm.IPx = (long int *)aObj[ o_wi_ipxpm ].Alloc(LsIPxSum, 1, L_);
+    pm.IPx = (long int *)aObj[ o_wi_ipxpm ]->Alloc(LsIPxSum, 1, L_);
 }
 void TMulti::alloc_PMc( long int LsModSum )
 {
-    pm.PMc = (double *)aObj[ o_wi_pmc].Alloc( LsModSum, 1, D_);
+    pm.PMc = (double *)aObj[ o_wi_pmc]->Alloc( LsModSum, 1, D_);
 }
 void TMulti::alloc_DMc( long int LsMdcSum )
 {
-    pm.DMc = (double *)aObj[ o_wi_dmc].Alloc( LsMdcSum, 1, D_ );
+    pm.DMc = (double *)aObj[ o_wi_dmc]->Alloc( LsMdcSum, 1, D_ );
 }
 void TMulti::alloc_MoiSN( long int LsMsnSum )
 {
-    pm.MoiSN = (double *)aObj[ o_wi_moisn].Alloc( LsMsnSum, 1, D_ );
+    pm.MoiSN = (double *)aObj[ o_wi_moisn]->Alloc( LsMsnSum, 1, D_ );
 }
 void TMulti::alloc_SitFr( long int LsSitSum )
 {
-    pm.SitFr  = (double *)aObj[ o_wo_sitfr ].Alloc( LsSitSum, 1, D_ );
+    pm.SitFr  = (double *)aObj[ o_wo_sitfr ]->Alloc( LsSitSum, 1, D_ );
 }
 void TMulti::alloc_DQFc( long int DQFcSum )
 {
-   pm.DQFc = (double *)aObj[ o_wi_dqfc].Alloc( DQFcSum, 1, D_ );
+   pm.DQFc = (double *)aObj[ o_wi_dqfc]->Alloc( DQFcSum, 1, D_ );
 }
 void TMulti::alloc_PhLin( long int PhLinSum )
 {
-    pm.PhLin = (long int (*)[2])aObj[ o_wi_phlin].Alloc( PhLinSum, 2, L_ );
+    pm.PhLin = (long int (*)[2])aObj[ o_wi_phlin]->Alloc( PhLinSum, 2, L_ );
 }
 void TMulti::alloc_lPhc( long int lPhcSum )
 {
-    pm.lPhc  = (double *)aObj[ o_wi_lphc ].Alloc( lPhcSum, 1, D_ );
+    pm.lPhc  = (double *)aObj[ o_wi_lphc ]->Alloc( lPhcSum, 1, D_ );
 }
 
 void TMulti::alloc_xSMd( long int xSMdSum )
 {
-    pm.xSMd = (long int*)aObj[ o_wi_xsmd].Alloc( xSMdSum, 1, L_ );
+    pm.xSMd = (long int*)aObj[ o_wi_xsmd]->Alloc( xSMdSum, 1, L_ );
 }
 void TMulti::alloc_IsoPc( long int IsoPcSum )
 {
-    pm.IsoPc = (double*)aObj[ o_wi_isopc].Alloc( IsoPcSum, 1, D_ );
+    pm.IsoPc = (double*)aObj[ o_wi_isopc]->Alloc( IsoPcSum, 1, D_ );
 }
 void TMulti::alloc_IsoSc( long int IsoScSum )
 {
-    pm.IsoSc = (double*)aObj[ o_wi_isosc].Alloc( IsoScSum, 1, D_ );
+    pm.IsoSc = (double*)aObj[ o_wi_isosc]->Alloc( IsoScSum, 1, D_ );
 }
 void TMulti::alloc_IsoCt( long int IsoCtSum )
 {
-   pm.IsoCt = (char*)aObj[ o_wi_isoct].Alloc( IsoCtSum, 1, A_ );
+   pm.IsoCt = (char*)aObj[ o_wi_isoct]->Alloc( IsoCtSum, 1, A_ );
 }
 void TMulti::alloc_EImc( long int EImcSum )
 {
-    pm.EImc = (double*)aObj[ o_wi_eimc].Alloc( EImcSum, 1, D_ );
+    pm.EImc = (double*)aObj[ o_wi_eimc]->Alloc( EImcSum, 1, D_ );
 }
 void TMulti::alloc_mCDc( long int mCDcSum )
 {
-    pm.mCDc = (double*)aObj[ o_wi_mcdc].Alloc( mCDcSum, 1, D_ );
+    pm.mCDc = (double*)aObj[ o_wi_mcdc]->Alloc( mCDcSum, 1, D_ );
 }
 
 void TMulti::alloc_xSKrC( long int xSKrCSum )
 {
-    pm.xSKrC = (long int*)aObj[ o_wi_jcrdc].Alloc( xSKrCSum, 1, L_ );
+    pm.xSKrC = (long int*)aObj[ o_wi_jcrdc]->Alloc( xSKrCSum, 1, L_ );
 }
 void TMulti::alloc_ocPRkC( long int ocPRkC_feSArC_Sum )
 {
-    pm.ocPRkC = (long int(*)[2])aObj[ o_wi_ocprkc].Alloc( ocPRkC_feSArC_Sum, 2, L_ );
+    pm.ocPRkC = (long int(*)[2])aObj[ o_wi_ocprkc]->Alloc( ocPRkC_feSArC_Sum, 2, L_ );
 }
 void TMulti::alloc_feSArC( long int ocPRkC_feSArC_Sum )
 {
-    pm.feSArC = (double*)aObj[ o_wi_fsac].Alloc( ocPRkC_feSArC_Sum, 1, D_ );
+    pm.feSArC = (double*)aObj[ o_wi_fsac]->Alloc( ocPRkC_feSArC_Sum, 1, D_ );
 }
 void TMulti::alloc_rpConC( long int rpConCSum )
 {
-   pm.rpConC = (double*)aObj[ o_wi_krpc].Alloc( rpConCSum, 1, D_ );
+   pm.rpConC = (double*)aObj[ o_wi_krpc]->Alloc( rpConCSum, 1, D_ );
 }
 void TMulti::alloc_apConC( long int apConCSum )
 {
-    pm.apConC = (double*)aObj[ o_wi_apconc].Alloc( apConCSum, 1, D_ );
+    pm.apConC = (double*)aObj[ o_wi_apconc]->Alloc( apConCSum, 1, D_ );
 }
 void TMulti::alloc_AscpC( long int AscpCSum )
 {
-    pm.AscpC = (double*)aObj[ o_wi_ascpc].Alloc( AscpCSum, 1, D_ );
+    pm.AscpC = (double*)aObj[ o_wi_ascpc]->Alloc( AscpCSum, 1, D_ );
 }
 void TMulti::alloc_UMpcC( long int UMpcSum )
 {
-    pm.UMpcC = (double*)aObj[ o_wi_umpc].Alloc( UMpcSum, 1, D_ );
+    pm.UMpcC = (double*)aObj[ o_wi_umpc]->Alloc( UMpcSum, 1, D_ );
 }
 void TMulti::alloc_xICuC( long int xICuCSum )
 {
-    pm.xICuC = (long int *)aObj[o_wi_xicuc ].Alloc( xICuCSum, 1, L_ );
+    pm.xICuC = (long int *)aObj[o_wi_xicuc ]->Alloc( xICuCSum, 1, L_ );
 }
 
 

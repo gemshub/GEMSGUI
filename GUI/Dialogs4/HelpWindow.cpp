@@ -29,6 +29,9 @@
 #endif
 
 #include <QtHelp/QHelpEngine>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+#include <QtHelp/QHelpLink>
+#endif
 #include <QtHelp/QHelpContentWidget>
 #include <QtHelp/QHelpIndexWidget>
 #include <QFileInfo>
@@ -44,7 +47,7 @@
 static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.7.0 c.b053eed ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.7.1 c.5d15bac ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = nullptr;
@@ -53,9 +56,9 @@ HelpWindow::HelpWindow( QWidget* parent):
         QMainWindow( parent )
 {
    setupUi(this);
-   gstring titl = pVisorImp->getGEMTitle();
+   string titl = pVisorImp->getGEMTitle();
            titl+= " : Help Viewer ";
-           setWindowTitle( trUtf8(titl.c_str()) );
+           setWindowTitle(  titl.c_str()  );
 
     pDia = this;
 
@@ -117,7 +120,7 @@ HelpWindow::HelpWindow( QWidget* parent):
 
 #ifndef GEMS_RELEASE  
     QLabel *label_2 = new QLabel(toolAddress);
-    label_2->setText(trUtf8("Address:"));
+    label_2->setText( "Address:" );
     toolAddress->addWidget( label_2 );
 
     adressLine = new QLineEdit( toolAddress );
@@ -138,7 +141,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     }
     else
      {
-      //cout << collectionFile.toLatin1().data() << endl;
+      //cout << collectionFile.toStdString() << endl;
 
       // Contents part
       wContents = hEngine->contentWidget();
@@ -215,7 +218,7 @@ void HelpWindow::setActions()
                 this, SLOT(showFind()));
 
     QLabel *label_2 = new QLabel(toolFind);
-    label_2->setText(trUtf8("Find:"));
+    label_2->setText( "Find:" );
     toolFind->addWidget( label_2 );
 
     findLine = new QLineEdit( toolFind );
@@ -243,19 +246,19 @@ void HelpWindow::helpVersion()
     QMessageBox::information(this,
 #ifdef __unix
 #ifdef __APPLE__
-           trUtf8("Title"), trUtf8("GEMS3.7 (MacOS X 10.10 to 10.15, 64bit clang)\n\n")+
+           "Title", "GEMS3.7 (macOSX 10.13-10.15, C++ clang x64)\n\n"+
 #else
-           trUtf8("GEMS3.7 (Linux 64bit gcc7.3 Qt5.12)"),
+           "GEMS3.7 (Linux x64 C++ gcc7.3 up, Qt5.12 up)",
 #endif
 #else
-           trUtf8("GEMS3.7 (Windows 10 MinGW 64 gcc7.3 Qt5.12"),
+           "GEMS3.7 (Windows 10 C++ MSVC15 x64 Qt5.15)",
 #endif
-           trUtf8("\nThis is GEM-Selektor code package\n\n")+
-           trUtf8( _GEMS_version_stamp ) + trUtf8(  "\n\nusing " )+
-           trUtf8( _GEMIPM_version_stamp ) +
-           trUtf8( "\n\n\nFor GEMS R&D community, GPL v.3\n\n"
+            QString("\nThis is GEM-Selektor code package\n\n") +
+             _GEMS_version_stamp   +  "\n\nusing "  +
+             _GEMIPM_version_stamp   +
+            "\n\n\nFor GEMS R&D community, GPL v.3\n\n"
                   "(c) 2020, GEMS Development Team\n\n"
-                  "          PSI-ETHZ-CSM" ) );
+                  "          Paul Scherrer Institut" );
 }
 
 void HelpWindow::helpAbout()
@@ -298,8 +301,13 @@ void HelpWindow::showFind()
 {
     if( hEngine )
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+        auto query = hEngine->searchEngine()->queryWidget()->searchInput();
+         findLine->setText(query);
+#else
        QStringList query = hEngine->searchEngine()->queryWidget()->query().value(0).wordList;
        findLine->setText(query.value(0));
+#endif
     }
 }
 
@@ -329,7 +337,7 @@ void HelpWindow::actionFind()
   if( !findLine )
   {
       QLabel *label_2 = new QLabel(toolFind);
-      label_2->setText(trUtf8("Find for:"));
+      label_2->setText("Find for:");
       toolFind->addWidget( label_2 );
 
       findLine = new QLineEdit( toolFind );
@@ -351,7 +359,7 @@ void HelpWindow::actionFindNext()
   if( !findLine )
    return;
 
-  QTextDocument::FindFlags flg = nullptr;
+  QTextDocument::FindFlags flg;
   if(action_Case_sensetiv->isChecked() )
        flg |=QTextDocument::FindCaseSensitively;
 
@@ -389,7 +397,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
    if (!hEngine)
        return;
 
-    gstring path = "qthelp://gems3/help/";
+    string path = "qthelp://gems3/help/";
     QUrl path_str;
 
     if( !file/*item1*/ )
@@ -401,7 +409,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
         path += file;
         // adding ".html" if needed
         if( path.rfind( "#" ) == path.npos )
-        {   if( gstring(path, path.length()-5, 5) != ".html" )
+        {   if( string(path, path.length()-5, 5) != ".html" )
               path += ".html";
             if( item1  )
             {  path += "#";
@@ -411,7 +419,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
         path_str = QUrl(path.c_str());
     }
 
-   cout << "showDocumentation " << path_str.toString().toLatin1().data() << endl;
+   cout << "showDocumentation " << path_str.toString().toStdString() << endl;
    loadResource(  QUrl(path_str) );
 }
 
@@ -425,6 +433,24 @@ QUrl HelpWindow::showHelpForKeyword(const QString &keyword)
     if (!hEngine)
       return QUrl();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    // finding full name, not subString
+    //QMap<QString, QUrl> links = hEngine->indexModel()->linksForKeyword( keyword );
+    auto links = hEngine->documentsForKeyword(keyword);
+    if (links.count())
+      return links.constBegin()->url;
+
+    QString kwInternal = keyword;
+    int ndx = kwInternal.lastIndexOf('_');
+    if(ndx > -1)
+    {    kwInternal= kwInternal.remove(QRegExp("_[0-9]{1,3}")/*ndx*/);
+         // links = hEngine->indexModel()->linksForKeyword( kwInternal );
+         links = hEngine->documentsForKeyword( kwInternal );
+            if (links.count())
+              return links.constBegin()->url;
+    }
+
+#else
     // finding full name, not subString
     QMap<QString, QUrl> links = hEngine->indexModel()->linksForKeyword( keyword );
     if (links.count())
@@ -438,6 +464,9 @@ QUrl HelpWindow::showHelpForKeyword(const QString &keyword)
             if (links.count())
               return links.constBegin().value();
     }
+
+#endif
+
 
     //for old keywd list
     //    "objectlabel[indexN][indexM]", if sizeN >1 and sizeM > 1
@@ -528,7 +557,11 @@ SearchWidget::~SearchWidget()
 
 void SearchWidget::search() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+   auto query = srchEngine->queryWidget()->searchInput();
+#else
     QList<QHelpSearchQuery> query = srchEngine->queryWidget()->query();
+#endif
     srchEngine->search(query);
 }
 
@@ -549,7 +582,7 @@ AboutDialog::AboutDialog( QWidget* parent):
         QDialog( parent )
 {
    setupUi(this);
-   gstring titl = pVisorImp->getGEMTitle();
+   string titl = pVisorImp->getGEMTitle();
            titl+= " : About the program package ";
    setWindowTitle( trUtf8(titl.c_str()) );
 }
@@ -566,7 +599,7 @@ HowToStartDialog::HowToStartDialog( QWidget* parent):
         QDialog( parent )
 {
    setupUi(this);
-   gstring titl = pVisorImp->getGEMTitle();
+   string titl = pVisorImp->getGEMTitle();
            titl+= " : Start the program package ";
    setWindowTitle( trUtf8(titl.c_str()) );
 }

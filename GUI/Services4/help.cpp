@@ -43,13 +43,13 @@ void HelpConfigurator::u_getline(istream& is, QString& str, QString end )
 void HelpConfigurator::getHrefs( QString file, QString file_name)
 {
    char ch;
-   fstream f_in( file.toLatin1().data(), ios::in );
+   fstream f_in( file.toStdString(), ios::in );
    QString ref;
 
    if( !f_in.good() )
    {
         file += " Fileopen error";
-        Error( "HelpConfigurator", file.toLatin1().data());
+        Error( "HelpConfigurator", file.toStdString());
         return;
    }
 
@@ -85,14 +85,14 @@ void HelpConfigurator::addNameToList( QString ref, QString file_name )
     QString value;
 
     int indx = ref.indexOf("name=");
-// cout << indx << "    " << ref.toLatin1().data() << endl;
+// cout << indx << "    " << ref.toStdString() << endl;
     if(indx > -1 )
     {
       names.append(ref);
       key =ref.section("\"",1,1);
       value = file_name +"#"+key;
-      links.insertMulti(key,QUrl(value));
-// cout << value.toLatin1().data()<<endl;
+      links.insert(key, QUrl(value));
+// cout << value.toStdString()<<endl;
     }
     else
         hrefs.append(ref);
@@ -104,14 +104,14 @@ void HelpConfigurator::addImgToList( QString ref )
 {
     QString value, rref, file_name;
     int indx = ref.indexOf("src=");
-// cout << indx << "    " << ref.toLatin1().data(); // << endl;
+// cout << indx << "    " << ref.toStdString(); // << endl;
     if(indx > -1 )   // Bugfixes by DK on 15.02.2012
     {
       rref = ref.mid(indx);
       value = rref.section("\"",1,1);
-// cout << "+ " << value.toLatin1().data() << endl;
+// cout << "+ " << value.toStdString() << endl;
       file_name = value.section("/", -1);
-// cout << "- " << file_name.toLatin1().data() << endl;
+// cout << "- " << file_name.toStdString() << endl;
       images.append(file_name);
     }
     else
@@ -134,11 +134,11 @@ int HelpConfigurator::readDir(const char *dir)
     filters << "*.html";
     thisDir.setNameFilters(filters);
 
-    QFileInfoList files = thisDir.entryInfoList();
-    if (files.empty())
+    QFileInfoList files1 = thisDir.entryInfoList();
+    if (files1.empty())
         return 0;
 
-    QListIterator<QFileInfo> it(files);
+    QListIterator<QFileInfo> it(files1);
     QFileInfo f;
     while ( it.hasNext() )
     {
@@ -159,7 +159,7 @@ int HelpConfigurator::writeFile(const char *file)
     if( !f_out.good() )
     {
         QString str = QString(file) + " Fileopen error";
-        Error( "HelpConfigurator", str.toLatin1().data());
+        Error( "HelpConfigurator", str.toStdString());
         return 0;
     }
 
@@ -187,13 +187,13 @@ void HelpConfigurator::writeFiles( fstream& f_out)
     f_out << "      <files>" << endl;
     for( int ii =0; ii<files.count(); ii++)
     {
-      f_out << "        <file>" << files[ii].toLatin1().data() << "</file>" << endl;
+      f_out << "        <file>" << files[ii].toStdString() << "</file>" << endl;
     }
     images.sort();
     images.removeDuplicates();
     for( int ii =0; ii<images.count(); ii++)
     {
-      f_out << "        <file>" << images[ii].toLatin1().data() << "</file>" << endl;
+      f_out << "        <file>" << images[ii].toStdString() << "</file>" << endl;
     }
     f_out << "      </files>" << endl;
 }
@@ -206,7 +206,7 @@ void HelpConfigurator::writeKeywords( fstream& f_out)
 
     //kwds = links.keys();
     //for(int ii=0; ii<links.count(); ii++ )
-    // cout << kwds[ii].toLatin1().data() << endl;
+    // cout << kwds[ii].toStdString() << endl;
 
     kwds = links.uniqueKeys();
     f_out << "    <keywords>" << endl;
@@ -219,8 +219,8 @@ void HelpConfigurator::writeKeywords( fstream& f_out)
         urls = links.values( kwds[ii] );
 
       for( int jj=0; jj<urls.count(); jj++ )
-      f_out << "        <keyword name=\"" << kwds[ii].toLatin1().data()
-            << "\" ref=\"" << urls[jj].toString().toLatin1().data()  << "\"/>" << endl;
+      f_out << "        <keyword name=\"" << kwds[ii].toStdString()
+            << "\" ref=\"" << urls[jj].toString().toStdString()  << "\"/>" << endl;
     }
     f_out << "    </keywords>" << endl;
 }
@@ -230,11 +230,11 @@ void HelpConfigurator::writeContent( fstream& f_out)
     QString ref;
     QString contentfile = path;
             contentfile += "/gems3helpconfig.toc";
-    fstream f_in( contentfile.toLatin1().data(), ios::in );
+    fstream f_in( contentfile.toStdString(), ios::in );
     if( !f_in.good() )
     {
         contentfile += " Fileopen error";
-        Error( "HelpConfigurator", contentfile.toLatin1().data());
+        Error( "HelpConfigurator", contentfile.toStdString());
         return;
     }
 
@@ -242,7 +242,7 @@ void HelpConfigurator::writeContent( fstream& f_out)
     {
       ref = "";
       u_getline(f_in, ref, ">" );
-      f_out << ref.toLatin1().data();
+      f_out << ref.toStdString();
     }
 }
 
@@ -349,8 +349,8 @@ bool Helper::startAssistant()
             ;
 
         proc->start(app, args);
-    	cout << app.toLatin1().data() << endl;
-    	cout << args[2].toLatin1().data() << endl;
+        cout << app.toStdString() << endl;
+        cout << args[2].toStdString() << endl;
 
         if (!proc->waitForStarted()) 
         {
@@ -368,10 +368,10 @@ void Helper::showDocumentation(const char* file, const char* item1)
     if (!startAssistant())
         return;
 
-    gstring path = "";//pVisor->docDir();
+    string path = "";//pVisor->docDir();
     if( item1 )
     {  
-        gstring item = item1;
+        string item = item1;
         checkForRef( file, item );
         if( item.empty() )
             Error("Help", item + ": No such item in HTML files!");
@@ -382,7 +382,7 @@ void Helper::showDocumentation(const char* file, const char* item1)
         path += file;
         // adding ".html" if needed
         if( path.rfind( "#" ) == path.npos )
-           if( gstring(path, path.length()-5, 5) != ".html" )
+           if( string(path, path.length()-5, 5) != ".html" )
               path += ".html"; 
     }
     QString path_str = path.c_str();
@@ -411,18 +411,18 @@ void Helper::showDocumentation(const char* file, const char* item1)
 //
 //    Fixed by DS 17/02/2005
 bool
-Helper::checkForRef( const gstring& file, gstring& ref)
+Helper::checkForRef( const string& file, string& ref)
 {
-    gstring fname = docPath;
+    string fname = docPath;
     fname += file;
-//    gstring fname = file;
+//    string fname = file;
 
     ifstream is(fname.c_str());
     if( !is.good() )
         throw FileError();
 
-    gstring line;
-    gstring ref1 = ref;
+    string line;
+    string ref1 = ref;
 
     size_t pos_name;
     size_t  pos_1 = ref1.find('[');
@@ -430,18 +430,18 @@ Helper::checkForRef( const gstring& file, gstring& ref)
     size_t  pos_12 = ref1.find(']');
     size_t  pos_22 = ref1.rfind("]");
     if( pos_2 == pos_1 )
-           pos_2 = pos_22 = gstring::npos;
+           pos_2 = pos_22 = string::npos;
 
-    gstring o_name = ">";
+    string o_name = ">";
             o_name += ref1.substr(0, pos_1 );
-    gstring o_name2 = "";
-    if( pos_2 != gstring::npos  )
+    string o_name2 = "";
+    if( pos_2 != string::npos  )
     {
         o_name2 = o_name;
         o_name2 += "[]";
         o_name2 += ref1.substr( pos_2, pos_22-pos_2 );
     }
-    gstring name = o_name;
+    string name = o_name;
     ref = "";
 
     /// should be case insensitive  !!!
@@ -454,12 +454,12 @@ Helper::checkForRef( const gstring& file, gstring& ref)
             throw FileError();
 
         size_t posf = line.find("a href=\"");  // 08.01.01
-        if( posf == gstring::npos )
+        if( posf == string::npos )
                continue;
         posf += 8;
 
         if( !o_name2.empty() )
-          if( line.find( o_name2 ) != gstring::npos )
+          if( line.find( o_name2 ) != string::npos )
           {  // include line such: ">keywd[][m]"
             ref = line.substr( posf );
             ref = ref.substr( 0, ref.find('\"') );
@@ -467,7 +467,7 @@ Helper::checkForRef( const gstring& file, gstring& ref)
           }
 ID:
         pos_name = line.find( o_name );
-        if( pos_name != gstring::npos )
+        if( pos_name != string::npos )
         {
 
            size_t poss = o_name.length();
@@ -477,7 +477,7 @@ ID:
              continue; // finding full name, not subtring
            ref = line.substr( posf );
            ref = ref.substr( 0, ref.find('\"') );
-           if( pos_1 == gstring::npos )
+           if( pos_1 == string::npos )
             { // all reference finding
                return true;
             }
@@ -486,7 +486,7 @@ ID:
               o_name += ref1.substr( pos_1, pos_12-pos_1+1);
               pos_1 = pos_2;
               pos_12 = pos_22;
-              pos_2 = pos_22 = gstring::npos;
+              pos_2 = pos_22 = string::npos;
               goto ID;
             }
          }
@@ -494,7 +494,7 @@ ID:
            if( !ref.empty() )
            {
               pos_name = line.find( name );
-              if( pos_name == gstring::npos ) // next object, return nearest
+              if( pos_name == string::npos ) // next object, return nearest
                    return true;
            }
 

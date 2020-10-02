@@ -138,7 +138,7 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
    if( usp->PsGraph != S_OFF )
     for(int j=0; j< usp->dimXY[1]+usp->dimEF[1]; j++ )
     {
-        vstr tbuf(100);
+        char tbuf[100];
         sprintf( tbuf, "%d", j+1 );
         if( !*usp->lNam[j]|| *usp->lNam[j] == ' ' )
             strncpy( usp->lNam[j], tbuf, MAXGRNAME );
@@ -148,41 +148,41 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
     strncpy( usp->UnICn[0], "Det.(m_t)",  NAME_SIZE );
     strncpy( usp->UnICn[1], "Filt<m_t>",  NAME_SIZE );
     strncpy( usp->UnICn[2], "2SigFilt",  NAME_SIZE );
-    strncpy( usp->UnICn[3], "DomPA<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[3], "DomPA-m_t",  NAME_SIZE );
     strncpy( usp->UnICn[4], "2SigDomPA",  NAME_SIZE );
-    strncpy( usp->UnICn[5], "qLapl<m_t>",  NAME_SIZE );
-    strncpy( usp->UnICn[6], "qHurv<m_t>",  NAME_SIZE );
-    strncpy( usp->UnICn[7], "qWald<m_t>",  NAME_SIZE );
-    strncpy( usp->UnICn[8], "qHome<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[5], "qLapl-m_t",  NAME_SIZE );
+    strncpy( usp->UnICn[6], "qHurv-m_t",  NAME_SIZE );
+    strncpy( usp->UnICn[7], "qWald-m_t",  NAME_SIZE );
+    strncpy( usp->UnICn[8], "qHome-m_t",  NAME_SIZE );
     strncpy( usp->UnICn[9], "reserved",  NAME_SIZE );
 
     strncpy( usp->UgDCn[0], "Det.(UIP)",  NAME_SIZE );
     strncpy( usp->UgDCn[1], "Filt<UIP>",  NAME_SIZE );
     strncpy( usp->UgDCn[2], "2SigFilt",  NAME_SIZE );
-    strncpy( usp->UgDCn[3], "DomPA<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[3], "DomPA-UIP",  NAME_SIZE );
     strncpy( usp->UgDCn[4], "2SigDomPA",  NAME_SIZE );
-    strncpy( usp->UgDCn[5], "qLapl<UIP>",  NAME_SIZE );
-    strncpy( usp->UgDCn[6], "qHurv<UIP>",  NAME_SIZE );
-    strncpy( usp->UgDCn[7], "qWald<UIP>",  NAME_SIZE );
-    strncpy( usp->UgDCn[8], "qHome<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[5], "qLapl-UIP",  NAME_SIZE );
+    strncpy( usp->UgDCn[6], "qHurv-UIP",  NAME_SIZE );
+    strncpy( usp->UgDCn[7], "qWald-UIP",  NAME_SIZE );
+    strncpy( usp->UgDCn[8], "qHome-UIP",  NAME_SIZE );
     strncpy( usp->UgDCn[9], "reserved",  NAME_SIZE );
 
     strncpy( usp->UaDCn[0], "Det.(act)",  NAME_SIZE );
     strncpy( usp->UaDCn[1], "Filt<act>",  NAME_SIZE );
     strncpy( usp->UaDCn[2], "2SigFilt",  NAME_SIZE );
-    strncpy( usp->UaDCn[3], "DomPA<act>",  NAME_SIZE );
+    strncpy( usp->UaDCn[3], "DomPA-act",  NAME_SIZE );
     strncpy( usp->UaDCn[4], "2SigDomPA",  NAME_SIZE );
-    strncpy( usp->UaDCn[5], "qLapl<act>",  NAME_SIZE );
-    strncpy( usp->UaDCn[6], "qHurv<act>",  NAME_SIZE );
-    strncpy( usp->UaDCn[7], "qWald<act>",  NAME_SIZE );
-    strncpy( usp->UaDCn[8], "qHome<act>",  NAME_SIZE );
+    strncpy( usp->UaDCn[5], "qLapl-act",  NAME_SIZE );
+    strncpy( usp->UaDCn[6], "qHurv-act",  NAME_SIZE );
+    strncpy( usp->UaDCn[7], "qWald-act",  NAME_SIZE );
+    strncpy( usp->UaDCn[8], "qHome-act",  NAME_SIZE );
     strncpy( usp->UaDCn[9], "reserved",  NAME_SIZE );
 
     strncpy( usp->UnDCAn[0], "Adap(UIP)",  NAME_SIZE );
     strncpy( usp->UnDCAn[1], "HintAdap",  NAME_SIZE );
     strncpy( usp->UnDCAn[2], "min(UIP)",  NAME_SIZE );
     strncpy( usp->UnDCAn[3], "max(UIP)",  NAME_SIZE );
-    strncpy( usp->UnDCAn[4], "AdapF<UIP>",  NAME_SIZE );
+    strncpy( usp->UnDCAn[4], "AdapF-UIP",  NAME_SIZE );
     strncpy( usp->UnDCAn[5], "2SigAdapF",  NAME_SIZE );
     strncpy( usp->UnDCAn[6], "reserved",  NAME_SIZE );
     strncpy( usp->UnDCAn[7], "reserved",  NAME_SIZE );
@@ -414,7 +414,7 @@ int TUnSpace::calc_nPG()
 //build list of unspace components
 void TUnSpace::build_nPG_list()
 {
-  vstr tbuf(100);
+  char tbuf[100];
   int j, count=0;
 
   if( !usp->ParNames )
@@ -504,13 +504,13 @@ void TUnSpace::init_analyse( )
 
   // Get full matrix A
   // load formulae
-  TIArray<TFormula> aFo;
-  gstring form;
+  std::vector<TFormula> aFo;
+  std::string form;
   int ii;
 
   for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
   {
-     aFo.Add( new TFormula() );
+     aFo.push_back( TFormula() );
      form = aFo[ii].form_extr( ii, TRMults::sm->GetMU()->L,
                                TRMults::sm->GetMU()->DCF );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
@@ -520,7 +520,7 @@ void TUnSpace::init_analyse( )
   for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
      aFo[ii].Stm_line(TRMults::sm->GetMU()->N, usp->A+ii*TRMults::sm->GetMU()->N,
            (char *)TRMults::sm->GetMU()->SB, TRMults::sm->GetMU()->Val );
-  aFo.Clear();
+  aFo.clear();
 }
 
 
@@ -535,7 +535,7 @@ void TUnSpace::text_analyze( int nObj)
         TProfil* PRof = TProfil::pm;
         int mupL=0, pmpL =0;
 
-        if( pVisor->ProfileMode == true )
+        if( pVisor->ProfileMode )
         {
             mupL = TRMults::sm->GetMU()->L;
             pmpL = TMulti::sm->GetPM()->L;
@@ -545,18 +545,18 @@ void TUnSpace::text_analyze( int nObj)
         {
          case o_ungexpr:
                PRof->ET_translate( o_untprn, o_ungexpr, 0, mupL, 0, pmpL );
-               rpn[1].GetEquat( static_cast<char *>(aObj[o_untprn].GetPtr()) );
+               rpn[1].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
                break;
          case o_unexpr:
                PRof->ET_translate( o_untprn, o_unexpr, 0, mupL, 0, pmpL );
-               rpn[0].GetEquat( static_cast<char *>(aObj[o_untprn].GetPtr()) );
+               rpn[0].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
                break;
         }
 
     }
     catch( TError& xcpt )
     {
-        char *erscan = static_cast<char *>(aObj[nObj].GetPtr());
+        char *erscan = static_cast<char *>(aObj[nObj]->GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
@@ -590,18 +590,18 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     if( usp->PsGraph == S_OFF )
       return;
 
-    TIArray<TPlot> plt;
+    std::vector<TPlot> plt;
 
-    plt.Add( new TPlot(o_unxa, o_unyc ));
+    plt.push_back( TPlot(o_unxa, o_unyc ));
     int  nLn = plt[ 0 ].getLinesNumber();
-    plt.Add( new TPlot(o_unxs, o_unys ));
+    plt.push_back( TPlot(o_unxs, o_unys ));
     nLn += plt[1].getLinesNumber();
     if( plot )
     {
-        int oldN = aObj[o_unplline].GetN();
+        int oldN = aObj[o_unplline]->GetN();
         TPlotLine defpl("", 3, 6, 0);
 
-        plot = static_cast<TPlotLine * >(aObj[ o_unplline ].Alloc( nLn, sizeof(TPlotLine) ));
+        plot = static_cast<TPlotLine * >(aObj[ o_unplline ]->Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -618,7 +618,7 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     {
       TCStringArray lnames;
       for(int  ii=0; ii<usp->dimXY[1]+usp->dimEF[1]; ii++ )
-          lnames.Add( gstring(usp->lNam[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string(usp->lNam[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, usp->name,
           usp->xNames, usp->yNames, lnames, ISOLINES );
     }
@@ -646,7 +646,7 @@ bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
         usp->size[1][ii] =  static_cast<float>(gr->part[ii]);
     }
 
-    plot = static_cast<TPlotLine *>(aObj[ o_unplline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
+    plot = static_cast<TPlotLine *>(aObj[ o_unplline]->Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
     for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
     {
         plot[ii] = convertor( gr->lineData( ii ) );
@@ -665,8 +665,8 @@ bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
 //=====================================================
 
 // insert changes in Project to TUnSpace
-void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
-    TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
+void TUnSpace::InsertChanges( std::vector<CompItem>& aIComp,
+    std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp )
 {
 // make copy of UNSPACE  structure (only for changed arrays )
    ods_link(-2);  //1
@@ -761,13 +761,13 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
     uint i=0;
     int j, ii=0, jj =0;
 
-if( aIComp.GetCount() < 1)
+if( aIComp.size() < 1)
   goto DCOMPS;
 
 // IComps  ( size  N )
     while( jj < usp->N )
     {
-      if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
+      if( i < aIComp.size() &&  aIComp[i].line == ii )
       {
         if( aIComp[i].delta == 1 )
         { // add line
@@ -832,7 +832,7 @@ if( aIComp.GetCount() < 1)
     }
 
 DCOMPS:
-if( aDComp.GetCount() < 1)
+if( aDComp.size() < 1)
   goto PHASES;
 
 // DComps  ( size  L )
@@ -840,7 +840,7 @@ if( aDComp.GetCount() < 1)
 
     while( jj < usp->L )
     {
-      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      if( i < aDComp.size() &&  aDComp[i].line == ii )
       {
         if( aDComp[i].delta == 1 )
         { // add line
@@ -933,7 +933,7 @@ if( aDComp.GetCount() < 1)
 
     while( jj < usp->Ls )
     {
-      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      if( i < aDComp.size() &&  aDComp[i].line == ii )
       {
         if( aDComp[i].delta == 1 )
         { // add line
@@ -995,14 +995,14 @@ if( aDComp.GetCount() < 1)
 //*************************************************************
 PHASES:
 
-if( aPhase.GetCount() < 1)
+if( aPhase.size() < 1)
   return;
 
     ii=0; jj =0; i=0;
 // PHases  ( size  Fi )
     while( jj < usp->Fi )
     {
-      if( i < aPhase.GetCount() &&  aPhase[i].line == ii )
+      if( i < aPhase.size() &&  aPhase[i].line == ii )
       {
         if( aPhase[i].delta == 1 )
         { // add line

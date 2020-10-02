@@ -4,7 +4,6 @@
 // Implementation of UnSpaceWizard class
 //
 // Copyright (C) 2005-2008  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -76,7 +75,7 @@ UnSpaceWizard::UnSpaceWizard( const char* pkey, char flgs[38],
 {
     //setFinishEnabled( WizardPage_3, true);
     setupUi(this);
-    gstring str1= "GEM-Selektor UnSpace Setup:  ";
+    string str1= "GEM-Selektor UnSpace Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 

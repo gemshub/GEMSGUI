@@ -5,7 +5,6 @@
 // ( Provides stream input/output for  visual elements )
 //
 // Copyright (C) 1996-2001  A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -25,7 +24,7 @@
 #include "units.h"
 #include "v_module.h"
 
-TIArray < CWinInfo > aWinInfo;
+std::vector<std::shared_ptr<CWinInfo>> aWinInfo;
 
 CWinInfo::CWinInfo(TSubModule & m, istream & visor_dat):
         pWin(0), rM(m)
@@ -35,7 +34,7 @@ CWinInfo::CWinInfo(TSubModule & m, istream & visor_dat):
     fromDAT(visor_dat);
 }
 
-CWinInfo::CWinInfo(TSubModule & m, TConfig & cnf):
+CWinInfo::CWinInfo(TSubModule & m, TConfig& cnf):
         pWin(0), rM(m)
 {
     init_width = 600; //400;
@@ -45,26 +44,26 @@ CWinInfo::CWinInfo(TSubModule & m, TConfig & cnf):
 }
 
 void
-CWinInfo::load(TConfig & cnf)
+CWinInfo::load( TConfig& cnf)
 {
-    gstring sname = rM.GetName();	// section name
+    string sname = rM.GetName();	// section name
 
     cnf.SetSection(sname);
 
-    gstring size_params[2];
+    string size_params[2];
     if (cnf.getFirst() == "size")
     {
         cnf.getcStrings(2, size_params);
 
-        if (sscanf(size_params[0].c_str(), "%u", &init_width) != 1
-                || sscanf(size_params[1].c_str(), "%u", &init_height) != 1)
+        if (sscanf(size_params[0].c_str(), "%d", &init_width) != 1
+                || sscanf(size_params[1].c_str(), "%d", &init_height) != 1)
             Error("Visor configuration", "Window size is bad!");
     }
 
-    gstring ss = cnf.GetFirstSubSection();
+    string ss = cnf.GetFirstSubSection();
     while (!ss.empty())
     {
-        aPageInfo.Add(new PageInfo(*this, cnf, ss));
+        aPageInfo.push_back( std::make_shared<PageInfo>(*this, cnf, ss));
         ss = cnf.GetNextSubSection();
     }
 }
@@ -82,10 +81,10 @@ CWinInfo::toDAT(ostream & os)
     // start signature
     os.write(SigBEG, 2);
 
-    int n = aPageInfo.GetCount();
+    int n = aPageInfo.size();
     os.write((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aPageInfo[ii].toDAT(os);
+        aPageInfo[ii]->toDAT(os);
 
     os.write((char *) &init_width, sizeof init_width);
     os.write((char *) &init_height, sizeof init_height);
@@ -106,7 +105,7 @@ CWinInfo::fromDAT(istream & is)
     int n;
     is.read((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aPageInfo.Add(new PageInfo(*this, is));
+        aPageInfo.push_back( std::make_shared<PageInfo>(*this, is));
 
     is.read((char *) &init_width, sizeof init_width);
     is.read((char *) &init_height, sizeof init_height);
@@ -132,8 +131,8 @@ CWinInfo::fromWinCFG(istream & win_cfg)
 {
 //    win_cfg.read((char *) &init_width, sizeof init_width);
 //    win_cfg.read((char *) &init_height, sizeof init_height);
-    vstr name(100);
-    win_cfg >> name.p;	// Don't compile in BCB without .p 
+    char name[100];
+    win_cfg >> name;	// Don't compile in BCB without .p
     win_cfg >> init_width;
     win_cfg >> init_height;
 }
@@ -142,35 +141,35 @@ CWinInfo::fromWinCFG(istream & win_cfg)
 // TCPage
 //----------------------------------------------------------------
 
-PageInfo::PageInfo(/*const */CWinInfo & wi, istream & is):
+PageInfo::PageInfo( CWinInfo & wi, istream & is):
         rWinInfo(wi)/*, pPage(0)*/
 {
     fromDAT(is);
 }
 
 
-PageInfo::PageInfo(/*const */CWinInfo & wi, TConfig & cnf, gstring s):
+PageInfo::PageInfo( CWinInfo & wi, TConfig& cnf, string s):
         rWinInfo(wi), /*pPage(0),*/ name(s)
 {
     load(cnf);
 }
 
 void
-PageInfo::load(TConfig & cnf)
+PageInfo::load( TConfig& cnf )
 {
     // object type len p1 p2 abcd
-    gstring obj;
-    gstring mode;
+    string obj;
+    string mode;
     int npos;
 
-    gstring astr[5];
+    string astr[5];
 
     obj = cnf.getFirst();
     while (!obj.empty())
     {
         cnf.getcStrings(5, astr);
 
-        gstring field = astr[0];
+        string field = astr[0];
         eFieldType type = GetType(field);
 
         if (type == ftUndefined)
@@ -178,7 +177,7 @@ PageInfo::load(TConfig & cnf)
 
         if (type != ftCheckBox)
         {
-            if ( /*type!=ftText && */ sscanf(astr[1].c_str(), "%u", &npos) != 1)
+            if ( /*type!=ftText && */ sscanf(astr[1].c_str(), "%d", &npos) != 1)
                 throw TError(obj.c_str(), "Bad field lenth");
         }
         else if ((npos = aUnits.Find(astr[1])) == -1)
@@ -186,7 +185,7 @@ PageInfo::load(TConfig & cnf)
 
         int maxm, maxn;
         int maxM = DEF_M_BROWSE, maxN = DEF_N_BROWSE;
-        if (sscanf(astr[2].c_str(), "%u", &maxm) != 1)
+        if (sscanf(astr[2].c_str(), "%d", &maxm) != 1)
             throw TError(obj.c_str(), "Bad field width");
         if (maxm > DEF_M_BROWSE)
             maxM = maxm;
@@ -207,7 +206,7 @@ PageInfo::load(TConfig & cnf)
             throw TError(obj.c_str(), "Object name not found");
         else
         {
-            TObject & rO = aObj[ind];
+            TObject & rO = *aObj[ind];
 
             bool label = mode[0] == '+';
             eEdit edit = eEdit(mode[2]);
@@ -216,9 +215,8 @@ PageInfo::load(TConfig & cnf)
 
             ePlaceMode place = ePlaceMode(mode[1]);
             eShowType showT = eShowType(mode[3]);
-            aFieldInfo.Add(new FieldInfo(*this, rO, ind, type, npos,
-                                         label, place, edit, showT, maxM,
-                                         maxN));
+            aFieldInfo.push_back( std::make_shared<FieldInfo>(*this, rO, ind, type, npos,
+                                         label, place, edit, showT, maxM, maxN));
         }
         obj = cnf.getNext();
     }
@@ -236,10 +234,10 @@ PageInfo::toDAT(ostream & os)
     int l = name.length() + 1;	// writing ending '\0'
     os.write((char *) &l, sizeof l);
     os.write(name.c_str(), l);
-    int n = aFieldInfo.GetCount();
+    int n = aFieldInfo.size();
     os.write((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aFieldInfo[ii].toDAT(os);
+        aFieldInfo[ii]->toDAT(os);
     // end signature
     os.write(PSigEND, 2);
 }
@@ -263,7 +261,7 @@ PageInfo::fromDAT(istream & is)
     int n;
     is.read((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aFieldInfo.Add(new FieldInfo(*this, is));
+        aFieldInfo.push_back( std::make_shared<FieldInfo>(*this, is));
 
     is.read(sg, sizeof sg);
     if (sg[0] != PSigEND[0] || sg[1] != PSigEND[1])
@@ -271,7 +269,7 @@ PageInfo::fromDAT(istream & is)
 }
 
 eFieldType
-PageInfo::GetType(const gstring & s)
+PageInfo::GetType(const string & s)
 {
     const char *snames[nFieldTypes] =
         { "F_NUM", "F_FLOAT", "F_STRING", "F_TEXT",
@@ -302,8 +300,8 @@ FieldInfo::FieldInfo(const PageInfo & pi, TObject & rO, int anO,
 
 FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
            ePlaceMode pl, eEdit e, eShowType sT, int w, int h):
-        rPageInfo(aWinInfo[0].aPageInfo[0]), // for internal using in TreeList 
-        pObj(&aObj[anO]), nO(anO),
+        rPageInfo(*aWinInfo[0]->aPageInfo[0]), // for internal using in TreeList
+        pObj( anO>=0 ?  aObj[anO].get(): nullptr ), nO(anO),
         fType(fT), npos(np),
         label(lb), place(pl), edit(e), showType(sT), maxN(h), maxM(w)
 {
@@ -371,7 +369,7 @@ FieldInfo::fromDAT(istream & is)
     if (sg[0] != FSigEND[0] || sg[1] != FSigEND[1])
         throw TError(SigERROR, "EndField");
 
-    pObj = &aObj[nO];
+    pObj = aObj[nO].get();
 }
 //--------------------- End of page_f.cpp ---------------------------
 

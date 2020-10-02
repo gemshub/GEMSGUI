@@ -4,7 +4,6 @@
 // Implementation of GemsMainWindow class
 //
 // Copyright (C) 2011  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -148,9 +147,9 @@ void TVisorImp::setMenuEnabled( bool menuEnabled )
     itemWidget1->setEnabled(menuEnabled);
 }
 
-gstring TVisorImp::nameMdiChild( QWidget *p )
+string TVisorImp::nameMdiChild( QWidget *p )
 {
-    gstring mdName;
+    string mdName;
 
     TCModuleImp *child = qobject_cast<TCModuleImp *>(p);
     if(child)
@@ -173,7 +172,7 @@ gstring TVisorImp::nameMdiChild( QWidget *p )
 
 QIcon TVisorImp::iconMdiChild( QWidget *p )
 {
-    gstring iconName;
+    string iconName;
 
     TCModuleImp *child = qobject_cast<TCModuleImp *>(p);
     if(child)
@@ -341,7 +340,7 @@ void TVisorImp::setActions()
        connect( ui->action_Compress, SIGNAL( triggered()), this, SLOT(CmRebildFile()));
 
     // Window
-    connect( ui->actClose, SIGNAL(triggered()), mdiArea, SLOT(closeui->activeSubWindow()));
+    connect( ui->actClose, SIGNAL(triggered()), mdiArea, SLOT(closeActiveSubWindow()));
     connect(ui->actCloseAll, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
     connect(ui->actTile, SIGNAL(triggered()), mdiArea, SLOT(tileSubWindows()));
     connect(ui->actCascade, SIGNAL(triggered()), mdiArea, SLOT(cascadeSubWindows()));
@@ -493,7 +492,7 @@ void TVisorImp::CmHelp()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-    aMod[actwin->rtNum()].CmHelp();
+    aMod[actwin->rtNum()]->CmHelp();
   }
   else
   {
@@ -552,12 +551,12 @@ void TVisorImp::CmScript()
   if( actwin )
   {
 
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmScript();
+     dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmScript();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-         dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmScript();
+         dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->CmScript();
   }
 }
 
@@ -578,9 +577,9 @@ void TVisorImp::CmCreate()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {  if(pVisor->ProfileMode == MDD_DATABASE)
-      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCreate();
+      dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmCreate();
      else
-      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCreateinProfile();
+      dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmCreateinProfile();
     }
   }
 }
@@ -598,9 +597,9 @@ void TVisorImp::CmNew()
   {  TCModuleImp *actwin = activeMdiChild();
      if( actwin )
      {  if(pVisor->ProfileMode == MDD_DATABASE)
-          dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmNew();
+          dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmNew();
         else
-          dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmNewinProfile();
+          dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmNewinProfile();
      }
   }
 }
@@ -619,19 +618,19 @@ void TVisorImp::CmShow( const char * key )
     if( actwin )
     {
       if(pVisor->ProfileMode == MDD_DATABASE)
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmShow( key );
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmShow( key );
       else
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmLoadinProfile( key );
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmLoadinProfile( key );
 
       defineModuleKeysList( actwin->rtNumRecord() );
       QMdiSubWindow * grDlg = findMdiGraph(actwin->moduleName().c_str());
       if( grDlg )
       {
         grDlg->widget()->close();
-        QMdiSubWindow *wn = findMdiChild(actwin->moduleName().c_str());
+        QMdiSubWindow *wn1 = findMdiChild(actwin->moduleName().c_str());
         //mdiArea->setActiveSubWindow( grDlg );
         //mdiArea->closeActiveSubWindow();
-        mdiArea->setActiveSubWindow( wn );
+        mdiArea->setActiveSubWindow( wn1 );
         CmPlot();
         tbKeys->setFocus();
       }
@@ -649,7 +648,7 @@ void TVisorImp::CmDerive()
   {
      TCModuleImp *actwin = activeMdiChild();
      if( actwin )
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmDerive();
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmDerive();
   }
  }
 
@@ -658,7 +657,7 @@ void TVisorImp::CmCalc()
 {
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmCalc();
+    dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmCalc();
 }
 
 void TVisorImp::CmSave()
@@ -673,7 +672,7 @@ void TVisorImp::CmSave()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {
-      dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmSaveM();
+      dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmSaveM();
       // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -692,7 +691,7 @@ void TVisorImp::CmSaveAs()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {
-       dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmSaveAs();
+       dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmSaveAs();
         // defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -710,7 +709,7 @@ void TVisorImp::CmDelete()
   {
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
-    {  dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmDelete();
+    {  dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmDelete();
        defineModuleKeysList( actwin->rtNumRecord() );
     }
   }
@@ -722,12 +721,12 @@ void TVisorImp::CmPlot()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmPlot();
+     dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmPlot();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-         dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmPlot();
+         dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->CmPlot();
   }
 }
 
@@ -737,12 +736,12 @@ void TVisorImp::CmPrint()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->CmPrint();
+     dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->CmPrint();
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-       //  ((TCModule*)&aMod[RT_SYSEQ])->CmPrint();
+       //  dynamic_cast<TCModule *>(aMod[RT_SYSEQ].get())->CmPrint();
         wn->CmPrintEqstat();
   }
 }
@@ -753,15 +752,15 @@ void TVisorImp::CmFilter()
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
   {
-     dynamic_cast<TCModule*>(&aMod[actwin->rtNum()])->CmFilter();
-     pFilterKey->setText(dynamic_cast<TCModule*>(&aMod[actwin->rtNumRecord()])->getFilter());
+     dynamic_cast<TCModule*>(aMod[actwin->rtNum()].get())->CmFilter();
+     pFilterKey->setText(dynamic_cast<TCModule*>(aMod[actwin->rtNumRecord()].get())->getFilter());
       defineModuleKeysList( actwin->rtNumRecord() );
   }
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
-      {   dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->CmFilter();
-          pFilterKey->setText(dynamic_cast<TCModule*>(&aMod[RT_SYSEQ])->getFilter());
+      {   dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->CmFilter();
+          pFilterKey->setText(dynamic_cast<TCModule*>(aMod[RT_SYSEQ].get())->getFilter());
           defineModuleKeysList( RT_SYSEQ );
       }
   }
@@ -772,7 +771,7 @@ void TVisorImp::CmNext()
 {
   /*TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    ((TCModule*)&aMod[actwin->rtNum()])->CmNext();
+    dynamic_cast<TCModule *>(aMod[actwin->rtNum()].get())->CmNext();
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
@@ -795,7 +794,7 @@ void TVisorImp::CmPrevious()
 {
   /*TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    ((TCModule*)&aMod[actwin->rtNum()])->CmPrevious();
+    dynamic_cast<TCModule *>(aMod[actwin->rtNum()].get())->CmPrevious();
   else
   {   NewSystemDialog *wn = activeNewSystem();
       if( wn )
@@ -818,7 +817,7 @@ void TVisorImp::CmPrevious()
 #define TCM_EV_COMMAND(mm,ff)	void TVisorImp::ff() \
                                { TCModuleImp *actwin = activeMdiChild();\
                                  if( actwin )\
-                                 {  dynamic_cast<TCModule*>(&aMod[actwin->rtNum()])->ff(); \
+                                 {  dynamic_cast<TCModule*>(aMod[actwin->rtNum()].get())->ff(); \
                                     int nRT_ = static_cast<int>(actwin->rtNum()); \
                                     defineModuleKeysList( nRT_ );  }    \
                                 }
@@ -857,7 +856,7 @@ TVisorImp::CmOpen_SYSTEM_ICOMP()
 void                                 // Bulk composition (b)
 TVisorImp::CmInsert_SYSTEM()
 {
-    gstring key_s = rt[RT_SYSEQ].PackKey();
+    string key_s = rt[RT_SYSEQ]->PackKey();
     TProfil::pm->systbcInput( this, key_s.c_str() );
     Update( true );
 }
@@ -963,11 +962,11 @@ TFileList::TFileList(QWidget* win, size_t iRt, const char* caption ):
    setWindowTitle(caption);
 
    pFileList = new QListWidget(this);
-   const TCStringArray& s = rt[iRt].GetOpenFiles();
-   for( size_t ii=0; ii<s.GetCount(); ii++ )
+   const TCStringArray& s = rt[iRt]->GetOpenFiles();
+   for( size_t ii=0; ii<s.size(); ii++ )
               pFileList->addItem(s[ii].c_str());
 
-        pFileList->item(rt[iRt].GetWorkFileName())->setSelected(true);
+        pFileList->item(rt[iRt]->GetWorkFileName())->setSelected(true);
 
     QPushButton* btn;
     btn = new QPushButton(this);

@@ -4,7 +4,6 @@
 // Implementation of SelectDialog class
 //
 // Copyright (C) 1996-2007  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -36,8 +35,8 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     pList->setFont( pVisorImp->getCellFont() );
 
     setWindowTitle(title);
-    unsigned int lens=30;
-    for( uint ii=0; ii<list.GetCount(); ii++ )
+    size_t lens=30;
+    for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
@@ -45,7 +44,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || sel > list.GetCount() )
+    if( sel < 0 || sel > static_cast<int>(list.size()) )
 	    sel = 0;
     pList->setCurrentRow(sel); // setSelected(sel, true);
 
@@ -68,8 +67,8 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     pList->setFont( pVisorImp->getCellFont() );
 
     setWindowTitle(title);
-    unsigned int lens=30;
-    for( uint ii=0; ii<list.GetCount(); ii++ )
+    size_t lens=30;
+    for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
@@ -77,7 +76,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
-    if( sel < 0 || sel > list.GetCount() )
+    if( sel < 0 || sel > static_cast<int>(list.size()) )
  	    sel = 0;
      pList->setCurrentRow(sel); // setSelected(sel, true);
 
@@ -101,8 +100,8 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     setWindowTitle(title);
 
     pList->setSelectionMode(QAbstractItemView::MultiSelection); //pList->setMultiSelection(true);
-    unsigned int lens=30;
-    for( uint ii=0; ii<list.GetCount(); ii++ )
+    size_t lens=30;
+    for( size_t ii=0; ii<list.size(); ii++ )
     {
         pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
@@ -110,7 +109,7 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     //  pList->setCurrentRow(0);
-    for( uint jj=0; jj< sel.GetCount(); jj++ )
+    for( size_t jj=0; jj< sel.size(); jj++ )
     {
         if( sel[jj] < pList->count() )
             pList->item(sel[jj])->setSelected( true);
@@ -126,7 +125,7 @@ void
 SelectDialog::CmSelectAll()
 {
     if( multi == true )
-    {// select all gstrings
+    {// select all strings
       pList->selectAll();
       //pList->setFocus();
       //for( uint ii=0; ii<pList->count(); ii++ )
@@ -160,7 +159,7 @@ SelectDialog::allSelected()
 
     for( int ii=0; ii<pList->count(); ii++ )
         if( pList->item(ii)->isSelected() )
-            arr.Add(ii);
+            arr.push_back(ii);
     
     return arr;
 }

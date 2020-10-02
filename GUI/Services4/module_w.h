@@ -4,7 +4,6 @@
 // Declaration of TCModuleImp class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -41,7 +40,7 @@ class TCModuleImp: public QDialog//QMainWindow
 
     //QToolBar* toolBar;
 
-    int	    iMod;
+    size_t	    iMod;
     TSubModule& rMod;
     TCWindow* pWin;
 
@@ -59,19 +58,19 @@ public slots:
     void saveGraphData( jsonui::ChartData* );
 
 public:
-    TCModuleImp(size_t iMod, int page=0, int viewmode=0);
+    TCModuleImp(size_t aiMod, int page=0, int viewmode=0);
     virtual ~TCModuleImp();
 
     /*! Returns whether this module is submodule */
     bool IsSubModule()
     { return rMod.IsSubModule();  }
 
-    gstring moduleName() const
+    string moduleName() const
     {  return   rMod.GetName();   }
 
     size_t rtNum() const;
     size_t rtNumRecord() const;
-    gstring iconFile() const;
+    string iconFile() const;
 
     void Update(bool force=true);
     QSize sizeHint() const;

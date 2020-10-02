@@ -29,8 +29,8 @@ TConst::TConst( uint nrt ):
         TCModule( nrt )
 {
     CA=0;
-    aFldKeysHelp.Add("Code of function using table of constants");
-    aFldKeysHelp.Add("Table of constants ID and dimensions");
+    aFldKeysHelp.push_back("Code of function using table of constants");
+    aFldKeysHelp.push_back("Table of constants ID and dimensions");
     set_def();
     start_title = " Numerical Constants ";
 }
@@ -39,8 +39,8 @@ TConst::TConst( uint nrt ):
 // link values to objects
 void TConst::ods_link(int)
 {
-    aObj[o_constlab].SetPtr( ConLab );
-    aObj[o_constdim].SetPtr( Dim );
+    aObj[o_constlab]->SetPtr( ConLab );
+    aObj[o_constdim]->SetPtr( Dim );
 }
 
 
@@ -57,7 +57,7 @@ void TConst::set_def(int)
 // set dynamic objects ptr to values
 void TConst::dyn_set(int)
 {
-    CA = aObj[o_const].GetPtr();
+    CA = aObj[o_const]->GetPtr();
     if( CA==0 )
         dyn_new();
 }
@@ -65,20 +65,20 @@ void TConst::dyn_set(int)
 // free dynamic memory in objects and values
 void TConst::dyn_kill(int)
 {
-    CA = aObj[o_const].Free();
+    CA = aObj[o_const]->Free();
 }
 
 // realloc dynamic memory
 void TConst::dyn_new(int)
 {
-    CA = aObj[o_const].Alloc( Dim[0]*Dim[1], Dim[2], Dim[3] );
+    CA = aObj[o_const]->Alloc( Dim[0]*Dim[1], Dim[2], Dim[3] );
 }
 
 void TConst::CopyRecords( const char *prfName )
 {
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 

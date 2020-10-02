@@ -25,7 +25,7 @@
 void TSyst::mark_ic_to_bc( )
 {
     short j, i, ii, ij, Nn;
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TCompos* aCMP=dynamic_cast<TCompos *>( aMod[RT_COMPOS].get() );
     RMULTS* mup = TRMults::sm->GetMU();
     time_t crt;
 
@@ -128,9 +128,9 @@ void TSyst::mark_dc_to_ph()
 void TSyst::mark_dc_to_ic()
 {
     int  j, ij;
-    vstr ICs(MAXRKEYLEN);
+    char ICs[MAXRKEYLEN];
     TFormula aFo;
-    gstring form;
+    std::string form;
     RMULTS* mup = TRMults::sm->GetMU();
 
     sy.N = 0;
@@ -142,7 +142,7 @@ void TSyst::mark_dc_to_ic()
         /* analyse DC formule */
         form = aFo.form_extr( j, mup->L, mup->DCF );
         aFo.SetFormula( form.c_str() );   // set formula to analyse
-        for(int ii=0; ii<aFo.GetIn(); ii++ )
+        for(size_t ii=0; ii<aFo.GetIn(); ii++ )
         { /* cycle on formula terms  */
             ICs[IC_RKLEN-1]=0;
             memset( ICs, ' ', IC_RKLEN-1 );
@@ -164,9 +164,9 @@ void TSyst::mark_dc_to_ic()
 void TSyst::mark_ic_to_dc()
 {
     int  j, ij;
-    vstr ICs(MAXRKEYLEN);
+    char ICs[MAXRKEYLEN];
     TFormula aFo;
-    gstring form;
+    std::string form;
     RMULTS* mup = TRMults::sm->GetMU();
 
     sy.L = 0;
@@ -177,7 +177,7 @@ void TSyst::mark_ic_to_dc()
         /* analyse DC formule */
         form = aFo.form_extr( j, mup->L, mup->DCF );
         aFo.SetFormula( form.c_str() );   // set formula to analyse
-        for(int ii=0; ii<aFo.GetIn(); ii++ )
+        for(size_t ii=0; ii<aFo.GetIn(); ii++ )
         { /* cycle on formula terms  */
             ICs[IC_RKLEN-1]=0;
             memset( ICs, ' ', IC_RKLEN-1 );
@@ -203,7 +203,7 @@ void TSyst::mark_ic_to_dc()
 void TSyst::make_syst_sizes()
 {
     short i, j, k, N;
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     /* Test classified codes! Do more!!!!!!!!!! */
@@ -411,11 +411,11 @@ void TSyst::make_syst()
                     STENG = sy.Sigm[k][1];  // solid-gaseous spec. interface free energy
                     sy.PSigm = S_ON;
                 }
-                if( SSA && STENW && !sy.YOF[k] )  // specific surface area is provided
+                if( noZero(SSA) && noZero(STENW) && approximatelyZero(sy.YOF[k]) )  // specific surface area is provided
                 { // Calculating stability correction in J/g from Freundlich-Ostwald equation
                    sy.YOF[k] = 2./3.*STENW*SSA;
                 }
-                else if( SSA && STENG && !sy.YOF[k] )
+                else if( noZero(SSA) && noZero(STENG) && approximatelyZero(sy.YOF[k]) )
                 {    // changed DK 28.02.2012
                    sy.YOF[k] = 2./3.*STENG*SSA;
                 }
@@ -451,12 +451,12 @@ void TSyst::systbc_calc( int mode )
     double MsysC = 0., MaqC = 0., VaqC = 0., VsysC = 0., R1C = 0.;
     double Xincr, DCmw, ACmw, Term, MBX;
     double *A=0;
-    vstr ICs(MAXRKEYLEN);
+    //char ICs[MAXRKEYLEN];
     TFormula aFo;
-    gstring form;
+    std::string form;
     time_t crt;
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TProfil *aPa= dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
+    TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
     RMULTS* mup = TRMults::sm->GetMU();
 
     if( !mode )
@@ -468,13 +468,13 @@ void TSyst::systbc_calc( int mode )
     if( sy.PbIC != S_OFF )
     { //  calc bulk chemical composition from IComp
       for( i=0; i<mup->N; i++ )
-         if( sy.BI[i] != 0.0 )
+         if( noZero(sy.BI[i]) )
              ProvidedBI = true;
       if( ProvidedBI )
       {
         for( i=0; i<mup->N; i++ )
         {
-            if( sy.Icl[i] == S_OFF || !sy.BI[i] || IsDoubleEmpty(sy.BI[i] ))
+            if( sy.Icl[i] == S_OFF || approximatelyZero(sy.BI[i]) || IsDoubleEmpty(sy.BI[i] ))
                 continue;
             double ICmv = mup->BC[i];
             Xincr = aCMP->Reduce_Conc( sy.BIun[i], sy.BI[i], ICmv, 1.0, sy.R1,
@@ -491,14 +491,14 @@ void TSyst::systbc_calc( int mode )
     {
       sy.Lb = 0;
       for( j=0; j<mup->L; j++ )
-        if(sy.XeD[j] )
+        if(  noZero(sy.XeD[j]) )
            ProvidedXeD = true;
       if( ProvidedXeD )
       {
         A = new double[mup->N];
         for( j=0; j<mup->L; j++ )
         {
-            if( sy.Dcl[j] == S_OFF || !sy.XeD[j] || IsDoubleEmpty( sy.XeD[j] ))
+            if( sy.Dcl[j] == S_OFF || approximatelyZero(sy.XeD[j]) || IsDoubleEmpty( sy.XeD[j] ))
                 continue;
             //Xincr = 0.;  // DCmw = 0.;  // memset( A, 0, sizeof(double)*mup->N );
             sy.Lb++;            
@@ -513,7 +513,7 @@ void TSyst::systbc_calc( int mode )
                                        sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
             // recalculate using stoichiometry line
             for( i=0; i<mup->N; i++ )
-                if( A[i] )
+                if( noZero(A[i]) )
                 {
                     sy.B[i] += Xincr*(A[i]);
                     R1C += Xincr*(A[i]);
@@ -530,7 +530,7 @@ void TSyst::systbc_calc( int mode )
     {
 
       for( j=0; j<mup->La; j++ )
-          if( sy.XeA[j] )
+          if( noZero(sy.XeA[j]) )
               ProvidedXeA = true;
       if( ProvidedXeA )
       {
@@ -538,7 +538,7 @@ void TSyst::systbc_calc( int mode )
         aCMP->ods_link(0);
         for( j=0; j<mup->La; j++ )
         {
-            if( sy.Acl[j] == S_OFF || !sy.XeA[j] || IsDoubleEmpty( sy.XeA[j] ))
+            if( sy.Acl[j] == S_OFF || approximatelyZero(sy.XeA[j]) || IsDoubleEmpty( sy.XeA[j] ))
                 continue;
             //Xincr = 0.;
             ACmw = 0.;
@@ -563,7 +563,7 @@ void TSyst::systbc_calc( int mode )
                                        sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
             // recalc stehiometric COMPOS
             for( i=0; i<mup->N; i++ )
-                if( A[i] )
+                if( noZero(A[i]) )
                 {   Term = Xincr*(A[i]);
                    // Term = NormDoubleRound(Term, 15 ); // SD 22/07/2009
                    sy.B[i] += Term;
@@ -587,10 +587,10 @@ void TSyst::systbc_calc( int mode )
       if( ProvidedPhm )
       {
         bool NewRkey = false; // , syPbPH, syPPHk;
-        gstring pkey;
-        gstring skey;
-        TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
-        skey = gstring(aSE->ssp->PhmKey, 0, EQ_RKLEN);
+        std::string pkey;
+        std::string skey;
+        TSysEq* aSE= dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
+        skey = std::string(aSE->ssp->PhmKey, 0, EQ_RKLEN);
 
         // Added Sveta 14/03/02 check if another SysEq record is available
         if( !skey.empty() && skey[0] != '\0' &&
@@ -598,11 +598,11 @@ void TSyst::systbc_calc( int mode )
         {
 //           syPbPH = sy.PbPH;
 //           syPPHk = sy.PPHk;
-           pkey = rt[RT_SYSEQ].UnpackKey();  // Save the initial SysEq rkey
+           pkey = rt[RT_SYSEQ]->UnpackKey();  // Save the initial SysEq rkey
            aSE->ods_link(1);
            try
            {
-                  int Rnum = rt[RT_SYSEQ].Find( skey.c_str() );
+                  int Rnum = rt[RT_SYSEQ]->Find( skey.c_str() );
 
                   if( Rnum<0 )    // Here call dialog for selection of the SysEq key
                   {
@@ -610,19 +610,19 @@ void TSyst::systbc_calc( int mode )
                         "Please, select one SysEq record",  RT_SYSEQ,  skey.c_str() );
                     if( skey.empty() )
                     {
-                      gstring msg = "Record ";
+                      std::string msg = "Record ";
                          msg += skey;
                          msg += " not found!" ;
                          Error( GetName(), msg.c_str());
                     }
                     else {  // record selected
-                        Rnum = rt[RT_SYSEQ].Find( skey.c_str() );
+                        Rnum = rt[RT_SYSEQ]->Find( skey.c_str() );
                         NewRkey = true;
                     }
                   }
 //                  sy.PbPH = syPbPH;
 //                  sy.PPHk = syPPHk;
-                  rt[RT_SYSEQ].Get( Rnum );  // Read record
+                  rt[RT_SYSEQ]->Get( Rnum );  // Read record
                   aSE->dyn_set(1);
                   PHbcalcSysEq( &MsysC, &MaqC, &R1C, &VaqC, &VsysC );  // Calculation
             }
@@ -630,7 +630,7 @@ void TSyst::systbc_calc( int mode )
             {
                // return to first record
                 aSE->ods_link(0);
-                rt[RT_SYSEQ].SetKey( pkey.c_str() ); // Set back the initial record key
+                rt[RT_SYSEQ]->SetKey( pkey.c_str() ); // Set back the initial record key
                 Error( pkey.c_str() , xcpt.mess );
             }
 
@@ -641,7 +641,7 @@ void TSyst::systbc_calc( int mode )
                  memcpy( aSE->ssp->PhmKey, skey.c_str(), EQ_RKLEN );
              sy.PbPH = S_ON;
               	// Set back the initial record key
-             rt[RT_SYSEQ].SetKey( pkey.c_str() );
+             rt[RT_SYSEQ]->SetKey( pkey.c_str() );
         }
         else  // another SysEq record not provided or inaccessible
             sy.PbPH = S_REM;
@@ -673,7 +673,7 @@ void TSyst::systbc_calc( int mode )
         {
             if( /*( pe && (pe[0].Istat == P_EXECUTE ||
                 pe[0].Istat == P_MT_EXECUTE ))  ||*/
-                vfQuestion(window(), rt[RT_SYSEQ].PackKey(),
+                vfQuestion(window(), rt[RT_SYSEQ]->PackKey(),
                            "Warning: Charge mismatch in calculated \n"
                            "bulk composition!  Compensate(Y) or leave untouched (N)?"  ))
                 sy.BI[N] = -sy.B[N];    // sy.B[N]= 0.0;  fixed on Dec.3,2009 by DK
@@ -686,7 +686,7 @@ void TSyst::systbc_calc( int mode )
     /* test for zero in composition */
     TCStringArray aICkeys;
     TCIntArray aICnums;
-    TOArray<bool> sel;
+    std::vector<bool> sel;
     double fill_data = aPa->pa.p.DHB*1e4; // fixed DK 29.02.2012
 
     for( i=0; i<N; i++ )
@@ -695,8 +695,8 @@ void TSyst::systbc_calc( int mode )
             continue;
         if( sy.B[i] < aPa->pa.p.DB || sy.B[i] > 1e6 )
         {
-            aICkeys.Add(gstring(mup->SB[i],0, MAXICNAME));
-            aICnums.Add(i);
+            aICkeys.push_back(std::string(mup->SB[i],0, MAXICNAME));
+            aICnums.push_back(i);
             sy.Icl[i] = S_REM;
         }
         else
@@ -705,11 +705,11 @@ void TSyst::systbc_calc( int mode )
         }
     }
 
-    if( aICkeys.GetCount() > 0 )
+    if( aICkeys.size() > 0 )
     {
-      if( vfExcludeFillEdit( window(), rt[RT_SYSEQ].PackKey(),
+      if( vfExcludeFillEdit( window(), rt[RT_SYSEQ]->PackKey(),
             aICkeys, sel,  fill_data ))
-         for( uint ii=0; ii<aICnums.GetCount(); ii++ )
+         for( size_t ii=0; ii<aICnums.size(); ii++ )
          {
            i = aICnums[ii];
            if( sel[ii]== true ) //fill
@@ -739,13 +739,13 @@ void TSyst::systbc_calc( int mode )
 //Calc bulk chemical composition from phases in EQStat
 // Modified 19.05.2010 DK
 void TSyst::PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
-                     double */*VaqC*/,  double */*VsysC*/ )
+                     double* /*VaqC*/,  double* /*VsysC*/ )
 {
-    TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TSysEq* aSE= dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
+    TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
     RMULTS* mup = TRMults::sm->GetMU();
-    TIArray<TFormula> aFo;
-    gstring form;
+    std::vector<TFormula> aFo;
+    std::string form;
     int i, j, jf=0, jsf=0, k, Lf;
     double *A, *X;
     double *B, *BS,  Xf, Mass, Xincr;
@@ -768,7 +768,7 @@ void TSyst::PHbcalcSysEq( double *MsysC, double *MaqC, double *R1C,
         NotSolid =  mup->PHC[k] == PH_AQUEL || mup->PHC[k] == PH_GASMIX ||
                     mup->PHC[k] == PH_FLUID || mup->PHC[k] == PH_PLASMA ||
                     mup->PHC[k] == PH_SIMELT || mup->PHC[k] == PH_LIQUID;
-        if( Lf && Xf && ( sy.Phm[k] || ( sy.Msolids && !NotSolid ) ) )
+        if( Lf && noZero(Xf) && ( noZero(sy.Phm[k]) || ( noZero(sy.Msolids) && !NotSolid ) ) )
             goto NEXT;
         jf+=mup->Ll[k];
         jsf += Lf;
@@ -780,7 +780,7 @@ NEXT:
         /* load formulae */
         for( i=0; i<Lf; i++ )
         {
-            aFo.Add( new TFormula() );
+            aFo.push_back(  TFormula() );
             j=aSE->stp->llf[jsf+i];
             form = aFo[i].form_extr( j, mup->L, mup->DCF );
             aFo[i].SetFormula( form.c_str() ); // and ce_fscan
@@ -793,7 +793,7 @@ NEXT:
 
         for( i=0; i<Lf; i++ )
             aFo[i].Stm_line( mup->N, A+i*mup->N, (char *)mup->SB, mup->Val );
-        aFo.Clear();
+        aFo.clear();
         Mass = 0.0; /* calc mass of phase */
         for( i=0; i<Lf; i++ )
             Mass += X[i]*MolWeight( mup->N, mup->BC, A+i*mup->N );
@@ -801,13 +801,13 @@ NEXT:
         stbal( mup->N, Lf, A, X, B );
         delete[] A;
         delete[] X;
-        if( sy.Phm[k] && sy.PPHk != S_ON )
+        if( noZero(sy.Phm[k]) && sy.PPHk != S_ON )
         {
            Xincr = aCMP->Reduce_Conc( sy.XPun[k], sy.Phm[k], Mass, 1.0, sy.R1,
                                    sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
            /* recalculating the recipe increments */
            for( i=0; i<mup->N; i++ )
-              if( B[i] )
+              if( noZero(B[i]) )
               {
                  sy.B[i] += Xincr*B[i];
               }
@@ -819,7 +819,7 @@ NEXT:
            if( sy.R1 > 1e-7 )
                *R1C += Xincr*B[i];
         }
-        if( sy.Msolids && !NotSolid && sy.PPHk != S_OFF )
+        if( noZero(sy.Msolids) && !NotSolid && sy.PPHk != S_OFF )
         {  //  Adding phase to total bulk composition of solids in the equilibrium state
            for( i=0; i<mup->N; i++ )
               BS[i] += B[i];
@@ -829,16 +829,16 @@ NEXT:
         jsf+=Lf;
     } /* k */
     // Added the use of bXs (bulk composition of all solid phases in the referenced equilibrium state)
-    if( sy.Msolids && sy.PPHk != S_OFF ) // 19.05.2010  DK
+    if( noZero(sy.Msolids) && sy.PPHk != S_OFF ) // 19.05.2010  DK
     {  // adding total solids, for now in grams only!
         Mass = MolWeight( mup->N, mup->BC, BS );
-        if( Mass )
+        if( noZero(Mass) )
         {
            Xincr = aCMP->Reduce_Conc( 'g', sy.Msolids, Mass, 1.0, sy.R1,
                                    sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
            // recalculating the recipe increments
            for( i=0; i<mup->N; i++ )
-             if( BS[i] )
+             if( noZero(BS[i]) )
              {
                 sy.B[i] += Xincr*BS[i];
              }
@@ -858,10 +858,10 @@ NEXT:
 //Calc bulk chemical composition from phases in current contents of MULTI
 // Added by DK 12.02.2010
 void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
-                     double */*VaqC*/,  double */*VsysC*/ )
+                     double* /*VaqC*/,  double* /*VsysC*/ )
 {
     double *A, *B, Mass, Xincr;
-    TCompos* aCMP=(TCompos *)(&aMod[RT_COMPOS]);
+    TCompos* aCMP= dynamic_cast<TCompos *>( aMod[RT_COMPOS].get());
     MULTI* pmp = TMulti::sm->GetPM();
     RMULTS* mup = TRMults::sm->GetMU();
     int j, i, k, k_, i_;
@@ -871,8 +871,8 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
     for( k=0; k< pmp->FI; k++ )
     { // cycle by phases
         i=j+pmp->L1[k];
-        k_ = (int)pmp->muk[k];
-        if( !sy.Phm[k_] || !pmp->XFs[k] || (sy.PPHk == S_OFF && sy.PbPH != S_REM ) )
+        k_ = pmp->muk[k];
+        if( approximatelyZero(sy.Phm[k_]) || approximatelyZero(pmp->XFs[k]) || (sy.PPHk == S_OFF && sy.PbPH != S_REM ) )
         {
             j=i;       // There is no amount given for this phase in xp_
             continue;  // or amount of this phase in equilibrium is zero
@@ -883,7 +883,7 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
             A = pmp->BF+k*pmp->N;
             for( i=0; i<pmp->N; i++ )
             {
-                i_ = (int)pmp->mui[i];
+                i_ = pmp->mui[i];
                 B[i_] = A[i];
             }
         }
@@ -902,7 +902,7 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
                                    sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
         // recalculate phase stoichiometry
         for( i_=0; i_<mup->N; i_++ )
-            if( B[i_] )
+            if( noZero(B[i_]) )
             {
                 sy.B[i_] += Xincr*B[i_];
             }
@@ -917,19 +917,19 @@ void TSyst::PHbcalcMulti( double *MsysC, double *MaqC, double *R1C,
         j=i;
     }
     Mass = pmp->FitVar[0];
-    if( sy.Msolids && Mass && (sy.PPHk != S_ON || sy.PbPH == S_REM ) )
+    if( noZero(sy.Msolids) && noZero(Mass) && (sy.PPHk != S_ON || sy.PbPH == S_REM ) )
     {  // adding total solids, for now in grams only!
         A = pmp->BFC;
         for( i=0; i<pmp->N; i++ )
         {
-            i_ = (int)pmp->mui[i];
+            i_ = pmp->mui[i];
             B[i_] = A[i];
         }
 //        Mass = MolWeight( mup->N, mup->BC, B );
         Xincr = aCMP->Reduce_Conc( 'g', sy.Msolids, Mass, 1.0, sy.R1,
                                    sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
         for( i_=0; i_<mup->N; i_++ )
-            if( B[i_] )
+            if( noZero(B[i_]) )
             {
                 sy.B[i_] += Xincr*B[i_];
             }
@@ -970,8 +970,8 @@ double TSyst::MolWeight( int N, float *ICaw, double *Smline )
     double MW = 0.0;
 
     for( i=0; i<N; i++ )
-        if( ICaw[i] && Smline[i] )
-            MW += (double)(ICaw[i]) * (Smline[i]);
+        if( noZero(ICaw[i]) && noZero(Smline[i]) )
+            MW += static_cast<double>(ICaw[i]) * (Smline[i]);
 
     return( MW );
 }
@@ -983,7 +983,7 @@ double TSyst::MolWeight( int N, double *ICaw, double *Smline )
     double MW = 0.0;
 
     for( i=0; i<N; i++ )
-        if( ICaw[i] && Smline[i] )
+        if( noZero(ICaw[i]) && noZero(Smline[i]) )
             MW += (ICaw[i]) * (Smline[i]);
 
     return( MW );

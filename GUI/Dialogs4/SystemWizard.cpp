@@ -4,7 +4,6 @@
 // Implementation of SystemWizard class
 //
 // Copyright (C) 2010  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -64,13 +63,13 @@ void 	SystemWizard::resetBackButton()
 }
 
 SystemWizard::SystemWizard( const char* pkey, char flgs[40],
-    gstring name, gstring comment, gstring EQkey,  QWidget* parent):
+    string name, string comment, string EQkey,  QWidget* parent):
     QDialog( parent )
 {
 
     //setFinishEnabled( WizardPage3, true);
     setupUi(this);
-    gstring str1= "GEM-Selektor System Setup:  ";
+    string str1= "GEM-Selektor System Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
@@ -152,19 +151,19 @@ SystemWizard::SystemWizard( const char* pkey, char flgs[40],
 SystemWizard::~SystemWizard()
 {}
 
-gstring SystemWizard::getName(  )
+string SystemWizard::getName(  )
 {
-  return gstring(pName->text().toLatin1().data());
+  return pName->text().toStdString();
 }
 
-gstring SystemWizard::getComment(  )
+string SystemWizard::getComment(  )
 {
-  return gstring(pComment->text().toLatin1().data());
+  return pComment->text().toStdString();
 }
 
-gstring SystemWizard::getEQkey(  )
+string SystemWizard::getEQkey(  )
 {
-  return gstring(pKey->text().toLatin1().data());
+  return pKey->text().toStdString();
 }
 
 

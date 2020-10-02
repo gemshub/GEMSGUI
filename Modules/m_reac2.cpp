@@ -213,8 +213,8 @@ void TReacDC::Convert_KT_to_Cp( int CE )
             fabs( rcp->Gs[0] - Gr ) >= 57.08 ||
             fabs( rcp->Ks[1] - lgK ) >= 0.01 )
     {
-        gstring msgbuf = "W24RErun: Warning: Some of the calculated values\n logK = ";
-        vstr doublbuf(100);
+        std::string msgbuf = "W24RErun: Warning: Some of the calculated values\n logK = ";
+        char doublbuf[100];
         sprintf( doublbuf, "%g", lgK );
         msgbuf += doublbuf;
         msgbuf += ", dGr = ";
@@ -251,11 +251,11 @@ void TReacDC::Recalc( int q, const char *key  )
 {
     int i, st0, st1, Count, rShift=0, CM, CE;
     double Z, MW, foS, nj;
-    vstr dcn(MAXRKEYLEN+5);
+    char dcn[MAXRKEYLEN+5];
     time_t crt;
 
     TFormula aFo;
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
 
     memset( dcn, 0, MAXRKEYLEN );
@@ -465,7 +465,7 @@ NEXT:
             rc[q].Hs[0] = 0.0;
             rc[q].Cps[0] = 0.0;
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_EK1 )
         {
@@ -473,26 +473,26 @@ NEXT:
             rc[q].Hs[0] = DOUBLE_EMPTY;
             rc[q].Cps[0] = 0.0;
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_EK2 )
         {
             rc[q].Cps[0] = 0.0;
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_EK3 )
         {
             if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_LGK )
         {
         	if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-        		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
-        	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
-        		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
-            for( i=0; i<7; i++ )
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
+            if( /*!rc[q].Cps ||*/ rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
+                 rc[q].DCp =   (float *)aObj[ o_redcp ]->Alloc( MAXCPCOEF, 1, F_);
+            for( i=0; i<3; i++ )
             {
               if( IsFloatEmpty( rc[q].Cps[i] ) )
                   rc[q].Cps[i] = 0.0;
@@ -501,9 +501,9 @@ NEXT:
         else if (CE == CTM_LGX)
         {
         	if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
-        		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
-        	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
-        		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
+                rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
+            if( /*!rc[q].Cps ||*/ rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
+                 rc[q].DCp =   (float *)aObj[ o_redcp ]->Alloc( MAXCPCOEF, 1, F_);
             for( i=0; i<7; i++ )
             {
               if( IsFloatEmpty( rc[q].pKt[i] ) )
@@ -1611,8 +1611,8 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
         aE = 0.;
         for( i=0; i<5; i++ )
         { // see all  coef Vp(T,P)
-            a = (double)rc[q].DVt[i];
-            if( IsDoubleEmpty( a ) || !a ) continue;
+            a = rc[q].DVt[i];
+            if( IsDoubleEmpty( a ) || approximatelyZero(a) ) continue;
             switch( i ) // calc delta
             {
             case 0:
@@ -1643,7 +1643,7 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
             for( i=0; i<MAXVTCOEF; i++ )
             {
                 a = (double)rc[q].DVt[i];
-                if( IsDoubleEmpty( a ) || !a ) continue;
+                if( IsDoubleEmpty( a ) || approximatelyZero(a) ) continue;
                 switch( i ) //calc delta coef Vp(T)
                 {
                 case 0:

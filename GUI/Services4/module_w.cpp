@@ -4,7 +4,6 @@
 // Implementation of TCModuleImp class
 //
 // Copyright (C) 1996-2001  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -35,7 +34,7 @@
 TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
         QDialog(0),
         iMod(irt),
-        rMod( aMod[irt] ),
+        rMod( *aMod[irt] ),
         last_update( 0 ),
         viewmode(aviewmode)
 {
@@ -43,7 +42,7 @@ TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
    //(void)statusBar();
     setAttribute( Qt::WA_DeleteOnClose );
 
-    gstring s = rMod.GetName();
+    std::string s = rMod.GetName();
     s += " :: ";
     rMod.SetTitle();
     s += rMod.GetString();
@@ -54,7 +53,7 @@ TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
     //setMinimumSize( 300, 200 );
 
     rMod.pImp = this;
-    pWin = new TCWindow(this, aWinInfo[iMod], page);
+    pWin = new TCWindow(this, *aWinInfo[iMod], page);
     //setCentralWidget(pWin);
     QVBoxLayout* mainBox = new QVBoxLayout(this);
     mainBox->addWidget( pWin );
@@ -80,10 +79,10 @@ size_t TCModuleImp::rtNumRecord() const
         return   rMod.rtNum();
 }
 
-gstring TCModuleImp::iconFile() const
+std::string TCModuleImp::iconFile() const
 {
     if( rMod.IsSubModule() )
-        return  aMod[RT_SYSEQ].GetIcon();
+        return  aMod[RT_SYSEQ]->GetIcon();
       else
         return  rMod.GetIcon();
 }
@@ -102,8 +101,8 @@ void TCModuleImp::closeEvent(QCloseEvent* e)
 
     if( !(windowState() & Qt::WindowMaximized) )
     {
-        aWinInfo[iMod].init_width = parentWidget()->width();
-        aWinInfo[iMod].init_height = parentWidget()->height();
+        aWinInfo[iMod]->init_width = parentWidget()->width();
+        aWinInfo[iMod]->init_height = parentWidget()->height();
     }
 
     // close module
@@ -121,7 +120,7 @@ void TCModuleImp::closeEvent(QCloseEvent* e)
 
 QSize TCModuleImp::sizeHint() const
 {
-    return QSize(aWinInfo[iMod].init_width, aWinInfo[iMod].init_height);
+    return QSize(aWinInfo[iMod]->init_width, aWinInfo[iMod]->init_height);
 }
 
 /*!
@@ -135,7 +134,7 @@ void TCModuleImp::Update(bool force)
         return;
 
     pWin->Update();
-    gstring s = rMod.GetName();
+    std::string s = rMod.GetName();
     s += " :: ";
     s += rMod.GetString();
     SetCaption( s.c_str() );
@@ -155,7 +154,7 @@ void TCModuleImp::SelectStart()
    //if( qApp->focusWidget() )
    //   qApp->focusWidget()->clearFocus();
 
-   if( iMod >= (int)rt.GetCount() || rt[iMod].RecCount() <= 0)
+   if( iMod >= rt.size() || rt[iMod]->RecCount() <= 0)
        return;   // Added to avoid a selection
 
    if( pVisor->ProfileMode )
@@ -173,15 +172,15 @@ void TCModuleImp::SelectStart()
 */
 void TCModuleImp::MakeQuery()
 {
-    TQueryWindow qd(aWinInfo[iMod]);
+    TQueryWindow qd(*aWinInfo[iMod]);
     qd.exec();
 
     Update(true);
 }
 
-void TCModuleImp::saveGraphData(jsonui::ChartData *data)
+void TCModuleImp::saveGraphData(jsonui::ChartData *data1)
 {
-    rMod.SaveChartData(data);
+    rMod.SaveChartData(data1);
     cout<< "saveGraphData" << endl;
 }
 

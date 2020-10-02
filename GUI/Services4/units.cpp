@@ -4,7 +4,6 @@
 // Implementation of TUnitsList class
 //
 // Copyright (C) 1996-2001  A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -32,10 +31,10 @@
 const char *defVALS = "+-* `";
 
 
-gstring
+string
 sunits::getVals(int m) const
 {
-    if (vals.find('/') == gstring::npos)	// not splitted
+    if (vals.find('/') == string::npos)	// not splitted
         return vals;
 
     size_t pos = 0, p = 0;
@@ -43,21 +42,21 @@ sunits::getVals(int m) const
     for (int ii = 0; ii < m; ii++)
     {
         pos = vals.find('/', pos);
-        if (pos == gstring::npos)
+        if (pos == string::npos)
             //      return defVALS;
-            return (gstring (vals, p, gstring::npos) + " `");	// the last defined vals
+            return (string (vals, p, string::npos) + " `");	// the last defined vals
         p = ++pos;
     }
 
     size_t sp = vals.find('/', pos);
-    if (sp != gstring::npos)
+    if (sp != string::npos)
         sp = sp - pos;
-    // else the rest of the gstring
-    return (gstring (vals, pos, sp) + " `");
+    // else the rest of the string
+    return (string (vals, pos, sp) + " `");
 }
 
 TUnitsList::TUnitsList()
-//  TOArray<sunits>
+//  std::vector<sunits>
 {}
 
 
@@ -76,16 +75,16 @@ TUnitsList::toDAT(ostream& visor_dat)
     // begin signature
     visor_dat << USigBEG;
 
-    int n1 = GetCount();
+    int n1 = size();
     visor_dat.write((char *) &n1, sizeof n1);
     for (int ii = 0; ii < n1; ii++)
     {
-        int n = elem(ii).name.length() + 1;
+        int n = at(ii).name.length() + 1;
         visor_dat.write((char *) &n, sizeof n);
-        visor_dat.write(elem(ii).name.c_str(), n);
-        n = elem(ii).vals.length() + 1;
+        visor_dat.write(at(ii).name.c_str(), n);
+        n = at(ii).vals.length() + 1;
         visor_dat.write((char *) &n, sizeof n);
-        visor_dat.write(elem(ii).vals.c_str(), n);
+        visor_dat.write(at(ii).vals.c_str(), n);
     }
 
     // end signature
@@ -100,13 +99,12 @@ TUnitsList::fromDAT(istream& visor_dat)
     if (sg[0] != USigBEG[0] || sg[1] != USigBEG[1])
         throw TError(USigERROR, USigTITLE);
 
-    vstr nm(100);
-    vstr vl(100);
+    char nm[100];
+    char vl[100];
     int n1;
     visor_dat.read((char *) &n1, sizeof n1);
 
-    Clear(n1);
-
+    clear();
     for (int ii = 0; ii < n1; ii++)
     {
         int n;
@@ -114,7 +112,7 @@ TUnitsList::fromDAT(istream& visor_dat)
         visor_dat.read(nm, n);
         visor_dat.read((char *) &n, sizeof n);
         visor_dat.read(vl, n);
-        Add(sunits(gstring (nm), gstring (vl)));
+        push_back(sunits(string (nm), string (vl)));
         ;
     }
 
@@ -128,26 +126,27 @@ void
 TUnitsList::load(const char *f_units)
 {
     TConfig cnf(f_units, ' ');
-    gstring par;
-    gstring str;
+    string par;
+    string str;
 
     par = cnf.getFirst();
 
     while (!par.empty())
     {
+        //cout << par << "  " << str << endl;
         cnf.getcStr(str);
         //    str += " `";
 
-        Add(sunits(par, str));
+        push_back(sunits(par, str));
         par = cnf.getNext();
     }
 }
 
 int
-TUnitsList::Find(const gstring &s)
+TUnitsList::Find(const string &s)
 {
-    for (uint ii = 0; ii < GetCount(); ii++)
-        if (elem(ii).name == s)
+    for (size_t ii = 0; ii < size(); ii++)
+        if (at(ii).name == s)
             return ii;
 
     return -1;

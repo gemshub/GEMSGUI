@@ -47,14 +47,14 @@ TLMDataType::~TLMDataType()
   if( fType == MATHSCRIPT_FIT || eType == MATHSCRIPT_EVL )
   {
     // setup  internal objects  for 0
-    aObj[ o_lms_yexp ].SetPtr( NULL );
-    aObj[ o_lms_yexp ].SetDim( 0, 1 );
-    aObj[ o_lms_tx ].SetPtr( NULL );
-    aObj[ o_lms_tx ].SetDim( 0, tm_d );
-    aObj[ o_lms_wexp ].SetPtr( NULL );
-    aObj[ o_lms_wexp ].SetDim( 0, 1 );
-    aObj[ o_lms_para ].SetPtr( NULL );
-    aObj[ o_lms_para ].SetDim( 0, 1 );
+    aObj[ o_lms_yexp ]->SetPtr( NULL );
+    aObj[ o_lms_yexp ]->SetDim( 0, 1 );
+    aObj[ o_lms_tx ]->SetPtr( NULL );
+    aObj[ o_lms_tx ]->SetDim( 0, tm_d );
+    aObj[ o_lms_wexp ]->SetPtr( NULL );
+    aObj[ o_lms_wexp ]->SetDim( 0, 1 );
+    aObj[ o_lms_para ]->SetPtr( NULL );
+    aObj[ o_lms_para ]->SetDim( 0, 1 );
    // free internal arrays
    //     aObj[ o_lms_delta ].Free();
    //    aObj[ o_lms_yfit  ].Free();
@@ -124,18 +124,18 @@ void TLMDataType::test_sizes()
   if( fType == MATHSCRIPT_FIT || eType == MATHSCRIPT_EVL )
   {
     // setup  internal objects
-    aObj[ o_lms_yexp ].SetPtr( ydat );
-    aObj[ o_lms_yexp ].SetDim( m_dat, 1 );
-    aObj[ o_lms_tx ].SetPtr( tdat );
-    aObj[ o_lms_tx ].SetDim( m_dat, tm_d );
-    aObj[ o_lms_wexp ].SetPtr( wdat );
-    aObj[ o_lms_wexp ].SetDim( m_dat, 1 );
-    aObj[ o_lms_para ].SetPtr( 0 );
-    aObj[ o_lms_para ].SetDim( n_par, 1 );
+    aObj[ o_lms_yexp ]->SetPtr( ydat );
+    aObj[ o_lms_yexp ]->SetDim( m_dat, 1 );
+    aObj[ o_lms_tx ]->SetPtr( tdat );
+    aObj[ o_lms_tx ]->SetDim( m_dat, tm_d );
+    aObj[ o_lms_wexp ]->SetPtr( wdat );
+    aObj[ o_lms_wexp ]->SetDim( m_dat, 1 );
+    aObj[ o_lms_para ]->SetPtr( 0 );
+    aObj[ o_lms_para ]->SetDim( n_par, 1 );
    // allocate internal arrays
-    aObj[ o_lms_delta ].Alloc( m_dat, 1, D_ );
-    aObj[ o_lms_yfit  ].Alloc( m_dat, 1, D_ );
-    aObj[ o_lms_paf  ].Alloc( n_par, 1, D_ );
+    aObj[ o_lms_delta ]->Alloc( m_dat, 1, D_ );
+    aObj[ o_lms_yfit  ]->Alloc( m_dat, 1, D_ );
+    aObj[ o_lms_paf  ]->Alloc( n_par, 1, D_ );
    //     o_lms_jp, o_lms_kp, o_lms_itx, o_lms_para
    // translate equation after setup sizes
    rpn.GetEquat( text_function );
@@ -153,7 +153,7 @@ double TLMDataType::function( int i, double* t, double* p )
      case TEST_FIT_SVD: r = p[0] + p[1]*t[0] + p[2]*t[0]*t[0];
                     break;
      case FUN_IPF_R:   // Redlich-Kister
-                       r = cnst_y[i];
+                       r = cnst_y[i]; [[fallthrough]];
      case FUN_IPF_G:   // Guggenheim
                        r *= Guggenheim( t, p );
                        break;
@@ -298,10 +298,10 @@ double TLMDataType::rpn_function( int i, double* p )
 {
     short ii=(short)i;
 //     o_lms_jp, o_lms_kp, o_lms_itx, o_lms_para
-    aObj[ o_lms_para ].SetPtr( p );
-    aObj[ o_lms_jp ].SetPtr( &ii );
+    aObj[ o_lms_para ]->SetPtr( p );
+    aObj[ o_lms_jp ]->SetPtr( &ii );
     rpn.CalcEquat();
-    double ret = aObj[ o_lms_yfit ].Get( ii, 0 );
+    double ret = aObj[ o_lms_yfit ]->Get( ii, 0 );
     return ret;
 }
 
@@ -310,24 +310,24 @@ void
  TLMDataType::rpn_par_function( int i, double* p  )
 {
     short ii = (short)i;
-    aObj[ o_lms_jp ].SetPtr( &ii );  // current line in x
+    aObj[ o_lms_jp ]->SetPtr( &ii );  // current line in x
     rpn.CalcEquat();
     for( int j=0; j<n_par; j++)
-     p[j] = aObj[ o_lms_paf ].Get( j, 0);}
+     p[j] = aObj[ o_lms_paf ]->Get( j, 0);}
 
 
 void TLMDataType::rpn_evaluate( double* par, double* fvec )
 {
   short ii;
 
-    aObj[ o_lms_para ].SetPtr( par );
-    aObj[ o_lms_jp ].SetPtr( &ii );  // current line in X
+    aObj[ o_lms_para ]->SetPtr( par );
+    aObj[ o_lms_jp ]->SetPtr( &ii );  // current line in X
 
 
     for ( ii=0; ii<m_dat; ii++)
     {
          rpn.CalcEquat();
-         fvec[ii] = aObj[ o_lms_delta ].Get(ii, 0);
+         fvec[ii] = aObj[ o_lms_delta ]->Get(ii, 0);
     }
 }
 
@@ -344,7 +344,7 @@ void TLMDataType::lm_print_default( double* par, double* /*fvec*/, double *CVM,
  *       nfev  : number of calls to *evaluate
  */
 {
-    gstring fname = pVisor->userGEMDir();
+    std::string fname = pVisor->userGEMDir();
             fname += "fit_func.out";
     double f, y, *t;
     int i, j;

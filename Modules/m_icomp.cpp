@@ -27,9 +27,9 @@ TIComp* TIComp::pm;
 TIComp::TIComp( uint nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add("Symbol of Independent Component (IC)");
-    aFldKeysHelp.Add("Class of Independent Component { e o h a i z v }");
-    aFldKeysHelp.Add("Comment to IC definition");
+    aFldKeysHelp.push_back("Symbol of Independent Component (IC)");
+    aFldKeysHelp.push_back("Class of Independent Component { e o h a i z v }");
+    aFldKeysHelp.push_back("Comment to IC definition");
     icp=&ic[0];
     set_def();
     start_title = " Data for Independent Components ";
@@ -38,25 +38,25 @@ TIComp::TIComp( uint nrt ):
 // link values to objects
 void TIComp::ods_link( int q)
 {
-    // aObj[ o_icsymb].SetPtr( ic[q].symb );
-    // aObj[ o_ictype].SetPtr( ic[q].type );
-    // aObj[ o_icgrp].SetPtr( ic[q].grp );
-    aObj[ o_icawt].SetPtr( &ic[q].awt );
-    aObj[ o_icass].SetPtr( &ic[q].aSs );
-    aObj[ o_icacp].SetPtr( &ic[q].aCp );
-    aObj[ o_icavs].SetPtr( &ic[q].aVs );
-    aObj[ o_icarad].SetPtr( &ic[q].arad );
-    aObj[ o_icidis].SetPtr( &ic[q].idis );
-    aObj[ o_icval].SetPtr( &ic[q].val );
-    aObj[ o_icnum].SetPtr( &ic[q].num );
-    aObj[ o_iccoor].SetPtr( &ic[q].coor );
-    aObj[ o_icsst].SetPtr( ic[q].sst );
-    aObj[ o_icname].SetPtr( ic[q].name );
-    aObj[ o_icform].SetPtr( ic[q].form );
-    aObj[ o_icdc].SetPtr(  ic[q].dc_ref );
-    aObj[ o_icfloat].SetPtr( &ic[q].awt );
-    aObj[ o_icint].SetPtr( &ic[q].val );
-    aObj[ o_ictprn].SetPtr( ic[q].tprn );
+    // aObj[ o_icsymb]->SetPtr( ic[q].symb );
+    // aObj[ o_ictype]->SetPtr( ic[q].type );
+    // aObj[ o_icgrp]->SetPtr( ic[q].grp );
+    aObj[ o_icawt]->SetPtr( &ic[q].awt );
+    aObj[ o_icass]->SetPtr( &ic[q].aSs );
+    aObj[ o_icacp]->SetPtr( &ic[q].aCp );
+    aObj[ o_icavs]->SetPtr( &ic[q].aVs );
+    aObj[ o_icarad]->SetPtr( &ic[q].arad );
+    aObj[ o_icidis]->SetPtr( &ic[q].idis );
+    aObj[ o_icval]->SetPtr( &ic[q].val );
+    aObj[ o_icnum]->SetPtr( &ic[q].num );
+    aObj[ o_iccoor]->SetPtr( &ic[q].coor );
+    aObj[ o_icsst]->SetPtr( ic[q].sst );
+    aObj[ o_icname]->SetPtr( ic[q].name );
+    aObj[ o_icform]->SetPtr( ic[q].form );
+    aObj[ o_icdc]->SetPtr(  ic[q].dc_ref );
+    aObj[ o_icfloat]->SetPtr( &ic[q].awt );
+    aObj[ o_icint]->SetPtr( &ic[q].val );
+    aObj[ o_ictprn]->SetPtr( ic[q].tprn );
     icp=&ic[q];
 }
 
@@ -65,7 +65,7 @@ void TIComp::dyn_set(int q)
 {
     ErrorIf( icp!=&ic[q], GetName(),
              "Invalid access to ic in dyn_set.");
-    ic[q].tprn= (char *)aObj[o_ictprn].GetPtr();
+    ic[q].tprn= (char *)aObj[o_ictprn]->GetPtr();
 }
 
 // free dynamic memory in objects and values
@@ -73,7 +73,7 @@ void TIComp::dyn_kill(int q)
 {
     ErrorIf( icp!=&ic[q], GetName(),
              "Invalid access to ic in dyn_kill.");
-    ic[q].tprn = (char *)aObj[o_ictprn].Free();
+    ic[q].tprn = (char *)aObj[o_ictprn]->Free();
 }
 
 // realloc dynamic memory
@@ -92,7 +92,7 @@ void TIComp::set_def( int q)
     ErrorIf( icp!=&ic[q], GetName(), "Invalid access to IC in set_def()");
     strcpy( ic[q].sst, "s" );
     strcpy( ic[q].name, "Independent Component");
-    strncpy( ic[q].form, rt[rtNum()].FldKey(0), MAXICNAME );
+    strncpy( ic[q].form, rt[rtNum()]->FldKey(0), MAXICNAME );
     strcpy( ic[q].dc_ref, "`" );
     ic[q].awt   =  FLOAT_EMPTY;
     ic[q].aSs   =  FLOAT_EMPTY;
@@ -123,6 +123,7 @@ db->SetStatus(ONEF_);
         retType = VF3_1;
         dyn_kill();
         set_def(); // set default data or zero if necessary
+         [[fallthrough]];
     case VF3_2:
         contentsChanged = true;
         break;
@@ -162,18 +163,18 @@ TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
  //db->OpenAllFiles(true);
  db->GetKeyList( "*:*:*:", aIC1, anR );
 
- for( uint ii=0; ii<aIC1.GetCount(); ii++ )
+ for( uint ii=0; ii<aIC1.size(); ii++ )
  {
     RecInput( aIC1[ii].c_str() );
     if( *db->FldKey( 1 ) == 'a' || *db->FldKey( 1 ) == 'v' ) // addition
-      aIndMT.Add( -1 );
+      aIndMT.push_back( -1 );
     else
       if( isotopes || *db->FldKey( 1 ) == 'e' || *db->FldKey( 1 ) == 'z' ||
           *db->FldKey( 1 ) == 'h' || *db->FldKey( 1 ) == 'o' )
-        aIndMT.Add( icp->num );
+        aIndMT.push_back( icp->num );
       else
         continue;
-   aIC.Add(aIC1[ii]);
+   aIC.push_back(aIC1[ii]);
  }
 }
 
@@ -187,50 +188,50 @@ TIComp::CopyElements( const char * prfName,
 
   // delete the equvalent keys
    TCStringArray aICkey_new;         // 30/11/2006
-   aICkey_new.Clear();
+   aICkey_new.clear();
 
     //  copy to it selected records
     // ( add to last key field first symbol from prfname )
     int nrec;
-    for(uint j, i=0; i<el_data.ICrds.GetCount(); i++ )
+    for(uint j, i=0; i<el_data.ICrds.size(); i++ )
     {
-       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+       for( j=0; j<el_data.oldIComps.size(); j++ )
         if( !memcmp( el_data.ICrds[i].c_str(),
             el_data.oldIComps[j].c_str(), MAXICNAME+MAXSYMB ))
          break;
-       if( j<el_data.oldIComps.GetCount() )
+       if( j<el_data.oldIComps.size() )
          continue;
 
        // test the same component (overload) 30/11/2006
-       gstring stt = el_data.ICrds[i].substr(0,MAXICNAME+MAXSYMB);
-       for( j=0; j<aICkey_new.GetCount(); j++ )
+       std::string stt = el_data.ICrds[i].substr(0,MAXICNAME+MAXSYMB);
+       for( j=0; j<aICkey_new.size(); j++ )
        // if( !memcmp( stt.c_str(), aICkey_new[j].c_str(), MAXICNAME+MAXSYMB ))
          if( stt ==  aICkey_new[j])
         break;
-      if( j<aICkey_new.GetCount() )
+      if( j<aICkey_new.size() )
         continue;
 
        nrec = db->Find( el_data.ICrds[i].c_str() );
        db->Get( nrec );
         /// !!! changing record key
-       gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+       std::string str= std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
        ChangeforTempl( str, st_data.from_templ,
                        st_data.to_templ, db->FldLen( 2 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
         //Point SaveRecord
         if( AddRecordTest( str.c_str(), fnum_ ))
-            aICkey_new.Add( stt );  // 30/11/2006
+            aICkey_new.push_back( stt );  // 30/11/2006
     }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 
 }

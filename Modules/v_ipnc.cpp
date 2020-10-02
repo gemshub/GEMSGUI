@@ -4,7 +4,6 @@
 // Implementation of IPNCalc
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -20,7 +19,6 @@
 #include <cmath>
 // #include <cfloat>  // to set consistent checks of number limits in script function arguments
 #include <cstdio>
-#include "gstring.h"
 #include "v_ipnc.h"
 #include "v_object.h"
 
@@ -79,7 +77,7 @@ static FUNCTION fun[] = {
 
 
 IPNCalc::IPNCalc():
-        aItm(RPN_BLOCK, 100),  aEq(EQUATION_BLOCK, 5),  aCon(CONST_BLOCK, 5)
+        aItm(),  aEq(),  aCon()
 {
     input = 0;
     con_add( 0.0 );
@@ -89,15 +87,15 @@ IPNCalc::IPNCalc():
 
 IPNCalc::~IPNCalc()
 {
-    aItm.Clear();
-    aEq.Clear();
-    aCon.Clear();
+    aItm.clear();
+    aEq.clear();
+    aCon.clear();
 }
 
 // push element to stack
 void IPNCalc::Push( char ch, unsigned n )
 {
-    aItm.Add( new RpnItem(ch, n) );
+    aItm.push_back( RpnItem(ch, n) );
 }
 
 
@@ -105,11 +103,11 @@ void IPNCalc::Push( char ch, unsigned n )
 void IPNCalc::eq_add( int Item, int First )
 {
     if( First != -1 )
-        aEq.Add( new Equation( Item, First) );
+        aEq.push_back( Equation( Item, First) );
     else
     {
-        int Indx = aEq.GetCount()-1;
-        aEq[aEq.GetCount()-1].nItems = Item - aEq[Indx].first;
+        int Indx = aEq.size()-1;
+        aEq[aEq.size()-1].nItems = Item - aEq[Indx].first;
         //aItm.GetCount() - aEq[Indx].first;
     }
 
@@ -118,13 +116,13 @@ void IPNCalc::eq_add( int Item, int First )
 // add value to array of constant
 int IPNCalc::con_add( double val )
 {
-    for( uint i=0; i<aCon.GetCount(); i++)
+    for( size_t i=0; i<aCon.size(); i++)
     {
-        if( aCon[i] == val )
+        if( approximatelyEqual( aCon[i], val) )
             return i;
     }
-    aCon.Add(val);
-    return aCon.GetCount()-1;
+    aCon.push_back(val);
+    return aCon.size()-1;
 }
 
 // skip  trailing blanks and commemt statements
@@ -151,7 +149,7 @@ int IPNCalc::INDEX( const char *s, char ch )
     const char *f = strchr(s, ch);
     if( f==0 )
         return -1;
-    return (int)(f-s);
+    return (f-s);
 }
 
 //Get operation priority
@@ -177,7 +175,7 @@ void IPNCalc::InDigit()
         n += strspn( input+n, DIGIT );
     }
     //ErrorIf( n>24 ,"IPNE01", "Too many digits in a numerical constant.");
-    gstring str=gstring(input, 0, n);
+    std::string str=std::string(input, 0, n);
     //memset( str, 0, 25 );
     //strncpy( str, input, n );
     sscanf( str.c_str(), "%lg", &d );
@@ -185,8 +183,8 @@ void IPNCalc::InDigit()
     Push( IT_C, con_add(d) );
 }
 
-// skip gstring const "<ᨬ����>", in struct put
-// ascii code of the first character in gstring
+// skip std::string const "<ᨬ����>", in struct put
+// ascii code of the first character in std::string
 void IPNCalc::IsAscii()
 {
     double d;
@@ -201,26 +199,28 @@ void IPNCalc::IsAscii()
 }
 
 //get identifier
-void IPNCalc::Ident( char *s )
+string IPNCalc::Ident()
 {
     int n,m;
     n=strcspn( input, RAZD );
     m = min( MAXKEYWD, n);
-    strncpy( s, input, m);
+    auto str = string( input, 0, m);//strncpy( s, input, m);
     input+=n;
+    return str;
+
+
 }
 
 //analyse IPN function
-void IPNCalc::Ffun( char *str)
+void IPNCalc::Ffun(const string& str)
 {
     int i,j;
-    vstr st(MAXKEYWD);
-    gstring err;
+    std::string err;
 
     input++;
     if( (input=xblanc( input ))==0 ) goto OSH;
     for( i=0; i<FuncNumber; i++)
-        if( !( strncmp( str, fun[i].func, MAXKEYWD) ) )
+        if( !( strncmp( str.c_str(), fun[i].func, MAXKEYWD) ) )
             break;
     if( i==FuncNumber )
     {
@@ -257,9 +257,7 @@ void IPNCalc::Ffun( char *str)
             err += input;
             Error( "E03MSTran: ", err.c_str() );
         }
-        memset( st, '\0', MAXKEYWD );
-        //st[MAXKEYWD-1] = '\0';
-        Ident( st );
+        auto st = Ident();
         I_Variab( st );
         if( (input=xblanc( input ))==0 ) goto OSH;
         if( *input!=')' )
@@ -277,21 +275,21 @@ OSH:
 }
 
 //analyse IPN variable
-void IPNCalc::Variab( const char *str)
+void IPNCalc::Variab( const string& str)
 {
-    int j = aObj.Find(str);
+    int j = aObj.Find(str.c_str());
 
     if( j<0 )
     {
-        gstring err = "Variable ";
+        std::string err = "Variable ";
         err += str;
         err+= " is not known.";
         Error( "E06MSTran: ", err.c_str() );
     }
-    if( aObj[j].IsDynamic() || aObj[j].GetN() > 1  )
+    if( aObj[j]->IsDynamic() || aObj[j]->GetN() > 1  )
     {
       bool isLine = false;
-      if( aObj[j].GetN() <= 1 )
+      if( aObj[j]->GetN() <= 1 )
       {
 
         char *crnt = input;
@@ -315,7 +313,7 @@ void IPNCalc::Variab( const char *str)
         }
     }
     if( ( input=xblanc( input ) )==0 ) goto OSH;
-    if( aObj[j].IsDynamic() || aObj[j].GetM() > 1 )
+    if( aObj[j]->IsDynamic() || aObj[j]->GetM() > 1 )
     {
         if( *input != '[' )
             Push( IT_C, 0);
@@ -332,18 +330,18 @@ OSH:
 }
 
 //analyse IPN interval variable
-void IPNCalc::I_Variab( char * str)
+void IPNCalc::I_Variab( const string& str)
 {
-    int j = aObj.Find(str);
+    int j = aObj.Find(str.c_str());
 
     if( j<0 )
     {
-        gstring err = "Variable ";
+        std::string err = "Variable ";
         err += str;
         err+= " is not declared.";
         Error( "E16MSTran: ", err.c_str() );
     }
-    if( aObj[j].GetN() > 1 )
+    if( aObj[j]->GetN() > 1 )
     {
         if( (input=xblanc( input ))==0 ) goto  OSH;
         if( *input=='[' )
@@ -355,10 +353,10 @@ void IPNCalc::I_Variab( char * str)
         else  // [0:dimN]
         {
             Push( IT_C, 0);
-            Push( IT_C, con_add((double)aObj[j].GetN()) );
+            Push( IT_C, con_add((double)aObj[j]->GetN()) );
         }
     }
-    if( aObj[j].GetM() > 1 )
+    if( aObj[j]->GetM() > 1 )
     {
         if( (input=xblanc( input ))==0 ) goto  OSH;
         if( *input=='[' )
@@ -370,7 +368,7 @@ void IPNCalc::I_Variab( char * str)
         else  // [0:dimM]
         {
             Push( IT_C, 0);
-            Push( IT_C, con_add((double)aObj[j].GetM()) );
+            Push( IT_C, con_add((double)aObj[j]->GetM()) );
         }
     }
     Push( IT_I, 0);
@@ -383,9 +381,8 @@ OSH:
 //get IPN code of one math script operator
 void IPNCalc::bildEquat()
 {
-    vstr str(MAXKEYWD);
     char *s;
-    gstring err;
+    std::string err;
     int i,j;
 
     input = s = xblanc( input );
@@ -417,7 +414,7 @@ void IPNCalc::bildEquat()
             }
             continue;
         }
-        eq_add( 0, aItm.GetCount() );
+        eq_add( 0, aItm.size() );
         // eq[Neqs].first = Nitems;
         j =INDEX( s, '=' );
         if( j<0 || j>i || *(s+(j+1)) != ':' )
@@ -442,12 +439,11 @@ void IPNCalc::bildEquat()
             err += input;
             Error(  "E10MSTran: ", err.c_str() );
         }
-        memset( str, '\0', MAXKEYWD );
-        //str[MAXKEYWD-1] = '\0';
-        Ident( str );
+
+        auto str = Ident();
         Variab( str );
         Push( IT_A, 0 );
-        eq_add( aItm.GetCount() );
+        eq_add( aItm.size() );
         s += i + 1;
         s = xblanc( s );
         if( !s || !strncmp(s, "end", 3))
@@ -475,7 +471,7 @@ OSH :
 void IPNCalc::bildWhile()
 {
     int neqbg, it;
-    gstring err;
+    std::string err;
 
     input += 2; // skip do
     if( ( input=xblanc( input ))==0 ) goto OSH;
@@ -486,8 +482,8 @@ void IPNCalc::bildWhile()
         Error(  "E14MSTran: ", err.c_str() );
     }
     input++;
-    neqbg = aEq.GetCount();
-    eq_add( 0, aItm.GetCount() ); //  eq[Neqs].first = Nitems; // conditions
+    neqbg = aEq.size();
+    eq_add( 0, aItm.size() ); //  eq[Neqs].first = Nitems; // conditions
     if( *input==')')
     {
         err = "Expression is needed here:\n";
@@ -497,11 +493,11 @@ void IPNCalc::bildWhile()
     RPN_expr( ')' );
     Variab( "k_");
     Push( IT_A, 0 );
-    eq_add(  aItm.GetCount() );  // conditional jump to equation
-    eq_add(  0, aItm.GetCount() );  // eq[Neqs].first = Nitems;
-    it = aItm.GetCount();
+    eq_add(  aItm.size() );  // conditional jump to equation
+    eq_add(  0, aItm.size() );  // eq[Neqs].first = Nitems;
+    it = aItm.size();
     Push( IT_W, 0 );
-    eq_add( aItm.GetCount());
+    eq_add( aItm.size());
     // analyse before  'end'
     if( ( input=xblanc( input ))==0 ) goto OSH;
     if( strncmp( input, "begin", 5 ))
@@ -520,10 +516,10 @@ void IPNCalc::bildWhile()
     }
     input+=3;
     // unconditional jump to equation
-    eq_add(  0, aItm.GetCount() );  // eq[Neqs].first = Nitems;
+    eq_add(  0, aItm.size() );  // eq[Neqs].first = Nitems;
     Push( IT_B, neqbg );
-    eq_add( aItm.GetCount() );
-    aItm[it].num = aEq.GetCount();
+    eq_add( aItm.size() );
+    aItm[it].num = aEq.size();
     input=xblanc( input );
     return;
 OSH :
@@ -536,7 +532,7 @@ OSH :
 void IPNCalc::bildIf()
 {
     int it2,it;
-    gstring err;
+    std::string err;
 
     input += 2; // skip if
     if( ( input=xblanc( input ))==0 ) goto OSH;
@@ -547,7 +543,7 @@ void IPNCalc::bildIf()
         Error(  "E24MSTran: ", err.c_str() );
     }
     input++;
-    eq_add(  0, aItm.GetCount() );  // eq[Neqs].first = Nitems; // conditions
+    eq_add(  0, aItm.size() );  // eq[Neqs].first = Nitems; // conditions
     if( *input==')' )
     {
         err = "Expression is needed here:\n";
@@ -557,12 +553,12 @@ void IPNCalc::bildIf()
     RPN_expr( ')' );
     Variab( "k_");
     Push( IT_A, 0 );
-    eq_add( aItm.GetCount() );
+    eq_add( aItm.size() );
     // conditional jump to equation
-    eq_add(  0, aItm.GetCount() );  // 	eq[Neqs].first = Nitems;
-    it = aItm.GetCount();
+    eq_add(  0, aItm.size() );  // 	eq[Neqs].first = Nitems;
+    it = aItm.size();
     Push( IT_W, 0 );
-    eq_add( aItm.GetCount() );
+    eq_add( aItm.size() );
     // analyse before  'end'
     if( ( input=xblanc( input ))==0 ) goto OSH;
     if( strncmp( input,"begin", 5 ))
@@ -581,11 +577,11 @@ void IPNCalc::bildIf()
     }
     input+=3;
     // unconditional jump to equation
-    eq_add(  0, aItm.GetCount() );  // 	eq[Neqs].first = Nitems;
-    it2 = aItm.GetCount();
-    Push( IT_B, aEq.GetCount()/*+1*/ ); // 27/11/2006 SD
-    eq_add( aItm.GetCount() );
-    aItm[it].num = aEq.GetCount();
+    eq_add(  0, aItm.size() );  // 	eq[Neqs].first = Nitems;
+    it2 = aItm.size();
+    Push( IT_B, aEq.size()/*+1*/ ); // 27/11/2006 SD
+    eq_add( aItm.size() );
+    aItm[it].num = aEq.size();
     if( ((input=xblanc( input ))!=0) && !strncmp( input,"else", 4 ))
     { // condition else
         input+=4;
@@ -621,7 +617,7 @@ void IPNCalc::bildIf()
         /*eq[Neqs].first = Nitems;
           Push( IT_B, Neqs+1 );
           eq_add();*/
-        aItm[it2].num = aEq.GetCount();
+        aItm[it2].num = aEq.size();
     }
     input=xblanc( input );
     return;
@@ -634,11 +630,10 @@ OSH :
 void IPNCalc::RPN_expr( char ck )
 {
     int itec=-1;
-    vstr stack(MAXSTACK);
+    char stack[MAXSTACK];
     char op,op1;
     int l;
-    vstr str(MAXKEYWD);
-    gstring err;
+    std::string err;
 
     memset( stack, 0, MAXSTACK );
     if( (input=xblanc(input))==0 ) goto OSH;
@@ -650,7 +645,7 @@ void IPNCalc::RPN_expr( char ck )
             if( (input=xblanc(input))==0 ) goto OSH;
             continue;
         }
-        if( *input == '"') // gstring const
+        if( *input == '"') // std::string const
         {
             IsAscii();
             if( (input=xblanc(input))==0 ) goto OSH;
@@ -658,9 +653,7 @@ void IPNCalc::RPN_expr( char ck )
         }
         if( IsLetter( *input ) ) // variable or function
         {
-            memset( str, '\0', MAXKEYWD );
-            //str[MAXKEYWD-1] = '\0';
-            Ident( str );
+            auto str = Ident();
             if( (input=xblanc( input ))==0 ) goto OSH;
             if( *input=='(' )  // function
                 Ffun( str );
@@ -687,14 +680,12 @@ void IPNCalc::RPN_expr( char ck )
                 {
                     if( IsLetter( *input ) )
                     {
-                        memset( str, '\0', MAXKEYWD );
-                        //str[MAXKEYWD-1] = '\0';
-                        Ident( str );
+                        auto str = Ident();
                         if( (input=xblanc( input ))==0 ) goto OSH;
                         if( *input=='(' ) //function
                             Ffun(str);
                         else // variable
-                            Variab( str);
+                            Variab( str );
                     }
                     else
                         if( IsDigit( *input ) ) // constant
@@ -797,14 +788,14 @@ void IPNCalc::RPN_expr( char ck )
                 Push( IT_O, INDEX( OPER, op ));
             }
             input++;
-            l = aItm.GetCount();
+            l = aItm.size();
             Push( IT_T, 0 );
             RPN_expr( ':');
-            aItm[l].num = aItm.GetCount()-l;
-            l = aItm.GetCount();
+            aItm[l].num = aItm.size()-l;
+            l = aItm.size();
             Push( IT_G, 0);
             RPN_expr( ')');
-            aItm[l].num = aItm.GetCount()-l;
+            aItm[l].num = aItm.size()-l;
             break;
         default :
             err = "Invalid symbol of operation:\n";
@@ -838,9 +829,9 @@ void IPNCalc::GetEquat( char *txt )
          return;
 //    ErrorIf( !input || *input=='\0', "IPNTranslate",
 //             "No Math Script text to analyse!");
-    aItm.Clear( false );
-    aEq.Clear( false );
-    aCon.Clear( false );
+    aItm.clear();
+    aEq.clear();
+    aCon.clear();
     con_add( 0.0 );
     con_add( 1.0 );
 
@@ -848,8 +839,8 @@ void IPNCalc::GetEquat( char *txt )
     ErrorIf( input!=0, "E00MSTran: ", "Math Script operator syntax error");
 }
 
-#define StackEnd( i ) aStack[aStack.GetCount()-1+i]
-#define StackDel() aStack.Remove(aStack.GetCount()-1)
+#define StackEnd( i ) aStack[aStack.size()-1+i]
+#define StackDel() aStack.erase(aStack.end()-1)
 
 // calc IPN notation
 void IPNCalc::CalcEquat()
@@ -858,13 +849,13 @@ void IPNCalc::CalcEquat()
     double z;
     int ci;
     uint /*nstack,*/ ni, ieq;
-    TOArray<double> aStack(MAXSTACK, 10);
+    std::vector<double> aStack;
     int k = 1;
 
     o_k_=aObj.Find("k_");
-    aObj[o_k_].SetPtr(&k);
+    aObj[o_k_]->SetPtr(&k);
     ieq = 0;
-    while( /*ieq >= 0 &&*/ ieq < aEq.GetCount() )
+    while( /*ieq >= 0 &&*/ ieq < aEq.size() )
     {
         i = aEq[ieq].first;
         ci = aItm[i].code;
@@ -872,14 +863,14 @@ void IPNCalc::CalcEquat()
         if( ci == IT_W )  // conditional jump to equation
         {
             ErrorIf( ni<ieq, "E01MSExec", "Invalid conditional goto command");
-            if( fabs( aObj[o_k_].Get() ) < IPNC_DBL_MIN ) // 1e-34 )
+            if( fabs( aObj[o_k_]->Get() ) < IPNC_DBL_MIN ) // 1e-34 )
                 ieq = ni;
             else ieq++;
             continue;
         }
         if( ci == IT_B ) // unconditional jump to equation
         {
-            ErrorIf( ni > aEq.GetCount()+1, "E02MSExec",
+            ErrorIf( ni > aEq.size()+1, "E02MSExec",
                      "Invalid unconditional goto command");
             ieq =ni;
             continue;
@@ -890,7 +881,7 @@ void IPNCalc::CalcEquat()
             switch( ci )
             {
             case IT_O :
-                if( aStack.GetCount()<2)
+                if( aStack.size()<2)
                     Error( "E03MSExec", "No operands left in execution stack");
                 switch( ni )
                 {
@@ -976,7 +967,7 @@ void IPNCalc::CalcEquat()
                 }
                 break;
             case IT_U :
-                ErrorIf( aStack.GetCount()<1, "E13MSExec",
+                ErrorIf( aStack.size()<1, "E13MSExec",
                          "No operands left in execution stack.");
                 switch( ni )
                 {
@@ -988,13 +979,13 @@ void IPNCalc::CalcEquat()
                 }
                 break;
             case IT_V :   // variable
-                if( aObj[ni].IsDynamic() || aObj[ni].GetM()>1 )
+                if( aObj[ni]->IsDynamic() || aObj[ni]->GetM()>1 )
                 {
                     k2 = ROUND( StackEnd(0) );
                     StackDel();
                 }
                 else k2 = 0;
-                if( aObj[ni].IsDynamic() || aObj[ni].GetN()>1 )
+                if( aObj[ni]->IsDynamic() || aObj[ni]->GetN()>1 )
                 {
                     k1 = ROUND( StackEnd(0) );
                     StackDel();
@@ -1002,20 +993,20 @@ void IPNCalc::CalcEquat()
                 else k1 = 0;
                 if( aItm[i+1].code == IT_A ) //save result
                 {
-                    aObj[ni].Put( StackEnd(0), k1, k2 );
+                    aObj[ni]->Put( StackEnd(0), k1, k2 );
                     StackDel();
                 }
                 else  //set variable to stack
                 {
-                    aStack.Add( aObj[ni].Get( k1, k2 ) );
+                    aStack.push_back( aObj[ni]->Get( k1, k2 ) );
                 }
                 break;
             case IT_C :  // constant
-                aStack.Add( aCon[ni] );
+                aStack.push_back( aCon[ni] );
                 break;
             case IT_F :
                 if( ni != empty_f )
-                  ErrorIf( aStack.GetCount()<1, "E23MSExec",
+                  ErrorIf( aStack.size()<1, "E23MSExec",
                          "No operands left in execution stack.");
                 switch( ni )
                 {
@@ -1096,10 +1087,10 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) = derfc( StackEnd(0) );
                     break;
                 case empty_f :
-                       aStack.Add( DOUBLE_EMPTY );
+                       aStack.push_back( DOUBLE_EMPTY );
                      break;
                 case mod_f  :
-                    ErrorIf( StackEnd(0)==0||aStack.GetCount()<2,
+                    ErrorIf( approximatelyZero( StackEnd(0)) || aStack.size()<2,
                              "E12MSExec","Missing mod() argument(s).");
                     StackEnd(-1) =
                         (double)( ROUND (StackEnd(-1))%
@@ -1124,7 +1115,7 @@ void IPNCalc::CalcEquat()
                 i++;
                 ErrorIf(aItm[i].code != IT_F, "E15MSExec",
                         "Missing interval function code.");
-                if( aObj[ni].GetM()>1 )
+                if( aObj[ni]->GetM()>1 )
                 {
                     k4 = ROUND( StackEnd(0) );
                     StackDel();
@@ -1132,7 +1123,7 @@ void IPNCalc::CalcEquat()
                     StackDel();
                 }
                 else k3 = k4 = 0;
-                if( aObj[ni].GetN()>1 )
+                if( aObj[ni]->GetN()>1 )
                 {
                     k2 = ROUND( StackEnd(0) );
                     StackDel();
@@ -1143,40 +1134,40 @@ void IPNCalc::CalcEquat()
                 switch( aItm[i].num )
                 {
                 case sum_f :
-                    aStack.Add( 0. );
+                    aStack.push_back( 0. );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
-                            z = aObj[ni].Get( j1, j2 );
+                            z = aObj[ni]->Get( j1, j2 );
                             StackEnd(0) += z;
                         }
                     break;
                 case prod_f :
-                    aStack.Add( 1. );
+                    aStack.push_back( 1. );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
-                            z = aObj[ni].Get( j1, j2 );
+                            z = aObj[ni]->Get( j1, j2 );
                             StackEnd(0) *= z;
                             if( fabs(StackEnd(0))<1.e-34) break;
                         }
                     break;
                 case max_f :
-                    aStack.Add( aObj[ni].Get( k1, k3 ) );
+                    aStack.push_back( aObj[ni]->Get( k1, k3 ) );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
-                            z = aObj[ni].Get( j1, j2 );
+                            z = aObj[ni]->Get( j1, j2 );
                             if( (z-StackEnd(0))>1.e-34)
                                 StackEnd(0) = z;
                         }
                     break;
                 case min_f :
-                    aStack.Add( aObj[ni].Get( k1, k3 ) );
+                    aStack.push_back( aObj[ni]->Get( k1, k3 ) );
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
                         {
-                            z = aObj[ni].Get( k1, k2 );
+                            z = aObj[ni]->Get( k1, k2 );
                             if( (z-StackEnd(0)) < 0 )
                                 StackEnd(0) = z;
                         }
@@ -1184,12 +1175,12 @@ void IPNCalc::CalcEquat()
                 case null_f:
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
-                            aObj[ni].Put( 0., j1, j2 );
+                            aObj[ni]->Put( 0., j1, j2 );
                     break;
                 case one_f:
                     for( j1 = k1; j1 <= k2; j1++ )
                         for( j2 = k3; j2 <= k4; j2++ )
-                            aObj[ni].Put( 1., j1, j2 );
+                            aObj[ni]->Put( 1., j1, j2 );
                     break;
                 default  :
                     Error("E20MSExec","Invalid function code");
@@ -1212,7 +1203,7 @@ void IPNCalc::CalcEquat()
             ci = aItm[i].code;
             ni = aItm[i].num;
         }
-        if( aStack.GetCount()>0 )
+        if( aStack.size()>0 )
             Error( "E17MSExec","Stack is not empty after script execution.");
     }
     return;
@@ -1224,7 +1215,7 @@ void IPNCalc::PrintEquat( char *s, fstream& f)
     int k,l=0,j;
 
     f << "Source expressions :\n" << s;
-    for(uint i=0; i < aEq.GetCount(); l=0, i++)
+    for(size_t i=0; i < aEq.size(); l=0, i++)
     {
         f << "Expression " << i << "\n";
         for( j=aEq[i].first; j<aEq[i].first+aEq[i].nItems; l++, j++)
@@ -1241,7 +1232,7 @@ void IPNCalc::PrintEquat( char *s, fstream& f)
                 f<< " " << aCon[k];
                 break;
             case IT_V :
-                f<< " " << aObj[k].GetKeywd();
+                f<< " " << aObj[k]->GetKeywd();
                 break;
             case IT_F :
                 f<< " " << fun[k].func;
@@ -1389,7 +1380,7 @@ double derf(double x)
     w = x < 0 ? -x : x;
     if (w < 2.2) {
         t = w * w;
-        k = (int) t;
+        k = static_cast<int>(t);
         t -= k;
         k *= 13;
         y = ((((((((((((a[k] * t + a[k + 1]) * t +
@@ -1398,7 +1389,7 @@ double derf(double x)
             a[k + 8]) * t + a[k + 9]) * t + a[k + 10]) * t +
             a[k + 11]) * t + a[k + 12]) * w;
     } else if (w < 6.9) {
-        k = (int) w;
+        k = static_cast<int>(w);
         t = w - k;
         k = 13 * (k - 2);
         y = (((((((((((b[k] * t + b[k + 1]) * t +

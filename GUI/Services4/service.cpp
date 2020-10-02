@@ -4,7 +4,6 @@
 // Implementation of some GUI service functions
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -17,9 +16,10 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-using namespace std;
+
+#ifdef __unix
 #include <unistd.h>
-#ifndef __unix
+#else
 #include <io.h>
 #endif
 
@@ -57,7 +57,11 @@ using namespace std;
 #include "LoadMessage.h"
 #include "InputSystemDialog.h"
 #include "PhaseInfoDialog.h"
+//using namespace std;
 
+
+void deleteDirectory(QString dir);
+void vfObjToFile(QWidget* par, TObject* obj);
 QMutex qmutex;
 
 //----------------------------------------------------------------
@@ -104,7 +108,7 @@ bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
     return rest;
 }
 
-int vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess)
+int vfQuestYesNoCancel(QWidget* par, const string& title, const string& mess)
 {
     QString titl, spac, messag;
     titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
@@ -355,7 +359,7 @@ TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
 // System remake dialog
 bool
 vfExcludeFillEdit(QWidget* par, const char* caption,
-   TCStringArray& aICkeys, TOArray<bool>& sel, double& fill_data )
+   TCStringArray& aICkeys, std::vector<bool>& sel, double& fill_data )
 {
   if( pThread != QThread::currentThreadId() )
   {
@@ -388,7 +392,7 @@ vfExcludeFillEdit(QWidget* par, const char* caption,
 // KeyEdit dialogs
 //=============================================
 
-gstring
+string
 vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
 {
     KeyDialog dbk(par, iRt, key, caption);
@@ -398,10 +402,10 @@ vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
     return dbk.getKey();
 }
 
-gstring
+string
 vfKeyProfile(QWidget* par, const char* caption, int iRt,
              bool& chAqGas, bool& addFiles, bool& remake, int& makeDump,
-             gstring& key_templ, bool& genGEMS3k, bool& brief_mode   )
+             string& key_templ, bool& genGEMS3k, bool& brief_mode   )
 {
     KeyProfile dbk(par, iRt, caption);
     if( !dbk.exec() )
@@ -419,7 +423,7 @@ vfKeyProfile(QWidget* par, const char* caption, int iRt,
     return dbk.getKey();
 }
 
-gstring
+string
 vfKeyTemplEdit(QWidget* par, const char* caption, uint iRt, const char* key,
                bool allowTemplate)
 {
@@ -436,7 +440,7 @@ vfKeyTemplEdit(QWidget* par, const char* caption, uint iRt, const char* key,
 
 bool
 vfKeyCanged(QWidget* par, const char* caption,
-            gstring& from_str, gstring& to_str, int fldLen )
+            string& from_str, string& to_str, int fldLen )
 {
     ChangeKeyDialog dbk(par, fldLen, caption );
     if( !dbk.exec() )
@@ -487,7 +491,7 @@ bool vfChooseFileOpen(QWidget* par, std::string& path_,
           QFileDialog::DontConfirmOverwrite );
    if ( !fn.isEmpty() )
     {
-        path_ = fn.toLatin1().data();
+        path_ = fn.toStdString();
         std::string dir;
         std::string name;
         std::string newname;
@@ -531,7 +535,7 @@ bool vfChooseFileSave(QWidget* par, std::string& path_,
 
     if ( !fn.isEmpty() )
     {
-        path_ = fn.toLatin1().data();
+        path_ = fn.toStdString();
         std::string dir;
         std::string name;
         std::string newname;
@@ -553,7 +557,8 @@ bool vfChooseDirectory(QWidget* par, std::string& path_,
 {
       std::string path;
       if( path_.find('/') == std::string::npos )
-      {      path = pVisor->localDir().c_str();//userGEMDir();
+      {      
+            path = pVisor->localDir();//userGEMDir();
              path+= path_;
       }
       else   path = path_;
@@ -565,7 +570,7 @@ bool vfChooseDirectory(QWidget* par, std::string& path_,
 
     if ( !dir.isEmpty() )
     {
-        path_ = dir.toLatin1().data();
+        path_ = dir.toStdString();
         pVisor->setLocalDir( path_.c_str() );
         return true;
     }
@@ -589,10 +594,10 @@ void deleteDirectory(QString dir)
 
     //Now recursively delete any child directories
     QFileInfoList dirs = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
-    for(int dir = 0; dir < dirs.count(); dir++)
+    for(int dr = 0; dr < dirs.count(); dr++)
     {
-        deleteDirectory(dirs.at(dir).absoluteFilePath());
-        data_dir.rmdir(dirs.at(dir).absoluteFilePath());
+        deleteDirectory(dirs.at(dr).absoluteFilePath());
+        data_dir.rmdir(dirs.at(dr).absoluteFilePath());
     }
 }
 
@@ -702,8 +707,8 @@ vfElements(QWidget* par, const char * prfName,
 
 bool
 vfSystemInput(QWidget* par, const char * p_key,
-              TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
-              TIArray<pagesSetupData>& scalarsList )
+              std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
+              std::vector<pagesSetupData>& scalarsList )
 {
     InputSystemDialog pdlg( par, p_key, wnData, tbData, scalarsList );
     if( !pdlg.exec() )
@@ -717,8 +722,8 @@ vfSystemInput(QWidget* par, const char * p_key,
 bool
 vfProcessSet(QWidget* par, const char * p_key,
              char flgs[24], int size[8], short tabInt[6], double tabDoubl[24],
-gstring& calcScript, gstring& outScript, TCStringArray& names,
-gstring& xName, gstring& yName )
+string& calcScript, string& outScript, TCStringArray& names,
+string& xName, string& yName )
 {
     ProcessWizard pdlg( p_key, flgs, size,  tabInt, tabDoubl,
                         calcScript.c_str(), outScript.c_str(),
@@ -740,8 +745,8 @@ gstring& xName, gstring& yName )
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
             char flgs[32], int size[20],  double Tai[4], double Pai[4], double Tau[3],
-gstring& calcScript, gstring& outScript, TCStringArray& names,
-gstring& xName, gstring& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
+string& calcScript, string& outScript, TCStringArray& names,
+string& xName, string& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
 {
     GEM2MTWizard pdlg( p_key, flgs, size, Tai, Pai, Tau,
                        calcScript.c_str(), outScript.c_str(),
@@ -778,8 +783,8 @@ vfUnSpaceSet(QWidget* par, const char * p_key,
 }
 
 bool vfGtDemoSet(QWidget* par, const char * p_key, int size[8],
-            gstring& prkey, gstring& script, TCStringArray& names,
-            gstring& xName, gstring& yName )
+            string& prkey, string& script, TCStringArray& names,
+            string& xName, string& yName )
 {
      GtDemoWizard cdlg( p_key, size, script.c_str(), prkey.c_str(),
                         xName.c_str(), yName.c_str(),  par );
@@ -837,10 +842,10 @@ vfReacDCSet(QWidget* par, const char * p_key,
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
             char flgs[10], int size[7], double val[6],
-            gstring& script, gstring& xName,  gstring& yName,
+            string& script, string& xName,  string& yName,
             TCStringArray& names )
 {
-    gstring axName;
+    string axName;
     RTparmWizard cdlg( p_key, flgs, size, val, script.c_str(),
                        xName.c_str(), yName.c_str(), par );
      if( !cdlg.exec() )
@@ -899,7 +904,7 @@ vfProjectSet(QWidget* par, const char * p_key,
 
 bool
 vfSystemSet(QWidget* par, const char * p_key,
-            char flgs[40],  gstring& name, gstring& comment, gstring& EQkey )
+            char flgs[40],  string& name, string& comment, string& EQkey )
 {
      SystemWizard pdlg( p_key, flgs, name, comment,  EQkey, par );
      if( !pdlg.exec() )
@@ -915,7 +920,7 @@ vfSystemSet(QWidget* par, const char * p_key,
 
 // call to AutoPhaseDialog  added 18.07.03
 bool
-vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key,
+vfAutoPhaseSet(QWidget* wpar, const char *pr_key, string& a_key, string& g_key,
          char& acode, char& gcode, float apar[8]  )
 {
      AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );
@@ -957,8 +962,8 @@ bool vfLookupDialogSet(QWidget* wpar, char flags[6],
     return true;
 }
 
-void vfPhaseInfo(QWidget* wpar, bool system, int xph, gstring phname,
-                 vector<int>& xdclist, vector<gstring>& dcnames, int xdc )
+void vfPhaseInfo(QWidget* wpar, bool system, int xph, string phname,
+                 vector<int>& xdclist, vector<string>& dcnames, int xdc )
 {
     PhaseInfoDialog dlg( wpar,  system, xph, phname, xdclist, dcnames, xdc );
     dlg.exec();

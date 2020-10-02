@@ -4,7 +4,6 @@
 // Declaration of ElementsDialog class
 //
 // Copyright (C) 2001-2008  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -29,7 +28,7 @@
 
 class ElementsDialog : public QDialog, public Ui::ElementsDialogData
 {
-    gstring prf_name;
+    string prf_name;
     setFiltersData sf_data;
     elmWindowData  el_data;
     elmFilesConfData files_data;
@@ -47,7 +46,7 @@ class ElementsDialog : public QDialog, public Ui::ElementsDialogData
     TCStringArray aICkey2_sel;  // lists from template bgOther
 
     // working with open files
-    int  isOpenFile( gstring& name );
+    int  isOpenFile( string& name );
     void setFilesList();
     void resetFilesSelection();
     void openFilesSelection();
@@ -57,8 +56,8 @@ class ElementsDialog : public QDialog, public Ui::ElementsDialogData
     void setTreeWidget();
     void setSelectionTreeWidget();  // set up selection in wiget use selNames
     void getSelectionTreeWidget();
-    void getTag( gstring tag, QStandardItem* pdb);
-    void setTag( gstring fname, QStandardItem* pdb);
+    void getTag( string tag, QStandardItem* pdb);
+    void setTag( string fname, QStandardItem* pdb);
     void deleteTag( QString aTag, QStandardItem* pdb);
 
     // working with elements buttoms
@@ -110,13 +109,13 @@ class TreeFileLine
 {
 public:
 
-    TreeFileLine(int aRow,gstring aTag, gstring aVer, TreeFileLine* aParent);
+    TreeFileLine(int aRow,string aTag, string aVer, TreeFileLine* aParent);
     ~TreeFileLine();
     void printTest();
 
     int row;
-    gstring tag;
-    gstring ver;
+    string tag;
+    string ver;
 
     TreeFileLine *parent;
     QList<TreeFileLine *> children;

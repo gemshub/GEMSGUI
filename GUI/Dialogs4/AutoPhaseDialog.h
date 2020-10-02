@@ -4,7 +4,6 @@
 // Declaration of AutoPhaseDialog class
 //
 // (C) 2003-2008  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -23,7 +22,6 @@
 #include <QDialog>
 
 #include "ui_AutoPhaseDialog4.h"
-#include "gstring.h"
 
 class AutoPhaseDialog : public QDialog, public Ui::AutoPhaseDialogData
 {
@@ -38,12 +36,12 @@ public:
     virtual ~AutoPhaseDialog();
 
     void set_apar( float apar[8] );
-    void set_akey( gstring& a_key );
-    void set_gkey( gstring& g_key );
+    void set_akey( std::string& a_key );
+    void set_gkey( std::string& g_key );
 
     void get_apar( float apar[8] );
-    void get_akey( gstring& a_key );
-    void get_gkey( gstring& g_key );
+    void get_akey( std::string& a_key );
+    void get_gkey( std::string& g_key );
 
     char get_acode();
     char get_gcode();
@@ -53,8 +51,8 @@ private:
    float a_param[8];  // Changed size from 4 to 8 on 22.05.2009 (DK,TW)
    char aqu_code;
    char gas_code;
-   gstring aqu_key;
-   gstring gas_key;
+   std::string aqu_key;
+   std::string gas_key;
 
 protected slots:
     virtual void CmHelp();

@@ -4,7 +4,6 @@
 // Implementation of RTparmWizard class
 //
 // Copyright (C) 2005-2008  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -106,7 +105,7 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
 
 
     setupUi(this);
-    gstring str1= "GEM-Selektor RTparm Setup:  ";
+    string str1= "GEM-Selektor RTparm Setup:  ";
             str1 += pkey;
     setWindowTitle( str1.c_str() );
     stackedWidget->setCurrentIndex (0);
@@ -209,7 +208,7 @@ void   RTparmWizard::getSizes( int size[7] )
     size[2] = pMode->currentIndex();
 }
 
-void RTparmWizard::getFlags( char flgs[6], gstring& xName )
+void RTparmWizard::getFlags( char flgs[6], string& xName )
 {
 // Page 1 - not return
     QString str = pPtun->currentText();
@@ -220,11 +219,11 @@ void RTparmWizard::getFlags( char flgs[6], gstring& xName )
 
     if(butP->isChecked())
     {  flgs[6] = 'P';
-       xName = pPun->currentText().toLatin1().data();
+       xName = pPun->currentText().toStdString();
     }
     else
     {  flgs[6] = 'T';
-       xName = pPtun->currentText().toLatin1().data();
+       xName = pPtun->currentText().toStdString();
     }
 
 // Page 2
@@ -295,8 +294,8 @@ void RTparmWizard::definePTArray()
    //double *arP, *arT;
 
    nPT = max( pNP->value(), pNT->value());
-   /*arP = (double *)*/ aObj[ o_rpxp].Alloc( nPT, 1, D_);
-   /*arT = (double *)*/ aObj[ o_rpxt].Alloc( nPT, 1, D_);
+   /*arP = (double *)*/ aObj[ o_rpxp]->Alloc( nPT, 1, D_);
+   /*arT = (double *)*/ aObj[ o_rpxt]->Alloc( nPT, 1, D_);
 }
 
 void RTparmWizard::initPTTable()
@@ -343,8 +342,8 @@ static equatSetupData eq( "", "yF", "jTP", "" );
 void RTparmWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData;
 
     GetListsnRT( -1, pgData,  scalarsList );
     GetListsnRT( RT_RTPARM, pgData,  scalarsList );

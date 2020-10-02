@@ -2,7 +2,7 @@
 #define NODE_GUI_H
 
 #include "GEMS3K/node.h"
-#include "array.h"
+#include "v_user.h"
 class QWidget;
 
 class TNodeGUI: public TNode

@@ -92,12 +92,13 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
     T3 = T2 * T;
     T4 = T3 * T;
     T05 = sqrt( T );
-    for( i=0; i</*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ )
+    for( i=0; i</*MAXCPCOEF*/aObj[o_dccp]->GetN(); i++ )
     {  // Cp(t)  current temperature only
         a1 = dc[q].Cp[i*dc[q].NeCp+k];
-        if( IsFloatEmpty( a1 ) || !a1 )
-	    ac[i] = 0.0;
-        else ac[i] = (double)a1;
+        if( IsFloatEmpty( a1 ) || approximatelyZero(a1) )
+            ac[i] = 0.0;
+        else
+            ac[i] = a1;
      }
      aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2
            + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
@@ -137,12 +138,13 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
                 // if(j)
             aW.twp->G -= aW.twp->S * T_Tst;
             // aW.twp->Cp = 0.;
-            for( i=0; i< /*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ ) // fix 08.09.00
+            for( i=0; i< /*MAXCPCOEF*/aObj[o_dccp]->GetN(); i++ ) // fix 08.09.00
             {
-	        a1 = dc[q].Cp[i*dc[q].NeCp+j];
-                if( IsFloatEmpty( a1 ) || !a1 )
-		    ac[i] = 0.0;
-		else ac[i] = (double)a1;
+                a1 = dc[q].Cp[i*dc[q].NeCp+j];
+                if( IsFloatEmpty( a1 ) || approximatelyZero(a1) )
+                    ac[i] = 0.0;
+                else
+                    ac[i] = a1;
             }
             aW.twp->S  += ( ac[0] * log( TT ) + ac[1] * T_Tst + ac[2] * ( 1./Tst2 - 1./T2 ) / 2.
 	          + ac[3] * 2. * ( 1./Tst05 - 1./T05 ) + ac[4] * ( T2 - Tst2 ) / 2.
@@ -170,26 +172,26 @@ NEXT:
     // need to insert check for code of Murnaghan EoS
     if( CE == CTM_CHP )  // Corrected 02.04.2011 (TW)
     {
-        double Qq, dQq, Tcr, Tcr0, Smax, Vmax, k298, kT, a0, p, pp, ivdp, idvdtdp,
+        double Qq, dQq, Tcr, Tcr0, Smax, Vmax, k298, kT, a0, p1, pp, ivdp, idvdtdp,
                Q298, v_bis, smq;
         // Parameters of lambda-transition
         if( dc[q].FtBer ) // bugfix of crash by reading records with CTM_CHP older than 2011
         {
-            Tcr0 = (double)dc[q].FtBer[0];   // given in centigrade
-            Smax = (double)dc[q].FtBer[1];
-            Vmax = (double)dc[q].FtBer[2];
+            Tcr0 = dc[q].FtBer[0];   // given in centigrade
+            Smax = dc[q].FtBer[1];
+            Vmax = dc[q].FtBer[2];
         }
         else {
             // no FtBer allocated - old format
-            Tcr0 = (double)dc[q].TCr;   // given in centigrade
-            Smax = (double)dc[q].Smax;
-            Vmax = (double)dc[q].Der;
+            Tcr0 = dc[q].TCr;   // given in centigrade
+            Smax = dc[q].Smax;
+            Vmax = dc[q].Der;
         }
-        k298 = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
-        p = aW.twp->P;             // in bars
+        k298 = dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
+        p1 = aW.twp->P;             // in bars
         if( IsFloatEmpty( dc[q].Comp ))
            k298 = 0.;
-        a0 = (double)dc[q].Expa; // This is the a parameter (at one bar) in 1/K !
+        a0 = dc[q].Expa; // This is the a parameter (at one bar) in 1/K !
         if( IsFloatEmpty( dc[q].Expa ))
            a0 = 0.;
 
@@ -198,7 +200,7 @@ NEXT:
             if ( Smax <= 0)
                 Smax = 1.0e-20;
 
-            pp = p/1000.; // p is in bar, pp in kbar, kT and k298 in kbar
+            pp = p1/1000.; // p1 is in bar, pp in kbar, kT and k298 in kbar
 
             if( IsFloatEmpty( Vmax ) )
             {
@@ -206,7 +208,7 @@ NEXT:
                Tcr = Tcr0;
             }
             else
-               Tcr = Tcr0 + Vmax/Smax * p;
+               Tcr = Tcr0 + Vmax/Smax * p1;
 
             Tcr += dT;
             Tcr0 += dT;     // dT is a constant equal 273.15
@@ -255,7 +257,7 @@ NEXT:
 void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 {
     double /*a,*/ T, Vst, Tst, Pst, P, P_Pst, T_Tst, Ts2, VP, VT,
-          aC, aE, kap, /*T05, Tst05,*/ Vt, PP, a0, k0, dg, ds, dh, dv, dcp;
+          aC, aE, kap, /*T05, Tst05,*/ Vt, PP, a0, k0, dg, ds, dh, dv, dcp1;
     double vc[5];
     float a1;
     int i;
@@ -311,7 +313,7 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                            + Vt*PP*(1.5e-4)/(1.-(1.5e-4)*(T-Tst)) * pow((1.+4.*PP/kap),(-0.25)) ) * (1000.) );
                 dh = dg + T*ds;
                 dv = ( Vt*pow( (1.- 4.*PP/(kap + 4.*PP )),0.25 ));
-                dcp = - T * ( (5./3.)*Vst*a0*kap/pow(T,1.5) * (pow((1.+4.*PP/kap),0.75)-1.)
+                dcp1 = - T * ( (5./3.)*Vst*a0*kap/pow(T,1.5) * (pow((1.+4.*PP/kap),0.75)-1.)
                             - (2./3.)*Vst*(a0-10.*a0/pow(T,0.5))*k0*(1.5e-4) * (pow((1.+4*PP/kap),0.75)-1.)
                             + 2.*Vst*(a0-10.*a0/pow(T,0.5))*PP*(1.5e-4) / (1.-(1.5e-4)*(T-Tst)) * pow((1.+4.*PP/kap),(-0.25))
                             - Vt*pow(PP,2.)*pow((1.5e-4),2.) / ( pow((1.-(1.5e-4)*(T-Tst)),3.)*k0 )
@@ -321,7 +323,7 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                 aW.twp->S += ds;
                 aW.twp->H += dh;
                 aW.twp->V += dv;
-                aW.twp->Cp += dcp;
+                aW.twp->Cp += dcp1;
 
     	}
 
@@ -346,9 +348,10 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
         for( i=0; i<5; i++ )
         {
             a1 = dc[q].Vt[i];
-            if( IsFloatEmpty( a1 ) || !a1 )
+            if( IsFloatEmpty( a1 ) || approximatelyZero(a1) )
                 vc[i] = 0.0;
-            else vc[i] = (double)a1;
+            else
+                vc[i] = a1;
          }
 
          // expansion/compressibility
@@ -383,18 +386,18 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
     {
       if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
       {
-         double VV0=0.0, GG0=0.0, HH0=0.0, SS0=0.0, aC=0.0, aE=0.0;
+         double VV0=0.0, GG0=0.0, HH0=0.0, SS0=0.0, aC1=0.0, aE1=0.0;
 
          BirchMurnaghan( 0.1*Pst, 0.1*P, Tst, T, Vst*10., dc[q].ODc,
-                         VV0, aC, aE, GG0, HH0, SS0 );
+                         VV0, aC1, aE1, GG0, HH0, SS0 );
          // increments to V, G, H, S
          aW.twp->V += Vst+VV0/10.;    // fixed by KD on 22.11.04
 			 // aW.twp->V += VV0/10.;
          aW.twp->S += SS0;
          aW.twp->G += GG0;
          aW.twp->H += HH0;
-         aW.twp->Alp = aC;
-         aW.twp->Bet = aE;
+         aW.twp->Alp = aC1;
+         aW.twp->Bet = aE1;
       }
    }
 }
@@ -405,7 +408,7 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 // Written in fortran by M.Gottschalk, GFZ Potsdam
 // Translated to C/C++ by D.Kulik, 08 April 2003
 // calculate the volume integral
-double TDComp::BM_IntVol(double P, double Pref, double vt, double vpt,
+double TDComp::BM_IntVol(double P, double Pref1, double vt, double vpt,
                          double kt0, double kp, double kpp)
 {
 	double vt23, pint;
@@ -419,7 +422,7 @@ double TDComp::BM_IntVol(double P, double Pref, double vt, double vpt,
 				+ 9.*kpp*kt0*(1. - 4.*vt23) - 956.*vt23 + kp*(-87. + 324.*vt23))))/(128.*vpt*vpt);
 
 // return vdP
-   return (-Pref*vt+P*vpt-pint);
+   return (-Pref1*vt+P*vpt-pint);
 }
 
 
@@ -460,7 +463,7 @@ double TDComp::BM_Volume( double P, double vt, double kt0, double kp,
 // calculate the integral vdP using the Birch-Murnaghan EOS
 // this function will be incorporated into GEM-Selektor v.2.1.0 code
 void
-TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
+TDComp::BirchMurnaghan( double Pref1, double P, double Tref1, double T, double v0,
           const float *BMConst, double &vv, double &alpha, double &beta,
           double &dG, double &dH, double &dS )
 {
@@ -486,9 +489,9 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
     Tminus = T - Tincr;
 
     // calculate bulk modulus at T and its T increments
-    kt0 = kt00 + dkdt*(T - Tref);
-    kt0Tplus = kt00 + dkdt*(Tplus - Tref);
-    kt0Tminus = kt00 + dkdt*(Tminus - Tref);
+    kt0 = kt00 + dkdt*(T - Tref1);
+    kt0Tplus = kt00 + dkdt*(Tplus - Tref1);
+    kt0Tminus = kt00 + dkdt*(Tminus - Tref1);
 
     // set kpp if not already defined and its T increments
     if ( fabs(kpp) < 1e-20 )
@@ -498,19 +501,19 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
       kppTminus = -((35./9.+(3.-kp)*(4.-kp))/kt0Tminus);
     }
 
-    // calculate volume at T and Pref and its T increments
-    vt = v0* exp( a1*(T-Tref)
-         + a2/2.*(T*T-Tref*Tref)
-         + a3*(-1./T+1./Tref) );
-    vtTplus  =  v0* exp( a1*(Tplus-Tref)
-         + a2/2.*(Tplus*Tplus-Tref*Tref)
-         + a3*(-1./Tplus+1./Tref) );
-    vtTminus =  v0* exp( a1*(Tminus-Tref)
-         + a2/2.*(Tminus*Tminus-Tref*Tref)
-         + a3*(-1./Tminus+1./Tref) );
+    // calculate volume at T and Pref1 and its T increments
+    vt = v0* exp( a1*(T-Tref1)
+         + a2/2.*(T*T-Tref1*Tref1)
+         + a3*(-1./T+1./Tref1) );
+    vtTplus  =  v0* exp( a1*(Tplus-Tref1)
+         + a2/2.*(Tplus*Tplus-Tref1*Tref1)
+         + a3*(-1./Tplus+1./Tref1) );
+    vtTminus =  v0* exp( a1*(Tminus-Tref1)
+         + a2/2.*(Tminus*Tminus-Tref1*Tref1)
+         + a3*(-1./Tminus+1./Tref1) );
 
     // calculate volume to start iterations
-    vstart = vt* exp( -1./kt0*(P-Pref) );
+    vstart = vt* exp( -1./kt0*(P-Pref1) );
 
     // calculate volumes at P and T and its increments
     vv = BM_Volume(P, vt, kt0, kp, kpp, vstart);
@@ -524,11 +527,11 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
     beta = - 1./vv*((vPplus-vPminus)/(2.*Pincr));
 
     // calculate vdP (P-T correction of G ->  dG)
-    dG = BM_IntVol(P, Pref, vt, vv, kt0, kp, kpp);
+    dG = BM_IntVol(P, Pref1, vt, vv, kt0, kp, kpp);
 
     // calculate d(vdP)/dT (dS)
-    dGTplus = BM_IntVol(P,Pref,vtTplus,vTplus,kt0Tplus,kp,kppTplus);
-    dGTminus = BM_IntVol(P,Pref,vtTminus,vTminus,kt0Tminus,kp,kppTminus);
+    dGTplus = BM_IntVol(P,Pref1,vtTplus,vTplus,kt0Tplus,kp,kppTplus);
+    dGTminus = BM_IntVol(P,Pref1,vtTminus,vTminus,kt0Tminus,kp,kppTminus);
     dS = (dGTplus-dGTminus)/(2.*Tincr);
 
     // calculate dH
@@ -806,7 +809,7 @@ void TDComp::omeg92( double g, double dgdP, double dgdT, double d2gdT2,
                     double *dwdT, double *d2wdT2 )
 {
     double reref, re, Z3, Z4;
-    if( ZZ == 0.0 )  // neutral aqueous species
+    if( approximatelyZero(ZZ) )  // neutral aqueous species
     {
         *W = wref;
         *dwdP = 0.0;
@@ -921,7 +924,7 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
     arf.C[0] = dc[q].HKFc[4];
     arf.C[1] = dc[q].HKFc[5];
     arf.wref = dc[q].HKFc[6];
-    arf.chg = (int)dc[q].Zz;
+    arf.chg = static_cast<int>(dc[q].Zz);
     if ( aSpc.isat )
         i=1;        // below Psat curve (vapour field)?
     else

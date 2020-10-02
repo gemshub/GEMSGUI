@@ -5,7 +5,6 @@
 // (Plotting system description)
 //
 // Copyright (C) 2013  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -23,9 +22,9 @@
 
 #include <math.h>
 #include <vector>
+#include <fstream>
 class QPointF;
 #include <QtGui/QColor>
-#include  "gstring.h"
 class GemDataStream;
 
 //const int maxPLOT = 20;
@@ -182,9 +181,9 @@ public:
         name[15] = '\0';
     }
 
-    gstring getName() const
+    std::string getName() const
     {
-        return gstring(name, 0, 15);
+        return std::string(name, 0, 15);
     }
 
     int getIndex() const
@@ -201,8 +200,8 @@ public:
 
     void read(GemDataStream& stream);
     void write(GemDataStream& stream);
-    void read(fstream& stream);
-    void write(fstream& stream);
+    void read(std::fstream& stream);
+    void write(std::fstream& stream);
 };
 
 
@@ -242,7 +241,7 @@ public:
     { return dY1;   }
 
     /// Return string with Ordinate name and line index
-    gstring getName( int ii);
+    std::string getName( int ii);
 
     // first index in lines list
     int getFirstLine() const

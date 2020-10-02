@@ -56,10 +56,10 @@
 namespace jsonui {
 
 /// The constructor
-GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::ChartData>& data,
+GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::ChartData>& data1,
                           const std::vector<std::shared_ptr<PlotModel>>& aplotModels,
                           const string& title ):
-        QDialog( pmodule->window() ), pModule(pmodule), gr_data(data), plotModels(aplotModels),
+        QDialog( pmodule->window() ), pModule(pmodule), gr_data(data1), plotModels(aplotModels),
         ui(new Ui::GraphDialogData),
         isFragment(false)
 {
@@ -122,11 +122,11 @@ GraphDialog::~GraphDialog()
     delete ui;
 }
 
-void GraphDialog::resetGraphDialog(const std::shared_ptr<ChartData> &data,
+void GraphDialog::resetGraphDialog(const std::shared_ptr<ChartData> &data1,
                                    const std::vector<std::shared_ptr<PlotModel> > &aplotModels,
                                    const string &title)
 {
-  gr_data = data;
+  gr_data = data1;
   plotModels = aplotModels;
   UpdateAll(title.c_str() );
 }

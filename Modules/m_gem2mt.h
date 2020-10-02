@@ -32,7 +32,7 @@ class TRWArrays;
 
 #else
 // internal
-enum grr_constants { // gstring len for graph
+enum grr_constants { // std::string len for graph
     MAXAXISNAME = 9,
     MAXGSNAME = 70,
     MAXGRNAME = 16
@@ -356,7 +356,7 @@ class TGEM2MT
     IPNCalc rpn[2];      // IPN
     jsonui::GraphDialog *gd_gr = nullptr;
     TPlotLine* plot;
-    gstring title;           // changed titler to title
+    std::string title;           // changed titler to title
 #endif
 
   TNodeArrayGUI* na;       // pointer to nodearray class instance
@@ -478,7 +478,7 @@ public:
     void dyn_new( int i=0);
     void set_def( int i=0);
     bool check_input( const char *key, int level=1 );
-    gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
+    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
                               int keyType );
 
     void RecInput( const char *key );
@@ -495,8 +495,8 @@ public:
     //void CmHelp();
     const char* GetHtml();
 
-   void InsertChanges( TIArray<CompItem>& aIComp,
-          TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+   void InsertChanges( std::vector<CompItem>& aIComp,
+          std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
    void FreeNa();
 
 #else
@@ -527,7 +527,7 @@ public:
     bool userCancel;
     bool stepWise;
     bool calcFinished;
-    gstring Vmessage;
+    std::string Vmessage;
 
   class UserCancelException {};
    bool internalCalc();

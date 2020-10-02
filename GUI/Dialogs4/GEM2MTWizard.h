@@ -40,17 +40,17 @@ class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
 {
     Q_OBJECT
 
-    gstring calcScript;
-    gstring outScript;
+    string calcScript;
+    string outScript;
     EquatSetup *pageScript;
 
     QButtonGroup *GroupBox1;
 
     // for VTK window
     int cPage;
-    TIArray<pagesSetupData> stData;
-    TIArray<pagesSetupData> pgData;
-    TIArray<scriptSetupData>  scriptData;
+    std::vector<pagesSetupData> stData;
+    std::vector<pagesSetupData> pgData;
+    std::vector<scriptSetupData>  scriptData;
     QList<QListWidget *> pLists;
     TCIntArray pNdx;
 
@@ -93,14 +93,14 @@ public:
     void   getPdata( double Pai[4] );
     void   getTaudata( double Tau[3] );
 
-    gstring getCalcScript() const
-    { gstring res= pScript_t->toPlainText().toLatin1().data();
+    string getCalcScript() const
+    { string res= pScript_t->toPlainText().toStdString();
       return res;
     }
-    gstring getOutScript() const
+    string getOutScript() const
     { return pageScript->getScript(); }
 
-    TCStringArray getNames( gstring& xName, gstring& yName ) const
+    TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
     void getVTK( TCIntArray& vtk1, TCIntArray& vtk2  );

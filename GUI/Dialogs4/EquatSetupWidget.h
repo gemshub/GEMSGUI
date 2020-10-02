@@ -4,7 +4,6 @@
 // Declaration of EquatSetup class
 //
 // Copyright (C) 2010  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -23,7 +22,6 @@
 #include <QWidget>
 #include <QButtonGroup>
 #include "ui_EquatSetupWidget4.h"
-#include "array.h"
 #include "model_w.h"
 #include "service.h"
 
@@ -32,10 +30,10 @@
 
 struct equatSetupData
 {
-   gstring xName; // Abscissa name
-   gstring yName; // Ordinate name
-   gstring indexName; // Index name
-   gstring abscissaEquat; // Abscissa first object name
+   string xName; // Abscissa name
+   string yName; // Ordinate name
+   string indexName; // Index name
+   string abscissaEquat; // Abscissa first object name
 
    bool useSeveral; // More then one Abscissa is permitted
    TCStringArray abscissaLines;  // Abscissa object names (if more then one Abscissa)
@@ -48,8 +46,8 @@ struct equatSetupData
    equatSetupData( equatSetupData& d ):
      xName(d.xName), yName(d.yName), indexName(d.indexName), abscissaEquat(d.abscissaEquat), useSeveral(d.useSeveral)
    {
-       for( uint ii=0; ii<abscissaLines.GetCount(); ii++)
-           abscissaLines.Add( d.abscissaLines[ii] );
+       for( size_t ii=0; ii<abscissaLines.size(); ii++)
+           abscissaLines.push_back( d.abscissaLines[ii] );
    }
 };
 
@@ -62,24 +60,20 @@ struct scriptSetupData
    //double val;
    //char unit;
 
-   gstring objName;
-   gstring ndxName;
-   gstring lineText;
+   string objName;
+   string ndxName;
+   string lineText;
 
    scriptSetupData( int aWin, int aobj, const char * oName,
                    int aIdx, const char * ndName,
                    const char * alineText ):
            nWin(aWin), nObj(aobj), nIdx(aIdx),
            objName(oName), ndxName(ndName), lineText(alineText)
-   { ndxName.strip(); }
+   { strip( ndxName ); }
 
-   scriptSetupData( scriptSetupData& d ):
-           nWin(d.nWin), nObj(d.nObj), nIdx(d.nIdx),
-           objName(d.objName), ndxName(d.ndxName), lineText(d.lineText)
-   { }
 };
 
-void GetListsnRT( int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList );
+void GetListsnRT( int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList );
 
 
 class EquatSetup : public QWidget, public Ui_EquatWidgetForm
@@ -89,16 +83,16 @@ class EquatSetup : public QWidget, public Ui_EquatWidgetForm
    int cPage;
    int cnRT;
    equatSetupData eqData;
-   TIArray<pagesSetupData> stData;
-   TIArray<pagesSetupData> pgData;
-   TIArray<scriptSetupData>  scriptData;
+   std::vector<pagesSetupData> stData;
+   std::vector<pagesSetupData> pgData;
+   std::vector<scriptSetupData>  scriptData;
 
    QList<QListWidget *> pLists;
    bool useCalc;
 
    TCStringArray namLines;
-   gstring xNam;
-   gstring yNam;
+   string xNam;
+   string yNam;
 
 
    // internal functions
@@ -107,7 +101,7 @@ class EquatSetup : public QWidget, public Ui_EquatWidgetForm
    void tableDeleteRow( int row );
    void scriptUpdate( );
    void emptyScriptTable();
-   gstring getStringValue( int nO, int ndx, const char * andName );
+   string getStringValue( int nO, int ndx, const char * andName );
 
 protected slots:
     virtual void languageChange();
@@ -117,12 +111,12 @@ protected slots:
 public:
 
     EquatSetup( QWidget* parent, equatSetupData aEqData,
-       int nRT, TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList,
+       int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList,
        const char* script = nullptr, const char* aXname = nullptr, const char* aYname = nullptr  );
     virtual ~EquatSetup();
 
-   gstring getScript() const;
-   TCStringArray getNames( gstring& xName, gstring& yName ) const;
+   string getScript() const;
+   TCStringArray getNames( string& xName, string& yName ) const;
    void setNames(TCStringArray lst );
    void setXname( const char* name )
    {
@@ -133,16 +127,20 @@ public:
       yNam =name;
    }
 
-   size_t getScriptLinesNum() const
-   {  return   scriptData.GetCount(); }
+   int getScriptLinesNum() const
+   {
+       return   static_cast<int>(scriptData.size());
+   }
 
-   size_t getAbscissaNum() const
-   {  return   eqData.abscissaLines.GetCount()+1; }
+   int getAbscissaNum() const
+   {
+       return   static_cast<int>(eqData.abscissaLines.size()+1);
+   }
 
 public slots:
     // slot or function ????
     void resetPageList( int newRT,
-          TIArray<pagesSetupData>& wnData, TIArray<pagesSetupData>& scalarsList );
+          std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList );
     void slotPopupContextMenu(const QPoint &pos);
     void CmCalc();
     void CmAbscissa();

@@ -4,7 +4,6 @@
 // Implementation of ExcludeFillDialog class
 //
 // Copyright (C) 1996-2008   S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -33,7 +32,7 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
 {
    setWindowModality(Qt::WindowModal);
     
-	setWindowTitle( trUtf8( caption ) );
+    setWindowTitle( caption );
     // qt3to4 setSizeGripEnabled( TRUE );
 
     // set up labels
@@ -41,45 +40,45 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     QLabel*     label1;
     
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "C O N F L I C T   W A R N I N G !" ) );
+    label1->setText( "C O N F L I C T   W A R N I N G !"  );
     labelsBox->addWidget( label1 );
     
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "Mole amounts of some Independent Components (IC) \n"
+    label1->setText( "Mole amounts of some Independent Components (IC) \n"
                              "   are missing in the calculated bulk composition vector\n"
-                             "   (B_[i] < Pa_DB)!\n" ) );
+                             "   (B_[i] < Pa_DB)!\n" );
     labelsBox->addWidget( label1 );
     
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "P O S S I B L E   A C T I O N S :" ) );
+    label1->setText( "P O S S I B L E   A C T I O N S :"  );
     labelsBox->addWidget( label1 );
 
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "* EXCLUDE ALL these ICs together with DCs that\n"
-"    contain them and some Phases made of those DCs;" ) );
+    label1->setText( "* EXCLUDE ALL these ICs together with DCs that\n"
+"    contain them and some Phases made of those DCs;" );
     labelsBox->addWidget( label1 );
 
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "* RETAIN ALL missing ICs by inserting a default \n"
-"   mole amount (below) into bi_ vector cells;" ) );
+    label1->setText( "* RETAIN ALL missing ICs by inserting a default \n"
+"   mole amount (below) into bi_ vector cells;"  );
     labelsBox->addWidget( label1 );
 
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "* CHECK some boxes to keep these ICs in the\n"
+    label1->setText(  "* CHECK some boxes to keep these ICs in the\n"
 "   system by inserting a default mole amount into bi_;\n"
 "   unchecked ICs will be turned off together with all\n"
-"   DCs that contain them.\n" ) );
+"   DCs that contain them.\n" );
     labelsBox->addWidget( label1 );
 
     QHBoxLayout* editBox = new QHBoxLayout();
 
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "Default amount, mol (editable):" ) );
+    label1->setText( "Default amount, mol (editable):" );
     editBox->addWidget( label1 );
 
     LineEdit = new QLineEdit( this );
     LineEdit->setValidator( new QDoubleValidator( LineEdit ) );
-    // vstr buf(200);  sprintf( buf, "%g", fill_data ); LineEdit->setText( trUtf8( buf.p ) );
+    // vstr_buf(200);  sprintf( buf, "%g", fill_data ); LineEdit->setText( trUtf8( buf.p ) );
     QString str;
     LineEdit->setText( str.setNum( fill_data, 'g' ));
     editBox->addWidget( LineEdit );
@@ -89,17 +88,17 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     QVBoxLayout* buttonBox = new QVBoxLayout();
     
     pExcludeAll = new QPushButton( this );
-    pExcludeAll->setText( trUtf8( "&EXCLUDE ALL" ) );
+    pExcludeAll->setText(  "&EXCLUDE ALL");
     pExcludeAll->setAutoDefault( true );
     buttonBox->addWidget( pExcludeAll );
 
     pFillAll = new QPushButton( this );
-    pFillAll->setText( trUtf8( "&RETAIN ALL" ) );
+    pFillAll->setText( "&RETAIN ALL" );
     pFillAll->setAutoDefault( true );
     buttonBox->addWidget( pFillAll );
 
     buttonOk = new QPushButton( this );
-    buttonOk->setText( trUtf8( "CHECK/&Ok" ) );
+    buttonOk->setText( "CHECK/&Ok"  );
     buttonOk->setAutoDefault( true );
     buttonOk->setDefault( true );
     buttonBox->addWidget( buttonOk );
@@ -107,19 +106,19 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     buttonBox->addStretch();
 
     buttonHelp = new QPushButton( this );
-    buttonHelp->setText( trUtf8( "&Learn more..." ) );
+    buttonHelp->setText( "&Learn more..." );
     buttonHelp->setAutoDefault( true );
     buttonBox->addWidget( buttonHelp );
 
     buttonCancel = new QPushButton( this );
-    buttonCancel->setText( trUtf8( "&Cancel" ) );
+    buttonCancel->setText( "&Cancel" );
     buttonCancel->setAutoDefault( true );
     buttonBox->addWidget( buttonCancel );
 
 /// Missin IC
     QVBoxLayout* scrollBox = new QVBoxLayout();
     label1 = new QLabel( this );
-    label1->setText( trUtf8( "Missing ICs" ) );
+    label1->setText( "Missing ICs" );
     scrollBox->addWidget( label1 );
 
     QGroupBox* grpBox = new QGroupBox( this );
@@ -132,10 +131,10 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     plotLayout->setMargin(11);
     
     QCheckBox* CheckBox1;
-    for(size_t ii=0; ii<aICkeys.GetCount(); ii++ )
+    for(size_t ii=0; ii<aICkeys.size(); ii++ )
     {
       CheckBox1 = new QCheckBox( grpBox );
-      CheckBox1->setText( trUtf8( aICkeys[ii].c_str() ) );
+      CheckBox1->setText( aICkeys[ii].c_str() );
       GroupBox1->addButton( CheckBox1, ii );
       plotLayout->addWidget( CheckBox1 );
     }
@@ -185,13 +184,13 @@ ExcludeFillDialog::CmExcludeAll()
      GroupBox1->button(ii)->setChecked( false );
 }
 
-TOArray<bool>
+std::vector<bool>
 ExcludeFillDialog::getFillType()
 {
- TOArray<bool> arr;
+ std::vector<bool> arr;
 
  for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
-     arr.Add( GroupBox1->button(ii)->isChecked() );
+     arr.push_back( GroupBox1->button(ii)->isChecked() );
 
  return arr;
 }

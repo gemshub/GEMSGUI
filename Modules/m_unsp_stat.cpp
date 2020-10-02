@@ -29,7 +29,7 @@ void TUnSpace::unsp_eqkey()
     // calculate EqStat record (Thermodynamic&Equlibria)
     pmu->pTPD = 0;
     //     pmu->pNP = 0;
-    vstr buf(40);
+    char buf[40];
 
     sprintf(buf, "%.4d", usp->q);
     memset(usp->timep, 0, 5 );
@@ -41,10 +41,10 @@ void TUnSpace::unsp_eqkey()
  //  rt[RT_SYSEQ].MakeKey( RT_UNSPACE,  usp->stkey, RT_UNSPACE, 0, RT_UNSPACE,1,
  //       RT_UNSPACE, 2, K_IMM, usp->timep, K_IMM, usp->Bnamep,
  //       K_IMM, usp->Pp, K_IMM, usp->TCp, RT_UNSPACE, 7, K_END );
-   rt[RT_SYSEQ].MakeKey( RT_UNSPACE,  usp->stkey, RT_UNSPACE, 0, RT_UNSPACE,1,
+   rt[RT_SYSEQ]->MakeKey( RT_UNSPACE,  usp->stkey, RT_UNSPACE, 0, RT_UNSPACE,1,
         RT_UNSPACE, 2, RT_UNSPACE, 3, K_IMM, usp->Bnamep,
         K_IMM, usp->Pp, K_IMM, usp->TCp, K_IMM, usp->timep, K_END );
-   rt[RT_SYSEQ].SetKey(usp->stkey);
+   rt[RT_SYSEQ]->SetKey(usp->stkey);
 
 // calc current SyStat 16/02/2007
      pmu->TCc = usp->Tc;
@@ -262,7 +262,7 @@ void TUnSpace::UNIFORM0( int reg )
   for(i=0;i<k;i++)
   {   j=rand();
       R=ceil(24359738368.*j/RAND_MAX + 10000000000.);
-      if(!fmod(R,2))
+      if( approximatelyZero(fmod(R,2)) )
          R=R+1.;
        if(!reg)
          usp->OVR[i+1]=R;
@@ -316,7 +316,7 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
       m2=0;
       if(B==MC)
         for(i=1;i<=D-1;i++)
-          if(OVB[i]==OVB[D])
+          if( approximatelyEqual( OVB[i], OVB[D]) )
           { OVB[D]=j;
             m2=1;
             break;
@@ -487,7 +487,8 @@ void  TUnSpace::NexT(int J )
      {
        xx = usp->P[0]- usp->IntP[0] + 2*usp->IntP[0]*R;
        usp->Pc = xx;
-       if(usp->Pc<0.) usp->Pc = 1e-5;
+       if(usp->Pc<0.)
+           usp->Pc = 1e-5f;
 //#ifdef IPMGEMPLUGIN
 //         dBR->P = usp->Pc;
 //#endif
@@ -633,13 +634,13 @@ int TUnSpace::filters( int k )
     Filtr=1;
   if( usp->Pa_f_fug == S_ON )
      for(i=0; i<usp->Ls; i++)
-      if(  usp->fug_up[i] &&
+      if( noZero( usp->fug_up[i]) &&
           ( usp->vFug[k*usp->Ls+i] < usp->fug_lo[i] ||
             usp->vFug[k*usp->Ls+i] > usp->fug_up[i] ))
        Filtr=1;
   if( usp->Pa_f_mol == S_ON )
     for(i=0; i<usp->N;i++)
-       if( usp->m_t_up[i] &&
+       if( noZero(usp->m_t_up[i]) &&
         ( usp->vMol[k*usp->N+i] < usp->m_t_lo[i] ||
           usp->vMol[k*usp->N+i] > usp->m_t_up[i]))
        Filtr=1;
@@ -1117,7 +1118,7 @@ void TUnSpace::Un_criteria()
             if( usp->PvPOM == S_ON )
             {
              usp->pmr = usp->POM + t*usp->Q ;
-             aObj[ o_unpmr].SetPtr( usp->pmr );
+             aObj[ o_unpmr]->SetPtr( usp->pmr );
              usp->POM[ t*usp->Q+q ] = R;
             }
             if( usp->PvPOR == S_ON )
@@ -1273,8 +1274,8 @@ void TUnSpace::setPhaseAssemb( )
        for( j=i+1; j<usp->Q; j++)
        { fl=0;
          for( k=0; k<usp->Fi; k++ )
-          if( (usp->vYF[i*usp->Fi+k] && !usp->vYF[j*usp->Fi+k])  ||
-             (!usp->vYF[i*usp->Fi+k] && usp->vYF[j*usp->Fi+k])   )
+          if( (  noZero(usp->vYF[i*usp->Fi+k]) && approximatelyZero(usp->vYF[j*usp->Fi+k]) )  ||
+              ( approximatelyZero(usp->vYF[i*usp->Fi+k]) && noZero(usp->vYF[j*usp->Fi+k]) )   )
           { fl=1; break; }
          if(!fl)
            usp->sv[j] = usp->nPhA;
@@ -1299,7 +1300,7 @@ for(np=0; np<usp->nPhA; np++ )
      {
        if( !usp->PhNum[np] )
        {
-         gstring lst = "";
+         std::string lst = "";
          numPH=0;
 
          for( k=0; k<usp->Fi; k++ )
@@ -1308,13 +1309,13 @@ for(np=0; np<usp->nPhA; np++ )
             usp->PhAndx[np*usp->N+numPH ] = (short)k;
             numPH++;
 //#ifndef IPMGEMPLUGIN
-            lst += gstring(
+            lst += std::string(
                TRMults::sm->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
 //#else
-//            lst += gstring(
+//            lst += std::string(
 //               mup_SF[k]+MAXSYMB, 0, MAXPHNAME);
 //#endif
-            lst.strip();
+            strip( lst );
             lst += ";";
           }
          sprintf( usp->PhAID[np], "GR%2d", np );

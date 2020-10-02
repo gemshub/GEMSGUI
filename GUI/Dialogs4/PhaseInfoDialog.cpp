@@ -4,7 +4,6 @@
 // Implementation of PhaseInfoDialog class
 //
 // Copyright (C) 2013  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -29,11 +28,11 @@
 #include "service.h"
 
 PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
-                                 int xph, gstring phname, vector<int>& xdclist, vector<gstring>& dcnames, int xdc):
+                                 int xph, string phname, vector<int>& xdclist, vector<string>& dcnames, int xdc):
         QDialog( parent )
 {
     int row = 0;
-    gstring str;
+    string str;
 
     setupUi(this);
     setWindowTitle("Phase Information Widget");
@@ -51,7 +50,7 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
         labelDC->setText( QString("             %1  Depended Component(s):").arg(xdclist.size()));
     }
 
-    systKey->setText(tr (rt[RT_SYSEQ].PackKey()));
+    systKey->setText(tr (rt[RT_SYSEQ]->PackKey()));
 
     // define tablePh
     tablePh->setEditTriggers( QAbstractItemView::NoEditTriggers );
@@ -75,14 +74,14 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
 
     tablePh->setItem(0, 0, new QTableWidgetItem(tr("%1").arg( xph)) );
     str = phname;
-    tablePh->setItem(0, 1, new QTableWidgetItem(tr("%1").arg( gstring(str, 0, MAXSYMB).c_str() )) );
+    tablePh->setItem(0, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
     str = str.substr(MAXSYMB);
     if( system)
-     { tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( gstring(str, 0, 8).c_str() )) );
+     { tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, 8).c_str() )) );
         str = str.substr(8);
-       tablePh->setItem(0, 3, new QTableWidgetItem(tr("%1").arg( gstring(str, 0, MAXPHNAME).c_str() )) );
+       tablePh->setItem(0, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXPHNAME).c_str() )) );
        str = str.substr(MAXPHNAME);
-       tablePh->setItem(0, 4, new QTableWidgetItem(tr("%1").arg( gstring(str, 0, MAXSYMB).c_str() )) );
+       tablePh->setItem(0, 4, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
        str = str.substr(MAXSYMB);
        tablePh->setItem(0, 5, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
     } else
@@ -109,7 +108,7 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
     }
     tableDC->setRowCount(xdclist.size());
 
-    for( int ii=0; ii<xdclist.size(); ii++ )
+    for( size_t ii=0; ii<xdclist.size(); ii++ )
     {
         tableDC->setRowHeight(ii, htF(ftString, 0)+6);
         tableDC->setItem(ii, 0, new QTableWidgetItem(tr("%1").arg( xdclist[ii])) );
@@ -117,13 +116,14 @@ PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
         if( xdclist[ii] == xdc )
          row = ii;
         if( system)
-        {  str = dcnames[ii];
+        {
+           str = dcnames[ii];
            // std::cout << str.c_str() << xdc << endl;
-           tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( gstring(str, 0, MAXSYMB).c_str() )) );
+           tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
            str = str.substr(MAXSYMB);
-           tableDC->setItem(ii, 2, new QTableWidgetItem(tr("%1").arg( gstring(str, 0, MAXDRGROUP).c_str() )) );
+           tableDC->setItem(ii, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDRGROUP).c_str() )) );
            str = str.substr(MAXDRGROUP);
-           tableDC->setItem(ii, 3, new QTableWidgetItem(tr("%1").arg( gstring(str, 0, MAXDCNAME).c_str() )) );
+           tableDC->setItem(ii, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDCNAME).c_str() )) );
            str = str.substr(MAXDCNAME);
            tableDC->setItem(ii, 4, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
         } else

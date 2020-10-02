@@ -4,7 +4,6 @@
 // Implementation of GemsMainWindow class
 //
 // Copyright (C) 2020  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (http://qt.nokia.com)
@@ -71,7 +70,7 @@ void TVisorImp::error_IPN( std::string err_mess )
 
 void TVisorImp::setCalcClient()
 {
-    qRegisterMetaType<gstring>("gstring");
+    qRegisterMetaType<std::string>("std::string");
     try{
 
         cout << "setCalcClient" << endl;
@@ -135,8 +134,8 @@ void TVisorImp::startGEMServer()
             GEMS3_proc->setWorkingDirectory(serverPath);
             QStringList argumentos;
             //argumentos << "-P" << filehex  << "-Q" << "-V" <<  "after_programming";
-            GEMS3_proc->start(app);
-            cout << app.toLatin1().data() << endl;
+            GEMS3_proc->start(app,argumentos);
+            cout << app.toStdString() << endl;
 
             if(!GEMS3_proc->waitForStarted(-1))
             {
@@ -224,12 +223,12 @@ void TVisorImp::Update(bool force)
     if( NewSystemDialog::pDia )
         NewSystemDialog::pDia->Update();
 
-    for( uint ii=0; ii<aMod.GetCount(); ii++ )
-        aMod[ii].Update(force);
+    for( size_t ii=0; ii<aMod.size(); ii++ )
+        aMod[ii]->Update(force);
 
     int nrt = nRTofActiveSubWindow();
     if( nrt>=0 )
-       pLine->setText(tr(rt[nrt].PackKey()));
+       pLine->setText(tr(rt[nrt]->PackKey()));
 }
 
 

@@ -53,8 +53,8 @@ public:
     static TMulti* sm;
 
     // This is used only in GEM-Selektor
-    TIArray<IPNCalc> qEp;
-    TIArray<IPNCalc> qEd;
+    std::vector<std::shared_ptr<IPNCalc>> qEp;
+    std::vector<std::shared_ptr<IPNCalc>> qEd;
 
     TMulti( int nrt ):
         TMultiBase(nullptr),TSubModule( nrt )
@@ -183,8 +183,8 @@ private:
     // new TKinMet stuff
     void KinMetModLoad();
     bool CompressPhaseIpxt( int kPH );
-    gstring PressSolMod( int nP );
-    char *ExtractEG( char *Etext, int jp, int *EGlen, int Nes );
+    string PressSolMod( int nP );
+    char *ExtractEG( char *Etext, int jp, size_t& EGlen, int Nes );
     int find_icnum( char *name, int LNmode );
     int find_dcnum( char *name, int jb, int je, int LNmode, char *stmt  );
     int find_phnum( char *name, int LNmode );

@@ -4,7 +4,6 @@
 // Implementation of TDBFile, TDBKey and TDBKeyList classes
 //
 // Copyright (C) 1996-2001 S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -22,9 +21,12 @@
 #include <cstdarg>
 
 #include "GEMS3K/gdatastream.h"
+#include "v_mod.h"
 #include "v_dbm.h"
 #include "v_dbfile.h"
 #include "v_object.h"
+
+int rlencomp( const void *ie_1, const void *ie_2 );
 
 // Reading header of DB file
 void
@@ -325,8 +327,7 @@ TDBFile::Close()
 }
 
 // compare deleted blocs
-int
-rlencomp( const void *ie_1, const void *ie_2 )
+int rlencomp( const void *ie_1, const void *ie_2 )
 {
     const DBentry* ie1 = static_cast<const DBentry *>(ie_1);
     const DBentry* ie2 = static_cast<const DBentry *>(ie_2);
@@ -595,22 +596,22 @@ TDBKey::SetKey( const char *key )
 {
     ErrorIf( key==nullptr,"TDBKey", "No key buf.");
 
-    vstr sp(fullLen+rkFlds+1);
+    //vvstr sp(fullLen+rkFlds+1);
+    std::string sp;
     if( strncmp( key, ALLKEY, fullLen )==0 )
     {
-        gstring st;
+        string st;
         for(int i=0; i<rkFlds; i++)
             st += "*:";
-        strncpy( sp, st.c_str(), fullLen);
+        sp = std::string( st, 0, fullLen);
     }
     else
-        strncpy( sp, key, fullLen);
+        sp = std::string( key, 0, fullLen);
 
-    sp[fullLen] = '\0';
-    if( strchr( sp, ':' ))  // key in packed form
-        unpack( sp );
+    if( strchr( sp.c_str(), ':' ))  // key in packed form
+        unpack( sp.c_str() );
     else
-        pack( sp );
+        pack( sp.c_str() );
  }
 
 // Change i-th field of DBkey to key
@@ -671,10 +672,10 @@ TDBKey::unpack( char *key )
 
 // unpack key
 void
-TDBKey::unpack( char *key )
+TDBKey::unpack( const char *key )
 {
     int i;
-    unsigned char ln;
+    size_t ln;
     char *sp, *sp1;
 
     check();
@@ -702,7 +703,7 @@ TDBKey::unpack( char *key )
                 }
             }
             else  ln = ( sp1- sp);
-            ln = min( ln, rkLen[i] );
+            ln = min<size_t>( ln, rkLen[i] );
             strncpy( uKey+rkInd[i], sp, ln );
             if( *(sp+ln) == ':' )
                   ln++;
@@ -712,7 +713,7 @@ TDBKey::unpack( char *key )
             sp += ln;
         }
         uKey[fullLen]= '\0';
-        strncpy( key, uKey, fullLen );
+        //// strncpy( key, uKey, fullLen );
     }
 }
 
@@ -755,7 +756,7 @@ TDBKey::pack( char *key )
 
 // pack key
 void
-TDBKey::pack( char *key )
+TDBKey::pack( const char *key )
 {
     uint i;
     int len, ln;
@@ -786,7 +787,7 @@ TDBKey::pack( char *key )
                 pKey[len-1]=':';
             }
         }
-        strncpy( key, pKey, fullLen );
+       //// strncpy( key, pKey, fullLen );
     }
 }
 
@@ -820,20 +821,21 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
         case K_ANY:  // field  "*"
             strcat( pkey, S_ANY );
             break;
-        case K_IMM:  // field in gstring
+        case K_IMM:  // field in string
             imf = va_arg( Marker, char * );
             strncat( pkey, imf, min( strlen(imf), static_cast<size_t>(rkflen) ));
             break;
         case K_ACT:  // get field from  PRIE request
             rts = nRTwrk;
+            [[fallthrough]];
         default:     // get field from enathe chain key
             nkf = va_arg( Marker, uint );
-            if( !*rt[rts].FldKey( nkf ))
+            if( !*rt[rts]->FldKey( nkf ))
                 strcat( pkey, S_ANY );
             else
             {
-                gstring str=  gstring( rt[rts].FldKey( nkf ), 0,
-                                       min( rt[rts].FldLen(nkf), rkflen ));
+                string str=  string( rt[rts]->FldKey( nkf ), 0,
+                                       min( rt[rts]->FldLen(nkf), rkflen ));
                 StripLine( str );
                 strncat( pkey, str.c_str(), rkflen );
             }
@@ -903,8 +905,8 @@ TDBKeyList::initnew()
     for(uint j=0; j<KeyNumFlds(); j++)
         memset( ndx[j], 0, FldLen(j)*nBuf*sizeof(char) );
     memset( re, 0, nBuf*sizeof(RecEntry) );
-    aKey.Clear();
-    anR.Clear();
+    aKey.clear();
+    anR.clear();
 }
 
 // delete the keys of records file nF
@@ -1046,13 +1048,13 @@ TDBKeyList::PutKey( uint i)
 
 //Put key i record to kbuf in unpack form.
 void
-TDBKeyList::RecKey(uint i, gstring& kbuf )
+TDBKeyList::RecKey(uint i, string& kbuf )
 {
     uint j;
     check_i(i);
     kbuf = "";
     for( j=0; j<KeyNumFlds(); j++)
-        kbuf += gstring( RecKeyFld(i,j), 0, FldLen(j) );
+        kbuf += string( RecKeyFld(i,j), 0, FldLen(j) );
 }
 
 // write the keys of records to ndx file
@@ -1076,8 +1078,8 @@ void
 TDBKeyList::GetKeyList_i(uint nF, int nRec, GemDataStream& f)
 {
     RecEntry re_;
-
-    vstr key(KeyLen()+1);
+    //vvstr key(KeyLen()+1);
+    char key[MAXRKEYLEN+10];
     memset( key, 0, KeyLen()+1);
     for( int i=0; i< nRec; i++ )
     {
@@ -1132,10 +1134,10 @@ NEXTKF:
 void
 TDBKeyList::arec_add( uint ni )
 {
-    gstring s;
+    string s;
     RecKey( ni, s);
-    aKey.Add( s );
-    anR.Add( ni );
+    aKey.push_back( s );
+    anR.push_back( ni );
 }
 
 //get key list for a wildcard search
@@ -1156,14 +1158,14 @@ TDBKeyList::xlist( const char *pattern )
         AllRecs = false;
     else
         AllRecs = true;
-    aKey.Clear();
-    anR.Clear();
+    aKey.clear();
+    anR.clear();
     if( OneRec )
     {
        auto i = findx( pattern );
         if( i >= 0 )
             arec_add( i );
-        return aKey.GetCount();
+        return aKey.size();
     }
     for(uint ii=0; ii<RecCount(); ii++ )
     {
@@ -1172,7 +1174,7 @@ TDBKeyList::xlist( const char *pattern )
                 continue;
         arec_add(ii);
     }
-    return aKey.GetCount();
+    return aKey.size();
 }
 
 //--------------------- End of v_dbm1.cpp ---------------------------

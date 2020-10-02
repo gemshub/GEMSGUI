@@ -4,7 +4,6 @@
 // Implementation of GemsMainWindow class
 //
 // Copyright (C) 2011  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -264,7 +263,7 @@ TVisorImp::TVisorImp(int c, char** v):
         {
            ui->action_calcMode->setChecked(true);
            // load last system
-           if( rt[RT_SYSEQ].Find( pVisor->lastSystemKey.c_str()) >= 0 )
+           if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 )
            CmShow( pVisor->lastSystemKey.c_str() );
            //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
         }
@@ -321,35 +320,34 @@ void TVisorImp::showEvent ( QShowEvent * event )
 
 //------------------------------------------------------------------------------------
 // Define list of Module keys using filter
-void TVisorImp::defineModuleKeysList( int nRT_ )
+void TVisorImp::defineModuleKeysList( size_t nRT )
 {
-  size_t  jj, kk, ln;
-  int ii, colsz;
-  gstring keyfld;
+  size_t  kk, ln;
+  int jj, ii, colsz;
+  string keyfld;
   QTableWidgetItem *item, *curItem=nullptr;
   settedCureentKeyIntotbKeys = false;
 
-  if( currentNrt != nRT_ || nRT_ <0 )
+  if( currentNrt != static_cast<int>(nRT) )
     return;
 
-  size_t nRT = static_cast<size_t>(nRT_);
-  gstring oldKey = rt[nRT].UnpackKey();
-  pFilterKey->setText( dynamic_cast<TCModule*>(&aMod[nRT])->getFilter());
+  string oldKey = rt[nRT]->UnpackKey();
+  pFilterKey->setText( dynamic_cast<TCModule*>(aMod[nRT].get())->getFilter());
 
   // define tbKeys
   tbKeys->clear();
   tbKeys->setSortingEnabled ( false );
-  tbKeys->setColumnCount( rt[nRT].KeyNumFlds());
+  tbKeys->setColumnCount( rt[nRT]->KeyNumFlds());
 
 
   // get list or record keys
-  gstring keyFilter = pFilterKey->text().toLatin1().data();
+  string keyFilter = pFilterKey->text().toStdString();
   TCIntArray temp, colSizes;
   TCStringArray keyList;
-  int nKeys = rt[nRT].GetKeyList( keyFilter.c_str(), keyList, temp);
+  int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList, temp);
 
-  for(jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
-   colSizes.Add( 0/*rt[nRT].FldLen(jj)*/ );
+  for(jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
+   colSizes.push_back( 0/*rt[nRT]->FldLen(jj)*/ );
 
   // define key list
   tbKeys->setRowCount(nKeys);
@@ -357,11 +355,11 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
   for( ii=0; ii<nKeys; ii++ )
   {
       tbKeys->setRowHeight(ii, htF(ftString, 0)+2);
-      for(jj=0, kk=0; jj<rt[nRT].KeyNumFlds(); jj++)
+      for(jj=0, kk=0; jj<rt[nRT]->KeyNumFlds(); jj++)
       {
 
-          ln = rt[nRT].FldLen(jj);
-          keyfld = gstring(keyList[ii], kk, ln);
+          ln = rt[nRT]->FldLen(jj);
+          keyfld = string(keyList[ii], kk, ln);
           StripLine(keyfld);
           colsz = keyfld.length()+1;
           if( colsz > colSizes[jj])
@@ -376,11 +374,11 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
       }
 
   }
-  for( jj=0; jj<rt[nRT].KeyNumFlds(); jj++)
+  for( jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
   {
       tbKeys->setColumnWidth(jj, wdF( ftString, colSizes[jj], eNo ) );
       item = new QTableWidgetItem(tr("%1").arg( jj+1));
-      item->setToolTip( dynamic_cast<TCModule*>(&aMod[nRT])->GetFldHelp(jj));
+      item->setToolTip( dynamic_cast<TCModule*>(aMod[nRT].get())->GetFldHelp(jj));
       tbKeys->setHorizontalHeaderItem( jj, item );
   }
 
@@ -391,7 +389,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
     tbKeys->scrollToItem( curItem, QAbstractItemView::PositionAtCenter );
   }
 
-  if( pVisor->ProfileMode == true && (nRT == RT_SYSEQ || nRT == RT_PROCES
+  if( pVisor->ProfileMode && (nRT == RT_SYSEQ || nRT == RT_PROCES
     || nRT == RT_UNSPACE  || nRT > RT_GTDEMO ) )
   {
      tbKeys->hideColumn(0);
@@ -403,7 +401,7 @@ void TVisorImp::defineModuleKeysList( int nRT_ )
      tbKeys->showColumn(1);
   }
 
-  rt[nRT].SetKey(oldKey.c_str());
+  rt[nRT]->SetKey(oldKey.c_str());
 }
 
 // Change list of Modules for General or Project mode
@@ -411,7 +409,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 {
 
     if( nRT >=0 )
-      pLine->setText(tr(rt[nRT].PackKey()));
+      pLine->setText(tr(rt[nRT]->PackKey()));
     else
         pLine->setText(tr(""));
 
@@ -428,7 +426,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 
     }
     else
-    {    //pFilterKey->setText(((TCModule*)&aMod[nRT])->getFilter());
+    {    //pFilterKey->setText(dynamic_cast<TCModule *>(aMod[nRT].get())->getFilter());
          defineModuleKeysList( nRT );
     }
    // currentNrt = nRT;
@@ -437,14 +435,14 @@ void TVisorImp::changeModulesKeys( int nRT )
 
 void TVisorImp::openRecordKey( int row, int    )
 {
-    gstring currentKey ="";
+    string currentKey ="";
 
     if( row >= tbKeys->rowCount())
         return;
 
     for(int jj=0; jj<tbKeys->columnCount(); jj++)
     {
-        currentKey += tbKeys->item( row, jj)->text().toLatin1().data();
+        currentKey += tbKeys->item( row, jj)->text().toStdString();
         StripLine(currentKey);
         currentKey +=":";
      }
@@ -457,8 +455,8 @@ void TVisorImp::changeKeyList()
 {
     if( currentNrt >=0 )
     {
-        gstring filter = pFilterKey->text().toLatin1().data();
-        dynamic_cast<TCModule*>(&aMod[currentNrt])->setFilter(filter.c_str());
+        string filter = pFilterKey->text().toStdString();
+        dynamic_cast<TCModule*>(aMod[currentNrt].get())->setFilter(filter.c_str());
         defineModuleKeysList( currentNrt );
     }
 }
@@ -479,7 +477,7 @@ void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, b
            openMdiChild( NewSystemDialog::pDia, true );
 
            // Create, if no syseq is present in the project
-           if( rt[RT_SYSEQ].RecCount() <= 0)
+           if( rt[RT_SYSEQ]->RecCount() <= 0)
                NewSystemDialog::pDia->CmCreate();
 
            //mdiArea->addSubWindow(NewSystemDialog::pDia);
@@ -496,7 +494,7 @@ void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, b
        }
        else
        {
-         TCModuleImp* p = aMod[irt].pImp;
+         TCModuleImp* p = aMod[irt]->pImp;
          if( !p )
          {   p = new TCModuleImp(irt, page, viewmode);
             //--p->Raise(page);
@@ -810,7 +808,7 @@ void TVisorImp::OpenHelp(const char* file, const char* item1, int page )
        {
           QString res = item1;
           res += QString("_%1").arg(page);
-          gstring txt = res.toLatin1().data();
+          string txt = res.toStdString();
           HelpWindow::pDia->showDocumentation( file, txt.c_str() );
         }
         else
@@ -826,7 +824,7 @@ void TVisorImp::CmHelp2()
 {
   TCModuleImp *actwin = activeMdiChild();
   if( actwin )
-    aMod[actwin->rtNum()].CmHelp2();
+    aMod[actwin->rtNum()]->CmHelp2();
   else
   {
      NewSystemDialog *wn = activeNewSystem();

@@ -4,7 +4,6 @@
 // Declaration of KeyFilter class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -18,13 +17,11 @@
 //-------------------------------------------------------------------
 #ifndef KeyFilter_h_
 #define KeyFilter_h_
-
-#include <qdialog.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-
-#include "gstring.h"
-
+#include <memory>
+#include <QDialog>
+#include <QLineEdit>
+#include <QLabel>
+#include "v_user.h"
 
 //=============================================
 // KeyEdit dialog
@@ -34,7 +31,7 @@ class KeyFilter:   public QDialog
 {
     Q_OBJECT
 
-    TIArray<QLineEdit> aEdit;
+    std::vector<std::shared_ptr<QLineEdit>> aEdit;
     QLineEdit *fullKey;
 
     size_t iRt;
@@ -49,13 +46,13 @@ protected slots:
     void setKeyLine();
 
 protected:
-    gstring SetKeyString();
+    string SetKeyString();
 
 public:
     KeyFilter(QWidget* win, size_t iRt, const char* keyFilter,
               const char* caption, bool allowTemplates=true );
 
-    gstring getFilter();
+    string getFilter();
 };
 
 #endif   // _KeyFilter_h_

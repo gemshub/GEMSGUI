@@ -4,7 +4,6 @@
 // Implementation of PhaseWizard class
 //
 // Copyright (C) 2005-2008  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -85,7 +84,7 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[37], int size[30],
 {
     //setFinishEnabled( WizardPage3, true);
     setupUi(this);
-    gstring str1= "GEM-Selektor Phase Setup:  ";
+    string str1= "GEM-Selektor Phase Setup:  ";
             str1 += pkey;
             setWindowTitle( str1.c_str() );
 
@@ -262,7 +261,7 @@ double   PhaseWizard::getR2()
  double r=lineEdit_surfArea->text().toDouble();
 
  if( SCM_code->currentText()[0] != QChar('N') )
-      if( r == 0. ) r = 1.;
+      if( approximatelyZero(r) ) r = 1.;
   return r;
 }
 

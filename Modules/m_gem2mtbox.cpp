@@ -83,6 +83,7 @@ inline void TGEM2MT::dMBfluxDir( long int q, long int i, double *dm, double fRat
        case NBC3source:  // 3: Cauchy source ( constant flux )
                  if( sign < 0 )
                       break;
+                 [[fallthrough]];
        case NBC1source:  //1: Dirichlet source ( constant concentration )
        case NBC1sink:    // -1: Dirichlet sink
        case NBC2source:  // 2: Neumann source ( constant gradient )
@@ -534,7 +535,7 @@ TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double s
   if( Ni >= 0)
   {
       char buf[300];
-      //gstring Vmessage;
+      //std::string Vmessage;
       sprintf(buf, "   step %ld; time %lg; dtime %lg  ", mtp->ct, mtp->cTau, mtp->dTau );
       Vmessage = "Simulating Reactive Transport in a Box-Flux chain: ";
       Vmessage += buf;
@@ -601,9 +602,9 @@ void TGEM2MT::BoxFluxTransportStart()
     mtp->qf = 0;
 
 #ifndef IPMGEMPLUGIN
-    mtp->gfc = (double *)aObj[ o_mtgfc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
-    mtp->yfb = (double *)aObj[ o_mtyfb].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
-    mtp->tt  = (double (*)[9])aObj[ o_mttt].Alloc(  mtp->nC*mtp->Nf, 9, D_);
+    mtp->gfc = (double *)aObj[ o_mtgfc]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
+    mtp->yfb = (double *)aObj[ o_mtyfb]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
+    mtp->tt  = (double (*)[9])aObj[ o_mttt]->Alloc(  mtp->nC*mtp->Nf, 9, D_);
 #else
     if( mtp->gfc )
             delete[] mtp->gfc;
@@ -686,7 +687,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 {
 
   try {
-    //gstring Vmessage;
+    //std::string Vmessage;
     long int p, i, kk, x_aq=-1, x_gf=-1;//, naqgf=1, lastp=0;
     bool iRet = false;
     clock_t outp_time = (clock_t)0;
@@ -778,14 +779,15 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
       Vmessage += buf;
       Vmessage += ". Please, wait (may take time)...";
 
-    if( mtp->PsSmode != S_OFF  )
-    {
-      STEP_POINT2();
-    }
-     else
-      iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                           mtp->ct, mtp->ntM, UseGraphMonitoring );
-
+      if( mtp->PsSmode != S_OFF  )
+      {
+          STEP_POINT2();
+      }
+      else
+      {
+          iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
+                                  mtp->ct, mtp->ntM, UseGraphMonitoring );
+      }
 
       if( iRet )
              return iRet;// Error("GEM2MT SeqReac model", "Cancel by the user");
@@ -958,7 +960,7 @@ bool TGEM2MT::CalcBoxFluxModel( char /*mode*/ )
 //--------------------------------------------------------------------
 // Integration process
 
-const long int NMAX = 800;
+//const long int NMAX = 800;
 const long int KM = 8;
 const double UROUND = 1.73e-18;
 const double FAC1 = 2.e-2;

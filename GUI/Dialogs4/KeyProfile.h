@@ -4,7 +4,6 @@
 // Declaration of KeyProfile class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -23,7 +22,6 @@
 #include <QDialog>
 
 #include "ui_KeyProfile4.h"
-#include "gstring.h"
 
 class KeyProfile : public QDialog, public Ui::KeyProfileData
 {
@@ -44,12 +42,12 @@ public:
     KeyProfile(QWidget* win, uint irt, const char* caption = nullptr);
     virtual ~KeyProfile();
 
-    gstring getKey() const;
+    std::string getKey() const;
     bool   getAqGasState() const;
     bool   getFilesState() const;
     bool   getRemakeState() const;
     int   getMakeDump() const;
-    gstring getTemplateKey() const;
+    std::string getTemplateKey() const;
 
     bool   getGEMSExport() const;
     bool   getGEMSExportMode() const;

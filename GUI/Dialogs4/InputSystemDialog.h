@@ -4,7 +4,6 @@
 // Declaration of InputSystemDialog class
 //
 // Copyright (C) 2010  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -76,9 +75,9 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
 
    Q_OBJECT
 
-   TIArray<windowSetupData> wnData;
-   TIArray<tableSetupData>  tbData;
-   TIArray<pagesSetupData> stData;
+   std::vector<windowSetupData> wnData;
+   std::vector<tableSetupData>  tbData;
+   std::vector<pagesSetupData> stData;
    uint curPage;
 
    QList<QListWidget *> pLists;
@@ -89,7 +88,7 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
    //int tableChangeRow( int row, tableSetupData& d);
    int tableInsertRow( tableSetupData& d);
    int tableInsertRow( int nO, int ndx, const char * andName);
-   int tableDeleteRow( int row );
+   size_t tableDeleteRow( int row );
    void tableShowRow( int row );
    // working with static list
    int staticFindRow( int nO, int ndx);
@@ -99,13 +98,13 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
 public:
 
     InputSystemDialog( QWidget* parent, const char* pkey,
-       TIArray<windowSetupData>& wnData, TIArray<tableSetupData>& tbData,
-       TIArray<pagesSetupData>& scalarsList );
+       const std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
+       const std::vector<pagesSetupData>& scalarsList );
     virtual ~InputSystemDialog();
 
 
 
-   void getTable( TIArray<tableSetupData>& tab ) const;
+   void getTable( std::vector<tableSetupData>& tab ) const;
    void deleteRows( int f_from, int r_to );
 
    int getObjTable( size_t row ) const

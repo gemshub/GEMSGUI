@@ -30,9 +30,9 @@ TSData::TSData( uint nrt ):
 {
     refs = 0;
     title = abstr = 0;
-    aFldKeysHelp.Add("Script name or author's name for data source");
-    aFldKeysHelp.Add("Script number or year of publication { 1990 }");
-    aFldKeysHelp.Add("Script module name { DComp ReacDC } or data source type");
+    aFldKeysHelp.push_back("Script name or author's name for data source");
+    aFldKeysHelp.push_back("Script number or year of publication { 1990 }");
+    aFldKeysHelp.push_back("Script module name { DComp ReacDC } or data source type");
     //startKeyEdit = 0;
     set_def();
     start_title = " Scripts or Bibliographic References ";
@@ -41,15 +41,15 @@ TSData::TSData( uint nrt ):
 // link values to objects
 void TSData::ods_link( int )
 {
-    aObj[o_sdnref].SetPtr( &nREf );
-    aObj[o_sdauth].SetPtr( auth );
-    aObj[o_sdyear].SetPtr( year );
-    aObj[o_sdclass].SetPtr( type );
-    aObj[o_sdvoly].SetPtr( volyr );
-    aObj[o_sdpage].SetPtr( pages );
-    aObj[o_sdauthr].SetPtr( authors );
-    aObj[o_sdedit].SetPtr( editn );
-    aObj[o_sdnote].SetPtr( notes );
+    aObj[o_sdnref]->SetPtr( &nREf );
+    aObj[o_sdauth]->SetPtr( auth );
+    aObj[o_sdyear]->SetPtr( year );
+    aObj[o_sdclass]->SetPtr( type );
+    aObj[o_sdvoly]->SetPtr( volyr );
+    aObj[o_sdpage]->SetPtr( pages );
+    aObj[o_sdauthr]->SetPtr( authors );
+    aObj[o_sdedit]->SetPtr( editn );
+    aObj[o_sdnote]->SetPtr( notes );
 }
 
 // set default data
@@ -73,30 +73,30 @@ void TSData::set_def(int)
 void TSData::dyn_new(int)
 {
     if( title==0 )
-        title = (char *)aObj[o_sdtitle].Alloc( 1, 128, S_ );
+        title = (char *)aObj[o_sdtitle]->Alloc( 1, 128, S_ );
     if( abstr==0 )
-        abstr = (char *)aObj[o_sdabstr].Alloc( 1, 128, S_ );
+        abstr = (char *)aObj[o_sdabstr]->Alloc( 1, 128, S_ );
     if( nREf != 0 )
-        refs = (char *)aObj[o_sdrefs].Alloc( nREf, 1, 32 );
+        refs = (char *)aObj[o_sdrefs]->Alloc( nREf, 1, 32 );
     else  if( refs )
-        refs = (char *)aObj[o_sdrefs].Free();
+        refs = (char *)aObj[o_sdrefs]->Free();
 }
 
 // set dynamic objects ptr to values
 void TSData::dyn_set(int)
 {
-    title = (char *)aObj[o_sdtitle].GetPtr();
-    abstr = (char *)aObj[o_sdabstr].GetPtr();
-    refs = (char *)aObj[o_sdrefs].GetPtr();
-    nREf = (short)aObj[o_sdrefs].GetN();
+    title = (char *)aObj[o_sdtitle]->GetPtr();
+    abstr = (char *)aObj[o_sdabstr]->GetPtr();
+    refs = (char *)aObj[o_sdrefs]->GetPtr();
+    nREf = (short)aObj[o_sdrefs]->GetN();
 }
 
 // free dynamic memory in objects and values
 void TSData::dyn_kill(int)
 {
-    title = (char *)aObj[o_sdtitle].Free();
-    abstr = (char *)aObj[o_sdabstr].Free();
-    refs = (char *)aObj[o_sdrefs].Free();
+    title = (char *)aObj[o_sdtitle]->Free();
+    abstr = (char *)aObj[o_sdabstr]->Free();
+    refs = (char *)aObj[o_sdrefs]->Free();
 }
 
 //Rebuild record structure before calc
@@ -130,7 +130,7 @@ const char* TSData::GetHtml()
 
 void TSData::RecordPrint( const char* /*key*/ )
 {
-   gstring text_fmt = "line %s \"SDref record: \", %s rkey, %11s date, %6s time\n"
+   std::string text_fmt = "line %s \"SDref record: \", %s rkey, %11s date, %6s time\n"
                       "line %s \"\"\n"
                       "line %s \"Authors: \", %s #SDauth\n"
                       "line %s \"Title: \", %s #SDtitl\n"
@@ -145,7 +145,7 @@ void TSData::RecordPrint( const char* /*key*/ )
 }
 
 
-void TSData::CopyRecords( const char *prfName, TCStringArray& SDlist )
+void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
 {
     int Rnum;
     uint ii;
@@ -157,29 +157,29 @@ void TSData::CopyRecords( const char *prfName, TCStringArray& SDlist )
     TCIntArray anR;
     TCStringArray aScripts;
     db->GetKeyList( "?script*:*:*:", aScripts, anR );
-    for(ii=0; ii<aScripts.GetCount(); ii++ )
-       SDlist.AddUnique(aScripts[ii]);
+    for(ii=0; ii<aScripts.size(); ii++ )
+       SDlist.insert(aScripts[ii]);
 
     // rename records from list
-    for(ii=0; ii<SDlist.GetCount(); ii++ )
+    for( const auto& sdkey: SDlist )
     {
-      Rnum = db->Find( SDlist[ii].c_str() );
+      Rnum = db->Find( sdkey.c_str() );
       if( Rnum < 0 )
         continue;
-      RecInput( SDlist[ii].c_str() );
+      RecInput( sdkey.c_str() );
 
       // changing record key
-      gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+      std::string str= std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
 
       // we can change/add only one last (7) symbol
       // first (6) critical for scripts
       ChangeforTempl( str, "*", "*_", db->FldLen( 2 ));
       str += ":";
-      gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-      str1.strip();
+      std::string str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+      strip( str1 );
       str = str1 + ":" + str;
-      str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-      str1.strip();
+      str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+      strip( str1 );
       str = str1 + ":" + str;
 
       //Point SaveRecord
@@ -191,7 +191,7 @@ void TSData::CopyRecords( const char *prfName, TCStringArray& SDlist )
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 
@@ -205,23 +205,23 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
     if( ! MessageToSave() )
         return;
 
-    vstr key( db->KeyLen(), key_);
     TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key);
-    gstring fld2 = gstring(dbKey.FldKey(2), 0, dbKey.FldLen(2));
-    fld2.strip();
+    dbKey.SetKey(key_);
+    std::string fld2 = std::string(dbKey.FldKey(2), 0, dbKey.FldLen(2));
+    strip( fld2 );
     fld2 += "*";
     cout << fld2.c_str() << endl;
     dbKey.SetFldKey(2,fld2.c_str());
-    gstring str_key( dbKey.UnpackKey(), 0, db->KeyLen());
+    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
-    gstring msg;
+    std::string msg;
 
     switch( iRet )
     {
     case MANY_:    // Get Key list
         db->GetKeyList(  str_key.c_str(), aSDlist, anRDc );
         db->Get(anRDc[0]);
+        [[fallthrough]];
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();
@@ -234,7 +234,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += gstring( key, 0, db->KeyLen() );
+            msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             Error( GetName(), msg.c_str() );
         }
@@ -244,7 +244,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
-        msg += gstring( key, 0, db->KeyLen() );
+        msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }

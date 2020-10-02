@@ -110,7 +110,7 @@ std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
                                             bool putNodT1, bool addMui )
 {
     // Get name of filenames structure
-    std::string path = std::string( rt[RT_SYSEQ].FldKey(2), 0, rt[RT_SYSEQ].FldLen(2));;
+    std::string path = std::string( rt[RT_SYSEQ]->FldKey(2), 0, rt[RT_SYSEQ]->FldLen(2));;
     strip(path);
     if( bin_mode )
         path += "-bin.lst";
@@ -236,14 +236,14 @@ bool TNodeArrayGUI::set_resv_msg( std::vector<string> &&recv_message )
 }
 
 
-void TNodeArrayGUI::pVisor_Message(bool toclose, long int ndx, long int size )
+void TNodeArrayGUI::pVisor_Message(bool toclose, long int ndx, long int size1 )
 {
     if( toclose )
         pVisor->CloseMessage();
     else
         pVisor->Message( nullptr, "GEM2MT node array",
                          "Reading from disk a set of node array files to resume an interrupted RMT task. "
-                         "Please, wait...", ndx, size );
+                         "Please, wait...", ndx, size1 );
 }
 
 

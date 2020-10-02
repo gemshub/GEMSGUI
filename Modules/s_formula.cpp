@@ -71,7 +71,7 @@ Formuan::~Formuan()
 { }
 
 //get <formula>  ::= <fterm> | <fterm><charge>
-void Formuan::scanFormula( TIArray<ICTERM>& tt )
+void Formuan::scanFormula( std::vector<ICTERM>& tt )
 {
   scanCharge();
 
@@ -91,13 +91,13 @@ void Formuan::scanFormula( TIArray<ICTERM>& tt )
 }
 
 //add component to sorted list
-void Formuan::icadd(  TIArray<ICTERM>& itt_, ICTERM it )
+void Formuan::icadd(  std::vector<ICTERM>& itt_, ICTERM it )
 {
     int iRet;
-    uint ii=0;
+    size_t ii=0;
 
     // test for setting element before
-    while( ii < itt_.GetCount() )
+    while( ii < itt_.size() )
     {
         iRet = ictcomp( itt_, ii, it.ick, it.val );
         if( iRet == 0 )// ic find
@@ -109,18 +109,18 @@ void Formuan::icadd(  TIArray<ICTERM>& itt_, ICTERM it )
             break;
         ii++;
     }
-    itt_.AddAt( new ICTERM( it ), ii );
+    itt_.insert( itt_.begin()+ii, ICTERM( it ) );
 }
 
 //add component to sorted list
-void Formuan::icadd(  TIArray<ICTERM>& itt_, const char *icn,
+void Formuan::icadd(  std::vector<ICTERM>& itt_, const char *icn,
                       const char *iso, int val, double csto )
 {
     ICTERM term( icn, iso, val, csto );
     icadd( itt_, term );
 }
 
-int Formuan::ictcomp( TIArray<ICTERM>& itt_, int ii, string& ick, int val )
+int Formuan::ictcomp( std::vector<ICTERM>& itt_, size_t ii, string& ick, int val )
 {
     //int iRet = memcmp( itt_[ii].ick.c_str(), ick, MAXICNAME+MAXSYMB );
     //if( iRet ) return( iRet );
@@ -166,7 +166,7 @@ void Formuan::scanCharge( )
 
 
 // read charge
-void Formuan::charge(TIArray<ICTERM>& tt)
+void Formuan::charge(std::vector<ICTERM>& tt)
 {
  double cha = 1.0;
  int sign = 1;
@@ -177,7 +177,7 @@ void Formuan::charge(TIArray<ICTERM>& tt)
  switch( chan[0] )
  {
     case CHARGE_NUL:    break;
-    case CHARGE_MINUS:  sign = -1;
+    case CHARGE_MINUS:  sign = -1; [[fallthrough]];
     case CHARGE_PLUS:
                         chan = chan.substr(1);
                         getReal( cha, chan );
@@ -189,17 +189,17 @@ void Formuan::charge(TIArray<ICTERM>& tt)
 
 //get <fterm>  ::= <icterm> | <icterm><icterm>
 //    <icterm> ::= <elem>   | <elem>< elem_st_coef>
-void Formuan::scanFterm( TIArray<ICTERM>& itt_, string& startPos, char endSimb )
+void Formuan::scanFterm( std::vector<ICTERM>& itt_, string& startPos, char endSimb )
 {
   //char *cur_ = startPos;
-  uint ii;
+  size_t ii;
   double st_coef;
-  TIArray<ICTERM> elt_;
+  std::vector<ICTERM> elt_;
 
   while( startPos[0] != endSimb && !startPos.empty())  // list of <elem>< elem_st_coef>
   {
       // get element
-      elt_.Clear();
+      elt_.clear();
 
       scanElem( elt_, startPos );
 
@@ -208,12 +208,12 @@ void Formuan::scanFterm( TIArray<ICTERM>& itt_, string& startPos, char endSimb )
         // get elem_st_coef
         st_coef = 1.;
         getReal( st_coef, startPos );
-        for(uint ii=0; ii<elt_.GetCount(); ii++)
-          elt_[ii].stoc *= st_coef;
+        for(size_t ii1=0; ii1<elt_.size(); ii1++)
+          elt_[ii1].stoc *= st_coef;
       }
 
       // added elements list to top level elements
-      for( ii=0; ii<elt_.GetCount(); ii++ )
+      for( ii=0; ii<elt_.size(); ii++ )
         icadd(  itt_, elt_[ii] );
 
       xblanc( startPos );
@@ -226,7 +226,7 @@ void Formuan::scanFterm( TIArray<ICTERM>& itt_, string& startPos, char endSimb )
 //                   <isotope_mass><icsymb><valence> |
 //                   <isotope_mass><icsymb> |
 //                   <icsymb><valence> | <icsymb>
-void Formuan::scanElem( TIArray<ICTERM>& itt_, string& startPos )
+void Formuan::scanElem( std::vector<ICTERM>& itt_, string& startPos )
 {
   //char *cur = startPos;
 
@@ -258,6 +258,7 @@ void Formuan::scanElem( TIArray<ICTERM>& itt_, string& startPos )
                       {   startPos = startPos.substr(2);
                           break;
                       } // else goto default - other <icsymb>
+                    [[fallthrough]];
     default: // <isotope_mass><icsymb><valence>
         {
           string isotop = string(ISOTOPE_N);
@@ -370,13 +371,13 @@ void Formuan::scanICsymb( string& icName, string& cur)
 // <fterm>  ::= <site_term> : | <fterm> <site_term>:
 // <site_term> ::= <moiety>   | <moiety><moiety>
 // <moiety>    ::= {<elem>}   | {<elem>} <elem_st_coef> | Va
-int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
+int Formuan::scanMoiety( std::vector<MOITERM>& moit_ )
 {
   string cur_ = form_str;
   size_t endmoi;
   string moiName;
   double nj;          // moiety-site occupancy.
-  moit_.Clear();
+  moit_.clear();
 
   nSites = 0;
   while(  !cur_.empty() )  // list of {<elem>}< elem_st_coef>
@@ -397,7 +398,7 @@ int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
                       cur_ = cur_.substr(endmoi+1);
                       nj = 1.;
                       getReal( nj, cur_ );
-                      moit_.Add( new MOITERM(moiName.c_str(), nSites, nj ));
+                      moit_.push_back( MOITERM(moiName.c_str(), nSites, nj ));
                       }
                      break;
         case 'V':  if( cur_[1] == 'a' ) // Va vacancy
@@ -405,9 +406,10 @@ int Formuan::scanMoiety( TIArray<MOITERM>& moit_ )
                       cur_ = cur_.substr(2); //Va
                       nj = 1.;
                       getReal( nj, cur_ );
-                      moit_.Add( new MOITERM("Va", nSites, nj ));
+                      moit_.push_back( MOITERM("Va", nSites, nj ));
                       break;
                    }
+                  [[fallthrough]];
                   // else other symbol
         default:   cur_ = cur_.substr(1);
                     break;
@@ -434,9 +436,9 @@ TFormula::~TFormula()
 
 void TFormula::fo_clear()
 {
-    aCn.Clear();
-    aSC.Clear();
-    aVal.Clear();
+    aCn.clear();
+    aSC.clear();
+    aVal.clear();
     aZ = 0.;
 }
 
@@ -447,14 +449,14 @@ void TFormula::Reset()
 }
 
 // unpack list of terms to data and calculate charge
-void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
+void TFormula::fo_unpak( std::vector<ICTERM>& itt_ )
 {
     char ICbuf[MAXICNAME+MAXSYMB+2];
     string specSim = string(CHARGE_TYPE) + string(ISOTOPE_N) + "v";
 
     fo_clear();
 
-    for(uint i=0; i<itt_.GetCount(); i++ )
+    for(size_t i=0; i<itt_.size(); i++ )
     {
         memset( ICbuf, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICbuf, itt_[i].ick.c_str(), min(itt_[i].ick.length(), (size_t)MAXICNAME));
@@ -465,9 +467,9 @@ void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
             ICbuf[MAXICNAME] = '*';
         ICbuf[MAXICNAME+MAXSYMB]=0;
 
-        aCn.Add( ICbuf );
-        aSC.Add( itt_[i].stoc );
-        aVal.Add( itt_[i].val  );
+        aCn.push_back( ICbuf );
+        aSC.push_back( itt_[i].stoc );
+        aVal.push_back( itt_[i].val  );
 
         if( itt_[i].val != SHORT_EMPTY/*I_EMPTY*/ && itt_[i].ick_iso[0] != 'z' )
             aZ += itt_[i].stoc * itt_[i].val;
@@ -476,7 +478,7 @@ void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
 
 const char* EQDEL_CHARS   ="$&,=<>";
 
-int TFormula::BuildMoiety( const char * StrForm, TIArray<MOITERM>& moit_ )
+int TFormula::BuildMoiety( const char * StrForm, std::vector<MOITERM>& moit_ )
 {
     int nSites = 0;
     Formuan aFa( StrForm );
@@ -494,11 +496,11 @@ int TFormula::BuildMoiety( const char * StrForm, TIArray<MOITERM>& moit_ )
 // Set new formula and analyze it , calculate charge, get moiety
 void TFormula::SetFormula( const char * StrForm )
 {
-    int len, ti;
+    size_t len, ti;
 
     fo_clear();
 
-    aFormula = gstring(StrForm);
+    aFormula = std::string(StrForm);
     if( aFormula.empty() )
         return;
 
@@ -507,8 +509,8 @@ void TFormula::SetFormula( const char * StrForm )
     len = ( len < ti )? len: ti;
     ErrorIf( !len, "TFormula", "E32FPrun: Null length of the formula string");
 
-    gstring fbuf = gstring( StrForm, 0, len );
-    TIArray<ICTERM> itt_;
+    std::string fbuf = std::string( StrForm, 0, len );
+    std::vector<ICTERM> itt_;
 
     Formuan aFa( fbuf.c_str() );
 
@@ -561,9 +563,9 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
 {
     uint i;
     int jj=-1;
-    vstr ICS(MAXICNAME+MAXSYMB+10);
+    char ICS[MAXICNAME+MAXSYMB+10];
 
-    for( i=0; i<aCn.GetCount(); i++ )
+    for( i=0; i<aCn.size(); i++ )
     {
         memset( ICS, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICS, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -580,10 +582,10 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
         }
         if( jj==-1 )
         {
-            gstring msg = "IComp: ";
-            msg += gstring(ICS.p, 0, MAXICNAME+MAXSYMB );
+            std::string msg = "IComp: ";
+            msg += std::string(ICS, 0, MAXICNAME+MAXSYMB );
             msg += "\n in formula in DComp/ReacDC record: \n";
-            msg += gstring( key, 0, DC_RKLEN);
+            msg += std::string( key, 0, DC_RKLEN);
 
             Error( "E37FPrun: Invalid symbol ", msg.c_str() );
         }
@@ -594,15 +596,15 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
 // Calculate charge, molar mass, elemental entropy, atomic numbers
 // from chemical formulae
 // returns number of elements (ICs) used in the formula
-int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
+size_t TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
 {
     time_t icrtim;
     TIComp* aIC = TIComp::pm;
-    vstr ICs(MAXICNAME+MAXSYMB+3);
+    char ICs[MAXICNAME+MAXSYMB+3];
     double Sc, Zf=0.0;
 
     Z =  mW =  eS = 0.0;
-    for(uint i=0; i<aCn.GetCount(); i++ ) // TERMS
+    for(size_t i=0; i<aCn.size(); i++ ) // TERMS
     {
         memset( ICs, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICs, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -623,7 +625,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
     }
     if( fabs( Zf ) > 1e-10 && fabs(Z) > 1e-10 )
         Z -= Zf;
-    return aCn.GetCount();
+    return aCn.size();
 }
 
 
@@ -631,15 +633,15 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
 // calculate charge, molar mass, elemental entropy, atomic number, atoms per formula unit
 // from chemical formulae
 // returns number of elements (ICs) used in the formula
-int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
+size_t TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
 {
     time_t icrtim;
     TIComp* aIC = TIComp::pm;
-    vstr ICs(MAXICNAME+MAXSYMB+3);
+    char ICs[MAXICNAME+MAXSYMB+3];
     double Sc, Zf=0.0;
 
     Z = mW = eS = Nj = 0.0;
-    for(uint i=0; i<aCn.GetCount(); i++ ) // TERMS
+    for(uint i=0; i<aCn.size(); i++ ) // TERMS
     {
         memset( ICs, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICs, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -661,7 +663,7 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
     }
     if( fabs( Zf ) > 1e-10 && fabs(Z) > 1e-10 )
         Z -= Zf;
-    return aCn.GetCount();
+    return aCn.size();
 }
 
 
@@ -671,13 +673,13 @@ int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn, double &Nj )
 //
 void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
 {
-    uint i, ii;
+    size_t i, ii;
     int jj=-1;
-    vstr ICS(MAXICNAME+MAXSYMB+10);
+    char ICS[MAXICNAME+MAXSYMB+10];
     char *icsp = ICS;
 
     fillValue( Sml, 0., N);
-    for( i=0; i<aCn.GetCount(); i++ )
+    for( i=0; i<aCn.size(); i++ )
     {
         memset( ICS, ' ', MAXICNAME+MAXSYMB );
         strncpy( ICS, aCn[i].c_str(), MAXICNAME+MAXSYMB );
@@ -698,7 +700,7 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
         if( aVal[i] == SHORT_EMPTY && ICval )
             aVal[i] = ICval[jj];
     }
-    ii = aCn.GetCount();
+    ii = aCn.size();
     if( ii < 1 || !ICval )
         return;
     aZ = 0;    // calculate charge balance
@@ -707,32 +709,34 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
     for( i=0; i<ii; i++ )
         aZ += aVal[i] * aSC[i];
 
-    // Sveta
-    double tt = aSC[ii];
-    if( ii < aCn.GetCount() )
+    // Sveta 11/09/2020 Error 2
+    if( ii < aCn.size() )
+    {
+        double tt = aSC[ii];
         if( fabs( (aZ - tt) ) > 1e-6 )
         {
-            gstring str = " in the formula: ";
+            std::string str = " in the formula: ";
             str +=  aFormula;
             str += "\n calculated charge: ";
-            vstr   buf(40);
+            char   buf[40];
             sprintf( buf, "%lg != %lg", aZ, tt );
-            str += buf.p;
+            str += buf;
  aSC[ii] = aZ;  // KD 03.01.04  - temporary workaround (adsorption)
             vfMessage( 0,  "W34FPrun: Charge imbalance ", str.c_str() );
          }
+   }
 }
 
 // Get a formula with index nCk from the formula list Cfor (L is total number of formulae in the list)
-gstring TFormula::form_extr( int nCk, int L, char *Cfor )
+std::string TFormula::form_extr( int nCk, int L, char *Cfor )
 {
-    int i, len;
+    size_t  len;
     char  *Fbg;
 
     ErrorIf( nCk >= L || nCk < 0, "Formula", "E35FPrun: Error in the formula list!" );
     Fbg = Cfor;
     if( nCk )
-        for( i=0; i<nCk; i++ )
+        for(int i=0; i<nCk; i++ )
         {
             len = strcspn( Fbg, EQDEL_CHARS );
             ErrorIf( !len && nCk < L-1, "Formula", "E35FPrun: Error in the formula list" );
@@ -746,7 +750,7 @@ gstring TFormula::form_extr( int nCk, int L, char *Cfor )
 
     ErrorIf( !len, "Formula", "E36FPrun: Invalid formula length!" );
 
-    gstring rez( Fbg, 0, len );
+    std::string rez( Fbg, 0, len );
     return rez;
 }
 

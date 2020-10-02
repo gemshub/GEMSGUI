@@ -31,7 +31,7 @@ TGtDemo* TGtDemo::pm = nullptr;
 
 bool TGtDemo::check_RT( int nrt )
 {
-    return ( nrt >RT_ICOMP && nrt < aMod.GetCount());
+    return ( nrt >RT_ICOMP && nrt < static_cast<int>(aMod.size()));
 }
 ///
 
@@ -39,11 +39,11 @@ TGtDemo::TGtDemo( uint nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Top database chain type for data sampling { PR SY CO PH RE DC IC }");
-    aFldKeysHelp.Add("Name of this GtDemo data sampling task");
-    aFldKeysHelp.Add("Variant number of this GtDemo task");
-    aFldKeysHelp.Add("Record key comment to this GtDemo task");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Top database chain type for data sampling { PR SY CO PH RE DC IC }");
+    aFldKeysHelp.push_back("Name of this GtDemo data sampling task");
+    aFldKeysHelp.push_back("Variant number of this GtDemo task");
+    aFldKeysHelp.push_back("Record key comment to this GtDemo task");
     setKeyEditField(1);
     gdp=&gd[0];
     set_def();
@@ -51,21 +51,21 @@ TGtDemo::TGtDemo( uint nrt ):
     gd_gr = nullptr;
 }
 
-const gstring&
+const std::string&
 TGtDemo::GetString()
 {
-    titler = gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+    titler = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     titler += " : ";
     titler += TSubModule::GetString();
     return titler;
 }
 
 // get key of record
-gstring
+std::string
 TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
                           int keyType )
 {
-    gstring str;
+    std::string str;
 
     if( oldKey == nullptr )
     {
@@ -77,7 +77,7 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of Project
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         str = prfKey;
         str+= ":*:*:*:*:";
@@ -85,7 +85,7 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
     str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
     if(  str.empty() )
         return str;
-    rt[RT_GTDEMO].SetKey(str.c_str());
+    rt[RT_GTDEMO]->SetKey(str.c_str());
      if( keyType != KEY_TEMP )
          keyTest( str.c_str() );
     return str;
@@ -95,13 +95,13 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test TGtDemo key to calc mode
 void TGtDemo::keyTest( const char *key )
 {
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode  )
     { // test project key
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Wrong TGtDemo record key (another Modelling Project)!");
      }
 }
@@ -109,63 +109,63 @@ void TGtDemo::keyTest( const char *key )
 // link values to objects
 void TGtDemo::ods_link( int q)
 {
-    aObj[ o_gdps].SetPtr(   &gd[q].PtAEF );   /*a 16*/
-    aObj[ o_gdnlrk].SetPtr( &gd[q].Nlrk );   /*i 4*/
-    aObj[ o_gdnwcq].SetPtr( &gd[q].Nwc );    /*i 2*/
-    aObj[ o_gddimxy].SetPtr( gd[q].dimXY ); /*i 2*/
-    aObj[ o_gddimef].SetPtr( gd[q].dimEF );  /*i 2*/
-    aObj[ o_gdname].SetPtr(  gd[q].name );
-    aObj[ o_gdcom].SetPtr(   gd[q].comment );
-    aObj[ o_gdxnames].SetPtr(  gd[q].xNames );
-    aObj[ o_gdynames].SetPtr(  gd[q].yNames );
-    aObj[ o_gdaxis].SetPtr(   gd[q].axisType );   /* i 6 */
-    aObj[ o_gwwkb].SetPtr(   gd[q].wcrk );
-    aObj[ o_gdproc].SetPtr(   gd[q].prKey );
-    aObj[ o_gdsize].SetPtr(    gd[q].size[0] ); /*f 8*/
+    aObj[ o_gdps]->SetPtr(   &gd[q].PtAEF );   /*a 16*/
+    aObj[ o_gdnlrk]->SetPtr( &gd[q].Nlrk );   /*i 4*/
+    aObj[ o_gdnwcq]->SetPtr( &gd[q].Nwc );    /*i 2*/
+    aObj[ o_gddimxy]->SetPtr( gd[q].dimXY ); /*i 2*/
+    aObj[ o_gddimef]->SetPtr( gd[q].dimEF );  /*i 2*/
+    aObj[ o_gdname]->SetPtr(  gd[q].name );
+    aObj[ o_gdcom]->SetPtr(   gd[q].comment );
+    aObj[ o_gdxnames]->SetPtr(  gd[q].xNames );
+    aObj[ o_gdynames]->SetPtr(  gd[q].yNames );
+    aObj[ o_gdaxis]->SetPtr(   gd[q].axisType );   /* i 6 */
+    aObj[ o_gwwkb]->SetPtr(   gd[q].wcrk );
+    aObj[ o_gdproc]->SetPtr(   gd[q].prKey );
+    aObj[ o_gdsize]->SetPtr(    gd[q].size[0] ); /*f 8*/
     int dimPclnam = gd[q].dimXY[1];
     if(  gd[q].dimX > 1)
         dimPclnam +=  gd[q].dimX;
-    aObj[ o_gdlnam].SetPtr( gd[q].lNam0[0] );
-    aObj[ o_gdlnam].SetDim( 1, dimPclnam );
-    aObj[ o_gdlname].SetPtr( gd[q].lNamE[0] );
-    aObj[ o_gdlname].SetDim( 1, gd[q].dimEF[1] );
+    aObj[ o_gdlnam]->SetPtr( gd[q].lNam0[0] );
+    aObj[ o_gdlnam]->SetDim( 1, dimPclnam );
+    aObj[ o_gdlname]->SetPtr( gd[q].lNamE[0] );
+    aObj[ o_gdlname]->SetDim( 1, gd[q].dimEF[1] );
 
-    aObj[o_gdexpr].SetPtr( gd[q].expr );//aObj[o_gdexpr].SetDim(1,len(gd[q].expr));
-    aObj[o_gdexpre].SetPtr(gd[q].exprE);//aObj[o_gdexpre].SetDim(1,l(gd[q].exprE));
-    aObj[ o_gdrkey].SetPtr( gd[q].rkey );
-    aObj[ o_gdrkey].SetDim(  gd[q].Nlrk, 1 );
+    aObj[o_gdexpr]->SetPtr( gd[q].expr );//aObj[o_gdexpr]->SetDim(1,len(gd[q].expr));
+    aObj[o_gdexpre]->SetPtr(gd[q].exprE);//aObj[o_gdexpre]->SetDim(1,l(gd[q].exprE));
+    aObj[ o_gdrkey]->SetPtr( gd[q].rkey );
+    aObj[ o_gdrkey]->SetDim(  gd[q].Nlrk, 1 );
     if( gd[q].dimX <= 0)
         gd[q].dimX = 1;
-    aObj[o_gdx0].SetPtr( gd[q].x0 );
-    aObj[ o_gdx0].SetDim(gd[q].dimXY[0], gd[q].dimX );
-    aObj[o_gdy0].SetPtr( gd[q].y0 );
-    aObj[ o_gdy0].SetDim(gd[q].dimXY[0], gd[q].dimXY[1] );
-    aObj[ o_gdxe].SetPtr( gd[q].xE );
-    aObj[o_gdxe].SetDim( gd[q].dimEF[0],1 );
-    aObj[ o_gdye].SetPtr( gd[q].yE );
-    aObj[ o_gdye].SetDim(gd[q].dimEF[0], gd[q].dimEF[1] );
-    aObj[ o_gdwc].SetPtr( gd[q].wc );
-    aObj[ o_gdwc].SetDim( gd[q].Nwc, 1 );
-    aObj[ o_gdqp].SetPtr( gd[q].qp );
-    aObj[ o_gdqp].SetDim( gd[q].Nlrk,  gd[q].Nqp);
-    aObj[ o_gdplline].SetPtr( plot );
-    aObj[ o_gdplline].SetDim( gd[q].dimXY[1]+gd[q].dimEF[1],  sizeof(TPlotLine));
+    aObj[o_gdx0]->SetPtr( gd[q].x0 );
+    aObj[ o_gdx0]->SetDim(gd[q].dimXY[0], gd[q].dimX );
+    aObj[o_gdy0]->SetPtr( gd[q].y0 );
+    aObj[ o_gdy0]->SetDim(gd[q].dimXY[0], gd[q].dimXY[1] );
+    aObj[ o_gdxe]->SetPtr( gd[q].xE );
+    aObj[o_gdxe]->SetDim( gd[q].dimEF[0],1 );
+    aObj[ o_gdye]->SetPtr( gd[q].yE );
+    aObj[ o_gdye]->SetDim(gd[q].dimEF[0], gd[q].dimEF[1] );
+    aObj[ o_gdwc]->SetPtr( gd[q].wc );
+    aObj[ o_gdwc]->SetDim( gd[q].Nwc, 1 );
+    aObj[ o_gdqp]->SetPtr( gd[q].qp );
+    aObj[ o_gdqp]->SetDim( gd[q].Nlrk,  gd[q].Nqp);
+    aObj[ o_gdplline]->SetPtr( plot );
+    aObj[ o_gdplline]->SetDim( gd[q].dimXY[1]+gd[q].dimEF[1],  sizeof(TPlotLine));
 
-    aObj[ o_gwetext].SetPtr( gd[q].etext ); // aObj[ o_gwetext].SetDim(1, 0 );
-    aObj[ o_gwprtab].SetPtr( gd[q].prtab ); // aObj[ o_gwprtab].SetDim(1, 0);
-    aObj[ o_gwtprn].SetPtr(  gd[q].tprn  ); // aObj[ o_gwtprn].SetDim( 1,l( gd[q].tprn));
+    aObj[ o_gwetext]->SetPtr( gd[q].etext ); // aObj[ o_gwetext]->SetDim(1, 0 );
+    aObj[ o_gwprtab]->SetPtr( gd[q].prtab ); // aObj[ o_gwprtab]->SetDim(1, 0);
+    aObj[ o_gwtprn]->SetPtr(  gd[q].tprn  ); // aObj[ o_gwtprn]->SetDim( 1,l( gd[q].tprn));
 
-    aObj[ o_gwnext].SetPtr(  &gd[q].Next );
-    aObj[ o_gwjr].SetPtr(    &gd[q].jR );
-    aObj[ o_gwi0].SetPtr(    &gd[q].i0 );
-    aObj[ o_gwie].SetPtr(    &gd[q].iE );
-    aObj[ o_gwj0].SetPtr(    &gd[q].j0 );
-    aObj[ o_gwje].SetPtr(    &gd[q].jE );
-    aObj[ o_gwwkey].SetPtr(  gd[q].Wkb );
-    aObj[ o_gdsdref].SetPtr( gd[q].sdref);
-    aObj[ o_gdsdref].SetDim( gd[q].Nsd, 1 );
-    aObj[ o_gdsdval].SetPtr( gd[q].sdval);
-    aObj[ o_gdsdval].SetDim( gd[q].Nsd, 1 );
+    aObj[ o_gwnext]->SetPtr(  &gd[q].Next );
+    aObj[ o_gwjr]->SetPtr(    &gd[q].jR );
+    aObj[ o_gwi0]->SetPtr(    &gd[q].i0 );
+    aObj[ o_gwie]->SetPtr(    &gd[q].iE );
+    aObj[ o_gwj0]->SetPtr(    &gd[q].j0 );
+    aObj[ o_gwje]->SetPtr(    &gd[q].jE );
+    aObj[ o_gwwkey]->SetPtr(  gd[q].Wkb );
+    aObj[ o_gdsdref]->SetPtr( gd[q].sdref);
+    aObj[ o_gdsdref]->SetDim( gd[q].Nsd, 1 );
+    aObj[ o_gdsdval]->SetPtr( gd[q].sdval);
+    aObj[ o_gdsdval]->SetDim( gd[q].Nsd, 1 );
 
     gdp=&gd[q];
 }
@@ -177,58 +177,58 @@ void TGtDemo::dyn_set(int q)
     // memcpy( gdp->symb , rt[nRT].UnpackKey(), GD_RKLEN );
 
     // Change MAXGRNAME from 7 to 16
-    if(aObj[ o_gdlnam ].GetType() == 7 )
-        gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ].Alloc( 1,
+    if(aObj[ o_gdlnam ]->GetType() == 7 )
+        gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->Alloc( 1,
                      gdp->dimXY[1], MAXGRNAME));
     else
-        gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ].GetPtr());
+        gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->GetPtr());
 
-    if(gdp->PtAEF != S_OFF && aObj[ o_gdlname ].GetType() == 7 )
-        gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ].Alloc(1,
+    if(gdp->PtAEF != S_OFF && aObj[ o_gdlname ]->GetType() == 7 )
+        gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ]->Alloc(1,
                      gdp->dimEF[1], MAXGRNAME));
     else
-       gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ].GetPtr());
+       gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ]->GetPtr());
 
-    gdp->expr = static_cast<char *>(aObj[ o_gdexpr ].GetPtr());
-    gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ].GetPtr());
-    gdp->rkey  = static_cast<char *>(aObj[ o_gdrkey ].GetPtr());
-    gdp->x0    = static_cast<double *>(aObj[ o_gdx0 ].GetPtr());
-    gdp->dimX = aObj[ o_gdx0 ].GetM();
-    gdp->y0    = static_cast<double *>(aObj[ o_gdy0 ].GetPtr());
-    gdp->xE    = static_cast<double *>(aObj[ o_gdxe ].GetPtr());
-    gdp->yE    = static_cast<double *>(aObj[ o_gdye ].GetPtr());
-    gdp->wc    = static_cast<double *>(aObj[ o_gdwc ].GetPtr());
-    gdp->qp    = static_cast<double *>(aObj[ o_gdqp ].GetPtr());
-    gdp->etext = static_cast<char *>(aObj[ o_gwetext ].GetPtr());
-    gdp->prtab = static_cast<char *>(aObj[ o_gwprtab ].GetPtr());
-    gdp->tprn  = static_cast<char *>(aObj[ o_gwtprn ].GetPtr());
-    plot  = static_cast<TPlotLine *>(aObj[ o_gdplline ].GetPtr());
-    gdp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref ].GetPtr());
-    gdp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval ].GetPtr());
-    gdp->rtLen =  rt[ gdp->nRT ].KeyLen();
+    gdp->expr = static_cast<char *>(aObj[ o_gdexpr ]->GetPtr());
+    gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ]->GetPtr());
+    gdp->rkey  = static_cast<char *>(aObj[ o_gdrkey ]->GetPtr());
+    gdp->x0    = static_cast<double *>(aObj[ o_gdx0 ]->GetPtr());
+    gdp->dimX = aObj[ o_gdx0 ]->GetM();
+    gdp->y0    = static_cast<double *>(aObj[ o_gdy0 ]->GetPtr());
+    gdp->xE    = static_cast<double *>(aObj[ o_gdxe ]->GetPtr());
+    gdp->yE    = static_cast<double *>(aObj[ o_gdye ]->GetPtr());
+    gdp->wc    = static_cast<double *>(aObj[ o_gdwc ]->GetPtr());
+    gdp->qp    = static_cast<double *>(aObj[ o_gdqp ]->GetPtr());
+    gdp->etext = static_cast<char *>(aObj[ o_gwetext ]->GetPtr());
+    gdp->prtab = static_cast<char *>(aObj[ o_gwprtab ]->GetPtr());
+    gdp->tprn  = static_cast<char *>(aObj[ o_gwtprn ]->GetPtr());
+    plot  = static_cast<TPlotLine *>(aObj[ o_gdplline ]->GetPtr());
+    gdp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref ]->GetPtr());
+    gdp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval ]->GetPtr());
+    gdp->rtLen =  rt[ gdp->nRT ]->KeyLen();
 }
 
 // free dynamic memory in objects and values
 void TGtDemo::dyn_kill(int q)
 {
     ErrorIf( gdp!=&gd[q], GetName(), "E05GDrem: Attempt to access corrupted dynamic memory.");
-    gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ].Free());
-    gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ].Free());
-    gdp->expr = static_cast<char *>(aObj[ o_gdexpr ].Free());
-    gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ].Free());
-    gdp->rkey  = static_cast<char *>(aObj[ o_gdrkey ].Free());
-    gdp->x0    = static_cast<double *>(aObj[ o_gdx0 ].Free());
-    gdp->y0    = static_cast<double *>(aObj[ o_gdy0 ].Free());
-    gdp->xE    = static_cast<double *>(aObj[ o_gdxe ].Free());
-    gdp->yE    = static_cast<double *>(aObj[ o_gdye ].Free());
-    gdp->wc    = static_cast<double *>(aObj[ o_gdwc ].Free());
-    gdp->qp    = static_cast<double *>(aObj[ o_gdqp ].Free());
-    gdp->etext = static_cast<char *>(aObj[ o_gwetext ].Free());
-    gdp->prtab = static_cast<char *>(aObj[ o_gwprtab ].Free());
-    gdp->tprn  = static_cast<char *>(aObj[ o_gwtprn ].Free());
-    plot = static_cast<TPlotLine*>(aObj[ o_gdplline ].Free());
-    gdp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref ].Free());
-    gdp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval ].Free());
+    gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->Free());
+    gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ]->Free());
+    gdp->expr = static_cast<char *>(aObj[ o_gdexpr ]->Free());
+    gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ]->Free());
+    gdp->rkey  = static_cast<char *>(aObj[ o_gdrkey ]->Free());
+    gdp->x0    = static_cast<double *>(aObj[ o_gdx0 ]->Free());
+    gdp->y0    = static_cast<double *>(aObj[ o_gdy0 ]->Free());
+    gdp->xE    = static_cast<double *>(aObj[ o_gdxe ]->Free());
+    gdp->yE    = static_cast<double *>(aObj[ o_gdye ]->Free());
+    gdp->wc    = static_cast<double *>(aObj[ o_gdwc ]->Free());
+    gdp->qp    = static_cast<double *>(aObj[ o_gdqp ]->Free());
+    gdp->etext = static_cast<char *>(aObj[ o_gwetext ]->Free());
+    gdp->prtab = static_cast<char *>(aObj[ o_gwprtab ]->Free());
+    gdp->tprn  = static_cast<char *>(aObj[ o_gwtprn ]->Free());
+    plot = static_cast<TPlotLine*>(aObj[ o_gdplline ]->Free());
+    gdp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref ]->Free());
+    gdp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval ]->Free());
 
 }
 
@@ -240,52 +240,52 @@ void TGtDemo::dyn_new(int q)
     int dimPclnam = gdp->dimXY[1];
     if(  gdp->dimX > 1)
         dimPclnam +=  gdp->dimX;
-    gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ].Alloc( 1,
+    gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->Alloc( 1,
                  dimPclnam, MAXGRNAME));
-    gdp->expr = static_cast<char *>(aObj[ o_gdexpr ].Alloc(1, 2048, S_));
+    gdp->expr = static_cast<char *>(aObj[ o_gdexpr ]->Alloc(1, 2048, S_));
 
-    gdp->x0    = static_cast<double *>(aObj[ o_gdx0 ].Alloc(gdp->dimXY[0], gdp->dimX, D_));
-    gdp->y0    = static_cast<double *>(aObj[ o_gdy0 ].Alloc(gdp->dimXY[0], gdp->dimXY[1], D_));
+    gdp->x0    = static_cast<double *>(aObj[ o_gdx0 ]->Alloc(gdp->dimXY[0], gdp->dimX, D_));
+    gdp->y0    = static_cast<double *>(aObj[ o_gdy0 ]->Alloc(gdp->dimXY[0], gdp->dimXY[1], D_));
 
     if( gdp->PtAEF == S_OFF )
     {
-        gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ].Free());
-        gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ].Free());
-        gdp->xE    = static_cast<double *>(aObj[ o_gdxe ].Free());
-        gdp->yE    = static_cast<double *>(aObj[ o_gdye ].Free());
+        gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ]->Free());
+        gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ]->Free());
+        gdp->xE    = static_cast<double *>(aObj[ o_gdxe ]->Free());
+        gdp->yE    = static_cast<double *>(aObj[ o_gdye ]->Free());
         gdp->dimEF[1] = gdp->dimEF[0] = 0;
     }
     else
     {
-        gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ].Alloc(1,
+        gdp->lNamE = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlname ]->Alloc(1,
                      gdp->dimEF[1], MAXGRNAME));
-        gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ].Alloc(1, 2048, S_));
-        gdp->xE    = static_cast<double *>(aObj[ o_gdxe ].Alloc(gdp->dimEF[0], 1, D_));
-        gdp->yE    = static_cast<double *>(aObj[ o_gdye ].Alloc(gdp->dimEF[0],gdp->dimEF[1], D_));
+        gdp->exprE = static_cast<char *>(aObj[ o_gdexpre ]->Alloc(1, 2048, S_));
+        gdp->xE    = static_cast<double *>(aObj[ o_gdxe ]->Alloc(gdp->dimEF[0], 1, D_));
+        gdp->yE    = static_cast<double *>(aObj[ o_gdye ]->Alloc(gdp->dimEF[0],gdp->dimEF[1], D_));
     }
     if( gdp->Nwc > 0 )
-        gdp->wc    = static_cast<double *>(aObj[ o_gdwc ].Alloc(1, gdp->Nwc, D_));
-    else  gdp->wc    = static_cast<double *>(aObj[ o_gdwc ].Free());
+        gdp->wc    = static_cast<double *>(aObj[ o_gdwc ]->Alloc(1, gdp->Nwc, D_));
+    else  gdp->wc    = static_cast<double *>(aObj[ o_gdwc ]->Free());
 
     if( gdp->Nqp>0 && gdp->Nlrk>0 )
-        gdp->qp    = static_cast<double *>(aObj[ o_gdqp ].Alloc( gdp->Nlrk, gdp->Nqp, D_ ));
-    else    gdp->qp    = static_cast<double *>(aObj[ o_gdqp ].Free());
+        gdp->qp    = static_cast<double *>(aObj[ o_gdqp ]->Alloc( gdp->Nlrk, gdp->Nqp, D_ ));
+    else    gdp->qp    = static_cast<double *>(aObj[ o_gdqp ]->Free());
 
     if( gdp->Nsd > 0 )
     {
         gdp->sdref =
-            static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref].Alloc( gdp->Nsd, 1, V_SD_RKLEN ));
+            static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref]->Alloc( gdp->Nsd, 1, V_SD_RKLEN ));
         gdp->sdval =
-            static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval].Alloc( gdp->Nsd, 1, V_SD_VALEN ));
+            static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval]->Alloc( gdp->Nsd, 1, V_SD_VALEN ));
     }
     else
     {
-        gdp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref ].Free());
-        gdp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval ].Free());
+        gdp->sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_gdsdref ]->Free());
+        gdp->sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_gdsdval ]->Free());
     }
 
-    gdp->etext = static_cast<char *>(aObj[ o_gwetext ].Alloc(1, 2048, S_));
-    gdp->prtab = static_cast<char *>(aObj[ o_gwprtab ].Alloc(1, 2048, S_));
+    gdp->etext = static_cast<char *>(aObj[ o_gwetext ]->Alloc(1, 2048, S_));
+    gdp->prtab = static_cast<char *>(aObj[ o_gwprtab ]->Alloc(1, 2048, S_));
 
 }
 
@@ -338,50 +338,50 @@ TGtDemo::MakeQuery()
 //    pImp->MakeQuery();
     const char * p_key;
     TCStringArray namesLines;
-    gstring prkey = gstring( gdp->prKey, 0, MAXRKEYLEN);
+    std::string prkey = std::string( gdp->prKey, 0, MAXRKEYLEN);
     int size[8];
-    int nRT = RT_ICOMP;
-    gstring script;
+    int nRT1 = RT_ICOMP;
+    std::string script;
     if( gdp->expr )
      script = gdp->expr;
 
-    gstring xName = gdp->xNames;
-    gstring yName = gdp->yNames;
+    std::string xName = gdp->xNames;
+    std::string yName = gdp->yNames;
 
 
-    // nRT from flags
+    // nRT1 from flags
     if( gdp->PsTR != S_OFF )
-     nRT = RT_GEM2MT;
+     nRT1 = RT_GEM2MT;
     else
      if( gdp->PsUT != S_OFF )
-       nRT = RT_DUALTH;
+       nRT1 = RT_DUALTH;
      else
        if( gdp->PsPB != S_OFF )
-          nRT = RT_UNSPACE;
+          nRT1 = RT_UNSPACE;
        else
          if( gdp->PsPE != S_OFF )
-           nRT = RT_PROCES;
+           nRT1 = RT_PROCES;
          else
            if( gdp->PsST != S_OFF )
-              nRT = RT_SYSEQ;
+              nRT1 = RT_SYSEQ;
            else
              if( gdp->PsPH != S_OFF )
-                nRT = RT_PHASE;
+                nRT1 = RT_PHASE;
              else
                if( gdp->PsRP != S_OFF )
-                  nRT = RT_RTPARM;
+                  nRT1 = RT_RTPARM;
                else
                  if( gdp->PsRE != S_OFF )
-                   nRT = RT_REACDC;
+                   nRT1 = RT_REACDC;
                  else
                    if( gdp->PsBC != S_OFF )
-                      nRT = RT_COMPOS;
+                      nRT1 = RT_COMPOS;
                    else
                      if( gdp->PsDC != S_OFF )
-                        nRT = RT_DCOMP;
+                        nRT1 = RT_DCOMP;
 
     p_key  = db->PackKey();
-    size[0] = nRT;//gdp->nRT;
+    size[0] = nRT1;//gdp->nRT;
     size[1] = gdp->Nsd;
     size[2] = gdp->Nwc;
     size[3] = gdp->Nqp;
@@ -411,10 +411,10 @@ TGtDemo::MakeQuery()
 
 
     if( !gdp->expr )
-       gdp->expr = static_cast<char *>(aObj[ o_gdexpr ].Alloc(1, 2048, S_));
-    aObj[o_gdexpr].SetString( script.c_str(),0,0);
+       gdp->expr = static_cast<char *>(aObj[ o_gdexpr ]->Alloc(1, 2048, S_));
+    aObj[o_gdexpr]->SetString( script.c_str(),0,0);
 
-    if(namesLines.GetCount() > 0)
+    if(namesLines.size() > 0)
      {
         int dimPclnam = gdp->dimXY[1];
         int ndxy = 0;
@@ -422,9 +422,9 @@ TGtDemo::MakeQuery()
         {      dimPclnam +=  gdp->dimX;
                 ndxy =gdp->dimX;
         }
-        gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ].Alloc( 1,
+        gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->Alloc( 1,
                      dimPclnam, MAXGRNAME));
-        for(short ii=0; ii< min<short>( namesLines.GetCount(),gdp->dimXY[1]); ii++)
+        for(size_t ii=0; ii< min<size_t>( namesLines.size(),gdp->dimXY[1]); ii++)
         {
           strncpy( gdp->lNam0[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -500,10 +500,10 @@ void TGtDemo::bld_rec_list( )
     TCIntArray anRk;
     TCStringArray aMrk;
     TCIntArray aMrk2;
-    gstring str;
+    std::string str;
     char *key_p;
-    int i, Nr;
-    short rtlen = rt[gdp->nRT].KeyLen();
+    int i;
+    short rtlen = rt[gdp->nRT]->KeyLen();
 
 AGAIN:
     key_p=nullptr;
@@ -512,16 +512,16 @@ AGAIN:
     if( gdp->PsPE != S_OFF )   // GTdemo by Process
     {
         TProcess::pm->RecordLoadinProfile(key_p);
-        strncpy( gdp->prKey, rt[RT_PROCES].PackKey(), MAXRKEYLEN );
-        for( i=0; i<aObj[o_pestl].GetN(); i++ )
-            aRklist.Add( aObj[o_pestl].GetString( i, 0 ));
+        strncpy( gdp->prKey, rt[RT_PROCES]->PackKey(), MAXRKEYLEN );
+        for( i=0; i<aObj[o_pestl]->GetN(); i++ )
+            aRklist.push_back( aObj[o_pestl]->GetString( i, 0 ));
     }
     else  if( gdp->PsPB != S_OFF ) // GTdemo by TUnSpace
     {
         TUnSpace::pm->RecordLoadinProfile(key_p);
-        strncpy( gdp->prKey, rt[RT_UNSPACE].PackKey(), MAXRKEYLEN );
-        for( i=0; i<aObj[o_unstl].GetN(); i++ )
-            aRklist.Add( aObj[o_unstl].GetString( i, 0 ));
+        strncpy( gdp->prKey, rt[RT_UNSPACE]->PackKey(), MAXRKEYLEN );
+        for( i=0; i<aObj[o_unstl]->GetN(); i++ )
+            aRklist.push_back( aObj[o_unstl]->GetString( i, 0 ));
     }
     else // other type of records
     {
@@ -529,7 +529,7 @@ AGAINRC:    //get  keypart
         //str = vfKeyTemplEdit(window(), "Please, set a record key filter ", gdp->nRT, gdp->wcrk );
         //      if(  str== "" )   Bugfix 19.12.00  DAK
         //          goto AGAINRC;
-        Nr = rt[gdp->nRT].GetKeyList( gdp->wcrk/*str.c_str()*/, aRklist, anRk );
+        auto Nr = rt[gdp->nRT]->GetKeyList( gdp->wcrk/*str.c_str()*/, aRklist, anRk );
         if( Nr<1 )
         {
             if( vfQuestion(window(), GetName(),
@@ -540,38 +540,38 @@ AGAINRC:    //get  keypart
     }
     if( gdp->rkey )  // old selections
     {
-        aMrk.Clear();
-        for(uint j=0; j<aRklist.GetCount() ; j++ )
+        aMrk.clear();
+        for(uint j=0; j<aRklist.size() ; j++ )
             for( i=0; i<gdp->Nlrk; i++ )
             {
                 if( strncmp( gdp->rkey+i*rtlen, aRklist[j].c_str(), rtlen ))
                     continue;
-                aMrk.Add(aRklist[j]/*j*/);
-                aMrk2.Add(j);
+                aMrk.push_back(aRklist[j]/*j*/);
+                aMrk2.push_back(j);
                 break;
             }
     }
     // Select records list
     if( gdp->PsPE != S_OFF || gdp->PsPB != S_OFF ) // GTdemo by TUnSpace or by Process
     {
-       aMrk.Clear();
+       aMrk.clear();
        aMrk2 = vfMultiChoiceSet(window(), aRklist,
                        "Please, select/mark some record keys for data sampling", aMrk2 );
-      for(uint j=0; j<aMrk2.GetCount(); j++ )
-          aMrk.Add(aRklist[aMrk2[j]]);
+      for(size_t j=0; j<aMrk2.size(); j++ )
+          aMrk.push_back(aRklist[aMrk2[j]]);
     }
     else
     {
         aMrk =  vfMultiKeysSet(window(), "Please, select/mark some record keys for data sampling",
                         gdp->nRT, gdp->wcrk, aMrk );
     }
-    if( aMrk.GetCount() < 1 )
+    if( aMrk.size() < 1 )
     {    if( vfQuestion(window(), GetName(), "No record keys selected to sample! Repeat selection?" ))
             goto AGAIN;
         else Error( GetName(), "E01GDrem: No record keys selected...");
     }
-    gdp->Nlrk = aMrk.GetCount();
-    gdp->rkey = static_cast<char *>(aObj[ o_gdrkey ].Alloc( gdp->Nlrk, 1, rtlen ));
+    gdp->Nlrk = aMrk.size();
+    gdp->rkey = static_cast<char *>(aObj[ o_gdrkey ]->Alloc( gdp->Nlrk, 1, rtlen ));
     // make list of record
     for( i=0; i<gdp->Nlrk; i++ )
         memcpy( gdp->rkey+i*rtlen, aMrk[i].c_str(), rtlen );
@@ -582,7 +582,7 @@ int
 TGtDemo::RecBuild( const char *key, int mode  )
 {
     TProfil *aPa=TProfil::pm;
-    vstr tbuf(100);
+    char tbuf[100];
     int i;
 
     if( gst.iopt )
@@ -598,7 +598,7 @@ TGtDemo::RecBuild( const char *key, int mode  )
     if( gdp->nRT == RT_PROCES  ||  gdp->nRT == RT_UNSPACE )
         gdp->nRT = RT_SYSEQ;
 
-    if( pVisor->ProfileMode != true  && gdp->nRT >= RT_SYSEQ )
+    if( !pVisor->ProfileMode  && gdp->nRT >= RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Equilibria Calculation mode" );
 
     if( ret == VF_CANCEL )
@@ -611,7 +611,7 @@ TGtDemo::RecBuild( const char *key, int mode  )
         goto AGAIN;
     }
 */
-    gdp->rtLen =  rt[ gdp->nRT ].KeyLen();
+    gdp->rtLen =  rt[ gdp->nRT ]->KeyLen();
     bld_rec_list();
     gdp->dimXY[0] = gdp->Nlrk;
     if(  gdp->dimXY[1] <= 0 )  gdp->dimXY[1] = 2;
@@ -651,17 +651,17 @@ void TGtDemo::gd_text_analyze()
         TProfil* PRof = TProfil::pm;
         int mupL=0, pmpL =0;
 
-        if( pVisor->ProfileMode == true )
+        if( pVisor->ProfileMode  )
         {
             mupL = TRMults::sm->GetMU()->L;
             pmpL = TMulti::sm->GetPM()->L;
         }
         PRof->ET_translate( o_gwetext, o_gdexpr, 0, mupL, 0, pmpL );
-        rpn[0].GetEquat( static_cast<char *>(aObj[o_gwetext].GetPtr()) );
+        rpn[0].GetEquat( static_cast<char *>(aObj[o_gwetext]->GetPtr()) );
     }
     catch( TError& xcpt )
     {
-        char *erscan = static_cast<char *>(aObj[o_gdexpr].GetPtr());
+        char *erscan = static_cast<char *>(aObj[o_gdexpr]->GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
@@ -677,11 +677,11 @@ void TGtDemo::gd_EF_calc()
 {
     try
     {
-        rpn[1].GetEquat( static_cast<char *>(aObj[o_gdexpre].GetPtr()) );
+        rpn[1].GetEquat( static_cast<char *>(aObj[o_gdexpre]->GetPtr()) );
     }
     catch( TError& xcpt )
     {
-        char *erscan = static_cast<char *>(aObj[o_gdexpre].GetPtr());
+        char *erscan = static_cast<char *>(aObj[o_gdexpre]->GetPtr());
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
@@ -703,7 +703,7 @@ TGtDemo::gd_rec_read( int nI )
     memset( gdp->Wkb, 0, MAXRKEYLEN );
     strncpy( gdp->Wkb, gdp->rkey+nI*gdp->rtLen, gdp->rtLen );
 
-    if( gdp->nRT == RT_SYSEQ && pVisor->ProfileMode == true )
+    if( gdp->nRT == RT_SYSEQ && pVisor->ProfileMode )
     {
         TProfil* PRof = TProfil::pm;
         PRof->loadSystat( gdp->Wkb );
@@ -729,7 +729,7 @@ TGtDemo::gd_rec_read( int nI )
     }
     else
     {
-        auto pmod = dynamic_cast<TCModule *>(&aMod[gdp->nRT]);
+        auto pmod = dynamic_cast<TCModule *>(aMod[gdp->nRT].get());
         if( pmod )
         {
             pmod->RecInput( gdp->Wkb );
@@ -742,7 +742,7 @@ TGtDemo::gd_rec_read( int nI )
 void
 TGtDemo::RecCalc( const char *key )
 {
-    if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
+    if( !pVisor->ProfileMode  && gdp->nRT == RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Equilibria Calculation mode" );
     TCModule::RecCalc(key);
 
@@ -762,13 +762,13 @@ TGtDemo::RecCalc( const char *key )
                  "Sampling the results into GtDemo x0, y0 arrays. "
                  "Please, wait...", gdp->jR, gdp->Nlrk);
         gd_rec_read( gdp->jR );
-        if( strcmp( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey() ))
+        if( strcmp( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey() ))
         {  /* retranslate the math script text */
             gd_text_analyze();
-            strncpy( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey(), EQ_RKLEN );
+            strncpy( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey(), EQ_RKLEN );
         }
         rpn[0].CalcEquat();
-        aMod[RT_GTDEMO].ModUpdate("GtDemo data sampling in progress...");
+        aMod[RT_GTDEMO]->ModUpdate("GtDemo data sampling in progress...");
         // Stop Process from Andy Sveta
     }
     /* calc empirical data */
@@ -799,13 +799,13 @@ TGtDemo::RecordPlot( const char* /*key*/ )
            return;
       }
 
-    TIArray<TPlot> plt;
+    std::vector<TPlot> plt;
 
-    plt.Add( new TPlot(o_gdx0, o_gdy0 ));
+    plt.push_back( TPlot(o_gdx0, o_gdy0 ));
     int  nLn = plt[ 0 ].getLinesNumber();
     if( gdp->PtAEF != S_OFF )
     {
-        plt.Add( new TPlot(o_gdxe, o_gdye ));
+        plt.push_back( TPlot(o_gdxe, o_gdye ));
         nLn += plt[1].getLinesNumber();
     }
     int ndxy = 0;
@@ -814,9 +814,9 @@ TGtDemo::RecordPlot( const char* /*key*/ )
 
     if( plot )
     {
-        int oldN = aObj[o_gdplline].GetN();
+        int oldN = aObj[o_gdplline]->GetN();
 
-        plot = static_cast<TPlotLine * >(aObj[ o_gdplline ].Alloc( nLn, sizeof(TPlotLine) ));
+        plot = static_cast<TPlotLine * >(aObj[ o_gdplline ]->Alloc( nLn, sizeof(TPlotLine) ));
         for(int ii=0; ii<nLn; ii++ )
         {
             if( ii >= oldN )
@@ -849,9 +849,9 @@ TGtDemo::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<gdp->dimXY[1]; ii++ )
-          lnames.Add( gstring(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
+          lnames.push_back( std::string(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
       for( ii=0; ii<gdp->dimEF[1]; ii++ )
-          lnames.Add( gstring( gdp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.push_back( std::string( gdp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
           gdp->xNames, gdp->yNames, lnames );
     }
@@ -881,7 +881,7 @@ bool TGtDemo::SaveChartData( jsonui::ChartData* gr )
     int ndxy = 0;
     if(  gdp->dimX > 1)
         ndxy =gdp->dimX;
-    plot = static_cast<TPlotLine *>(aObj[ o_gdplline].Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
+    plot = static_cast<TPlotLine *>(aObj[ o_gdplline]->Alloc( gr->getSeriesNumber(), sizeof(TPlotLine)));
     for(int ii=0; ii<gr->getSeriesNumber(); ii++ )
     {
         plot[ii] = convertor( gr->lineData( ii ) );
@@ -971,11 +971,11 @@ void TGtDemo::probe_stat( const char *key )
     int i, j, k, N, M, nPar;
     short nI, nF, QT,*iopt;
     size_t tblen;
-    vstr pbuf(121);
+    char pbuf[121];
     char  (*lNames)[MAXGRNAME];
     double *y, *U, par[9];
-    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
-    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    TUnSpace* Prob = dynamic_cast<TUnSpace *>( aMod[RT_UNSPACE].get());
+    TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
     if( gdp->PsPB != S_OFF && *gdp->prKey)    // read probe record 
         TUnSpace::pm->RecInput( gdp->prKey );
@@ -1091,13 +1091,13 @@ void TGtDemo::probe_stat( const char *key )
     if( vfQuestion(window(), GetName(), "Print sampling equations?" ) )
     {
         prTab.PutString( "\n Sampling equations:\n--------------------------" );
-        prTab.PutString( (char *)aObj[o_gdexpr].GetPtr() );
+        prTab.PutString( (char *)aObj[o_gdexpr]->GetPtr() );
     }
     prTab.PutEnd();
     // Put results to object
     const char *tab= prTab.GetTable();
     tblen = strlen(tab)+1; // Get size of text buf 
-    gdp->prtab = (char *)aObj[ o_gwprtab ].Alloc( 1, tblen, S_ );
+    gdp->prtab = (char *)aObj[ o_gwprtab ]->Alloc( 1, tblen, S_ );
     memcpy( gdp->prtab, tab, tblen );
 
     vfObjToFile(window(), &aObj[o_gwprtab]);

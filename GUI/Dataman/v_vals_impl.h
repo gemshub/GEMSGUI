@@ -4,7 +4,6 @@
 // Declaration of TVal class and its child classes
 //
 // Copyright (C) 1996-2001 A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -20,7 +19,7 @@
 #ifndef _v_vals_impl_h_
 #define _v_vals_impl_h_
 
-// #include <cstdint>
+#include <memory>
 #include <stdint.h>  // To be replaced with cstdint after switching to C++ 11 standard
 #include <cstdio>
 #include "v_vals.h"
@@ -83,29 +82,15 @@ struct TVal:
 
     /* returns true if values equals to ANY
     */
-    bool IsAny(int ndx) const
-    {
-        if( static_cast<T*>(ptr)[ndx] == ANY() )
-            return true;
-        return false;
-    }
+    bool IsAny(int ndx) const;
 
-    /* returns true if values equals to EMPTY
-    */
-    bool IsEmpty(int ndx) const
-    {
-        if( static_cast<T*>(ptr)[ndx] == EMPTY() )
-            return true;
-        return false;
-    }
+    /* returns true if values equals to EMPTY */
+    bool IsEmpty(int ndx) const;
 
-    /* returns string representation of the cell value
-    */
-    gstring GetString(int ndx) const;
-    //  bool VerifyString(const char* s);
+    /* returns string representation of the cell value */
+    string GetString(int ndx) const;
     /* converts string to the type and puts it into cell
-	returns false on failure
-    */
+    returns false on failure  */
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size) {
@@ -168,14 +153,11 @@ struct TValFixString:
     {
         return static_cast<char*>(ptr)[ndx*len]=='*';
     }
-    gstring GetString(int ndx) const
+    string GetString(int ndx) const
     {
-        vstr ss(len);
-        strncpy(ss, static_cast<char*>(ptr)+(ndx*len), len);
-        ss[len]='\0';
-        return ss.p;
+        auto ss = string( static_cast<char*>(ptr)+(ndx*len), len);
+        return ss;
     }
-    //  bool VerifyString(const char* s);
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size) {
@@ -233,18 +215,17 @@ struct TValString:
     {
         return (strcmp(static_cast<char*>(ptr),S_EMPTY)==0);
     }
-    gstring GetString(int /*ndx*/) const
+    string GetString(int /*ndx*/) const
     {
         return (!static_cast<char*>(ptr) ? S_EMPTY: static_cast<char*>(ptr));
     }
-    //  bool VerifyString(const char* s);
     bool SetString(const char* s, int ndx);
 
-    void write(GemDataStream& s, int size) {
-    s.writeArray(static_cast<char*>(ptr), size);
+    void write(GemDataStream& s, int size1) {
+    s.writeArray(static_cast<char*>(ptr), size1);
     }
-    void read(GemDataStream& s, int size) {
-    s.readArray(static_cast<char*>(ptr), size);
+    void read(GemDataStream& s, int size1) {
+    s.readArray(static_cast<char*>(ptr), size1);
     }
 };
 
@@ -252,9 +233,31 @@ struct TValString:
 //  TVal<T> functions definitions
 //
 
+/* returns true if values equals to ANY
+*/
 template<class T>
 inline
-gstring
+bool
+TVal<T>::IsAny(int ndx) const
+{
+    if( static_cast<T*>(ptr)[ndx] == ANY() )
+        return true;
+    return false;
+}
+
+template<class T>
+inline
+bool
+TVal<T>::IsEmpty(int ndx) const
+{
+    if( static_cast<T*>(ptr)[ndx] == EMPTY() )
+        return true;
+    return false;
+}
+
+template<class T>
+inline
+string
 TVal<T>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
@@ -262,26 +265,10 @@ TVal<T>::GetString(int ndx) const
     if( IsAny(ndx) )
         return S_ANY;
 
-    vstr vbuf(30);	// double is ~15 digit
+    char vbuf[30];	// double is ~15 digit
     sprintf(vbuf, PATTERN_GET(), static_cast<T*>(ptr)[ndx]);
 
-    return vbuf.p;
-}
-
-template<>
-inline
-gstring
-TVal<double>::GetString(int ndx) const
-{
-    if( IsEmpty(ndx) )
-        return S_EMPTY;
-    if( IsAny(ndx) )
-        return S_ANY;
-
-    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
-    sprintf(vbuf, "%.*lg" , doublePrecision, static_cast<double*>(ptr)[ndx]);
-
-    return vbuf.p;
+    return vbuf;
 }
 
 template<class T>
@@ -289,8 +276,8 @@ template<class T>
 bool
 TVal<T>::SetString(const char* s, int ndx)
 {
-    gstring ss = s;
-    ss.strip();
+    string ss = s;
+    strip( ss );
     if( /*ss.empty() ||*/ ss==S_EMPTY )
     {
         static_cast<T*>(ptr)[ndx] = EMPTY();
@@ -304,8 +291,9 @@ TVal<T>::SetString(const char* s, int ndx)
     }
 
     T v;
-    vstr sv(strlen(s)+3);
-    if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.p ) != 1 )
+    auto sv = std::make_unique<char[]>(ss.length()+3);
+    //auto sv = std::make_shared<char[]>( ss.length()+3 );
+    if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.get() ) != 1 )
         return false;
 
     static_cast<T*>(ptr)[ndx] = v;
@@ -335,18 +323,18 @@ TVal<unsigned char>::SetString(const char* s, int ndx)
 
 template<>
 inline
-gstring
+string
 TVal<char>::GetString(int ndx) const
 {
-    return gstring(1, static_cast<char*>(ptr)[ndx]);
+    return string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 template<>
 inline
-gstring
+string
 TVal<unsigned char>::GetString(int ndx) const
 {
-    return gstring(1, static_cast<char*>(ptr)[ndx]);
+    return string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 
@@ -361,8 +349,7 @@ TVal<T>::Put(double v, int ndx)
 // Put() for <double> need special handling for efficency
 
 template<>
-inline
-void
+inline void
 TVal<double>::Put(double v, int ndx)
 {
     static_cast<double*>(ptr)[ndx] = v;
@@ -384,6 +371,13 @@ int TVal<long>::cSize() const
     return sizeof(int32_t);
 }
 
+
+template<> bool TVal<double>::IsAny(int ndx) const;
+template<> bool TVal<double>::IsEmpty(int ndx) const;
+template<> bool TVal<float>::IsAny(int ndx) const;
+template<> bool TVal<float>::IsEmpty(int ndx) const;
+template<> string TVal<double>::GetString(int ndx) const;
+
 /*
 template<class T>
 extern
@@ -396,28 +390,6 @@ bool
 TVal<signed char>::SetString(const char* s, int ndx);
 */
 
-/*
-template<class T>
-bool
-TVal<T>::VerifyString(const char* s, T& v)
-{
-  gstring ss = s;
-  ss.strip();
-  if( ss==S_EMPTY )
-    return true;
-  if( ss == S_ANY )
-    return true;
-  T v;
-  vstr sv(strlen(s)+1);
-  gstring PAT = PATTERN;
-  PAT += "%s";
-
-  if( sscanf(ss.c_str(), PAT.c_str(), &v, sv.p ) != 1 )
-    return false;
-
-  return true;
-}
-*/
 
 #endif // _v_vals_impl_h_
 

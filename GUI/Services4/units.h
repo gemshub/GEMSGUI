@@ -4,7 +4,6 @@
 // Declaration of TUnitsList class
 //
 // Copyright (C) 1996-2001  A.Rysin
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -20,7 +19,8 @@
 #define _units_h_
 
 #include <fstream>
-#include "gstring.h"
+#include <vector>
+#include <string>
 
 //---------------------------------
 // units for TCellCheck
@@ -28,33 +28,33 @@
 
 struct sunits
 {
-    gstring name;
-    gstring vals;
+    std::string name;
+    std::string vals;
 
     sunits()
     {}
 
-    sunits(const gstring & n, const gstring & v):
+    sunits(const std::string & n, const std::string & v):
             name(n), vals(v)
     {}
 
 
-    gstring getVals(int m) const;
+    std::string getVals(int m) const;
 };
 
-class TUnitsList : public TOArray<sunits>
+class TUnitsList : public std::vector<sunits>
 {
 
 public:
     TUnitsList();
     int Find(const char* s)
     {
-        return Find(gstring(s));
+        return Find( std::string(s));
     }
-    int Find(const gstring & s);
+    int Find(const std::string & s);
 
-    void toDAT(ostream & visor_dat);
-    void fromDAT(istream & visor_dat);
+    void toDAT(std::ostream & visor_dat);
+    void fromDAT(std::istream & visor_dat);
     void load(const char* units_ini);
 };
 

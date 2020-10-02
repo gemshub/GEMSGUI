@@ -441,13 +441,13 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
                    short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT)
 {
     int i, aNsuT = 0;
-    vstr pkeyrd(81);
+    char pkeyrd[81];
     TCStringArray aDclist_old;
 
-    aDclist.Clear();
+    aDclist.clear();
 
     //REACDC&DCOMP  keypart
-    rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
+    rt[RT_REACDC]->MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
    if( pkeyrd[1] != ':')
        pkeyrd[1] = '*';
    if( bNsuT && php->NsuT > 0 )  // template for adsorption
@@ -458,28 +458,28 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
     if( nDC && SM )
     {
       // Build old selections DCOMP and REACDC
-       aDclist_old.Clear();
+       aDclist_old.clear();
        for( i=0; i<nDC; i++ )
        {
-          gstring key_dr = gstring( SM[i], 0, DC_RKLEN );
+          std::string key_dr = std::string( SM[i], 0, DC_RKLEN );
           if( DCS[i] == SRC_DCOMP )
           {
-            rt[RT_DCOMP].SetKey( key_dr.c_str() );
-            rt[RT_DCOMP].SetFldKey( 3, "*" );
-            key_dr  = gstring(1, DCS[i]);
+            rt[RT_DCOMP]->SetKey( key_dr.c_str() );
+            rt[RT_DCOMP]->SetFldKey( 3, "*" );
+            key_dr  = string(1, DCS[i]);
             key_dr += ' ';
-            key_dr += rt[RT_DCOMP].UnpackKey();
+            key_dr += rt[RT_DCOMP]->UnpackKey();
           }
           else
             if( DCS[i] == SRC_REACDC )
             {
-              rt[RT_REACDC].SetKey( key_dr.c_str() );
-              rt[RT_REACDC].SetFldKey( 3, "*" );
-              key_dr  = gstring(1, DCS[i]);
+              rt[RT_REACDC]->SetKey( key_dr.c_str() );
+              rt[RT_REACDC]->SetFldKey( 3, "*" );
+              key_dr  = std::string(1, DCS[i]);
               key_dr += ' ';
-              key_dr += rt[RT_REACDC].UnpackKey();
+              key_dr += rt[RT_REACDC]->UnpackKey();
             }
-         aDclist_old.Add( key_dr );
+         aDclist_old.push_back( key_dr );
       }
     }
 
@@ -487,7 +487,7 @@ AGAINRC:
      aDclist = vfRDMultiKeysSet( window(), caption,
                   pkeyrd, aDclist_old, aNsuT  );
 
-     if( aDclist.GetCount() < 1 )
+     if( aDclist.size() < 1 )
      {
         switch ( vfQuestion3(window(), GetName(),
         "W08PHrem: Number of selected ReacDC/DComp keys < 1.\n"
@@ -503,29 +503,29 @@ AGAINRC:
              "E09PHrem: No ReacDC/DComp records selected into Phase...");
         }
       }
-      nDC = aDclist.GetCount();
+      nDC = aDclist.size();
 }
 
 // Build Phase keys (aPhlist) to be included into the Phase
 void TPhase::makePhaseList( const char *caption, TCStringArray& aPhlist )
 {
-    gstring pkeyrd = "*:*:*:*:*:";
+    std::string pkeyrd = "*:*:*:*:*:";
     TCStringArray aPhlist_old;
 
-    aPhlist.Clear();
+    aPhlist.clear();
     if( php->nlPh && php->lPh )
     {
       // Build old selections DCOMP and REACDC
-       aPhlist_old.Clear();
+       aPhlist_old.clear();
        for(int i=0; i<php->nlPh; i++ )
        {
-          gstring key_dr = gstring( php->lPh[i], 0, PH_RKLEN );
-          aPhlist_old.Add( key_dr );
+          std::string key_dr = std::string( php->lPh[i], 0, PH_RKLEN );
+          aPhlist_old.push_back( key_dr );
        }
     }
 AGAINRC:
      aPhlist = vfMultiKeysSet( window(), caption, RT_PHASE, pkeyrd.c_str(), aPhlist_old  );
-     if( aPhlist.GetCount() < 1 )
+     if( aPhlist.size() < 1 )
      {
         switch ( vfQuestion3(window(), GetName(),
         "W08PHrem: Number of selected Phase keys < 1.\n"
@@ -541,14 +541,14 @@ AGAINRC:
              "E09PHrem: No Phase records selected into Phase...");
         }
       }
-      php->nlPh = aPhlist.GetCount();
+      php->nlPh = aPhlist.size();
  }
 
 /*
 // Build Phase keys (aIclist) to be included into the Phase
 void TPhase::makeICompList( const char *caption, TCStringArray& aIclist )
 {
-    gstring ikeyrd = "*:*:*:";
+    std::string ikeyrd = "*:*:*:";
     TCStringArray aIclist_old;
 
     aIclist.Clear();
@@ -558,7 +558,7 @@ void TPhase::makeICompList( const char *caption, TCStringArray& aIclist )
        aIclist_old.Clear();
        for(int j=0; j<php->nDC; j++ )
        {
-          gstring key_dr = gstring( php->lICu[j], 0, IC_RKLEN );
+          std::string key_dr = std::string( php->lICu[j], 0, IC_RKLEN );
           aIclist_old.Add( key_dr );
        }
     }
@@ -587,11 +587,11 @@ AGAINRC:
 // Load DC classes from records and set to DCC
 void TPhase::LoadDCC()
 {
-    vstr dcn(MAXRKEYLEN);
+    char dcn[MAXRKEYLEN];
     char Ctype;
     time_t crt;
-    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     memset( dcn, 0, MAXRKEYLEN );
 
     for(int i=0; i<php->nDC; i++ )
@@ -639,12 +639,12 @@ void TPhase::DetNumbCatAn(TCStringArray& aDclist)
      ( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ))
  {
     int pos;
-    gstring spName;
+    std::string spName;
     for(int i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
     {
-      spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
+      spName = std::string( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
 
-      spName.strip();
+      strip( spName );
       pos = spName.length()-1;
       while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
           pos--;
@@ -676,7 +676,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 {
    int pos;
    short i, iCat=0, iAn=0, iNs=0, nAn, nCat, nNs;
-   gstring spName;
+   std::string spName;
 
    if( WorkCount )
    {   // pre-proc. loop: determining number of cations, anions and neutral species
@@ -685,8 +685,8 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
       nNs=0;
       for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
       {
-         spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-         spName.strip();
+         spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+         strip( spName );
          pos = spName.length()-1;
          while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
              pos--;
@@ -715,28 +715,28 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
       if( php->Ppnc == S_ON
     		  && (php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ) )
       {
-         php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ].Alloc(
+         php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Alloc(
                           php->nCat, 1, MAXDCNAME ));
-         php->lsAn  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ].Alloc(
+         php->lsAn  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Alloc(
                           php->nAn, 1, MAXDCNAME ));
-         php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ].Alloc( php->nCat, 1, I_));
-         php->nxAn  = static_cast<short *>(aObj[ o_ph_w_nxa ].Alloc( php->nAn, 1, I_));
+         php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Alloc( php->nCat, 1, I_));
+         php->nxAn  = static_cast<short *>(aObj[ o_ph_w_nxa ]->Alloc( php->nAn, 1, I_));
          if( php->nNs )
          {
-             php->lsNs  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ].Alloc(
+             php->lsNs  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Alloc(
                               php->nNs, 1, MAXDCNAME ));
-             php->nxNs  = static_cast<short *>(aObj[ o_ph_w_nxn ].Alloc( php->nNs, 1, I_));
+             php->nxNs  = static_cast<short *>(aObj[ o_ph_w_nxn ]->Alloc( php->nNs, 1, I_));
          }
       }
       else {
 
         php->nSub =  0;
-        php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ].Free());
-        php->lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ].Free());
-        php->lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ].Free());
-        php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ].Free());
-        php->nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ].Free());
-        php->nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ].Free());
+        php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Free());
+        php->lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Free());
+        php->lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Free());
+        php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Free());
+        php->nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ]->Free());
+        php->nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ]->Free());
 
       }
    }
@@ -745,8 +745,8 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
    {
      for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
      { // Determining if cation or anion
-       spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-       spName.strip();
+       spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+       strip( spName );
        pos = spName.length()-1;
        while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
           pos--;
@@ -777,15 +777,15 @@ const int MAXMOIETY = 60;
 void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
 {
     TFormula form;
-    TIArray<MOITERM> moit_;
-    uint ii, jj;
+    std::vector<MOITERM> moit_;
+    size_t ii, jj;
     int i1, nSites =0;
     int nMoi =  0;
 
     // allocate default buffer and setup default values
-    moiety_new( form_array.GetCount(), MAXMOIETY, true );
+    moiety_new( form_array.size(), MAXMOIETY, true );
 
-    for( jj=0; jj<form_array.GetCount(); jj++ )
+    for( jj=0; jj<form_array.size(); jj++ )
     {
       nSites =  form.BuildMoiety(form_array[jj].c_str(), moit_);
       if( jj== 0)
@@ -793,7 +793,7 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
       else
         ErrorIf( php->nSub!=nSites, "MakeSublatticeLists", "Different number of sites" );
 
-      for( ii=0; ii<moit_.GetCount(); ii++ )
+      for( ii=0; ii<moit_.size(); ii++ )
       {
          for( i1=0; i1<nMoi; i1++)
          {
@@ -812,7 +812,7 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
     }
 
    // re allocate memory
-   moiety_new( form_array.GetCount(), nMoi, false );
+   moiety_new( form_array.size(), nMoi, false );
 
 
    // setup data to formula list
@@ -824,9 +824,9 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
          moi_lst += string(php->lsMoi[i1])+";";
        }
        php->PdEq = S_ON;
-       php->dEq  =  static_cast<char *>(aObj[ o_phdeq ].Alloc( 1, moi_lst.size()+10, S_));
+       php->dEq  =  static_cast<char *>(aObj[ o_phdeq ]->Alloc( 1, moi_lst.size()+10, S_));
        strncpy( php->dEq, moi_lst.c_str(),  moi_lst.size()+1 );
-       for( jj=0; jj<form_array.GetCount(); jj++ )
+       for( jj=0; jj<form_array.size(); jj++ )
         strncpy( php->lsForm[jj], form_array[jj].c_str(), MAXFORMULA);
 
    }
@@ -843,21 +843,21 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
 {
     int  i, pa0=0, Kielland=0;
     short nsc=0;
-    vstr dcn(MAXRKEYLEN);
+    char dcn[MAXRKEYLEN];
     char Ctype;
     float a0=0., bp=0., Z=0., cN=0., Fi=0.;
     time_t crt;
     TCStringArray form_array;
 
-    TDComp* aDC=dynamic_cast<TDComp *>(&aMod[RT_DCOMP]);
-    TReacDC* aRDC=dynamic_cast<TReacDC *>(&aMod[RT_REACDC]);
+    TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
+    TReacDC* aRDC=dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
     aDC->ods_link(0);
     aRDC->ods_link(0);
 
     /* Question of get effective ion radii of aqueous species */
     if( (php->PphC == PH_AQUEL) && php->scoef )
     {
-        if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
+        if( pVisor->ProfileMode || vfQuestion(window(), GetName(),
         		"Parameters of aqueous species: Collect from DComp/ReacDC records?"))
         {
             pa0 = 1;
@@ -906,7 +906,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
            bp = aDC->dcp->DerB;
            Z = aDC->dcp->Zz;
            Ctype = aDC->dcp->PdcC;
-           form_array.Add( gstring(aDC->dcp->form,0,MAXFORMULA));
+           form_array.push_back( std::string(aDC->dcp->form,0,MAXFORMULA));
            cN = aDC->dcp->Comp;
            Fi = aDC->dcp->Expa;
 
@@ -951,7 +951,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
                 bp = aRDC->rcp->DerB;
                 Z = aRDC->rcp->Zz;
                 Ctype = aRDC->rcp->PreC;
-                form_array.Add( gstring(aRDC->rcp->form,0,MAXFORMULA));
+                form_array.push_back( std::string(aRDC->rcp->form,0,MAXFORMULA));
                 cN = aRDC->rcp->Comp;
                 Fi = aRDC->rcp->Expa;
             }
@@ -982,7 +982,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
             }
             if( Kielland && pa0 )  /* Helgeson */
             { if( Z < 0.01 ) s(i,0) = 0;
-                if( Z > 0.99 ) s(i,0) = 3.84;
+                if( Z > 0.99 ) s(i,0) = 3.84f;
                 /* do it by HKF ! */    //  3.72 !
             }
         }
@@ -1055,19 +1055,19 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
    const char amod, const char gmod, float apar[8], /*float gpar[4],*/
    bool useLst, TCStringArray lst )
 {
-//    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+//    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     const char *part;
     char nbuf[MAXFORMULA*2], neutbuf[16], H2Obuf[16], tempdbuf[16];
-    gstring Name = "Auto-set ";
+    std::string Name = "Auto-set ";
 
 //  Setup of aqueous phase
-    if( !apar[2] )
+    if( approximatelyZero(apar[2]) )
         strcpy(neutbuf, "1.0");
     else strcpy(neutbuf, "b_q*IS");
-    if( !apar[3] )
+    if( approximatelyZero(apar[3]) )
         strcpy(H2Obuf, "1.0");
     else strcpy(H2Obuf, "calculate");
-    if( !apar[4] )
+    if( approximatelyZero(apar[4]) )
         strcpy( tempdbuf, "0");
     else sprintf( tempdbuf, "%c", (char)(apar[4]+'0'));
 // cout << "newAqGasPhase: " << amod << endl;
@@ -1245,11 +1245,12 @@ MAKE_GAS_PHASE:
               goto DONE;
     }
     part = "g:*:*:*:";
-    if( gkey[0] == 'f' )
+    if( gkey && gkey[0] == 'f' )
         part = "f:*:*:*:";
 
     // Assembling gas phase
-    AssemblePhase( gkey, part, nullptr, file, useLst, lst, 0 );
+    if(gkey )
+     AssemblePhase( gkey, part, nullptr, file, useLst, lst, 0 );
 
     // Do sometning else here?
     DONE:
@@ -1264,7 +1265,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float* param,
     int file, bool useLst, TCStringArray lst, int Npar )
 {
 
-    TProfil *aPa=dynamic_cast<TProfil *>(&aMod[RT_PARAM]);
+    TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
 
 // Initializing
 memcpy( php->kin_t, "NNNNNNNN", 8 );
@@ -1284,59 +1285,59 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     if( useLst == false )
     {
         //DCOMP key list
-        Ndc = rt[RT_DCOMP].GetKeyList( part, aDclist, anRDc );
+        Ndc = rt[RT_DCOMP]->GetKeyList( part, aDclist, anRDc );
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
           TCIntArray anRDc1;
-          Ndc += rt[RT_DCOMP].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
-          for(uint kk=0; kk<aDclist1.GetCount(); kk++)
+          Ndc += rt[RT_DCOMP]->GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
-            aDclist.Add(aDclist1[kk]);
-            anRDc.Add(anRDc1[kk]);
+            aDclist.push_back(aDclist1[kk]);
+            anRDc.push_back(anRDc1[kk]);
           }
         }
-        uint ii=0;
-        while( ii< aDclist.GetCount() )
+        size_t ii=0;
+        while( ii< aDclist.size() )
         {
             if( !memcmp( aDclist[ii].c_str()+MAXSYMB+MAXDRGROUP, "E-", 2 ) ||
                     !memcmp( aDclist[ii].c_str()+MAXSYMB+MAXDRGROUP, "e-", 2 ) )
             {
-                aDclist.Remove(ii);
-                anRDc.Remove(ii);
+                aDclist.erase(aDclist.begin() +ii);
+                anRDc.erase( anRDc.begin()+ii);
                 Ndc--;
             }
             else
                 if( ii>0 &&
                         !memcmp( aDclist[ii].c_str(), aDclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
                 {
-                    aDclist.Remove(ii);
-                    anRDc.Remove(ii);
+                    aDclist.erase(aDclist.begin() +ii);
+                    anRDc.erase( anRDc.begin()+ii);
                     Ndc--;
                 }
                 else ii++;
         }
         //REACDC  key list
-        Nrc = rt[RT_REACDC].GetKeyList( part, aRclist, anRRc );
+        Nrc = rt[RT_REACDC]->GetKeyList( part, aRclist, anRRc );
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
           TCIntArray anRDc1;
-          Nrc += rt[RT_REACDC].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
-          for(uint kk=0; kk<aDclist1.GetCount(); kk++)
+          Nrc += rt[RT_REACDC]->GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
-            aRclist.Add(aDclist1[kk]);
-            anRRc.Add(anRDc1[kk]);
+            aRclist.push_back(aDclist1[kk]);
+            anRRc.push_back(anRDc1[kk]);
           }
         }
         ii=0;
-        while( ii< aRclist.GetCount() )
+        while( ii< aRclist.size() )
         {
             if( ii>0 &&
                     !memcmp( aRclist[ii].c_str(), aRclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
             {
-                aRclist.Remove(ii);
-                anRRc.Remove(ii);
+                aRclist.erase(aRclist.begin() +ii);
+                anRRc.erase( anRRc.begin()+ii);
                 Nrc--;
             }
             else ii++;
@@ -1345,10 +1346,10 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
               " No DComp and ReacDC records found! ");
         php->nDC = (Ndc + Nrc);
 //        php->NR1 = (short)aRclist.GetCount();
-        iic = aDclist.GetCount();
+        iic = aDclist.size();
     }
     else
-        php->nDC = lst.GetCount(); // php->NR1 ?
+        php->nDC = lst.size(); // php->NR1 ?
 
     dyn_new(0);
 
@@ -1356,7 +1357,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     {   /* Get list of component : add aMcv and aMrv */
         for( i=0; i<php->nDC; i++ )
         {
-            if( (size_t)i < aDclist.GetCount() )
+            if( i < static_cast<int>(aDclist.size()) )
             {
                 memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;
@@ -1392,13 +1393,13 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         {
             if( !php->SCMC[i] || php->SCMC[i]==A_NUL )
                 php->SCMC[i] = SC_CCM;  /* Default! */
-            if( !php->MSDT[i][0] )
+            if( approximatelyZero(php->MSDT[i][0]) )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
-            if( !php->MSDT[i][1] )
+            if( approximatelyZero(php->MSDT[i][1]) )
                 php->MSDT[i][1] = 0.6022f; /* 1/nm2; = 1 mkmol/m2 */
-            if( !php->CapT[i][0] )
+            if( approximatelyZero(php->CapT[i][0]) )
                 php->CapT[i][0] = 1.0f; /* A plane */
-            if( !php->CapT[i][1] )
+            if( approximatelyZero(php->CapT[i][1]) )
                 php->CapT[i][1] = 0.2f; /* B plane */
         }
 
@@ -1435,7 +1436,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         db->AddRecordToFile( key, file );
     else
       {
-        gstring mess = key;
+        std::string mess = key;
         mess += "\n";
         mess+=  "This record exists! Overwrite?";
         if( !vfQuestion( window(), "Automatically generated aq or gas/fluid",mess.c_str()) )
@@ -1900,7 +1901,7 @@ void TPhase::set_def_comments( bool clearall,
      if( clearall || ( php->kin_t[KinProCode] != old_kin[KinProCode] ) )
      {
 
-         // ph[q].umpcl =  (char (*)[MAXDCNAME])aObj[ o_phumpcl].Alloc( 1, ph[q].numpC, MAXDCNAME );
+         // ph[q].umpcl =  (char (*)[MAXDCNAME])aObj[ o_phumpcl]->Alloc( 1, ph[q].numpC, MAXDCNAME );
          switch(php->kin_t[KinProCode])
          {   //KinProCode
              case KM_PRO_MWR:  // = 'M' Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)

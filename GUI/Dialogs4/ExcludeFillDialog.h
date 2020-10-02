@@ -4,7 +4,6 @@
 // Implementation of ExcludeFillDialog class
 //
 // Copyright (C) 1996-200    S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -28,8 +27,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QButtonGroup>
-
-#include "gstring.h"
+#include "v_user.h"
 
 class ExcludeFillDialog : public QDialog
 {
@@ -45,7 +43,7 @@ public:
       TCStringArray& aICkeys, double fill_data );
    ~ExcludeFillDialog();
 
-    TOArray<bool> getFillType();
+    std::vector<bool> getFillType();
     double getFillValue();
 
 

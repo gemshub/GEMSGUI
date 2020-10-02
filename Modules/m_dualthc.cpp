@@ -103,22 +103,22 @@ void TDualTh::dt_next()
 void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 {
   // Get full matrix A
-  TIArray<TFormula> aFo;
-  gstring form;
+  std::vector<TFormula> aFo;
+  std::string form;
   int ii;
 
   for( ii=0; ii<siz_; ii++ )
   {
-     aFo.Add( new TFormula() );
-     form = gstring( for_[ii], 0, MAXFORMUNITDT );
-     form.strip();
+     aFo.push_back( TFormula() );
+     form = std::string( for_[ii], 0, MAXFORMUNITDT );
+     strip( form );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }
 
   ErrorIf( dtp->Nb != TRMults::sm->GetMU()->N, GetName(),
                "Invalid data in dtp->Nb ");
 
-  dtp->An = (float *)aObj[ o_dtan ].Alloc( siz_, dtp->Nb, F_ );
+  dtp->An = (float *)aObj[ o_dtan ]->Alloc( siz_, dtp->Nb, F_ );
   dtp->Asiz = (short)siz_;
   double *AA = new double[TRMults::sm->GetMU()->N]; // dtp->An must be double SD 21/07/2009
   fillValue(dtp->An, (float)0., (siz_*dtp->Nb) );
@@ -129,13 +129,13 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
      copyValues( dtp->An+ii*TRMults::sm->GetMU()->N, AA, dtp->Nb );
   }
   delete[] AA;
-  aFo.Clear();
+  aFo.clear();
 }
 
 // make EqStat key  && calculate records
 void TDualTh::calc_eqstat()
 {
-    vstr buf(40);
+    char buf[40];
     double dummy = -1.;
 
     sprintf(buf, "%.4d", dtp->c_tm);
@@ -148,11 +148,11 @@ void TDualTh::calc_eqstat()
     Gcvt( dtp->cP, 6, dtp->Pp );
     Gcvt( dtp->cV, 6, dtp->Bnamep );
 
-   rt[RT_SYSEQ].MakeKey( RT_DUALTH,  dtp->sykey, RT_DUALTH, 0, RT_DUALTH,1,
+   rt[RT_SYSEQ]->MakeKey( RT_DUALTH,  dtp->sykey, RT_DUALTH, 0, RT_DUALTH,1,
          RT_DUALTH, 2, K_IMM, dtp->timep, K_IMM, dtp->Bnamep,
          K_IMM, dtp->Pp, K_IMM, dtp->TCp, K_IMM, dtp->NVp, K_END );
 
-   rt[RT_SYSEQ].Find(dtp->sykey);
+   rt[RT_SYSEQ]->Find(dtp->sykey);
 // calc current SyStat
    TProfil::pm->CalcEqstat( dummy );
    if( dtp->PsSYd == S_ON )
@@ -243,7 +243,7 @@ void TDualTh::build_mu_n()
 // Translate, analyze and unpack dual-thermo math script for activity coeffs
 void TDualTh::dt_text_analyze()
 {
-  TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+  TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 /*  try
     {
       if( dtp->PvChi != S_OFF )
@@ -270,12 +270,12 @@ void TDualTh::dt_text_analyze()
 
         PRof->ET_translate( o_dttprn, o_dtgexpr,
           0, TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
-        rpn[1].GetEquat( (char *)aObj[o_dttprn].GetPtr() );
+        rpn[1].GetEquat( (char *)aObj[o_dttprn]->GetPtr() );
       }
     }
     catch( TError& xcpt )
     {
-        char *erscan = (char *)aObj[o_dtgexpr].GetPtr();
+        char *erscan = (char *)aObj[o_dtgexpr]->GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         TDualTh::pm->CheckEqText(  erscan,
   "E94MSTran: Error in translation of math script \n"
@@ -302,7 +302,7 @@ TDualTh::Bb_Calc()
     double Msysb_bk, Tmolb_bk;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
-    vstr  pkey(MAXRKEYLEN+10);
+    char  pkey[MAXRKEYLEN+10];
     float  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
     float *A;
     time_t crt;
@@ -311,7 +311,7 @@ TDualTh::Bb_Calc()
        return;
 
 // get data fron IComp
-    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aIC= dynamic_cast<TIComp *>( aMod[RT_ICOMP].get());
     aIC->ods_link(0);
     ICw = new float[dtp->Nb];
     memset( pkey, 0, MAXRKEYLEN+9 );
@@ -346,7 +346,7 @@ TDualTh::Bb_Calc()
     { //  Through IC
         for( i=0; i<dtp->Nb; i++ )
         {
-          if( !dtp->CIb[ii*dtp->Nb + i] ||
+          if( approximatelyZero(dtp->CIb[ii*dtp->Nb + i]) ||
                  IsFloatEmpty( dtp->CIb[ ii*dtp->Nb + i ] ))
                 continue;
 
@@ -368,7 +368,7 @@ TDualTh::Bb_Calc()
       for( j=0; j < dtp->La_b; j++ )
       {
          A = dtp->An + j * dtp->Nb;
-         if( !dtp->CAb[ii*dtp->La_b + j] ||
+         if( approximatelyZero(dtp->CAb[ii*dtp->La_b + j]) ||
             IsFloatEmpty( dtp->CAb[ii*dtp->La_b + j] ))
                     continue;
          DCmw = 0.;
@@ -381,7 +381,7 @@ TDualTh::Bb_Calc()
                  dtp->Vaqb, dtp->Maqb, dtp->Vsysb );
          // recalc stoichiometry
          for( i=0; i<dtp->Nb; i++ )
-          if( A[i] )
+          if( noZero(A[i]) )
           {
             dtp->Bb[ii*dtp->Nb+i] += Xincr*A[i]; // calc control sum
             MsysC += Xincr * A[i] * ICw[i];
@@ -443,7 +443,7 @@ TDualTh::Bn_Calc()
     double Msysb_bk, Tmolb_bk;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
-    vstr  pkey(MAXRKEYLEN+10);
+    char  pkey[MAXRKEYLEN+10];
     float  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
     float *A;
     time_t crt;
@@ -452,7 +452,7 @@ TDualTh::Bn_Calc()
        return;
 
 // get data fron IComp
-    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    TIComp* aIC=dynamic_cast<TIComp *>( aMod[RT_ICOMP].get());
     aIC->ods_link(0);
     ICw = new float[dtp->Nb];
     memset( pkey, 0, MAXRKEYLEN+9 );
@@ -487,7 +487,7 @@ TDualTh::Bn_Calc()
     { //  Through IC
         for( i=0; i<dtp->Nb; i++ )
         {
-          if( !dtp->CIn[ii*dtp->Nb + i] ||
+          if( approximatelyZero(dtp->CIn[ii*dtp->Nb + i]) ||
                  IsFloatEmpty( dtp->CIn[ ii*dtp->Nb + i ] ))
                 continue;
 
@@ -509,7 +509,7 @@ TDualTh::Bn_Calc()
     for( j=0; j < dtp->La_b; j++ )
     {
          A = dtp->An + j * dtp->Nb;
-         if( !dtp->CAn[ii*dtp->La_b + j] ||
+         if( approximatelyZero(dtp->CAn[ii*dtp->La_b + j]) ||
             IsFloatEmpty( dtp->CAn[ii*dtp->La_b + j] ))
                     continue;
          DCmw = 0.;
@@ -522,7 +522,7 @@ TDualTh::Bn_Calc()
                  dtp->Vaqb, dtp->Maqb, dtp->Vsysb );
          // recalc stoichiometry
          for( i=0; i<dtp->Nb; i++ )
-          if( A[i] )
+          if( noZero(A[i]) )
           {
             dtp->Bn[ii*dtp->Nb+i] += Xincr*A[i]; // calc control sum
             MsysC += Xincr * A[i] * ICw[i];
@@ -589,7 +589,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
        dtp->An, dtp->Bn+(ii*dtp->Nb), dtp->chi+(ii*dtp->nM) );
      if( task_Axb.CalcSVD( true ) > 0 )
      {
-            gstring str = "Mole fractions calculation routine ";
+            std::string str = "Mole fractions calculation routine ";
             str += " finds more than one solution for experiment ";
             str +=  dtp->nam_b[ii];
             str += "\n Please, check its non-basis bulk composition.";
@@ -607,7 +607,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
      }
      if( if_resid ) // residual
      {
-            gstring str = "Mole fractions calculation routine ";
+            std::string str = "Mole fractions calculation routine ";
             str += " finds no exact solution for experiment ";
             str +=  dtp->nam_b[ii];
             str += ".\nLeast-squares solution Residuals ";
@@ -681,11 +681,11 @@ TDualTh::RegressionLSM( int /*Mode*/ )  // task or minimization
  if( dtp->PvChi != S_OFF )
  {
    afType  = MATHSCRIPT_FIT;
-   TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+   TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
    PRof->ET_translate( o_dttprn, o_dtcexpr,
      0, TRMults::sm->GetMU()->L, 0, TMulti::sm->GetPM()->L );
-   arpn = (char *)aObj[o_dttprn].GetPtr() ;
+   arpn = (char *)aObj[o_dttprn]->GetPtr() ;
  }
  TLMDataType data( afType, TEST_EVL, // may be changed for flags
                        dtp->nQ, dtp->nM, dtp->nP, dtp->tdat,
@@ -742,7 +742,7 @@ TDualTh::Calc_muo_n( char eState )
        {
           lnChi = log( 1e-20 );
           Chi = 1e-20;
-          gstring str = "Zero or negative mole fraction chi";
+          std::string str = "Zero or negative mole fraction chi";
             str += " encountered in the experiment ";
             str +=  dtp->nam_b[ii];
             str += ".\n Mole fraction is set to chi=1e-20 in ";
@@ -1040,6 +1040,7 @@ TDualTh::Calc_gam_n( char eState )
                                dtp->Wa[ii*dtp->nP] = alp0;
                                break;
                             }
+                            [[fallthrough]];
              case DT_IPF_G:  // Guggenheim
              case DT_IPF_T:  // Thompson-Waldbaum
                             if(dtp->PsIPu == DT_IPU_J )
@@ -1169,6 +1170,7 @@ TDualTh::Calc_gam_n( char eState )
                                dtp->Wa[ii] = alp0;
                                break;
                             }
+                            [[fallthrough]];
              case DT_IPF_G:  // Guggenheim
              case DT_IPF_T:  // Thompson-Waldbaum
                             if(dtp->PsIPu == DT_IPU_J )
@@ -1206,6 +1208,7 @@ TDualTh::Calc_gam_n( char eState )
                                dtp->Wa[ii+1] = alp1;
                                break;
                             }
+                            [[fallthrough]];
              case DT_IPF_G:  // Guggenheim
                             if(dtp->PsIPu == DT_IPU_J )
                             {
@@ -1386,7 +1389,7 @@ TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
        ScaleF = 1.;
        switch( dtp->PsIPu )  // Analyzing units and setting up the the scale factor
        {                     // such that parameters are dimensionless
-          case DT_IPU_K:   ScaleF *= 1000.;
+          case DT_IPU_K:   ScaleF *= 1000.; [[fallthrough]];
           case DT_IPU_J:   ScaleF /= RT;
           case DT_IPU_N:
           default:         break;

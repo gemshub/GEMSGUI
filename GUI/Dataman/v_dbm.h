@@ -5,7 +5,6 @@
 //	DataBaseList classes
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -23,7 +22,6 @@
 
 #include <iostream>
 #include <ctime>
-#include "gstring.h"
 #include "v_object.h"
 #include "v_dbfile.h"
 
@@ -53,8 +51,8 @@ class TDBKey
     const TDBKey& operator=(const TDBKey&);
 
 protected:
-    void unpack( char *key );
-    void pack( char *key );
+    void unpack( const char *key );
+    void pack( const char *key );
 
 public:
     TDBKey(unsigned char nRkflds,const unsigned char* rkfrm );
@@ -157,7 +155,7 @@ public:
     }
     size_t KeyInList()
     {
-        return aKey.GetCount();
+        return aKey.size();
     }
 
     //--- Manipulation records
@@ -171,7 +169,7 @@ public:
 
     //--- Manipulation key
     void PutKey(uint i);
-    void RecKey(uint i, gstring& kbuf );
+    void RecKey(uint i, string& kbuf );
 
     //--- reset class
     void initnew();
@@ -221,7 +219,7 @@ class TDataBase
     int frstOD;
     unsigned char nOD;
     TDBKeyList ind;
-    TIArray<TDBFile> aFile;  // list of add files
+    std::vector< std::shared_ptr<TDBFile>> aFile;  // list of add files
     TCIntArray fls;
 
     //work param
@@ -277,7 +275,7 @@ public:
     {
         return ind.KeyLen();
     }
-    void RecKey( uint i, gstring& kbuf )
+    void RecKey( uint i, string& kbuf )
     {
         ind.RecKey(i,kbuf);
     }
@@ -351,7 +349,7 @@ public:
     bool SetNewOpenFileList( const TCStringArray& aFlNames );
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
-    //  int GetNumFiles() { return aFile.GetCount(); }
+    //  int GetNumFiles() { return aFile.size(); }
     void  MakeInNewProfile( const std::string& dir,
       const char *prfName, const char * f_name=nullptr );
     void OpenOnlyFromList( TCStringArray& names );
@@ -399,11 +397,11 @@ public:
 // Data Base container : rt
 
 class DataBaseList:
-            public TIArray<TDataBase>
+            public std::vector<std::shared_ptr<TDataBase>>
 {
 public:
     DataBaseList():
-            TIArray<TDataBase>(40)
+           std::vector<std::shared_ptr<TDataBase>>()
     { }
 
     ~DataBaseList();
@@ -413,7 +411,6 @@ public:
     void toCFG(fstream& f);
 
     //--- Selectors
-    TDataBase& operator[](size_t) const;
     int Find(const char* keywd);
 };
 

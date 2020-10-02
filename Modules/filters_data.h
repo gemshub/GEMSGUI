@@ -4,7 +4,6 @@
 // Internal declarations
 //
 // Copyright (C) 2002 S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -20,7 +19,6 @@
 #ifndef filters_data_included
 #define filters_data_included
 
-#include "array.h"
 #include "v_user.h"
 
 //-----------------------------------------------------------------------
@@ -49,7 +47,7 @@ struct elmWindowData
 {
    TCStringArray ICrds;   // list of selected IComp
    TCStringArray oldIComps; // list from parent project
-   gstring aSelNames;  // names of selected grups of files
+   std::string aSelNames;  // names of selected grups of files
    //   TCStringArray flNames; // kernel, uncertain, specific
 
    bool flags[14];         // selectType
@@ -78,10 +76,10 @@ struct elmWindowData
     uint ii;
     for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
-    for( ii=0; ii<d.ICrds.GetCount(); ii++ )
-     ICrds.Add(d.ICrds[ii]);
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
+    for( ii=0; ii<d.ICrds.size(); ii++ )
+     ICrds.push_back(d.ICrds[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
     aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
@@ -92,10 +90,10 @@ struct elmWindowData
     uint ii;
     for( ii=0; ii<14; ii++ )
      flags[ii] = d.flags[ii];
-    for( ii=0; ii<d.ICrds.GetCount(); ii++ )
-     ICrds.Add(d.ICrds[ii]);
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
+    for( ii=0; ii<d.ICrds.size(); ii++ )
+     ICrds.push_back(d.ICrds[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
     aSelNames = d.aSelNames;
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
@@ -103,10 +101,10 @@ struct elmWindowData
     return *this;
   }
 
-  void setFlags( gstring strBuf)  //"<TDBflags> = "
+  void setFlags( std::string strBuf)  //"<TDBflags> = "
   {
       size_t  pos1 =  strBuf.find( "<TDBflags> = " ); //13
-      if( pos1 != gstring::npos )
+      if( pos1 != std::string::npos )
       {
          pos1 += 13;
          size_t pos2 = strBuf.find( ";", pos1 );
@@ -116,9 +114,9 @@ struct elmWindowData
       }
   }
 
-  gstring getFlags()
+  std::string getFlags()
   {
-      gstring strBuf =  "<TDBflags> = "; //+13
+      std::string strBuf =  "<TDBflags> = "; //+13
       for(int ii=0; ii<14; ii++ )
           if( flags[ii] )
               strBuf +='+';
@@ -153,8 +151,8 @@ struct elmFilesConfData
 
 struct icSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
+   std::string from_templ;
+   std::string to_templ;
 
    TCStringArray oldIComps; // list from parent project
    TCStringArray newIComps; // list from default database
@@ -168,10 +166,10 @@ struct icSetupData
     from_templ( d.from_templ), to_templ(d.to_templ)
   {
     uint ii;
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
-    for( ii=0; ii<d.newIComps.GetCount(); ii++ )
-     newIComps.Add(d.newIComps[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
+    for( ii=0; ii<d.newIComps.size(); ii++ )
+     newIComps.push_back(d.newIComps[ii]);
 //    for( ii=0; ii<d.flKeywds.GetCount(); ii++ )
 //     flKeywds.Add(d.flKeywds[ii]);
   }
@@ -182,10 +180,10 @@ struct icSetupData
     from_templ =  d.from_templ;
     to_templ =    d.to_templ;
 
-    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
-     oldIComps.Add(d.oldIComps[ii]);
-    for( ii=0; ii<d.newIComps.GetCount(); ii++ )
-     newIComps.Add(d.newIComps[ii]);
+    for( ii=0; ii<d.oldIComps.size(); ii++ )
+     oldIComps.push_back(d.oldIComps[ii]);
+    for( ii=0; ii<d.newIComps.size(); ii++ )
+     newIComps.push_back(d.newIComps[ii]);
 //    for( ii=0; ii<d.flKeywds.GetCount(); ii++ )
 //     flKeywds.Add(d.flKeywds[ii]);
 
@@ -196,9 +194,9 @@ struct icSetupData
 
 struct dcSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
-   gstring f_script;
+   std::string from_templ;
+   std::string to_templ;
+   std::string f_script;
 
 //   TCStringArray flKeywds;   // list files to open
 
@@ -232,9 +230,9 @@ struct dcSetupData
 
 struct rdSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
-   gstring f_script;
+   std::string from_templ;
+   std::string to_templ;
+   std::string f_script;
 
 //   TCStringArray flKeywds;   // list files to open
 
@@ -268,9 +266,9 @@ struct rdSetupData
 
 struct cmSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
-   gstring f_script;
+   std::string from_templ;
+   std::string to_templ;
+   std::string f_script;
 
 //   TCStringArray flKeywds;   // list files to open
 
@@ -312,8 +310,8 @@ enum copyFlagX { PHcopyL__ = 0, // (deleted!) Copy Phase records for &liquid (gl
 
 struct phSetupData
 {
-   gstring from_templ;
-   gstring to_templ;
+   std::string from_templ;
+   std::string to_templ;
 
    bool flags[6];
 
@@ -400,8 +398,8 @@ struct tableSetupData
    double val;
    char unit;
 
-   gstring objName;
-   gstring ndxName;
+   std::string objName;
+   std::string ndxName;
 
    tableSetupData( size_t aWin, int aobj, const char * oName,
                    int aIdx, const char * ndName,
@@ -410,19 +408,12 @@ struct tableSetupData
            objName(oName), ndxName (ndName)
    { }
 
-   tableSetupData( tableSetupData& d ):
-           nWin(d.nWin), nObj(d.nObj), nIdx(d.nIdx), val(d.val), unit(d.unit),
-           objName(d.objName), ndxName(d.ndxName)
-   {
-       // cout << "nWin = " << nWin << " nObj = " << nObj << " nIdx = " << nIdx << endl;
-   }
-
 };
 
 
 struct windowSetupData
 {
-   gstring pageName;
+   std::string pageName;
    int nObj;       // index of object
    int nOunit;     // index of object with units
    int nSwitch;    // index of object with switches
@@ -435,11 +426,6 @@ struct windowSetupData
         pageName(pName),  nObj(aobj), nOunit(uObj), nSwitch(sObj),
         unitLine(aUnt), defVal( adefVal), defUnit(adefUnit)
    { }
-
-   windowSetupData( windowSetupData& d ):
-           pageName(d.pageName),  nObj(d.nObj), nOunit(d.nOunit),  nSwitch(d.nSwitch),
-           unitLine(d.unitLine), defVal( d.defVal), defUnit(d.defUnit)
-   {}
 
 };
 

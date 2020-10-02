@@ -22,7 +22,6 @@
 #include <QDialog>
 #include "ui_GtDemoWizard4.h"
 #include "EquatSetupWidget.h"
-#include "gstring.h"
 
 
 class GtDemoWizard : public QDialog, public Ui::GtDemoWizardData
@@ -30,7 +29,7 @@ class GtDemoWizard : public QDialog, public Ui::GtDemoWizardData
     Q_OBJECT
 
     int nRT;
-    gstring script;
+    string script;
     EquatSetup *pageScript;
     QButtonGroup *allButtons;
 
@@ -47,10 +46,10 @@ public:
 
 
     void   getSizes( int size[8] );
-    gstring getPrKey();
-    gstring getScript() const
+    string getPrKey();
+    string getScript() const
     { return pageScript->getScript(); }
-    TCStringArray getNames( gstring& xName, gstring& yName ) const
+    TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
 protected slots:

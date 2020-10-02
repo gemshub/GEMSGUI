@@ -4,7 +4,6 @@
 // Implementation of KeyFilter class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -45,23 +44,24 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
     setWindowModality(Qt::WindowModal);
     setWindowTitle(caption);
 
-    TDBKey dbKey( rt[irt].GetDBKey() );
+    TDBKey dbKey( rt[irt]->GetDBKey() );
 
     if( key )
         dbKey.SetKey(key);
 
     QGridLayout* editBox = new QGridLayout();
-    auto editLine = aMod[iRt].keyEditField();
+    auto editLine = aMod[iRt]->keyEditField();
     
     for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
-        aEdit.Add( pEdit = new QLineEdit(this) );
-        QString str = dynamic_cast<TCModule*>(&aMod[irt])->GetFldHelp(ii);
+        pEdit = new QLineEdit(this);
+        aEdit.push_back( std::shared_ptr<QLineEdit>(pEdit) );
+        QString str = dynamic_cast<TCModule*>(aMod[irt].get())->GetFldHelp(ii);
         pEdit->setToolTip( str);
         pEdit->setMaxLength( dbKey.FldLen(ii) );
         pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
         pEdit->setMinimumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
-        gstring s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
+        string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
         pEdit->setText( s.c_str() );
         connect( pEdit, SIGNAL(editingFinished ()), this, SLOT(setKeyLine()) );
@@ -73,7 +73,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
         if( !allowTemplates && ii < editLine )
             pEdit->setEnabled(false);
     }
-    aEdit[0].setFocus();
+    aEdit[0]->setFocus();
 
     QHBoxLayout* buttonBox = new QHBoxLayout();
     QPushButton* btn;
@@ -136,16 +136,16 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
 void
 KeyFilter::CmHelp()
 {                               
-   gstring dbName =  DBM;
+   string dbName =  DBM;
    dbName +="_";
-   dbName += gstring(aMod[iRt].GetName());
+   dbName += string(aMod[iRt]->GetName());
    pVisorImp->OpenHelp(  GEMS_REKEY_HTML, dbName.c_str() );
 }
 
 void
 KeyFilter::CmOk()
 {
-    if( allowTemplates || SetKeyString().find_first_of("*?") == gstring::npos )
+    if( allowTemplates || SetKeyString().find_first_of("*?") == string::npos )
     {
         accept();
         return;
@@ -154,16 +154,16 @@ KeyFilter::CmOk()
     vfMessage(this, "Key error", "No templates allowed!", vfErr);
 }
 
-gstring
+string
 KeyFilter::SetKeyString()
 {
     //TDBKey dbKey( rt[iRt].GetDBKey() );
-    gstring Key;
+    string Key;
 
     Key = "";
-    for( uint ii=0/*, jj=0*/; ii<aEdit.GetCount(); ii++/*, jj=Key.length()*/)
+    for( size_t ii=0/*, jj=0*/; ii<aEdit.size(); ii++/*, jj=Key.length()*/)
     {
-        gstring s = aEdit[ii].text().toLatin1().data();
+        string s = aEdit[ii]->text().toStdString();
         Key += s;
         StripLine(Key);
 //Sveta 04/09/01 ????  if( Key.length()-jj < dbKey.FldLen(ii) )
@@ -182,8 +182,8 @@ KeyFilter::setKeyLine()
 void
 KeyFilter::EvSetAll()
 {
-    for( uint ii=0; ii<aEdit.GetCount(); ii++ )
-        aEdit[ii].setText("*");
+    for( size_t ii=0; ii<aEdit.size(); ii++ )
+        aEdit[ii]->setText("*");
     setKeyLine();
 }
 
@@ -194,20 +194,20 @@ KeyFilter::EvGetList()
     if( !dlg.exec() )
         return;
 
-    TDBKey dbKey( rt[iRt].GetDBKey() );
+    TDBKey dbKey( rt[iRt]->GetDBKey() );
 
     dbKey.SetKey(dlg.getKey().c_str());
 
     for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
-        gstring s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
+        string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
-        aEdit[ii].setText( s.c_str() );
+        aEdit[ii]->setText( s.c_str() );
     }
     setKeyLine();
 }
 
-gstring
+string
 KeyFilter::getFilter()
 {
     //  if( result )

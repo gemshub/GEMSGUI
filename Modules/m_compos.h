@@ -131,7 +131,7 @@ public:
     const char* GetHtml();
 
     void CopyRecords( const char * prfName, TCStringArray& aCMnoused,
-       elmWindowData el_data, cmSetupData st_data, TCStringArray& SDlist );
+       elmWindowData el_data, cmSetupData st_data, std::set<std::string>& SDlist );
 }
 ;
 

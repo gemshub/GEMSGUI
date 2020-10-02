@@ -4,7 +4,6 @@
 // Declaration of IPNCalc class
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -21,10 +20,9 @@
 #define __v_ipnc_h_
 
 #include <cctype>
+#include <vector>
 #include <fstream>
 using namespace std;
-
-#include "array.h"
 
 const double IPNC_DBL_MAX = 1e307;
 const double IPNC_DBL_MIN = 1e-307;
@@ -92,9 +90,9 @@ class IPNCalc
         mod_f, pow_f, sum_f, prod_f, max_f, min_f, null_f, one_f
     };
 
-    TIArray<RpnItem> aItm;  // list of items
-    TIArray<Equation> aEq;  // list of equations
-    TOArray<double> aCon;  // list of constant
+    std::vector<RpnItem> aItm;  // list of items
+    std::vector<Equation> aEq;  // list of equations
+    std::vector<double> aCon;  // list of constant
     char *input;
 
 protected:
@@ -114,10 +112,10 @@ protected:
     int SPRTY( char c );
     void InDigit();
     void IsAscii();
-    void Ident( char *s );
-    void Ffun( char * str);
-    void Variab( const char * str);
-    void I_Variab( char * str);
+    string Ident();
+    void Ffun( const string& str);
+    void Variab( const string& str);
+    void I_Variab( const string& str);
     void bildEquat();
     void bildWhile();
     void bildIf();
@@ -129,9 +127,9 @@ public:
     void GetEquat( char *txt );
     void CalcEquat();
     void PrintEquat( char *s, fstream& f);
-    int nEquat() const
+    size_t nEquat() const
     {
-        return aEq.GetCount();
+        return aEq.size();
     }
 
 };

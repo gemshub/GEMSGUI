@@ -4,7 +4,6 @@
 // Implementation of NewSystemDialog class
 //
 // Copyright (C) 1996-2008 S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -34,10 +33,10 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
 	QMainWindow( parent )
 {
 	setupUi(this);
-        gstring titl; // = pVisorImp->getGEMTitle();
+        string titl; // = pVisorImp->getGEMTitle();
             titl = "EqStat:: Single Thermodynamic System in Project ";
-            titl+= gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
-            setWindowTitle( trUtf8(titl.c_str()) );
+            titl+= string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+            setWindowTitle(  titl.c_str()  );
 
     pDia = this;
 
@@ -66,7 +65,7 @@ void NewSystemDialog::languageChange()
 
 QSize NewSystemDialog::sizeHint() const
 {
-    return QSize(aWinInfo[RT_SYSEQ].init_width, aWinInfo[RT_SYSEQ].init_height);
+    return QSize(aWinInfo[RT_SYSEQ]->init_width, aWinInfo[RT_SYSEQ]->init_height);
 }
 void NewSystemDialog::objectChanged()
 {
@@ -204,7 +203,7 @@ void NewSystemDialog::Update()
 {
     MULTI* pData = TMulti::sm->GetPM();
 
-   if( !ListViewResult  && aObj[ o_wi_l1 ].GetPtr() )
+   if( !ListViewResult  && aObj[ o_wi_l1 ]->GetPtr() )
      defineResultList(); 
     //pLine->setText(tr (rt[RT_SYSEQ].PackKey()));
     //toolBar_5->update();
@@ -263,8 +262,8 @@ void NewSystemDialog::closeEvent(QCloseEvent* ev)
 {
     if( !(windowState() & Qt::WindowMaximized) )
     {
-        aWinInfo[RT_SYSEQ].init_width = parentWidget()->width();
-        aWinInfo[RT_SYSEQ].init_height = parentWidget()->height();
+        aWinInfo[RT_SYSEQ]->init_width = parentWidget()->width();
+        aWinInfo[RT_SYSEQ]->init_height = parentWidget()->height();
     }
 
     // close module
@@ -294,8 +293,8 @@ void NewSystemDialog::printInputList( fstream& f )
 // returns true if user pressed 'save' or 'discard' and false on 'cancel'
 bool NewSystemDialog::MessageToSave()
 {
-    gstring key_str = rt[RT_SYSEQ].PackKey();
-    if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == gstring::npos )
+    string key_str = rt[RT_SYSEQ]->PackKey();
+    if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == string::npos )
     {
      int res = vfQuestion3(this, key_str.c_str(),
                        "Data record has been changed!",
@@ -518,7 +517,7 @@ void NewSystemDialog::CmNew()
 
 void NewSystemDialog::CmSelect( const char *key )
 {
-    if( rt[RT_SYSEQ].RecCount() <= 0)
+    if( rt[RT_SYSEQ]->RecCount() <= 0)
         return;   // Added to avoid a pitfall at creating new project
     try
     {
@@ -558,8 +557,8 @@ void NewSystemDialog::CmSave()
     {
         if( TSysEq::pm->ifCalcFlag()== false )
         {
-            gstring key_s = rt[RT_SYSEQ].PackKey();
-            if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0) // FindCurrent
+            string key_s = rt[RT_SYSEQ]->PackKey();
+            if( rt[RT_SYSEQ]->Find( key_s.c_str()  ) < 0) // FindCurrent
             { vfMessage( this, key_s.c_str(),
                          "Please, calculate the equilibrium state before saving this record!");
                 return;
@@ -594,7 +593,7 @@ void NewSystemDialog::CmDelete()
 
 void NewSystemDialog::CmNext()
 {
-    if( rt[RT_SYSEQ].RecCount() <= 0 )
+    if( rt[RT_SYSEQ]->RecCount() <= 0 )
         return;    // Added to avoid a pitfall at creating new project
     try
     {
@@ -603,18 +602,18 @@ void NewSystemDialog::CmNext()
 
         size_t i_next = 0;
         // get current record key
-        gstring str=rt[RT_SYSEQ].UnpackKey();
+        string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ].GetKeyList(TSysEq::pm->getFilter(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList(TSysEq::pm->getFilter(), aKey, anR );
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != gstring::npos) )
+        if( !(str.find_first_of("*?" ) != string::npos) )
             //Current record key is defined!
         {
-            for(uint i=0; i<aKey.GetCount(); i++ )
+            for(size_t i=0; i<aKey.size(); i++ )
                 if( str == aKey[i])
                 {
                     i_next = i+1;
@@ -636,7 +635,7 @@ void NewSystemDialog::CmNext()
 void NewSystemDialog::CmPrevious()
 {
 
-    if( rt[RT_SYSEQ].RecCount() <= 0)
+    if( rt[RT_SYSEQ]->RecCount() <= 0)
         return; // Added to avoid a pitfall at creating new project
     try
     {
@@ -645,18 +644,18 @@ void NewSystemDialog::CmPrevious()
 
         size_t i_next = 0;
         // get current record key
-        gstring str=rt[RT_SYSEQ].UnpackKey();
+        string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ].GetKeyList( TSysEq::pm->getFilter(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList( TSysEq::pm->getFilter(), aKey, anR );
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != gstring::npos) )
+        if( !(str.find_first_of("*?" ) != string::npos) )
             //Current record key is defined!
         {
-            for(size_t i=0; i<aKey.GetCount(); i++ )
+            for(size_t i=0; i<aKey.size(); i++ )
                 if( str == aKey[i])
                 {
                     if( i > 0 )

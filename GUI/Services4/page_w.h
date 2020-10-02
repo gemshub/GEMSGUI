@@ -4,7 +4,6 @@
 // Declaration of TCPage, TQueryWindow and TCWindow classes
 //
 // Copyright (C) 1996-2009  A.Rysin,  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -51,13 +50,13 @@ class TCPage:
     bool fRedraw;
     bool firstRedraw;
 
-    TOArray<TObjectModel*> aModels;
-    TOArray<QWidget*> aFields;
-    TOArray<int> aTypes;
+    std::vector< std::shared_ptr<TObjectModel> > aModels;
+    std::vector< std::shared_ptr<TObjectTable>> aFields;
+    std::vector<int> aTypes;
     
-    int getFieldCnt() const
+    size_t getFieldCnt() const
     {
-        return rInfo.aFieldInfo.GetCount();
+        return rInfo.aFieldInfo.size();
     }
     
     TSubModule& getWin() const
@@ -99,7 +98,7 @@ class TCWindow: public QWidget
 
     CWinInfo& rInfo;
     int iCurPage;
-    TOArray<TCPage*> aPages;
+    std::vector< std::shared_ptr<TCPage>> aPages;
 
     QStackedWidget *pages;
     QScrollArea *scroll;
@@ -115,7 +114,7 @@ class TCWindow: public QWidget
 
     int getPageCnt() const
     {
-        return rInfo.aPageInfo.GetCount();
+        return static_cast<int>(rInfo.aPageInfo.size());
     }
 
     TSubModule& getCModule() const

@@ -4,7 +4,6 @@
 // Implementation of KeyProfile class
 //
 // Copyright (C) 1996-2008  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -48,10 +47,10 @@ KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
         rbOldPrMode->setChecked( true );
     }
 
-    //    gstring s = "Select Project record";
+    //    string s = "Select Project record";
     //    pLabel->setText(s.c_str());
 
-    auto n = rt[irt].GetKeyList( "*", keyList, temp);
+    auto n = rt[irt]->GetKeyList( "*", keyList, temp);
     for( size_t ii=0; ii<n; ii++ )
         pList->addItem(keyList[ii].c_str());
     pList->setCurrentRow(0);
@@ -74,16 +73,16 @@ void KeyProfile::languageChange()
     retranslateUi(this);
 }
 
-gstring KeyProfile::getKey() const
+string KeyProfile::getKey() const
 {
     pVisor->setElemPrMode(rbNewPrMode->isChecked());
     if( newKey == true )
         return ALLKEY;
     int sel = pList->currentRow();
     if( sel != -1 )
-        return gstring(pList->item(sel)->text().toLatin1().data());
+        return pList->item(sel)->text().toStdString();
 
-    return gstring();
+    return string();
 }
 
 void KeyProfile::CmReturnIA()
@@ -154,16 +153,16 @@ bool KeyProfile::getRemakeState() const
 
 }
 
-gstring KeyProfile::getTemplateKey() const
+string KeyProfile::getTemplateKey() const
 {
     if( newKey == true && pTemplate->isChecked() )
     {
         int sel = pList->currentRow();
         if( sel != -1 )
-            return gstring(pList->item(sel)->text().toLatin1().data());
+            return pList->item(sel)->text().toStdString();
         Error( "New Modelling Project", "No template record selected");
     }
-    return gstring();
+    return string();
 }
 
 bool KeyProfile::getGEMSExport() const

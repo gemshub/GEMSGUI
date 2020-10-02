@@ -26,14 +26,14 @@ TSysEq::TSysEq( uint nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Thermodynamic potential to minimize {G GV}");
-    aFldKeysHelp.Add("Name of the chemical system definition (CSD)");
-    aFldKeysHelp.Add("CSD (recipe) variant number <integer>");
-    aFldKeysHelp.Add("Volume of the system, dm3 (0 if no volume constraint)");
-    aFldKeysHelp.Add("Pressure, bar, or 0 for Psat(H2O)g");
-    aFldKeysHelp.Add("Temperature, C (>= 0)");
-    aFldKeysHelp.Add("Variant number for additional constraints");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Thermodynamic potential to minimize {G GV}");
+    aFldKeysHelp.push_back("Name of the chemical system definition (CSD)");
+    aFldKeysHelp.push_back("CSD (recipe) variant number <integer>");
+    aFldKeysHelp.push_back("Volume of the system, dm3 (0 if no volume constraint)");
+    aFldKeysHelp.push_back("Pressure, bar, or 0 for Psat(H2O)g");
+    aFldKeysHelp.push_back("Temperature, C (>= 0)");
+    aFldKeysHelp.push_back("Variant number for additional constraints");
     setKeyEditField(1);
 
     stp=&st[1];
@@ -71,9 +71,9 @@ void TSysEq::RecInput( const char *key )
 void
 TSysEq::RecSave( const char *key, bool onOld )
 {
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode  )
     { // test system and pack
-        TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+        TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
         aPa->PackSystat();
     }
     TCModule::RecSave( key, onOld );
@@ -83,13 +83,13 @@ TSysEq::RecSave( const char *key, bool onOld )
 // test Project key to calc mode
 void TSysEq::keyTest( const char *key )
 {
-    if( pVisor->ProfileMode == true )
+    if( pVisor->ProfileMode )
     { // test project key
-        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
-        int k = prfKey.length();
+        auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( GetName(), "Invalid key!");
     }
 }
@@ -99,9 +99,9 @@ void TSysEq::keyTest( const char *key )
 void TSysEq::MakeQuery()
 {
     const char * p_key;
-    gstring name = gstring(ssp->name, 0, MAXFORMULA);
-    gstring notes = gstring(ssp->notes, 0, MAXFORMULA);
-    gstring EQkey = gstring(ssp->PhmKey, 0, EQ_RKLEN);
+    std::string name = std::string(ssp->name, 0, MAXFORMULA);
+    std::string notes = std::string(ssp->notes, 0, MAXFORMULA);
+    std::string EQkey = std::string(ssp->PhmKey, 0, EQ_RKLEN);
 
     p_key  = db->PackKey();
 
@@ -120,7 +120,7 @@ void TSysEq::MakeQuery()
 int
 TSysEq::RecBuild( const char *key, int mode  )
 {
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "Invalid mode!");
 
 
@@ -138,13 +138,13 @@ TSysEq::RecBuild( const char *key, int mode  )
 //        rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
 //            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
 
-        gstring skey = gstring(ssp->PhmKey, 0, EQ_RKLEN);
+        std::string skey = std::string(ssp->PhmKey, 0, EQ_RKLEN);
         if( /* !skey.empty() && */ skey[0] != '-' && skey != S_EMPTY )
         {
            if( skey.empty() || skey[0] == '\0' || skey[0] == ' ' )
               skey = "*";
            else
-              rt[RT_SYSEQ].SetKey( skey.c_str() ); //Find( skey.c_str() );
+              rt[RT_SYSEQ]->SetKey( skey.c_str() ); //Find( skey.c_str() );
 
           skey = vfKeyEdit( window(),
                "Please, select one SysEq record",  nRT,  skey.c_str() );
@@ -153,7 +153,7 @@ TSysEq::RecBuild( const char *key, int mode  )
           else
                memcpy( ssp->PhmKey, skey.c_str(), EQ_RKLEN );
 
-          rt[RT_SYSEQ].SetKey( key ); // DAK fixed 27.10.99
+          rt[RT_SYSEQ]->SetKey( key ); // DAK fixed 27.10.99
        }
     }
     // Check flags to alloc data
@@ -189,7 +189,7 @@ TSysEq::RecBuild( const char *key, int mode  )
         ssp->switches[30] = S_OFF;
         ssp->DM[17] = 0;
     }
-    //TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    //TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
     // for phase separation (exsolution)
     ssp->switches[21] = S_REM;
     ssp->switches[20] = S_REM;
@@ -209,7 +209,7 @@ TSysEq::RecBuild( const char *key, int mode  )
 void
 TSysEq::RecCalc( const char *key )
 {
-    if( pVisor->ProfileMode != true )
+    if( !pVisor->ProfileMode )
         Error( GetName(), "Invalid mode!");
     TCModule::RecCalc(key);
 }
@@ -217,19 +217,19 @@ TSysEq::RecCalc( const char *key )
 
 // insert changes in Project to TSysEq
 
-void TSysEq::InsertChanges( TIArray<CompItem>& aIComp,
-                            TIArray<CompItem>& aCompos, TIArray<CompItem>& aPhase,
-                            TIArray<CompItem>&aDComp )
+void TSysEq::InsertChanges( std::vector<CompItem>& aIComp,
+                            std::vector<CompItem>& aCompos, std::vector<CompItem>& aPhase,
+                            std::vector<CompItem>&aDComp )
 {
-    uint i;
+    size_t i;
     int j1, j2, j3, j4, j5, j6;
     short  delta=0;
     bool ifRealloc = false;
     // insert changes to IComp
-    if(aIComp.GetCount()<1)
+    if(aIComp.size()<1)
         goto COMPOS_TEST;
 
-    for( i=0, j1=0, j2=0, j3=0; i<aIComp.GetCount(); i++)
+    for( i=0, j1=0, j2=0, j3=0; i<aIComp.size(); i++)
     {
         if( ssp->nnc )
         {
@@ -286,9 +286,9 @@ void TSysEq::InsertChanges( TIArray<CompItem>& aIComp,
 
     // insert changes to Compos
 COMPOS_TEST:
-    if(aCompos.GetCount()<1)
+    if(aCompos.size()<1)
         goto PHASE_TEST;
-    for( i=0, j1=0, delta=0; i<aCompos.GetCount(); i++)
+    for( i=0, j1=0, delta=0; i<aCompos.size(); i++)
     {
         if( ssp->llc )
         {
@@ -313,10 +313,10 @@ COMPOS_TEST:
     // insert changes to Phase
 PHASE_TEST:
     delta = 0;
-    if(aPhase.GetCount()<1)
+    if(aPhase.size()<1)
         goto DCOMP_TEST;
 
-    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aPhase.GetCount(); i++)
+    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aPhase.size(); i++)
     {
         if( ssp->phc )
         {
@@ -424,11 +424,11 @@ PHASE_TEST:
 DCOMP_TEST:
 
     delta = 0;
-    if(aDComp.GetCount()<1)
+    if(aDComp.size()<1)
         goto EXIT_TEST;
 
 
-    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aDComp.GetCount(); i++)
+    for( i=0, j1=0, j2=0, j3=0, j4=0, j5=0, j6=0; i<aDComp.size(); i++)
     {
         if( ssp->dcc ) // DC     on  in  XeD[]     [sy.Lb]
         {
@@ -780,10 +780,10 @@ void TSysEq::newSizeifChange()
 void TSysEq::RenameList( const char* newName,
         const char *oldName )
 {
-    if( (int)strlen(newName) > db->FldLen(0) )
+    if( strlen(newName) > db->FldLen(0) )
       return;
 
-    gstring str_old = gstring( oldName, 0, db->FldLen(0) );
+    std::string str_old = std::string( oldName, 0, db->FldLen(0) );
 //04/09/01 ????    if( strlen(oldName)<FldLen(0) )
         str_old += ":";
     for( int i=1; i<db->KeyNumFlds(); i++)
@@ -792,12 +792,12 @@ void TSysEq::RenameList( const char* newName,
     TCStringArray arKey;
     TCIntArray arR;
 
-    uint Nrec = db->GetKeyList( str_old.c_str(), arKey, arR );
+    auto Nrec = db->GetKeyList( str_old.c_str(), arKey, arR );
     if( Nrec < 1)
       return;
 
     int nrec;
-    gstring str;
+    std::string str;
 
     for(uint i=0; i<Nrec; i++ )
     {
@@ -807,14 +807,14 @@ void TSysEq::RenameList( const char* newName,
         // changing record key
         str = db->PackKey();
         db->Del( nrec );
-        str = str.replace( oldName, newName);
+        replace( str, oldName, newName);
         // change tPhEQ key (o_ssphst,PhmKey)
-        gstring tPhkey = gstring( ssp->PhmKey, 0 , EQ_RKLEN );
-        if( tPhkey.find(oldName) != gstring::npos)
+        std::string tPhkey = std::string( ssp->PhmKey, 0 , EQ_RKLEN );
+        if( tPhkey.find(oldName) != std::string::npos)
         {
          db->SetKey( tPhkey.c_str() );
          tPhkey = db->PackKey();
-         tPhkey = tPhkey.replace( oldName, newName);
+         replace( tPhkey, oldName, newName );
          memcpy( ssp->PhmKey, tPhkey.c_str(), EQ_RKLEN );
         }
         db->AddRecordToFile( str.c_str(), db->fNum );

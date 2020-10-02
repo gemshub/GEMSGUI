@@ -4,7 +4,6 @@
 // Declaration of GemsMainWindow class
 //
 // Copyright (C) 2011  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -91,7 +90,7 @@ struct DThread
   //vfChoise3
   bool all; // only return
   //vfExcludeFillEdit
-  TOArray<bool> sel;
+  std::vector<bool> sel;
   double fill_data;
 
   //Message&Quastion&Question3
@@ -113,9 +112,9 @@ struct DThread
      mess ="";
      all = all_;
      seli = sel_;
-     list.Clear();
-     for( uint ii=0; ii<arr.GetCount(); ii++ )
-       list.Add( arr[ii]);
+     list.clear();
+     for( size_t ii=0; ii<arr.size(); ii++ )
+       list.push_back( arr[ii]);
   }
   //vfExcludeFillEdit
   void setDThread( const char* caption, TCStringArray& aICkeys,
@@ -124,9 +123,9 @@ struct DThread
      wait = true;
      title = caption;
      fill_data = fill_data_;
-     list.Clear();
-     for( uint ii=0; ii<aICkeys.GetCount(); ii++ )
-       list.Add( aICkeys[ii]);
+     list.clear();
+     for( size_t ii=0; ii<aICkeys.size(); ii++ )
+       list.push_back( aICkeys[ii]);
   }
 };
 
@@ -206,7 +205,7 @@ public:
     //--void SetDialog(QWidget* centralDialog);
 
     void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
-    void defineModuleKeysList( int nRT );
+    void defineModuleKeysList( size_t nRT );
     void GetHelp();
     void OpenHelp(const char* file, const char* item=nullptr, int page =-1);
     bool Message( QWidget* parent, const char* name,
@@ -412,7 +411,7 @@ private slots:
     QMdiSubWindow *findMdiChild(const QString &moduleName);
     QMdiSubWindow *findMdiGraph(const QString &moduleName);
     QMdiSubWindow *findNewSystem();
-    gstring nameMdiChild( QWidget *p );
+    string nameMdiChild( QWidget *p );
     int indexMdiChild( QWidget *p );
     int nRTofActiveSubWindow();
     QIcon iconMdiChild( QWidget *p );

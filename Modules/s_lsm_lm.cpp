@@ -197,6 +197,7 @@ void TLMmin::CheckLimits( double *p )
               tmp = par_ap[ii] -  fabs(d_par[ii]);
               if( p[ii] < tmp )
                 p[ii] =  tmp;
+              [[fallthrough]];
       case 2:  /* upper bounds only */
               tmp = par_ap[ii] +  fabs(d_par[ii]);
               if( p[ii] > tmp )
@@ -283,11 +284,11 @@ void TLMmin::lm_minimize( double* sdpar )
 
 
 // ***** the low-level legacy interface for full control.
-void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, double xtol,
-               double gtol, int maxfev, double epsfcn, double* diag, int mode,
+void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, double xtol,
+               double gtol, int maxfev, double epsfcn, double* diag1, int mode,
                double factor, int *info, int *nfev,
-               double* fjac, int* ipvt, double* qtf,
-               double* wa1, double* wa2, double* wa3, double* wa4 )
+               double* fjac1, int* ipvt1, double* qtf1,
+               double* wa11, double* wa21, double* wa31, double* wa41 )
 {
 /*
  *   the purpose of lmdif is to minimize the sum of the squares of
@@ -302,7 +303,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *
  *   the parameters are the same as in the legacy FORTRAN implementation,
  *   with the following exceptions:
- *      the old parameter ldfjac which gave leading dimension of fjac has
+ *      the old parameter ldfjac which gave leading dimension of fjac1 has
  *        been deleted because this C translation makes no use of two-
  *        dimensional arrays;
  *      the old parameter nprint has been deleted; printout is now controlled
@@ -322,7 +323,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *	  an initial estimate of the solution vector. on output x
  *	  contains the final estimate of the solution vector.
  *
- *	fvec is an output array of length m which contains
+ *	fvec1 is an output array of length m which contains
  *	  the functions evaluated at the output x.
  *
  *	ftol is a nonnegative input variable. termination
@@ -337,7 +338,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *	  relative error desired in the approximate solution.
  *
  *	gtol is a nonnegative input variable. termination
- *	  occurs when the cosine of the angle between fvec and
+ *	  occurs when the cosine of the angle between fvec1 and
  *	  any column of the jacobian is at most gtol in absolute
  *	  value. therefore, gtol measures the orthogonality
  *	  desired between the function vector and the columns
@@ -355,18 +356,18 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *	  errors in the functions are of the order of the machine
  *	  precision.
  *
- *	diag is an array of length n. if mode = 1 (see below), diag is
- *        internally set. if mode = 2, diag must contain positive entries
+ *	diag1 is an array of length n. if mode = 1 (see below), diag1 is
+ *        internally set. if mode = 2, diag1 must contain positive entries
  *        that serve as multiplicative scale factors for the variables.
  *
  *	mode is an integer input variable. if mode = 1, the
  *	  variables will be scaled internally. if mode = 2,
- *	  the scaling is specified by the input diag. other
+ *	  the scaling is specified by the input diag1. other
  *	  values of mode are equivalent to mode = 1.
  *
  *	factor is a positive input variable used in determining the
  *	  initial step bound. this bound is set to the product of
- *	  factor and the euclidean norm of diag*x if nonzero, or else
+ *	  factor and the euclidean norm of diag1*x if nonzero, or else
  *	  to factor itself. in most cases factor should lie in the
  *	  interval (.1,100.). 100. is a generally recommended value.
  *
@@ -385,7 +386,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *
  *	  info = 3  conditions for info = 1 and info = 2 both hold;
  *
- *	  info = 4  the cosine of the angle between fvec and any
+ *	  info = 4  the cosine of the angle between fvec1 and any
  *		    column of the jacobian is at most gtol in
  *		    absolute value;
  *
@@ -398,38 +399,38 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *	  info = 7  xtol is too small. no further improvement in
  *		    the approximate solution x is possible;
  *
- *	  info = 8  gtol is too small. fvec is orthogonal to the
+ *	  info = 8  gtol is too small. fvec1 is orthogonal to the
  *		    columns of the jacobian to machine precision;
  *
  *	nfev is an output variable set to the number of calls to the
  *        user-supplied routine *evaluate.
  *
- *	fjac is an output m by n array. the upper n by n submatrix
- *	  of fjac contains an upper triangular matrix r with
+ *	fjac1 is an output m by n array. the upper n by n submatrix
+ *	  of fjac1 contains an upper triangular matrix r with
  *	  diagonal elements of nonincreasing magnitude such that
  *
  *		 t     t	   t
  *		p *(jac *jac)*p = r *r,
  *
  *	  where p is a permutation matrix and jac is the final
- *	  calculated jacobian. column j of p is column ipvt(j)
+ *	  calculated jacobian. column j of p is column ipvt1(j)
  *	  (see below) of the identity matrix. the lower trapezoidal
- *	  part of fjac contains information generated during
+ *	  part of fjac1 contains information generated during
  *	  the computation of r.
  *
- *	ipvt is an integer output array of length n. ipvt
+ *	ipvt1 is an integer output array of length n. ipvt1
  *	  defines a permutation matrix p such that jac*p = q*r,
  *	  where jac is the final calculated jacobian, q is
  *	  orthogonal (not stored), and r is upper triangular
  *	  with diagonal elements of nonincreasing magnitude.
- *	  column j of p is column ipvt(j) of the identity matrix.
+ *	  column j of p is column ipvt1(j) of the identity matrix.
  *
- *	qtf is an output array of length n which contains
- *	  the first n elements of the vector (q transpose)*fvec.
+ *	qtf1 is an output array of length n which contains
+ *	  the first n elements of the vector (q transpose)*fvec1.
  *
- *	wa1, wa2, and wa3 are work arrays of length n.
+ *	wa11, wa21, and wa31 are work arrays of length n.
  *
- *	wa4 is a work array of length m.
+ *	wa41 is a work array of length m.
  *
  *   the following parameters are newly introduced in this C translation:
  *
@@ -438,11 +439,11 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *        alternatively, evaluate can be provided by a user calling program.
  *        it should be written as follows:
  *
- *        void evaluate ( double* par, int m_dat, double* fvec,
+ *        void evaluate ( double* par, int m_dat, double* fvec1,
  *                       void *data, int *info )
  *        {
  *           // for ( i=0; i<m_dat; ++i )
- *           //     calculate fvec[i] for given parameters par;
+ *           //     calculate fvec1[i] for given parameters par;
  *           // to stop the minimization,
  *           //     set *info to a negative integer.
  *        }
@@ -452,7 +453,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *        alternatively, printout can be provided by a user calling program.
  *        it should be written as follows:
  *
- *        void printout ( int n_par, double* par, int m_dat, double* fvec,
+ *        void printout ( int n_par, double* par, int m_dat, double* fvec1,
  *                       void *data, int iflag, int iter, int nfev )
  *        {
  *           // iflag : 0 (init) 1 (outer loop) 2(inner loop) -1(terminated)
@@ -465,7 +466,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *
  */
     int i, iter, j;
-    double actred, delta, dirder, eps, fnorm, fnorm1, gnorm, par, pnorm,
+    double actred, delta, dirder, eps, fnorm, fnorm1, gnorm, par1, pnorm,
         prered, ratio, step, sum, temp, temp1, temp2, temp3, xnorm;
     static double p1 = 0.1;
     static double p5 = 0.5;
@@ -475,7 +476,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 
     *nfev = 0; // function evaluation counter
     iter = 1;  // outer loop counter
-    par = 0;   // levenberg-marquardt parameter
+    par1 = 0;   // levenberg-marquardt parameter
     delta = 0; // just to prevent a warning (initialization within if-clause)
     xnorm = 0; // dito
 
@@ -496,11 +497,11 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 //        return;
 //#endif
     }
-    if ( mode == 2 )  /* scaling by diag[] */
+    if ( mode == 2 )  /* scaling by diag1[] */
     {
 	for ( j=0; j<n; j++ )  /* check for nonpositive elements */
         {
-            if ( diag[j] <= 0.0 )
+            if ( diag1[j] <= 0.0 )
             {
 //#ifndef IPMGEMPLUGIN
               Error( lm_shortmsg[0], lm_infmsg[0]);
@@ -515,14 +516,14 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 // *** evaluate the function at the starting point and calculate its norm.
 
 //    *info = 0;
-//    (*evaluate)( x, m, fvec, data, info );
-//    (*printout)( n, x, m, fvec, data, 0, 0, ++(*nfev) );
+//    (*evaluate)( x, m, fvec1, data, info );
+//    (*printout)( n, x, m, fvec1, data, 0, 0, ++(*nfev) );
 
 // SD oct 2005
-    *info = data->evaluate( x, fvec );
-    data->lm_print_default( x, fvec, 0, 0, 0, ++(*nfev), lm_enorm(m,fvec) );
+    *info = data->evaluate( x, fvec1 );
+    data->lm_print_default( x, fvec1, 0, 0, 0, ++(*nfev), lm_enorm(m,fvec1) );
 //    if ( *info < 0 ) return; must be exeption if error
-    fnorm = lm_enorm(m,fvec);
+    fnorm = lm_enorm(m,fvec1);
 
 // *** the outer loop.
 
@@ -534,18 +535,18 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         {
             temp = x[j];
             step = eps * fabs(temp);
-            if (step == 0.) step = eps;
+            if ( approximatelyZero(step) ) step = eps;
             x[j] = temp + step;
 //            *info = 0;
-//            (*evaluate)( x, m, wa4, data, info );
-//            (*printout)( n, x, m, wa4, data, 1, iter, ++(*nfev) );
+//            (*evaluate)( x, m, wa41, data, info );
+//            (*printout)( n, x, m, wa41, data, 1, iter, ++(*nfev) );
 // SD oct 2005
-    *info = data->evaluate( x, wa4 );
-    data->lm_print_default( x, wa4, 0, 1, iter, ++(*nfev) , lm_enorm(m,wa4));
+    *info = data->evaluate( x, wa41 );
+    data->lm_print_default( x, wa41, 0, 1, iter, ++(*nfev) , lm_enorm(m,wa41));
 //            if ( *info < 0 ) return;  // user requested break must be exeption
             x[j] = temp;
             for ( i=0; i<m; i++ )
-                fjac[j*m+i] = (wa4[i] - fvec[i]) / step;
+                fjac1[j*m+i] = (wa41[i] - fvec1[i]) / step;
         }
 
 // O** compute the qr factorization of the jacobian.
@@ -555,18 +556,18 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         {
           double tmp = 0;
           for(int kk=0; kk<m; kk++ )
-          tmp += fjac[kk*n+ii] * fjac[kk*n+jj];
+          tmp += fjac1[kk*n+ii] * fjac1[kk*n+jj];
           CVM[ii*n+jj] = CVM[jj*n+ii] = tmp;
         }
 
-        lm_qrfac( m, n, fjac, 1, ipvt, wa1, wa2, wa3);
+        lm_qrfac( m, n, fjac1, 1, ipvt1, wa11, wa21, wa31);
 /*         //   compute A = JtJ
         for(int  ii=0; ii<n; ii++)
         for(int jj=ii; jj<n; jj++)
         {
           double tmp = 0;
           for(int kk=0; kk<m; kk++ )
-          tmp += fjac[kk*n+ii] * fjac[kk*n+jj];
+          tmp += fjac1[kk*n+ii] * fjac1[kk*n+jj];
           CVM[ii*n+jj] = CVM[jj*n+ii] = tmp;
         }
 */
@@ -579,9 +580,9 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
             {
                 for ( j=0; j<n; j++ )
                 {
-                    diag[j] = wa2[j];
-                    if ( wa2[j] == 0. )
-                        diag[j] = 1.;
+                    diag1[j] = wa21[j];
+                    if ( approximatelyZero( wa21[j] ) )
+                        diag1[j] = 1.;
                 }
             }
 
@@ -589,48 +590,48 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 //          initialize the step bound delta.
 
             for ( j=0; j<n; j++ )
-                wa3[j] = diag[j] * x[j];
+                wa31[j] = diag1[j] * x[j];
 
-            xnorm = lm_enorm( n, wa3 );
+            xnorm = lm_enorm( n, wa31 );
             delta = factor*xnorm;
-            if (delta == 0.)
+            if ( approximatelyZero( delta ) )
                 delta = factor;
         }
 
-// O** form (q transpose)*fvec and store the first n components in qtf.
+// O** form (q transpose)*fvec1 and store the first n components in qtf1.
 
         for ( i=0; i<m; i++ )
-            wa4[i] = fvec[i];
+            wa41[i] = fvec1[i];
 
         for ( j=0; j<n; j++ )
         {
-            temp3 = fjac[j*m+j];
-            if (temp3 != 0.)
+            temp3 = fjac1[j*m+j];
+            if ( noZero(temp3) )
             {
                 sum = 0;
                 for ( i=j; i<m; i++ )
-                    sum += fjac[j*m+i] * wa4[i];
+                    sum += fjac1[j*m+i] * wa41[i];
                 temp = -sum / temp3;
                 for ( i=j; i<m; i++ )
-                    wa4[i] += fjac[j*m+i] * temp;
+                    wa41[i] += fjac1[j*m+i] * temp;
             }
-            fjac[j*m+j] = wa1[j];
-            qtf[j] = wa4[j];
+            fjac1[j*m+j] = wa11[j];
+            qtf1[j] = wa41[j];
         }
 
 // O** compute the norm of the scaled gradient and test for convergence.
 
         gnorm = 0;
-        if ( fnorm != 0 )
+        if ( noZero(fnorm) )
         {
             for ( j=0; j<n; j++ )
             {
-                if ( wa2[ ipvt[j] ] == 0 ) continue;
+                if ( approximatelyZero( wa21[ ipvt1[j] ] ) ) continue;
 
                 sum = 0.;
                 for ( i=0; i<=j; i++ )
-                    sum += fjac[j*m+i] * qtf[i] / fnorm;
-                gnorm = MAX( gnorm, fabs(sum/wa2[ ipvt[j] ]) );
+                    sum += fjac1[j*m+i] * qtf1[i] / fnorm;
+                gnorm = MAX( gnorm, fabs(sum/wa21[ ipvt1[j] ]) );
             }
         }
 
@@ -645,7 +646,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         if ( mode != 2 )
         {
             for ( j=0; j<n; j++ )
-                diag[j] = MAX(diag[j],wa2[j]);
+                diag1[j] = MAX(diag1[j],wa21[j]);
         }
 
 // O** the inner loop.
@@ -654,27 +655,27 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 
 // OI* determine the levenberg-marquardt parameter.
 
-            lm_lmpar( n,fjac,m,ipvt,diag,qtf,delta,&par,wa1,wa2,wa3,wa4 );
+            lm_lmpar( n,fjac1,m,ipvt1,diag1,qtf1,delta,&par1,wa11,wa21,wa31,wa41 );
 
 // OI* store the direction p and x + p. calculate the norm of p.
 
 //SD insert check limits
 
            for ( j=0; j<n; j++ )
-                wa2[j] = x[j] - wa1[j];
-            CheckLimits( wa2 );
+                wa21[j] = x[j] - wa11[j];
+            CheckLimits( wa21 );
             for ( j=0; j<n; j++ )
-                wa1[j] = x[j] - wa2[j];
+                wa11[j] = x[j] - wa21[j];
 
 // end check limits
 
            for ( j=0; j<n; j++ )
             {
-                wa1[j] = -wa1[j];
-                wa2[j] = x[j] + wa1[j];
-                wa3[j] = diag[j]*wa1[j];
+                wa11[j] = -wa11[j];
+                wa21[j] = x[j] + wa11[j];
+                wa31[j] = diag1[j]*wa11[j];
             }
-            pnorm = lm_enorm(n,wa3);
+            pnorm = lm_enorm(n,wa31);
 
 // OI* on the first iteration, adjust the initial step bound.
 
@@ -684,14 +685,14 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 // OI* evaluate the function at x + p and calculate its norm.
 
 //            *info = 0;
-//            (*evaluate)( wa2, m, wa4, data, info );
-//            (*printout)( n, x, m, wa4, data, 2, iter, ++(*nfev) );
+//            (*evaluate)( wa21, m, wa41, data, info );
+//            (*printout)( n, x, m, wa41, data, 2, iter, ++(*nfev) );
 // SD oct 2005
-    *info = data->evaluate( wa2, wa4 );
-    data->lm_print_default( x, wa4, 0, 2, iter, ++(*nfev), lm_enorm(m,wa4) );
+    *info = data->evaluate( wa21, wa41 );
+    data->lm_print_default( x, wa41, 0, 2, iter, ++(*nfev), lm_enorm(m,wa41) );
 //            if ( *info < 0 ) return;  // user requested break exeption
 
-            fnorm1 = lm_enorm(m,wa4);
+            fnorm1 = lm_enorm(m,wa41);
 
 // OI* compute the scaled actual reduction.
 
@@ -705,18 +706,18 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 
             for ( j=0; j<n; j++ )
             {
-                wa3[j] = 0;
+                wa31[j] = 0;
                 for ( i=0; i<=j; i++ )
-                    wa3[i] += fjac[j*m+i]*wa1[ ipvt[j] ];
+                    wa31[i] += fjac1[j*m+i]*wa11[ ipvt1[j] ];
             }
-            temp1 = lm_enorm(n,wa3) / fnorm;
-            temp2 = sqrt(par) * pnorm / fnorm;
+            temp1 = lm_enorm(n,wa31) / fnorm;
+            temp2 = sqrt(par1) * pnorm / fnorm;
             prered = SQR(temp1) + 2 * SQR(temp2);
             dirder = - ( SQR(temp1) + SQR(temp2) );
 
 // OI* compute the ratio of the actual to the predicted reduction.
 
-            ratio = prered!=0 ? actred/prered : 0;
+            ratio = noZero(prered) ? actred/prered : 0;
 
 // OI* update the step bound.
 
@@ -729,12 +730,12 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
                 if ( p1*fnorm1 >= fnorm || temp < p1 )
                     temp = p1;
                 delta = temp * MIN(delta,pnorm/p1);
-                par /= temp;
+                par1 /= temp;
             }
-            else if ( par == 0. || ratio >= p75 )
+            else if ( approximatelyZero(par1) || ratio >= p75 )
             {
                 delta = pnorm/p5;
-                par *= p5;
+                par1 *= p5;
             }
 
 // OI* test for successful iteration...
@@ -742,16 +743,16 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
             if (ratio >= p0001)
             {
 
-//     ... successful iteration. update x, fvec, and their norms.
+//     ... successful iteration. update x, fvec1, and their norms.
 
                 for ( j=0; j<n; j++ )
                 {
-                    x[j] = wa2[j];
-                    wa2[j] = diag[j]*x[j];
+                    x[j] = wa21[j];
+                    wa21[j] = diag1[j]*x[j];
                 }
                 for ( i=0; i<m; i++ )
-                    fvec[i] = wa4[i];
-                xnorm = lm_enorm(n,wa2);
+                    fvec1[i] = wa41[i];
+                xnorm = lm_enorm(n,wa21);
                 fnorm = fnorm1;
                 iter++;
             }
@@ -796,23 +797,23 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 
 
 
-void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double* qtb,
-              double delta, double* par, double* x, double* sdiag,
-              double* wa1, double* wa2)
+void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt1, double* diag1, double* qtb,
+              double delta, double* par1, double* x, double* sdiag,
+              double* wa11, double* wa21)
 {
 /*     given an m by n matrix a, an n by n nonsingular diagonal
  *     matrix d, an m-vector b, and a positive number delta,
  *     the problem is to determine a value for the parameter
- *     par such that if x solves the system
+ *     par1 such that if x solves the system
  *
- *	    a*x = b ,	  sqrt(par)*d*x = 0 ,
+ *	    a*x = b ,	  sqrt(par1)*d*x = 0 ,
  *
  *     in the least squares sense, and dxnorm is the euclidean
- *     norm of d*x, then either par is 0. and
+ *     norm of d*x, then either par1 is 0. and
  *
  *	    (dxnorm-delta) .le. 0.1*delta ,
  *
- *     or par is positive and
+ *     or par1 is positive and
  *
  *	    abs(dxnorm-delta) .le. 0.1*delta .
  *
@@ -827,13 +828,13 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
  *     lmpar also provides an upper triangular matrix s such that
  *
  *	     t	 t		     t
- *	    p *(a *a + par*d*d)*p = s *s .
+ *	    p *(a *a + par1*d*d)*p = s *s .
  *
  *     s is employed within lmpar and may be of separate interest.
  *
  *     only a few iterations are generally needed for convergence
  *     of the algorithm. if, however, the limit of 10 iterations
- *     is reached, then the output par will contain the best
+ *     is reached, then the output par1 will contain the best
  *     value obtained so far.
  *
  *     parameters:
@@ -849,11 +850,11 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
  *	ldr is a positive integer input variable not less than n
  *	  which specifies the leading dimension of the array r.
  *
- *	ipvt is an integer input array of length n which defines the
+ *	ipvt1 is an integer input array of length n which defines the
  *	  permutation matrix p such that a*p = q*r. column j of p
- *	  is column ipvt(j) of the identity matrix.
+ *	  is column ipvt1(j) of the identity matrix.
  *
- *	diag is an input array of length n which must contain the
+ *	diag1 is an input array of length n which must contain the
  *	  diagonal elements of the matrix d.
  *
  *	qtb is an input array of length n which must contain the first
@@ -862,18 +863,18 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
  *	delta is a positive input variable which specifies an upper
  *	  bound on the euclidean norm of d*x.
  *
- *	par is a nonnegative variable. on input par contains an
+ *	par1 is a nonnegative variable. on input par1 contains an
  *	  initial estimate of the levenberg-marquardt parameter.
- *	  on output par contains the final estimate.
+ *	  on output par1 contains the final estimate.
  *
  *	x is an output array of length n which contains the least
- *	  squares solution of the system a*x = b, sqrt(par)*d*x = 0,
- *	  for the output par.
+ *	  squares solution of the system a*x = b, sqrt(par1)*d*x = 0,
+ *	  for the output par1.
  *
  *	sdiag is an output array of length n which contains the
  *	  diagonal elements of the upper triangular matrix s.
  *
- *	wa1 and wa2 are work arrays of length n.
+ *	wa11 and wa21 are work arrays of length n.
  *
  */
     int i, iter, j, nsing;
@@ -889,22 +890,22 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
     nsing = n;
     for ( j=0; j<n; j++ )
     {
-	wa1[j] = qtb[j];
-	if ( r[j*ldr+j] == 0 && nsing == n )
+    wa11[j] = qtb[j];
+    if ( approximatelyZero(r[j*ldr+j]) && nsing == n )
             nsing = j;
 	if (nsing < n)
-            wa1[j] = 0;
+            wa11[j] = 0;
     }
     for ( j=nsing-1; j>=0; j-- )
     {
-        wa1[j] = wa1[j]/r[j+ldr*j];
-        temp = wa1[j];
+        wa11[j] = wa11[j]/r[j+ldr*j];
+        temp = wa11[j];
         for ( i=0; i<j; i++ )
-            wa1[i] -= r[j*ldr+i]*temp;
+            wa11[i] -= r[j*ldr+i]*temp;
     }
 
     for ( j=0; j<n; j++ )
-	x[ ipvt[j] ] = wa1[j];
+    x[ ipvt1[j] ] = wa11[j];
 
 // *** initialize the iteration counter.
 //     evaluate the function at the origin, and test
@@ -912,12 +913,12 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
 
     iter = 0;
     for ( j=0; j<n; j++ )
-	wa2[j] = diag[j]*x[j];
-    dxnorm = lm_enorm(n,wa2);
+    wa21[j] = diag1[j]*x[j];
+    dxnorm = lm_enorm(n,wa21);
     fp = dxnorm - delta;
     if (fp <= p1*delta)
     {
-        *par = 0;
+        *par1 = 0;
         return;
     }
 
@@ -929,16 +930,16 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
     if (nsing >= n)
     {
 	for ( j=0; j<n; j++ )
-            wa1[j] = diag[ ipvt[j] ] * wa2[ ipvt[j] ] / dxnorm;
+            wa11[j] = diag1[ ipvt1[j] ] * wa21[ ipvt1[j] ] / dxnorm;
 
 	for ( j=0; j<n; j++ )
         {
             sum = 0.;
             for ( i=0; i<j; i++ )
-                sum += r[j*ldr+i]*wa1[i];
-            wa1[j] = (wa1[j] - sum)/r[j+ldr*j];
+                sum += r[j*ldr+i]*wa11[i];
+            wa11[j] = (wa11[j] - sum)/r[j+ldr*j];
         }
-	temp = lm_enorm(n,wa1);
+    temp = lm_enorm(n,wa11);
 	parl = fp/delta/temp/temp;
     }
 
@@ -949,80 +950,80 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
 	sum = 0;
 	for ( i=0; i<=j; i++ )
             sum += r[j*ldr+i]*qtb[i];
-	wa1[j] = sum/diag[ ipvt[j] ];
+    wa11[j] = sum/diag1[ ipvt1[j] ];
     }
-    gnorm = lm_enorm(n,wa1);
+    gnorm = lm_enorm(n,wa11);
     paru = gnorm/delta;
-    if (paru == 0.)
-	paru = LM_DWARF/MIN(delta,p1);
+    if ( approximatelyZero(paru) )
+        paru = LM_DWARF/MIN(delta,p1);
 
-// *** if the input par lies outside of the interval (parl,paru),
-//     set par to the closer endpoint.
+// *** if the input par1 lies outside of the interval (parl,paru),
+//     set par1 to the closer endpoint.
 
-    *par = MAX( *par,parl);
-    *par = MIN( *par,paru);
-    if ( *par == 0.)
-	*par = gnorm/dxnorm;
+    *par1 = MAX( *par1,parl);
+    *par1 = MIN( *par1,paru);
+    if ( approximatelyZero(*par1) )
+    *par1 = gnorm/dxnorm;
 
 // *** iterate.
 
     for ( ; ; iter++ ) {
 
-// *** evaluate the function at the current value of par.
+// *** evaluate the function at the current value of par1.
 
-        if ( *par == 0.)
-            *par = MAX(LM_DWARF,p001*paru);
-        temp = sqrt( *par );
+        if ( approximatelyZero(*par1) )
+            *par1 = MAX(LM_DWARF,p001*paru);
+        temp = sqrt( *par1 );
         for ( j=0; j<n; j++ )
-            wa1[j] = temp*diag[j];
-        lm_qrsolv( n, r, ldr, ipvt, wa1, qtb, x, sdiag, wa2);
+            wa11[j] = temp*diag1[j];
+        lm_qrsolv( n, r, ldr, ipvt1, wa11, qtb, x, sdiag, wa21);
         for ( j=0; j<n; j++ )
-            wa2[j] = diag[j]*x[j];
-        dxnorm = lm_enorm(n,wa2);
+            wa21[j] = diag1[j]*x[j];
+        dxnorm = lm_enorm(n,wa21);
         fp_old = fp;
         fp = dxnorm - delta;
 
 // ***	 if the function is small enough, accept the current value
-//	 of par. also test for the exceptional cases where parl
+//	 of par1. also test for the exceptional cases where parl
 //	 is 0. or the number of iterations has reached 10.
 
         if ( fabs(fp) <= p1*delta
-             || (parl == 0. && fp <= fp_old && fp_old < 0.)
+             || ( approximatelyZero(parl) && fp <= fp_old && fp_old < 0.)
              || iter == 10 )
             break; // the only exit from this loop
 
 // *** compute the Newton correction.
 
         for ( j=0; j<n; j++ )
-            wa1[j] = diag[ ipvt[j] ] * wa2[ ipvt[j] ] / dxnorm;
+            wa11[j] = diag1[ ipvt1[j] ] * wa21[ ipvt1[j] ] / dxnorm;
 
         for ( j=0; j<n; j++ )
         {
-            wa1[j] = wa1[j]/sdiag[j];
+            wa11[j] = wa11[j]/sdiag[j];
             for ( i=j+1; i<n; i++ )
-                wa1[i] -= r[j*ldr+i]*wa1[j];
+                wa11[i] -= r[j*ldr+i]*wa11[j];
         }
-        temp = lm_enorm( n, wa1);
+        temp = lm_enorm( n, wa11);
         parc = fp/delta/temp/temp;
 
 // *** depending on the sign of the function, update parl or paru.
 
         if (fp > 0)
-            parl = MAX(parl, *par);
+            parl = MAX(parl, *par1);
         else if (fp < 0)
-            paru = MIN(paru, *par);
+            paru = MIN(paru, *par1);
         // the case fp==0 is precluded by the break condition
 
-// *** compute an improved estimate for par.
+// *** compute an improved estimate for par1.
 
-        *par = MAX(parl, *par + parc);
+        *par1 = MAX(parl, *par1 + parc);
 
     }
 
 }
 
 
-void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt,
+void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt1,
            double* rdiag, double* acnorm, double* wa)
 {
 /*
@@ -1060,10 +1061,10 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt,
  *	  then column pivoting is enforced. if pivot is set false,
  *	  then no column pivoting is done.
  *
- *	ipvt is an integer output array of length lipvt. ipvt
+ *	ipvt1 is an integer output array of length lipvt. ipvt1
  *	  defines the permutation matrix p such that a*p = q*r.
- *	  column j of p is column ipvt(j) of the identity matrix.
- *	  if pivot is false, ipvt is not referenced.
+ *	  column j of p is column ipvt1(j) of the identity matrix.
+ *	  if pivot is false, ipvt1 is not referenced.
  *
  *	rdiag is an output array of length n which contains the
  *	  diagonal elements of r.
@@ -1089,7 +1090,7 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt,
 	rdiag[j] = acnorm[j];
 	wa[j] = rdiag[j];
 	if ( pivot )
-            ipvt[j] = j;
+            ipvt1[j] = j;
     }
 
 // *** reduce a to r with householder transformations.
@@ -1115,9 +1116,9 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt,
 	}
         rdiag[kmax] = rdiag[j];
         wa[kmax] = wa[j];
-        k = ipvt[j];
-        ipvt[j] = ipvt[kmax];
-        ipvt[kmax] = k;
+        k = ipvt1[j];
+        ipvt1[j] = ipvt1[kmax];
+        ipvt1[kmax] = k;
 
     pivot_ok:
 
@@ -1125,7 +1126,7 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt,
 //     j-th column of a to a multiple of the j-th unit vector.
 
         ajnorm = lm_enorm( m-j, &a[j*m+j] );
-        if (ajnorm == 0.)
+        if ( approximatelyZero(ajnorm) )
         {
             rdiag[j] = 0;
             continue;
@@ -1152,7 +1153,7 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt,
             for ( i=j; i<m; i++ )
                 a[k*m+i] -= temp * a[j*m+i];
 
-            if ( pivot && rdiag[k] != 0. )
+            if ( pivot && noZero(rdiag[k]) )
             {
                 temp = a[m*k+j]/rdiag[k];
                 temp = MAX( 0., 1-temp*temp );
@@ -1171,7 +1172,7 @@ void TLMmin::lm_qrfac(int m, int n, double* a, int pivot, int* ipvt,
 }
 
 
-void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
+void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt1, double* diag1,
               double* qtb, double* x, double* sdiag, double* wa)
 {
 /*
@@ -1218,11 +1219,11 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
  *	ldr is a positive integer input variable not less than n
  *	  which specifies the leading dimension of the array r.
  *
- *	ipvt is an integer input array of length n which defines the
+ *	ipvt1 is an integer input array of length n which defines the
  *	  permutation matrix p such that a*p = q*r. column j of p
- *	  is column ipvt(j) of the identity matrix.
+ *	  is column ipvt1(j) of the identity matrix.
  *
- *	diag is an input array of length n which must contain the
+ *	diag1 is an input array of length n which must contain the
  *	  diagonal elements of the matrix d.
  *
  *	qtb is an input array of length n which must contain the first
@@ -1262,11 +1263,11 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
 // ***	 prepare the row of d to be eliminated, locating the
 // 	 diagonal element using p from the qr factorization.
 
-        if (diag[ ipvt[j] ] == 0.)
+        if ( approximatelyZero(diag1[ ipvt1[j] ]) )
             goto L90;
         for ( k=j; k<n; k++ )
             sdiag[k] = 0.;
-        sdiag[j] = diag[ ipvt[j] ];
+        sdiag[j] = diag1[ ipvt1[j] ];
 
 // ***	 the transformations to eliminate the row of d
 //	 modify only a single element of (q transpose)*b
@@ -1279,7 +1280,7 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
 //	    determine a givens rotation which eliminates the
 //	    appropriate element in the current row of d.
 
-            if (sdiag[k] == 0.)
+            if ( approximatelyZero(sdiag[k]) )
 		continue;
             kk = k + ldr * k; // <! keep this shorthand !>
             if ( fabs(r[kk]) < fabs(sdiag[k]) )
@@ -1327,7 +1328,7 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
     nsing = n;
     for ( j=0; j<n; j++ )
     {
-	if ( sdiag[j] == 0. && nsing == n )
+    if ( approximatelyZero(sdiag[j]) && nsing == n )
             nsing = j;
 	if (nsing < n)
             wa[j] = 0;
@@ -1344,7 +1345,7 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
 // *** permute the components of z back to components of x.
 
     for ( j=0; j<n; j++ )
-	x[ ipvt[j] ] = wa[j];
+    x[ ipvt1[j] ] = wa[j];
 }
 
 /*
@@ -1500,7 +1501,7 @@ int
    for(j=0; j<m; ++j)
      if((tmp=fabs(a[i*m+j]))>max)
         max=tmp;
-   if(max==0.0)
+   if( approximatelyZero(max) )
    {
      delete[] idx;
      delete[] a;
@@ -1545,7 +1546,7 @@ int
       work[maxi]=work[j];
      }
      idx[j]=maxi;
-     if(a[j*m+j]==0.0)
+     if( approximatelyZero(a[j*m+j]) )
        a[j*m+j]=2.22 *1e-16; // DBL_EPSILON;
      if(j!=m-1)
      {
@@ -1573,7 +1574,7 @@ int
          for(j=k-1; j<i; ++j)
              sum-=a[i*m+j]*x[j];
        else
-        if(sum!=0.0)
+        if( noZero(sum) )
            k=i+1;
        x[i]=sum;
     }
@@ -1670,7 +1671,7 @@ double enorm( int n, double *x )
         }
         else
         {
-            if (xabs != 0.)
+            if ( noZero(xabs) )
             {
                 temp = xabs/x3max;
                 s3 += SQR(temp);
@@ -1680,9 +1681,9 @@ double enorm( int n, double *x )
 
 // calculation of norm.
 
-    if (s1 != 0)
+    if ( noZero(s1) )
         return x1max*sqrt(s1 + (s2/x1max)/x1max);
-    if (s2 != 0)
+    if ( noZero(s2))
     {
         if (s2 >= x3max)
             return sqrt( s2*(1+(x3max/s2)*(x3max*s3)) );

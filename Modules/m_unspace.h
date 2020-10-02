@@ -407,7 +407,7 @@ public:
     void set_def( int i=0);
     bool check_input( const char *key, int level=1 );
 
-    gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
+    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
                               int keyType );
 
     void RecInput( const char *key );
@@ -425,8 +425,8 @@ public:
     const char* GetHtml();
 
     //insert changes in profile  (must be in next version)
-    void InsertChanges( TIArray<CompItem>& aIComp,
-                        TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+    void InsertChanges( std::vector<CompItem>& aIComp,
+                        std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
     void newSizeifChange();
 
 };

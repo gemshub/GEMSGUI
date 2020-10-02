@@ -5,7 +5,6 @@
 //  TCellCheck, TCellText and TQueryWindow classes
 //
 // Copyright (C) 1996-2009  A.Rysin, S.Dmitrieva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -92,11 +91,11 @@ void TCPage::AddFields( bool info )
 //    TCellText*  fieldText;
 	QList<FieldInfo>	aFlds;
 
-    int ii = 0, cnt;
+    size_t ii = 0, cnt;
 
     while( ii<getFieldCnt() )
     {
-       FieldInfo fi = rInfo.aFieldInfo[ii];
+       FieldInfo fi = *rInfo.aFieldInfo[ii];
     
        if(info)
        { if( fi.edit != eParam )  // for TQueryWindow
@@ -111,16 +110,16 @@ void TCPage::AddFields( bool info )
         
        cnt = 1;
        while( (ii+cnt) < getFieldCnt() && 
-    		   ( rInfo.aFieldInfo[ii+cnt].place == Tied || 
-                     rInfo.aFieldInfo[ii+cnt].place == Sticked ||
-                     rInfo.aFieldInfo[ii+cnt].place == UndeTabl ) )
+               ( rInfo.aFieldInfo[ii+cnt]->place == Tied ||
+                     rInfo.aFieldInfo[ii+cnt]->place == Sticked ||
+                     rInfo.aFieldInfo[ii+cnt]->place == UndeTabl ) )
        {
-           aFlds.append(rInfo.aFieldInfo[ii+cnt]);
+           aFlds.append(*rInfo.aFieldInfo[ii+cnt]);
     	   cnt++;
        }
 
        model = new TObjectModel( aFlds, this );
-       aModels.Add( model );
+       aModels.push_back( std::shared_ptr<TObjectModel>(model) );
        
    	  switch( fi.fType )
        {
@@ -134,8 +133,8 @@ void TCPage::AddFields( bool info )
                 TObjectDelegate *deleg = new TObjectDelegate( fieldTable, this);
        	    fieldTable->setItemDelegate(deleg);
        	    fieldTable->setModel(model);
-       	    aFields.Add( fieldTable );
-        	aTypes.Add(1);
+            aFields.push_back( std::shared_ptr<TObjectTable>(fieldTable) );
+            aTypes.push_back(1);
             break;     
        }
       
@@ -155,14 +154,14 @@ void TCPage::RedrawFields()
     mwidth = x = X0;
     mheight = y = Y0;
    
-    for( uint ii=0; ii<aModels.GetCount(); ii++ )
+    for( size_t ii=0; ii<aModels.size(); ii++ )
     {
     	oldRowSize = rowSize;
     	oldColSize = colSize;
     	
    	  // get size of element
         place = aModels[ii]->getObjectPlace();
-        qobject_cast<TObjectTable *>(aFields[ii])->getObjectSize(rowSize, colSize);
+        aFields[ii]->getObjectSize(rowSize, colSize);
 
        // calculating position of the element
        switch( place )
@@ -243,7 +242,7 @@ TQueryWindow::TQueryWindow(CWinInfo& w):
         QDialog( w.pWin ),
         rInfo( w )
 {
-    gstring s = w.rM.GetName();
+    string s = w.rM.GetName();
     s += ": Remake dialog (press Ok to use default parameters)";
     setWindowTitle(s.c_str());
 
@@ -251,8 +250,8 @@ TQueryWindow::TQueryWindow(CWinInfo& w):
     // adds all fields from given module window
     // only from  last page
     // that have 'param' flag set to the Query dialog
-    int LastPage = rInfo.aPageInfo.GetCount()-1;
-    aPage = new  TCPage( rInfo.aPageInfo[LastPage], true );
+    auto LastPage = rInfo.aPageInfo.size()-1;
+    aPage = new  TCPage( *rInfo.aPageInfo[LastPage], true );
     scroll = new QScrollArea;
     scroll->setWidget(aPage);
    
@@ -313,7 +312,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
         for( int ii=0; ii<getPageCnt(); ii++ )
         {
             QPushButton* p = new QPushButton;//( pWin);
-            p->setText( rInfo.aPageInfo[ii].name.c_str() );
+            p->setText( rInfo.aPageInfo[ii]->name.c_str() );
             p->setAutoExclusive(true);
             p->setCheckable( true );
             p->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -356,13 +355,13 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
     pages =  new QStackedWidget;//(pWin);
     for( int ii=0; ii<getPageCnt(); ii++ )
     {
-        PageInfo& pi = rInfo.aPageInfo[ii];
+        PageInfo& pi = *rInfo.aPageInfo[ii];
         TCPage* pPage = new TCPage(pi);
         scroll = new QScrollArea;
         scroll->setFrameStyle( QFrame::NoFrame ); //Remove outer frame about data objects
         scroll->setWidget(pPage);
         pages->addWidget( scroll );
-        aPages.Add( pPage );
+        aPages.push_back( std::shared_ptr<TCPage>( pPage) );
     }
     pages->setCurrentIndex(iCurPage);
 
@@ -421,15 +420,15 @@ void TCWindow::ShowInfo()
         nR = RT_SYSEQ;
     else nR = getCModule().rtNum();
 
-    time_t time = rt[nR].Rtime();
+    time_t time = rt[nR]->Rtime();
     struct tm *time_s;
     tzset();
     time_s = localtime(&time);
-    vstr str(40);
+    char str[80];
     strftime(str, 20, "%d/%m/%Y, %H:%M", time_s);
 
     //pPackKey->setText( rt[nR].PackKey() );
-    pRTime->setText( str.p );
+    pRTime->setText( str );
 }
 
 //    Updates window

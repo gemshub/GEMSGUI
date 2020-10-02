@@ -66,7 +66,7 @@ public:
 class TEQDemo :
             public TSubModule
 {
-      gstring titler;
+      string titler;
 
 protected:
 
@@ -95,9 +95,9 @@ public:
     void set_def( int /*i*/=0)
     {}
 
-    const gstring& GetString()
+    const string& GetString()
     {
-     titler = rt[RT_SYSEQ].PackKey();
+     titler = rt[RT_SYSEQ]->PackKey();
      //titler += " : ";
      //titler += TSubModule::GetString();
      return titler;

@@ -4,7 +4,6 @@
 // Declaration of TReadData class
 //
 // Copyright (C) 2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -19,8 +18,7 @@
 #ifndef _t_read_h_
 #define _t_read_h_
 
-//#include "v_object.h"
-#include "gstring.h"
+#include <vector>
 #include "v_ipnc.h"
 
 
@@ -50,9 +48,9 @@ struct RFormat
                 // or object index for object_r type
   int  i;        // to object_r i(N) index
   int  j;        // to object_r j(M) index
-  gstring fmt;
+  string fmt;
 
-  RFormat( const char aType, int aSize, gstring aFmt ):
+  RFormat( const char aType, int aSize, string aFmt ):
     type( aType), size(aSize), i(0), j(0), fmt(aFmt)
   {
 
@@ -63,10 +61,6 @@ struct RFormat
   {
 
   }
-
-  RFormat( RFormat& d ):
-    type( d.type), size(d.size), i(d.i), j(d.j), fmt( d.fmt)
-  {}
 
   int FmtType()
   {
@@ -97,11 +91,6 @@ struct RData
   RData( int _index, unsigned int i_index, unsigned int j_index):
    objNum(_index), i(i_index), j(j_index)
    { }
-
-  RData( RData& d ):
-   objNum(d.objNum), i(d.i), j(d.j)
-   { }
-
 };
 
 
@@ -111,15 +100,15 @@ struct RData
 
 class TReadData  // reading data by format
 {
-    gstring key_format;        // key of SDref record
+    string key_format;        // key of SDref record
     unsigned int nRT;                   // module number
 
     char *input;               // current position
-    TOArray<bool> aList;     // true if reading list of values
-    TIArray<RFormat> aFmts;  // list of formats
-    TIArray<RData> aDts;     // list of datas
+    std::vector<bool> aList;     // true if reading list of values
+    std::vector<RFormat> aFmts;  // list of formats
+    std::vector<RData> aDts;     // list of datas
 
-   gstring mScript;     // Text with IPN-expression ## equations ##
+   string mScript;     // Text with IPN-expression ## equations ##
    IPNCalc rpn;       // IPN of equats of print condition
 
 protected:

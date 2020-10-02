@@ -4,7 +4,6 @@
 // Implementation of TPrintData class
 //
 // Copyright (C) 2001  S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -29,7 +28,7 @@ TPrintData::TPrintData(const char *sd_key,
     unsigned int nrt, fstream& fout, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
-  ErrorIf( !fout.good() , rt[nRT].GetKeywd(), "Fileopen error");
+  ErrorIf( !fout.good() , rt[nRT]->GetKeywd(), "Fileopen error");
   input = const_cast<char*>(fmt_text);
 
   prr = 1;
@@ -37,8 +36,8 @@ TPrintData::TPrintData(const char *sd_key,
   uint o_prn_= aObj.Find("prn");
   uint o_ii_ = aObj.Find("ii");
 
-  aObj[o_prn_].SetPtr(&prr);
-  aObj[o_ii_].SetPtr(&iir);
+  aObj[o_prn_]->SetPtr(&prr);
+  aObj[o_ii_]->SetPtr(&iir);
 
   while( *input )
   {
@@ -54,15 +53,15 @@ TPrintData::TPrintData(const char *sd_key,
             code = getToken( i, j );
             if( code >=0 )
             {
-              count = aObj[code].GetN();
-              if( aObj[code].IsNull() )
+              count = aObj[code]->GetN();
+              if( aObj[code]->IsNull() )
                count = 0;
             }
             else
               count = 1;
        }
        else
-           {  gstring str_err = "Invalid command: \n";
+           {  string str_err = "Invalid command: \n";
               str_err += input;
               Error( key_format.c_str(), str_err.c_str() );
             }
@@ -79,11 +78,11 @@ TPrintData::TPrintData(const char *sd_key,
                pose = strchr( pose+1, '#');
             }
             if( !pose )
-            {  gstring str_err = "Invalid condition: \n";
+            {  string str_err = "Invalid condition: \n";
                str_err += input;
                Error( key_format.c_str(), str_err.c_str() );
             }
-            cond = gstring( input, 0, pose-input );
+            cond = string( input, 0, pose-input );
             input = pose+2;
             ifcond = true;
             try{
@@ -101,8 +100,8 @@ TPrintData::TPrintData(const char *sd_key,
     }
     // end insert
 
-     aFmts.Clear();  // list of formats
-     aDts.Clear();     // list of datas
+     aFmts.clear();  // list of formats
+     aDts.clear();     // list of datas
      bool showMss = true;
      //Read formats
      do{
@@ -149,11 +148,10 @@ TPrintData::TPrintData(const char *sd_key,
         if( prr == 0 )
           continue;
        }
-       for( uint jj=0; jj<aDts.GetCount(); jj++ )
+       for( size_t jj=0; jj<aDts.size(); jj++ )
        {
           if( code == line_d && aDts[jj].index_i != 0)
-            prnData( fout, aDts[jj].index_i,
-                     aFmts[jj], aDts[jj] );
+            prnData( fout, aDts[jj].index_i, aFmts[jj], aDts[jj] );
           else
            prnData( fout, ii, aFmts[jj], aDts[jj] );
        }
@@ -168,8 +166,8 @@ TPrintData::TPrintData(const char *sd_key,
 
 TPrintData::~TPrintData()
 {
-     aFmts.Clear();  // list of formats
-     aDts.Clear();     // list of datas
+     aFmts.clear();  // list of formats
+     aDts.clear();     // list of datas
 }
 
 
@@ -203,7 +201,7 @@ TPrintData::getFormat( const char * fmt )
  if( fmt[i] == 's' || fmt[i] == 'c' || fmt[i] == 'f' ||
      fmt[i] == 'e' || fmt[i] == 'g' )
  {
-    aFmts.Add( new PFormat( fmt[i], gstring( fmt, 0, i) ) );
+    aFmts.push_back( PFormat( fmt[i], string( fmt, 0, i) ) );
     input += i+1;
     return true;
  }
@@ -234,7 +232,7 @@ TPrintData::getToken( int& ii, int& jj )
 {
  int i;
  int data=0;
- gstring str;
+ string str;
 
  skipSpace();
 /* while( *input == ' ' || *input == '\n' || *input == '\t')
@@ -250,7 +248,7 @@ TPrintData::getToken( int& ii, int& jj )
        else
           i++;
     ii = i;
-/*    str = gstring( input, 0, i );
+/*    str = string( input, 0, i );
     if( *input == '\'')
       input++;
 */
@@ -267,9 +265,9 @@ TPrintData::getToken( int& ii, int& jj )
    && input[i] != '\t' && input[i] != '$' && input[i] != '\0')
           i++;
 */
-    str = gstring( input, 0, i );
+    str = string( input, 0, i );
 
-    if( str.equals("substr") )
+    if( str == "substr" )
     {  data = substr_d;
        input += i;
 
@@ -304,17 +302,17 @@ TPrintData::getToken( int& ii, int& jj )
       }
       return data;
     }
-    if( str.equals("list") ) data = list_d;
-    else if( str.equals("line") ) data = line_d;
-      else if( str.equals("all") ) data = all_d;
-         else if( str.equals("label") ) data = label_d;
-            else if( str.equals("rkey") ) data = rkey_d;
-                else if( str.equals("index") ) data = index_d;
-                   else  if( str.equals("space") ) data = space_d;
-                      else  if( str.equals("date") ) data = date_d;
-                          else  if( str.equals("time") ) data = time_d;
+    if( str == "list" ) data = list_d;
+    else if( str =="line" ) data = line_d;
+      else if( str =="all" ) data = all_d;
+         else if( str == "label" ) data = label_d;
+            else if( str == "rkey" ) data = rkey_d;
+                else if( str == "index" ) data = index_d;
+                   else  if( str == "space" ) data = space_d;
+                      else  if( str == "date" ) data = date_d;
+                          else  if( str == "time" ) data = time_d;
     else
-    {  gstring str_err = "Invalid token: \n";
+    {  string str_err = "Invalid token: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
@@ -330,10 +328,10 @@ TPrintData::getToken( int& ii, int& jj )
            && input[i] != '\t'&&
            input[i] != '[' && input[i] != '\0'&& input[i] != '\n')
        i++;
-    str = gstring( input, 0, i );
+    str = string( input, 0, i );
     data = aObj.Find( str.c_str() );
     if( data < 0 )
-    {  gstring str_err = "Invalid object name: \n";
+    {  string str_err = "Invalid object name: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
@@ -410,7 +408,7 @@ TPrintData::getData( )
 
  if( _data == text_d )
  {
-   aDts.Add( new PData( _data, gstring( input, 0, i ).c_str() ) );
+   aDts.push_back( PData( _data, string( input, 0, i ).c_str() ) );
    input += i;
    if( *input == '"')
       input++;
@@ -424,17 +422,17 @@ TPrintData::getData( )
  }
  if( j < 0  )
  { j=i; i=0; }
- aDts.Add( new PData(_data, i, j, bg_s, end_s, _all, _label));
+ aDts.push_back( PData(_data, i, j, bg_s, end_s, _all, _label));
 
 }
 
-const gstring emptiness("---");
+const string emptiness("---");
 
 void
 TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
 {
-  vstr strbuf(8192);
-  gstring format = fmt.FmtOut();
+  char strbuf[8192];
+  string format = fmt.FmtOut();
   switch( dt.data )
   {
     case space_d: fmt.type = 's';
@@ -446,7 +444,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                  fout << strbuf << " ";
                  break;
     case rkey_d: fmt.type = 's';
-                 sprintf( strbuf, format.c_str(), rt[nRT].PackKey() );
+                 sprintf( strbuf, format.c_str(), rt[nRT]->PackKey() );
                  fout << strbuf << " ";
                  break;
     case date_d: fmt.type = 's';
@@ -467,7 +465,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
               else
                if( fmt.type != 's' && fmt.type != 'c' )
                {
-                   switch ( aObj[dt.data].GetType() )
+                   switch ( aObj[dt.data]->GetType() )
                    {
                     case F_: break;
                     case D_: fmt.long_ = 'l'; break;
@@ -476,8 +474,8 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                }
               int scalar = 0, Ndim, Mdim;
               int count = 1;
-              Mdim = aObj[dt.data].GetM();
-              Ndim = aObj[dt.data].GetN();
+              Mdim = aObj[dt.data]->GetM();
+              Ndim = aObj[dt.data]->GetN();
               if( dt.is_all )
                   count = Mdim;
               if( Mdim * Ndim == 1 )
@@ -489,22 +487,22 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                if( dt.is_label )
                { // workaround - skip printing DOD labels and data
                  // if dynamic object is not allocated
-                 if( !aObj[dt.data].IsNull() )
+                 if( !aObj[dt.data]->IsNull() )
                     sprintf( strbuf, format.c_str(),
-                        aObj[dt.data].GetKeywd() );
+                        aObj[dt.data]->GetKeywd() );
                }
                else
                {
                  if( fmt.type == 's' || fmt.type == 'c' )
                  {
-                   gstring str_data;
-                   if( dt.end_sub > 0 && ( aObj[dt.data].GetType() >= 0 ) )
+                   string str_data;
+                   if( dt.end_sub > 0 && ( aObj[dt.data]->GetType() >= 0 ) )
                    { // substring only for string type
-                    str_data = aObj[dt.data].GetString( ind, dt.index_j );
+                    str_data = aObj[dt.data]->GetString( ind, dt.index_j );
                     str_data = str_data.substr( dt.bg_sub, dt.end_sub );
                     }
                    else
-                     str_data = aObj[dt.data].GetStringEmpty( ind, dt.index_j );
+                     str_data = aObj[dt.data]->GetStringEmpty( ind, dt.index_j );
                    if( fmt.type == 's' )
                     sprintf( strbuf, format.c_str(), str_data.c_str() );
                    else //c
@@ -513,20 +511,20 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                   }
                   else // float or double data
                   {
-                     if( !aObj[dt.data].IsNull() ) // workaround - print
+                     if( !aObj[dt.data]->IsNull() ) // workaround - print
                      {  // only static or allocated objects !
                         int indx;
                         if( scalar )
                            indx = 0;
                         else indx = ind;
-                        if( aObj[dt.data].IsEmpty( indx, dt.index_j) )
+                        if( aObj[dt.data]->IsEmpty( indx, dt.index_j) )
                         {
                           char oldtype = fmt.type;
                           fmt.type = 's';
                           sprintf( strbuf, format.c_str(), emptiness.c_str() ); // S_EMPTY );
                           fmt.type = oldtype;
                         }
-                         else sprintf( strbuf, format.c_str(), aObj[dt.data].Get( indx, dt.index_j) );
+                         else sprintf( strbuf, format.c_str(), aObj[dt.data]->Get( indx, dt.index_j) );
                      }
                      else
                      {

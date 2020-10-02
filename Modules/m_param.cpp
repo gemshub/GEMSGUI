@@ -195,7 +195,7 @@ void TProfil::ChangeSettings(int nSettings)
 	     else
             pa.p = dfBase[min(nSettings-2,5)];
     // Added by DK 16.02.2012
-    gstring pa_ver = _GEMS_version_stamp;
+    std::string pa_ver = _GEMS_version_stamp;
     pa_ver += _GEMIPM_version_stamp;
     memcpy(pa.ver, pa_ver.c_str(), TDBVERSION-1);
     pa.ver[TDBVERSION-1]='\0';
@@ -243,8 +243,8 @@ SPP_SETTING::read(GemDataStream& iss)
 TProfil::TProfil( uint nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add("Name of the modeling project");
-    aFldKeysHelp.Add("Comment to the project definition");
+    aFldKeysHelp.push_back("Name of the modeling project");
+    aFldKeysHelp.push_back("Comment to the project definition");
     //startKeyEdit = 0;
     start_title = " Numerical and Configuration Settings ";
     pa= pa_;
@@ -278,26 +278,28 @@ void TProfil::InitSubModules()
 {
     if( !rmults /*aMod.GetCount() < MD_RMULTS*/ )
     {
-        aMod.Add( rmults = new TRMults( MD_RMULTS ) );
+        rmults = new TRMults( MD_RMULTS );
+        aMod.push_back( std::shared_ptr<TRMults>(rmults) );
         TRMults::sm = rmults;
         rmults->ods_link();
         //mup = rmults->GetMU();
-        aMod.Add( mtparm = new TMTparm( MD_MTPARM ) );
+
+        aMod.push_back( std::shared_ptr<TMTparm>( mtparm = new TMTparm( MD_MTPARM ) ));
         TMTparm::sm = mtparm;
         mtparm->ods_link();
         //tpp = mtparm->GetTP();
-        aMod.Add( syst = new TSyst( MD_SYSTEM ) );
+        aMod.push_back( std::shared_ptr<TSyst>( syst = new TSyst( MD_SYSTEM )) );
         TSyst::sm = syst;
         syst->ods_link();
         //syp = syst->GetSY();
-        aMod.Add( multi = new TMulti( MD_MULTI ) );
+        aMod.push_back( std::shared_ptr<TMulti>(multi = new TMulti( MD_MULTI )) );
         TMulti::sm = multi;
         ///multi->setPa(this);
         //pmulti = multi;
         multi->ods_link();
         //pmp = multi->GetPM();
-        aMod.Add( new TEQCalc( MD_EQCALC ) );
-        aMod.Add( new TEQDemo( MD_EQDEMO ) );
+        aMod.push_back( std::shared_ptr<TEQCalc>( new TEQCalc( MD_EQCALC )) );
+        aMod.push_back( std::shared_ptr<TEQDemo>(new TEQDemo( MD_EQDEMO )) );
 
     }
 }
@@ -309,69 +311,69 @@ void TProfil::ods_link( int )
      mtparm->ods_link();
      syst->ods_link();
      multi->ods_link();*/
-    aObj[o_paver].SetPtr( pa.ver );
-    aObj[o_papc].SetPtr( &(pa.p.PC) );
-    aObj[o_paprd].SetPtr(&(pa.p.PD) );
-    aObj[o_padpwt].SetPtr( &(pa.p.DP));
-    aObj[o_papllg].SetPtr( &(pa.p.PLLG));
-    aObj[o_pape].SetPtr( &(pa.p.PE) );
-    aObj[o_paiim].SetPtr( &(pa.p.IIM) );
-    aObj[o_padg].SetPtr( &(pa.p.DG) );
+    aObj[o_paver]->SetPtr( pa.ver );
+    aObj[o_papc]->SetPtr( &(pa.p.PC) );
+    aObj[o_paprd]->SetPtr(&(pa.p.PD) );
+    aObj[o_padpwt]->SetPtr( &(pa.p.DP));
+    aObj[o_papllg]->SetPtr( &(pa.p.PLLG));
+    aObj[o_pape]->SetPtr( &(pa.p.PE) );
+    aObj[o_paiim]->SetPtr( &(pa.p.IIM) );
+    aObj[o_padg]->SetPtr( &(pa.p.DG) );
     if( pa.p.DG <1 )                     // SD 07/05/2010
         pa.p.DG = 1e4;
-    aObj[o_padhb].SetPtr( &(pa.p.DHB) );
-    aObj[o_pads].SetPtr( &(pa.p.DS) );
-    aObj[o_padk].SetPtr( &(pa.p.DK) );
-    aObj[ o_padf].SetPtr(   &(pa.p.DF));
-    aObj[ o_padfy].SetPtr(  &(pa.p.DFYw));
-    aObj[ o_padb].SetPtr(   &(pa.p.DB));
-    aObj[ o_paag].SetPtr(   &(pa.p.AG));
-    aObj[ o_padgc].SetPtr(  &(pa.p.DGC));
-    aObj[ o_pagan].SetPtr(  &(pa.p.GAR));
-    aObj[ o_padns].SetPtr(  &(pa.p.DNS));
-    aObj[ o_paxmin].SetPtr( &(pa.p.XwMin));
-    aObj[ o_paeps].SetPtr(  &(pa.p.EPS));
-    aObj[ o_padkin].SetPtr( &(pa.p.DKIN));
-    aObj[ o_patprn].SetPtr( pa.p.tprn );
-    aObj[ o_padcpct].SetPtr(pa.DCpct );
-    aObj[ o_padcpdc].SetPtr(pa.DCpdc );
-    aObj[ o_parepct].SetPtr(pa.REpct );
-    aObj[ o_parepdc].SetPtr(pa.REpdc );
-    aObj[ o_parepvc].SetPtr(pa.REpvc );
-    aObj[ o_parppdc].SetPtr(pa.RPpdc );
-    aObj[ o_parppvc].SetPtr(pa.RPpvc );
-    aObj[ o_paphsol_t].SetPtr(pa.PHsol_t );
-    aObj[ o_paphpvc].SetPtr(pa.PHpvc );
-    aObj[ o_pamupmv].SetPtr(pa.MUpmv );
-    aObj[ o_patppdc].SetPtr(pa.TPpdc );
-    aObj[ o_patppvc].SetPtr(pa.TPpvc );
-    aObj[ o_pasyppc].SetPtr(pa.SYppc );
-    aObj[ o_pasypvc].SetPtr(pa.SYpvc );
-    aObj[ o_pautppc].SetPtr(pa.UTppc );
-    aObj[ o_papepsc].SetPtr(pa.PEpsc );
-    aObj[ o_papepvc].SetPtr(pa.PEpvc );
-    aObj[ o_pagdcode].SetPtr(&pa.GDcode[0][0] );
-    aObj[ o_pagdpsc].SetPtr(pa.GDpsc );
-    aObj[ o_pagdpcc].SetPtr(&pa.GDpcc[0][0] );
-    aObj[ o_pagdptc].SetPtr(pa.GDptc );
-    aObj[ o_parpnptv].SetPtr(&pa.NP );
-    aObj[ o_parpmode].SetPtr(&pa.Mode );
-    aObj[ o_partpi].SetPtr(   pa.Pi );
-    aObj[ o_partti].SetPtr(   pa.Ti );
-    aObj[ o_partvi].SetPtr(   pa.Vi );
-    aObj[ o_padrprtr].SetPtr(&pa.DRpst );
-    aObj[ o_papmnum].SetPtr( &pa.lowPosNum );
+    aObj[o_padhb]->SetPtr( &(pa.p.DHB) );
+    aObj[o_pads]->SetPtr( &(pa.p.DS) );
+    aObj[o_padk]->SetPtr( &(pa.p.DK) );
+    aObj[ o_padf]->SetPtr(   &(pa.p.DF));
+    aObj[ o_padfy]->SetPtr(  &(pa.p.DFYw));
+    aObj[ o_padb]->SetPtr(   &(pa.p.DB));
+    aObj[ o_paag]->SetPtr(   &(pa.p.AG));
+    aObj[ o_padgc]->SetPtr(  &(pa.p.DGC));
+    aObj[ o_pagan]->SetPtr(  &(pa.p.GAR));
+    aObj[ o_padns]->SetPtr(  &(pa.p.DNS));
+    aObj[ o_paxmin]->SetPtr( &(pa.p.XwMin));
+    aObj[ o_paeps]->SetPtr(  &(pa.p.EPS));
+    aObj[ o_padkin]->SetPtr( &(pa.p.DKIN));
+    aObj[ o_patprn]->SetPtr( pa.p.tprn );
+    aObj[ o_padcpct]->SetPtr(pa.DCpct );
+    aObj[ o_padcpdc]->SetPtr(pa.DCpdc );
+    aObj[ o_parepct]->SetPtr(pa.REpct );
+    aObj[ o_parepdc]->SetPtr(pa.REpdc );
+    aObj[ o_parepvc]->SetPtr(pa.REpvc );
+    aObj[ o_parppdc]->SetPtr(pa.RPpdc );
+    aObj[ o_parppvc]->SetPtr(pa.RPpvc );
+    aObj[ o_paphsol_t]->SetPtr(pa.PHsol_t );
+    aObj[ o_paphpvc]->SetPtr(pa.PHpvc );
+    aObj[ o_pamupmv]->SetPtr(pa.MUpmv );
+    aObj[ o_patppdc]->SetPtr(pa.TPpdc );
+    aObj[ o_patppvc]->SetPtr(pa.TPpvc );
+    aObj[ o_pasyppc]->SetPtr(pa.SYppc );
+    aObj[ o_pasypvc]->SetPtr(pa.SYpvc );
+    aObj[ o_pautppc]->SetPtr(pa.UTppc );
+    aObj[ o_papepsc]->SetPtr(pa.PEpsc );
+    aObj[ o_papepvc]->SetPtr(pa.PEpvc );
+    aObj[ o_pagdcode]->SetPtr(&pa.GDcode[0][0] );
+    aObj[ o_pagdpsc]->SetPtr(pa.GDpsc );
+    aObj[ o_pagdpcc]->SetPtr(&pa.GDpcc[0][0] );
+    aObj[ o_pagdptc]->SetPtr(pa.GDptc );
+    aObj[ o_parpnptv]->SetPtr(&pa.NP );
+    aObj[ o_parpmode]->SetPtr(&pa.Mode );
+    aObj[ o_partpi]->SetPtr(   pa.Pi );
+    aObj[ o_partti]->SetPtr(   pa.Ti );
+    aObj[ o_partvi]->SetPtr(   pa.Vi );
+    aObj[ o_padrprtr]->SetPtr(&pa.DRpst );
+    aObj[ o_papmnum]->SetPtr( &pa.lowPosNum );
 
-    aObj[ o_pabcpc].SetPtr(  pa.BCpc );
-    aObj[ o_pagdpgw].SetPtr(  pa.GDpgw );
-    aObj[ o_pasdref].SetPtr(  pa.SDrefKey );
+    aObj[ o_pabcpc]->SetPtr(  pa.BCpc );
+    aObj[ o_pagdpgw]->SetPtr(  pa.GDpgw );
+    aObj[ o_pasdref]->SetPtr(  pa.SDrefKey );
 
-    aObj[ o_spppar].SetPtr(  static_cast<void *>(&pa) );
-    aObj[ o_spppar].SetM( sizeof( SPP_SETTING ) );
-aObj[ o_sptext].SetPtr(  internalBufer );
-    //   aObj[ o_sppconst].SetPtr( sc_ );
+    aObj[ o_spppar]->SetPtr(  static_cast<void *>(&pa) );
+    aObj[ o_spppar]->SetM( sizeof( SPP_SETTING ) );
+aObj[ o_sptext]->SetPtr(  internalBufer );
+    //   aObj[ o_sppconst]->SetPtr( sc_ );
     //   ob[o_sppconst].dim_M = sizeof( SPP_CONST );
-    //   aObj[ o_sppdatac].SetPtr( &nQ );
+    //   aObj[ o_sppdatac]->SetPtr( &nQ );
     //   ob[o_sppdatac].dim_M = sizeof( DATACOUNT );
 }
 
@@ -379,8 +381,8 @@ aObj[ o_sptext].SetPtr(  internalBufer );
 
 void TProfil::dyn_set(int )
 {
-    pa.p.tprn= static_cast<char *>(aObj[o_patprn].GetPtr());
-internalBufer = static_cast<char *>(aObj[ o_sptext].GetPtr());
+    pa.p.tprn= static_cast<char *>(aObj[o_patprn]->GetPtr());
+internalBufer = static_cast<char *>(aObj[ o_sptext]->GetPtr());
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
@@ -390,8 +392,8 @@ internalBufer = static_cast<char *>(aObj[ o_sptext].GetPtr());
 // free dynamic memory in objects and values
 void TProfil::dyn_kill(int )
 {
-    pa.p.tprn = static_cast<char *>(aObj[o_patprn].Free());
-internalBufer = static_cast<char *>(aObj[ o_sptext].Free());
+    pa.p.tprn = static_cast<char *>(aObj[o_patprn]->Free());
+internalBufer = static_cast<char *>(aObj[ o_sptext]->Free());
     if( rmults ) rmults->dyn_kill();
     if( mtparm ) mtparm->dyn_kill();
     if( syst ) syst->dyn_kill();
@@ -450,7 +452,7 @@ void TProfil::MakeQuery()
 // Help on Modelling Project module ( ? button )
 const char* TProfil::GetHtml()
 {
-   if(pVisor->ProfileMode == true )
+   if(pVisor->ProfileMode )
      return GEMS_NUMSET_HTML;
    else
     return GM_PROJECT_HTML;
@@ -476,10 +478,10 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
         	return;
 
       //internal objects for lookup arrays data
-      arT = static_cast<double *>(aObj[ o_w_tval].GetPtr());
-      nTp_ = aObj[ o_w_tval].GetN();
-      arP = static_cast<double *>(aObj[ o_w_pval].GetPtr());
-      nPp_ = aObj[ o_w_pval].GetN();
+      arT = static_cast<double *>(aObj[ o_w_tval]->GetPtr());
+      nTp_ = aObj[ o_w_tval]->GetN();
+      arP = static_cast<double *>(aObj[ o_w_pval]->GetPtr());
+      nPp_ = aObj[ o_w_pval]->GetN();
 
 
       na = new TNodeArrayGUI( 1, multi );
@@ -512,7 +514,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 // Checks if the modelling project name is the same as read from GEMS3K I/O files
 bool TProfil::CompareProjectName( const char* SysKey )
 {
-    auto len = rt[RT_PARAM].FldLen(0);
+    auto len = rt[RT_PARAM]->FldLen(0);
 //    const char* proj_name = rt[RT_PARAM].UnpackKey();
     const char* proj_key = db->UnpackKey();
 //char project_name[64];
@@ -535,23 +537,23 @@ void TProfil::ChangeTPinKey( double T, double P )
 
     Gcvt( T, 6, bT );
     Gcvt( P, 6, bP );
-    rt[RT_SYSEQ].SetKey( pmp->stkey );
-    rt[RT_SYSEQ].MakeKey( RT_SYSEQ, pmp->stkey, RT_SYSEQ, 0, RT_SYSEQ, 1,
+    rt[RT_SYSEQ]->SetKey( pmp->stkey );
+    rt[RT_SYSEQ]->MakeKey( RT_SYSEQ, pmp->stkey, RT_SYSEQ, 0, RT_SYSEQ, 1,
                            RT_SYSEQ, 2, RT_SYSEQ, 3, RT_SYSEQ, 4,
                            K_IMM, bP, K_IMM, bT, RT_SYSEQ, 7, K_END);
 
-    gstring str = pmp->stkey;
-    gstring capName = "Change the key read from GEMS3K I/O files";
+    std::string str = pmp->stkey;
+    std::string capName = "Change the key read from GEMS3K I/O files";
 AGAIN:
     str = TSysEq::pm->GetKeyofRecord( str.c_str(),capName.c_str(), KEY_NEW );
     if( str.empty() )
          Error( GetName(), "Record creation rejected!");
-    if( rt[RT_SYSEQ].FindCurrent( str.c_str() ) >= 0 )
+    if( rt[RT_SYSEQ]->FindCurrent( str.c_str() ) >= 0 )
     {
         capName = "This record already exists! Please, enter another name.";
         goto AGAIN;
     }
-    rt[RT_SYSEQ].SetKey( str.c_str() );
+    rt[RT_SYSEQ]->SetKey( str.c_str() );
 }
 
 
@@ -614,7 +616,7 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
     TNodeGUI* na = new TNodeGUI( multi );
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
-    //gstring key = pmp->stkey;
+    //std::string key = pmp->stkey;
 
     if( na->GEM_init( path ) )
     {
@@ -720,58 +722,58 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 {
     TCStringArray aList;
     TCIntArray anR;
-    vstr pkey(81);
+    char pkey[81];
     uint i;
 
-    int  Rnum = rt[nRT].Find( key );
+    int  Rnum = rt[nRT]->Find( key );
     ErrorIf( Rnum<0, GetName(), "Record to delete not found!");
-    rt[RT_PARAM].Get( Rnum ); // read record
+    rt[RT_PARAM]->Get( Rnum ); // read record
     dyn_set();
     SetFN();                  // reopen files of data base
-    rt[nRT].SetKey( key);
+    rt[nRT]->SetKey( key);
 
     // Delete all records connected to project
-    aList.Clear();    //SYSEQ
-    anR.Clear();
-    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    aList.clear();    //SYSEQ
+    anR.clear();
+    rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.size(); i++)
         TSysEq::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //PROCES
-    anR.Clear();
-    rt[RT_PROCES].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    aList.clear();    //PROCES
+    anR.clear();
+    rt[RT_PROCES]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROCES].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    rt[RT_PROCES]->GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.size(); i++)
         TProcess::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //UNSPACE
-    anR.Clear();
-    rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    aList.clear();    //UNSPACE
+    anR.clear();
+    rt[RT_UNSPACE]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    rt[RT_UNSPACE]->GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.size(); i++)
         TUnSpace::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //GTDEMO
-    anR.Clear();
-    rt[RT_GTDEMO].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    aList.clear();    //GTDEMO
+    anR.clear();
+    rt[RT_GTDEMO]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_GTDEMO].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    rt[RT_GTDEMO]->GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.size(); i++)
         TGtDemo::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //DUALTH
-    anR.Clear();
-    rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    aList.clear();    //DUALTH
+    anR.clear();
+    rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
-    for( i=0; i< aList.GetCount(); i++)
+    rt[RT_DUALTH]->GetKeyList( pkey, aList, anR );
+    for( i=0; i< aList.size(); i++)
         TDualTh::pm->DeleteRecord(aList[i].c_str());
 
-    rt[nRT].Del( Rnum );
+    rt[nRT]->Del( Rnum );
 }
 
 
@@ -796,8 +798,8 @@ void TProfil::CheckMtparam()
 void TProfil::PMtest( const char *key )
 {
     //double V, T, P;
-    TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
-    TProcess* Proc = dynamic_cast<TProcess *>(&aMod[RT_PROCES]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
+    TProcess* Proc = dynamic_cast<TProcess *>(aMod[RT_PROCES].get());
     MULTI *pmp = multi->GetPM();
 
     // test for available old solution
@@ -909,15 +911,16 @@ short TProfil::BAL_compare()
   // lists of components didn't change
   // test B - recipes and constraints
       for( i=0; i<pmp->N; i++ )
-          if( pmp->B[i] != 0. )
+          if( noZero( pmp->B[i] ) )
           {
 //              if( fabs( syp->B[pmp->mui[i]] /pmp->B[i] - 1. ) > pa.p.DHB * 0.001   )
               if( fabs( log10( syp->B[pmp->mui[i]] /pmp->B[i] )) > 1e-13  ) // log10( pa.p.DB ) ) )
                   return 1;
           }
           else
-          { if( syp->B[pmp->mui[i]]  !=  0.   )
-              return 1;
+          {
+              if( noZero( syp->B[pmp->mui[i]] )   )
+                    return 1;
           }
 
     je = 0;
@@ -932,11 +935,11 @@ short TProfil::BAL_compare()
 
           if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
   //            if( fabs( syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
-                if( syp->DLL[jj] != pmp->DLL[j]  )   //SD 22/01/2009
+                if( !approximatelyEqual( syp->DLL[jj], pmp->DLL[j])  )   //SD 22/01/2009
                   break;
           if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
   //            if( fabs( syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
-                if( syp->DUL[jj] != pmp->DUL[j] )   //SD 22/01/2009
+                if( !approximatelyEqual( syp->DUL[jj], pmp->DUL[j] ) )   //SD 22/01/2009
                 break;
           if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
           {  if( pmp->RLC[j] != syp->RLC[jj] )
@@ -1064,9 +1067,9 @@ void  TProfil::CalculateEquilibriumGUI()
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
-double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
+double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /*NumIterFIA*/, long int& /*NumIterIPM*/ )
 {
-  TSysEq* STat = dynamic_cast<TSysEq *>(&aMod[RT_SYSEQ]);
+  TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
   calcFinished = false;
 
   //multi->Access_GEM_IMP_init();

@@ -33,11 +33,11 @@ void TNodeGUI::MakeNodeStructures(
 
     // make lists
     for( ii=0; ii<anICb; ii++)
-        aSelIC.Add( axIC[ii] );
+        aSelIC.push_back( axIC[ii] );
     for( ii=0; ii<anDCb; ii++)
-        aSelDC.Add( axDC[ii] );
+        aSelDC.push_back( axDC[ii] );
     for( ii=0; ii<anPHb; ii++)
-        aSelPH.Add( axPH[ii] );
+        aSelPH.push_back( axPH[ii] );
 
     // set default data and realloc arrays
     makeStartDataChBR( 0, no_interpolat, aSelIC, aSelDC, aSelPH,
@@ -87,34 +87,34 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     TCStringArray aList;
 
     // select lists
-    aList.Clear();
+    aList.clear();
     for(long int ii=0; ii< pmm->N; ii++ )
     {  if( select_all )
-            aSelIC.Add( ii );
+            aSelIC.push_back( ii );
         else
-            aList.Add( gstring( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
+            aList.push_back( std::string( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelIC = vfMultiChoice(par, aList,
                                "Please, mark independent components for selection into DataBridge");
 
-    aList.Clear();
+    aList.clear();
     for(long int ii=0; ii< pmm->L; ii++ )
     {  if( select_all )
-            aSelDC.Add( ii );
+            aSelDC.push_back( ii );
         else
-            aList.Add( gstring( pmm->SM[ii], 0, MAXDCNAME));
+            aList.push_back( std::string( pmm->SM[ii], 0, MAXDCNAME));
     }
     if( !select_all  )
         aSelDC = vfMultiChoice(par, aList,
                                "Please, mark dependent components for selection into DataBridge");
 
-    aList.Clear();
+    aList.clear();
     for(long int ii=0; ii< pmm->FI; ii++ )
     {  if( select_all )
-            aSelPH.Add( ii );
+            aSelPH.push_back( ii );
         else
-            aList.Add( gstring( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
+            aList.push_back( std::string( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelPH = vfMultiChoice(par, aList,
@@ -150,11 +150,11 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
 
     // These dimensionalities define sizes of dynamic data in DATABR structure!!!
 
-    CSD->nICb = (long int)selIC.GetCount();
-    CSD->nDCb = (long int)selDC.GetCount();
-    CSD->nPHb = (long int)selPH.GetCount();
+    CSD->nICb = selIC.size();
+    CSD->nDCb = selDC.size();
+    CSD->nPHb = selPH.size();
     CSD->nPSb = 0;
-    for( ii=0; ii< selPH.GetCount(); ii++, CSD->nPSb++ )
+    for( ii=0; ii< selPH.size(); ii++, CSD->nPSb++ )
         if( selPH[ii] >= pmm->FIs )
             break;
     if( no_interpolation )
@@ -172,11 +172,11 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
 
     // set dynamic data to DataCH
 
-    for( ii=0; ii< selIC.GetCount(); ii++ )
+    for( ii=0; ii< selIC.size(); ii++ )
         CSD->xic[ii] = (long int)selIC[ii];
-    for( ii=0; ii< selDC.GetCount(); ii++ )
+    for( ii=0; ii< selDC.size(); ii++ )
         CSD->xdc[ii] = (long int)selDC[ii];
-    for( ii=0; ii< selPH.GetCount(); ii++ )
+    for( ii=0; ii< selPH.size(); ii++ )
         CSD->xph[ii] = (long int)selPH[ii];
 
     for( i1=0; i1< CSD->nIC*CSD->nDC; i1++ )
@@ -350,7 +350,7 @@ std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
 
 bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
 {
-    double time;
+    //double time;
     long int NodeStatusCH = T_ERROR_GEM;
 
     if( msg_return.size() >= 2 )
@@ -362,12 +362,12 @@ bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
     {
     case OK_GEM_AIA:
     case OK_GEM_SIA: // unpack dbr data
-        time = readMultiServer( NodeStatusCH, msg_return );
+        /*time =*/ readMultiServer( NodeStatusCH, msg_return );
         return true;
         break;
     case BAD_GEM_AIA:
     case BAD_GEM_SIA:  // unpack dbr data
-        time = readMultiServer( NodeStatusCH, msg_return );
+        /*time =*/ readMultiServer( NodeStatusCH, msg_return );
         Error( (msg_return.end()-1)->c_str(), msg_return.back().c_str() );
         break;
     case ERR_GEM_AIA:

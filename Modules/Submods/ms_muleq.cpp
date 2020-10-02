@@ -27,7 +27,7 @@
 void TMulti::setSizes()
 {
     short j, Lp;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
 
     // short
     STat->stp->N = pm.N;
@@ -57,7 +57,7 @@ void TMulti::setSizes()
 void TMulti::packData()
 {
     short i,j;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
 
     if( pm.N != STat->stp->N  ) // crash if error in calculation System
     {
@@ -107,7 +107,7 @@ void TMulti::packData()
 void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
 {
     short i,j;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
 
     for( i=0,j=0; j<pm.L; j++ )
         if( pm.X[j] >= fmin( pm.lowPosNum, pm.DcMinM ))
@@ -138,8 +138,8 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
 //
 void TMulti::unpackData()
 {
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    TProfil* Prf = (TProfil*)(&aMod[RT_PARAM]);
+    TSysEq* STat = dynamic_cast<TSysEq *>( aMod[RT_SYSEQ].get());
+    TProfil* Prf = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
     int i, j, js, jp, is, ip;
 
@@ -161,8 +161,8 @@ void TMulti::unpackData()
                 goto FOUNDI;
             }
         pm.pNP = 1;
-        { gstring err = "No ";
-          err += gstring(TRMults::sm->GetMU()->SB[i], 0, MAXICNAME);
+        { string err = "No ";
+          err += string(TRMults::sm->GetMU()->SB[i], 0, MAXICNAME);
           err += " IComp in the system!";
           Error( GetName(), err.c_str() /*"no such IComp in this system"*/ );
         }
@@ -241,13 +241,13 @@ void TMulti::MultiKeyInit( const char*key )
 
    
    // Get V, P and T from SysEq record key
-   gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
+   string s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
    V = atof(s.c_str());
-   s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
+   s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
    P = atof(s.c_str());
-   s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
+   s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
    T = atof(s.c_str());
-   s = gstring( key,MAXMUNAME, MAXTDPCODE);
+   s = string( key,MAXMUNAME, MAXTDPCODE);
 
    typeMin = s[0];
    switch( typeMin )
@@ -298,26 +298,26 @@ void TMulti::MultiKeyInit( const char*key )
 //
 void TMulti::EqstatExpand( /*const char *key,*/ bool calcActivityModels/*, bool calcKineticModels*/ )
 {
-    long int i, j, k;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
+    long int i, j, kk;//, jb, je=0, jpb, jpe=0, jdb, jde=0;
 //    double FitVar3;
     SPP_SETTING *pa = &TProfil::pm->pa;
     pmp->NR = pmp->N;
 
     bool AllPhasesPure = true;   // Added by DK on 09.03.2010
     // checking if all phases are pure
-    for( k=0; k < pmp->FI; k++ )
-        if( pmp->L1[k] > 1 )
+    for( kk=0; kk < pmp->FI; kk++ )
+        if( pmp->L1[kk] > 1 )
             AllPhasesPure = false;
 
     TotalPhasesAmounts( pmp->X, pmp->XF, pmp->XFA );
     for( j=0; j<pmp->L; j++ )
         pmp->Y[j] = pmp->X[j];
 
-    for( k=0; k<pmp->FI; k++ )
+    for( kk=0; kk<pmp->FI; kk++ )
     {
-        pmp->YF[k] = pmp->XF[k];
-        if( k<pmp->FIs )
-            pmp->YFA[k] = pmp->XFA[k];
+        pmp->YF[kk] = pmp->XF[kk];
+        if( kk<pmp->FIs )
+            pmp->YFA[kk] = pmp->XFA[kk];
     }
     // calculate DC (species) concentrations and activities
     CalculateConcentrations( pmp->X, pmp->XF, pmp->XFA);
@@ -455,11 +455,11 @@ void TMulti::EqstatExpand( /*const char *key,*/ bool calcActivityModels/*, bool 
     pmp->FitVar[0] = bfc_mass();   // added DK 02.03.2012
 
     // dynamic work arrays - loading initial data  (added 07.03.2008)
-    for( k=0; k<pmp->FI; k++ )
+    for( kk=0; kk<pmp->FI; kk++ )
     {
-        pmp->XFs[k] = pmp->XF[k];
-        pmp->Falps[k] = pmp->Falp[k];
-        memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
+        pmp->XFs[kk] = pmp->XF[kk];
+        pmp->Falps[kk] = pmp->Falp[kk];
+        memcpy( pmp->SFs[kk], pmp->SF[kk], MAXPHNAME+MAXSYMB );
     }
 
     //calculate gas partial pressures  -- obsolete?, retained evtl. for old process scripts

@@ -4,7 +4,6 @@
 // Declaration of ProgressDialog class
 //
 // Copyright (C) 1996-2009  A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -26,7 +25,6 @@
 
 #include <ctime>
 #include "ui_ProgressDialog4.h"
-#include "gstring.h"
 
 class CalcThread;
 class QTimer;

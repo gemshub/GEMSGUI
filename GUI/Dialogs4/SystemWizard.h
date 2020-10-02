@@ -21,9 +21,7 @@
 
 #include <QDialog>
 #include <QComboBox>
-
 #include "ui_SystemWizard4.h"
-#include "gstring.h"
 
 
 class SystemWizard : public QDialog, public Ui::SystemWizardData
@@ -36,12 +34,12 @@ class SystemWizard : public QDialog, public Ui::SystemWizardData
 public:
 
     SystemWizard( const char* pkey, char flgs[40],
-         gstring name, gstring comment, gstring EQkey,  QWidget* parent = nullptr);
+         std::string name, std::string comment, std::string EQkey,  QWidget* parent = nullptr);
     virtual ~SystemWizard();
 
-    gstring getName();
-    gstring getComment();
-    gstring getEQkey();
+    std::string getName();
+    std::string getComment();
+    std::string getEQkey();
 
     void   getFlags( char flgs[40] );
 

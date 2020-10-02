@@ -89,11 +89,11 @@ void TTreeModel::setupModelData()
     short* l1_I = 0;
        
     if( nO ==  o_wi_l1 )
-        l1_R = (long int *)aObj[ o_wi_l1 ].GetPtr();
+        l1_R = (long int *)aObj[ o_wi_l1 ]->GetPtr();
     else 	
-        l1_I = (short *)aObj[ nO/*o_mul1*/ ].GetPtr();
+        l1_I = (short *)aObj[ nO/*o_mul1*/ ]->GetPtr();
     
-    int nPhases = aObj[ nO/*o_mul1*/ ].GetN();
+    int nPhases = aObj[ nO/*o_mul1*/ ]->GetN();
     int ii, jj, je, jb;
     je = 0;
     
@@ -167,8 +167,8 @@ Qt::ItemFlags TTreeModel::flags( const QModelIndex& index ) const
   int nO, iN, iM;
   FieldInfo fld = getInfo( index, iN, iM );
   nO = fld.nO;
-  if( (fld.edit == eYes ) ) 
-	  if( nO == -1 || aObj[nO].GetPtr() !=0 )
+  if( fld.edit == eYes  )
+      if( nO == -1 || aObj[nO]->GetPtr() !=0 )
           {  flags |= Qt::ItemIsEditable;
              return flags;
           }
@@ -204,13 +204,13 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 	           break;   
 	  }
 	QString res = QString("%1").arg(dat);	
-	gstring txt = res.toLatin1().data();
-	aObj[nO].SetString( txt.c_str(), iN, 0 );
+    string txt = res.toStdString();
+    aObj[nO]->SetString( txt.c_str(), iN, 0 );
 }
 
 QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 {
-    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
+    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO]->GetStringEmpty( iN, 0 )).c_str() );
 	char code = lineFromIndex(index)->UGval;
 	double dat = res.toDouble();
         double tK = TMulti::sm->GetPM()->T; //TProfil::pm->tpp->TK;
@@ -235,7 +235,7 @@ QString TTreeModel::getGOcorr( const QModelIndex& index, int nO, int iN ) const
 
 QString TTreeModel::getObjValue(  int nO, int iN ) const
 {
-    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO].GetStringEmpty( iN, 0 )).c_str() );
+    QString res =  QString::fromLatin1( visualizeEmpty(aObj[nO]->GetStringEmpty( iN, 0 )).c_str() );
 
     if( res == emptiness.c_str() )
     	return  res;
@@ -251,7 +251,7 @@ QString TTreeModel::getObjValue(  int nO, int iN ) const
          break; 		
 // Result	
 	case o_wo_wx:
-		  switch( aObj[o_wi_dcc].GetStringEmpty(iN)[0])
+          switch( aObj[o_wi_dcc]->GetStringEmpty(iN)[0])
 		  {
 		    case DC_SCP_CONDEN:
 		    case DC_AQ_SOLVENT:  /* mol fractions in solvent */
@@ -272,7 +272,7 @@ QString TTreeModel::getObjValue(  int nO, int iN ) const
 		          //  res = res; // o_wo_wx
 		         break;
 		    default: // molality
-                res =  QString::fromLatin1( visualizeEmpty(aObj[o_wd_ym].GetStringEmpty( iN, 0 )).c_str() );
+                res =  QString::fromLatin1( visualizeEmpty(aObj[o_wd_ym]->GetStringEmpty( iN, 0 )).c_str() );
 		         break; /* error in DC class code */
 		 }
 	    break;
@@ -305,14 +305,14 @@ QString TTreeModel::getDescription( int nO, int N) const
     if( nO == -1 )
       return "";
     
-    TObject& pObj = aObj[nO]; 
-	gstring desc = pObj.GetDescription(N,0);
+    TObject& pObj = *aObj[nO];
+    string desc = pObj.GetDescription(N,0);
 	const char *keyWd = pObj.GetKeywd();
 	switch( nO )
 	{
 // Result	
 	case o_wo_wx:
-		  switch( aObj[o_wi_dcc].GetStringEmpty(N)[0])
+          switch( aObj[o_wi_dcc]->GetStringEmpty(N)[0])
 		  {
 		    case DC_SCP_CONDEN:
 		    case DC_AQ_SOLVENT:  /* mol fractions in solvent */
@@ -332,8 +332,8 @@ QString TTreeModel::getDescription( int nO, int N) const
 		         break;
 		    default: // molality
 		        // pObj = aObj[o_wd_ym]; 
-		    	desc = aObj[o_wd_ym].GetDescription(N,0);
-		    	keyWd = aObj[o_wd_ym].GetKeywd();
+                desc = aObj[o_wd_ym]->GetDescription(N,0);
+                keyWd = aObj[o_wd_ym]->GetKeywd();
 		    	break; /* error in DC class code */
 		 }
 	    break;
@@ -433,20 +433,20 @@ bool TTreeModel::setData( const QModelIndex& index, const QVariant& value, int r
            if( nO >= 0 )
 	   {
              QString val = QVariant(value).toString();
-             gstring txt = val.toLatin1().data();
+             string txt = val.toStdString();
 	
             if( index.column()== 3 ) // + or - (switch all dcomps with phase)
-             {   char old_data = aObj[nO].GetStringEmpty( iN, iM )[0];
+             {   char old_data = aObj[nO]->GetStringEmpty( iN, iM )[0];
                  childChanged( index, value, old_data);
              }
 
             if( txt == emptiness /*|| txt == short_emptiness*/ )
-	      aObj[nO].SetString( S_EMPTY, iN, iM );
+          aObj[nO]->SetString( S_EMPTY, iN, iM );
              else
              {   if( index.column()== 7 )
 	 	   		setGOcorr( index, val, nO, iN );
                  else
-	            aObj[nO].SetString( txt.c_str(), iN, iM );
+                aObj[nO]->SetString( txt.c_str(), iN, iM );
              }
 
             emit dataChanged(index, index); // set flag the system changed
@@ -465,7 +465,7 @@ void TTreeModel::childChanged(const QModelIndex& index, const QVariant& value, c
 {
     if( index.column()== 3 ) // + or - (switch all dcomps with phase)
     {
-        gstring txt = QVariant(value).toString().toLatin1().data();
+        string txt = QVariant(value).toString().toStdString();
 
        if( txt[0] == '-' ||
                (( txt[0] == '+' || txt[0] == '*' ) && old_data == '-' ))
@@ -489,37 +489,41 @@ TTreeDelegate::TTreeDelegate( QObject * parent ):
 
 // Editing QTreeView for objects in System page
 QWidget *TTreeDelegate::createEditor(QWidget *parent,
-        const QStyleOptionViewItem &option,
-        const QModelIndex &index) const
+                                     const QStyleOptionViewItem &option,
+                                     const QModelIndex &index) const
 {
-	int iN, iM; 
-	
-	FieldInfo fld =  ((TTreeModel *)(index.model() ))->getInfo( index, iN, iM);
+    int iN, iM;
+
+    auto model = dynamic_cast<const TTreeModel *>(index.model());
+    if( !model)
+        return QAbstractItemDelegate::createEditor( parent, option,  index );
+
+    FieldInfo fld =  model->getInfo( index, iN, iM);
     if( iN >= 0 && iM >= 0)
     {
-    	switch( fld.fType )
+        switch( fld.fType )
         {
-          case ftCheckBox:
-           { TCellCheck* editor =  new TCellCheck( fld, iN, iM, parent);
-             return editor;
-           }  
-        default:
-        	{ TCellInput* editor =  new TCellInput( fld, iN, iM, parent);
-              return editor;
-        	}  
+        case ftCheckBox:
+        { TCellCheck* editor =  new TCellCheck( fld, iN, iM, parent);
+            return editor;
         }
-    }	
-   return QAbstractItemDelegate::createEditor( parent, option,  index );
+        default:
+        { TCellInput* editor =  new TCellInput( fld, iN, iM, parent);
+            return editor;
+        }
+        }
+    }
+    return QAbstractItemDelegate::createEditor( parent, option,  index );
 }
 
 void TTreeDelegate::setEditorData(QWidget *editor,
                                   const QModelIndex &index) const
 {
-	TCell *cellEdit = dynamic_cast<TCell*>(editor);
-	if( cellEdit)
-	{   
-	    cellEdit->setData( index.data(Qt::EditRole).toString());
-	}    
+    TCell *cellEdit = dynamic_cast<TCell*>(editor);
+    if( cellEdit)
+    {
+        cellEdit->setData( index.data(Qt::EditRole).toString());
+    }
 }
 
 void TTreeDelegate::setModelData(QWidget *editor,
@@ -582,7 +586,7 @@ void TTreeView::printList( fstream& ff )
          {
             index = model()->index(row, col, rootIndex() );
             QString value = model()->data(index).toString();
-            ff << value.toLatin1().data() << " ";
+            ff << value.toStdString() << " ";
          }  
     	 ff << endl;
     	 
@@ -592,161 +596,164 @@ void TTreeView::printList( fstream& ff )
              {
                 index = model()->index(rw, col, childIndex );
                 QString value = model()->data(index).toString();
-                ff << value.toLatin1().data() << " ";
+                ff << value.toStdString() << " ";
              }  
         	 ff << endl;
          }
      }
  }
 
- void TTreeView::slotPopupContextMenu(const QPoint &pos)
- {
+void TTreeView::slotPopupContextMenu(const QPoint &pos)
+{
     QModelIndex index = indexAt( pos );
-    TTreeModel* model =(TTreeModel *)index.model();
- 	int iN, iM;
- 	FieldInfo fld =  model->getInfo( index, iN, iM);
-     if(iN == -1 || iM == -1 )
-     	return;
- 	
-     QMenu *menu = new QMenu(this);
-  //   no_menu1 = false;
-  
-     QAction* act =  new QAction(tr("&Help"), this);
-     act->setIcon(QIcon(":/menu/Icons/ShowHelpWindowIcon.png"));
-     act->setShortcut(tr("F1"));
-     act->setStatusTip(tr("Help for specified cell"));
-     connect(act, SIGNAL(triggered()), this, SLOT(CmHelp()));
-     menu->addAction(act);
-          	    
-     if( (fld.fType == ftFloat || fld.fType == ftNumeric || 
-        		fld.fType == ftCheckBox) && fld.edit == eYes )
-         {
-     	    menu->addSeparator();
-            act =  new QAction(tr("&Calculator"), this);
-            act->setShortcut(tr("F8"));
-            act->setStatusTip(tr("Use Calculator for specified cells"));
-       	    connect(act, SIGNAL(triggered()), this, SLOT(CmCalc()));
-            menu->addAction(act);
-         }
- /*     if( fld.fType == ftRecord )
+    auto model = dynamic_cast<const TTreeModel *>(index.model());
+    if( !model )
+        return;
+
+    int iN, iM;
+    FieldInfo fld =  model->getInfo( index, iN, iM);
+    if(iN == -1 || iM == -1 )
+        return;
+
+    QMenu *menu = new QMenu(this);
+    //   no_menu1 = false;
+
+    QAction* act =  new QAction(tr("&Help"), this);
+    act->setIcon(QIcon(":/menu/Icons/ShowHelpWindowIcon.png"));
+    act->setShortcut(tr("F1"));
+    act->setStatusTip(tr("Help for specified cell"));
+    connect(act, SIGNAL(triggered()), this, SLOT(CmHelp()));
+    menu->addAction(act);
+
+    if( (fld.fType == ftFloat || fld.fType == ftNumeric ||
+         fld.fType == ftCheckBox) && fld.edit == eYes )
+    {
+        menu->addSeparator();
+        act =  new QAction(tr("&Calculator"), this);
+        act->setShortcut(tr("F8"));
+        act->setStatusTip(tr("Use Calculator for specified cells"));
+        connect(act, SIGNAL(triggered()), this, SLOT(CmCalc()));
+        menu->addAction(act);
+    }
+    /*     if( fld.fType == ftRecord )
          {
            act =  new QAction(tr("&Show record"), this);
            act->setShortcut(tr("F7"));
            act->setStatusTip(tr("Go to the specified cell"));
            connect(act, SIGNAL(triggered()), this, SLOT(CmDComp()));
            menu->addAction(act);
-         }	
-   */      
-       menu->addSeparator();
-         
-   	   act =  new QAction(tr("Select &row"), this);
+         }
+   */
+    menu->addSeparator();
 
-        act->setShortcut(tr("Ctrl+R"));
-        act->setStatusTip(tr("Select current row"));
-   	    connect(act, SIGNAL(triggered()), this, SLOT(SelectRow()));
-        menu->addAction(act);
- 
-        act =  new QAction(tr("Select co&lumn"), this);
-        act->setShortcut(tr("Ctrl+L"));
-        act->setStatusTip(tr("Select curent column"));
-   	    connect(act, SIGNAL(triggered()), this, SLOT(SelectColumn()));
-        menu->addAction(act);
-       
-        act =  new QAction(tr("Select &group"), this);
-        act->setShortcut(tr("Ctrl+G"));
-        act->setStatusTip(tr("Select current phase"));
-   	    connect(act, SIGNAL(triggered()), this, SLOT(SelectGroup()));
-        menu->addAction(act);
+    act =  new QAction(tr("Select &row"), this);
 
-        act =  new QAction(tr("Select &all"), this);
-        act->setShortcut(tr("Ctrl+A"));
-        act->setStatusTip(tr("Select all"));
-   	    connect(act, SIGNAL(triggered()), this, SLOT(SelectAll()));
-        menu->addAction(act);
+    act->setShortcut(tr("Ctrl+R"));
+    act->setStatusTip(tr("Select current row"));
+    connect(act, SIGNAL(triggered()), this, SLOT(SelectRow()));
+    menu->addAction(act);
 
-        menu->addSeparator();
+    act =  new QAction(tr("Select co&lumn"), this);
+    act->setShortcut(tr("Ctrl+L"));
+    act->setStatusTip(tr("Select curent column"));
+    connect(act, SIGNAL(triggered()), this, SLOT(SelectColumn()));
+    menu->addAction(act);
 
-        act =  new QAction(tr("&Copy"), this);
-        act->setShortcut(tr("Ctrl+C"));
-        act->setStatusTip(tr("Copy selected data"));
-   	    connect(act, SIGNAL(triggered()), this, SLOT(CopyData()));
-        menu->addAction(act);
+    act =  new QAction(tr("Select &group"), this);
+    act->setShortcut(tr("Ctrl+G"));
+    act->setStatusTip(tr("Select current phase"));
+    connect(act, SIGNAL(triggered()), this, SLOT(SelectGroup()));
+    menu->addAction(act);
 
-        act =  new QAction(tr("Copy wit&h names"), this);
-        act->setShortcut(tr("Ctrl+H"));
-        act->setStatusTip(tr("Copy selected header&cells"));
-  	    connect(act, SIGNAL(triggered()), this, SLOT(CopyDataHeader()));
-        menu->addAction(act);
+    act =  new QAction(tr("Select &all"), this);
+    act->setShortcut(tr("Ctrl+A"));
+    act->setStatusTip(tr("Select all"));
+    connect(act, SIGNAL(triggered()), this, SLOT(SelectAll()));
+    menu->addAction(act);
 
-  
-      menu->exec( viewport()->mapToGlobal(pos) );
-      delete menu;
- }
+    menu->addSeparator();
 
-  void TTreeView::keyPressEvent(QKeyEvent* e)
- {
-	    if ( e->modifiers() & Qt::ControlModifier ) 
-	    {
-			switch ( e->key() ) 
-			{
-			  case Qt::Key_R:
-			    SelectRow();
-			    return;
-			  case Qt::Key_L:
-			    SelectColumn();
-			    return;
-			  case Qt::Key_G:
-			    SelectGroup();
-			    return;
-			  case Qt::Key_A:
-			    SelectAll();
-			    return;
-			  case Qt::Key_C:
-			    CopyData();
-			    return;
-			  case Qt::Key_H:
-			    CopyDataHeader();
-			    return;
-			}
-		}
+    act =  new QAction(tr("&Copy"), this);
+    act->setShortcut(tr("Ctrl+C"));
+    act->setStatusTip(tr("Copy selected data"));
+    connect(act, SIGNAL(triggered()), this, SLOT(CopyData()));
+    menu->addAction(act);
 
-	   switch( e->key() )
- 	  {
- 	    case Qt::Key_F1:
- 	        CmHelp();
- 	        return;
- 	    case Qt::Key_F8:
- 	         CmCalc();
- 	        return;
- 	}
- 	QTreeView::keyPressEvent(e);
- }
-   
-  void TTreeView::SelectRow()
-  {
-    selectionModel()->select( currentIndex(), 
-    		QItemSelectionModel::Rows|QItemSelectionModel::Select ); 
-  }
+    act =  new QAction(tr("Copy wit&h names"), this);
+    act->setShortcut(tr("Ctrl+H"));
+    act->setStatusTip(tr("Copy selected header&cells"));
+    connect(act, SIGNAL(triggered()), this, SLOT(CopyDataHeader()));
+    menu->addAction(act);
 
-  void TTreeView::SelectColumn()
-  {
-   // selectionModel()->select( currentIndex(), 
-   // 		QItemSelectionModel::Columns|QItemSelectionModel::Select ); 
-   int col = currentIndex().column();
-   int row, rw;
-   QModelIndex index, childIndex;
-   for( row = 0; row < model()->rowCount( rootIndex() ); row++ ) 
-   {
-       childIndex = model()->index( row, col, rootIndex());
-       selectionModel()->select( childIndex, QItemSelectionModel::Select ); 
-       childIndex = model()->index( row, 0, rootIndex());
-       for (rw = 0; rw < model()->rowCount( childIndex ); rw++ ) 
-       {
-           index = model()->index(rw, col, childIndex );
-           selectionModel()->select( index, QItemSelectionModel::Select ); 
-	     }
-   }   
-  }
+
+    menu->exec( viewport()->mapToGlobal(pos) );
+    delete menu;
+}
+
+void TTreeView::keyPressEvent(QKeyEvent* e)
+{
+    if ( e->modifiers() & Qt::ControlModifier )
+    {
+        switch ( e->key() )
+        {
+        case Qt::Key_R:
+            SelectRow();
+            return;
+        case Qt::Key_L:
+            SelectColumn();
+            return;
+        case Qt::Key_G:
+            SelectGroup();
+            return;
+        case Qt::Key_A:
+            SelectAll();
+            return;
+        case Qt::Key_C:
+            CopyData();
+            return;
+        case Qt::Key_H:
+            CopyDataHeader();
+            return;
+        }
+    }
+
+    switch( e->key() )
+    {
+    case Qt::Key_F1:
+        CmHelp();
+        return;
+    case Qt::Key_F8:
+        CmCalc();
+        return;
+    }
+    QTreeView::keyPressEvent(e);
+}
+
+void TTreeView::SelectRow()
+{
+    selectionModel()->select( currentIndex(),
+                              QItemSelectionModel::Rows|QItemSelectionModel::Select );
+}
+
+void TTreeView::SelectColumn()
+{
+    // selectionModel()->select( currentIndex(),
+    // 		QItemSelectionModel::Columns|QItemSelectionModel::Select );
+    int col = currentIndex().column();
+    int row, rw;
+    QModelIndex index, childIndex;
+    for( row = 0; row < model()->rowCount( rootIndex() ); row++ )
+    {
+        childIndex = model()->index( row, col, rootIndex());
+        selectionModel()->select( childIndex, QItemSelectionModel::Select );
+        childIndex = model()->index( row, 0, rootIndex());
+        for (rw = 0; rw < model()->rowCount( childIndex ); rw++ )
+        {
+            index = model()->index(rw, col, childIndex );
+            selectionModel()->select( index, QItemSelectionModel::Select );
+        }
+    }
+}
 
   void TTreeView::SelectAll()
   {
@@ -872,52 +879,55 @@ void TTreeView::printList( fstream& ff )
 
   void TTreeView::CmCalc()
   {
-    QModelIndex index = currentIndex();
-    TTreeModel* model =(TTreeModel *)index.model();
- 	int iN, iM, col = index.column();
-	FieldInfo fld =  model->getInfo( index, iN, iM);
-    if( fld.edit != eYes )
-  	   	return;
-    QModelIndex parIndex = model->parent(currentIndex());
-    QModelIndexList selIndexes = selectedIndexes();
+      QModelIndex index = currentIndex();
+      auto model = const_cast<TTreeModel *>(dynamic_cast<const TTreeModel *>(index.model()));
+      if( !model )
+          return;
 
-    if(  fld.fType == ftFloat || fld.fType == ftNumeric )
-     {
-       CalcDialog calc(topLevelWidget(), fld.nO );
-       if( calc.exec() )
-        {
-    	   for(int row = 0; row < model->rowCount( parIndex ); row++ ) 
-    	   {
-    	     index = model->index(row, col, parIndex );
-    	   	 if( selIndexes.contains( index ) )
-    	   	 {
-                QString res = calc.fun( index.data(Qt::EditRole).toDouble() );
-                model->setData(index, res, Qt::EditRole);
-    	      }	 
-    	  }  	
-        }
-     }
-  
-    if(  fld.fType == ftCheckBox )
-    {
-      gstring Vals = aUnits[fld.npos].getVals(iM);
-      CalcCheckDialog calc(topLevelWidget(), fld.nO, Vals);
+      int iN, iM, col = index.column();
+      FieldInfo fld =  model->getInfo( index, iN, iM);
+      if( fld.edit != eYes )
+          return;
+      QModelIndex parIndex = model->parent(currentIndex());
+      QModelIndexList selIndexes = selectedIndexes();
 
-      if( calc.exec() )
+      if(  fld.fType == ftFloat || fld.fType == ftNumeric )
       {
-    	  int ii = calc.fun();
-       	  QString res  = gstring(Vals, ii, 1).c_str();
-       	  for(int row = 0; row < model->rowCount( parIndex ); row++ ) 
-     	  {
-     	    index = model->index(row, col, parIndex );
-     	   	 if( selIndexes.contains( index ) )
-     	   	 {
-     	        // double res = calc.fun( index.data(Qt::EditRole).toDouble() );
-     	        model->setData(index, res, Qt::EditRole);         
-     	      }	 
-     	  }  	
-       }
-    }
+          CalcDialog calc(topLevelWidget(), fld.nO );
+          if( calc.exec() )
+          {
+              for(int row = 0; row < model->rowCount( parIndex ); row++ )
+              {
+                  index = model->index(row, col, parIndex );
+                  if( selIndexes.contains( index ) )
+                  {
+                      QString res = calc.fun( index.data(Qt::EditRole).toDouble() );
+                      model->setData(index, res, Qt::EditRole);
+                  }
+              }
+          }
+      }
+
+      if(  fld.fType == ftCheckBox )
+      {
+          string Vals = aUnits[fld.npos].getVals(iM);
+          CalcCheckDialog calc(topLevelWidget(), fld.nO, Vals);
+
+          if( calc.exec() )
+          {
+              int ii = calc.fun();
+              QString res  = string(Vals, ii, 1).c_str();
+              for(int row = 0; row < model->rowCount( parIndex ); row++ )
+              {
+                  index = model->index(row, col, parIndex );
+                  if( selIndexes.contains( index ) )
+                  {
+                      // double res = calc.fun( index.data(Qt::EditRole).toDouble() );
+                      model->setData(index, res, Qt::EditRole);
+                  }
+              }
+          }
+      }
 
   }
 
@@ -925,15 +935,18 @@ void TTreeView::printList( fstream& ff )
     void TTreeView::CmHelp()
     {
       QModelIndex index = currentIndex();
+      auto model = dynamic_cast<const TTreeModel *>(index.model());
+      if( !model)
+          return;
       //if( !index.isValid() )
       //   index = model()->index(0, 0, rootIndex() );
       int iN, iM;
-      FieldInfo fld =  ((TTreeModel *)(index.model() ))->getInfo( index, iN, iM);
+      FieldInfo fld =  model->getInfo( index, iN, iM);
       if(iN == -1 || iM == -1 || fld.nO < 0 )
         	return;
         
-      //gstring item = fld.pObj->GetFullName(iN,iM); // for old indexation
-      gstring item = fld.pObj->GetHelpLink(iN,iM);
+      //string item = fld.pObj->GetFullName(iN,iM); // for old indexation
+      string item = fld.pObj->GetHelpLink(iN,iM);
       pVisorImp->OpenHelp( 0, item.c_str());
     }
   

@@ -25,6 +25,7 @@
 //-------------------------------------------------------------------
 //
 
+#include <memory>
 #include "s_lsm.h"
 static int iminarg1,iminarg2;
 #define IMIN(a,b) (iminarg1=(a),iminarg2=(b),(iminarg1) < (iminarg2) ?\
@@ -222,10 +223,10 @@ void TSVDcalc::svdGetXmore0( int ii, fd_type x[] )
 }
 
 
-void TSVDcalc::svdGetX( fd_type b[], fd_type x[] )
-// Solves A�x = b for a vector x, where A is specified by the arrays
+void TSVDcalc::svdGetX( fd_type b1[], fd_type x[] )
+// Solves A�x = b1 for a vector x, where A is specified by the arrays
 // U, w, V as returned by svdGetUWV.
-//  b is the input right-hand side.
+//  b1 is the input right-hand side.
 //  x is the output solution vector.
 {
   int jj,j,i;
@@ -235,10 +236,10 @@ void TSVDcalc::svdGetX( fd_type b[], fd_type x[] )
   for( j=0;j<IMIN(m+1,n);j++ )   // Calculate UTB.
   {
      s = 0.0;
-     if ( w[j] )  // Nonzero result only if wj is nonzero.
+     if ( noZero(w[j]) )  // Nonzero result only if wj is nonzero.
      {
        for (i=0;i<m;i++)
-           s += U[i][j]*b[i];
+           s += U[i][j]*b1[i];
         s /= w[j]; // This is the divide by wj .
      }
      tmp[j] = s;
@@ -276,13 +277,13 @@ rank can be computed from this decomposition.
        U = Array2D<Real>(m, nu, Real(0));
        V = Array2D<Real>(n,n);
   */
- SVD<double> data(Arg);
+ SVD<double> data1(Arg);
 
- data.getU( U ); // m * min( m+1, n )
+ data1.getU( U ); // m * min( m+1, n )
  // Return the right singular vectors
- data.getV( V ); // n*n
+ data1.getV( V ); // n*n
  // Return the one-dimensional array of singular values
- data.getSingularValues( w ); // min(m+1,n)
+ data1.getSingularValues( w ); // min(m+1,n)
 }
 
 void TSVDcalc::svdMin(  fd_type a[] )
@@ -298,10 +299,10 @@ void TSVDcalc::svdMin(  fd_type a[] )
 // functions evaluated at x = x in the array afunc[1..n].
 {
 
-   fd_type wmax,tmp,thresh,sum,*b,*afunc;
+   fd_type wmax,tmp,thresh,sum,*b1,*afunc;
    int i, j;
 
-   b = new fd_type[m];
+   b1 = new fd_type[m];
    afunc = new fd_type[n];
    AA = Array2D<double>(m, n);
 
@@ -311,7 +312,7 @@ void TSVDcalc::svdMin(  fd_type a[] )
        tmp= data->getWdat(i); // 1.0/sig[i];
        for (j=0;j<n;j++)
          AA[i][j] = afunc[j]*tmp;
-       b[i] = data->getY(i) * tmp;
+       b1[i] = data->getY(i) * tmp;
     }
 
    svdGetUWV( AA );    //Singular value decomposition.
@@ -323,7 +324,7 @@ void TSVDcalc::svdMin(  fd_type a[] )
    for (j=0;j<n;j++)
        if (w[j] < thresh) w[j]=0.0;
 
-   svdGetX( b, a );
+   svdGetX( b1, a );
 
    chisq=0.0;                    // Evaluate chi-square.
    for (i=0;i<m;i++)
@@ -338,7 +339,7 @@ void TSVDcalc::svdMin(  fd_type a[] )
    data->xi2 = chisq;
 
    delete[] afunc;
-   delete[] b;
+   delete[] b1;
 }
 
 void TSVDcalc::svdStat()
@@ -353,7 +354,7 @@ void TSVDcalc::svdStat()
    for( i=0;i<IMIN(m+1,n);i++ )
    {
        wti[i]=0.0;
-       if(w[i])
+       if( noZero(w[i]) )
          wti[i]=1.0/(w[i]*w[i]);
    }
 

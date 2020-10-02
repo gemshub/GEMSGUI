@@ -34,10 +34,10 @@ TReacDC::TReacDC( uint nrt ):
 {
     nQ =8;
 
-    aFldKeysHelp.Add("Phase state code of new Dependent Component { a g f p s l m c i z y h }");
-    aFldKeysHelp.Add("ID of a group to which this new Dependent Component belongs");
-    aFldKeysHelp.Add("Name of this new reaction-defined Dependent Component (chemical species)");
-    aFldKeysHelp.Add("Thermodynamic data subset (TDS) code (e.g. database ID)");
+    aFldKeysHelp.push_back("Phase state code of new Dependent Component { a g f p s l m c i z y h }");
+    aFldKeysHelp.push_back("ID of a group to which this new Dependent Component belongs");
+    aFldKeysHelp.push_back("Name of this new reaction-defined Dependent Component (chemical species)");
+    aFldKeysHelp.push_back("Thermodynamic data subset (TDS) code (e.g. database ID)");
 
     for(int i=1; i<nQ; i++)
     {
@@ -55,71 +55,71 @@ void TReacDC::ods_link( int q)
     ErrorIf( q >= nQ, GetName(), "E00RErem: Invalid link (q>=8)!" );
 
     // static
-    //aObj[ o_repst].SetPtr( rc[q].pstate );
-    //aObj[ o_reps].SetPtr( rc[q].psymb );
-    //aObj[ o_redcn].SetPtr( rc[q].dcn );
-    //aObj[ o_reatyp].SetPtr( rc[q].atyp );
-    aObj[ o_repct].SetPtr(   rc[q].pct );
-    aObj[ o_reprun].SetPtr( &rc[q].PreC );    /*6*/
-    aObj[ o_repra].SetPtr(  &rc[q].PreKT );    /*8*/
-    aObj[ o_rermtm].SetPtr(  rc[q].rmtm );
-    aObj[ o_rezz].SetPtr(   &rc[q].Zz );
-    aObj[ o_remwt].SetPtr(  &rc[q].mwt );
-    aObj[ o_reks].SetPtr(    rc[q].Ks );   /*d 3*/
-    aObj[ o_regs].SetPtr(    rc[q].Gs );   /*d 3*/
-    aObj[ o_rehs].SetPtr(    rc[q].Hs );   /*d 3*/
-    aObj[ o_ress].SetPtr(    rc[q].Ss );   /*f 3*/
-    aObj[ o_recps].SetPtr(   rc[q].Cps );  /*f 3*/
-    aObj[ o_remvs].SetPtr(   rc[q].Vs );   /*f 3*/
-    aObj[ o_renix].SetPtr(   rc[q].Nix );  /*f 3*/
-    aObj[ o_reptst].SetPtr( &rc[q].Pst );  /*f 2*/
-    aObj[ o_realbet].SetPtr(&rc[q].Comp ); /*f 2*/
-    aObj[ o_reder].SetPtr(  &rc[q].Der ); /*f 2*/
-    aObj[ o_redim].SetPtr(  &rc[q].nDC );   /*8*/
-    aObj[ o_refloat1].SetPtr( &rc[q].Zz );  /*2*/
-    aObj[ o_redbl1].SetPtr(   rc[q].Ks );  /*9*/
-    aObj[ o_refloat2].SetPtr( rc[q].Ss );  /*18*/
-    aObj[ o_restr].SetPtr(   rc[q].pct );
-    aObj[ o_rename].SetPtr(  rc[q].name );
-    aObj[ o_reform].SetPtr(  rc[q].form );
+    //aObj[ o_repst]->SetPtr( rc[q].pstate );
+    //aObj[ o_reps]->SetPtr( rc[q].psymb );
+    //aObj[ o_redcn]->SetPtr( rc[q].dcn );
+    //aObj[ o_reatyp]->SetPtr( rc[q].atyp );
+    aObj[ o_repct]->SetPtr(   rc[q].pct );
+    aObj[ o_reprun]->SetPtr( &rc[q].PreC );    /*6*/
+    aObj[ o_repra]->SetPtr(  &rc[q].PreKT );    /*8*/
+    aObj[ o_rermtm]->SetPtr(  rc[q].rmtm );
+    aObj[ o_rezz]->SetPtr(   &rc[q].Zz );
+    aObj[ o_remwt]->SetPtr(  &rc[q].mwt );
+    aObj[ o_reks]->SetPtr(    rc[q].Ks );   /*d 3*/
+    aObj[ o_regs]->SetPtr(    rc[q].Gs );   /*d 3*/
+    aObj[ o_rehs]->SetPtr(    rc[q].Hs );   /*d 3*/
+    aObj[ o_ress]->SetPtr(    rc[q].Ss );   /*f 3*/
+    aObj[ o_recps]->SetPtr(   rc[q].Cps );  /*f 3*/
+    aObj[ o_remvs]->SetPtr(   rc[q].Vs );   /*f 3*/
+    aObj[ o_renix]->SetPtr(   rc[q].Nix );  /*f 3*/
+    aObj[ o_reptst]->SetPtr( &rc[q].Pst );  /*f 2*/
+    aObj[ o_realbet]->SetPtr(&rc[q].Comp ); /*f 2*/
+    aObj[ o_reder]->SetPtr(  &rc[q].Der ); /*f 2*/
+    aObj[ o_redim]->SetPtr(  &rc[q].nDC );   /*8*/
+    aObj[ o_refloat1]->SetPtr( &rc[q].Zz );  /*2*/
+    aObj[ o_redbl1]->SetPtr(   rc[q].Ks );  /*9*/
+    aObj[ o_refloat2]->SetPtr( rc[q].Ss );  /*18*/
+    aObj[ o_restr]->SetPtr(   rc[q].pct );
+    aObj[ o_rename]->SetPtr(  rc[q].name );
+    aObj[ o_reform]->SetPtr(  rc[q].form );
 
     // dynamic
     // if( rc[q].nDC > 0 ) {
-    aObj[ o_redck].SetPtr( rc[q].DCk );
-    aObj[ o_redck].SetDim( rc[q].nDC, 1 );
-    aObj[ o_rerdc].SetPtr(  rc[q].rDC );
-    aObj[ o_rerdc].SetDim( rc[q].nDC, 1 );
-    aObj[ o_rescdc].SetPtr(  rc[q].scDC );
-    aObj[ o_rescdc].SetDim( rc[q].nDC, 1 );
-    aObj[ o_repardc].SetPtr(rc[q].ParDC);
-    aObj[ o_repardc].SetDim( rc[q].nDC, 6 );
+    aObj[ o_redck]->SetPtr( rc[q].DCk );
+    aObj[ o_redck]->SetDim( rc[q].nDC, 1 );
+    aObj[ o_rerdc]->SetPtr(  rc[q].rDC );
+    aObj[ o_rerdc]->SetDim( rc[q].nDC, 1 );
+    aObj[ o_rescdc]->SetPtr(  rc[q].scDC );
+    aObj[ o_rescdc]->SetDim( rc[q].nDC, 1 );
+    aObj[ o_repardc]->SetPtr(rc[q].ParDC);
+    aObj[ o_repardc]->SetDim( rc[q].nDC, 6 );
     //}
-    aObj[ o_redcp].SetPtr( rc[q].DCp );
-    aObj[o_redcp].SetDim( MAXCPCOEF, 1 );
-    aObj[ o_rehkfc].SetPtr(rc[q].HKFc );
-    aObj[o_rehkfc].SetDim( MAXHKFCOEF, 1 );
-    aObj[ o_redvt].SetPtr( rc[q].DVt );
-    aObj[ o_redvt].SetDim( MAXVTCOEF, 1 );
-    aObj[ o_redst].SetPtr( rc[q].DSt );
-    aObj[ o_redst].SetDim( MAXCPCOEF, 1 );
-    aObj[ o_repkt].SetPtr( rc[q].pKt );
-    aObj[ o_repkt].SetDim( MAXCPCOEF, 1 );
+    aObj[ o_redcp]->SetPtr( rc[q].DCp );
+    aObj[o_redcp]->SetDim( MAXCPCOEF, 1 );
+    aObj[ o_rehkfc]->SetPtr(rc[q].HKFc );
+    aObj[o_rehkfc]->SetDim( MAXHKFCOEF, 1 );
+    aObj[ o_redvt]->SetPtr( rc[q].DVt );
+    aObj[ o_redvt]->SetDim( MAXVTCOEF, 1 );
+    aObj[ o_redst]->SetPtr( rc[q].DSt );
+    aObj[ o_redst]->SetDim( MAXCPCOEF, 1 );
+    aObj[ o_repkt]->SetPtr( rc[q].pKt );
+    aObj[ o_repkt]->SetDim( MAXCPCOEF, 1 );
 
-    aObj[ o_retcint].SetPtr( rc[q].TCint );
-    aObj[ o_retcint].SetDim(  max((short)2,rc[q].nTp), 1 );
-    aObj[ o_repint].SetPtr(  rc[q].Pint );
-    aObj[ o_repint].SetDim(  max((short)2,rc[q].nPp), 1 );
+    aObj[ o_retcint]->SetPtr( rc[q].TCint );
+    aObj[ o_retcint]->SetDim(  max((short)2,rc[q].nTp), 1 );
+    aObj[ o_repint]->SetPtr(  rc[q].Pint );
+    aObj[ o_repint]->SetDim(  max((short)2,rc[q].nPp), 1 );
     //if( rc[q].PreKP == S_ON && rc[q].nTp && rc[q].nPp ){
-    aObj[ o_relgK].SetPtr(  rc[q].logK );
-//    aObj[ o_relgK].SetDim(  rc[q].nTp, rc[q].nPp ); // bug fix AY, DM 24.10.2016
-    aObj[ o_relgK].SetDim(   rc[q].nPp, rc[q].nTp );
+    aObj[ o_relgK]->SetPtr(  rc[q].logK );
+//    aObj[ o_relgK]->SetDim(  rc[q].nTp, rc[q].nPp ); // bug fix AY, DM 24.10.2016
+    aObj[ o_relgK]->SetDim(   rc[q].nPp, rc[q].nTp );
     //}
-    //aObj[ o_retprn].SetPtr( rc[q].tprn  ); aObj[o_retprn].SetDim(1, SPPTPRNBUFSIZE);
+    //aObj[ o_retprn]->SetPtr( rc[q].tprn  ); aObj[o_retprn]->SetDim(1, SPPTPRNBUFSIZE);
     //if( rc[q].Nsd > 0 ) {
-    aObj[ o_resdref ].SetPtr( rc[q].sdref );
-    aObj[o_resdref].SetDim(rc[q].Nsd, 1);
-    aObj[ o_resdval ].SetPtr( rc[q].sdval );
-    aObj[o_resdval].SetDim(rc[q].Nsd, 1);
+    aObj[ o_resdref ]->SetPtr( rc[q].sdref );
+    aObj[o_resdref]->SetDim(rc[q].Nsd, 1);
+    aObj[ o_resdval ]->SetPtr( rc[q].sdval );
+    aObj[o_resdval]->SetDim(rc[q].Nsd, 1);
     // }
     rcp=&rc[q];
 }
@@ -128,50 +128,50 @@ void TReacDC::ods_link( int q)
 void TReacDC::dyn_set(int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Invalid access to rc in dyn_set()");
-    memcpy( rcp->pstate, rt[nRT].UnpackKey(), RE_RKLEN );
-    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].GetPtr();
-    rc[q].rDC =   (char *)aObj[ o_rerdc ].GetPtr();
-    rc[q].scDC =  (double *)aObj[ o_rescdc ].GetPtr();
-    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ].GetPtr();
-    rc[q].TCint = (float *)aObj[ o_retcint ].GetPtr();
-    rc[q].Pint =  (float *)aObj[ o_repint ].GetPtr();
-    rc[q].DCp =   (float *)aObj[ o_redcp ].GetPtr();
-    rc[q].HKFc =  (float *)aObj[ o_rehkfc ].GetPtr();
-    rc[q].DVt =   (float *)aObj[ o_redvt ].GetPtr();
-    rc[q].DSt =   (float *)aObj[ o_redst ].GetPtr();
-    rc[q].pKt =   (float *)aObj[ o_repkt ].GetPtr();
-    rc[q].logK =  (float *)aObj[ o_relgK ].GetPtr();
-    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].GetPtr();
-    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].GetPtr();
-    rc[q].tprn =  (char *)aObj[ o_retprn ].GetPtr();
+    memcpy( rcp->pstate, rt[nRT]->UnpackKey(), RE_RKLEN );
+    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->GetPtr();
+    rc[q].rDC =   (char *)aObj[ o_rerdc ]->GetPtr();
+    rc[q].scDC =  (double *)aObj[ o_rescdc ]->GetPtr();
+    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ]->GetPtr();
+    rc[q].TCint = (float *)aObj[ o_retcint ]->GetPtr();
+    rc[q].Pint =  (float *)aObj[ o_repint ]->GetPtr();
+    rc[q].DCp =   (float *)aObj[ o_redcp ]->GetPtr();
+    rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->GetPtr();
+    rc[q].DVt =   (float *)aObj[ o_redvt ]->GetPtr();
+    rc[q].DSt =   (float *)aObj[ o_redst ]->GetPtr();
+    rc[q].pKt =   (float *)aObj[ o_repkt ]->GetPtr();
+    rc[q].logK =  (float *)aObj[ o_relgK ]->GetPtr();
+    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->GetPtr();
+    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->GetPtr();
+    rc[q].tprn =  (char *)aObj[ o_retprn ]->GetPtr();
 }
 
 // free dynamic memory in objects and values
 void TReacDC::dyn_kill(int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E02RErem: Invalid access to rc in dyn_kill()");
-    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Free();
-    rc[q].rDC =   (char *)aObj[ o_rerdc ].Free();
-    rc[q].scDC =  (double *)aObj[ o_rescdc ].Free();
-    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ].Free();
-    rc[q].TCint = (float *)aObj[ o_retcint ].Free();
-    rc[q].Pint =  (float *)aObj[ o_repint ].Free();
-    rc[q].DCp =   (float *)aObj[ o_redcp ].Free();
-    rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Free();
-    rc[q].DVt =   (float *)aObj[ o_redvt ].Free();
-    rc[q].DSt =   (float *)aObj[ o_redst ].Free();
-    rc[q].pKt =   (float *)aObj[ o_repkt ].Free();
-    rc[q].logK =  (float *)aObj[ o_relgK ].Free();
-    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].Free();
-    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].Free();
-    rc[q].tprn =  (char *)aObj[ o_retprn ].Free();
+    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->Free();
+    rc[q].rDC =   (char *)aObj[ o_rerdc ]->Free();
+    rc[q].scDC =  (double *)aObj[ o_rescdc ]->Free();
+    rc[q].ParDC = (double (*)[6])aObj[ o_repardc ]->Free();
+    rc[q].TCint = (float *)aObj[ o_retcint ]->Free();
+    rc[q].Pint =  (float *)aObj[ o_repint ]->Free();
+    rc[q].DCp =   (float *)aObj[ o_redcp ]->Free();
+    rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->Free();
+    rc[q].DVt =   (float *)aObj[ o_redvt ]->Free();
+    rc[q].DSt =   (float *)aObj[ o_redst ]->Free();
+    rc[q].pKt =   (float *)aObj[ o_repkt ]->Free();
+    rc[q].logK =  (float *)aObj[ o_relgK ]->Free();
+    rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->Free();
+    rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->Free();
+    rc[q].tprn =  (char *)aObj[ o_retprn ]->Free();
 }
 
 
 // free dynamic memory in objects and values
 void TReacDC::w_dyn_kill()
 {
-    rcp->ParDC = (double (*)[6])aObj[ o_repardc ].Free();
+    rcp->ParDC = (double (*)[6])aObj[ o_repardc ]->Free();
 }
 
 
@@ -182,74 +182,74 @@ void TReacDC::dyn_new(int q)
     short nTp, nPp;
     ErrorIf( rc[q].nDC < 1, GetName(), "E04RErem: Number of DC in reaction is < 1" );
 
-    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Alloc(rc[q].nDC, 1,DC_RKLEN);
-    rc[q].rDC =   (char *)aObj[ o_rerdc ].Alloc(rc[q].nDC, 1, A_);
-    rc[q].scDC =  (double *)aObj[ o_rescdc ].Alloc(rc[q].nDC, 1, D_);
+    rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->Alloc(rc[q].nDC, 1,DC_RKLEN);
+    rc[q].rDC =   (char *)aObj[ o_rerdc ]->Alloc(rc[q].nDC, 1, A_);
+    rc[q].scDC =  (double *)aObj[ o_rescdc ]->Alloc(rc[q].nDC, 1, D_);
 
     nTp = max( (short)2, rc[q].nTp );
-    rc[q].TCint = (float *)aObj[ o_retcint ].Alloc( nTp, 1, F_);
+    rc[q].TCint = (float *)aObj[ o_retcint ]->Alloc( nTp, 1, F_);
     nPp = max( (short)2, rc[q].nPp );
-    rc[q].Pint =  (float *)aObj[ o_repint  ].Alloc(nPp, 1, F_);
+    rc[q].Pint =  (float *)aObj[ o_repint  ]->Alloc(nPp, 1, F_);
 
     if( rc[q].PreKP != S_OFF && rc[q].nTp >0 && rc[q].nPp>0 )
-//        rc[q].logK =  (float *)aObj[ o_relgK ].Alloc( rc[q].nTp, rc[q].nPp, F_); // bug fix AY, DM 24.10.2016
-        rc[q].logK =  (float *)aObj[ o_relgK ].Alloc( rc[q].nPp, rc[q].nTp, F_);
+//        rc[q].logK =  (float *)aObj[ o_relgK ]->Alloc( rc[q].nTp, rc[q].nPp, F_); // bug fix AY, DM 24.10.2016
+        rc[q].logK =  (float *)aObj[ o_relgK ]->Alloc( rc[q].nPp, rc[q].nTp, F_);
     else
-        rc[q].logK = (float *)aObj[ o_relgK ].Free();
+        rc[q].logK = (float *)aObj[ o_relgK ]->Free();
 
 
     if( rc[q].PreDC == S_OFF )
-        rc[q].DCp =   (float *)aObj[ o_redcp ].Free();
+        rc[q].DCp =   (float *)aObj[ o_redcp ]->Free();
     else
-        rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
+        rc[q].DCp =   (float *)aObj[ o_redcp ]->Alloc( MAXCPCOEF, 1, F_);
 
     if( rc[q].PrAki == S_OFF )  /* HKF - �model */
-        rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Free();
+        rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->Free();
     else
-        rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Alloc( MAXHKFCOEF, 1, F_);
+        rc[q].HKFc =  (float *)aObj[ o_rehkfc ]->Alloc( MAXHKFCOEF, 1, F_);
 
     if( rc[q].PreDV == S_OFF )  /* equations dV(T,P) */
-        rc[q].DVt =   (float *)aObj[ o_redvt ].Free();
+        rc[q].DVt =   (float *)aObj[ o_redvt ]->Free();
     else
-        rc[q].DVt =   (float *)aObj[ o_redvt ].Alloc( MAXVTCOEF, 1, F_);
+        rc[q].DVt =   (float *)aObj[ o_redvt ]->Alloc( MAXVTCOEF, 1, F_);
 
     if( rc[q].PreDS == S_OFF ) /* array of coeff. S(T) */
-        rc[q].DSt =   (float *)aObj[ o_redst ].Free();
+        rc[q].DSt =   (float *)aObj[ o_redst ]->Free();
     else
-        rc[q].DSt =   (float *)aObj[ o_redst ].Alloc( MAXCPCOEF, 1, F_);
+        rc[q].DSt =   (float *)aObj[ o_redst ]->Alloc( MAXCPCOEF, 1, F_);
 
     if( rc[q].PreKT == S_OFF )  /* array of coef. regres. lgK(T) */
-        rc[q].pKt =   (float *)aObj[ o_repkt ].Free();
+        rc[q].pKt =   (float *)aObj[ o_repkt ]->Free();
     else
-        rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+        rc[q].pKt =   (float *)aObj[ o_repkt ]->Alloc( MAXCPCOEF, 1, F_);
 
     if( rc[q].Nsd > 0 )
     {
-        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].Alloc(rc[q].Nsd,
+        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->Alloc(rc[q].Nsd,
                       1, V_SD_RKLEN);
-        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].Alloc(rc[q].Nsd,
+        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->Alloc(rc[q].Nsd,
                       1, V_SD_VALEN);
     }
     else
     {
-        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ].Free();
-        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ].Free();
+        rc[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_resdref ]->Free();
+        rc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_resdval ]->Free();
     }
     // if( rc[q].tprn == 0 )
-    //   rc[q].tprn = (char *)aObj[o_retprn].Alloc( 1, 256, S_ );
+    //   rc[q].tprn = (char *)aObj[o_retprn]->Alloc( 1, 256, S_ );
 }
 
 
 void TReacDC::w_dyn_new()
 {
-    rcp->ParDC = (double (*)[6])aObj[ o_repardc ].Alloc( rcp->nDC, 6, D_);
+    rcp->ParDC = (double (*)[6])aObj[ o_repardc ]->Alloc( rcp->nDC, 6, D_);
 }
 
 //set default information
 void TReacDC::set_def( int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E05RErem: Invalid access to rc in set_def()");
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
 
     //memset( rc[q].pct, 0, sizeof( REACDC )-DC_RKLEN );
     memcpy( rc[q].pct, aPa->pa.REpct, 6 );
@@ -300,7 +300,7 @@ bool TReacDC::check_input( const char *key, int Level )
     bool iRet = false;
     if( Level != 1 )
         return true;
-    tre = rt[nRT].Rtime();
+    tre = rt[nRT]->Rtime();
     for( i=0; i<nQ; i++)
         if( rcp == &rc[i])
             break;
@@ -332,11 +332,11 @@ bool TReacDC::check_input( const char *key, int Level )
     catch( TError& xcpt )
     {
         ods_link(q);
-        rt[nRT].SetKey(key);
+        rt[nRT]->SetKey(key);
         Error( key/*xcpt.title.c_str()*/, xcpt.mess.c_str());
     }
     ods_link(q);
-    rt[nRT].SetKey(key); //   RecInput( key );
+    rt[nRT]->SetKey(key); //   RecInput( key );
     return iRet;
 }
 
@@ -380,8 +380,8 @@ TReacDC::MakeQuery()
 
 int TReacDC::RecBuild( const char *key, int mode  )
 {
-    int i, /*iir, Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
-    vstr pkey(81);
+    int /*i, iir, Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
+    char pkey[81];
     int CM,CE,CV;
     //short oldnDC = rcp->nDC/*, newnDC*/;
 
@@ -446,6 +446,7 @@ AGAIN_MOD:
         case CTM_LGK:
         case CTM_LGX:
             rcp->PreDC = S_ON;
+             [[fallthrough]];
         case CTM_EK0:
         case CTM_EK1:
         case CTM_EK3:
@@ -479,11 +480,11 @@ AGAIN_MOD:
     Nf1 = 0;
 
     //REACDC&DCOMP  keypart
-    rt[RT_REACDC].MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_REACDC]->MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
 
     if( rcp->rDC )
     { // calc count DC and RC
-        for( i=0; i<rcp->nDC; i++ )
+        for(int i=0; i<rcp->nDC; i++ )
         {
             switch( rcp->rDC[i] )
             {
@@ -511,21 +512,21 @@ AGAIN_MOD:
     if( Nc1>0 || Nr1>0 )
     {
         /* Build old selections DCOMP and REACDC */
-        aDclist_old.Clear();
+        aDclist_old.clear();
         //aRclist_old.Clear();
-        gstring key_dr;
+        std::string key_dr;
 
-        for( i=0; i<rcp->nDC; i++ )
+        for( int i=0; i<rcp->nDC; i++ )
         {
           if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
           {
-              key_dr  = gstring(1, rcp->rDC[i]);
+              key_dr  = std::string(1, rcp->rDC[i]);
               key_dr += ' ';
-              key_dr += gstring( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB );
-              aDclist_old.Add( key_dr.c_str() );
+              key_dr += std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB );
+              aDclist_old.push_back( key_dr.c_str() );
           }
           /*
-          gstring key_dr = gstring( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
+          std::string key_dr = std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
           if( rcp->rDC[i] == SRC_DCOMP )
               aDclist_old.Add( key_dr.c_str() );
           else
@@ -548,7 +549,7 @@ AGAINRC:
         pkey, aDclist_old );
 
 
-    if( /*aRclist.GetCount() < 1 &&*/ aDclist.GetCount() < 1 )
+    if( /*aRclist.GetCount() < 1 &&*/ aDclist.size() < 1 )
     {
        switch ( vfQuestion3(window(), GetName(),
             "W09RErem: Number of selected ReacDC/DComp keys < 1.\n"
@@ -566,7 +567,7 @@ AGAINRC:
     }
 
     /*================================*/
-    rcp->nDC =(short)( aDclist.GetCount()/*+aRclist.GetCount()*/+Nn1+Nf1);
+    rcp->nDC = ( aDclist.size()/*+aRclist.GetCount()*/+Nn1+Nf1);
     // ???? 28/02/02 Sveta
     // if( (oldnDC != newnDC) && (newnDC != rcp->nDC) )
     //    rcp->nDC = newnDC;
@@ -574,11 +575,11 @@ AGAINRC:
 
     /*================================*/
     // get aMcv+aMrv  (Remake code! Must be by component groups )
-    for( i=0; i<rcp->nDC; i++ )
+    for( int i=0; i<rcp->nDC; i++ )
     {
-        if( !rcp->scDC[i] )
+        if( approximatelyZero(rcp->scDC[i]) )
             rcp->scDC[i] = 1;
-        if( i< (int)(aDclist.GetCount()) )
+        if( i < static_cast<int>(aDclist.size()) )
         {
             memcpy( rcp->DCk[i], aDclist[i].c_str()+2, DC_RKLEN );
             rcp->rDC[i] = aDclist[i].c_str()[0];
@@ -594,7 +595,7 @@ AGAINRC:
     } //i
 
     /**************/
-    rt[nRT].SetKey(key); //   RecInput( key );
+    rt[nRT]->SetKey(key); //   RecInput( key );
     return ret;
 }
 
@@ -640,7 +641,7 @@ TReacDC::RCthermo( int q, int p )
 	int CM,CE,CV, j, isotop = 0;
     double rho, eps, alp, dal, bet, xborn, yborn, /*zborn,*/ qborn;
     time_t tim;
-    vstr  /*buf[121],*/ dckey(DC_RKLEN + 10);
+    char  /*buf[121],*/ dckey[DC_RKLEN + 10];
 
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T; /* !!!! */
@@ -670,7 +671,7 @@ TReacDC::RCthermo( int q, int p )
     if( rcp != rc+q )
         ods_link( q );
     aW.ods_link( p );
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
 
     /*  memcpy( dckey, rc[q].pstate, DC_RKLEN ); */
@@ -820,7 +821,7 @@ CALCULATE_DELTA_R:
         switch( CE )
         {
         default:
-            Error(dckey.p, "E12RErun: Invalid CE method flag!");
+            Error(dckey, "E12RErun: Invalid CE method flag!");
             break;
         case CTM_HKF:
             calc_tphkf_r( q, p );
@@ -851,7 +852,7 @@ CALCULATE_DELTA_R:
              calc_r_MRB( q, p, CE, CV );
             break;
         default:
-            Error(dckey.p,"E13RErem: Invalid CE method flag!");
+            Error(dckey,"E13RErem: Invalid CE method flag!");
         }
         break;
     case CTPM_ISO:
@@ -862,11 +863,11 @@ CALCULATE_DELTA_R:
         break;
     default:
         {  /* Invalid code method of calculation?*/
-            gstring msg = "W14RErun: Invalid CM method flag!";
+            std::string msg = "W14RErun: Invalid CM method flag!";
             msg += dckey;
             msg += "'.\n Change the record?";
             //if( !vfQuestion( GetName(), buf );
-            Error( dckey.p, "E14RErun: Invalid CM method flag in ReacDC!");
+            Error( dckey, "E14RErun: Invalid CM method flag in ReacDC!");
             //  else  RecBuild( dckey );  // !!!!!! Recalc new record?
         }
      }
@@ -957,7 +958,7 @@ void TReacDC::PronsPrep( const char *key )
     DELHR1, DELHR2, DELHR3, DELHR4, DELCP1, DELCP2, DELCP3, DELCP4,
     DELVR1, DELVR2, DELVR3, DELVR4, GZ, CSC, LSC, DZ, scC;
     int i, iL=0, iC=0, scL,  b1, b2, b3, b4;
-    vstr dcn(MAXRKEYLEN+5);
+    char dcn[MAXRKEYLEN+5];
     int Rfind;
 
     /* Finding index of cation and anion */
@@ -992,14 +993,14 @@ void TReacDC::PronsPrep( const char *key )
     LSC = rcp->scDC[iL];
 
     /* Loading Log_beta using st.coeff.at ligand */
-    scL = (int)fabs(LSC);
+    scL = static_cast<int>(fabs(LSC));
     BETA1 = 0;
     BETA2 = 0;
     BETA3 = 0;
     BETA4 = 0; //BETA = 0;
     b1 = b2 = b3 = b4 = 0;
     BETA = rcp->Ks[1];
-    if(BETA == 0.0 )
+    if( approximatelyZero(BETA) )
         BETA = 1e-9;
     switch( scL )
     {
@@ -1259,7 +1260,7 @@ void TReacDC::PronsPrep( const char *key )
     rcp->Cps[1] = (float)(CP * cal_to_J);
     rcp->Vs[1] = (float)(V/10.0);
 
-    aMod[RT_REACDC].ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
+    aMod[RT_REACDC]->ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
 
     if( !vfQuestion( window(), "DComp",
                "Would you like to create/modify a DComp record?" ))
@@ -1267,9 +1268,9 @@ void TReacDC::PronsPrep( const char *key )
     /* Trying to read resulting DCOMP */
 
     strncpy( dcn, key, MAXRKEYLEN );
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    Rfind = rt[RT_DCOMP].Find( dcn );
+    Rfind = rt[RT_DCOMP]->Find( dcn );
     if(Rfind <0 )
     { /* There is no such record - copying data */
         aDC->dcp->Zz = rcp->Zz;
@@ -1288,7 +1289,7 @@ void TReacDC::PronsPrep( const char *key )
     }
     else
     {  /* The record is found */
-        rt[RT_DCOMP].Get(Rfind);
+        rt[RT_DCOMP]->Get(Rfind);
         aDC->dyn_set();
     }
     aDC->dcp->Gs[0] = rcp->Gs[1];
@@ -1306,7 +1307,7 @@ void TReacDC::PronsPrep( const char *key )
              "The DComp record already exists! Modify it (Y) or skip (N)?" ))
             return;
         //Rnum = rt[RT_DCOMP].Find(dcn);
-        rt[RT_DCOMP].Rep(Rfind/*Rnum*/);
+        rt[RT_DCOMP]->Rep(Rfind/*Rnum*/);
     }
     else TDComp::pm->AddRecord(dcn);
     /* A reminder */
@@ -1333,7 +1334,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     DELHR1,DELHR2,DELHR3,DELHR4,DELVR1,//DELVR2,DELVR3,DELVR4,
     CSC, LSC, /*DZ,*/ scC, LOGKR, Sw, Hw;//, Gw, Cpw, Vw;
     int i, iL=0, iC=0, scL, NC, ZZ;
-    vstr dcn(MAXRKEYLEN+5);
+    char dcn[MAXRKEYLEN+5];
     int Rfind;
 
     Sw = 69.923/cal_to_J;
@@ -1373,14 +1374,14 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     VL = rcp->ParDC[iL][_Vs_]*10.0;
     LSC = rcp->scDC[iL];
 
-    scL = (int)fabs(LSC);
+    scL = static_cast<int>(fabs(LSC));
     LOGKR = rcp->Ks[1];
-    if(LOGKR == 0.0 )
+    if( approximatelyZero(LOGKR) )
         LOGKR = 1e-9;
-    ZZ = (int)fabs(ZC);
+    ZZ = static_cast<int>(fabs(ZC));
 
 //    NC = 0;  // needs to pull atomic number of cation from IComp here
-    NC = (int)lAN[iC];
+    NC = lAN[iC];
 
     // calculations for complex number 1
     switch ( ZZ )
@@ -1628,7 +1629,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     rcp->Cps[1] = (float)(CP * cal_to_J);
     rcp->Vs[1] = (float)(V/10.0);
 
-    aMod[RT_REACDC].ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
+    aMod[RT_REACDC]->ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
 
     if( !vfQuestion( window(), "DComp",
                "Would you like to create/modify a DComp record?" ))
@@ -1636,9 +1637,9 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     // Trying to read resulting DCOMP
 
     strncpy( dcn, key, MAXRKEYLEN );
-    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    Rfind = rt[RT_DCOMP].Find( dcn );
+    Rfind = rt[RT_DCOMP]->Find( dcn );
     if(Rfind <0 )
     { // There is no such record - copying data
         aDC->dcp->Zz = rcp->Zz;
@@ -1657,7 +1658,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     }
     else
     {  // The record is found
-        rt[RT_DCOMP].Get(Rfind);
+        rt[RT_DCOMP]->Get(Rfind);
         aDC->dyn_set();
     }
     aDC->dcp->Gs[0] = rcp->Gs[1];
@@ -1675,7 +1676,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
              "The DComp record already exists! Modify it (Y) or skip (N)?" ))
             return;
         //Rnum = rt[RT_DCOMP].Find(dcn);
-        rt[RT_DCOMP].Rep(Rfind/*Rnum*/);
+        rt[RT_DCOMP]->Rep(Rfind/*Rnum*/);
     }
     else TDComp::pm->AddRecord(dcn);
     // A reminder
@@ -1704,11 +1705,10 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     if( ! MessageToSave() )
 	return;
 
-    vstr key(db->KeyLen(), key_);
     TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key);
+    dbKey.SetKey(key_);
     dbKey.SetFldKey(3,"*");
-    gstring str_key( dbKey.UnpackKey(), 0, db->KeyLen() );
+    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen() );
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
     std::string msg;
 
@@ -1717,6 +1717,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     case MANY_:    // Get Key list
         db->GetKeyList( str_key.c_str(), aDclist, anRDc );
         db->Get(anRDc[0]);
+        [[fallthrough]];
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();
@@ -1729,16 +1730,16 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += std::string( key.p, 0, db->KeyLen() );
+            msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked to chain.\n";
-            if(pVisor->ProfileMode == true)
+            if( pVisor->ProfileMode )
                 Error( GetName(), msg.c_str() );
             msg +=  "Create a new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), " E18RErun: New record create action dismissed...");
-            gstring str = key.p;
+            std::string str = key_;
 
-            if( str.find_first_of("*?" ) != gstring::npos)  // pattern
+            if( str.find_first_of("*?" ) != std::string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
                             "Enter a new data record key, please!", KEY_NEW);
             if(  str.empty() )
@@ -1746,7 +1747,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), " W20RErun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT,0,true);
-            gstring str1 = db->UnpackKey();
+            std::string str1 = db->UnpackKey();
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString("Remake of new record finished OK. "
@@ -1761,14 +1762,14 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "data record key '";
-        msg += std::string( key.p, 0, db->KeyLen() );
+        msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }
 }
 
 void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
- elmWindowData el_data, rdSetupData st_data, TCStringArray& SDlist)
+ elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist)
 {
     TCIntArray anR;
     TCStringArray aDCkey;
@@ -1779,19 +1780,17 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
 
     // delete the equvalent keys
     TCStringArray aICkey_new;         // 30/11/2006
-    aICkey_new.Clear();
+    aICkey_new.clear();
 
     // get list of records
     db->GetKeyList( "*:*:*:*:", aDCkey, anR );
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i;
-    int itmpl;
-    uint j;
+    size_t i, j, itmpl;
     TFormula aFo;
 
-    for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
+    for(size_t ii=0; ii<aDCkey.size(); ii++ )
     {
 
         // Phase Filters
@@ -1820,11 +1819,11 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
          continue;
 
      // test the same component (overload) 30/11/2006
-     gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
-     for( j=0; j<aICkey_new.GetCount(); j++ )
+     std::string stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
+     for( j=0; j<aICkey_new.size(); j++ )
        if( stt ==  aICkey_new[j])
            break;
-     if( j<aICkey_new.GetCount() )
+     if( j<aICkey_new.size() )
          continue;
 
     RecInput( aDCkey[ii].c_str() );
@@ -1833,14 +1832,14 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
      itmpl=0;
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           break;
-       if( j == el_data.ICrds.GetCount() )
+       if( j == el_data.ICrds.size() )
         break;
 
        //template
-       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+       for( j=0; j<el_data.oldIComps.size(); j++ )
         if( !memcmp( el_data.oldIComps[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           { itmpl++;
             break;
@@ -1851,12 +1850,12 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
      // add cnt
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           cnt[j]++;
      }
     // test Vol
-       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+       for( j=0; j<el_data.ICrds.size(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), "Vol", 3 ) )
           cnt[j]++;
 
@@ -1864,33 +1863,33 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
         continue;
 
     // !!! changing record key
-     gstring str= gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+     std::string str= std::string(db->FldKey( 3 ), 0, db->FldLen( 3 ));
     ChangeforTempl( str, st_data.from_templ,
                     st_data.to_templ, db->FldLen( 3 ));
         str += ":";
-        gstring str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-        str1.strip();
+        std::string str1 = std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        strip( str1 );
         str = str1 + ":" + str;
-        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        str1.strip();
+        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        strip( str1 );
         str = str1 + ":" + str;
      //Point SaveRecord
      if( AddRecordTest( str.c_str(), fnum_ ))
-     {   aICkey_new.Add( stt );  // 30/11/2006
+     {   aICkey_new.push_back( stt );  // 30/11/2006
          for(int isd=0; isd<rcp->Nsd; isd++)
-         { gstring sdkey = gstring( rcp->sdref[isd], 0,V_SD_RKLEN);
-          sdkey.strip();
-          SDlist.AddUnique( sdkey );
+         { std::string sdkey = std::string( rcp->sdref[isd], 0,V_SD_RKLEN);
+          strip( sdkey );
+          SDlist.insert( sdkey );
         }
      }
     }
 
     // close all no project files
     TCStringArray names1;
-    names1.Add(prfName);
+    names1.push_back(prfName);
     db->OpenOnlyFromList(names1);
 }
 

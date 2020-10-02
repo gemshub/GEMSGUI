@@ -47,8 +47,8 @@ const char  splitRow = '\n';
 const char  splitCol = '\t';
 #endif
 
-const gstring emptiness("---");
-//const gstring short_emptiness("---");
+const string emptiness("---");
+//const string short_emptiness("---");
 
 struct Selection {
     int N1;
@@ -66,7 +66,7 @@ struct Selection {
 
 };
 
-//inline gstring visualizeEmpty(const gstring& text);
+//inline string visualizeEmpty(const string& text);
 //inline int wdF(eFieldType ft, int npos, eEdit edit );
 //inline int htF(eFieldType ft, int ht);
 //===========================================
@@ -107,8 +107,8 @@ class TObjectModel: public QAbstractTableModel
 	 QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;  
 	 Qt::ItemFlags flags ( const QModelIndex & index ) const;
 	
-	 FieldInfo& getInfo( int row, int col, int& iN, int& iM, 
-                         Selection* sel=0 )
+     const FieldInfo& getInfo( int row, int col, int& iN, int& iM,
+                         Selection* sel=0 ) const
 	 {
 		int nO, ii;
                 ii = getObjFromModel( row, col, nO, iN, iM, sel );
@@ -289,9 +289,9 @@ public:
     	return text();
     }
     
-    virtual void setData( QString data )
+    virtual void setData( QString data1 )
     { 
-    	setText( data );
+        setText( data1 );
     }
 
 };
@@ -306,7 +306,7 @@ class TCellCheck:
 {
     Q_OBJECT
 
-    gstring Vals;
+    string Vals;
     int startIndex;
 
 protected:
@@ -325,11 +325,12 @@ public:
     	return currentText();
     }
 
-    virtual void setData( QString data )
-     { startIndex = findText(data);
-       if(startIndex >= 0 )
-           setCurrentIndex(startIndex);
-     }
+    virtual void setData( QString data1 )
+    {
+        startIndex = findText(data1);
+        if(startIndex >= 0 )
+            setCurrentIndex(startIndex);
+    }
 
     virtual bool dataCh()
     { return (startIndex!=currentIndex()); }
@@ -366,16 +367,16 @@ public:
     	return toPlainText();
     }
 
-    virtual void setData( QString data )
+    virtual void setData( QString data1 )
      { 
-    	setPlainText(data);
+        setPlainText(data1);
         edited = false;
      }
 
 };
 
 inline
-gstring visualizeEmpty(const gstring& text)
+string visualizeEmpty(const string& text)
 {
     return (text==S_EMPTY) ? emptiness : text;
 }

@@ -4,7 +4,6 @@
 // Implementation of ProcessWizard class
 //
 // Copyright (C) 2005-2013  S.Dmytriyeva, D.Kulik
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -103,7 +102,7 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[8],
         calcScript(acalcScript), outScript(aoutScript), pageScript(nullptr)
 {
     setupUi(this);
-    gstring str1= "GEM-Selektor Process Setup:  ";
+    string str1= "GEM-Selektor Process Setup:  ";
         str1 += pkey;
         setWindowTitle( str1.c_str() );
 
@@ -527,47 +526,47 @@ void ProcessWizard::defineWindow(char type)
   curType = type;
 
   // define object pages
-  pgData.Clear();
+  pgData.clear();
   switch(type)
     {
      case P_PVT:
-            pgData.Add( new pagesSetupData("Phases", o_w_xf));
+            pgData.push_back(  pagesSetupData("Phases", o_w_xf));
             break;
      case P_SEQUENT:
-            pgData.Add( new pagesSetupData("Compos", o_syxea));
-            pgData.Add( new pagesSetupData("DComp", o_syxed));
-            pgData.Add( new pagesSetupData("IComp", o_sybi));
-            pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
-            pgData.Add( new pagesSetupData("DC-lower", o_sydll)); // dll_
-            pgData.Add( new pagesSetupData("DC-upper", o_sydul)); // dul_
-            pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
-            pgData.Add( new pagesSetupData("Sorbed", o_wo_bfc));
+            pgData.push_back(  pagesSetupData("Compos", o_syxea));
+            pgData.push_back(  pagesSetupData("DComp", o_syxed));
+            pgData.push_back(  pagesSetupData("IComp", o_sybi));
+            pgData.push_back(  pagesSetupData("Phases", o_syphm)); // xp_
+            pgData.push_back(  pagesSetupData("DC-lower", o_sydll)); // dll_
+            pgData.push_back(  pagesSetupData("DC-upper", o_sydul)); // dul_
+            pgData.push_back(  pagesSetupData("Molality",o_wd_ym ));
+            pgData.push_back(  pagesSetupData("Sorbed", o_wo_bfc));
            break;
     case P_LIP:
-           pgData.Add( new pagesSetupData("Phases", o_syyof)); // Yof_
-//           pgData.Add( new pagesSetupData("xd_", o_syxed));
-           pgData.Add( new pagesSetupData("AqIons",o_wd_yla ));
-           pgData.Add( new pagesSetupData("AqElements", o_wd_icm));
+           pgData.push_back(  pagesSetupData("Phases", o_syyof)); // Yof_
+//           pgData.push_back(  pagesSetupData("xd_", o_syxed));
+           pgData.push_back(  pagesSetupData("AqIons",o_wd_yla ));
+           pgData.push_back(  pagesSetupData("AqElements", o_wd_icm));
           break;
     case P_INV_TITR:
-          pgData.Add( new pagesSetupData("AcidBase", o_syxea));
-          pgData.Add( new pagesSetupData("Molality",o_wd_ym ));
-          pgData.Add( new pagesSetupData("Sorbed",o_w_x )); // x
+          pgData.push_back(  pagesSetupData("AcidBase", o_syxea));
+          pgData.push_back(  pagesSetupData("Molality",o_wd_ym ));
+          pgData.push_back(  pagesSetupData("Sorbed",o_w_x )); // x
           break;
     case P_TITRSING:      
-            pgData.Add( new pagesSetupData("Compos", o_syxea));
-            pgData.Add( new pagesSetupData("DComp", o_syxed));
-            pgData.Add( new pagesSetupData("IComp", o_sybi));
-            pgData.Add( new pagesSetupData("DCg0in", o_sygex));
-            pgData.Add( new pagesSetupData("lga", o_wd_yla)); 
+            pgData.push_back(  pagesSetupData("Compos", o_syxea));
+            pgData.push_back(  pagesSetupData("DComp", o_syxed));
+            pgData.push_back(  pagesSetupData("IComp", o_sybi));
+            pgData.push_back(  pagesSetupData("DCg0in", o_sygex));
+            pgData.push_back(  pagesSetupData("lga", o_wd_yla));
           break;
     case P_REACTORS:
-           pgData.Add( new pagesSetupData("Compos", o_syxea)); // xa_
-           pgData.Add( new pagesSetupData("DComp", o_syxed));  // xd_
-           pgData.Add( new pagesSetupData("IComp", o_sybi));   // bi_
-           pgData.Add( new pagesSetupData("Phases", o_syphm)); // xp_
-           pgData.Add( new pagesSetupData("DC-lower", o_sydll)); // dll_
-           pgData.Add( new pagesSetupData("DC-upper", o_sydul)); // dul_
+           pgData.push_back(  pagesSetupData("Compos", o_syxea)); // xa_
+           pgData.push_back(  pagesSetupData("DComp", o_syxed));  // xd_
+           pgData.push_back(  pagesSetupData("IComp", o_sybi));   // bi_
+           pgData.push_back(  pagesSetupData("Phases", o_syphm)); // xp_
+           pgData.push_back(  pagesSetupData("DC-lower", o_sydll)); // dll_
+           pgData.push_back(  pagesSetupData("DC-upper", o_sydul)); // dul_
            break;
 
      default: break;
@@ -667,11 +666,11 @@ void ProcessWizard::defineWindow(char type)
               sub3->hide();
               sub4->hide();
 
-              TIArray<pagesSetupData> scalarsList;
-              TIArray<pagesSetupData> pgData1;
+              std::vector<pagesSetupData> scalarsList;
+              std::vector<pagesSetupData> pgData1;
               GetListsnRT( MD_MULTI, pgData1,  scalarsList );
 
-              pgData.Add( new pagesSetupData("Other items", -1));
+              pgData.push_back( pagesSetupData("Other items", -1));
               /*QListWidgetItem *item1 =*/ new QListWidgetItem( "Other items",  listObj);
 
               // add page
@@ -685,7 +684,7 @@ void ProcessWizard::defineWindow(char type)
               pageLists->addWidget(page1);
 
               // insert items to list of indexes
-               for(size_t  jj=0; jj<scalarsList.GetCount(); jj++ )
+               for(size_t  jj=0; jj<scalarsList.size(); jj++ )
                   {
                      /*item1 =*/ new QListWidgetItem( scalarsList[jj].pageName.c_str(), lstIndexes1);
                   }
@@ -1043,7 +1042,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
              for(int jj=0; jj<6; jj++ )
              {
                lst = getSelected( jj );
-               gstring oName = aObj[pgData[jj].nObj].GetKeywd();
+               string oName = aObj[pgData[jj].nObj]->GetKeywd();
                for(ii=0; ii<lst.count();ii++)
                {
                   lst[ii] = lst[ii].trimmed();
@@ -1070,7 +1069,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
             for(int jj=0; jj<6; jj++ )
             {
               lst = getSelected( jj );
-              gstring oName = aObj[pgData[jj].nObj].GetKeywd();
+              string oName = aObj[pgData[jj].nObj]->GetKeywd();
               for(ii=0; ii<lst.count();ii++)
               {
                  lst[ii] = lst[ii].trimmed();
@@ -1100,13 +1099,13 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
       QString EM0 = "EM0", EM1 = "EM1";
       lst = getSelected( "Phases" );
       if( lst.count() > 0 )
-      {   gstring phname = lst[0].trimmed().toLatin1().data();
+      {   string phname = lst[0].trimmed().toStdString();
 
           dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
           // Here may be message if Invalid phase
-          if( dclst.GetCount() > 0 )
+          if( dclst.size() > 0 )
              EM0 = dclst[0].c_str();
-          if( dclst.GetCount()  > 1 )
+          if( dclst.size()  > 1 )
              EM1 = dclst[1].c_str();
       }
       ret = QString("if(cXi < 0.5) begin\n"
@@ -1156,7 +1155,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
            //    if( subtype == 0 )
                {
                  QString pH = "Output", com = "Input";
-                 gstring oName;
+                 string oName;
 
                  // select input (titrant)
                  for(int jj=0; jj<4; jj++ )
@@ -1164,7 +1163,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                      lst = getSelected( jj );
                      if( lst.count() > 0 )
                      {
-                       oName = aObj[pgData[jj].nObj].GetKeywd();
+                       oName = aObj[pgData[jj].nObj]->GetKeywd();
                        lst[0] = lst[0].trimmed();
                        com  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        break;
@@ -1177,7 +1176,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
                      if( lst.count() > 0 )
                      {
                        if( jj== 4)
-                       {  oName = aObj[pgData[jj].nObj].GetKeywd();
+                       {  oName = aObj[pgData[jj].nObj]->GetKeywd();
                           lst[0] = lst[0].trimmed();
                           pH  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        }
@@ -1355,7 +1354,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         {
           auto nO = pgData[jj].nObj;
           lst = getSelected( jj );
-          gstring oName = aObj[nO].GetKeywd();
+          string oName = aObj[nO]->GetKeywd();
 
           for(ii=0; ii<lst.count();ii++)
           {
@@ -1407,7 +1406,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for(ii=0; ii<lst.count();ii++)
           {
               lst[ii] = lst[ii].trimmed();
-              rowNames.Add(lst[ii].toLatin1().data());
+              rowNames.push_back(lst[ii].toStdString());
               ret  += QString("yp[J][%1] =: (Xa[{%2}]>Pa_DS? vP[J]/10: empty());\n").arg(
                     ii).arg( lst[ii]);
           }
@@ -1447,9 +1446,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "$ yp[J][2] =: lg( Wxx[{%1}] / my[{%3}] / (Wxx[{%2}] / my[{%4}]) );\n"
             "yp[J][2] =: yp[J][1] - yp[J][0]; \n"
             "$ Done\n").arg(BL, CL, b_ion, c_ion);
-           rowNames.Add("log(Kd(H))");
-           rowNames.Add("log(Kd(M))");
-           rowNames.Add("log(D_MH)");
+           rowNames.push_back("log(Kd(H))");
+           rowNames.push_back("log(Kd(M))");
+           rowNames.push_back("log(D_MH)");
            pGraph->setValue( 3 );
            pageScript->setXname("x(Minor)");
            pageScript->setYname("log10");
@@ -1474,9 +1473,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             "yp[J][2] =: yp[J][1]\n"
             "    - lg( bXs[{%2}]/( bXs[{%1}]+ bXs[{%2}])/m_t[{%2}] );\n"
             "$ Done\n").arg(TraceE1, HostE1);
-           rowNames.Add("x(Trace)");
-           rowNames.Add("Kd(Trace)");
-           rowNames.Add("D(Trace)");
+           rowNames.push_back("x(Trace)");
+           rowNames.push_back("Kd(Trace)");
+           rowNames.push_back("D(Trace)");
            pGraph->setValue( 3 );
            pageScript->setXname("log_m(Tr)");
            pageScript->setYname("log10");
@@ -1490,9 +1489,9 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
        lst = getSelected( "Phases" );
        if( lst.count() < 1 )
          return;
-       gstring phname = lst[0].trimmed().toLatin1().data();
+       string phname = lst[0].trimmed().toStdString();
        dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
-       if( dclst.GetCount() < 2 )
+       if( dclst.size() < 2 )
          return;
        EM1 = dclst[1].c_str();
 
@@ -1513,8 +1512,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
         "yp[J][0] =: lga[{%2}] + lg( 10^lga[{%3}] +  10^lga[{%4}] );\n"
         "yp[J][1] =: yp[J][0];\n"
         "$ Done \n" ).arg(EM1, ComIon, EMion0, EMion1);
-       rowNames.Add("Solidus");
-       rowNames.Add("Solutus");
+       rowNames.push_back("Solidus");
+       rowNames.push_back("Solutus");
        pGraph->setValue( 2 );
        pGraphX->setValue( 2 );
        pageScript->setYname("logSigPi");
@@ -1526,7 +1525,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
          lst = getSelected( "Phases" );
          if( lst.count() < 1 )
            return;
-         gstring phname = lst[0].trimmed().toLatin1().data();
+         string phname = lst[0].trimmed().toStdString();
          dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
          if( dclst.GetCount() < 2 )
            break;
@@ -1549,8 +1548,8 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           "yp[J][0] =: lg( m_t[{%1}] ) + lg( m_t[{%2}] +  m_t[{%3}] ); \n"
           "yp[J][1] =: yp[J][0]; \n"
           "$ Done \n").arg( ComIC, EM0IC, EM1IC );  // removed EM1 as first argument
-         rowNames.Add("Solidus");
-         rowNames.Add("Solutus");
+         rowNames.push_back("Solidus");
+         rowNames.push_back("Solutus");
          pGraph->setValue( 2 );
          pGraphX->setValue( 2 );
          pageScript->setYname("lgSigPiT");
@@ -1583,12 +1582,12 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
           for( ii=0; ii<lst.count(); ii++)
           {
              M_c1 = lst[ii].trimmed();
-             rowNames.Add(M_c1.toLatin1().data());
+             rowNames.push_back(M_c1.toStdString());
              ret += QString(" yp[J][%1]=: (x[{%2}]> 0? \n"
                             "   lg(x[{%2}]/cTau) : empty() ); \n").arg( QString("%1").arg(ii),M_c1);
           }
           ret += QString("$ log total M sorbed in mol/kg \n");
-          rowNames.Add("log sorbed");
+          rowNames.push_back("log sorbed");
           ret += QString( "yp[J][%1] =: lg((").arg(ii);
           for( ii=0; ii<lst.count(); ii++)
           {
@@ -1597,7 +1596,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
              ret += QString("x[{%1}]").arg( M_c1);
           }
           ret += QString( ")/cTau); \n$ log Kd \n");
-          rowNames.Add("log Kd");
+          rowNames.push_back("log Kd");
           ret += QString( "yp[J][%1] =: ").arg(ii+1);
           ret += QString( " yp[J][%1]- xp[J];\n").arg(ii);
           pGraph->setValue( ii+2 );
@@ -1610,7 +1609,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                if( subtype == 0 )
                {
                  QString pH, com;
-                 gstring oName;
+                 string oName;
 
                  // find titrant
                  for(ii=0; ii<4; ii++ )
@@ -1618,7 +1617,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                      lst = getSelected( ii );
                      if( lst.count() > 0 )
                      {
-                       oName = aObj[pgData[ii].nObj].GetKeywd();
+                       oName = aObj[pgData[ii].nObj]->GetKeywd();
                        lst[0] = lst[0].trimmed();
                        com  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        break;
@@ -1631,7 +1630,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
                      if( lst.count() > 0 )
                      {
                        if( ii== 4)
-                       {  oName = aObj[pgData[ii].nObj].GetKeywd();
+                       {  oName = aObj[pgData[ii].nObj]->GetKeywd();
                           lst[0] = lst[0].trimmed();
                           pH  = QString("%1[{%2}]").arg(oName.c_str(), lst[0]);
                        }
@@ -1656,7 +1655,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
    default: break;
      }
 
-   if( rowNames.GetCount() > 0)
+   if( rowNames.size() > 0)
        pageScript->setNames(rowNames);
    pageScript->textScript->setText( ret );
  }
@@ -1736,7 +1735,7 @@ void ProcessWizard::setupPages()
     listObj->setDisabled(false);
 
    // init new pages
-   for(uint ii=0; ii<pgData.GetCount();ii++)
+   for(size_t ii=0; ii<pgData.size();ii++)
     {
       nO = pgData[ii].nObj;
       TProfil::pm->getNamesList( nO, lst);
@@ -1755,7 +1754,7 @@ void ProcessWizard::setupPages()
       pageLists->addWidget(page1);
 
       // insert items to list of indexes
-       for(uint  jj=0; jj<lst.GetCount(); jj++ )
+       for(size_t  jj=0; jj<lst.size(); jj++ )
           {
              /*item1 =*/ new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
           }
@@ -1829,7 +1828,7 @@ int  ProcessWizard::getNPoints( int col )
          nP = -1;
       if( (nP < 1 || nP > 9999) && nP != -1 )
       {
-          gstring str = tIters->horizontalHeaderItem( col )->text().toLatin1().data();
+          string str = tIters->horizontalHeaderItem( col )->text().toStdString();
           vfMessage(this, str.c_str(), "Wrong number of steps - please, check values in this iterator!");
           return nP;
       }
@@ -1877,30 +1876,30 @@ static equatSetupData eqPr( "xp", "yp", "J", "J", true );
 void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
 {
 
-    TIArray<pagesSetupData> scalarsList;
-    TIArray<pagesSetupData> pgData;
+    std::vector<pagesSetupData> scalarsList;
+    std::vector<pagesSetupData> pgData1;
 
-    if(  rt[RT_SYSEQ].GetStatus() != ONEF_) // read first record in DB
+    if(  rt[RT_SYSEQ]->GetStatus() != ONEF_) // read first record in DB
         {
             TCStringArray aRklist;
             TCIntArray anRk;
-            auto Nr = rt[RT_SYSEQ].GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
               TProfil::pm->loadSystat( aRklist[0].c_str() );
         }
 
-    GetListsnRT( MD_MULTI, pgData,  scalarsList );
-    GetListsnRT( MD_SYSTEM, pgData,  scalarsList );
-    GetListsnRT( MD_MTPARM, pgData,  scalarsList );
-    GetListsnRT( MD_RMULTS, pgData,  scalarsList );
-    GetListsnRT( RT_PROCES, pgData,  scalarsList );
+    GetListsnRT( MD_MULTI, pgData1,  scalarsList );
+    GetListsnRT( MD_SYSTEM, pgData1,  scalarsList );
+    GetListsnRT( MD_MTPARM, pgData1,  scalarsList );
+    GetListsnRT( MD_RMULTS, pgData1,  scalarsList );
+    GetListsnRT( RT_PROCES, pgData1,  scalarsList );
 
 //    if( pageScript )
-//      pageScript->resetPageList( newRT, pgData, scalarsList );
+//      pageScript->resetPageList( newRT, pgData1, scalarsList );
 //    else
     {
       pageScript = new EquatSetup( page_5, eqPr,
-              RT_PROCES, pgData, scalarsList, outScript.c_str(), aXname, aYname  );
+              RT_PROCES, pgData1, scalarsList, outScript.c_str(), aXname, aYname  );
       verticalLayout->addWidget(pageScript);
     }
 

@@ -4,7 +4,6 @@
 // Implementation of TSubModule, TModule and TModList classes
 //
 // Copyright (C) 1996-2001 A.Rysin, S.Dmytriyeva
-// Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -16,8 +15,9 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
+#ifdef __unix
 #include <unistd.h>
-#ifndef __unix
+#else
 #include <io.h>
 #endif
 
@@ -50,7 +50,7 @@ TSubModule::~TSubModule()
 
 uint TSubModule::keyEditField()
 {
-    if( nRT == RT_RTPARM || pVisor->ProfileMode == true )
+    if( nRT == RT_RTPARM || pVisor->ProfileMode )
         return startKeyEdit;
     else return 0;
 }
@@ -77,7 +77,7 @@ TSubModule::EvClose()
 
 QWidget* TSubModule::window()
 {
-      if( nRT== RT_SYSEQ && pVisor->ProfileMode == true )
+      if( nRT== RT_SYSEQ && pVisor->ProfileMode )
        return dynamic_cast<QWidget*>(NewSystemDialog::pDia);
       else
        return dynamic_cast<QWidget*>(pImp);
@@ -132,7 +132,7 @@ const char* TSubModule::GetHtml()
 
 void TSubModule::CmHelp()
 {
-    if(pVisor->ProfileMode == true && nRT==RT_PARAM)
+    if(pVisor->ProfileMode && nRT==RT_PARAM)
          pVisorImp->OpenHelp( GetHtml(), NUMSET );
     else
          pVisorImp->OpenHelp( GetHtml() );
@@ -152,7 +152,7 @@ void TSubModule::CmHelp2()
 
 TCModule::TCModule( uint nrt ):
         TSubModule( nrt ),
-        db(&rt[nrt]),
+        db(rt[nrt].get()),
         nQ(1), Filter(ALLKEY), start_title(" ")
 {  }
 // start_title = " Access to database record without remake/recalculation"
@@ -204,8 +204,8 @@ TCModule::MessageToSave()
     //-- (pVisor->ProfileMode == true && nRT < RT_SYSEQ) )
     //--  return true;
 
-    gstring key_str = db->PackKey();
-    if( contentsChanged && key_str.find_first_of("*?") == gstring::npos )
+    string key_str = db->PackKey();
+    if( contentsChanged && key_str.find_first_of("*?") == string::npos )
 //        && ( db->GetStatus()!= UNDF_ ) )   // 09/11/2004 Sveta
     {
         int res = vfQuestion3(window(), key_str.c_str(),
@@ -223,15 +223,15 @@ TCModule::MessageToSave()
 }
 
 // get key of record (existing key, new key or key temlate )
-gstring
+string
 TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
                           int keyType )
 {
-    gstring str = GetName();
+    string str = GetName();
     str += ": ";
     str += strTitle;
 
-    gstring key;
+    string key;
 
     if( oldKey == nullptr )
     {
@@ -254,7 +254,7 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
         return vfKeyTemplEdit(par/*window()*/, str.c_str(), nRT, key.c_str(), false );
     case KEY_TEMP:
          {
-          gstring stt = vfKeyTemplEdit(par/*window()*/, str.c_str(), nRT, key.c_str() );
+          string stt = vfKeyTemplEdit(par/*window()*/, str.c_str(), nRT, key.c_str() );
           if( !stt.empty())
             Filter = stt;
           return Filter;
@@ -265,14 +265,14 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
 }
 
 // make all keys filter
-gstring  TCModule::makeKeyFilter()
+string  TCModule::makeKeyFilter()
 {
-    gstring strfilt;
-    if( pVisor->ProfileMode == true &&
+    string strfilt;
+    if( pVisor->ProfileMode &&
          ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
      RT_GTDEMO== nRT || RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
     {
-      strfilt = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+      strfilt = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
       StripLine(strfilt);
       strfilt += ":";
     }
@@ -291,13 +291,13 @@ bool  TCModule::testKeyFilter()
 {
   if( Filter.empty() || Filter== ALLKEY)
       return true;
-  if( pVisor->ProfileMode == true &&
+  if( pVisor->ProfileMode &&
        ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
          RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
   {
-    gstring strfilt = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+    string strfilt = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
     StripLine(strfilt);
-    if( Filter.find( strfilt ) == gstring::npos )
+    if( Filter.find( strfilt ) == string::npos )
      return true;
   }
   return false;
@@ -345,7 +345,7 @@ TCModule::RecSave( const char *key, bool onOld )
             db->Rep( Rnum );
     contentsChanged = false;
 
-    if( pVisor->ProfileMode == true && ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA ) )
+    if( pVisor->ProfileMode && ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA ) )
       TMulti::sm->GetPM()->pTPD = -1; // to reload thermodynamic data base
 }
 
@@ -353,8 +353,8 @@ TCModule::RecSave( const char *key, bool onOld )
 void TCModule::CmSaveM()
 {
   try{
-       gstring str=db->PackKey();
-       if( str.find_first_of("*?" ) != gstring::npos
+       string str=db->PackKey();
+       if( str.find_first_of("*?" ) != string::npos
            || ( db->GetStatus() == UNDF_  && db->RecCount() &&  // 09/11/2004 Sveta
            nRT != RT_SDATA ) )   // oct 2005  Sveta
              Error( GetName(), "E1 Cannot save under record key template, or record contents are not yet loaded!");
@@ -375,8 +375,8 @@ TCModule::CmSave()
            //--( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA  ))
            //--Error( GetName(), "Please, do it in Database mode!");
 
-        gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos )
+        string str=db->PackKey();
+        if( str.find_first_of("*?" ) != string::npos )
         {
             str = GetKeyofRecord( str.c_str(),
                      "Insert new record keyed ", KEY_NEW );
@@ -399,11 +399,11 @@ TCModule::CmSaveAs()
 {
     try
     {
-        if( pVisor->ProfileMode == true &&
+        if( pVisor->ProfileMode &&
            ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA && nRT != RT_PHASE) )
             Error( GetName(), "Please, do it in Database mode!");
 
-        gstring str=db->PackKey();
+        string str=db->PackKey();
         int  Rnum;
 
     AGN:
@@ -446,7 +446,7 @@ TCModule::DeleteRecord( const char *key, bool errifNo )
     {
         if( !errifNo )
             return;
-        gstring str = " Record ";
+        string str = " Record ";
         str += key;
         str += "\n not found to delete!";
         Error( GetName(), str.c_str() );
@@ -465,7 +465,7 @@ TCModule::CmDelete()
         if( nRT == RT_PARAM )
             Error( GetName(), "This record cannot be deleted!");
 
-        if( pVisor->ProfileMode == true && nRT < RT_SYSEQ )
+        if( pVisor->ProfileMode && nRT < RT_SYSEQ )
             Error( GetName(), "Please, do it in Database mode!");
 
         std::string str=db->PackKey();
@@ -491,8 +491,8 @@ TCModule::RecInput( const char *key )
     int Rnum = db->Find( key );
     if( Rnum<0 )
     {
-        gstring msg = "Record ";
-        msg += gstring(key, 0, db->KeyLen());
+        string msg = "Record ";
+        msg += string(key, 0, db->KeyLen());
         msg += " not found!" ;
         Error( GetName(), msg.c_str());
     }
@@ -508,7 +508,7 @@ TCModule::CmShow( const char *key )
 {
     try
     {
-        if( pVisor->ProfileMode == true &&
+        if( pVisor->ProfileMode &&
                 ( nRT >= RT_SYSEQ || nRT == RT_PARAM )  )
             Error( GetName(), "Invalid command in Project mode!");
 
@@ -516,14 +516,14 @@ TCModule::CmShow( const char *key )
 	    return;
 
     	// get key of record
-        gstring str;
+        string str;
         if( key == nullptr )
         { str = GetKeyofRecord(
           /*db->PackKey()*/nullptr, "Select data record key ", KEY_OLD );
           if( str.empty() )
     	    return;
         }
-        else  str = gstring(key);
+        else  str = string(key);
 
     	RecInput( str.c_str() );
     	SetTitle();
@@ -546,7 +546,7 @@ TCModule::CmFilter()
         if( ! MessageToSave() )
 	    return;
 
-        gstring str = Filter;
+        string str = Filter;
         str = GetKeyofRecord( str.c_str(),
                          "Please, give a record key template", KEY_TEMP );
         if(  str.empty() )
@@ -557,7 +557,7 @@ TCModule::CmFilter()
        auto Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
        if( Nrec >= 1 )
        {
-        if( pVisor->ProfileMode == true )
+        if( pVisor->ProfileMode )
           RecordLoadinProfile( aKey[0].c_str() );
        else
           RecInput( aKey[0].c_str() );
@@ -577,12 +577,12 @@ TCModule::CmNext()
 {
     try
     {
-       uint i_next = 0;
+       size_t i_next = 0;
        if( ! MessageToSave() )
 	    return;
 
        // get current record key
-       gstring str=db->UnpackKey();
+       string str=db->UnpackKey();
        // select scroll list
        TCStringArray aKey;
        TCIntArray anR;
@@ -590,10 +590,10 @@ TCModule::CmNext()
        if( Nrec <= 0 )
            return; // no records to scroll
        // get current record key
-       if( !(str.find_first_of("*?" ) != gstring::npos) )
+       if( !(str.find_first_of("*?" ) != string::npos) )
           //Current record key is defined!
        {
-         for(uint i=0; i<aKey.GetCount(); i++ )
+         for(size_t i=0; i<aKey.size(); i++ )
           if( str == aKey[i])
             {
               i_next = i+1;
@@ -601,7 +601,7 @@ TCModule::CmNext()
               break;
             }
         }
-       if( pVisor->ProfileMode == true )
+       if( pVisor->ProfileMode )
           RecordLoadinProfile( aKey[i_next].c_str() );
        else
           RecInput( aKey[i_next].c_str() );
@@ -620,22 +620,22 @@ TCModule::CmPrevious()
 {
     try
     {
-       uint i_next = 0;
+       size_t i_next = 0;
        if( ! MessageToSave() )
     	return;
 
        // get current record key
-       gstring str=db->UnpackKey();
+       string str=db->UnpackKey();
        // select scroll list
        TCStringArray aKey;
        TCIntArray anR;
        auto Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
        if( Nrec <= 0 )
            return; // no records to scroll
-       if( !(str.find_first_of("*?" ) != gstring::npos) )
+       if( !(str.find_first_of("*?" ) != string::npos) )
           //Current record key is defined!
        {
-         for(uint i=0; i<aKey.GetCount(); i++ )
+         for(size_t i=0; i<aKey.size(); i++ )
           if( str == aKey[i])
             {
               if( i==0 )
@@ -645,7 +645,7 @@ TCModule::CmPrevious()
               break;
             }
         }
-       if( pVisor->ProfileMode == true )
+       if( pVisor->ProfileMode )
           RecordLoadinProfile( aKey[i_next].c_str() );
        else
           RecInput( aKey[i_next].c_str() );
@@ -686,6 +686,7 @@ TCModule::RecBuild( const char *key, int mode  )
            contentsChanged = true;
            break;
          }
+        [[fallthrough]];
     case VF3_2:  // =VF_REMAKE
         //if( !pImp )
         //{    Show(pVisorImp, "Remaking...");
@@ -713,18 +714,18 @@ TCModule::CmDerive()
 {
     try
     {
-        if( pVisor->ProfileMode != true && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
+        if( !pVisor->ProfileMode && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
             Error( GetName(), "Please, do it in Project mode!");
-        if( pVisor->ProfileMode == true &&
+        if( pVisor->ProfileMode &&
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
             Error( GetName(), "Please, do it in Database mode!");
 
         if( ! MessageToSave() )
 	    return;
 
-        gstring str = gstring( db->UnpackKey(), 0, db->KeyLen() );
+        string str = string( db->UnpackKey(), 0, db->KeyLen() );
                     //db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos
+        if( str.find_first_of("*?" ) != string::npos
             || ( db->GetStatus() == UNDF_ && nRT != RT_SDATA) )   // 09/11/2004 Sveta
             Error( GetName(), "E2 Cannot save under record key template, or record contents are not yet loaded!");
 
@@ -757,7 +758,7 @@ TCModule::CmCalc()
 {
     try
     {
-        if( pVisor->ProfileMode != true && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
+        if( !pVisor->ProfileMode && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
             Error( GetName(), "Please, do it in Project mode!");
         //--if( pVisor->ProfileMode == true &&
         //--     ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
@@ -766,8 +767,8 @@ TCModule::CmCalc()
       //  if( ! MessageToSave() ) //27/08/2010
       //    return;
 
-        gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos
+        string str=db->PackKey();
+        if( str.find_first_of("*?" ) != string::npos
                || ( db->GetStatus()== UNDF_ && db->RecCount()
                  && nRT != RT_SDATA ))  // 09/11/2004 Sveta
             Error( GetName(), "E3 Cannot save under record key template, or record contents are not yet loaded!");
@@ -776,7 +777,7 @@ TCModule::CmCalc()
         // "Record to calculate not found!");
         // db->Get( Rnum ); must be done before
         // dyn_set(); must be done before
-        str = gstring( db->UnpackKey(), 0, db->KeyLen() );
+        str = string( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() );
         SetString("Calculation... ");
         clock_t t_start11, t_end11;
@@ -787,7 +788,7 @@ TCModule::CmCalc()
         // 19/02/2007 Sveta
         t_end11 = clock();
         clock_t dtime = ( t_end11- t_start11 );
-        vstr  buf(200);
+        char  buf[200];
         sprintf(buf, "Calculation finished OK (elapsed time: %lg s).",
                 static_cast<double>(dtime)/CLOCKS_PER_SEC);
         SetString(buf);
@@ -814,8 +815,8 @@ TCModule::CmNew()
         if( ! MessageToSave() )
 	    return;
 
-       gstring dlgName = "Please, set a new record key ";
-       gstring str = db->PackKey();
+       string dlgName = "Please, set a new record key ";
+       string str = db->PackKey();
        int  Rnum;
 
    AGN:
@@ -830,7 +831,7 @@ TCModule::CmNew()
           goto AGN;
        } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
 
-        str = gstring( db->UnpackKey(), 0, db->KeyLen() );
+        str = string( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str(), 0 ); // SD 18/11/2008
         RecBuild( str. c_str(), VF_REMAKE );
         SetString("Remake of the new record finished OK. "
@@ -855,8 +856,8 @@ TCModule::CmCreate()
         if( ! MessageToSave() )
 	    return;
 
-        gstring dlgName = "Please, set a new record key ";
-        gstring str = db->PackKey();
+        string dlgName = "Please, set a new record key ";
+        string str = db->PackKey();
         int  Rnum;
 
     AGN:
@@ -872,7 +873,7 @@ TCModule::CmCreate()
         } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
 
 
-        str = gstring( db->UnpackKey(), 0, db->KeyLen() );
+        str = string( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() , 0 ); // SD 18/11/2008
         RecBuild( str.c_str(), VF_CLEARALL );
         SetString("Remake of the new record finished OK. "
@@ -913,13 +914,12 @@ TCModule::CmFind() // ???? error in smShow
 void
 TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 {
-    vstr key( db->KeyLen(), _key);
-    // gstring  key( _key, 0, db->KeyLen());
+    string  key( _key, 0, db->KeyLen() );
 
     if( ! MessageToSave() )
 	return;
 
-    RecStatus iRet = db->Rtest( key, 1 );
+    RecStatus iRet = db->Rtest( key.c_str(), 1 );
     std::string msg;
 
     switch( iRet )
@@ -944,14 +944,14 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
                    " key  '";
             msg += key;
             msg += "'.\n Maybe, database file is not linked to chain\n";
-            if(pVisor->ProfileMode == true)
+            if(pVisor->ProfileMode)
                 Error( GetName(), msg.c_str() );
             msg +=  "Create new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), "Record creation rejected!");
-            gstring str = key.p;
+            string str = key;
 
-            if( str.find_first_of("*?" ) != gstring::npos)  // pattern
+            if( str.find_first_of("*?" ) != string::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
                        "Please, set a new record key ", KEY_NEW);
             if(  str.empty() )
@@ -959,7 +959,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), "A record with such key already exists!");
             pVisorImp->OpenModule(pVisorImp, nRT);
-            gstring str1 = gstring( db->UnpackKey(), 0, db->KeyLen() );
+            string str1 = string( db->UnpackKey(), 0, db->KeyLen() );
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString("Remake of the new record finished OK. "
@@ -988,14 +988,14 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 
 void TCModule::RecordLoadinProfile( const char *key )
 {
-    gstring str;
+    string str;
 
     if( key==nullptr )
     {
         str = getFilter();
         str = GetKeyofRecord( str.c_str(), "Please, select a record key ", KEY_OLD );
     }
-    else str=gstring(key);
+    else str=string(key);
     // get record
     if( str.empty() )
             return;
@@ -1043,8 +1043,8 @@ TCModule::CmNewinProfile()
 	    return;
 
         // Get record key
-        gstring str = makeKeyFilter();
-        gstring dlgName = "Please, set a new record key ";
+        string str = makeKeyFilter();
+        string dlgName = "Please, set a new record key ";
         int  Rnum;
 
     AGN:
@@ -1084,8 +1084,8 @@ TCModule::CmCreateinProfile()
 	    return;
 
         // Get record key
-        gstring str = makeKeyFilter();
-        gstring dlgName = "Please, set a new record key ";
+        string str = makeKeyFilter();
+        string dlgName = "Please, set a new record key ";
         int  Rnum;
 
     AGN:
@@ -1135,8 +1135,8 @@ TCModule::CmPlot()
         if( ! MessageToSave() )
 	    return;
 
-        gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos
+        string str=db->PackKey();
+        if( str.find_first_of("*?" ) != string::npos
         || ( db->GetStatus()== UNDF_ && db->RecCount() &&
            nRT != RT_SDATA ))  // 09/11/2004 Sveta
             Error( GetName(), "E4 Cannot save under record key template, or record contents are not yet loaded!");
@@ -1198,7 +1198,7 @@ void
 TCModule::RecordPrint( const char* key )
 {
   // select  SDref key
- gstring sd_key;
+ string sd_key;
  if( key )
   sd_key=key;
  else
@@ -1209,17 +1209,17 @@ TCModule::RecordPrint( const char* key )
     sd_key += "*";
     sd_key += ":";
  }
- if( sd_key.find_first_of("*?" ) != gstring::npos )
+ if( sd_key.find_first_of("*?" ) != string::npos )
  {
-     sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+     sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Please, select a print script", KEY_OLD);
  }
 
  if( sd_key.empty() )
      return;
 
-  dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-  const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr].GetPtr());
+  dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
+  const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr]->GetPtr());
   if( !text_fmt )
        Error( sd_key.c_str(), "No print script in this record.");
 
@@ -1236,8 +1236,8 @@ TCModule::CmPrint()
         if( ! MessageToSave() )
 	    return;
 
-        /*gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos )
+        /*string str=db->PackKey();
+        if( str.find_first_of("*?" ) != string::npos )
             Error( GetName(), "Current record is not defined!");*/
         RecordPrint();
         SetString("Printing of a record finished OK. ");
@@ -1255,7 +1255,7 @@ TCModule::CmScript()
     try
     {
           // read sdref record with format prn
-      gstring sd_key = "?script*:*:";
+      string sd_key = "?script*:*:";
 
       if( nRT < MD_RMULTS )
         sd_key += db->GetKeywd();
@@ -1266,15 +1266,15 @@ TCModule::CmScript()
 
       sd_key += "*";
       sd_key += ":";
-      sd_key =dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+      sd_key =dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Please, select an appropriate script", KEY_OLD);
       if( sd_key.empty() )
       return;
-      dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+      dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
        /*if( pImp )
            pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
        else*/ pVisor->OpenModule(nullptr, RT_SDATA,0,true);  // KD: workaround for NewSystemDialog
-      dynamic_cast<TCModule *>(&aMod[RT_SDATA])->Update();
+      dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->Update();
 
     }
     catch( TError& xcpt )
@@ -1397,7 +1397,7 @@ TCModule::CmReOpenFileList()
 
         TCIntArray arr = SelectFileList(closef|openf|oldself);
 
-        if( arr.GetCount() < 1 )
+        if( arr.size() < 1 )
             if( !vfQuestion( window(), GetName(),
                   "No database files selected to open! Continue?" ))
                 return;
@@ -1617,11 +1617,11 @@ TCModule::AddRecord(const char* key )
     if( strpbrk(key,"*?/")!=nullptr )
         Error( GetName(), "Attempt to insert record with template key!");
 
-    ErrorIf( db->fOpenNameBuf.GetCount()<1, GetName(), "No database file choosen");
-    if( db->fOpenNameBuf.GetCount()>1 )
+    ErrorIf( db->fOpenNameBuf.size()<1, GetName(), "No database file choosen");
+    if( db->fOpenNameBuf.size()>1 )
     {
-        gstring s="Choose a database file to put a record: "+ gstring(key);
-        file = db->fOpenNameBuf.GetCount() - 1;  // 04.04.01 KD
+        string s="Choose a database file to put a record: "+ string(key);
+        file = db->fOpenNameBuf.size() - 1;  // 04.04.01 KD
         file = vfChoice(window(), db->fOpenNameBuf, s.c_str(), file );
     }
     else
@@ -1645,14 +1645,14 @@ TCModule::AddRecord(const char* key, int& fnum )
       file = fnum;
     else
     {
-        ErrorIf( db->fOpenNameBuf.GetCount()<1, GetName(),
+        ErrorIf( db->fOpenNameBuf.size()<1, GetName(),
               "No database file choosen");
-        if( db->fOpenNameBuf.GetCount()>1 )
+        if( db->fOpenNameBuf.size()>1 )
         {
            bool ok_to_all = false;
-           gstring s="Choose a database file to put a record: "
-                      + gstring(key);
-           file = db->fOpenNameBuf.GetCount() - 1;  // 04.04.01 KD
+           string s="Choose a database file to put a record: "
+                      + string(key);
+           file = db->fOpenNameBuf.size() - 1;  // 04.04.01 KD
            file = vfChoice2(window(), db->fOpenNameBuf, s.c_str(), file, ok_to_all );
            if( ok_to_all == true && file >= 0 )
               fnum = file;
@@ -1670,7 +1670,7 @@ TCModule::AddRecord(const char* key, int& fnum )
 int TCModule::AddRecordTest(const char* key, int& fnum )
 {
     int  Rnum;
-    gstring str = key;
+    string str = key;
 
 AGN: Rnum = db->Find( str.c_str() );
      if( Rnum>=0 ) // name of exist record
@@ -1694,10 +1694,10 @@ TCModule::KeysToTXT( const char *pattern )
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark record keys to be listed in txt-file",
        nRT, pattern );
-    if( aKey.GetCount() <1 )
+    if( aKey.size() <1 )
         return;
 
-    gstring s = GetName();
+    string s = GetName();
     std::string filename;
     s += " : Please, select file to write record keys";
     if( !vfChooseFileSave(window(), filename, s.c_str()) )
@@ -1706,9 +1706,8 @@ TCModule::KeysToTXT( const char *pattern )
     ErrorIf( !f.good() , GetName(), "Fileopen error");
 
     // check for errors
-    f << " " << GetName() << " \'" << pattern << "\' Nrec="
-    << aKey.GetCount() << "\n";
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    f << " " << GetName() << " \'" << pattern << "\' Nrec="  << aKey.size() << "\n";
+    for(size_t i=0; i<aKey.size(); i++ )
     {
         f << aKey[i].c_str() << "\n";
     }
@@ -1722,7 +1721,7 @@ TCModule::RecToTXT( const char *pattern )
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
        nRT, pattern );
-    if( aKey.GetCount() <1 )
+    if( aKey.size() <1 )
         return;
 
     std::string s = GetName();
@@ -1733,14 +1732,14 @@ TCModule::RecToTXT( const char *pattern )
     fstream f(filename.c_str(), ios::out);
     ErrorIf( !f.good() , GetName(), "File write error");
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
-       aObj[o_reckey].SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())));
-       aObj[o_reckey].toTXT(f);
+       aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())));
+       aObj[o_reckey]->toTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
-            aObj[no].toTXT(f);
+            aObj[no]->toTXT(f);
     }
 
     ErrorIf( !f.good() , GetName(), "Filewrite error");
@@ -1752,7 +1751,7 @@ TCModule::RecToTXT( const char *pattern )
 void
 TCModule::RecOfTXT()
 {
-    vstr buf(150);
+    char buf[150];
     int Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
@@ -1765,15 +1764,15 @@ TCModule::RecOfTXT()
 
     while( !f.eof() )
     {
-        aObj[o_reckey].SetPtr(buf);
-        aObj[o_reckey].ofTXT(f);
+        aObj[o_reckey]->SetPtr(buf);
+        aObj[o_reckey]->ofTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
-            aObj[no].ofTXT(f);
+            aObj[no]->ofTXT(f);
         buf[db->KeyLen()] = '\0';
         Rnum = db->Find( buf );
         if( Rnum >= 0 )
         {
-           if( vfQuestion(pImp, buf.p,
+           if( vfQuestion(pImp, buf,
                "Data record with this key already exists! Replace?"))
               db->Rep( Rnum);
         }
@@ -1808,23 +1807,23 @@ TCModule::RecExport( const char *pattern )
 {
 
     // read sdref record with format prn
-    gstring sd_key = "escript*:*:";
+    string sd_key = "escript*:*:";
             sd_key += db->GetKeywd();
             sd_key += "*";
             sd_key += ":";
-    sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+    sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Select key of escript format", KEY_OLD);
     if( sd_key.empty() )
      return;
-    dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-    char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
+    dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
+    char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
 
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
        nRT, pattern );
-    if( aKey.GetCount() <1 )
+    if( aKey.size() <1 )
         return;
 
     std::string s = GetName();
@@ -1850,7 +1849,7 @@ TCModule::RecExport( const char *pattern )
     fstream f(filename.c_str(), mod);
     ErrorIf( !f.good() , GetName(), "File write error");
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
@@ -1865,22 +1864,22 @@ TCModule::RecExport( const char *pattern )
 void
 TCModule::RecImport()
 {
-    vstr buf(150);
+    //char buf[150];
     int Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
     char ch;
 
     // read sdref record with format read
-    gstring sd_key = "iscript*:*:";
+    string sd_key = "iscript*:*:";
             sd_key += db->GetKeywd();
             sd_key += "*";
             sd_key += ":";
-    sd_key = dynamic_cast<TCModule *>(&aMod[RT_SDATA])->GetKeyofRecord(
+    sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
           sd_key.c_str(), "Select key of iscript format", KEY_OLD);
     if( sd_key.empty() )
      return;
-    dynamic_cast<TCModule *>(&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-    char * text_fmt = static_cast<char *>(aObj[o_sdabstr].GetPtr());
+    dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
+    char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
 
@@ -1942,9 +1941,9 @@ TCModule::DelList( const char *pattern )
        nRT, pattern );
     int ichs = 1;
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
-        gstring str = "Please, confirm deleting record \nwith key: ";
+        string str = "Please, confirm deleting record \nwith key: ";
         str += aKey[i];
         if( ichs )
         {
@@ -1978,7 +1977,7 @@ TCModule::Transfer( const char *pattern )
        nRT, pattern );
 
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
         nrec = db->Find( aKey[i].c_str() );
         db->Get( nrec );
@@ -2001,7 +2000,7 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
 {
     int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
-    gstring str;
+    string str;
 
     if( if_rename )
      str = "Please, mark record keys to be renamed";
@@ -2013,7 +2012,7 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
 
     int rn_type = 0;
 
-    if( aKey.GetCount() < 2)
+    if( aKey.size() < 2)
       rn_type = 1;
     else
      {  switch (vfQuestYesNoCancel(window(),
@@ -2031,15 +2030,15 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
        }
     }
     uint fld = db->KeyNumFlds()-1;
-    gstring from_t;
-    gstring to_t;
+    string from_t;
+    string to_t;
     if( rn_type == 0 )
     {
      if( !vfKeyCanged(window(), "", from_t,  to_t, db->FldLen( fld ) ))
       return;
     }
 
-    for(uint i=0; i<aKey.GetCount(); i++ )
+    for(size_t i=0; i<aKey.size(); i++ )
     {
         nrec = db->Find( aKey[i].c_str() );
         db->Get( nrec );
@@ -2055,15 +2054,15 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
         else
         {
           //int fld = db->KeyNumFlds()-1;
-          gstring str1;
+          string str1;
           str = "";
           for(uint ii=0; ii<fld; ii++)
           {
-             str1 = gstring(db->FldKey( ii ), 0, db->FldLen( ii ));
-             str1.strip();
+             str1 = string(db->FldKey( ii ), 0, db->FldLen( ii ));
+             strip( str1 );
              str += str1 + ":";
            }
-          str1= gstring(db->FldKey( fld ), 0, db->FldLen( fld ));
+          str1= string(db->FldKey( fld ), 0, db->FldLen( fld ));
           ChangeforTempl( str1, from_t, to_t, db->FldLen( fld ));
           str += str1 + ":";
 
@@ -2100,8 +2099,8 @@ TCModule::SelectFileList(int mode)
          "Selection of files", sel);
 
     TCIntArray arr;
-    for( uint i=0; i<aSel.GetCount(); i++ )
-        arr.Add( indx[aSel[i]] );
+    for( size_t i=0; i<aSel.size(); i++ )
+        arr.push_back( indx[aSel[i]] );
 
     return arr;
 }
@@ -2136,8 +2135,8 @@ TCModule::RecToTXT( const char *pattern )
     if( aKey.GetCount() <1 )
         return;
 
-    gstring s = GetName();
-    gstring filename;
+    string s = GetName();
+    string filename;
     s += " : Please, give a file name for unloading records";
     if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
@@ -2192,12 +2191,12 @@ TCModule::RecToTXT( const char *pattern )
 void
 TCModule::RecOfTXT()
 {
-    vstr buf(150);
+    char buf[150];
     int ichs, Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
-    gstring s =gstring( GetName() )+" : Please, select file with unloaded records";
-    gstring filename;
+    string s =string( GetName() )+" : Please, select file with unloaded records";
+    string filename;
     if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::in);

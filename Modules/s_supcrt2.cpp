@@ -19,6 +19,7 @@
 
 #include <cmath>
 #include "GEMS3K/verror.h"
+#include "GEMS3K/v_detail.h"
 #include "s_supcrt.h"
 
 /* HGKcon - Constant parameters for the H2O equation of state given by
@@ -263,7 +264,7 @@ void  TSupcrt::aux(double r1, double th1, double *d2PdT2, double *d2PdMT,
     int i= -1;
     double  sS[2], w[2], y[2], z[2], coex[2], cc, beta, besq, delta, alpha,
     s00, s20, s01, s21, deli, ww, yy, zz, gamma, tt1, ter, g, alhi,
-    beti, gami, a1, a2, a4, f1;
+    beti, gami, a11, a21, a4, f1;
 
     cc   = co->a[0];
     beta = co->a[5];
@@ -294,7 +295,7 @@ void  TSupcrt::aux(double r1, double th1, double *d2PdT2, double *d2PdMT,
         alhi    = alpha - deli;
         beti    = beta + deli;
         gami    = gamma - deli;
-        if ( r1 )
+        if ( noZero(r1) )
         {
             w[i]  = (1.0 - alhi) * (1.0 - 3.0 * tt1) * sS[i] -
                     beta * delta * (1.0-tt1) * th1 * sd[i];
@@ -308,13 +309,13 @@ void  TSupcrt::aux(double r1, double th1, double *d2PdT2, double *d2PdMT,
             z[i]  = 1.0-besq*(1.0-(2.0*beti))*tt1;
             z[i]  = (z[i]*pow(r1,-gami)) * xk[i] / g;
             zz    = zz + z[i];
-            a1 = (beta * (delta - 3.0) - 3.0 * deli - besq * alhi * gami) /
+            a11 = (beta * (delta - 3.0) - 3.0 * deli - besq * alhi * gami) /
                  (2.0 * besq * besq * (2.0 - alhi) * (1.0 - alhi) * alhi);
-            a2 = 1 + ((beta * (delta - 3.0) - 3.0 * deli - besq * alhi
+            a21 = 1 + ((beta * (delta - 3.0) - 3.0 * deli - besq * alhi
                        * ter) / (2.0 * besq * (1.0 - alhi) * alhi));
-            a2 = -a2;
+            a21 = -a21;
             a4 = 1.0 + ((ter - 2.0) / (2.0 * alhi));
-            f1 = a1 + a2 + a4;
+            f1 = a11 + a21 + a4;
             coex[i] = ((2.0 - alhi) * (1.0 - alhi) * pow(r1, -alhi) * f1 * xk[i]);
             Cvcoex  += coex[i];
         }
@@ -515,13 +516,13 @@ int  TSupcrt::valTP(double T, double P)
 //--------------------------------------------------------------------//
 // valid insert data and scales for HKF
 void
-TSupcrt::valid(int it, int id, int ip, int ih, int itripl, int isat,
+TSupcrt::valid(int it, int id1, int ip, int ih, int itripl, int isat,
                int iopt, int useLVS, int epseqn, double Temp, double *Pres,
                double *Dens0, int *eR)    /* double Temp, Pres, Dens; */
 {
     double Ttripl, Tcrit, Pcrit; /*T, D, P, */
     // valid specification
-    *eR = valspc(it, id, ip, ih, itripl, isat, iopt, useLVS, epseqn);
+    *eR = valspc(it, id1, ip, ih, itripl, isat, iopt, useLVS, epseqn);
     ErrorIf( !*eR, "Tsupcrt","HKF H2O: Specification error!");
     // translate to  degC, bars, g/cm3
     trp.T   = TdegK(it, Temp) - 273.15e0;
@@ -823,10 +824,10 @@ void TSupcrt::thmLVS(int isat, double T, double r1, double th1)
         ss(r1, th1, dv.s, dv.sd);
         aux(r1,th1, &dv.d2PdT2, &dv.d2PdMT, &dv.d2PdM2, aa,
             dv.xk, dv.sd, Cvcoex);
-        if (r1 != 0.0)
+        if ( noZero(r1)  )
             d2.dPdD = cr->dPcon * sa.DH2O * T / dv.d2PdM2;
     }
-    if (r1 != 0.0)
+    if ( noZero(r1) )
     {
         a1.dPdTcd = dv.dP0dT + pw11 * (dv.amu -rho / dv.d2PdM2) +
                     dv.s[0] + dv.s[1] - dv.d2PdMT * rho / dv.d2PdM2;
@@ -890,7 +891,7 @@ double TSupcrt::dalLVS(double D, double T, double P, double alpha)
     s20   = co->a[17];
     s21   = co->a[19];
 
-    if (a2.r == 0.0)
+    if ( approximatelyZero(a2.r) )
     {
         dalLVS = 1.0e6;
         return(dalLVS);
@@ -1048,7 +1049,7 @@ void TSupcrt::dimLVS(int isat, int itripl, double theta, double T, double *Pbars
     betaPa  = th.betaw / 1.0e6;
     betab   = th.betaw / 1.0e1;
 
-    if (fabs(theta) != 1.0e0)
+    if ( approximatelyEqual( fabs(theta), 1.0e0) )
     {
         dkgm3 = sa.DH2O;
         www->Surtenw = 0.0e0;
@@ -1165,7 +1166,7 @@ void TSupcrt::LVSeqn(int isat, int iopt, int itripl, double TC,
             thmLVS(isat, TC, par.r1, par.th1);
             dimLVS(isat, itripl, par.th1, TC, P, &dL, &dV, &wl, aSpc.epseqn);
             /*   iRET = change(wpl, wl); */
-            if (dL == dV)
+            if (  approximatelyEqual(dL, dV) )
             {
                 cpoint = 1;
                 cdens  = dL;
@@ -1378,7 +1379,7 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
     aSpc.itripl=1;
     // 01.06.2016
     double psat = PsHGK(TC + 273.15)*10.0;
-    if( fabs( *P ) == 0 || aSpc.on_sat_curve || fabs(*P -  psat) <  1.e-4*psat) // || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-9* psat added 01.06.2016
+    if( approximatelyZero( fabs( *P ) ) || aSpc.on_sat_curve || fabs(*P -  psat) <  1.e-4*psat) // || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-9* psat added 01.06.2016
     { // set only T
         aSpc.isat=1;
         aSpc.iopt=1;
