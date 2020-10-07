@@ -238,8 +238,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
             rcp->Ks[1] = lgK;
         }
         else {
-                Error( GetName(),
-        "E25RErun: Input logK, dSr or dHr remain inconsistent - bailing out!");
+                Error( GetName(), "E25RErun: Input logK, dSr or dHr remain inconsistent - bailing out!");
         }
     }
     return;
@@ -355,8 +354,7 @@ void TReacDC::Recalc( int q, const char *key  )
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
-    Error( GetName(),
-    "W26RErun: Please, check stoichiometry, charge or valences in the formula.");
+    Error( GetName(), "W26RErun: Please, check stoichiometry, charge or valences in the formula.");
 NEXT:
     /* test value of st.mol.volume */
     if( ( rc[q].pstate[0] == CP_GAS || rc[q].pstate[0] == CP_GASI )
@@ -795,8 +793,7 @@ void TReacDC::Recalc_ISO1( double /*foS*/ )
         goto STAGE2;
     }
     if(!stK && !stLK && !stG )
-        Error( GetName(),
-               "W31RErun: One of values K, 1000lnK, dGr was not specified");
+        Error( GetName(), "W31RErun: One of values K, 1000lnK, dGr was not specified");
 STAGE2:
     return;
 }

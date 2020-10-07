@@ -703,8 +703,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
          }
       }
       if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
-           Error( GetName(),
-              "E39PHrem: No cations or no anions - SIT model cannot be applied...");
+           Error( GetName(), "E39PHrem: No cations or no anions - SIT model cannot be applied...");
       php->nCat = nCat;
       php->nAn = nAn;
       php->nNs = nNs;
@@ -766,8 +765,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
         }
      }
      if( iCat != php->nCat || iAn != php->nAn || iNs != php->nNs )
-       Error( GetName(),
-        "E38PHrem: Mismatch in the number of cations, anions or neutral species...");
+       Error( GetName(), "E38PHrem: Mismatch in the number of cations, anions or neutral species...");
    }
 }
 

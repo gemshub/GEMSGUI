@@ -546,8 +546,7 @@ void TDComp::RecCalc( const char *key )      // dcomp_test
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
-    Error( GetName(),
-  "W07DCrun: Please, check stoichiometry, charge or valences in the formula");
+    Error( GetName(), "W07DCrun: Please, check stoichiometry, charge or valences in the formula");
 NEXT:
     if( ( dcp->pstate[0] == CP_GAS || dcp->pstate[0] == CP_GASI ||
           dcp->pstate[0] == CP_FLUID )
@@ -945,7 +944,7 @@ void TDComp::DCthermo( int q, int p )
         msg += dcp->pstate;
         msg += "'.\nChange record?";
         if( !vfQuestion(window(),  GetName(), msg ))
-            Error( GetName(), msg.c_str() );
+            Error( GetName(), msg );
         //else  RecBuild( key );  // Recalc new record?
     }
 }
@@ -1219,7 +1218,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             if( pVisor->ProfileMode )
-                Error( GetName(), msg.c_str() );
+                Error( GetName(), msg );
             msg +=  "Create a new record?";
             if( !vfQuestion(0, GetName(), msg ))
                 Error( GetName(), "E17DCrun: New record creation dismissed...");
@@ -1250,7 +1249,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
                "Data record key '";
         msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
-        Error( GetName(),  msg.c_str() );
+        Error( GetName(),  msg );
     }
 }
 

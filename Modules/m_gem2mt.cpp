@@ -1096,7 +1096,7 @@ TGEM2MT::RecCalc( const char * key )
      //FreeNa();
      mtp->gStat = GS_ERR;
      mtp->iStat = AS_INDEF;
-     Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+     throw;
   }
 }
 

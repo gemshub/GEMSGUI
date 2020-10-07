@@ -179,7 +179,7 @@ void EquatSetup::resetPageList( int newRT,
 catch( TError& xcpt )
 {
     vfMessage( this, xcpt.title, xcpt.mess);
-    Error(  xcpt.title.c_str() , xcpt.mess.c_str() );
+    throw;
 }
 
 }

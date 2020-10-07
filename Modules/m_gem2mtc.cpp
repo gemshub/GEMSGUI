@@ -873,7 +873,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
                "E96MSTran: Error in translation of GEM2MT math script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 

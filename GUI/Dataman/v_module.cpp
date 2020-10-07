@@ -260,7 +260,7 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
           return Filter;
         }
     }
-    Error( str.c_str(), "Invalid record key editing mode");
+    Error( str, "Invalid record key editing mode");
     return "";
 }
 
@@ -449,7 +449,7 @@ TCModule::DeleteRecord( const char *key, bool errifNo )
         string str = " Record ";
         str += key;
         str += "\n not found to delete!";
-        Error( GetName(), str.c_str() );
+        Error( GetName(), str );
     }
     db->Del( Rnum );
 }
@@ -494,7 +494,7 @@ TCModule::RecInput( const char *key )
         string msg = "Record ";
         msg += string(key, 0, db->KeyLen());
         msg += " not found!" ;
-        Error( GetName(), msg.c_str());
+        Error( GetName(), msg );
     }
     db->Get( Rnum );
     dyn_set();
@@ -928,7 +928,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
         msg = "Record selection error! ";
         msg += key;
 // Sveta 14/06/01        if( RecChoise( key ) == false )
-            Error( GetName(), msg.c_str() );
+            Error( GetName(), msg );
         break;
     case ONEF_:
         dyn_set(q);
@@ -945,7 +945,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
             msg += key;
             msg += "'.\n Maybe, database file is not linked to chain\n";
             if(pVisor->ProfileMode)
-                Error( GetName(), msg.c_str() );
+                Error( GetName(), msg );
             msg +=  "Create new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), "Record creation rejected!");
@@ -975,7 +975,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
                "Data Record key '";
         msg += key;
         msg += "'\n Try to unload or re-index this database chain...";
-        Error( GetName(),  msg.c_str() );
+        Error( GetName(),  msg );
     }
 }
 
@@ -1221,7 +1221,7 @@ TCModule::RecordPrint( const char* key )
   dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
   const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr]->GetPtr());
   if( !text_fmt )
-       Error( sd_key.c_str(), "No print script in this record.");
+       Error( sd_key, "No print script in this record.");
 
   PrintSDref( sd_key.c_str(), text_fmt );
 }
@@ -1818,7 +1818,7 @@ TCModule::RecExport( const char *pattern )
     dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
     char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
-       Error( sd_key.c_str(), "No format text in this record.");
+       Error( sd_key, "No format text in this record.");
 
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
@@ -1881,7 +1881,7 @@ TCModule::RecImport()
     dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
     char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
-       Error( sd_key.c_str(), "No format text in this record.");
+       Error( sd_key, "No format text in this record.");
 
     // translate scripts
     TReadData dat( sd_key.c_str(), nRT, text_fmt );

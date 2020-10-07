@@ -503,7 +503,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       if( na )
        delete na;
       na = nullptr;
-       Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+      throw;
     }
     if( na )
      delete na;

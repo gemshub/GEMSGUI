@@ -516,7 +516,7 @@ void TRTParm::expr_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
               "E95MSTran: Error in translation of RTParm script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 
@@ -536,7 +536,7 @@ void TRTParm::exprE_calc()
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
   "E96MSTran: Error in RTParm script for empirical data: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
     // calc equations
     for( rpp->iE = 0; rpp->iE< rpp->dimEF[0]; rpp->iE++ )

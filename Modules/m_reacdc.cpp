@@ -333,7 +333,7 @@ bool TReacDC::check_input( const char *key, int Level )
     {
         ods_link(q);
         rt[nRT]->SetKey(key);
-        Error( key/*xcpt.title.c_str()*/, xcpt.mess.c_str());
+        Error( key/*xcpt.title.c_str()*/, xcpt.mess );
     }
     ods_link(q);
     rt[nRT]->SetKey(key); //   RecInput( key );
@@ -624,7 +624,7 @@ TReacDC::RecCalc( const char* key )
             db->SetKey(key);
         }
         w_dyn_kill();
-        Error(  key , xcpt.mess.c_str() );
+        Error(  key , xcpt.mess );
     }
     TCModule::RecCalc(key);
     db->SetStatus(ONEF_);   //  Experimental - trying to bugfix! 13.01.05
@@ -1021,8 +1021,7 @@ void TReacDC::PronsPrep( const char *key )
         b4 = 1;
         break;
     default:
-        Error( GetName(),
-               "E16RErun: Invalid stoich.coefficients of DC in reaction!");
+        Error( GetName(), "E16RErun: Invalid stoich.coefficients of DC in reaction!");
     }
 
     /*
@@ -1733,7 +1732,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked to chain.\n";
             if( pVisor->ProfileMode )
-                Error( GetName(), msg.c_str() );
+                Error( GetName(), msg );
             msg +=  "Create a new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), " E18RErun: New record create action dismissed...");
@@ -1764,7 +1763,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
                "data record key '";
         msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
-        Error( GetName(),  msg.c_str() );
+        Error( GetName(),  msg );
     }
 }
 

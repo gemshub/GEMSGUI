@@ -333,7 +333,7 @@ void
           k++;
       }
       else
-       Error( from_templ.c_str(), "Error (1): Invalid character in template ");
+       Error( from_templ, "Error (1): Invalid character in template ");
      ii++;
    }
    data_str = string( data_str, k );
@@ -372,7 +372,7 @@ void
           k--;
       }
       else
-       Error( from_templ.c_str(), "Error (2): Invalid character in template ");
+       Error( from_templ, "Error (2): Invalid character in template ");
      ik--;
      jj--;
    }

@@ -736,7 +736,7 @@ void TMulti::sm_text_analyze( int nph, int Type,
         TPhase::pm->CheckEqText(  erscan,
            "E97MSTran: Error in Phase non-ideality mixing model scripts: " );
         /*  if( iRet )  goto AGAIN;  */
-        Error(  "SolModLoad", xcpt.mess.c_str() );
+        Error(  "SolModLoad", xcpt.mess );
     }
     /* if( Type ) // print results to rpn_log.txt
         qEd[nph].PrintEquat( (char *)aObj[o_neqtxt]->GetPtr(), fstream& f);

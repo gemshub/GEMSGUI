@@ -63,7 +63,7 @@ TPrintData::TPrintData(const char *sd_key,
        else
            {  string str_err = "Invalid command: \n";
               str_err += input;
-              Error( key_format.c_str(), str_err.c_str() );
+              Error( key_format, str_err );
             }
     // insert condition  ## <math script>  ##
     skipSpace();
@@ -80,7 +80,7 @@ TPrintData::TPrintData(const char *sd_key,
             if( !pose )
             {  string str_err = "Invalid condition: \n";
                str_err += input;
-               Error( key_format.c_str(), str_err.c_str() );
+               Error( key_format, str_err );
             }
             cond = string( input, 0, pose-input );
             input = pose+2;
@@ -113,7 +113,7 @@ TPrintData::TPrintData(const char *sd_key,
           if( !getFormat( input ) )
           {  string str_err = "Wrong or missing format: \n";
                str_err += input;
-            Error( key_format.c_str(), str_err );
+            Error( key_format, str_err );
           }   // added by KD 17.06.2002 
           getData();
           skipSpace();
@@ -296,7 +296,7 @@ TPrintData::getToken( int& ii, int& jj )
         if( *input != ']')
         {  string str_err = "Invalid format: \n";
                str_err += input;
-            Error( key_format.c_str(), str_err );
+            Error( key_format, str_err );
         }
         input++;
       }
@@ -316,7 +316,7 @@ TPrintData::getToken( int& ii, int& jj )
            str_err += str;
        if( i==0 )
            str_err += input;
-       Error( key_format.c_str(), str_err.c_str() );
+       Error( key_format, str_err );
     }
     input += i;
  }
@@ -335,7 +335,7 @@ TPrintData::getToken( int& ii, int& jj )
            str_err += str;
        if( i==0 )
            str_err += input;
-       Error( key_format.c_str(), str_err.c_str() );
+       Error( key_format, str_err );
     }
     input += i;
     skipSpace();
@@ -363,7 +363,7 @@ TPrintData::getToken( int& ii, int& jj )
      if( *input != ']')
      {  string str_err = "Invalid format: \n";
            str_err += input;
-       Error( key_format.c_str(), str_err );
+       Error( key_format, str_err );
      }
     input++;
    }
@@ -418,7 +418,7 @@ TPrintData::getData( )
  {
    string str = "Error in format:\n";
            str+= input;
-   Error( key_format.c_str(), str);
+   Error( key_format, str);
  }
  if( j < 0  )
  { j=i; i=0; }

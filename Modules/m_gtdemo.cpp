@@ -668,7 +668,7 @@ void TGtDemo::gd_text_analyze()
                "E91MSTran: Error in analyzing the GtDemo sampling script: " );
         /*  if( iRet )
                goto AGAIN;  */
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 
@@ -686,7 +686,7 @@ void TGtDemo::gd_EF_calc()
         /*bool   iRet = */
         CheckEqText(  erscan,
     "E92MSTran: Error in analyzing the GtDemo script for empirical data: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
     // calc equations
     for( gdp->iE = 0; gdp->iE< gdp->dimEF[0]; gdp->iE++ )

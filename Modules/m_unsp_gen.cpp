@@ -563,7 +563,7 @@ void TUnSpace::text_analyze( int nObj)
                "E91MSTran: Error in translation of TUnSpace math script: " );
         /*  if( iRet )
                goto AGAIN;  */
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 

@@ -368,12 +368,12 @@ bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
     case BAD_GEM_AIA:
     case BAD_GEM_SIA:  // unpack dbr data
         /*time =*/ readMultiServer( NodeStatusCH, msg_return );
-        Error( (msg_return.end()-1)->c_str(), msg_return.back().c_str() );
+        Error( *(msg_return.end()-1), msg_return.back() );
         break;
     case ERR_GEM_AIA:
     case ERR_GEM_SIA:
     case T_ERROR_GEM:
-        Error( (msg_return.end()-1)->c_str(), msg_return.back().c_str() );
+        Error( *(msg_return.end()-1), msg_return.back() );
     }
     return false;
 }

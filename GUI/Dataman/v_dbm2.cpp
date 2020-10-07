@@ -221,7 +221,7 @@ void TDataBase::getndx( uint nF )
                 aFile[nF]->Name(), NDX_EXT );
     f.open( Path.c_str(), RDONLY_B);
     if( !f.good() )
-      Error(  Path.c_str(),"Index file open error");
+      Error(  Path, "Index file open error");
     //   f.read( (char *)&dh, sizeof(VDBhead) );
     dh.read (f);
     ind.GetKeyList_i( nF, dh.nRec, f);
@@ -1116,8 +1116,7 @@ bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
             if( !vfQuestion( nullptr, aFlKeywd[i].c_str(),
              "This database file was not found in the project or default database.\n"
             		" Continue without this file (Y) or cancel(N)?" ))
-               Error( aFlKeywd[i].c_str(),
-            		"Please, provide this database file and try opening the project again!");
+               Error( aFlKeywd[i], "Please, provide this database file and try opening the project again!");
             allOpend = false;
         }    
     }

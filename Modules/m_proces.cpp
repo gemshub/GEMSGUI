@@ -1069,7 +1069,7 @@ void TProcess::pe_text_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
    "E93MSTran: Error in analyzing Process simulation control script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 
     try
@@ -1088,7 +1088,7 @@ void TProcess::pe_text_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
   "E94MSTran: Error in analyzing Process data sampling script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 

@@ -297,7 +297,7 @@ void Formuan::getReal( double& valReal, string& cur)
        cur = cur.substr(ti);
 
     if( !sscanf( val.c_str(), " %lg", &valReal )) //%lg - double
-        Error( cur.c_str(), "Real number scan error");
+        Error( cur, "Real number scan error");
 }
 
 // get <valence>   ::= |-<integer>| \ |+<integer>| \ |<integer>|
@@ -313,14 +313,14 @@ void Formuan::scanValence( int& val, string& cur)
 
     cur = cur.substr(1);
     if(cur.empty())
-        Error( cur.c_str(),  "Term valence scan error");
+        Error( cur,  "Term valence scan error");
 
     size_t ti = cur.find_first_of(B_VALENT);
     if( ti >= 3 || ti==string::npos )
-        Error( cur.c_str(),  "Term valence scan error");
+        Error( cur,  "Term valence scan error");
 
     if( !sscanf( cur.c_str(), " %d", &val ))
-        Error( cur.c_str(), "Integer number scan error");
+        Error( cur, "Integer number scan error");
     cur = cur.substr(ti+1);
 }
 
@@ -337,11 +337,11 @@ void Formuan::scanIsotope( string& isotop, string& cur)
 
     cur = cur.substr(1);
     if(cur.empty())
-        Error( cur.c_str(),  "Term isotope scan error");
+        Error( cur,  "Term isotope scan error");
 
     size_t ti = cur.find_first_of(B_ISOTOPE);
     if( ti >= MAXICNAME || ti==string::npos )
-        Error( cur.c_str(),  "Term isotope scan error");
+        Error( cur,  "Term isotope scan error");
 
     isotop = string( cur, 0, ti );  // test please
     cur = cur.substr(ti+1);
@@ -357,7 +357,7 @@ void Formuan::scanICsymb( string& icName, string& cur)
         return;
 
     if( !iscapl( cur[0] ))
-        Error( cur.c_str(), " E30FPrun: A symbol of element expected here!");
+        Error( cur, " E30FPrun: A symbol of element expected here!");
 
     for( i=1; i<=MAXICNAME+2; i++ )
        if( !islowl( cur[i]))
@@ -587,7 +587,7 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
             msg += "\n in formula in DComp/ReacDC record: \n";
             msg += std::string( key, 0, DC_RKLEN);
 
-            Error( "E37FPrun: Invalid symbol ", msg.c_str() );
+            Error( "E37FPrun: Invalid symbol ", msg );
         }
     }
 }
