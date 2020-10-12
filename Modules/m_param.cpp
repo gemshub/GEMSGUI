@@ -22,7 +22,6 @@
 #include <unistd.h>
 #endif
 
-//#include <cmath>
 #include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_syseq.h"
@@ -1085,41 +1084,11 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /
   return multi->GetPM()->t_elap_sec;
 }
 
-void TProfil::outMulti( GemDataStream& ff, std::string& /*path*/  )
-{
-    ff.writeArray( &pa.p.PC, 10 );
-    ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff/*, path*/ );
-}
-
-// outpu MULTI to txt format
-// brief_mode - Do not write data items that contain only default values
-// with_comments -Write files with comments for all data entries ( in text mode)
-// addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
-void TProfil::outMulti( std::string& path, bool addMui, bool with_comments, bool brief_mode )
-{
-
-    fstream ff( path.c_str(), ios::out );
-    ErrorIf( !ff.good() , path, "Fileopen error");
-
-    multi->to_text_file_gemipm( ff, addMui, with_comments, brief_mode );
-//    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, false ); // workaround 18.12.14 DK (built-in kinetics) - reverted
-}
-
 void TProfil::outMultiTxt( const char *path, bool append  )
 {
     multi->to_text_file( path, append );
 }
 
-
-//// Reading structure MULTI (GEM IPM work structure)
-//void TProfil::readMulti( GemDataStream& ff,  DATACH* )
-//{
-
-//      ff.readArray( &pa.p.PC, 10 );
-//      ff.readArray( &pa.p.DG, 28 );
-//      multi->from_file( ff );
-//}
 
 
 

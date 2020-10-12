@@ -25,9 +25,9 @@
 #include "GemsMainWindow.h"
 #include "GEMS3K/num_methods.h"
 #include "m_gem2mt.h"
-#include "GEMS3K/io_arrays.h"
+#include "GEMS3K/io_template.h"
 
-extern outField DataBR_fields[58];
+extern io_formats::outField DataBR_fields[58];
 
 void GEM2MTWizard::languageChange()
 {

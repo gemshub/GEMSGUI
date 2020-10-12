@@ -20,7 +20,6 @@
 #include <cmath>
 #include <cstdio>
 #include <iomanip>
-#include "GEMS3K/io_arrays.h"
 
 
 #ifndef IPMGEMPLUGIN

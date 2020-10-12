@@ -70,28 +70,6 @@ u_getline(istream& is, string& str, char delim)
     return is;
 }
 
-//// read string as: "<characters>",
-//istream&
-//f_getline(istream& is, std::string& str, char delim)
-//{
-//    char ch;
-//    is.get(ch);
-//    str="";
-
-//    while( is.good() && ( ch==' ' || ch=='\n' || ch== '\t') )
-//        is.get(ch);
-//    if(ch == '\"')
-//        is.get(ch);
-//    while( is.good() &&  ch!=delim && ch!= '\"' )
-//    {
-//        str += ch;
-//        is.get(ch);
-//    }
-//    while( !is.eof() &&  ch!=delim )
-//            is.get(ch);
-
-//   return is;
-//}
 
 // The gcvt() function converts number to a minimal length NULL terminated
 // ASCII string and stores the result in buf.  It produces ndigit signifi‐

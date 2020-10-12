@@ -28,6 +28,7 @@
 #include "m_gem2mt.h"
 #include "visor.h"
 #include "m_syseq.h"
+#include "GEMS3K/io_keyvalue.h"
 
 TGEM2MT* TGEM2MT::pm;
 
@@ -1148,7 +1149,8 @@ void TGEM2MT::RecordPrint( const char* key )
             //mtp->PsScom=S_OFF;
             fstream ff( filename.c_str(), ios::out );
 	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
-            to_text_file( ff,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF, filename.c_str() );
+            io_formats::KeyValueWrite out_format( ff );
+            to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
 
 		}
     na = new TNodeArrayGUI( mtp->nC, TMulti::sm );

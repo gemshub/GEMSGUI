@@ -23,7 +23,10 @@
 #include "m_param.h"
 #include "nodearray_gui.h"
 #include "particlearray.h"
+
+namespace  io_formats {
 class TRWArrays;
+}
 
 #ifndef IPMGEMPLUGIN
 
@@ -520,9 +523,11 @@ public:
 #endif
 
     // for separate
-    void checkAlws(TRWArrays&  prar1, TRWArrays&  prar);
-    void to_text_file( fstream& ff, bool with_comments, bool brief_mode, const char* path );
-    void from_text_file(fstream& ff);
+    void checkAlws(io_formats::TRWArrays&  prar1, io_formats::TRWArrays&  prar) const;
+    template<typename TIO>
+    void to_text_file( TIO& out_format, bool with_comments, bool brief_mode ) const;
+    template<typename TIO>
+    void from_text_file(TIO& ff);
 
     bool userCancel;
     bool stepWise;
