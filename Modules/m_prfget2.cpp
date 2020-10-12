@@ -1187,7 +1187,7 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
         //std::cout << "GEM3k output: " <<  filepath.c_str() << " " << message.c_str() << point << std::endl;
         return false;
     };
-    na->genGEMS3KInputFiles(  filepath, messageF, 1, false, brief_mode, false, false, add_mui );
+    na->genGEMS3KInputFiles(  filepath, messageF, 1, global_type_f, brief_mode, false, false, add_mui );
 }
 
 void TProfil::System2GEMS3K( const std::string key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui )

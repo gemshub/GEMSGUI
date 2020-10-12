@@ -1110,7 +1110,7 @@ void TGEM2MT::savePoint( )
           " or cancel the RMT task (No)?" ) )
        {
          auto path = na->PutGEM2MTFiles( window(), mtp->nC,
-           mtp->PsSdat==S_OFF, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
+           mtp->PsSdat, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
          // save GEM2MT recort

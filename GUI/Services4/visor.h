@@ -24,6 +24,12 @@
 class QWidget;
 //class ZMQClient;
 
+#ifndef USE_OLD_KV_IO_FILES
+    const int global_type_f = 2;  // json
+#else
+    const int global_type_f = 0;  // key_value
+#endif
+
 class TVisor
 {
     friend class TVisorImp;

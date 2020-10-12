@@ -29,6 +29,7 @@
 #include "t_print.h"
 #include "stepwise.h"
 #include "GEMS3K/num_methods.h"
+#include "GEMS3K/gems3k_impex.h"
 #include "nodearray_gui.h"
 
 double ff_proc( double x, double );
@@ -1676,7 +1677,7 @@ const char* TProcess::GetHtml()
    return GM_PROCES_HTML;
 }
 
-void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
+void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
 {
     // set up Node Array
     std::unique_ptr<TNodeArrayGUI> na;
@@ -1699,7 +1700,8 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
               //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
               return false;
         };
-    auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, false, brief_mode, false, false, add_mui );
+
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, global_type_f, brief_mode, false, false, add_mui );
 
     // output dbr keys
     if( pep->stl == nullptr )
@@ -1709,7 +1711,8 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
     std::string name;
     std::string newname;
     u_splitpath( dbr_list, dir, name, newname );
-    ofstream fout2(dbr_list.c_str(), ios::app);
+    ofstream fout2( dbr_list, ios::app);
+    auto f_ext = GEMS3KImpexGenerator::ext( static_cast<GEMS3KImpexGenerator::FileIOModes>(global_type_f) );
 
     for( int ii=0; ii<pep->NR1 ; ++ii )
     {
@@ -1726,12 +1729,11 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
            KeyToName(name);
            newname = dir+ "/";
            newname += name;  // could be convert in sewrvice
-           newname += ".";
-           newname += dat_ext;
-           fout2 << "," << " \"" << name.c_str() << "." << dat_ext << "\"";
+           newname += "."+f_ext;
+           fout2 << "," << " \"" << name << "." << f_ext << "\"";
            // save to dataBR internal node  and save to file
            //TMulti::sm->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
-           na->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
+           na->GEMS3k_write_dbr( newname.c_str(), global_type_f, false, brief_mode );
        }
     }
 

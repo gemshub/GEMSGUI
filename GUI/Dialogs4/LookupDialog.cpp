@@ -328,9 +328,12 @@ void   LookupDialog::getFlags( char flgs[6] )
        flgs[0] = '+';
     else flgs[0] = '-';
 
-   if( chMode->isChecked() )
-       flgs[1] = '+';
-    else flgs[1] = '-';
+   if( rbJson->isChecked() )
+       flgs[1] = 'j';
+   else if( rbBinary->isChecked() )
+       flgs[1] = 'b';
+   else
+       flgs[1] = 't';
    
    if( chAll->isChecked() )
        flgs[2] = '+';

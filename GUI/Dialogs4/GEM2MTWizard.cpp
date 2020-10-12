@@ -281,9 +281,14 @@ pTaustep->setValue(Tau[2]);
         if( flgs[15] != '-' )
           chSelect->setChecked( true );
         else chSelect->setChecked( false );
-        if( flgs[23] != '-' )
-          chMode->setChecked( false );
-        else chMode->setChecked( true );
+
+        if( flgs[23] == 'j' )
+          rbJson->setChecked( true );
+        else if( flgs[23] == 'b' || flgs[23] == '-' )
+            rbBinary->setChecked( true );
+        else
+           rbKeyVal->setChecked( true );
+
         if( flgs[24] != '-' )
           chAll->setChecked( true );
         else chAll->setChecked( false );
@@ -590,9 +595,14 @@ if( c_PsSmode->isChecked() )
  if( chSelect->isChecked() )
      flgs[15] = '+';
  else flgs[15] = '-';
- if( chMode->isChecked() )
-     flgs[23] = '-';
- else flgs[23] = '+';
+
+ if( rbJson->isChecked() )
+     flgs[23] = 'j';
+ else if( rbBinary->isChecked() )
+     flgs[23] = 'b';
+ else
+     flgs[23] = 't';
+
  if( chAll->isChecked() )
      flgs[24] = '+';
  else flgs[24] = '-';

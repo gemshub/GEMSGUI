@@ -708,7 +708,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 #endif
 
 // na->CopyWorkNodeFromArray( 0, mtp->nC,  na->pNodT1() );
-// na->GEM_write_dbr( "node0000.dat",  false, false );
+// na->GEM_write_dbr( "node0000.dat",  0, false );
 
     // In this mode, no start calculation of equilibria in all nodes!
     // Index of aq phase in DBR
@@ -763,7 +763,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 
 //sprintf(buf, "node_0000_wave_0000_noeq_dbr.dat" );
 //na->CopyWorkNodeFromArray( 0, mtp->nC,  na->pNodT1() );
-//na->GEM_write_dbr( buf, false, false );
+//na->GEM_write_dbr( buf, 0, false );
 
   //  This loop contains the overall transport time step (wave)
   do {
@@ -822,7 +822,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 
 //sprintf(buf, "node_%4.4d_wave_%4.4d_in_dbr.dat", p, mtp->ct );
 //na->CopyWorkNodeFromArray( p, mtp->nC,  na->pNodT1() );
-//na->GEM_write_dbr( buf,  false, false);
+//na->GEM_write_dbr( buf,  0, false);
 
          // calculate equilibrium state in q-th box
          node1_Tm( p ) = mtp->cTau;
@@ -835,7 +835,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 //             break;
 //sprintf(buf, "node_%4.4d_wave_%4.4d_out_dbr.dat", p, mtp->ct );
 //na->CopyWorkNodeFromArray( p, mtp->nC,  na->pNodT1() );
-//na->GEM_write_dbr( buf,  false, false);
+//na->GEM_write_dbr( buf,  0, false);
          // Calculation of current box reactive IC masses in kg
          BoxMasses( p );
          // Calculation of MGP bulk compositions in boxes (in moles of ICs)

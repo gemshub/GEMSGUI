@@ -80,8 +80,6 @@ protected:
                              TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH  );
 
 
-    // Virtual function for interaction with TNodeArray class
-    //virtual void  setNodeArray( std::string& , long int , bool ) { }
     void init_into_gems3k() override {}
 
     double readMultiServer(long NodeStatusCH, const std::vector<std::string> &recv_msg);

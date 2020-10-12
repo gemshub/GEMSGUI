@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>530</height>
+    <width>580</width>
+    <height>605</height>
    </rect>
   </property>
   <property name="font">
@@ -24,7 +24,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QGridLayout" name="gridLayout_5">
+  <layout class="QGridLayout" name="gridLayout_6">
    <item row="0" column="0" colspan="5">
     <widget class="QStackedWidget" name="stackW">
      <property name="currentIndex">
@@ -37,29 +37,22 @@
          <property name="title">
           <string/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="chSelect">
             <property name="text">
              <string>Select ICs, DCs and phases to be exchanged via DBR file (take all, if unchecked)</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QCheckBox" name="chMode">
-            <property name="text">
-             <string>Write IPM, DCH and DBR files in binary mode (text mode, if unchecked)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
+          <item row="1" column="0" colspan="3">
            <widget class="QCheckBox" name="chAll">
             <property name="text">
              <string>Do not write data items that contain only default values</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="2" column="0" colspan="3">
            <widget class="QCheckBox" name="chComment">
             <property name="text">
              <string>Write files with comments for all data entries (in text mode)</string>
@@ -69,13 +62,44 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="3" column="0" colspan="3">
            <widget class="QCheckBox" name="chNoNodearray">
             <property name="text">
              <string>Include node transport properties into DBR file</string>
             </property>
             <property name="checked">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="3">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Write IPM, DCH and DBR files in mode: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QRadioButton" name="rbJson">
+            <property name="text">
+             <string>Json</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QRadioButton" name="rbKeyVal">
+            <property name="text">
+             <string>KeyValue</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QRadioButton" name="rbBinary">
+            <property name="text">
+             <string>Binary</string>
             </property>
            </widget>
           </item>
@@ -397,6 +421,7 @@
     <widget class="QPushButton" name="buttonHelp">
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -426,6 +451,7 @@
     <widget class="QPushButton" name="buttonBack">
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -439,6 +465,7 @@
     <widget class="QPushButton" name="buttonOK">
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -452,6 +479,7 @@
     <widget class="QPushButton" name="buttonCancel">
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>

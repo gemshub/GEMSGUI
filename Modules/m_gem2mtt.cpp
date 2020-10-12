@@ -176,7 +176,7 @@ void  TGEM2MT::NewNodeArray()
         return false;
     };
 
-    auto dbr_list =  na->genGEMS3KInputFiles(  "Te_start/Test-dat.lst", messageF, mtp->nC, false, false, false, false, false );
+    auto dbr_list =  na->genGEMS3KInputFiles(  "Te_start/Test-dat.lst", messageF, mtp->nC, 0, false, false, false, false );
     */
 }
 
@@ -331,7 +331,7 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
        return false;
    };
 
-   auto dbr_list =  na->genGEMS3KInputFiles(  "Te_point/Test-dat.lst", messageF, mtp->nC, false, false, false, true, false );
+   auto dbr_list =  na->genGEMS3KInputFiles(  "Te_point/Test-dat.lst", messageF, mtp->nC, 0, false, false, true, false );
    */
 
 #ifdef useOMP
