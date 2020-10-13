@@ -1291,6 +1291,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
             continue;
 
         TProcess::pm->RecInput( aList[ii].c_str() );
+        TProcess::pm->check_input( aList[ii].c_str(), 0 );
 
         // generate name and create directory
         process_name = rt[RT_PROCES]->PackKey();
