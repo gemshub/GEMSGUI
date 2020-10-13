@@ -869,7 +869,7 @@ bool TGEM2MT::CalcSeqReacModel( char mode )
 #ifndef IPMGEMPLUGIN
        vfMessage(window(), xcpt.title, xcpt.mess);
 #else
-       cerr << xcpt.title.c_str() << "  " <<  xcpt.mess.c_str() << endl;
+       std::cerr << xcpt.title.c_str() << "  " <<  xcpt.mess.c_str() << std::endl;
 #endif
        return 1;
   }
@@ -940,7 +940,7 @@ bool TGEM2MT::CalcBoxFluxModel( char /*mode*/ )
 #ifndef IPMGEMPLUGIN
        vfMessage(window(), xcpt.title, xcpt.mess);
 #else
-       cerr << xcpt.title.c_str() << "  " <<  xcpt.mess.c_str() << endl;
+       std::cerr << xcpt.title.c_str() << "  " <<  xcpt.mess.c_str() << std::endl;
 #endif
        return 1;
    }
@@ -1039,19 +1039,19 @@ void TGEM2MT::MIDEX( long int j, double t, double h )
         { // 
             v2 = fabs( mtp->tt[ i ][ 0 ] );
             v1 = fabs( x[ i ] );
-            v1 = max( v1, v2 );
-            v2 = max( 1.e-6, UROUND / epsd4 );
-            scal = max( v1, v2 );
+            v1 = std::max( v1, v2 );
+            v2 = std::max( 1.e-6, UROUND / epsd4 );
+            scal = std::max( v1, v2 );
             err += pow( (mtp->tt[ i ][ 0 ] - mtp->tt[ i ][ 1 ] ) / scal, 2. );
         }
         err = pow( err / (double)n, .5 );
         //
         expo = 1.e0 / (double)( 2 * ( j + 1 )-1 );
         facmin = pow( FAC1, expo );
-        v1 = max( facmin, pow( err/epsd4, expo ) / SAFE2 );
-        fac = min( FAC2/facmin, v1 );
+        v1 = std::max( facmin, pow( err/epsd4, expo ) / SAFE2 );
+        fac = std::min( FAC2/facmin, v1 );
         fac= 1.e0 / fac;
-        hh[ j ] = min( h * fac, MAXSTEP );
+        hh[ j ] = std::min( h * fac, MAXSTEP );
         w[ j ] = a1[ j ] / hh[ j ];
 
 VEL:
@@ -1091,12 +1091,12 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
     h = step;
     epsd4 = eps * SAFE1;
     v1 = -log10(eps)*.6+1.5;
-    v1 = min( 8.0, v1 );
-    k = (long int)max( 3.0, v1 ) - 1;
+    v1 = std::min( 8.0, v1 );
+    k = std::max( 3.0, v1 ) - 1;
     t = t_begin;
     h1 = t_end-t;
-    v1 = min( MAXSTEP, h1/2. );
-    h = min( h, v1 );
+    v1 = std::min( MAXSTEP, h1/2. );
+    h = std::min( h, v1 );
     //BoxEqStatesUpdate( 0, k, t, h ); // 14/12/2007 ????? may be done before in calc
     err = w[ 0 ] = 0.0;
     reject = last = 0;   // false
@@ -1104,8 +1104,8 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
     //
     while( fabs( h1 ) >= UROUND )
     {
-        v1 = min( h1, MAXSTEP);
-        h = min( h, v1 );
+        v1 = std::min( h1, MAXSTEP);
+        h = std::min( h, v1 );
         if( h >= ( h1 - UROUND ) )  last = 1;      // true
         Solut(  x, dx, t );
         nfcn++;
@@ -1167,7 +1167,7 @@ l60:
             kopt = kc;
             if( w[kc-1] < w[kc]*FAC3 ) kopt = kc - 1;
             if( w[kc] < w[kc-1]*FAC3 )
-                kopt = min( (kc+1) , (KM-1) );
+                kopt = std::min( (kc+1) , (KM-1) );
         }
         else
         {
@@ -1175,13 +1175,13 @@ l60:
             if( kc > 2 && w[kc-2] < w[kc-1]*FAC3 )
                 kopt = kc - 2;
             if( w[kc] < w[kopt]*FAC3 )
-                kopt = min( kc, (KM-1) );
+                kopt = std::min( kc, (KM-1) );
         }
         // 
         if( reject )
         {
-            k = min( kopt, kc );
-            h = min( h, hh[ k ] );
+            k = std::min( kopt, kc );
+            h = std::min( h, hh[ k ] );
             reject = 0;           // false
         }
         else
@@ -1199,7 +1199,7 @@ l60:
     step = h;
     return;
 l100:
-    k = min( k, kc );
+    k = std::min( k, kc );
     if( k > 1 && ( w[k-1] < w[k] * FAC3 ) )
         k--;
     nrejct++;

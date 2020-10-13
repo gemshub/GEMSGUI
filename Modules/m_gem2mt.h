@@ -20,8 +20,6 @@
 #define _m_gem2mt_h_
 
 
-#include "m_param.h"
-#include "nodearray_gui.h"
 #include "particlearray.h"
 
 namespace  io_formats {
@@ -30,6 +28,8 @@ class TRWArrays;
 
 #ifndef IPMGEMPLUGIN
 
+#include "m_param.h"
+#include "nodearray_gui.h"
 #include "v_ipnc.h"
 #include "graph_window.h"
 
@@ -459,7 +459,7 @@ public:
 
     GEM2MT *mtp;
 
-    TGEM2MT( uint nrt );
+    explicit TGEM2MT( uint nrt );
 
 #ifndef IPMGEMPLUGIN
     ~TGEM2MT()
