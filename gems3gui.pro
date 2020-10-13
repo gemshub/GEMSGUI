@@ -12,7 +12,7 @@ DEFINES  += NO_JSONIO
 #DEFINES  += USE_OLD_KV_IO_FILES
 
 CONFIG+=sdk_no_version_check
-CONFIG += c++14
+CONFIG += c++17
 CONFIG += warn_on
 #CONFIG += warn_off
 #CONFIG += help

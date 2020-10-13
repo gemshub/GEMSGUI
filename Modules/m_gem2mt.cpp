@@ -29,6 +29,8 @@
 #include "visor.h"
 #include "m_syseq.h"
 #include "GEMS3K/io_keyvalue.h"
+#include "GEMS3K/io_nlohmann.h"
+#include "GEMS3K/gems3k_impex.h"
 
 TGEM2MT* TGEM2MT::pm;
 
@@ -1129,43 +1131,64 @@ const char* TGEM2MT::GetHtml()
 void TGEM2MT::RecordPrint( const char* key )
 {
     int res = vfQuestion3(window(), "Question",
-                    "Will you produce input files for standalone TGEM2MT (Yes) or use print script (No)?",
-		       "Yes", "No", "Cancel");
-	if( res == VF3_3 )
-	    return;
+                          "Will you produce input files for standalone TGEM2MT (Yes) or use print script (No)?",
+                          "Yes", "No", "Cancel");
+    if( res == VF3_3 )
+        return;
 
-	if( res == VF3_1 )
-	{
-        std::string filename = "GEM2MT-task.";
-                filename += dat_ext;
+    if( res == VF3_1 )
+    {
+        GEMS3KImpexGenerator::FileIOModes type_f=GEMS3KImpexGenerator::f_key_value;
+        switch( mtp->PsSdat )
+        {
+        case '-':
+        case 'b': type_f = GEMS3KImpexGenerator::f_binary; break;
+        case 'j': type_f = GEMS3KImpexGenerator::f_json; break;
+        }
+        auto f_ext = GEMS3KImpexGenerator::ext( type_f );
 
-		if( vfChooseFileSave(window(), filename,
-                   "Please, enter the TGEM2MT work structure file name", dat_filt ) )
-		{
-		    if( !access(filename.c_str(), 0 ) ) //file exists
-		        if( !vfQuestion( window(), filename.c_str(),
-		        		"This file exists! Overwrite?") )
-                   return;
+        std::string filename = "GEM2MT-task." + f_ext;
+        if( vfChooseFileSave(window(), filename,
+                             "Please, enter the TGEM2MT work structure file name", std::string("*."+f_ext).c_str() ) )
+        {
+            if( !access(filename.c_str(), 0 ) ) //file exists
+                if( !vfQuestion( window(), filename.c_str(), "This file exists! Overwrite?") )
+                    return;
             //mtp->PsScom=S_OFF;
-            fstream ff( filename.c_str(), ios::out );
-	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
-            io_formats::KeyValueWrite out_format( ff );
-            to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
-
-		}
-    na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
-    mtp->gStat = GS_GOING;
-    mt_reset();
-    Bn_Calc();
-    mtp->gStat = GS_DONE;
-    mtp->iStat = AS_READY;
-    outMulti();
-    mtp->iStat = AS_DONE;
-    delete na;
-    na = nullptr;
-	}
-	else
-	     TCModule::RecordPrint( key );
+            fstream ff( filename, ios::out );
+            ErrorIf( !ff.good() , filename, "Fileopen error");
+            switch( type_f )
+            {
+            case GEMS3KImpexGenerator::f_json:
+#ifndef USE_OLD_KV_IO_FILES
+            {
+                io_formats::NlohmannJsonWrite out_format( ff );
+                to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
+            }
+                break;
+#endif
+            case GEMS3KImpexGenerator::f_binary:
+            case GEMS3KImpexGenerator::f_key_value:
+            {
+                io_formats::KeyValueWrite out_format( ff );
+                to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
+            }
+                break;
+            }
+        }
+        na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
+        mtp->gStat = GS_GOING;
+        mt_reset();
+        Bn_Calc();
+        mtp->gStat = GS_DONE;
+        mtp->iStat = AS_READY;
+        outMulti();
+        mtp->iStat = AS_DONE;
+        delete na;
+        na = nullptr;
+    }
+    else
+        TCModule::RecordPrint( key );
 }
 
 // insert changes in Project to GEM2MT
