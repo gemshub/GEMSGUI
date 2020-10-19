@@ -9,7 +9,7 @@ DEFINES         += NODEARRAYLEVEL
 #DEFINES += NOPARTICLEARRAY
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
-#DEFINES  += USE_OLD_KV_IO_FILES
+#DEFINES += USE_OLD_NLOHMANJSON
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++17
@@ -44,8 +44,9 @@ QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
 QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
    -Wmissing-declarations -Winline -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral \
    -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
-   -Wfloat-equal -pedantic -ansi
+   -Wfloat-equal -Wno-pedantic -ansi
 
+#QMAKE_CXXFLAGS += -Wall -Wno-ignored-attributes -Wno-pedantic -Wno-variadic-macros -Wno-deprecated
 }
 
 macx-g++ {

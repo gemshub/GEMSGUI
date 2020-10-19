@@ -29,8 +29,8 @@
 #include "visor.h"
 #include "m_syseq.h"
 #include "GEMS3K/io_keyvalue.h"
-#include "GEMS3K/io_nlohmann.h"
-#include "GEMS3K/gems3k_impex.h"
+#include "GEMS3K/io_simdjson.h"
+//#include "GEMS3K/io_nlohmann.h"
 
 TGEM2MT* TGEM2MT::pm;
 
@@ -1138,14 +1138,14 @@ void TGEM2MT::RecordPrint( const char* key )
 
     if( res == VF3_1 )
     {
-        GEMS3KImpexGenerator::FileIOModes type_f=GEMS3KImpexGenerator::f_key_value;
+        GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
         switch( mtp->PsSdat )
         {
         case '-':
-        case 'b': type_f = GEMS3KImpexGenerator::f_binary; break;
-        case 'j': type_f = GEMS3KImpexGenerator::f_json; break;
+        case 'b': type_f = GEMS3KGenerator::f_binary; break;
+        case 'j': type_f = GEMS3KGenerator::f_json; break;
         }
-        auto f_ext = GEMS3KImpexGenerator::ext( type_f );
+        auto f_ext = GEMS3KGenerator::ext( type_f );
 
         std::string filename = "GEM2MT-task." + f_ext;
         if( vfChooseFileSave(window(), filename,
@@ -1159,16 +1159,15 @@ void TGEM2MT::RecordPrint( const char* key )
             ErrorIf( !ff.good() , filename, "Fileopen error");
             switch( type_f )
             {
-            case GEMS3KImpexGenerator::f_json:
-#ifndef USE_OLD_KV_IO_FILES
+            case GEMS3KGenerator::f_nlohmanjson:
+            case GEMS3KGenerator::f_json:
             {
-                io_formats::NlohmannJsonWrite out_format( ff );
+                io_formats::SimdJsonWrite out_format( ff,  mtp->PsScom!=S_OFF );
                 to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
             }
                 break;
-#endif
-            case GEMS3KImpexGenerator::f_binary:
-            case GEMS3KImpexGenerator::f_key_value:
+            case GEMS3KGenerator::f_binary:
+            case GEMS3KGenerator::f_key_value:
             {
                 io_formats::KeyValueWrite out_format( ff );
                 to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );

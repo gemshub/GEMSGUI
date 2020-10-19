@@ -1701,7 +1701,7 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
               return false;
         };
 
-    auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, global_type_f, brief_mode, false, false, add_mui );
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, GEMS3KGenerator::default_type_f, brief_mode, false, false, add_mui );
 
     // output dbr keys
     if( pep->stl == nullptr )
@@ -1712,8 +1712,7 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
     std::string newname;
     u_splitpath( dbr_list, dir, name, newname );
     ofstream fout2( dbr_list, ios::app);
-    auto f_ext = GEMS3KImpexGenerator::ext( static_cast<GEMS3KImpexGenerator::FileIOModes>(global_type_f) );
-
+    auto f_ext = GEMS3KGenerator::default_ext();
     for( int ii=0; ii<pep->NR1 ; ++ii )
     {
         name = std::string( pep->stl[ii], 0, EQ_RKLEN );
@@ -1733,7 +1732,7 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
            fout2 << "," << " \"" << name << "." << f_ext << "\"";
            // save to dataBR internal node  and save to file
            //TMulti::sm->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
-           na->GEMS3k_write_dbr( newname.c_str(), global_type_f, false, brief_mode );
+           na->GEMS3k_write_dbr( newname.c_str(), GEMS3KGenerator::default_type_f, false, brief_mode );
        }
     }
 
