@@ -4,7 +4,6 @@ TEMPLATE	= app
 TARGET		= gems3
 #VERSION         = 3.6.0
 
-#DEFINES         += Use_mt_mode
 DEFINES         += NODEARRAYLEVEL
 #DEFINES += NOPARTICLEARRAY
 #DEFINES         += NOMUPNONLOGTERM
