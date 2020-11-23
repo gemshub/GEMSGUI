@@ -215,7 +215,7 @@ PageInfo::load( TConfig& cnf )
 
             ePlaceMode place = ePlaceMode(mode[1]);
             eShowType showT = eShowType(mode[3]);
-            aFieldInfo.push_back( std::make_shared<FieldInfo>(*this, rO, ind, type, npos,
+            aFieldInfo.push_back( std::make_shared<FieldInfo>( rO, ind, type, npos,
                                          label, place, edit, showT, maxM, maxN));
         }
         obj = cnf.getNext();
@@ -261,7 +261,7 @@ PageInfo::fromDAT(istream & is)
     int n;
     is.read((char *) &n, sizeof n);
     for (int ii = 0; ii < n; ii++)
-        aFieldInfo.push_back( std::make_shared<FieldInfo>(*this, is));
+        aFieldInfo.push_back( std::make_shared<FieldInfo>(is));
 
     is.read(sg, sizeof sg);
     if (sg[0] != PSigEND[0] || sg[1] != PSigEND[1])
@@ -287,20 +287,15 @@ PageInfo::GetType(const string & s)
 }
 
 
-
-FieldInfo::FieldInfo(const PageInfo & pi, TObject & rO, int anO,
+FieldInfo::FieldInfo( TObject & rO, int anO,
                      eFieldType fT, int np, bool lb,
                      ePlaceMode pl, eEdit e, eShowType sT, int w, int h):
-        rPageInfo(pi),
-        /*pField(0),*/ pObj(&rO), nO(anO),
-        fType(fT), npos(np),
+        pObj(&rO), nO(anO), fType(fT), npos(np),
         label(lb), place(pl), edit(e), showType(sT), maxN(h), maxM(w)
-{
-}
+{}
 
 FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
            ePlaceMode pl, eEdit e, eShowType sT, int w, int h):
-        rPageInfo(*aWinInfo[0]->aPageInfo[0]), // for internal using in TreeList
         pObj( anO>=0 ?  aObj[anO].get(): nullptr ), nO(anO),
         fType(fT), npos(np),
         label(lb), place(pl), edit(e), showType(sT), maxN(h), maxM(w)
@@ -308,8 +303,7 @@ FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
 }
 
 
-FieldInfo::FieldInfo(const PageInfo & pi, istream & is):
-        rPageInfo(pi)/*, pField(0)*/
+FieldInfo::FieldInfo( istream & is)
 {
     fromDAT(is);
 }

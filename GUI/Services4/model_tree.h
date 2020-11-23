@@ -91,7 +91,7 @@ public:
 	 
   void setupModelData();
 
-  FieldInfo getInfo( const QModelIndex& index, int& iN, int& iM/*,
+  const FieldInfo& getInfo( const QModelIndex& index, int& iN, int& iM/*,
              Selection* sel=0, int to_calc = 0*/) const
   {
     TreeLine *parentItem = lineFromIndex( index );

@@ -291,8 +291,8 @@ TVal<T>::SetString(const char* s, int ndx)
     }
 
     T v;
-    auto sv = std::make_unique<char[]>(ss.length()+3);
-    //auto sv = std::make_shared<char[]>( ss.length()+3 );
+    //auto sv = std::make_unique<char[]>(ss.length()+3);
+    auto sv = std::make_shared<char[]>( ss.length()+3 );
     if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.get() ) != 1 )
         return false;
 

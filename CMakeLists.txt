@@ -46,17 +46,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set the list of compiler flags for GNU compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
-    add_compile_options(-std=c++11 -Wall -Wno-pedantic -Wno-variadic-macros -Wno-deprecated)
+    add_compile_options(-std=c++17 -Wall -Wno-pedantic -Wno-variadic-macros -Wno-deprecated)
 endif()
 
 # Set the list of compiler flags for Clang compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-    add_compile_options(-std=c++11 -Wall -Wno-ignored-attributes -Wno-pedantic -Wno-variadic-macros -Wno-deprecated)
+    add_compile_options(-std=c++17 -Wall -Wno-ignored-attributes -Wno-pedantic -Wno-variadic-macros -Wno-deprecated)
 endif()
 
 # Set the list of compiler flags for Intel compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
-    add_compile_options(-std=c++11 -Wall -Wno-variadic-macros -Wno-deprecated)
+    add_compile_options(-std=c++17 -Wall -Wno-variadic-macros -Wno-deprecated)
 endif()
 
 # Set the list of compiler flags for MSVC compiler
