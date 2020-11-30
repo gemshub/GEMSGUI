@@ -171,8 +171,10 @@ void TGEM2MT::set_def(int q)
     memcpy( &mtp->PvICi, "++------------S00--+--+-----", 28 );
     strcpy( mtp->name,  "`" );
     strcpy( mtp->notes, "`" );
-    strcpy( mtp->xNames, "X" );
-    strcpy( mtp->yNames, "Y" );
+    //strcpy( mtp->xNames, "X" );
+    //strcpy( mtp->yNames, "Y" );
+    memcpy( mtp->xNames, TProfil::pm->pa.GDpcc[0], MAXAXISNAME );
+    memcpy( mtp->yNames, TProfil::pm->pa.GDpcc[1], MAXAXISNAME );
     memset( &mtp->nC, 0, sizeof(long int)*32 );
     memset( &mtp->Msysb, 0, sizeof(double)*20 );
     memset( mtp->size[0], 0, sizeof(float)*8 );

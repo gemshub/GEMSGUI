@@ -247,6 +247,8 @@ void TRTParm::set_def( int q)
     strcpy( rp[q].comment, "Please, change the script and/or remake, if necessary" );
     strcpy( rp[q].xNames,  "C  / bar" );   // Fixed for debugging
     strcpy( rp[q].yNames, "kJ/mol" );
+    //memcpy( rpp->xNames, TProfil::pm->pa.GDpcc[0], MAXAXISNAME );
+    //memcpy( rpp->yNames, TProfil::pm->pa.GDpcc[1], MAXAXISNAME );
 
     rp[q].NT = aPa->pa.NT;
     rp[q].NP = aPa->pa.NP;
@@ -290,6 +292,7 @@ void TRTParm::set_def( int q)
 // Added to set a default script 01.04.2003 KD
 //    rpp->Pplot = S_ON;
     rpp->dimXY[1] = 1;
+
     rpp->expr = static_cast<char *>(aObj[ o_rtexpr ]->Alloc(1, 2048, S_));
     strcpy( static_cast<char *>(aObj[o_rtexpr]->GetPtr()),  " yF[jTP][0] =: twG/1000;\n  " );
     rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ]->Alloc( 1, rpp->dimXY[1], MAXGRNAME));
@@ -688,20 +691,20 @@ const char* TRTParm::GetHtml()
 void
 TRTParm::RecordPlot( const char* /*key*/ )
 {
-   std::vector<TPlot> plt;
+    std::vector<TPlot> plt;
 
-   if( rpp->Pabs == 'P')
-     plt.push_back( TPlot( o_rpxp, o_rpyf ));
-   else
-     plt.push_back( TPlot( o_rpxt, o_rpyf ));
+    if( rpp->Pabs == 'P')
+        plt.push_back( TPlot( o_rpxp, o_rpyf ));
+    else
+        plt.push_back( TPlot( o_rpxt, o_rpyf ));
 
-   int  nLn = plt[ 0 ].getLinesNumber();
-   if( rpp->Pplot != S_OFF )
+    int  nLn = plt[ 0 ].getLinesNumber();
+    if( rpp->Pplot != S_OFF )
     {
-       if( rpp->Pabs == 'P')
-         plt.push_back( TPlot( o_rpxpe, o_rpyte ));
-       else
-         plt.push_back( TPlot( o_rpxte, o_rpyte ));
+        if( rpp->Pabs == 'P')
+            plt.push_back( TPlot( o_rpxpe, o_rpyte ));
+        else
+            plt.push_back( TPlot( o_rpxte, o_rpyte ));
         nLn += plt[1].getLinesNumber();
     }
     if( plot )
@@ -715,37 +718,40 @@ TRTParm::RecordPlot( const char* /*key*/ )
             {
                 if(ii < rpp->dimXY[1] )
                 {
-                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    TPlotLine defpl(ii, nLn, "",13,2,3);
                     plot[ii] = defpl;
                 }
                 else
                 {
-                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    TPlotLine defpl(ii, nLn, "",15,25,0);
                     plot[ii] = defpl;
                 }
             }
             if(ii < rpp->dimXY[1] )
-                 plot[ii].setName( rpp->lNam[ii]);
-                // strncpy( plot[ii].name, rpp->lNam[ii], MAXGRNAME-1 );
+                plot[ii].setName( rpp->lNam[ii]);
+            // strncpy( plot[ii].name, rpp->lNam[ii], MAXGRNAME-1 );
             else
                 plot[ii].setName( rpp->lNamE[ii-rpp->dimXY[1]]);
-                //strncpy( plot[ii].name, rpp->lNamE[ii-rpp->dimXY[1]], MAXGRNAME-1 );
-           // plot[ii].name[MAXGRNAME-1] = '\0';
+            //strncpy( plot[ii].name, rpp->lNamE[ii-rpp->dimXY[1]], MAXGRNAME-1 );
+            // plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
-                                     rpp->size[0], rpp->size[1], plot,
-                                     rpp->axisType, rpp->xNames, rpp->yNames);
+                                   rpp->size[0], rpp->size[1], plot,
+                rpp->axisType, rpp->xNames, rpp->yNames);
     }
     else
     {
-      TCStringArray lnames;
-      int ii;
-      for( ii=0; ii<rpp->dimXY[1]; ii++ )
-          lnames.push_back( std::string(rpp->lNam[ii], 0, MAXGRNAME ));
-      for( ii=0; ii<rpp->dimEF[1]; ii++ )
-          lnames.push_back( std::string( rpp->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
-          rpp->xNames, rpp->yNames, lnames );
+        std::vector<TPlotLine> def_plt_lines;
+        def_plt_lines.push_back(TPlotLine( "",13,2,3));
+        def_plt_lines.push_back(TPlotLine( "",15,25,0));
+        TCStringArray lnames;
+        int ii;
+        for( ii=0; ii<rpp->dimXY[1]; ii++ )
+            lnames.push_back( std::string(rpp->lNam[ii], 0, MAXGRNAME ));
+        for( ii=0; ii<rpp->dimEF[1]; ii++ )
+            lnames.push_back( std::string( rpp->lNamE[ii], 0, MAXGRNAME ));
+        gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
+                                   rpp->xNames, rpp->yNames, lnames, def_plt_lines );
     }
 }
 

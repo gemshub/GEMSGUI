@@ -917,12 +917,12 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
             {
                 if(ii < mtp->nYS )
                 {
-                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    TPlotLine defpl(ii, nLn, "",13,2,3);
                     plot[ii] = defpl;
                 }
                 else
                 {
-                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    TPlotLine defpl(ii, nLn, "",15,25,0);
                     plot[ii] = defpl;
                 }
             }
@@ -940,6 +940,9 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     }
     else
     {
+      std::vector<TPlotLine> def_plt_lines;
+      def_plt_lines.push_back(TPlotLine( "",13,2,3));
+      def_plt_lines.push_back(TPlotLine( "",15,25,0));
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<mtp->nYS; ii++ )
@@ -947,7 +950,7 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
       for( ii=0; ii<mtp->nYE; ii++ )
           lnames.push_back( std::string( mtp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, mtp->name,
-          mtp->xNames, mtp->yNames, lnames );
+          mtp->xNames, mtp->yNames, lnames, def_plt_lines );
     }
 }
 

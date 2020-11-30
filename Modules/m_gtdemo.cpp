@@ -458,6 +458,8 @@ void TGtDemo::set_def( int q)
     gdp->dimX = 1;
     gdp->dimXY[1] = 1;
     gdp->dimXY[0] = 0;
+    memcpy( gdp->xNames, TProfil::pm->pa.GDpcc[0], MAXAXISNAME );
+    memcpy( gdp->yNames, TProfil::pm->pa.GDpcc[1], MAXAXISNAME );
 
     gd_ps_set();
     gdp->lNam0 = nullptr;
@@ -792,12 +794,12 @@ void
 TGtDemo::RecordPlot( const char* /*key*/ )
 {
 
-     if(  gdp->PsRes4 == S_ON)
-      {
-           gdp->PsRes4 = S_OFF;
-           contentsChanged = true;
-           return;
-      }
+    if(  gdp->PsRes4 == S_ON)
+    {
+        gdp->PsRes4 = S_OFF;
+        contentsChanged = true;
+        return;
+    }
 
     std::vector<TPlot> plt;
 
@@ -810,7 +812,7 @@ TGtDemo::RecordPlot( const char* /*key*/ )
     }
     int ndxy = 0;
     if(  gdp->dimX > 1)
-            ndxy =gdp->dimX;
+        ndxy =gdp->dimX;
 
     if( plot )
     {
@@ -823,37 +825,40 @@ TGtDemo::RecordPlot( const char* /*key*/ )
             {
                 if(ii < gdp->dimXY[1] )
                 {
-                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    TPlotLine defpl(ii, nLn, "",13,2,3);
                     plot[ii] = defpl;
                 }
                 else
                 {
-                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    TPlotLine defpl(ii, nLn, "",15,25,0);
                     plot[ii] = defpl;
                 }
             }
             if(ii < gdp->dimXY[1] )
                 plot[ii].setName( gdp->lNam0[ii+ndxy]);
-                //strncpy( plot[ii].name, gdp->lNam0[ii], MAXGRNAME-1 );
+            //strncpy( plot[ii].name, gdp->lNam0[ii], MAXGRNAME-1 );
             else
                 plot[ii].setName( gdp->lNamE[ii-gdp->dimXY[1]]);
-                //strncpy( plot[ii].name, gdp->lNamE[ii-gdp->dimXY[1]], MAXGRNAME-1 );
+            //strncpy( plot[ii].name, gdp->lNamE[ii-gdp->dimXY[1]], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
-                                     gdp->size[0], gdp->size[1], plot,
-                                     gdp->axisType, gdp->xNames, gdp->yNames);
+                                   gdp->size[0], gdp->size[1], plot,
+                gdp->axisType, gdp->xNames, gdp->yNames);
     }
     else
     {
-      TCStringArray lnames;
-      int ii;
-      for( ii=0; ii<gdp->dimXY[1]; ii++ )
-          lnames.push_back( std::string(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
-      for( ii=0; ii<gdp->dimEF[1]; ii++ )
-          lnames.push_back( std::string( gdp->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
-          gdp->xNames, gdp->yNames, lnames );
+        std::vector<TPlotLine> def_plt_lines;
+        def_plt_lines.push_back(TPlotLine( "",13,2,3));
+        def_plt_lines.push_back(TPlotLine( "",15,25,0));
+        TCStringArray lnames;
+        int ii;
+        for( ii=0; ii<gdp->dimXY[1]; ii++ )
+            lnames.push_back( std::string(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
+        for( ii=0; ii<gdp->dimEF[1]; ii++ )
+            lnames.push_back( std::string( gdp->lNamE[ii], 0, MAXGRNAME ));
+        gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
+                                   gdp->xNames, gdp->yNames, lnames, def_plt_lines );
     }
 }
 

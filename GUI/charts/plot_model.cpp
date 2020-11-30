@@ -47,3 +47,4 @@ void PlotModel::resetMatrixData()
     beginResetModel();
     endResetModel();
 }
+

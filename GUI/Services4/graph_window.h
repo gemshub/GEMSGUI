@@ -22,6 +22,8 @@ jsonui::GraphDialog* updateGraphWindow(  jsonui::GraphDialog* graph_dlg,
                                          TCModule *pmodule, std::vector<TPlot>& aPlots,
                                          const char * aTitle,
                                          const char *aXName, const char *aYname,
-                                         TCStringArray line_names, int agraphType = LINES_POINTS  );
+                                         TCStringArray line_names,
+                                         const std::vector<TPlotLine>& def_plt_lines,
+                                         int agraphType = LINES_POINTS  );
 
 #endif // GRAPH_WINDOW_H

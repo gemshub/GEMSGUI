@@ -264,7 +264,8 @@ public:
     /// Get point from one line to paint  (ndxX - column in Abscissa table)
     QPointF getPoint( int line, int number, int ndxX );
     /// Get min and max values x,y for one curve line
-    void getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxX );
+    void getMaxMinLine( double& minX, double& maxX, double& minY, double& maxY,
+                        int line, int ndxAbs );
 
 };
 

@@ -302,30 +302,33 @@ void EquatSetup::tableInsertRow( int nO, int ndx, const char * andName )
 
     if( useCalc )
     {
-       CalcDialog calc(topLevelWidget(), -1 );
-       if( calc.exec() )
-       {
-          str = calc.funText( str.c_str() );
-       }
-     }
+        CalcDialog calc(topLevelWidget(), -1 );
+        if( calc.exec() )
+        {
+            str = calc.funText( str.c_str() );
+        }
+    }
 
     // added for clear names that got from Process calcScripts
     if(namLines.size() > scriptData.size() )
         namLines.clear();
 
     if(cPage == 0)
-     {  scriptData.push_back(  scriptSetupData( cPage, nO, andName,
-             ndx, andName, str.c_str() ));
+    {
+        scriptData.push_back(  scriptSetupData( cPage, nO, andName,
+                                                ndx, andName, str.c_str() ));
         namLines.push_back(andName);
-        yNam = andName;
-     }
-       else
-        {
-           scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO]->GetKeywd(),
-             ndx, andName, str.c_str() ));
-           namLines.push_back(andName);
-           yNam = aObj[nO]->GetKeywd();
-       }
+        if( yNam.empty() )
+            yNam = andName;
+    }
+    else
+    {
+        scriptData.push_back(  scriptSetupData( cPage, nO, aObj[nO]->GetKeywd(),
+                                                ndx, andName, str.c_str() ));
+        namLines.push_back(andName);
+        if( yNam.empty() )
+            yNam = aObj[nO]->GetKeywd();
+    }
 
     scriptUpdate();
     useCalc = false;

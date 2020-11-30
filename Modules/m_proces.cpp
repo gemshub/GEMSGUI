@@ -517,8 +517,10 @@ pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
     pe[q].sdval = nullptr;
     pe[q].tprn = nullptr;
     // graphics
-    strcpy( pe[q].xNames, "xp" );
-    strcpy( pe[q].yNames, "yp" );
+    //strcpy( pe[q].xNames, "xp" );
+    //strcpy( pe[q].yNames, "yp" );
+    memcpy( pe[q].xNames, TProfil::pm->pa.GDpcc[0], MAXAXISNAME );
+    memcpy( pe[q].yNames, TProfil::pm->pa.GDpcc[1], MAXAXISNAME );
     pe[q].dimEF[1] = 1;
     pe[q].dimEF[0] = 0;
     pe[q].dimX = 1;
@@ -1550,19 +1552,19 @@ void TProcess::RecordPrint(const char *key)
         filename1 += "-dat.lst";
 
         if( vfChooseFileSave(window(), filename1,
-                   "Please, enter the Process work structure file name", "*.lst" ) )
+                             "Please, enter the Process work structure file name", "*.lst" ) )
         {
             if( !access(filename1.c_str(), 0 ) ) //file exists
                 if( !vfQuestion( window(), filename1.c_str(),
-                        "This file exists! Overwrite?") )
-                   return;
+                                 "This file exists! Overwrite?") )
+                    return;
             TCStringArray savedSystems;
             genGEM3K(filename1, savedSystems, false, false);
             refreshState();
         }
     }
     else
-         TCModule::RecordPrint( key );
+        TCModule::RecordPrint( key );
 
 }
 
@@ -1580,7 +1582,7 @@ TProcess::RecordPlot( const char* /*key*/ )
     }
     int ndxy = 0;
     if(  pep->dimX > 1)
-           ndxy = pep->dimX;
+        ndxy = pep->dimX;
 
     if( plot )
     {
@@ -1593,37 +1595,40 @@ TProcess::RecordPlot( const char* /*key*/ )
             {
                 if(ii < pep->dimXY[1] )
                 {
-                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    TPlotLine defpl(ii, nLn, "",13,2,3);
                     plot[ii] = defpl;
                 }
                 else
                 {
-                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    TPlotLine defpl(ii, nLn, "",15,25,0);
                     plot[ii] = defpl;
                 }
             }
             if(ii < pep->dimXY[1] )
                 plot[ii].setName( pep->lNam[ii+ndxy]);
-                //strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME-1 );
+            //strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME-1 );
             else
                 plot[ii].setName( pep->lNamE[ii-pep->dimXY[1]]);
-                //strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME-1 );
+            //strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
-                                     pep->size[0], pep->size[1], plot,
-                                     pep->axisType, pep->xNames, pep->yNames);
+                                   pep->size[0], pep->size[1], plot,
+                pep->axisType, pep->xNames, pep->yNames);
     }
     else
     {
-      TCStringArray lnames;
-      int ii;
-      for( ii=0; ii<pep->dimXY[1]; ii++ )
-          lnames.push_back( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
-      for( ii=0; ii<pep->dimEF[1]; ii++ )
-          lnames.push_back( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
-          pep->xNames, pep->yNames, lnames );
+        std::vector<TPlotLine> def_plt_lines;
+        def_plt_lines.push_back(TPlotLine( "",13,2,3));
+        def_plt_lines.push_back(TPlotLine( "",15,25,0));
+        TCStringArray lnames;
+        int ii;
+        for( ii=0; ii<pep->dimXY[1]; ii++ )
+            lnames.push_back( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
+        for( ii=0; ii<pep->dimEF[1]; ii++ )
+            lnames.push_back( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
+        gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
+                                   pep->xNames, pep->yNames, lnames, def_plt_lines );
     }
 }
 

@@ -219,26 +219,25 @@ std::vector<int> TPlot::yColumns() const
 
 
 // Find min and max values x,y for one curve line
-void TPlot::getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxAbs )
+void TPlot::getMaxMinLine( double& minX, double& maxX, double& minY, double& maxY,
+                           int line, int ndxAbs )
 {
     QPointF point;
     int jj = line;
 
-    min = getPoint( jj, 0, ndxAbs );
-    max = min;
     for( int ii =0; ii<dX; ii++)
     {
         point = getPoint( jj, ii, ndxAbs );
         if( approximatelyEqual( point.x(), DOUBLE_EMPTY) || approximatelyEqual( point.y(), DOUBLE_EMPTY ) )
             continue;
-        if( min.x() > point.x() || approximatelyEqual( min.x(), DOUBLE_EMPTY ) )
-            min.setX( point.x() );
-        if( max.x() < point.x() || approximatelyEqual( max.x(), DOUBLE_EMPTY ) )
-            max.setX( point.x() );
-        if( min.y() > point.y() || approximatelyEqual( min.y(), DOUBLE_EMPTY ) )
-            min.setY( point.y() );
-        if( max.y() < point.y() || approximatelyEqual( max.y(), DOUBLE_EMPTY ) )
-            max.setY( point.y() );
+        if( minX > point.x() || approximatelyEqual( minX, DOUBLE_EMPTY ) )
+            minX = point.x();
+        if( maxX < point.x() || approximatelyEqual( maxX, DOUBLE_EMPTY ) )
+            maxX = point.x();
+        if( minY > point.y() || approximatelyEqual( minY, DOUBLE_EMPTY ) )
+            minY = point.y();
+        if( maxY < point.y() || approximatelyEqual( maxY, DOUBLE_EMPTY ) )
+            maxY = point.y();
     }
 }
 

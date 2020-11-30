@@ -45,6 +45,7 @@ public:
     {
         return m_plot.getNAbs();
     }
+
 };
 
 #endif // PLOTMODEL_H
