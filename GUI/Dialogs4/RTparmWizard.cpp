@@ -234,12 +234,12 @@ void RTparmWizard::getFlags( char flgs[6], string& xName )
 
 void   RTparmWizard::getFloat( double val[6] )
 {
-    val[0] = pTfrom->text().toDouble();
-    val[1] = pTuntil->text().toDouble();
-    val[2] = pTstep->text().toDouble();
-    val[3] = pPfrom->text().toDouble();
-    val[4] = pPuntil->text().toDouble();
-    val[5] = pPstep->text().toDouble();
+    val[0] = pTfrom->value();
+    val[1] = pTuntil->value();
+    val[2] = pTstep->value();
+    val[3] = pPfrom->value();
+    val[4] = pPuntil->value();
+    val[5] = pPstep->value();
 }
 
 
@@ -252,9 +252,9 @@ void RTparmWizard::help()
 void RTparmWizard::TChange()
 {
     double Tai[4];
-    Tai[0] = pTfrom->text().toDouble();
-    Tai[1] = pTuntil->text().toDouble();
-    Tai[2] = pTstep->text().toDouble();
+    Tai[0] = pTfrom->value();
+    Tai[1] = pTuntil->value();
+    Tai[2] = pTstep->value();
     auto nT = getNpoints( Tai );
     pNT->setValue(nT);
 }
@@ -262,9 +262,9 @@ void RTparmWizard::TChange()
 void RTparmWizard::PChange()
 {
   double Pai[4];
-  Pai[0] = pPfrom->text().toDouble();
-  Pai[1] = pPuntil->text().toDouble();
-  Pai[2] = pPstep->text().toDouble();
+  Pai[0] = pPfrom->value();
+  Pai[1] = pPuntil->value();
+  Pai[2] = pPstep->value();
   auto nP = getNpoints( Pai );
   pNP->setValue(nP);
 }
