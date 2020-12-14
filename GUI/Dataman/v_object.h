@@ -25,7 +25,7 @@
 #include "v_vals.h"
 
 class GemDataStream;
-
+class QJsonObject;
 
 const char TOKENOLABEL = '^';
 const char TOKENOBJBEGIN = '~';
@@ -187,7 +187,7 @@ public:
     void SetPtr(void *newPtr);
 
     //--- Value manipulation
-    double Get(int n = 0, int m = 0);
+    double Get(int n = 0, int m = 0) const;
     double GetEmpty(int n = 0, int m = 0);
     void Put(double value, int n = 0, int m = 0);
     // Put cell of object to string. Return the lengs of string.
@@ -220,6 +220,9 @@ public:
     int ofDB(GemDataStream& f);
     void toTXT(fstream& f);
     void ofTXT(fstream& f);
+
+    void toJsonObject( QJsonObject& obj ) const;
+    void fromJsonObject( const QJsonObject& obj );
 
     bool operator == (const TObject& o) const
     {

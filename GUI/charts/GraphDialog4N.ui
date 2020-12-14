@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>895</width>
-    <height>494</height>
+    <width>942</width>
+    <height>499</height>
    </rect>
   </property>
   <property name="font">
@@ -183,7 +183,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Click legend symbols to adjust curves; select abscissae under x#; edit Y (ordinate) labels, drag-drop them to plot area</string>
+                <string>Click legend symbols to customise curves; select an abscissa under x#; edit ordinate Y labels, drag-drop them to plot area; right-click on plot area to copy or save image</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignVCenter</set>

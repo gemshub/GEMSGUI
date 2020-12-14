@@ -55,11 +55,11 @@ TProfil* TProfil::pm;
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
-    " Tolerances and controls: GEMSGUI v.3.7.0  and " " GEMS3K v.3.7.0 ",
+    " Tolerances and controls: GEMSGUI v.3.8.0  and " " GEMS3K v.3.8.0 ",
     {   // Typical default set (24.03.2020) new PSSC( logSI ) & uDD()
-        2,  /* PC */  2,     /* PD */   -5,   /* PRD */
+        2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-        0, /* DT */     30000,   /* PLLG */   1,  /* PE */  7000, /* IIM */
+        0, /* DT */     30000,   /* PLLG */   1,  /* PE */  9999, /* IIM */
         1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
         1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
@@ -83,7 +83,7 @@ SPP_SETTING pa_ = {
     "0*-------P--", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
-    { "Abscissa","Ordinate"},    /* GDpcc[2][9] */
+    { "abscissa","ordinate"},    /* GDpcc[2][9] */
     "++++-+",   /* GDptc[6] */  "++++--",   /* GDpgw[6] */
     "*",   /* sdrefkey 32*/  "",   /* Reserv [50-32] */
     /* RTPARM */

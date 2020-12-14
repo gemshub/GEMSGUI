@@ -1028,7 +1028,9 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
 
     if( php->PphC == PH_SINCOND || php->PphC == PH_SINDIS
             || php->PphC == PH_LIQUID || php->PphC == PH_SIMELT )   // added DK 29.03.2012
+    {
         MakeSublatticeLists( form_array  );
+    }
 
 
     if( php->Asur > 1. )

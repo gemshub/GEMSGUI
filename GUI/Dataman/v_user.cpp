@@ -148,38 +148,6 @@ void StripLine(string& line)
    strip( line );
 }
 
-//void strip(string& str)
-//{
-//  string::size_type pos1 = str.find_first_not_of(' ');
-//  string::size_type pos2 = str.find_last_not_of(' ');
-//  str = str.substr(pos1 == string::npos ? 0 : pos1,
-//    pos2 == string::npos ? str.length() - 1 : pos2 - pos1 + 1);
-//}
-
-//void replace( string& str, const char* old_part, const char* new_part)
-//{
-//    size_t pos = str.find( old_part ); //rfind( old_part );
-//    if( pos != string::npos )
-//    {
-//        string res(str.substr(0, pos));
-//        res += new_part;
-//        res += str.substr( pos+strlen(old_part));
-//        str = res;
-//    }
-//}
-
-void replaceall( string& str, const char* old_part, const char* new_part)
-{
-    size_t pos = str.find( old_part ); //rfind( old_part );
-    while( pos != string::npos )
-    {
-        string res(str.substr(0, pos));
-        res += new_part;
-        res += str.substr( pos+strlen(old_part));
-        str = res;
-        pos = str.find( old_part );
-    }
-}
 
 void KeyToName(std::string& line)
 {

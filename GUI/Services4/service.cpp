@@ -475,8 +475,10 @@ bool vfChooseFileOpen(QWidget* par, std::string& path_,
 {
     std::string path;
     if( path_.find('/') == std::string::npos )
-    {      path = pVisor->localDir().c_str();//userGEMDir();
-             path+= path_;
+    {
+        path = pVisor->localDir();//userGEMDir();
+        path  +=  "/";
+        path += path_;
     }
     else   path = path_;
 
@@ -496,8 +498,7 @@ bool vfChooseFileOpen(QWidget* par, std::string& path_,
         std::string name;
         std::string newname;
         u_splitpath( path_, dir, name, newname );
-        dir  += "/";
-        pVisor->setLocalDir( dir.c_str() );
+        pVisor->setLocalDir( dir );
         return true;
     }
     else
@@ -512,8 +513,10 @@ bool vfChooseFileSave(QWidget* par, std::string& path_,
 {
       std::string path;
       if( path_.find('/') == std::string::npos )
-      {      path = pVisor->localDir().c_str();//userGEMDir();
-             path+= path_;
+      {
+          path = pVisor->localDir();//userGEMDir();
+          path +=  "/";
+          path += path_;
       }
       else   path = path_;
 
@@ -540,8 +543,7 @@ bool vfChooseFileSave(QWidget* par, std::string& path_,
         std::string name;
         std::string newname;
         u_splitpath( path_, dir, name, newname );
-        dir  += "/";
-        pVisor->setLocalDir( dir.c_str() );
+        pVisor->setLocalDir( dir );
         return true;
     }
     else
@@ -559,7 +561,8 @@ bool vfChooseDirectory(QWidget* par, std::string& path_,
       if( path_.find('/') == std::string::npos )
       {      
             path = pVisor->localDir();//userGEMDir();
-             path+= path_;
+            path +=  "/";
+            path+= path_;
       }
       else   path = path_;
 
@@ -571,12 +574,12 @@ bool vfChooseDirectory(QWidget* par, std::string& path_,
     if ( !dir.isEmpty() )
     {
         path_ = dir.toStdString();
-        pVisor->setLocalDir( path_.c_str() );
+        pVisor->setLocalDir( path_ );
         return true;
     }
     else
     {
-        path_ = pVisor->localDir().c_str();
+        path_ = pVisor->localDir();
         return false;
     }
 }

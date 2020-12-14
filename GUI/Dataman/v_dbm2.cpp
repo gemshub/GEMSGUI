@@ -16,6 +16,9 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#include <QJsonObject>
+#include <QJsonArray>
+
 #include "v_user.h"
 #include "v_dbm.h"
 #include "v_dbfile.h"
@@ -351,6 +354,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     return StillLen;
 }
 
+
 /*!
     Add new record with key pkey to file in DB files list
 */
@@ -514,6 +518,74 @@ void TDataBase::RenameList( const char* newName,
         replace( str, oldName, newName);
         AddRecordToFile( str.c_str(), fNum );
     }
+}
+
+void TDataBase::toJsonObject( QJsonObject &obj ) const
+{
+    //write key fileds
+    QJsonArray keyArray;
+    for( int ii=0; ii < KeyNumFlds(); ii++)
+    {
+        QJsonObject keyObject;
+        //      keyObject[ "kf" ] = aFldShot[ii].c_str();
+        keyObject[ "fx" ] = ii;
+        keyObject[ "fl" ] = FldLen(ii);
+        auto fld_key = std::string( FldKey(ii), 0, FldLen(ii) );
+        strip(fld_key);
+        keyObject[ "fv" ] = fld_key.c_str();
+        keyArray.append(keyObject);
+    }
+    obj[ "key" ] = keyArray;
+
+    // write objects
+    QJsonArray dodArray;
+    for( int ii=0, no=frstOD; ii<nOD;  ii++, no++)
+    {
+        if( aObj[no]->GetDescription(0,0) == "ejdbignore" )
+            continue;
+        QJsonObject dodObject;
+        dodObject[ "id" ] = no;
+        aObj[no]->toJsonObject( dodObject );
+        dodArray.append(dodObject);
+    }
+    obj[ "dod" ] = dodArray;
+}
+
+std::string TDataBase::fromJsonObject(const QJsonObject &obj)
+{
+    int ii, no;
+
+    QJsonArray keyArray = obj[ "key" ].toArray();
+    string keyStr = "", kbuf;
+    for( ii=0; ii< std::min<int>( KeyNumFlds(), keyArray.size()); ii++ )
+    {
+        QJsonObject keyObject = keyArray[ii].toObject();
+        kbuf = keyObject[ "fv" ].toString("*").toStdString();
+        strip( kbuf );
+        keyStr += kbuf.substr(0, FldLen( ii ));
+        keyStr += ":";
+    }
+
+    // read objects
+    QJsonArray dodArray = obj[ "dod" ].toArray();
+    for( const auto& dod_val: dodArray)
+    {
+        QJsonObject dodObject = dod_val.toObject();
+        no = dodObject["id"].toInt(-1);
+        kbuf = dodObject[ "label" ].toString("").toStdString();
+        if( kbuf.empty() )
+          continue; // undefined label
+        strip(kbuf);
+
+        // test changing index of object in list
+        if( no<0 || strcmp( aObj[no]->GetKeywd(), kbuf.c_str() ))
+            no = aObj.Find( kbuf.c_str() );
+        if( no < 0)
+          continue;
+        aObj[no]->fromJsonObject( dodObject );
+   }
+
+    return keyStr;
 }
 
 

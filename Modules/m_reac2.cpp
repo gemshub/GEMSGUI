@@ -1209,7 +1209,7 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
     double ReactProp[6];
     double rhoW, alphaW, betaW, dAldTW;
 
-    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
+        if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.01 && fabs( aW.WW(p).P - rc[q].Pst ) < 0.01 ) //if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 ) bugfix DM 29.11.2020
     {  // standard temperature - just get data from ReacDC record
     	aW.WW(p).K =   rc[q].Ks[0];
     	aW.WW(p).lgK = rc[q].Ks[1];

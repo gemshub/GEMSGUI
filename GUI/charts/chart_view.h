@@ -58,6 +58,7 @@ public slots:
 
 signals:
     void fragmentChanged(QRectF  rect);
+    void savetoFile();
 
 public:
 
@@ -76,6 +77,11 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent* event);
     void mouseReleaseEvent(QMouseEvent *event);
+
+protected slots:
+    void slotPopupMenu(const QPoint &pos);
+    void copyPlotBitmap();
+    void copyPlotPdf();
 
 };
 

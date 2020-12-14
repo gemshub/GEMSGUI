@@ -481,8 +481,12 @@ void TMulti::multi_sys_ph()
     pm.FIa = 0;
     pm.Lads = 0;   // Is this really needed?
 //    ja=0;
+
+    int JB, JE=0;
     for( kk=0, /*FI=0,*/ k=-1, /*jb=0,*/ je=0; kk<mup->Fi; kk++ )
     {
+        JB = JE;
+        JE += mup->Ll[kk];
         if( TSyst::sm->GetSY()->Pcl[kk] == S_OFF )
             continue;
         k++; // FI++;  //PMM = 0.0;
@@ -559,9 +563,9 @@ long int
                 TCStringArray form_array;
 
                 // build formula list
-                for( int jj=0; jj<mup->Ll[k]; jj++ )
+                for( j=JB; j < JE; j++  )
                 {
-                  form_array.push_back(aFo.form_extr( jj+jb, mup->L, mup->DCF ));
+                  form_array.push_back(aFo.form_extr( j, mup->L, mup->DCF ));
                 }
 
                 // get moiety full structure from phase

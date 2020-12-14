@@ -64,6 +64,9 @@
     <addaction name="separator"/>
     <addaction name="action_Export"/>
     <addaction name="action_Import"/>
+    <addaction name="separator"/>
+    <addaction name="actionExport_Json"/>
+    <addaction name="actionImport_Json"/>
    </widget>
    <widget class="QMenu" name="menu_Database_Files">
     <property name="title">
@@ -1243,6 +1246,16 @@
   <action name="actionLicense">
    <property name="text">
     <string>License</string>
+   </property>
+  </action>
+  <action name="actionExport_Json">
+   <property name="text">
+    <string>Backup &amp;to JSON...</string>
+   </property>
+  </action>
+  <action name="actionImport_Json">
+   <property name="text">
+    <string>Restore &amp;from JSON...</string>
    </property>
   </action>
  </widget>

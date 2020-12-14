@@ -332,6 +332,8 @@ void TVisorImp::setActions()
        connect( ui->action_Restore, SIGNAL( triggered()), this, SLOT(CmRestore()));
        connect( ui->action_Export, SIGNAL( triggered()), this, SLOT(CmExport()));
        connect( ui->action_Import, SIGNAL( triggered()), this, SLOT(CmImport()));
+       connect( ui->actionExport_Json, SIGNAL( triggered()), this, SLOT(CmBackuptoJson()));
+       connect( ui->actionImport_Json, SIGNAL( triggered()), this, SLOT(CmRestorefromJson()));
 
     // Database files
        connect( ui->action_Selection, SIGNAL( triggered()), this, SLOT(CmReOpenFileList()));
@@ -836,6 +838,9 @@ TCM_EV_COMMAND(CM_IMPORT, CmImport)
 TCM_EV_COMMAND(CM_EXPORT, CmExport)
 TCM_EV_COMMAND(CM_IMPORT2, CmBackup)
 TCM_EV_COMMAND(CM_EXPORT2, CmRestore)
+TCM_EV_COMMAND(CM_IMPORT2, CmBackuptoJson)
+TCM_EV_COMMAND(CM_EXPORT2, CmRestorefromJson)
+
 
 //----------------------------------------------------------------------------------------
 // NewSystemDialog commands

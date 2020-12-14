@@ -155,7 +155,7 @@ struct TValFixString:
     }
     string GetString(int ndx) const
     {
-        auto ss = string( static_cast<char*>(ptr)+(ndx*len), len);
+        auto ss = string( static_cast<char*>(ptr)+(ndx*len), 0, len);
         return ss;
     }
     bool SetString(const char* s, int ndx);

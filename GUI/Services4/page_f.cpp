@@ -287,6 +287,7 @@ PageInfo::GetType(const string & s)
 }
 
 
+
 FieldInfo::FieldInfo( TObject & rO, int anO,
                      eFieldType fT, int np, bool lb,
                      ePlaceMode pl, eEdit e, eShowType sT, int w, int h):
@@ -299,11 +300,10 @@ FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
         pObj( anO>=0 ?  aObj[anO].get(): nullptr ), nO(anO),
         fType(fT), npos(np),
         label(lb), place(pl), edit(e), showType(sT), maxN(h), maxM(w)
-{
-}
+{ }
 
 
-FieldInfo::FieldInfo( istream & is)
+FieldInfo::FieldInfo( istream & is )
 {
     fromDAT(is);
 }

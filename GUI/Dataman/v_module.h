@@ -215,6 +215,8 @@ public:	// moved to public to remove 'friend' for TCModuleImp
     virtual void CmExport();
     virtual void CmBackup();
     virtual void CmRestore();
+    virtual void CmBackuptoJson();
+    virtual void CmRestorefromJson();
 
     //--- Manipulation current record
     void CmDelete();
@@ -282,6 +284,8 @@ public:
     void RecOfTXT( );
     void RecExport( const char *pattern );
     void RecImport( );
+    void RecListToJSON( const char *pattern );
+    void RecListFromJSON();
 
     TCIntArray SelectFileList(int mode);
 

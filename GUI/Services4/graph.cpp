@@ -19,6 +19,7 @@
 
 #include <cstdio>
 #include <limits>
+#include <QJsonObject>
 #include "GEMS3K/gdatastream.h"
 #include "graph.h"
 #include "GemsMainWindow.h"
@@ -33,6 +34,29 @@ void helpWin( const std::string& name, const std::string& item )
 //---------------------------------------------------------------------------
 // TPlotLine
 //---------------------------------------------------------------------------
+
+void TPlotLine::toJsonObject( QJsonObject& obj ) const
+{
+    obj[ "gtp" ] = type;
+    obj[ "gsz" ] = sizes;
+    obj[ "gndx"] = ndxX;
+    obj[ "grd"] = red;
+    obj[ "ggr"] = green;
+    obj[ "gbl"] = blue;
+    obj[ "gnm"] =  name;
+}
+
+void TPlotLine::fromJsonObject(const QJsonObject &obj)
+{
+    type = obj[ "gtp" ].toInt( 4 );
+    sizes = obj[ "gsz" ].toInt( 2 );
+    ndxX = obj[ "gndx" ].toInt( -1 );
+    red = obj[ "grd" ].toInt( 25 );
+    green = obj[ "ggr" ].toInt( 0 );
+    blue = obj[ "gbl" ].toInt( 150 );
+    auto name_str = obj["gnm"].toString("line").toStdString();
+    memcpy( name, name_str.c_str(), 15);
+}
 
 void TPlotLine::read(GemDataStream& stream)
 {

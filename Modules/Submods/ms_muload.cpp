@@ -357,7 +357,7 @@ void TMulti::SolModLoad( )
             TCStringArray form_array;
 
             // build formula list
-            for( jj=jb, j=JB; j < JE; j++ )
+            for( /*jj=jb,*/ j=JB; j < JE; j++ )
                 form_array.push_back( aFo.form_extr( j, mup->L, mup->DCF ) );
 
             // get moiety full structure from phase
@@ -720,11 +720,13 @@ void TMulti::sm_text_analyze( int nph, int Type,
         ET_translate( o_nwtext, o_neqtxt, JB, JE, jb, je );
         if( Type )
         {
+            qEd.resize(nph);
             qEd.insert( qEd.begin()+nph, std::make_shared<IPNCalc>() );
             qEd[nph]->GetEquat( static_cast<char *>(aObj[o_nwtext]->GetPtr()) );
         }
         else
         {
+            qEp.resize(nph);
             qEp.insert( qEp.begin()+nph, std::make_shared<IPNCalc>() );
             qEp[nph]->GetEquat( static_cast<char *>(aObj[o_nwtext]->GetPtr() ));
         }

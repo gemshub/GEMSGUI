@@ -22,6 +22,9 @@
 #endif
 
 #include <ctime>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "v_module.h"
 #include "visor.h"
 #include "service.h"
@@ -1605,6 +1608,40 @@ TCModule::CmRestore()
     }
 }
 
+void TCModule::CmBackuptoJson()
+{
+    try
+    {
+        if( !MessageToSave() )
+            return;
+
+        RecListToJSON( Filter.c_str() );
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        pVisor->Update();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+    }
+}
+
+void TCModule::CmRestorefromJson()
+{
+    try
+    {
+        if( !MessageToSave() )
+            return;
+
+        RecListFromJSON();
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        pVisor->Update();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+    }
+}
+
 // Adds the record
 
 void
@@ -1736,7 +1773,8 @@ TCModule::RecToTXT( const char *pattern )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
-       aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())));
+
+       aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())) );
        aObj[o_reckey]->toTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
             aObj[no]->toTXT(f);
@@ -1928,7 +1966,77 @@ TCModule::RecImport()
               str += s;
       Error( GetName(), str );
      }
-     dyn_set();
+    dyn_set();
+}
+
+void TCModule::RecListToJSON(const char *pattern)
+{
+    TCStringArray aKey = vfMultiKeys( window(),
+                                      "Please, mark records to be unloaded to JSON",
+                                      nRT, pattern );
+    if( aKey.size() <1 )
+        return;
+
+    string s = GetName();
+    string filename = GetName();
+           filename += "_backup.json";
+    s += " : Please, give a file name for unloading records";
+    if( vfChooseFileSave( window(), filename, s.c_str(), "*.json" ) == false )
+        return;
+
+    QJsonArray allArray;
+    for( size_t i=0; i<aKey.size(); i++ )
+    {
+        int Rnum = db->Find( aKey[i].c_str() );
+        db->Get( Rnum );
+        db->SetKey( aKey[i].c_str() );
+        QJsonObject recObject;
+        db->toJsonObject( recObject );
+        allArray.append(recObject);
+    }
+    QJsonDocument saveDoc(allArray);
+    fstream f_out( filename, ios::out );
+    if( f_out.good() )
+        f_out << saveDoc.toJson().data() << std::endl;
+    dyn_set();
+}
+
+void TCModule::RecListFromJSON()
+{
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
+    bool yesToAll=false;
+
+    // Choose file name
+    string s =string( GetName() )+" : Please, select file with unloaded records";
+    string filename;
+    if( vfChooseFileOpen( window(), filename, s.c_str(), "*.json" ) == false )
+        return;
+
+    QFile CurrentFile(filename.c_str());
+    if(!CurrentFile.open(QIODevice::ReadOnly)) return;
+    QByteArray json_data = CurrentFile.readAll();
+
+    QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
+    QJsonArray allArray = readDoc.array();
+
+    for( const auto& val : allArray)
+    {
+        std::string keyp = db->fromJsonObject( val.toObject() );
+        auto Rnum = db->Find( keyp.c_str() );
+        if( Rnum >= 0 )
+        {
+            if( vfQuestion(window(), keyp.c_str(),
+                           "Data record with this key already exists! Replace?"))
+                db->Rep( Rnum );
+        }
+        else
+        {
+            AddRecord( keyp.c_str(), fnum );
+            if( fnum == -2 )
+                break;
+        }
+    }
+    dyn_set();
 }
 
 
@@ -1947,7 +2055,7 @@ TCModule::DelList( const char *pattern )
         str += aKey[i];
         if( ichs )
         {
-            switch( vfQuestion3(window(), GetName(), str.c_str(),
+         switch( vfQuestion3(window(), GetName(), str.c_str(),
                                 "&Yes", "&No", "&Delete All" ))
             {
             case VF3_3:

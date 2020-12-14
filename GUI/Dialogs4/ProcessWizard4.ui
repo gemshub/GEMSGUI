@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -60,6 +60,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -298,6 +299,7 @@ Any process simulator belongs to one of three types:
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -310,7 +312,7 @@ Any process simulator belongs to one of three types:
        <item row="1" column="0" colspan="3">
         <widget class="QTableWidget" name="tIters">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -324,7 +326,7 @@ Any process simulator belongs to one of three types:
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>100</height>
+           <height>120</height>
           </size>
          </property>
          <property name="layoutDirection">
@@ -540,7 +542,14 @@ Any process simulator belongs to one of three types:
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QStackedWidget" name="pageLists"/>
+        <widget class="QStackedWidget" name="pageLists">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item row="3" column="2">
         <widget class="QTextEdit" name="textEquat1">
@@ -563,6 +572,7 @@ Any process simulator belongs to one of three types:
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -586,6 +596,7 @@ Any process simulator belongs to one of three types:
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -987,6 +998,7 @@ Any process simulator belongs to one of three types:
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1108,6 +1120,7 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1243,6 +1256,7 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
       <widget class="QPushButton" name="pHelp">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1272,6 +1286,7 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
       <widget class="QPushButton" name="pBack">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1285,6 +1300,7 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
       <widget class="QPushButton" name="pNext">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1298,6 +1314,7 @@ Saving process-generated SysEq records may be necessary for subsequent sampling 
       <widget class="QPushButton" name="pCancel">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>

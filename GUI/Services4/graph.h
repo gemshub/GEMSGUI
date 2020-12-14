@@ -23,9 +23,12 @@
 #include <math.h>
 #include <vector>
 #include <fstream>
-class QPointF;
 #include <QtGui/QColor>
+
+class QPointF;
+class QJsonObject;
 class GemDataStream;
+
 
 //const int maxPLOT = 20;
 
@@ -197,6 +200,9 @@ public:
         //    aNdxX = 0;
         ndxX = aNdxX;
     }
+
+    void toJsonObject( QJsonObject& obj ) const;
+    void fromJsonObject( const QJsonObject& obj );
 
     void read(GemDataStream& stream);
     void write(GemDataStream& stream);
