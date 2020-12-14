@@ -260,7 +260,7 @@ void TDualTh::dt_text_analyze()
         TDualTh::pm->CheckEqText(  erscan,
   "E93MSTran: Error in translation of math script \n"
   "            for mole fractions of non-basis DCs: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 */
     try
@@ -280,7 +280,7 @@ void TDualTh::dt_text_analyze()
         TDualTh::pm->CheckEqText(  erscan,
   "E94MSTran: Error in translation of math script \n"
   "           for activity coefficients of non-basis DCs: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 

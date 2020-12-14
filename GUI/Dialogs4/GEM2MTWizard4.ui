@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>863</width>
-    <height>754</height>
+    <width>726</width>
+    <height>675</height>
    </rect>
   </property>
   <property name="font">
@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -60,6 +60,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -91,16 +92,7 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;GEM2MT module is a tool for automation of simple reactive transport (RT) simulations coupled with GEM calculation of equilibrium states in spatially distributed nodes (boxes, volumes) over time steps. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;1D advection-diffusion numerical RT simuations can be performed, as well as the evolution of various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics can be modeled. I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;Changes of species concentrations or amounts of phases through the node profile at time steps can be graphically monitored or logged to files in VTK format. Additionally, I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GEM2MT module is a tool for automation of simple reactive transport (RT) simulations coupled with GEM calculation of equilibrium states in spatially distributed nodes (boxes, volumes) over time steps. &lt;/p&gt;&lt;p&gt;1D advection-diffusion numerical RT simuations can be performed, as well as the evolution of various sequential and flow-trough reactor sequences or generic box-flux (reservoir) dynamics can be modeled. I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes.&lt;/p&gt;&lt;p&gt;Changes of species concentrations or amounts of phases through the node profile at time steps can be graphically monitored or logged to files in VTK format. Additionally, I/O files for standalone GEMS3K calculations can be exported for multiple initial node recipes.&lt;/p&gt;&lt;p/&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>
@@ -352,6 +344,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -380,8 +373,8 @@ p, li { white-space: pre-wrap; }
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Fira Sans Semi-Light'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;Set here the number of local equilibrium nodes (boxes, volumes) for the transport model, and the number of system definitions for initialization of nodes, or for the export to GEMS3K I/O files in T mode. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Set here the number of local equilibrium nodes (boxes, volumes) for the transport model, and the number of system definitions for initialization of nodes, or for the export to GEMS3K I/O files in T mode. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignVCenter</set>
@@ -729,6 +722,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -953,6 +947,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1159,6 +1154,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1374,6 +1370,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1541,6 +1538,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1562,35 +1560,59 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
          <property name="title">
           <string>(1) GEMS3K memory and I/O file data exchange</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_15">
+          <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="chSelect">
             <property name="text">
              <string>Select ICs, DCs and phases to be exchanged via DBR files and DATABR structure (take all, if unchecked)</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QCheckBox" name="chMode">
-            <property name="text">
-             <string>Write IPM, DCH and DBR files in binary mode (in text mode, if unchecked)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
+          <item row="1" column="0" colspan="3">
            <widget class="QCheckBox" name="chAll">
             <property name="text">
              <string>Do not write data items that contain only default values (text mode only)</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="2" column="0" colspan="3">
            <widget class="QCheckBox" name="chComment">
             <property name="text">
              <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (text mode only)</string>
             </property>
             <property name="checked">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="3">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Write IPM, DCH and DBR files in mode: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QRadioButton" name="rbJson">
+            <property name="text">
+             <string>Json</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QRadioButton" name="rbKeyVal">
+            <property name="text">
+             <string>KeyValue</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QRadioButton" name="rbBinary">
+            <property name="text">
+             <string>Binary</string>
             </property>
            </widget>
           </item>
@@ -1900,6 +1922,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1944,6 +1967,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -2232,6 +2256,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
       <widget class="QPushButton" name="pHelp">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -2261,6 +2286,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
       <widget class="QPushButton" name="pBack">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -2274,6 +2300,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
       <widget class="QPushButton" name="pNext">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -2287,6 +2314,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
       <widget class="QPushButton" name="pCancel">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>

@@ -354,22 +354,8 @@ public:
 
 
    //test
-   void outMulti( GemDataStream& ff, std::string& path  );
-   // brief_mode - Do not write data items that contain only default values
-   // with_comments -Write files with comments for all data entries ( in text mode)
-   // addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
-   void outMulti( std::string& path, bool addMui, bool with_comments = true, bool brief_mode = false );
    void makeGEM2MTFiles(QWidget* par);
    void outMultiTxt( const char *path, bool append=false  );
-//   void readMulti( GemDataStream& ff, DATACH  *dCH );
-//   void readMulti( const char* path,  DATACH  *dCH );
-
-//   /// Writes Multi to a json/key-value string
-//   /// \param brief_mode - Do not write data items that contain only default values
-//   /// \param with_comments - Write files with comments for all data entries
-//   std::string gemipm_to_string( bool addMui, bool with_comments = true, bool brief_mode = false );
-//   /// Reads Multi structure from a json/key-value string
-//   bool gemipm_from_string( const std::string& data,  DATACH  *dCH );
 
    void CmReadMulti( const char* path, bool new_ipm = false );
    double ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM );
@@ -383,12 +369,6 @@ public:
    void CalculateEquilibriumGUI();
 };
 
-/* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *
-enum SurTypeNdx {
-    AT_SA0=0, AT_SB0=0, AT_SA1=1, AT_SB1=1, AT_SA2=2, AT_SB2=2, AT_SA3=3,
-    AT_SB3=3, AT_SA4=4, AT_SB4=4, AT_SA5=5, AT_SB5=5,
-    MSPN = 2   * Max number of EDL planes considered in old-style SCMs *
-}; */
 
 
 #endif  // _m_param_h

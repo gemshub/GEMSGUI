@@ -512,7 +512,7 @@ void ElementsDialog::SetICompList()
      {
        bb = bgElem->button(aIndMT[ii]);
        if( !bb )
-        Error( aIC[ii].c_str(), "E01EDrem: Invalid IComp ");
+        Error( aIC[ii], "E01EDrem: Invalid IComp ");
        aBtmId1.push_back( aIndMT[ii] );
        aICkey1.push_back( aIC[ii] );
        bb->setEnabled( true );

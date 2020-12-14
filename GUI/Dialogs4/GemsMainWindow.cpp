@@ -24,6 +24,7 @@
 #include <QtGui>
 #endif
 
+
 #include "visor.h"
 #include "m_param.h"
 #include "HelpWindow.h"
@@ -73,14 +74,14 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
 
 //   The constructor
 TVisorImp::TVisorImp(int c, char** v):
-        QMainWindow(nullptr),
-        ui(new Ui::GemsMainWindowData),
-        argc(c),
-        argv(v),
-        last_update( 0 ),
-        configAutosave(false),
-        proc(nullptr),
-        //zmq_client(nullptr),
+    QMainWindow(nullptr),
+    ui(new Ui::GemsMainWindowData),
+    argc(c),
+    argv(v),
+    last_update( 0 ),
+    configAutosave(false),
+    proc(nullptr),
+   //zmq_client(nullptr),
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)
 {
@@ -88,62 +89,61 @@ TVisorImp::TVisorImp(int c, char** v):
     (void)statusBar();
     //setMinimumSize( 300, 200 );
 
-// from visor_w.cpp (old TVisorImp)
+    // from visor_w.cpp (old TVisorImp)
 
-     charWidth = 12;
-     charHeight = 18;
-     pVisorImp = this;
+    charWidth = 12;
+    charHeight = 18;
+    pVisorImp = this;
 
-     updateTime = 10; // centiseconds
+    updateTime = 10; // centiseconds
 
+    defaultFont = QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE);
+    setCellFont( defaultFont );
+    axisLabelFont.setPointSize( 14); //11
 
-       defaultFont = QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE);
-       setCellFont( defaultFont );
-       axisLabelFont.setPointSize( 14); //11
+    pVisor = new TVisor(argc, argv);
+    pVisor->Setup();
+    pThread = QThread::currentThreadId();
+    //setWindowTitle( GEMS_VERSION_STAMP );
+    SetCaption("GEM-Selektor 3 (GEMS3) - Geochemical Equilibrium Modelling "
+               "by Gibbs Energy Minimization");
 
-       pVisor = new TVisor(argc, argv);
-       pVisor->Setup();
-       pThread = QThread::currentThreadId();
-       //setWindowTitle( GEMS_VERSION_STAMP );
-       SetCaption("GEM-Selektor 3 (GEMS3) - Geochemical Equilibrium Modelling "
-                  "by Gibbs Energy Minimization");
+    // define menu part
+    //iconSystem.addFile(
+    //  QString::fromUtf8(":/menu/Icons/EquilibriumModeIcon.png"),
+    //                     QSize(), QIcon::Normal, QIcon::Off);
+    //iconDatabase.addFile(
+    //  QString::fromUtf8(":/menu/Icons/DatabaseModeIcon.png"),
+    //                     QSize(), QIcon::Normal, QIcon::Off);
 
-// define menu part
-       //iconSystem.addFile(
-       //  QString::fromUtf8(":/menu/Icons/EquilibriumModeIcon.png"),
-       //                     QSize(), QIcon::Normal, QIcon::Off);
-       //iconDatabase.addFile(
-       //  QString::fromUtf8(":/menu/Icons/DatabaseModeIcon.png"),
-       //                     QSize(), QIcon::Normal, QIcon::Off);
+    toolDataBase = new QToolBar(this);
+    toolDataBase->setObjectName(QString::fromUtf8("toolDataBase"));
+    toolDataBase->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    toolDataBase->setMovable(false);
+    this->addToolBar(Qt::LeftToolBarArea, toolDataBase);
+    toolDataBase->setIconSize(QSize(48,48));
+    toolDataBase->addAction(ui->actionIComp);
+    toolDataBase->addAction(ui->actionDComp);
+    toolDataBase->addAction(ui->actionReacDC);
+    toolDataBase->addAction(ui->actionRTparm);
+    toolDataBase->addAction(ui->actionPhase);
+    toolDataBase->addAction(ui->actionCompos);
+    toolDataBase->setWindowTitle("toolDataBase");
 
-       toolDataBase = new QToolBar(this);
-       toolDataBase->setObjectName(QString::fromUtf8("toolDataBase"));
-       toolDataBase->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-       toolDataBase->setMovable(false);
-       this->addToolBar(Qt::LeftToolBarArea, toolDataBase);
-       toolDataBase->setIconSize(QSize(48,48));
-       toolDataBase->addAction(ui->actionIComp);
-       toolDataBase->addAction(ui->actionDComp);
-       toolDataBase->addAction(ui->actionReacDC);
-       toolDataBase->addAction(ui->actionRTparm);
-       toolDataBase->addAction(ui->actionPhase);
-       toolDataBase->addAction(ui->actionCompos);
-       toolDataBase->setWindowTitle("toolDataBase");
-
-       toolProject = new QToolBar(this);
-       toolProject->setObjectName(QString::fromUtf8("toolProject"));
-       toolProject->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-       toolProject->setMovable(false);
-       this->addToolBar(Qt::LeftToolBarArea, toolProject);
-       toolProject->setIconSize(QSize(48,48));
-       toolProject->addAction(ui->actionSysEq);
-       toolProject->addAction(ui->actionProcess);
-       toolProject->addAction(ui->actionGtDemo);
-       toolProject->addAction(ui->actionGEM2MT);
-       //toolProject->addAction(actionDualTh);
-       toolProject->addAction(ui->actionUnSpace);
-       toolProject->addAction(ui->actionProject);
-       toolProject->setWindowTitle("toolProject");
+    toolProject = new QToolBar(this);
+    toolProject->setObjectName(QString::fromUtf8("toolProject"));
+    toolProject->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    toolProject->setMovable(false);
+    this->addToolBar(Qt::LeftToolBarArea, toolProject);
+    toolProject->setIconSize(QSize(48,48));
+    toolProject->addAction(ui->actionSysEq);
+    toolProject->addAction(ui->actionProcess);
+    toolProject->addAction(ui->actionGtDemo);
+    toolProject->addAction(ui->actionGEM2MT);
+    //toolProject->addAction(actionDualTh);
+    toolProject->addAction(ui->actionUnSpace);
+    toolProject->addAction(ui->actionProject);
+    toolProject->setWindowTitle("toolProject");
 
 
     // Define internal area
@@ -155,7 +155,7 @@ TVisorImp::TVisorImp(int c, char** v):
     ui->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
     ui->horizontalLayout->addWidget(splH);
 
-// column 1
+    // column 1
     QGridLayout *layoutTab = new QGridLayout;
     layoutTab->setContentsMargins( 0, 0, 0, 0 );
     layoutTab->setSpacing(0);
@@ -182,9 +182,9 @@ TVisorImp::TVisorImp(int c, char** v):
     tbKeys->setSelectionMode(QAbstractItemView::SingleSelection);
     tbKeys->setSelectionBehavior ( QAbstractItemView::SelectRows );
 
-     splH->addWidget(itemWidget1);
+    splH->addWidget(itemWidget1);
 
-// column 2
+    // column 2
 
     QSplitter *splV = new QSplitter(Qt::Vertical );
     splV->setChildrenCollapsible(false);
@@ -214,7 +214,7 @@ TVisorImp::TVisorImp(int c, char** v):
     splH->setStretchFactor(0, 3);
     splH->setStretchFactor(1, 1);
 
-// define signal/slots
+    // define signal/slots
 
     connect( ui->action_calcMode, SIGNAL( triggered()), this, SLOT(CmCalcMode()));
     connect( ui->actionDataBaseMode, SIGNAL( triggered()), this, SLOT(CmDataBaseMode()));
@@ -234,7 +234,7 @@ TVisorImp::TVisorImp(int c, char** v):
 
     connect( pFilterKey, SIGNAL(editingFinished ()), this, SLOT(changeKeyList()) );
 
- // Set up Menus and actions
+    // Set up Menus and actions
 
     setActions();
     setCalcClient();
@@ -258,16 +258,16 @@ TVisorImp::TVisorImp(int c, char** v):
             //action_calcMode->setChecked( false );
             SetGeneralMode();
             ui->actionDataBaseMode->setChecked(true);
-         }
+        }
         else
         {
-           ui->action_calcMode->setChecked(true);
-           // load last system
-           if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 )
-           CmShow( pVisor->lastSystemKey.c_str() );
-           //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
+            ui->action_calcMode->setChecked(true);
+            // load last system
+            if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 )
+                CmShow( pVisor->lastSystemKey.c_str() );
+            //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
         }
-     }
+    }
 
 
     //startGEMServer();

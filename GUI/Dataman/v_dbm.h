@@ -80,7 +80,7 @@ public:
     {
         return rkFlds;
     }
-    char *FldKey(uint i) const
+    char *FldKey( uint i) const
     {
         return uKey+rkInd[i];
     }
@@ -392,6 +392,8 @@ public:
     void RenameList( const char* newName,
         const char *oldName );
 
+    void toJsonObject( QJsonObject& obj ) const;
+    std::string fromJsonObject( const QJsonObject& obj );
 };
 
 // Data Base container : rt

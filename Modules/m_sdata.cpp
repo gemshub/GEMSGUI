@@ -236,7 +236,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
                    " key  '";
             msg += std::string( key_, 0, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
-            Error( GetName(), msg.c_str() );
+            Error( GetName(), msg );
         }
         break;
     case FAIL_:
@@ -246,7 +246,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
                "Data record key '";
         msg += std::string( key_, 0, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
-        Error( GetName(),  msg.c_str() );
+        Error( GetName(),  msg );
     }
 }
 

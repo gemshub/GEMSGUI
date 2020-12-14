@@ -155,7 +155,7 @@ struct TValFixString:
     }
     string GetString(int ndx) const
     {
-        auto ss = string( static_cast<char*>(ptr)+(ndx*len), len);
+        auto ss = string( static_cast<char*>(ptr)+(ndx*len), 0, len);
         return ss;
     }
     bool SetString(const char* s, int ndx);
@@ -291,8 +291,8 @@ TVal<T>::SetString(const char* s, int ndx)
     }
 
     T v;
-    auto sv = std::make_unique<char[]>(ss.length()+3);
-    //auto sv = std::make_shared<char[]>( ss.length()+3 );
+    //auto sv = std::make_unique<char[]>(ss.length()+3);
+    auto sv = std::make_shared<char[]>( ss.length()+3 );
     if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.get() ) != 1 )
         return false;
 

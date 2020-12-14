@@ -701,7 +701,7 @@ void TGEM2MT::outMulti()
     allocNodeWork();  //????
     LinkCSD(0);
 
-    na->PutGEM2MTFiles( window(),   mtp->nIV, mtp->PsSdat==S_OFF,
+    na->PutGEM2MTFiles( window(),   mtp->nIV, mtp->PsSdat,
                         mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
 
 }
@@ -873,7 +873,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
                "E96MSTran: Error in translation of GEM2MT math script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 
@@ -917,12 +917,12 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
             {
                 if(ii < mtp->nYS )
                 {
-                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    TPlotLine defpl(ii, nLn, "",13,2,3);
                     plot[ii] = defpl;
                 }
                 else
                 {
-                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    TPlotLine defpl(ii, nLn, "",15,25,0);
                     plot[ii] = defpl;
                 }
             }
@@ -940,6 +940,9 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
     }
     else
     {
+      std::vector<TPlotLine> def_plt_lines;
+      def_plt_lines.push_back(TPlotLine( "",13,2,3));
+      def_plt_lines.push_back(TPlotLine( "",15,25,0));
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<mtp->nYS; ii++ )
@@ -947,7 +950,7 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
       for( ii=0; ii<mtp->nYE; ii++ )
           lnames.push_back( std::string( mtp->lNamE[ii], 0, MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, mtp->name,
-          mtp->xNames, mtp->yNames, lnames );
+          mtp->xNames, mtp->yNames, lnames, def_plt_lines );
     }
 }
 

@@ -280,46 +280,46 @@ void LookupDialog::setupPTArrays()
 
 void   LookupDialog::setTdata( double Tai[4] )
 {
-   pTfrom->textFromValue( Tai[0] );
+   //pTfrom->textFromValue( Tai[0] );
    pTfrom->setValue( Tai[0] );
-   pTuntil->textFromValue( Tai[1] );
+   //pTuntil->textFromValue( Tai[1] );
    pTuntil->setValue( Tai[1] );
 }
 
 void   LookupDialog::setPdata( double Pai[4] )
 {
-    pPfrom->textFromValue( Pai[0] );
+    //pPfrom->textFromValue( Pai[0] );
     pPfrom->setValue( Pai[0] );
-    pPuntil->textFromValue( Pai[1] );
+    //pPuntil->textFromValue( Pai[1] );
     pPuntil->setValue( Pai[1] );
 }
 
 void   LookupDialog::getTdata( double Tai[4] )
 {
 //   nT = pTN->value();
-   Tai[0] = pTfrom->text().toDouble();
-   Tai[1] = pTuntil->text().toDouble();
+   Tai[0] = pTfrom->value();
+   Tai[1] = pTuntil->value();
    if( Tai[1] < Tai[0] )
    {
          Tai[1] = Tai[0];
-         Tai[0] = pTuntil->text().toDouble();
+         Tai[0] = pTuntil->value();
    }
-   Tai[2] = pTstep->text().toDouble();
-   Tai[3] = pTtol->text().toDouble();
+   Tai[2] = pTstep->value();
+   Tai[3] = pTtol->value();
 }
 
 void   LookupDialog::getPdata( double Pai[4] )
 {
 //   nP = pPN->value();
-   Pai[0] = pPfrom->text().toDouble();
-   Pai[1] = pPuntil->text().toDouble();
+   Pai[0] = pPfrom->value();
+   Pai[1] = pPuntil->value();
    if( Pai[1] < Pai[0] )
    {
 	 Pai[1] = Pai[0];  
-	 Pai[0] = pPuntil->text().toDouble();
+     Pai[0] = pPuntil->value();
    }
-   Pai[2] = pPstep->text().toDouble();
-   Pai[3] = pPtol->text().toDouble();
+   Pai[2] = pPstep->value();
+   Pai[3] = pPtol->value();
 }
 
 void   LookupDialog::getFlags( char flgs[6] )
@@ -328,9 +328,12 @@ void   LookupDialog::getFlags( char flgs[6] )
        flgs[0] = '+';
     else flgs[0] = '-';
 
-   if( chMode->isChecked() )
-       flgs[1] = '+';
-    else flgs[1] = '-';
+   if( rbJson->isChecked() )
+       flgs[1] = 'j';
+   else if( rbBinary->isChecked() )
+       flgs[1] = 'b';
+   else
+       flgs[1] = 't';
    
    if( chAll->isChecked() )
        flgs[2] = '+';

@@ -109,7 +109,6 @@ string curDateTime()
 
 // reads line to string class from istream with a delimiter
 istream& u_getline(istream& instream, string& dst_string, char delimit = '\n');
-istream& f_getline(istream& is, std::string& str, char delim);
 
 
 #ifdef __FreeBSD

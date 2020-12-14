@@ -163,6 +163,8 @@ public:
         return ServerGems3Dir;
     }
 
+    /// Generate full path to current directory from filename and extension
+    std::string filePathFromName( const std::string& filename, const std::string& extension );
 
     void deleteDBDir( const char * dir);
     void CopyF( const char * fName, const char* fTempl );

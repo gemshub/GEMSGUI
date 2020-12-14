@@ -54,7 +54,7 @@ void  TGEM2MT::copyNodeArrays()
      for(long int ic=0; ic < CH->nICb-1; ic++) // do not check charge
      {
         dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
-        if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3)))
+        if( fabs( dc ) > std::min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3)))
                   NeedCopy = true;
      }
      if( NeedCopy )
@@ -176,7 +176,7 @@ void  TGEM2MT::NewNodeArray()
         return false;
     };
 
-    auto dbr_list =  na->genGEMS3KInputFiles(  "Te_start/Test-dat.lst", messageF, mtp->nC, false, false, false, false, false );
+    auto dbr_list =  na->genGEMS3KInputFiles(  "Te_start/Test-dat.lst", messageF, mtp->nC, 0, false, false, false, false );
     */
 }
 
@@ -201,8 +201,8 @@ long int TGEM2MT::CheckPIAinNodes1D( char IAmode, long int start_node, long int 
 //       DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
        bool* iaN = na->piaNode();      // indicators for IA in the nodes
 
-       start_node = max( start_node, 0L );
-       end_node = min( end_node, mtp->nC-1 );
+       start_node =std::max( start_node, 0L );
+       end_node = std::min( end_node, mtp->nC-1 );
 
        // Initializing iaNode vector
        if( IAmode == NEED_GEM_SIA && CH->nDCb == CH->nDC )
@@ -306,8 +306,8 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
     if( mtp->PsMO != S_OFF )
       diffile = updiffile;
 
-    start_node = max( start_node, 0L );
-    end_node = min( end_node, mtp->nC-1 );
+    start_node = std::max( start_node, 0L );
+    end_node = std::min( end_node, mtp->nC-1 );
 
     for( long int ii = start_node; ii<= end_node; ii++) // node iteration
     {
@@ -331,7 +331,7 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* 
        return false;
    };
 
-   auto dbr_list =  na->genGEMS3KInputFiles(  "Te_point/Test-dat.lst", messageF, mtp->nC, false, false, false, true, false );
+   auto dbr_list =  na->genGEMS3KInputFiles(  "Te_point/Test-dat.lst", messageF, mtp->nC, 0, false, false, true, false );
    */
 
 #ifdef useOMP
@@ -389,7 +389,7 @@ void TGEM2MT::MassTransParticleStart()
     // Courant - Neumann criteria
     dt_dif = (mtp->dx*mtp->dx)/2./(mtp->al_in*mtp->fVel + mtp->eps_in*mtp->Dif_in/mtp->nto_in); // bugfix 10.10.19 DK
     if(fabs(dt_adv) > 1e-19)
-        mtp->dTau = min( dt_adv, dt_dif ) / mtp->tf; // advection and diffusion
+        mtp->dTau = std::min( dt_adv, dt_dif ) / mtp->tf; // advection and diffusion
     else
         mtp->dTau = dt_dif / mtp->tf;    // only diffusion
 //    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1./mtp->tf;  // Courant criterion
@@ -995,7 +995,7 @@ double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE*
 
        name = pathVTK + prefixVTK + name;
 
-       fstream out_br(name.c_str(), ios::out );
+       std::fstream out_br(name.c_str(), std::ios::out );
        ErrorIf( !out_br.good() , name, "VTK text make error");
        na->databr_to_vtk(out_br, nameVTK.c_str(), mtp->cTau, mtp->ct, mtp->nVTKfld, mtp->xVTKfld );
    }

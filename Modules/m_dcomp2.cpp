@@ -738,10 +738,10 @@ void TDComp::gShok2( double T, double P, double D, double beta, double alpha,
     *dgdT = a * dDbdT + Db * dadT;
     *d2gdT2 = a * dDbdTT + 2.0e0 * dDbdT * dadT + Db * dadTT;
 
-//    if((T < 155.0) || (P > 1000.0) || (T > 355.0)) // Fix DM 27.06.2017
+//    if((T < 155.0) || (P > 1000.0) || (T > 355.0)) // Fix DM 27.06.2017, 08.09.2020
 //        return;
     // Check if the point (T,P) is inside region II, as depicted in Fig. 6 of Shock and others (1992), on page 809
-    if ((T > 155.0 && T < 355.0 && P < 1000.0) || (T>=355 && P >=500 && P < 1000))
+    if ((T > 155.0 && T < 355.0 && P < 1000.0) || (T>=355 && P >=500 && P < 1000) || (T>=355 && P<500))
     {
         tempy = ((T - 155.0) / 300.0);
         ft = pow(tempy,4.8) + cC[0] * pow(tempy,16.);

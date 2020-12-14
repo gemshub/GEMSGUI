@@ -58,7 +58,7 @@ TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text
             if( !pose )
             {  string str_err = "Invalid condition: \n";
                str_err += input;
-               Error( key_format.c_str(), str_err.c_str() );
+               Error( key_format, str_err );
             }
             mScript = string( input, 0, pose-input );
             input = pose+2;
@@ -95,7 +95,7 @@ TReadData::getFormat()
        if( input[i] != 's' )
        {  string str_err = "Invalid format (must be '%nns'): \n";
                 str_err += input;
-         Error( key_format.c_str(), str_err.c_str() );
+         Error( key_format, str_err );
        }
        if( i>1 ) //digits
        {
@@ -114,7 +114,7 @@ TReadData::getFormat()
        {
          string str_err = "Invalid format (must be IREC): \n";
                 str_err += input;
-         Error( key_format.c_str(), str_err.c_str() );
+         Error( key_format, str_err );
        }
        break;
    case 'E':
@@ -125,7 +125,7 @@ TReadData::getFormat()
        } else
          { string str_err = "Invalid format (must be EMPTY): \n";
                 str_err += input;
-           Error( key_format.c_str(), str_err.c_str() );
+           Error( key_format, str_err );
           }
        break;
    case '#': {
@@ -141,7 +141,7 @@ TReadData::getFormat()
         if( data == -1 )
         {  string str_err = "Invalid object name: \n";
             str_err += str;
-           Error( key_format.c_str(), str_err.c_str() );
+           Error( key_format, str_err );
         }
         input += i;
         skipSpace();
@@ -171,7 +171,7 @@ TReadData::getFormat()
           if( *input != ']')
            {  string str_err = "Invalid format (left ']'): \n";
                str_err += input;
-              Error( key_format.c_str(), str_err );
+              Error( key_format, str_err );
             }
           input++;
         }
@@ -184,7 +184,7 @@ TReadData::getFormat()
        if( !pose )
        {  string str_err = "Invalid string ( left simbol '\"'): \n";
               str_err += input;
-          Error( key_format.c_str(), str_err.c_str() );
+          Error( key_format, str_err );
        }
        aFmts.push_back( RFormat( string_r, 0, string( input, 0, pose-input ) ));
        input = pose+1;
@@ -193,7 +193,7 @@ TReadData::getFormat()
    default:
       {  string str_err = "Invalid format: \n";
          str_err += input;
-         Error( key_format.c_str(), str_err.c_str() );
+         Error( key_format, str_err );
       }
    }
   skipSpace();
@@ -233,7 +233,7 @@ TReadData::getData( bool isList )
  {
    string str_err = "Must be #: \n";
    str_err += input;
-   Error( key_format.c_str(), str_err.c_str() );
+   Error( key_format, str_err );
  }
  input++;
  i=0;
@@ -250,7 +250,7 @@ TReadData::getData( bool isList )
  if( data == -1 )
  {  string str_err = "Invalid object name: \n";
            str_err += str;
-       Error( key_format.c_str(), str_err.c_str() );
+       Error( key_format, str_err );
  }
  input += i;
  skipSpace();
@@ -278,7 +278,7 @@ TReadData::getData( bool isList )
      if( *input != ']')
      {  string str_err = "Invalid format: \n";
            str_err += input;
-       Error( key_format.c_str(), str_err );
+       Error( key_format, str_err );
      }
     input++;
    }

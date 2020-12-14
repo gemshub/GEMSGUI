@@ -613,7 +613,7 @@ void TSyst::systbc_calc( int mode )
                       std::string msg = "Record ";
                          msg += skey;
                          msg += " not found!" ;
-                         Error( GetName(), msg.c_str());
+                         Error( GetName(), msg );
                     }
                     else {  // record selected
                         Rnum = rt[RT_SYSEQ]->Find( skey.c_str() );
@@ -631,7 +631,7 @@ void TSyst::systbc_calc( int mode )
                // return to first record
                 aSE->ods_link(0);
                 rt[RT_SYSEQ]->SetKey( pkey.c_str() ); // Set back the initial record key
-                Error( pkey.c_str() , xcpt.mess );
+                Error( pkey, xcpt.mess );
             }
 
             //    aSE->ssp -= 1; aSE->stp -= 1;// Back to first copy of TSysEq

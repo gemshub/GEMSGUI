@@ -499,28 +499,28 @@ void TUnSpace::build_nPG_list()
 void TUnSpace::init_analyse( )
 {
 
-  // realloc internal arrays
-  work_dyn_new();
+    // realloc internal arrays
+    work_dyn_new();
 
-  // Get full matrix A
-  // load formulae
-  std::vector<TFormula> aFo;
-  std::string form;
-  int ii;
+    // Get full matrix A
+    // load formulae
+    std::vector<TFormula> aFo;
+    std::string form;
+    int ii;
 
-  for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
-  {
-     aFo.push_back( TFormula() );
-     form = aFo[ii].form_extr( ii, TRMults::sm->GetMU()->L,
-                               TRMults::sm->GetMU()->DCF );
-     aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
-  }
+    for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
+    {
+        aFo.push_back( TFormula() );
+        form = aFo[ii].form_extr( ii, TRMults::sm->GetMU()->L,
+                                  TRMults::sm->GetMU()->DCF );
+        aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
+    }
 
-  fillValue(usp->A, 0., (TRMults::sm->GetMU()->N*TRMults::sm->GetMU()->L) );
-  for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
-     aFo[ii].Stm_line(TRMults::sm->GetMU()->N, usp->A+ii*TRMults::sm->GetMU()->N,
-           (char *)TRMults::sm->GetMU()->SB, TRMults::sm->GetMU()->Val );
-  aFo.clear();
+    fillValue(usp->A, 0., (TRMults::sm->GetMU()->N*TRMults::sm->GetMU()->L) );
+    for( ii=0; ii<TRMults::sm->GetMU()->L; ii++ )
+        aFo[ii].Stm_line(TRMults::sm->GetMU()->N, usp->A+ii*TRMults::sm->GetMU()->N,
+                         (char *)TRMults::sm->GetMU()->SB, TRMults::sm->GetMU()->Val );
+    aFo.clear();
 }
 
 
@@ -543,14 +543,14 @@ void TUnSpace::text_analyze( int nObj)
 
         switch(nObj)
         {
-         case o_ungexpr:
-               PRof->ET_translate( o_untprn, o_ungexpr, 0, mupL, 0, pmpL );
-               rpn[1].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
-               break;
-         case o_unexpr:
-               PRof->ET_translate( o_untprn, o_unexpr, 0, mupL, 0, pmpL );
-               rpn[0].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
-               break;
+        case o_ungexpr:
+            PRof->ET_translate( o_untprn, o_ungexpr, 0, mupL, 0, pmpL );
+            rpn[1].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
+            break;
+        case o_unexpr:
+            PRof->ET_translate( o_untprn, o_unexpr, 0, mupL, 0, pmpL );
+            rpn[0].GetEquat( static_cast<char *>(aObj[o_untprn]->GetPtr()) );
+            break;
         }
 
     }
@@ -560,25 +560,25 @@ void TUnSpace::text_analyze( int nObj)
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
-               "E91MSTran: Error in translation of TUnSpace math script: " );
+                      "E91MSTran: Error in translation of TUnSpace math script: " );
         /*  if( iRet )
                goto AGAIN;  */
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 
 // calculate equations of graphic data
 void TUnSpace::calc_graph()
 {
-//     if( usp->PsGraph == S_OFF )
-//      return;
+    //     if( usp->PsGraph == S_OFF )
+    //      return;
 
     // calc equations
     for( usp->q = 0; usp->q < usp->dimXY[0]/*usp->Q*/; usp->q++ )
     {
-       pVisor->Message( window(), GetName(),
-             "Calculation graphic\n"
-                 "Please, wait...", usp->q, usp->Q);
+        pVisor->Message( window(), GetName(),
+                         "Calculation graphic\n"
+                         "Please, wait...", usp->q, usp->Q);
         rpn[1].CalcEquat();
     }
 }
@@ -588,7 +588,7 @@ void
 TUnSpace::RecordPlot( const char* /*key*/ )
 {
     if( usp->PsGraph == S_OFF )
-      return;
+        return;
 
     std::vector<TPlot> plt;
 
@@ -611,16 +611,19 @@ TUnSpace::RecordPlot( const char* /*key*/ )
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = updateGraphWindow( gd_gr, this, plt, usp->name,
-               usp->size[0], usp->size[1], plot,
-               usp->axisType, usp->xNames, usp->yNames );
+                                   usp->size[0], usp->size[1], plot,
+                usp->axisType, usp->xNames, usp->yNames );
     }
     else
     {
-      TCStringArray lnames;
-      for(int  ii=0; ii<usp->dimXY[1]+usp->dimEF[1]; ii++ )
-          lnames.push_back( std::string(usp->lNam[ii], 0, MAXGRNAME ));
-      gd_gr = updateGraphWindow( gd_gr, this, plt, usp->name,
-          usp->xNames, usp->yNames, lnames, ISOLINES );
+        std::vector<TPlotLine> def_plt_lines;
+        def_plt_lines.push_back(TPlotLine( "",3,6,0));
+        //def_plt_lines.push_back(TPlotLine( "",7,20,0));
+        TCStringArray lnames;
+        for(int  ii=0; ii<usp->dimXY[1]+usp->dimEF[1]; ii++ )
+            lnames.push_back( std::string(usp->lNam[ii], 0, MAXGRNAME ));
+        gd_gr = updateGraphWindow( gd_gr, this, plt, usp->name,
+                                   usp->xNames, usp->yNames, lnames, def_plt_lines, ISOLINES );
     }
 }
 

@@ -1093,7 +1093,7 @@ void TRMults::TestIComp()
                 msg += "\n in Compos record: \n";
                 msg += string(mu.SA[j], 0, BC_RKLEN );
 
-                Error( "Invalid IComp", msg.c_str());
+                Error( "Invalid IComp", msg );
             }
         } /* i */
     } /*j*/

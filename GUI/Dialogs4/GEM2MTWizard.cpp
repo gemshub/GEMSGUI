@@ -24,10 +24,10 @@
 #include "GEM2MTWizard.h"
 #include "GemsMainWindow.h"
 #include "GEMS3K/num_methods.h"
+#include "GEMS3K/io_template.h"
 #include "m_gem2mt.h"
-#include "GEMS3K/io_arrays.h"
 
-extern outField DataBR_fields[58];
+extern io_formats::outField DataBR_fields[58];
 
 void GEM2MTWizard::languageChange()
 {
@@ -281,9 +281,14 @@ pTaustep->setValue(Tau[2]);
         if( flgs[15] != '-' )
           chSelect->setChecked( true );
         else chSelect->setChecked( false );
-        if( flgs[23] != '-' )
-          chMode->setChecked( false );
-        else chMode->setChecked( true );
+
+        if( flgs[23] == 'j' )
+          rbJson->setChecked( true );
+        else if( flgs[23] == 'b' || flgs[23] == '-' )
+            rbBinary->setChecked( true );
+        else
+           rbKeyVal->setChecked( true );
+
         if( flgs[24] != '-' )
           chAll->setChecked( true );
         else chAll->setChecked( false );
@@ -501,35 +506,35 @@ void   GEM2MTWizard::getSizes( int size[20] )
 void   GEM2MTWizard::getTdata( double Tai[4] )
 {
 //   nT = pTN->value();
-   Tai[0] = pTfrom->text().toDouble();
-   Tai[1] = pTuntil->text().toDouble();
+   Tai[0] = pTfrom->value();
+   Tai[1] = pTuntil->value();
    if( Tai[1] < Tai[0] )
    {
          Tai[1] = Tai[0];
-         Tai[0] = pTuntil->text().toDouble();
+         Tai[0] = pTuntil->value();
    }
-   Tai[2] = pTstep->text().toDouble();
-   Tai[3] = pTtol->text().toDouble();
+   Tai[2] = pTstep->value();
+   Tai[3] = pTtol->value();
 }
 
 void   GEM2MTWizard::getPdata( double Pai[4] )
 {
 //   nP = pPN->value();
-   Pai[0] = pPfrom->text().toDouble();
-   Pai[1] = pPuntil->text().toDouble();
+   Pai[0] = pPfrom->value();
+   Pai[1] = pPuntil->value();
    if( Pai[1] < Pai[0] )
    {
          Pai[1] = Pai[0];
-         Pai[0] = pPuntil->text().toDouble();
+         Pai[0] = pPuntil->value();
    }
-   Pai[2] = pPstep->text().toDouble();
-   Pai[3] = pPtol->text().toDouble();
+   Pai[2] = pPstep->value();
+   Pai[3] = pPtol->value();
 }
 
 void   GEM2MTWizard::getTaudata( double Tau[3] )
 {
-   Tau[0] = pTauFrom->text().toDouble();
-   Tau[2] = pTaustep->text().toDouble();
+   Tau[0] = pTauFrom->value();
+   Tau[2] = pTaustep->value();
    Tau[1] = Tau[2]*pntM->value()+Tau[0];
 }
 
@@ -590,9 +595,14 @@ if( c_PsSmode->isChecked() )
  if( chSelect->isChecked() )
      flgs[15] = '+';
  else flgs[15] = '-';
- if( chMode->isChecked() )
-     flgs[23] = '-';
- else flgs[23] = '+';
+
+ if( rbJson->isChecked() )
+     flgs[23] = 'j';
+ else if( rbBinary->isChecked() )
+     flgs[23] = 'b';
+ else
+     flgs[23] = 't';
+
  if( chAll->isChecked() )
      flgs[24] = '+';
  else flgs[24] = '-';

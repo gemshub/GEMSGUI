@@ -227,7 +227,7 @@ void IPNCalc::Ffun(const string& str)
         err = "Function ";
         err += str;
         err+= " is not defined.";
-        Error( "E02MSTran: ", err.c_str() );
+        Error( "E02MSTran: ", err );
     }
     if( fun[i].par ) // argument is expression
     {
@@ -238,7 +238,7 @@ void IPNCalc::Ffun(const string& str)
            err = "Function ";
            err += str;
            err+= " has not parameters.";
-           Error( "E26MSTran: ", err.c_str() );
+           Error( "E26MSTran: ", err );
          }
          input++;
        }
@@ -255,7 +255,7 @@ void IPNCalc::Ffun(const string& str)
         {
             err = "Missing identifier of interval:\n";
             err += input;
-            Error( "E03MSTran: ", err.c_str() );
+            Error( "E03MSTran: ", err );
         }
         auto st = Ident();
         I_Variab( st );
@@ -264,7 +264,7 @@ void IPNCalc::Ffun(const string& str)
         {
             err = "Missing bracket ):\n";
             err += input;
-            Error( "E04MSTran: ", err.c_str() );
+            Error( "E04MSTran: ", err );
         }
         input++;
         Push( IT_F, i);
@@ -284,7 +284,7 @@ void IPNCalc::Variab( const string& str)
         std::string err = "Variable ";
         err += str;
         err+= " is not known.";
-        Error( "E06MSTran: ", err.c_str() );
+        Error( "E06MSTran: ", err );
     }
     if( aObj[j]->IsDynamic() || aObj[j]->GetN() > 1  )
     {
@@ -339,7 +339,7 @@ void IPNCalc::I_Variab( const string& str)
         std::string err = "Variable ";
         err += str;
         err+= " is not declared.";
-        Error( "E16MSTran: ", err.c_str() );
+        Error( "E16MSTran: ", err );
     }
     if( aObj[j]->GetN() > 1 )
     {
@@ -421,7 +421,7 @@ void IPNCalc::bildEquat()
         {
             err = "Assignment needs =: \n";
             err += s;
-            Error(  "E08MSTran: ", err.c_str() );
+            Error(  "E08MSTran: ", err );
         }
         input = strchr( s, '=' ) + 2;
         if( ( input=xblanc( input )) ==0 ) goto OSH;
@@ -429,7 +429,7 @@ void IPNCalc::bildEquat()
         {
             err = "Expression is needed here:\n";
             err += input;
-            Error(  "E09MSTran: ", err.c_str() );
+            Error(  "E09MSTran: ", err );
         }
         RPN_expr( CK_ );
         if( ( input=xblanc( s ))==0 ) goto OSH;
@@ -437,7 +437,7 @@ void IPNCalc::bildEquat()
         {
             err = "Identifier (variable) is needed here:\n";
             err += input;
-            Error(  "E10MSTran: ", err.c_str() );
+            Error(  "E10MSTran: ", err );
         }
 
         auto str = Ident();
@@ -459,7 +459,7 @@ void IPNCalc::bildEquat()
     {
         err = "Invalid characters at the end of expression:\n";
         err += input;
-        Error(  "E11MSTran: ", err.c_str() );
+        Error(  "E11MSTran: ", err );
     }
     return;
 OSH :
@@ -479,7 +479,7 @@ void IPNCalc::bildWhile()
     {
         err = "Missing (:\n";
         err += input;
-        Error(  "E14MSTran: ", err.c_str() );
+        Error(  "E14MSTran: ", err );
     }
     input++;
     neqbg = aEq.size();
@@ -488,7 +488,7 @@ void IPNCalc::bildWhile()
     {
         err = "Expression is needed here:\n";
         err += input;
-        Error(  "E19MSTran: ", err.c_str() );
+        Error(  "E19MSTran: ", err );
     }
     RPN_expr( ')' );
     Variab( "k_");
@@ -504,7 +504,7 @@ void IPNCalc::bildWhile()
     {
         err = "Missing keyword begin :\n";
         err += input;
-        Error(  "E12MSTran: ", err.c_str() );
+        Error(  "E12MSTran: ", err );
     }
     input+=5;
     bildEquat();
@@ -512,7 +512,7 @@ void IPNCalc::bildWhile()
     {
         err = "Missing keyword end :\n";
         err += input;
-        Error(  "E13MSTran: ", err.c_str() );
+        Error(  "E13MSTran: ", err );
     }
     input+=3;
     // unconditional jump to equation
@@ -540,7 +540,7 @@ void IPNCalc::bildIf()
     {
         err = "Missing bracket ( :\n";
         err += input;
-        Error(  "E24MSTran: ", err.c_str() );
+        Error(  "E24MSTran: ", err );
     }
     input++;
     eq_add(  0, aItm.size() );  // eq[Neqs].first = Nitems; // conditions
@@ -548,7 +548,7 @@ void IPNCalc::bildIf()
     {
         err = "Expression is needed here:\n";
         err += input;
-        Error(  "E29MSTran: ", err.c_str() );
+        Error(  "E29MSTran: ", err );
     }
     RPN_expr( ')' );
     Variab( "k_");
@@ -565,7 +565,7 @@ void IPNCalc::bildIf()
     {
         err = "Missing keyword begin :\n";
         err += input;
-        Error(  "E22MSTran: ", err.c_str() );
+        Error(  "E22MSTran: ", err );
     }
     input+=5;
     bildEquat();
@@ -573,7 +573,7 @@ void IPNCalc::bildIf()
     {
         err = "Missing keyword end :\n";
         err += input;
-        Error(  "E23MSTran: ", err.c_str() );
+        Error(  "E23MSTran: ", err );
     }
     input+=3;
     // unconditional jump to equation
@@ -597,7 +597,7 @@ void IPNCalc::bildIf()
         {
             err = "Missing keyword begin :\n";
             err += input;
-            Error(  "E32MSTran: ", err.c_str() );
+            Error(  "E32MSTran: ", err );
         }
         input+=5;
         bildEquat();
@@ -605,7 +605,7 @@ void IPNCalc::bildIf()
         {
             err = "Missing keyword end :\n";
             err += input;
-            Error(  "E32MSTran: ", err.c_str() );
+            Error(  "E32MSTran: ", err );
         }
         input+=3;
 /*  Sveta 27/11/2006
@@ -697,7 +697,7 @@ void IPNCalc::RPN_expr( char ck )
                 {
                     err = "Missing bracket ) :\n";
                     err += input;
-                    Error(  "E34MSTran: ", err.c_str() );
+                    Error(  "E34MSTran: ", err );
                 }
                 input++;
                 Push( IT_U, 0 );
@@ -728,7 +728,7 @@ void IPNCalc::RPN_expr( char ck )
                 {
                     err = "No match of brackets ( and ) :\n";
                     err += input;
-                    Error("E20MSTran: ", err.c_str() );
+                    Error("E20MSTran: ", err );
                 }
             }
             input++;
@@ -783,7 +783,7 @@ void IPNCalc::RPN_expr( char ck )
                 {
                     err = "Missing ( :\n";
                     err += input;
-                    Error(  "E18MSTran: ", err.c_str() );
+                    Error(  "E18MSTran: ", err );
                 }
                 Push( IT_O, INDEX( OPER, op ));
             }
@@ -800,7 +800,7 @@ void IPNCalc::RPN_expr( char ck )
         default :
             err = "Invalid symbol of operation:\n";
             err += input;
-            Error(  "E21MSTran: ", err.c_str() );
+            Error(  "E21MSTran: ", err );
         }
         if( (input=xblanc(input))==0 ) goto OSH;
     }
@@ -811,7 +811,7 @@ void IPNCalc::RPN_expr( char ck )
         {
             err = "No match of brackets ( and ):\n";
             err += input;
-            Error(  "E30MSTran: ", err.c_str() );
+            Error(  "E30MSTran: ", err );
         }
         Push( IT_O, INDEX( OPER, op ));
     }

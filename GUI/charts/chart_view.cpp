@@ -30,9 +30,14 @@
 // JSONIO (https://bitbucket.org/gems4/jsonio); Qt5 (https://qt.io).
 //
 
+#include <QApplication>
+#include <QClipboard>
+#include <QBuffer>
 #include <QMimeData>
+#include <QPdfWriter>
 #include <QDragEnterEvent>
 #include <QDrag>
+#include <QMenu>
 #include <QtCharts/QAreaSeries>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QSplineSeries>
@@ -731,6 +736,7 @@ void PlotChartView::mouseReleaseEvent(QMouseEvent *event)
         /*QPointF fp = chart()->mapToValue(event->pos());
         QString label = QString("%1:%2").arg( fp.x()).arg( fp.y());
         pdata->addPoint( event->pos(), label);*/
+        slotPopupMenu(event->pos());
         event->accept();
         return;
     }
@@ -754,6 +760,82 @@ void PlotChartView::mouseReleaseEvent(QMouseEvent *event)
         }
 
     QChartView::mouseReleaseEvent(event);
+}
+
+void PlotChartView::slotPopupMenu(const QPoint &pos)
+{
+    std::shared_ptr<QMenu> menu( new QMenu(this) );
+    QAction* act;
+
+    act =  new QAction("Copy image to clipboard", this);
+    act->setStatusTip("Copy plot as bitmap");
+    connect(act, SIGNAL(triggered()), this, SLOT(copyPlotBitmap()));
+    menu->addAction(act);
+
+//    act =  new QAction("Copy plot as pdf", this);
+//    act->setStatusTip("Copy plot as pdf");
+//    connect(act, SIGNAL(triggered()), this, SLOT(copyPlotPdf()));
+//    menu->addAction(act);
+
+    act =  new QAction("Save image to file ...", this);
+    act->setStatusTip("Save image to file ...");
+    connect(act, SIGNAL(triggered()), this, SIGNAL(savetoFile()));
+    menu->addAction(act);
+
+    menu->exec( viewport()->mapToGlobal(pos) );
+}
+
+void PlotChartView::copyPlotBitmap()
+{
+    QPixmap picture = grab();
+    QApplication::clipboard()->setPixmap(picture, QClipboard::Clipboard);
+}
+
+void PlotChartView::copyPlotPdf()
+{
+
+//    auto formats = QApplication::clipboard()->mimeData()->formats();
+//    std::cout << "Formats " << std::endl;
+//    for( auto format: formats)
+//        std::cout << format.toStdString() << std::endl;
+
+    // https://uk.wikipedia.org/wiki/MIME_%D1%82%D0%B8%D0%BF
+    // https://developer.mozilla.org/ru/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+#ifndef QT_NO_PRINTER
+    QStringList formats;
+    formats << "application/pdf" << "application/com.adobe.pdf";
+
+    QByteArray byteArray("");
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
+    QPdfWriter writer(&buffer);
+    writer.setPageSize( QPageSize(QPageSize::A4) );
+    QPainter p( &writer );
+    render( &p );
+    p.end();
+    QMimeData* d = new QMimeData();
+    //d->setData("application/pdf",buffer.buffer());
+    d->setData("application/com.adobe.pdf",buffer.buffer());
+   QApplication::clipboard()->setMimeData(d,QClipboard::Clipboard);
+#endif
+
+    //#ifndef QWT_NO_SVG
+    //    QByteArray byteArray("");
+    //    QBuffer b(&byteArray);
+    //    b.open(QIODevice::ReadWrite);
+    //    QSvgGenerator generator;
+    //    generator.setOutputDevice(&b);
+    //    //generator.setFileName( "test.svg" );
+    //    generator.setSize( size() );
+    //    generator.setViewBox( rect() );
+    //    QPainter painter(&generator);
+    //    render(&painter);
+    //    painter.end();
+    //    QMimeData * d = new QMimeData();
+    //    d->setData("image/svg+xml", b.data());
+    //    std::cout <<  d->data("image/svg+xml").data()  << std::endl;
+    //    QApplication::clipboard()->setMimeData( d );
+    //#endif
 }
 
 

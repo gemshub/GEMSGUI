@@ -8,6 +8,7 @@
 #else
 #include "gemsreaktoro/zmq_client.hpp"
 #endif
+#include "GEMS3K/gems3k_impex.h"
 
 
 TNodeArrayGUI::TNodeArrayGUI( long int nNod, TMultiBase *apm  ):
@@ -106,13 +107,21 @@ bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* ,
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files
 std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
-                                            bool bin_mode, bool brief_mode, bool with_comments,
+                                            char  type_b, bool brief_mode, bool with_comments,
                                             bool putNodT1, bool addMui )
 {
     // Get name of filenames structure
     std::string path = std::string( rt[RT_SYSEQ]->FldKey(2), 0, rt[RT_SYSEQ]->FldLen(2));;
     strip(path);
-    if( bin_mode )
+    GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
+    switch( type_b)
+    {
+    case '-':
+    case 'b': type_f = GEMS3KGenerator::f_binary; break;
+    case 'j': type_f = GEMS3KGenerator::f_json; break;
+    }
+
+    if( type_f==GEMS3KGenerator::f_binary )
         path += "-bin.lst";
     else
         path += "-dat.lst";
@@ -137,7 +146,7 @@ AGAIN:
     ProcessProgressFunction messageF = [nIV, par](const std::string& message, long point){
         return  pVisor->Message( par, "GEM2MT node array",  message.c_str() , point, nIV );
     };
-    genGEMS3KInputFiles(  path, messageF, nIV, bin_mode, brief_mode, with_comments,
+    genGEMS3KInputFiles(  path, messageF, nIV, type_f, brief_mode, with_comments,
                           putNodT1, addMui );
 
     pVisor->CloseMessage();

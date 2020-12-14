@@ -328,6 +328,9 @@ public slots:
     void CmRestore();
     void CmExport();
     void CmImport();
+    void CmBackuptoJson();
+    void CmRestorefromJson();
+
 
     // NewSystemDialog
     void CmOpen_MTPARAM();
@@ -368,6 +371,7 @@ public slots:
     void CmHelpLicense();
     void Update(bool force);
     void theadService( int nFunction, QWidget* par );
+
 
 private slots:
     void updateMenus();

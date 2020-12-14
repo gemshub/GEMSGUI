@@ -110,6 +110,7 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
     QObject::connect( bCustomize, SIGNAL(clicked()), this, SLOT(CmLegend()));
     QObject::connect( bPrint, SIGNAL(clicked()), this, SLOT(CmPrint()));
     QObject::connect( bSaveImage, SIGNAL(clicked()), this, SLOT(CmSaveImage()));
+    QObject::connect( plot, SIGNAL(savetoFile()), this, SLOT(CmSaveImage()));
 
     QObject::connect( plot, SIGNAL(fragmentChanged(QRectF)), this, SLOT(updateFragment(QRectF)));
 
@@ -216,11 +217,13 @@ void GraphDialog::CmFragment()
 
 void GraphDialog::CmSaveImage()
 {
-   QString  fileName  =  pVisor->localDir().c_str();
-            fileName  +=  "image.pdf";
+    auto fname_default = gr_data->title.substr(0, 30);
+    if( fname_default.empty() )
+        fname_default =  "My_plot";
+    QString  fileName  =  pVisor->filePathFromName(fname_default, "pdf").c_str();
 
     const QList<QByteArray> imageFormats =
-        QImageWriter::supportedImageFormats();
+            QImageWriter::supportedImageFormats();
 
     QStringList filter;
     filter.clear();
@@ -245,8 +248,8 @@ void GraphDialog::CmSaveImage()
 
     QString selectedFilter;
     fileName = QFileDialog::getSaveFileName(
-        this, "Saving Graphics Image", fileName,
-        filter.join( ";;" ), &selectedFilter, QFileDialog::DontConfirmOverwrite );
+                this, "Saving Graphics Image", fileName,
+                filter.join( ";;" ), &selectedFilter, QFileDialog::DontConfirmOverwrite );
 
     if ( !fileName.isEmpty() )
     {
@@ -254,15 +257,14 @@ void GraphDialog::CmSaveImage()
         // can be saved current finfo.Dir()
         if( finfo.suffix().isEmpty() ) // solwing for linux
         {
-          int posb = selectedFilter.lastIndexOf(".");
-          int pose = selectedFilter.indexOf(")", posb);
-          QString ext = selectedFilter.mid(posb+1, pose-posb-1);
-          fileName += "."+ext;
+            int posb = selectedFilter.lastIndexOf(".");
+            int pose = selectedFilter.indexOf(")", posb);
+            QString ext = selectedFilter.mid(posb+1, pose-posb-1);
+            fileName += "."+ext;
         }
 
-        pVisor->setLocalDir( (finfo.dir().absolutePath().toStdString() + "/").c_str() );
+        pVisor->setLocalDir( finfo.dir().absolutePath().toStdString() );
         plot->renderDocument( gr_data->title.c_str(), fileName );
-
     }
 }
 

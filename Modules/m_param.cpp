@@ -22,7 +22,6 @@
 #include <unistd.h>
 #endif
 
-//#include <cmath>
 #include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_syseq.h"
@@ -56,11 +55,11 @@ TProfil* TProfil::pm;
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
-    " Tolerances and controls: GEMSGUI v.3.7.0  and " " GEMS3K v.3.7.0 ",
+    " Tolerances and controls: GEMSGUI v.3.8.0  and " " GEMS3K v.3.8.0 ",
     {   // Typical default set (24.03.2020) new PSSC( logSI ) & uDD()
-        2,  /* PC */  2,     /* PD */   -5,   /* PRD */
+        2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
-        0, /* DT */     30000,   /* PLLG */   1,  /* PE */  7000, /* IIM */
+        0, /* DT */     30000,   /* PLLG */   1,  /* PE */  9999, /* IIM */
         1000., /* DG */   1e-13,  /* DHB */  1e-20,  /* DS */
         1e-5,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-5,  /* DFYw */  1e-5,  /* DFYaq */    1e-5,  /* DFYid */
@@ -84,7 +83,7 @@ SPP_SETTING pa_ = {
     "0*-------P--", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
-    { "Abscissa","Ordinate"},    /* GDpcc[2][9] */
+    { "abscissa","ordinate"},    /* GDpcc[2][9] */
     "++++-+",   /* GDptc[6] */  "++++--",   /* GDpgw[6] */
     "*",   /* sdrefkey 32*/  "",   /* Reserv [50-32] */
     /* RTPARM */
@@ -493,7 +492,8 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
        // make  all files
       if(flags[5] == S_OFF )
            na->pNodT0()[0]->NodeStatusFMT = No_nodearray;
-      na->PutGEM2MTFiles( par, 1,  ( flags[1] == S_ON ), ( flags[2] == S_ON ),
+
+      na->PutGEM2MTFiles( par, 1,  flags[1], ( flags[2] == S_ON ),
                    ( flags[3] == S_ON ), false, true );// addMui, to txt
       //Test to compare standalone  na->GEM_print_ipm( "GemsCalcPhase.txt" );
       //outMultiTxt( "IPM_GEMS.txt"  );
@@ -503,7 +503,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       if( na )
        delete na;
       na = nullptr;
-       Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+      throw;
     }
     if( na )
      delete na;
@@ -1085,41 +1085,11 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /
   return multi->GetPM()->t_elap_sec;
 }
 
-void TProfil::outMulti( GemDataStream& ff, std::string& /*path*/  )
-{
-    ff.writeArray( &pa.p.PC, 10 );
-    ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff/*, path*/ );
-}
-
-// outpu MULTI to txt format
-// brief_mode - Do not write data items that contain only default values
-// with_comments -Write files with comments for all data entries ( in text mode)
-// addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
-void TProfil::outMulti( std::string& path, bool addMui, bool with_comments, bool brief_mode )
-{
-
-    fstream ff( path.c_str(), ios::out );
-    ErrorIf( !ff.good() , path, "Fileopen error");
-
-    multi->to_text_file_gemipm( ff, addMui, with_comments, brief_mode );
-//    multi->to_text_file_gemipm( path.c_str(), addMui, with_comments, false ); // workaround 18.12.14 DK (built-in kinetics) - reverted
-}
-
 void TProfil::outMultiTxt( const char *path, bool append  )
 {
     multi->to_text_file( path, append );
 }
 
-
-//// Reading structure MULTI (GEM IPM work structure)
-//void TProfil::readMulti( GemDataStream& ff,  DATACH* )
-//{
-
-//      ff.readArray( &pa.p.PC, 10 );
-//      ff.readArray( &pa.p.DG, 28 );
-//      multi->from_file( ff );
-//}
 
 
 

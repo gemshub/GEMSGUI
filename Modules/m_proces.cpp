@@ -29,6 +29,7 @@
 #include "t_print.h"
 #include "stepwise.h"
 #include "GEMS3K/num_methods.h"
+#include "GEMS3K/gems3k_impex.h"
 #include "nodearray_gui.h"
 
 double ff_proc( double x, double );
@@ -516,8 +517,10 @@ pe[q].PvR1 = '-';    // AIA on:   KD: temporary for process create
     pe[q].sdval = nullptr;
     pe[q].tprn = nullptr;
     // graphics
-    strcpy( pe[q].xNames, "xp" );
-    strcpy( pe[q].yNames, "yp" );
+    //strcpy( pe[q].xNames, "xp" );
+    //strcpy( pe[q].yNames, "yp" );
+    memcpy( pe[q].xNames, TProfil::pm->pa.GDpcc[0], MAXAXISNAME );
+    memcpy( pe[q].yNames, TProfil::pm->pa.GDpcc[1], MAXAXISNAME );
     pe[q].dimEF[1] = 1;
     pe[q].dimEF[0] = 0;
     pe[q].dimX = 1;
@@ -1069,7 +1072,7 @@ void TProcess::pe_text_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
    "E93MSTran: Error in analyzing Process simulation control script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 
     try
@@ -1088,7 +1091,7 @@ void TProcess::pe_text_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
   "E94MSTran: Error in analyzing Process data sampling script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
+        Error(  GetName() , xcpt.mess );
     }
 }
 
@@ -1549,19 +1552,19 @@ void TProcess::RecordPrint(const char *key)
         filename1 += "-dat.lst";
 
         if( vfChooseFileSave(window(), filename1,
-                   "Please, enter the Process work structure file name", "*.lst" ) )
+                             "Please, enter the Process work structure file name", "*.lst" ) )
         {
             if( !access(filename1.c_str(), 0 ) ) //file exists
                 if( !vfQuestion( window(), filename1.c_str(),
-                        "This file exists! Overwrite?") )
-                   return;
+                                 "This file exists! Overwrite?") )
+                    return;
             TCStringArray savedSystems;
             genGEM3K(filename1, savedSystems, false, false);
             refreshState();
         }
     }
     else
-         TCModule::RecordPrint( key );
+        TCModule::RecordPrint( key );
 
 }
 
@@ -1579,7 +1582,7 @@ TProcess::RecordPlot( const char* /*key*/ )
     }
     int ndxy = 0;
     if(  pep->dimX > 1)
-           ndxy = pep->dimX;
+        ndxy = pep->dimX;
 
     if( plot )
     {
@@ -1592,37 +1595,40 @@ TProcess::RecordPlot( const char* /*key*/ )
             {
                 if(ii < pep->dimXY[1] )
                 {
-                    TPlotLine defpl(ii, nLn, "",6,0,2);
+                    TPlotLine defpl(ii, nLn, "",13,2,3);
                     plot[ii] = defpl;
                 }
                 else
                 {
-                    TPlotLine defpl(ii, nLn, "",7,7,0);
+                    TPlotLine defpl(ii, nLn, "",15,25,0);
                     plot[ii] = defpl;
                 }
             }
             if(ii < pep->dimXY[1] )
                 plot[ii].setName( pep->lNam[ii+ndxy]);
-                //strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME-1 );
+            //strncpy( plot[ii].name, pep->lNam[ii], MAXGRNAME-1 );
             else
                 plot[ii].setName( pep->lNamE[ii-pep->dimXY[1]]);
-                //strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME-1 );
+            //strncpy( plot[ii].name, pep->lNamE[ii-pep->dimXY[1]], MAXGRNAME-1 );
             //plot[ii].name[MAXGRNAME-1] = '\0';
         }
         gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
-                                     pep->size[0], pep->size[1], plot,
-                                     pep->axisType, pep->xNames, pep->yNames);
+                                   pep->size[0], pep->size[1], plot,
+                pep->axisType, pep->xNames, pep->yNames);
     }
     else
     {
-      TCStringArray lnames;
-      int ii;
-      for( ii=0; ii<pep->dimXY[1]; ii++ )
-          lnames.push_back( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
-      for( ii=0; ii<pep->dimEF[1]; ii++ )
-          lnames.push_back( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
-          pep->xNames, pep->yNames, lnames );
+        std::vector<TPlotLine> def_plt_lines;
+        def_plt_lines.push_back(TPlotLine( "",13,2,3));
+        def_plt_lines.push_back(TPlotLine( "",15,25,0));
+        TCStringArray lnames;
+        int ii;
+        for( ii=0; ii<pep->dimXY[1]; ii++ )
+            lnames.push_back( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
+        for( ii=0; ii<pep->dimEF[1]; ii++ )
+            lnames.push_back( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
+        gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
+                                   pep->xNames, pep->yNames, lnames, def_plt_lines );
     }
 }
 
@@ -1676,7 +1682,7 @@ const char* TProcess::GetHtml()
    return GM_PROCES_HTML;
 }
 
-void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
+void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
 {
     // set up Node Array
     std::unique_ptr<TNodeArrayGUI> na;
@@ -1699,7 +1705,8 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
               //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
               return false;
         };
-    auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, false, brief_mode, false, false, add_mui );
+
+    auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, GEMS3KGenerator::default_type_f, brief_mode, false, false, add_mui );
 
     // output dbr keys
     if( pep->stl == nullptr )
@@ -1709,8 +1716,8 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
     std::string name;
     std::string newname;
     u_splitpath( dbr_list, dir, name, newname );
-    ofstream fout2(dbr_list.c_str(), ios::app);
-
+    ofstream fout2( dbr_list, ios::app);
+    auto f_ext = GEMS3KGenerator::default_ext();
     for( int ii=0; ii<pep->NR1 ; ++ii )
     {
         name = std::string( pep->stl[ii], 0, EQ_RKLEN );
@@ -1726,12 +1733,11 @@ void TProcess::genGEM3K(const std::string& filepath, TCStringArray& savedSystems
            KeyToName(name);
            newname = dir+ "/";
            newname += name;  // could be convert in sewrvice
-           newname += ".";
-           newname += dat_ext;
-           fout2 << "," << " \"" << name.c_str() << "." << dat_ext << "\"";
+           newname += "."+f_ext;
+           fout2 << "," << " \"" << name << "." << f_ext << "\"";
            // save to dataBR internal node  and save to file
            //TMulti::sm->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
-           na->GEMS3k_write_dbr( newname.c_str(), false, false, brief_mode );
+           na->GEMS3k_write_dbr( newname.c_str(), GEMS3KGenerator::default_type_f, false, brief_mode );
        }
     }
 

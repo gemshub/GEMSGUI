@@ -5,6 +5,7 @@
 #include "GemsMainWindow.h"
 #include "graph_window.h"
 
+void  adjustAxis( double& min, double& max, int& numTicks);
 ChartData *allocateData( const std::vector<TPlot>& aPlots,
                          std::vector<std::shared_ptr<PlotModel>>& plotModels,
                          const char * aTitle, const char *aXName, const char *aYName, int agraphType  );
@@ -45,7 +46,14 @@ ChartData *allocateData( const std::vector<TPlot>& aPlots,
         chartModels.back()->setXColumns(aPlots[ii].xColumns());
         chartModels.back()->setYColumns(aPlots[ii].yColumns(), true);
     }
-    return new ChartData( chartModels, aTitle, std::string(aXName, MAXAXISNAME), std::string(aYName, MAXAXISNAME), agraphType );
+    std::string XName = std::string(aXName, 0, MAXAXISNAME);
+    if( XName.empty() )
+        XName = "abscissa";
+    std::string YName = std::string(aYName, 0, MAXAXISNAME);
+    if( YName.empty() )
+        YName = "ordinate";
+
+    return new ChartData( chartModels, aTitle, XName, YName, agraphType );
 }
 
 
@@ -109,7 +117,9 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
                                  TCModule *pmodule, std::vector<TPlot>& aPlots,
                                  const char * aTitle,
                                  const char *aXName, const char *aYName,
-                                 TCStringArray line_names, int agraphType  )
+                                 TCStringArray line_names,
+                                 const std::vector<TPlotLine>& def_plt_lines,
+                                 int agraphType  )
 {
     /// Description of 2D plotting widget
     std::shared_ptr<jsonui::ChartData> m_chartData;
@@ -121,12 +131,49 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
     // change names
     for (size_t ii=0; ii<line_names.size(); ++ii)
     {
+        int plot =  m_chartData->getPlot( ii );
+        if( plot >= 0 && plot < static_cast<int>(def_plt_lines.size()) )
+        {
+            TPlotLine defpl(ii, line_names.size(), "",
+                            def_plt_lines[plot].getType(),
+                            def_plt_lines[plot].getSize(),
+                            def_plt_lines[plot].getLineSize());
+            auto seriesdata = convertor(defpl);
+
+            if( plot >= 0 &&  plotModels[plot]->absCount() <= seriesdata.getXColumn() )
+                seriesdata.setXColumn(0);
+            m_chartData->setLineData( ii, seriesdata );
+        }
         if( ii > m_chartData->linesNumber() )
             break;
         m_chartData->setLineData( ii,  std::string(line_names[ii].c_str())  );
     }
+
+    // set up axis
+    double minX=DOUBLE_EMPTY, maxX=DOUBLE_EMPTY,
+            minY=DOUBLE_EMPTY, maxY=DOUBLE_EMPTY;
+
+    for( size_t ii=0, nLines=0; ii<aPlots.size(); ii++)
+        for( int jj=0; jj<aPlots[ii].getLinesNumber(); jj++, nLines++ )
+        {
+            aPlots[ii].getMaxMinLine( minX, maxX, minY, maxY, jj, m_chartData->lineData(nLines).getXColumn() );
+        }
+
+    adjustAxis(minX, maxX, m_chartData->axisTypeX);
+    adjustAxis(minY, maxY, m_chartData->axisTypeY);
+
+    m_chartData->region[0] = minX;
+    m_chartData->region[1] = maxX;
+    m_chartData->region[2] = minY;
+    m_chartData->region[3] = maxY;
+    m_chartData->part[0] = minX+(maxX-minX)/3;
+    m_chartData->part[1] = maxX-(maxX-minX)/3;
+    m_chartData->part[2] = minY+(maxY-minY)/3;
+    m_chartData->part[3] = maxY-(maxY-minY)/3;
+    // end setup axis
+
     if( graph_dlg )
-      graph_dlg->close();
+        graph_dlg->close();
     //if( !graph_dlg )
     {
         graph_dlg = new GraphDialog( pmodule, m_chartData, plotModels  );
@@ -146,3 +193,22 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
     return graph_dlg;
 }
 
+void  adjustAxis( double& min, double& max, int& numTicks)
+{
+    const int minTicks = 4;
+    double grossStep = (max-min)/minTicks;
+    double step = pow(10. , floor(log10(grossStep)));
+
+    if(5*step < grossStep )
+    {
+        step *=5;
+    }
+    else if(2*step < grossStep )
+        step *=2;
+
+    numTicks = int(ceil(max/step)-floor(min/step));
+    if( numTicks < minTicks)
+        numTicks = minTicks;
+    min = floor(min/step)*step;
+    max = ceil(max/step)*step;
+}

@@ -19,7 +19,8 @@
 #include <cstdio>
 #include <cmath>
 #include <cctype>
-
+#include <QJsonObject>
+#include <QJsonArray>
 #include "v_vals_impl.h"
 #include "v_object.h"
 #include "m_param.h"
@@ -433,8 +434,7 @@ TObject::SetString(const char *vbuf, int aN, int aM)
 
 
 // get cell of data object as double
-double
-TObject::Get(int n, int m)
+double TObject::Get(int n, int m) const
 {
     check_dim(n,m);
     return pV->Get(ndx(n,m));
@@ -981,6 +981,159 @@ void TObject::ofTXT( fstream& of )
                     }
 
                 SetString( sbuf, i, j );
+            }
+    }
+}
+
+void TObject::toJsonObject( QJsonObject& obj ) const
+{
+    obj[ "label"] = Keywd;
+    obj[ "dot"] = Type;
+    if( IsNull() && Dynamic && M != 0)
+        obj[ "dN"] = 0;
+    else
+        obj[ "dN"] =  N;
+    obj[ "dM"] =  M;
+    obj[ "dyn"] = Dynamic;
+
+    if( IsNull() )
+    {
+        //no value will be written as null in the json file
+        obj[ "val" ];
+        return;
+    }
+
+    if( strcmp(Keywd, "SPPpar") == 0 )
+    {
+        //obj.insert( "val", ((SPP_SETTING*)GetPtr())->toJsonObject());
+        return;
+    }
+
+    if( strcmp(Keywd+2, "plt") == 0 )
+    {
+        QJsonArray pltArray;
+        for(int ii=0; ii<GetN(); ii++)
+        {
+            QJsonObject pltObject;
+            ((TPlotLine*)GetPtr() + ii)->toJsonObject( pltObject );
+            pltArray.append(pltObject);
+        }
+        obj["val"] = pltArray;
+        return;
+    }
+
+    if( Type == S_ ) // text
+    {
+        obj["val"] = (const char*)GetPtr();
+    }
+    else
+    {
+        QJsonArray valArray;
+        for(int i=0; i < N; i++ )
+            for(int j=0; j < M; j++ )
+            {
+                if( IsEmpty(i,j))
+                    valArray.append( QJsonValue(QJsonValue::Null) ); // null
+                else
+                {
+                    if( Type>= D_ && Type<= I_)
+                        valArray.append( Get(i,j) );
+                    else {
+                        auto str_val = GetString(i,j);
+                        //strip(str_val);
+                        valArray.append( str_val.c_str() );
+                    }
+                }
+            }
+        obj["val"] = valArray;
+    }
+}
+
+void TObject::fromJsonObject(const QJsonObject &obj)
+{
+    signed char Otype;
+    int Odim_N;
+    int Odim_M;
+    bool ODynamic;
+    std::string valStr;
+
+    Otype = obj[ "dot" ].toInt( N_TYPE_ );
+    Odim_N = obj[ "dN" ].toInt( 0 );
+    Odim_M = obj[ "dM" ].toInt( 0 );
+    ODynamic = obj[ "dyn" ].toBool( false );
+    // IndexationCode = (int)obj.value("ndxs").toDouble();
+
+    // now it is an error
+    ErrorIf( ODynamic != Dynamic, GetKeywd(), "TObject:E19 Try to change allocation of object");
+
+    if( IsDynamic() )
+    {
+        if( Odim_M==0 || Odim_N==0 )
+        {
+            Type = Otype;
+            N = Odim_N;
+            M = Odim_M;
+            Free();
+            return;
+        }
+
+        if( Otype != Type || Odim_N != N || Odim_M != M || IsNull() )
+        {
+            Alloc( Odim_N, Odim_M, Otype );
+            check();
+        }
+    }
+    else
+    {
+        if( Otype != Type || Odim_N != N || Odim_M != M )
+            Error( GetKeywd(), "TObject:E07 Invalid type/size on getting static data object");
+    }
+
+    if( strcmp(Keywd, "SPPpar") == 0 )
+    {
+        //((SPP_SETTING*)GetPtr())->fromJsonObject( obj.value("val").toObject() );
+        return;
+    }
+
+    if( strcmp(Keywd+2, "plt") == 0 )
+    {
+        QJsonArray pltArray = obj["val"].toArray();
+        for(int ii=0; ii< min( N, pltArray.size()); ii++)
+        {
+            QJsonObject pltObject = pltArray[ii].toObject();
+            ((TPlotLine*)GetPtr() + ii)->fromJsonObject( pltObject );
+        }
+        return;
+    }
+
+    else if( Type == S_ ) // text
+    {
+        valStr = obj["val"].toString("").toStdString();
+        SetString( valStr.c_str(), 0, 0 );
+    }
+    else
+    {
+        QJsonArray valArray = obj["val"].toArray();
+        for(int i=0; i < N; i++ )
+            for(int j=0; j < M; j++ )
+            {
+                int ndx_ = ndx(i, j);
+                if( valArray.size() <= ndx_ )
+                    return;
+
+                if( Type>= D_ && Type<= I_ )
+                {
+                    double valDouble =  valArray[ndx_].toDouble(DOUBLE_EMPTY);
+                    if(  IsDoubleEmpty( valDouble) )
+                        SetString( S_EMPTY, i, j );
+                    else
+                        Put( valDouble, i, j );
+                }
+                else
+                {
+                    valStr = valArray[ndx_].toString("").toStdString();
+                    SetString( valStr.c_str(), i, j );
+                }
             }
     }
 }

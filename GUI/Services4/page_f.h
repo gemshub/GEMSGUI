@@ -57,8 +57,6 @@ const int DEF_N_BROWSE = 6;
 
 struct FieldInfo
 {
-    const PageInfo& rPageInfo;
-//    TField* pField;
     TObject* pObj;
     int nO;
     eFieldType fType;
@@ -69,22 +67,18 @@ struct FieldInfo
     eShowType showType;
     int maxN, maxM;		// max size of grid w/out scrolls
 
-    FieldInfo(const PageInfo& pi, istream& is);
+    explicit FieldInfo( istream& is);
 
-    FieldInfo(const PageInfo& pi, TObject& rO, int anO, 
+    explicit FieldInfo( TObject& rO, int anO,
               eFieldType fT, int np, bool lb,
               ePlaceMode pl, eEdit e, eShowType sT,
               int w = DEF_M_BROWSE,
               int h = DEF_N_BROWSE);
-    FieldInfo( int anO, eFieldType fT, int np, bool lb,
+    explicit FieldInfo( int anO, eFieldType fT, int np, bool lb,
                ePlaceMode pl, eEdit e, eShowType sT, int w, int h);
 
     void toDAT(ostream& os);
     void fromDAT(istream& os);	// must be protected
-
-    // qt3to4 private:
-    //  FieldInfo(const FieldInfo&);
-    const FieldInfo& operator=(const FieldInfo&);
 };
 
 

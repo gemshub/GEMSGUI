@@ -164,7 +164,7 @@ void TMulti::unpackData()
         { string err = "No ";
           err += string(TRMults::sm->GetMU()->SB[i], 0, MAXICNAME);
           err += " IComp in the system!";
-          Error( GetName(), err.c_str() /*"no such IComp in this system"*/ );
+          Error( GetName(), err /*"no such IComp in this system"*/ );
         }
 FOUNDI:
         pm.U[ip] = STat->stp->U[is];

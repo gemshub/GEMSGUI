@@ -238,8 +238,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
             rcp->Ks[1] = lgK;
         }
         else {
-                Error( GetName(),
-        "E25RErun: Input logK, dSr or dHr remain inconsistent - bailing out!");
+                Error( GetName(), "E25RErun: Input logK, dSr or dHr remain inconsistent - bailing out!");
         }
     }
     return;
@@ -355,8 +354,7 @@ void TReacDC::Recalc( int q, const char *key  )
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
-    Error( GetName(),
-    "W26RErun: Please, check stoichiometry, charge or valences in the formula.");
+    Error( GetName(), "W26RErun: Please, check stoichiometry, charge or valences in the formula.");
 NEXT:
     /* test value of st.mol.volume */
     if( ( rc[q].pstate[0] == CP_GAS || rc[q].pstate[0] == CP_GASI )
@@ -795,8 +793,7 @@ void TReacDC::Recalc_ISO1( double /*foS*/ )
         goto STAGE2;
     }
     if(!stK && !stLK && !stG )
-        Error( GetName(),
-               "W31RErun: One of values K, 1000lnK, dGr was not specified");
+        Error( GetName(), "W31RErun: One of values K, 1000lnK, dGr was not specified");
 STAGE2:
     return;
 }
@@ -1212,7 +1209,7 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
     double ReactProp[6];
     double rhoW, alphaW, betaW, dAldTW;
 
-    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
+        if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.01 && fabs( aW.WW(p).P - rc[q].Pst ) < 0.01 ) //if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 ) bugfix DM 29.11.2020
     {  // standard temperature - just get data from ReacDC record
     	aW.WW(p).K =   rc[q].Ks[0];
     	aW.WW(p).lgK = rc[q].Ks[1];

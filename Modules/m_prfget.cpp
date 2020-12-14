@@ -310,8 +310,7 @@ AGAIN:
      rt[RT_PARAM]->SetKey( key_str.c_str() );
        // get opens files list
        if( !GetFN( fstKeyFld.c_str() ) )
-        Error( key_str.c_str(),
-           "Project configuration aborted by the user!" );
+        Error( key_str,  "Project configuration aborted by the user!" );
        SetFN();
 
        if( templ_key == true  )
@@ -408,8 +407,7 @@ AGAIN:
       SetFN();                  // reopen files of data base
       // if no elements profile as template
       if( rt[RT_ICOMP]->ifDefaultOpen() )
-       Error( templ_str.c_str(),
-        "This project cannot be extended using Elements Dialog.");
+       Error( templ_str, "This project cannot be extended using Elements Dialog.");
     }
     else
     {
@@ -442,13 +440,11 @@ AGAIN:
    rt[RT_PARAM]->SetKey( key_str.c_str() );
 
    if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
-       Error( key_str.c_str(),
-          "Project configuration aborted by the user!" );//goto BACK;
+       Error( key_str, "Project configuration aborted by the user!" );//goto BACK;
 
    // get opens files list
       if( !GetFN( fstKeyFld.c_str(), false ) )
-        Error( key_str.c_str(),
-           "Project configuration aborted by the user!" );
+        Error( key_str, "Project configuration aborted by the user!" );
        SetFN();
 
        if( templ_key == true  )

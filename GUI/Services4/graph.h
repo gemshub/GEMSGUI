@@ -23,9 +23,12 @@
 #include <math.h>
 #include <vector>
 #include <fstream>
-class QPointF;
 #include <QtGui/QColor>
+
+class QPointF;
+class QJsonObject;
 class GemDataStream;
+
 
 //const int maxPLOT = 20;
 
@@ -198,6 +201,9 @@ public:
         ndxX = aNdxX;
     }
 
+    void toJsonObject( QJsonObject& obj ) const;
+    void fromJsonObject( const QJsonObject& obj );
+
     void read(GemDataStream& stream);
     void write(GemDataStream& stream);
     void read(std::fstream& stream);
@@ -264,7 +270,8 @@ public:
     /// Get point from one line to paint  (ndxX - column in Abscissa table)
     QPointF getPoint( int line, int number, int ndxX );
     /// Get min and max values x,y for one curve line
-    void getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxX );
+    void getMaxMinLine( double& minX, double& maxX, double& minY, double& maxY,
+                        int line, int ndxAbs );
 
 };
 

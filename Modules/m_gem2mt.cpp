@@ -28,6 +28,9 @@
 #include "m_gem2mt.h"
 #include "visor.h"
 #include "m_syseq.h"
+#include "GEMS3K/io_keyvalue.h"
+#include "GEMS3K/io_simdjson.h"
+//#include "GEMS3K/io_nlohmann.h"
 
 TGEM2MT* TGEM2MT::pm;
 
@@ -1096,7 +1099,7 @@ TGEM2MT::RecCalc( const char * key )
      //FreeNa();
      mtp->gStat = GS_ERR;
      mtp->iStat = AS_INDEF;
-     Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+     throw;
   }
 }
 
@@ -1109,7 +1112,7 @@ void TGEM2MT::savePoint( )
           " or cancel the RMT task (No)?" ) )
        {
          auto path = na->PutGEM2MTFiles( window(), mtp->nC,
-           mtp->PsSdat==S_OFF, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
+           mtp->PsSdat, mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, true, true ); // with Nod0 and Nod1
          mtp->notes[0] = '@';
          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
          // save GEM2MT recort
@@ -1128,42 +1131,63 @@ const char* TGEM2MT::GetHtml()
 void TGEM2MT::RecordPrint( const char* key )
 {
     int res = vfQuestion3(window(), "Question",
-                    "Will you produce input files for standalone TGEM2MT (Yes) or use print script (No)?",
-		       "Yes", "No", "Cancel");
-	if( res == VF3_3 )
-	    return;
+                          "Will you produce input files for standalone TGEM2MT (Yes) or use print script (No)?",
+                          "Yes", "No", "Cancel");
+    if( res == VF3_3 )
+        return;
 
-	if( res == VF3_1 )
-	{
-        std::string filename = "GEM2MT-task.";
-                filename += dat_ext;
+    if( res == VF3_1 )
+    {
+        GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
+        switch( mtp->PsSdat )
+        {
+        case '-':
+        case 'b': type_f = GEMS3KGenerator::f_binary; break;
+        case 'j': type_f = GEMS3KGenerator::f_json; break;
+        }
+        auto f_ext = GEMS3KGenerator::ext( type_f );
 
-		if( vfChooseFileSave(window(), filename,
-                   "Please, enter the TGEM2MT work structure file name", dat_filt ) )
-		{
-		    if( !access(filename.c_str(), 0 ) ) //file exists
-		        if( !vfQuestion( window(), filename.c_str(),
-		        		"This file exists! Overwrite?") )
-                   return;
+        std::string filename = "GEM2MT-task." + f_ext;
+        if( vfChooseFileSave(window(), filename,
+                             "Please, enter the TGEM2MT work structure file name", std::string("*."+f_ext).c_str() ) )
+        {
+            if( !access(filename.c_str(), 0 ) ) //file exists
+                if( !vfQuestion( window(), filename.c_str(), "This file exists! Overwrite?") )
+                    return;
             //mtp->PsScom=S_OFF;
-            fstream ff( filename.c_str(), ios::out );
-	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
-            to_text_file( ff,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF, filename.c_str() );
-
-		}
-    na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
-    mtp->gStat = GS_GOING;
-    mt_reset();
-    Bn_Calc();
-    mtp->gStat = GS_DONE;
-    mtp->iStat = AS_READY;
-    outMulti();
-    mtp->iStat = AS_DONE;
-    delete na;
-    na = nullptr;
-	}
-	else
-	     TCModule::RecordPrint( key );
+            fstream ff( filename, ios::out );
+            ErrorIf( !ff.good() , filename, "Fileopen error");
+            switch( type_f )
+            {
+            case GEMS3KGenerator::f_nlohmanjson:
+            case GEMS3KGenerator::f_json:
+            {
+                io_formats::SimdJsonWrite out_format( ff,  mtp->PsScom!=S_OFF );
+                to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
+            }
+                break;
+            case GEMS3KGenerator::f_binary:
+            case GEMS3KGenerator::f_key_value:
+            {
+                io_formats::KeyValueWrite out_format( ff );
+                to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
+            }
+                break;
+            }
+        }
+        na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
+        mtp->gStat = GS_GOING;
+        mt_reset();
+        Bn_Calc();
+        mtp->gStat = GS_DONE;
+        mtp->iStat = AS_READY;
+        outMulti();
+        mtp->iStat = AS_DONE;
+        delete na;
+        na = nullptr;
+    }
+    else
+        TCModule::RecordPrint( key );
 }
 
 // insert changes in Project to GEM2MT

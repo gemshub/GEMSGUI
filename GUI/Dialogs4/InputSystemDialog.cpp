@@ -724,13 +724,13 @@ QWidget *TSystemDelegate::createEditor(QWidget *parent,
         {
           case 3:
            {
-             FieldInfo fld = FieldInfo( nUnit, ftCheckBox, nList, false, NextP, eYes, stIO, 1, 1);
+             FieldInfo fld( nUnit, ftCheckBox, nList, false, NextP, eYes, stIO, 1, 1);
              TCellCheck* editor =  new TCellCheck( fld, 0, 0, parent);
              return editor;
            }
         case 2:
            {
-             FieldInfo fld = FieldInfo( nObj, ftFloat, 20, false, NextP, eYes, stIO, 1, 1);
+             FieldInfo fld( nObj, ftFloat, 20, false, NextP, eYes, stIO, 1, 1);
              TCellInput* editor =  new TCellInput( fld, 0, 0, parent);
              return editor;
            }

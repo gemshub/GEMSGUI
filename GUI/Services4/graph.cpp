@@ -19,6 +19,7 @@
 
 #include <cstdio>
 #include <limits>
+#include <QJsonObject>
 #include "GEMS3K/gdatastream.h"
 #include "graph.h"
 #include "GemsMainWindow.h"
@@ -33,6 +34,29 @@ void helpWin( const std::string& name, const std::string& item )
 //---------------------------------------------------------------------------
 // TPlotLine
 //---------------------------------------------------------------------------
+
+void TPlotLine::toJsonObject( QJsonObject& obj ) const
+{
+    obj[ "gtp" ] = type;
+    obj[ "gsz" ] = sizes;
+    obj[ "gndx"] = ndxX;
+    obj[ "grd"] = red;
+    obj[ "ggr"] = green;
+    obj[ "gbl"] = blue;
+    obj[ "gnm"] =  name;
+}
+
+void TPlotLine::fromJsonObject(const QJsonObject &obj)
+{
+    type = obj[ "gtp" ].toInt( 4 );
+    sizes = obj[ "gsz" ].toInt( 2 );
+    ndxX = obj[ "gndx" ].toInt( -1 );
+    red = obj[ "grd" ].toInt( 25 );
+    green = obj[ "ggr" ].toInt( 0 );
+    blue = obj[ "gbl" ].toInt( 150 );
+    auto name_str = obj["gnm"].toString("line").toStdString();
+    memcpy( name, name_str.c_str(), 15);
+}
 
 void TPlotLine::read(GemDataStream& stream)
 {
@@ -219,26 +243,25 @@ std::vector<int> TPlot::yColumns() const
 
 
 // Find min and max values x,y for one curve line
-void TPlot::getMaxMinLine( QPointF& min, QPointF& max, int line, int ndxAbs )
+void TPlot::getMaxMinLine( double& minX, double& maxX, double& minY, double& maxY,
+                           int line, int ndxAbs )
 {
     QPointF point;
     int jj = line;
 
-    min = getPoint( jj, 0, ndxAbs );
-    max = min;
     for( int ii =0; ii<dX; ii++)
     {
         point = getPoint( jj, ii, ndxAbs );
         if( approximatelyEqual( point.x(), DOUBLE_EMPTY) || approximatelyEqual( point.y(), DOUBLE_EMPTY ) )
             continue;
-        if( min.x() > point.x() || approximatelyEqual( min.x(), DOUBLE_EMPTY ) )
-            min.setX( point.x() );
-        if( max.x() < point.x() || approximatelyEqual( max.x(), DOUBLE_EMPTY ) )
-            max.setX( point.x() );
-        if( min.y() > point.y() || approximatelyEqual( min.y(), DOUBLE_EMPTY ) )
-            min.setY( point.y() );
-        if( max.y() < point.y() || approximatelyEqual( max.y(), DOUBLE_EMPTY ) )
-            max.setY( point.y() );
+        if( minX > point.x() || approximatelyEqual( minX, DOUBLE_EMPTY ) )
+            minX = point.x();
+        if( maxX < point.x() || approximatelyEqual( maxX, DOUBLE_EMPTY ) )
+            maxX = point.x();
+        if( minY > point.y() || approximatelyEqual( minY, DOUBLE_EMPTY ) )
+            minY = point.y();
+        if( maxY < point.y() || approximatelyEqual( maxY, DOUBLE_EMPTY ) )
+            maxY = point.y();
     }
 }
 

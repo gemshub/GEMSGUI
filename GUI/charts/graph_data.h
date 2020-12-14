@@ -224,7 +224,7 @@ public:
     ChartData( const std::vector<std::shared_ptr<T>>& aPlots,  const std::string& atitle,
                const std::string& aXName, const std::string& aYname,
                int agraphType = LineChart ):
-        title(atitle), axisTypeX(5), axisTypeY(5),
+        title(atitle), axisTypeX(4), axisTypeY(4),
         xName(aXName), yName(aYname), graphType( agraphType )
     {
         // Define background color

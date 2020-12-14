@@ -20,13 +20,18 @@
 #define _m_gem2mt_h_
 
 
-#include "m_param.h"
-#include "nodearray_gui.h"
+#ifndef NOPARTICLEARRAY
 #include "particlearray.h"
+#endif
+
+namespace  io_formats {
 class TRWArrays;
+}
 
 #ifndef IPMGEMPLUGIN
 
+#include "m_param.h"
+#include "nodearray_gui.h"
 #include "v_ipnc.h"
 #include "graph_window.h"
 
@@ -359,8 +364,8 @@ class TGEM2MT
     std::string title;           // changed titler to title
 #endif
 
-  TNodeArrayGUI* na;       // pointer to nodearray class instance
-  TParticleArray* pa_mt;       // pointer to TParticleArray class instance
+  TNodeArrayGUI* na = nullptr;       // pointer to nodearray class instance
+  TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
 
     std::string pathVTK;
     std::string nameVTK;
@@ -416,9 +421,9 @@ protected:
          nstep,     // number of steps
          naccept,   // number of permissible steps
          nrejct;    // number of unpermissible steps
-    double *x;
-    double *dx;
-    double *tv;
+    double *x = nullptr;
+    double *dx = nullptr;
+    double *tv = nullptr;
 
     // Flow-through box-flux transport simulations
     void  BoxFluxTransportStart();
@@ -456,7 +461,7 @@ public:
 
     GEM2MT *mtp;
 
-    TGEM2MT( uint nrt );
+    explicit TGEM2MT( uint nrt );
 
 #ifndef IPMGEMPLUGIN
     ~TGEM2MT()
@@ -520,9 +525,11 @@ public:
 #endif
 
     // for separate
-    void checkAlws(TRWArrays&  prar1, TRWArrays&  prar);
-    void to_text_file( fstream& ff, bool with_comments, bool brief_mode, const char* path );
-    void from_text_file(fstream& ff);
+    void checkAlws(io_formats::TRWArrays&  prar1, io_formats::TRWArrays&  prar) const;
+    template<typename TIO>
+    void to_text_file( TIO& out_format, bool with_comments, bool brief_mode ) const;
+    template<typename TIO>
+    void from_text_file(TIO& ff);
 
     bool userCancel;
     bool stepWise;

@@ -83,30 +83,23 @@ TVisor::TVisor(int c, char *v[]):
 
 #ifdef __unix
 #ifdef __APPLE__
-    char work_path[PATH_MAX];
-    char cur_dir[PATH_MAX];
-	// let's try to find resources by path of the executable
-	getcwd(cur_dir, PATH_MAX);
-	strcpy(work_path, argv[0]);
-	char* rest = strstr(work_path, "/MacOS/gems");
-	if( rest != NULL ) {
-        strcpy(rest, RESOURCES_DIR);
 
-		if( work_path[0] == '.' && work_path[1] == '/' )
-            SysGEMDir = string(cur_dir) + (work_path+1);
-		else
-		if( work_path[0] != '/' )
-            SysGEMDir = (string(cur_dir) + "/") + work_path;
-		else
-			SysGEMDir = work_path;
-	}
-	else {
-	// non-standard executable path, search for resources starting with current dir
-		SysGEMDir = cur_dir;
-                SysGEMDir += "/gems3.app/Contents/Resources/";
-	}
-        UserGEMDir = getenv("HOME");
-        UserGEMDir += DEFAULT_USER_DIR; // "/Library/gems3/";
+    QString dirExe = QCoreApplication::applicationDirPath();
+    auto app_index = dirExe.lastIndexOf("/gems3.app/Contents", -1, Qt::CaseInsensitive );
+
+    if( app_index >= 0 )
+    {
+        SysGEMDir = dirExe.left(app_index).toStdString() + "/gems3.app/Contents/Resources/";
+    }
+    else {
+        // non-standard executable path, search for resources starting with current dir
+        SysGEMDir = dirExe.toStdString() + "/gems3.app/Contents/Resources/";
+    }
+    cout << "SysGEMDir  " << SysGEMDir << endl;
+
+    UserGEMDir = getenv("HOME");
+    UserGEMDir += DEFAULT_USER_DIR; // "/Library/gems3/";
+
 #else  // Linux - in user's home directory
        // By default: /Resources in the same dir as the exe file;
        //       /Library/gems3/projects on the same level as the /Gems3-app dir.
@@ -118,7 +111,15 @@ TVisor::TVisor(int c, char *v[]):
     if( dirUp.cdUp() )
          dirExe = dirUp.path(); // + QDir::separator();
     LocalDir = dirExe.toStdString();
-    UserGEMDir = localDir() + DEFAULT_USER_DIR;
+
+#ifdef NDEBUG
+    UserGEMDir = getenv("HOME");
+    UserGEMDir += DEFAULT_USER_DIR;
+    cout << "UserGEMDir: " << UserGEMDir <<  endl;
+#else
+    UserGEMDir =  localDir() + DEFAULT_USER_DIR;
+#endif
+
 #endif // __unix
 
 #else
@@ -132,8 +133,15 @@ TVisor::TVisor(int c, char *v[]):
     if( dirUp.cdUp() )
          dirExe = dirUp.path();
     LocalDir = dirExe.toStdString();
-    UserGEMDir = localDir() + DEFAULT_USER_DIR;
-// cout << SysGEMDir.c_str() << endl;
+#ifdef NDEBUG
+    char homedir[1000];
+    snprintf(homedir, 1000, "%s%s", getenv("HOMEDRIVE"), getenv("HOMEPATH"));
+    cout << "HOMEDRIVE: " << homedir <<  endl;
+    UserGEMDir =  std::string(homedir)/*localDir()*/ + DEFAULT_USER_DIR;
+#else
+    UserGEMDir =  localDir() + DEFAULT_USER_DIR;
+#endif
+    // cout << SysGEMDir.c_str() << endl;
 // cout << UserGEMDir.c_str() << endl;
 #endif // win
 
@@ -254,7 +262,7 @@ TVisor::Setup()
             option_f = true;
 	}
         else
-	if (strcmp(argv[ii], "-c") == 0
+    if (strcmp(argv[ii], "-c") == 0
                 || strcmp(argv[ii], "--with-default-config") == 0 )
 	{
             default_config = true;
@@ -267,6 +275,13 @@ TVisor::Setup()
             default_settings = true;
             pVisorImp->setConfigAutosave( true );
         }
+    }
+
+    if (argc == 1 ) // No command line parameters - assume as -d   since v.3.8.0
+    {
+       option_d = true;
+       // default_config = true;
+       pVisorImp->setConfigAutosave( true );
     }
 
     // check home dir
@@ -698,6 +713,21 @@ void
 TVisor::Update(bool force)
 {
     pVisorImp->Update(force);
+}
+
+string TVisor::filePathFromName(const string& filename, const string& extension)
+{
+    auto fname_default = filename;
+    replace_all(fname_default, " <>:\"/\\|?*.", '_' );
+    if( fname_default.empty() )
+        fname_default =  "empty";
+
+    auto  file_path  =  pVisor->localDir();
+    file_path  +=  "/";
+    file_path  +=  fname_default;
+    file_path  +=  ".";
+    file_path  +=  extension;
+    return  file_path;
 }
 
 

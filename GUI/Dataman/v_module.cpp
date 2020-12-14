@@ -22,6 +22,9 @@
 #endif
 
 #include <ctime>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "v_module.h"
 #include "visor.h"
 #include "service.h"
@@ -260,7 +263,7 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
           return Filter;
         }
     }
-    Error( str.c_str(), "Invalid record key editing mode");
+    Error( str, "Invalid record key editing mode");
     return "";
 }
 
@@ -449,7 +452,7 @@ TCModule::DeleteRecord( const char *key, bool errifNo )
         string str = " Record ";
         str += key;
         str += "\n not found to delete!";
-        Error( GetName(), str.c_str() );
+        Error( GetName(), str );
     }
     db->Del( Rnum );
 }
@@ -494,7 +497,7 @@ TCModule::RecInput( const char *key )
         string msg = "Record ";
         msg += string(key, 0, db->KeyLen());
         msg += " not found!" ;
-        Error( GetName(), msg.c_str());
+        Error( GetName(), msg );
     }
     db->Get( Rnum );
     dyn_set();
@@ -928,7 +931,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
         msg = "Record selection error! ";
         msg += key;
 // Sveta 14/06/01        if( RecChoise( key ) == false )
-            Error( GetName(), msg.c_str() );
+            Error( GetName(), msg );
         break;
     case ONEF_:
         dyn_set(q);
@@ -945,7 +948,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
             msg += key;
             msg += "'.\n Maybe, database file is not linked to chain\n";
             if(pVisor->ProfileMode)
-                Error( GetName(), msg.c_str() );
+                Error( GetName(), msg );
             msg +=  "Create new record?";
             if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), "Record creation rejected!");
@@ -975,7 +978,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
                "Data Record key '";
         msg += key;
         msg += "'\n Try to unload or re-index this database chain...";
-        Error( GetName(),  msg.c_str() );
+        Error( GetName(),  msg );
     }
 }
 
@@ -1221,7 +1224,7 @@ TCModule::RecordPrint( const char* key )
   dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
   const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr]->GetPtr());
   if( !text_fmt )
-       Error( sd_key.c_str(), "No print script in this record.");
+       Error( sd_key, "No print script in this record.");
 
   PrintSDref( sd_key.c_str(), text_fmt );
 }
@@ -1605,6 +1608,40 @@ TCModule::CmRestore()
     }
 }
 
+void TCModule::CmBackuptoJson()
+{
+    try
+    {
+        if( !MessageToSave() )
+            return;
+
+        RecListToJSON( Filter.c_str() );
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        pVisor->Update();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+    }
+}
+
+void TCModule::CmRestorefromJson()
+{
+    try
+    {
+        if( !MessageToSave() )
+            return;
+
+        RecListFromJSON();
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        pVisor->Update();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+    }
+}
+
 // Adds the record
 
 void
@@ -1736,7 +1773,8 @@ TCModule::RecToTXT( const char *pattern )
     {
        int Rnum = db->Find( aKey[i].c_str() );
        db->Get( Rnum );
-       aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())));
+
+       aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())) );
        aObj[o_reckey]->toTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
             aObj[no]->toTXT(f);
@@ -1818,7 +1856,7 @@ TCModule::RecExport( const char *pattern )
     dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
     char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
-       Error( sd_key.c_str(), "No format text in this record.");
+       Error( sd_key, "No format text in this record.");
 
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
@@ -1881,7 +1919,7 @@ TCModule::RecImport()
     dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
     char * text_fmt = static_cast<char *>(aObj[o_sdabstr]->GetPtr());
     if( !text_fmt )
-       Error( sd_key.c_str(), "No format text in this record.");
+       Error( sd_key, "No format text in this record.");
 
     // translate scripts
     TReadData dat( sd_key.c_str(), nRT, text_fmt );
@@ -1928,7 +1966,77 @@ TCModule::RecImport()
               str += s;
       Error( GetName(), str );
      }
-     dyn_set();
+    dyn_set();
+}
+
+void TCModule::RecListToJSON(const char *pattern)
+{
+    TCStringArray aKey = vfMultiKeys( window(),
+                                      "Please, mark records to be unloaded to JSON",
+                                      nRT, pattern );
+    if( aKey.size() <1 )
+        return;
+
+    string s = GetName();
+    string filename = GetName();
+           filename += "_backup.json";
+    s += " : Please, give a file name for unloading records";
+    if( vfChooseFileSave( window(), filename, s.c_str(), "*.json" ) == false )
+        return;
+
+    QJsonArray allArray;
+    for( size_t i=0; i<aKey.size(); i++ )
+    {
+        int Rnum = db->Find( aKey[i].c_str() );
+        db->Get( Rnum );
+        db->SetKey( aKey[i].c_str() );
+        QJsonObject recObject;
+        db->toJsonObject( recObject );
+        allArray.append(recObject);
+    }
+    QJsonDocument saveDoc(allArray);
+    fstream f_out( filename, ios::out );
+    if( f_out.good() )
+        f_out << saveDoc.toJson().data() << std::endl;
+    dyn_set();
+}
+
+void TCModule::RecListFromJSON()
+{
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
+    bool yesToAll=false;
+
+    // Choose file name
+    string s =string( GetName() )+" : Please, select file with unloaded records";
+    string filename;
+    if( vfChooseFileOpen( window(), filename, s.c_str(), "*.json" ) == false )
+        return;
+
+    QFile CurrentFile(filename.c_str());
+    if(!CurrentFile.open(QIODevice::ReadOnly)) return;
+    QByteArray json_data = CurrentFile.readAll();
+
+    QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
+    QJsonArray allArray = readDoc.array();
+
+    for( const auto& val : allArray)
+    {
+        std::string keyp = db->fromJsonObject( val.toObject() );
+        auto Rnum = db->Find( keyp.c_str() );
+        if( Rnum >= 0 )
+        {
+            if( vfQuestion(window(), keyp.c_str(),
+                           "Data record with this key already exists! Replace?"))
+                db->Rep( Rnum );
+        }
+        else
+        {
+            AddRecord( keyp.c_str(), fnum );
+            if( fnum == -2 )
+                break;
+        }
+    }
+    dyn_set();
 }
 
 
@@ -1947,7 +2055,7 @@ TCModule::DelList( const char *pattern )
         str += aKey[i];
         if( ichs )
         {
-            switch( vfQuestion3(window(), GetName(), str.c_str(),
+         switch( vfQuestion3(window(), GetName(), str.c_str(),
                                 "&Yes", "&No", "&Delete All" ))
             {
             case VF3_3:
