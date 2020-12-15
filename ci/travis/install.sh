@@ -26,10 +26,13 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       ..
 # Build step
 make #-j${CPU_COUNT}
-if [ $? -eq 1 ]
+if [ $? -eq 0 ]
 then
-echo "The install failed" >&2
-exit 1
+    echo "The make step ran OK" >&2
+    exit 1
+else
+    echo "The make step failed" >&2
+    exit 1
 fi
 make install
 conda list
