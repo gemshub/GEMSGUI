@@ -25,6 +25,7 @@ include(CondaAware)
 # Define which types of libraries to build
 option(BUILD_SHARED_LIBS "Build shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build static libraries." ON)
+option(BUILD_APP "Build application." ON)
 
 # Set the default build type to Release
 if(NOT CMAKE_BUILD_TYPE)
@@ -102,7 +103,9 @@ add_subdirectory(Modules)
 add_subdirectory(GUI)
 
 # make application
-add_subdirectory(App)
+if(BUILD_APP)
+   add_subdirectory(App)
+endif()
 
 
 # Copy Resources folder

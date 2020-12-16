@@ -17,7 +17,7 @@
 //-------------------------------------------------------------------
 
 
-#ifdef __unix
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>
@@ -95,7 +95,7 @@ bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
   titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
   int rest = (QMessageBox::question(par,
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
          "Title", titl.append(spac+=messag),
 #else
@@ -114,7 +114,7 @@ int vfQuestYesNoCancel(QWidget* par, const string& title, const string& mess)
     titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
     int result = QMessageBox::question(par,
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
           "Title", titl.append(spac+=messag),
 #else
@@ -157,7 +157,7 @@ void vfMessage(QWidget* par, const std::string& title, const std::string& mess, 
     {
     case vfWarn:
         QMessageBox::warning(par,
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
          "Title", titl.append(spac+=messag)
 #else
@@ -170,7 +170,7 @@ void vfMessage(QWidget* par, const std::string& title, const std::string& mess, 
         break;
     case vfErr:
         QMessageBox::critical(par,
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
         "Title", titl.append(spac+=messag)
 #else
@@ -183,7 +183,7 @@ void vfMessage(QWidget* par, const std::string& title, const std::string& mess, 
         break;
     default:
         QMessageBox::information(par,
- #ifdef __unix
+ #ifndef _WIN32
  #ifdef __APPLE__
          "Title", titl.append(spac+=messag)
  #else
@@ -215,7 +215,7 @@ int vfQuestion3(QWidget* par, const std::string& title, const std::string& mess,
   titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
          QMessageBox qm(
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
          "Title", titl.append(spac+=messag),
 #else

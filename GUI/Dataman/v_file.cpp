@@ -22,7 +22,7 @@
 #include <iostream>
 using namespace std;
 
-#ifdef __unix
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>
@@ -190,7 +190,7 @@ void TFile::Open( FileStatus mode )
     if( !Exist() && !(mode == WRITE_T || mode == WRITE_B ||
                       mode == APPEND_T || mode == APPEND_B) )
         Error( GetPath(),"File not found.");
-#ifdef __unix
+#ifndef _WIN32
     if( mode== UPDATE_DBV && access( Path.c_str(), W_OK ) != 0)
         mode = RDONLY_DBV;
 #else

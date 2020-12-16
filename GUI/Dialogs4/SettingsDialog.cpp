@@ -135,7 +135,7 @@ void SettingsDialog::CmHelpGenerate()
                     
                    QString docPath =  pRemoteHTML->text();
                    QString app;
-            #ifdef __unix
+            #ifndef _WIN32
             #ifdef __APPLE__
 //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
                     app += QLatin1String("qcollectiongenerator");

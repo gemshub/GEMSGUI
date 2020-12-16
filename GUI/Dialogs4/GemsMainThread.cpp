@@ -120,7 +120,7 @@ void TVisorImp::startGEMServer()
             QString serverPath =  pVisor->serverGems3Dir().c_str();
             //"/home/sveta/devGEMS/gitGEMS3/standalone/gemserver-build";
             QString app;
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
             //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
             app += QLatin1String("gems3_server");

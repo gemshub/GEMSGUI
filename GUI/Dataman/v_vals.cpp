@@ -282,7 +282,7 @@ TValString::SetString(const char* s, int )
 
 // transfered from v_vals.h
 
-#ifdef __unix
+#ifndef _WIN32
 
 /*
 template<>

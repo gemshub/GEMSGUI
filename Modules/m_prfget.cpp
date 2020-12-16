@@ -769,7 +769,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 
         std::string cmd;
 
-#ifdef __unix
+#ifndef _WIN32
         cmd = "cp -r ";
         cmd += tmpDirPath;
         cmd += "/ * ";

@@ -36,7 +36,7 @@
 
 //static const char* GEMS_LOGO_ICON = "Icons/gems1.png";
 static const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
 static const char* GEMS_DEFAULT_FONT_NAME = "Monaco";
 const int GEMS_DEFAULT_FONT_SIZE = 13;
