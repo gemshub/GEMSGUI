@@ -18,7 +18,7 @@
 //
 #include <qapplication.h>
 #include <iostream>
-#ifdef __unix
+#ifndef _WIN32
 #include <unistd.h>
 //#else
 //#include <io.h>
@@ -81,7 +81,7 @@ TVisor::TVisor(int c, char *v[]):
     dbChangeMode = false;
     isElementsProfileMode = true;
 
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
 
     QString dirExe = QCoreApplication::applicationDirPath();
@@ -209,7 +209,7 @@ TVisor::TVisor(int c, char *v[]):
 // cout << "LocalHTML: " << RemoteHTML.c_str() << endl;
 //
 /*
-#ifdef __unix
+#ifndef _WIN32
 #ifndef GEMS_RELEASE
 // added SD oct 2005
      if( LocalDocDir[0] == '.' && LocalDocDir[1] == '/' )
@@ -296,7 +296,7 @@ TVisor::Setup()
         default_settings = true;
         pVisorImp->setConfigAutosave( true );
 
-//#ifdef __unix
+//#ifndef _WIN32
          // build Library
         string dirUp = string( dir,0, dir.length()-1);
         size_t pos = dirUp.rfind("/");
@@ -320,7 +320,7 @@ TVisor::Setup()
         // copy default project
         string cmd;
 
-#ifdef __unix
+#ifndef _WIN32
         cmd = "cp -r ";
         cmd += sysProfDir();
         cmd += "* ";
@@ -532,7 +532,7 @@ TVisor::toModCFG()
     ErrorIf(!f_gems.good(), "GEMS Init",
             "Error writing configuration file (gemsdbf.conf)");
     rt.toCFG(f_gems);
-#ifdef __unix
+#ifndef _WIN32
     cerr << "gems.cfg saved " << endl;
 #endif
 }
@@ -547,7 +547,7 @@ TVisor::fromModCFG()
     ErrorIf(!f_gems.good(), "GEMS Init",
             "Error reading configuration file (gemsdbf.conf)");
     rt.fromCFG(f_gems);
-#ifdef __unix
+#ifndef _WIN32
     cerr << "gems.cfg read " << endl;
 #endif
 }
@@ -1113,7 +1113,7 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
     QDir thisDir(dir);
     if (!thisDir.isReadable())
     {
-#ifdef __unix
+#ifndef _WIN32
         cout << "Error :" << dir << endl;
 #endif
         throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");

@@ -15,7 +15,7 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#ifdef __unix
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>
@@ -2019,7 +2019,7 @@ void TCModule::RecListFromJSON()
     QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
     QJsonArray allArray = readDoc.array();
 
-    for( const auto& val : allArray)
+    for( auto val : allArray)
     {
         std::string keyp = db->fromJsonObject( val.toObject() );
         auto Rnum = db->Find( keyp.c_str() );

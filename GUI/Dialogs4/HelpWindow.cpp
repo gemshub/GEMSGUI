@@ -244,7 +244,7 @@ void HelpWindow::languageChange()
 void HelpWindow::helpVersion()
 {
     QMessageBox::information(this,
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
            "Title", "GEMS3.7 (macOSX 10.13-10.15, C++ clang x64)\n\n"+
 #else

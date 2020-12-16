@@ -16,13 +16,15 @@ conda install conda-devenv
 conda update -q conda
 conda info -a
 conda devenv
-source activate GEMS3K
+source activate GEMSGUI
+#./conda-install-dependencies.sh
 mkdir build
 cd build
 # Configure step
 cmake -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_LIBDIR=lib \
+    -DBUILD_APP=OFF \
     ..
 if [ $? -eq 0 ]
 then

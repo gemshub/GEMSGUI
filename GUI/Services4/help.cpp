@@ -321,7 +321,7 @@ bool Helper::startAssistant()
  //   QString app = "/home/gems/qt-4.5.2/bin/";//QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
        QString app;
  //    QString app = QLibraryInfo::location(QLibraryInfo::BinariesPath) + QDir::separator();
-#ifdef __unix
+#ifndef _WIN32
 #ifdef __APPLE__
         app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/Assistant");    // expected to work
 #else

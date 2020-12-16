@@ -19,7 +19,7 @@
 
 #include <cmath>
 #include <cstdio>
-#ifdef __unix
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>

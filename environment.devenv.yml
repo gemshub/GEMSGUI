@@ -9,9 +9,8 @@ dependencies:
   - ccache  # [unix]
   - gems3k
   - nlohmann_json
-  - qt>=5.12.5
-#  - zeromq
   - cppzmq
+  - qt>=5.12.5
   - mesalib
   - mesa-libgl-cos6-x86_64
   - libselinux-cos6-x86_64

@@ -25,6 +25,7 @@ include(CondaAware)
 # Define which types of libraries to build
 option(BUILD_SHARED_LIBS "Build shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build static libraries." ON)
+option(BUILD_APP "Build application." ON)
 
 # Set the default build type to Release
 if(NOT CMAKE_BUILD_TYPE)
@@ -41,7 +42,7 @@ endif()
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Set the C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set the list of compiler flags for GNU compiler
@@ -76,6 +77,7 @@ set(GEMSGUI_MODULES_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Modules)
 set(GEMSGUI_GUI_SOURCE_DIR ${CMAKE_SOURCE_DIR}/GUI)
 
 # Set the include directories
+include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${GEMSGUI_MODULES_SOURCE_DIR})
 include_directories(${GEMSGUI_MODULES_SOURCE_DIR}/Submods)
 include_directories(${GEMSGUI_MODULES_SOURCE_DIR}/Numerics)
@@ -101,7 +103,9 @@ add_subdirectory(Modules)
 add_subdirectory(GUI)
 
 # make application
-add_subdirectory(App)
+if(BUILD_APP)
+   add_subdirectory(App)
+endif()
 
 
 # Copy Resources folder

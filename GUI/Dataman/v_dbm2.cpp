@@ -568,7 +568,7 @@ std::string TDataBase::fromJsonObject(const QJsonObject &obj)
 
     // read objects
     QJsonArray dodArray = obj[ "dod" ].toArray();
-    for( const auto& dod_val: dodArray)
+    for( auto dod_val: dodArray)
     {
         QJsonObject dodObject = dod_val.toObject();
         no = dodObject["id"].toInt(-1);

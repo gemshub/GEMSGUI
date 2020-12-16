@@ -349,13 +349,6 @@ TObject::Alloc(int newN, int newM, ObjType newType)
                 pV1->SetString( str.c_str(), ii*newM+jj );
     }
 
-    /* Testing data type for debugging purposes
-#ifdef __unix
-    if( newType != Type )
-        cout << "Different type! Object:" << Keywd
-        << " Type= " << (int)Type << " newType= " << (int)newType << endl;
-#endif
-    */
     /* Saving old values */
     int n = min(N,newN);
     int m = min(M,newM);
@@ -626,9 +619,6 @@ int  TObject::toDB( GemDataStream& f )
         // temp workaround of alingment
         if( strcmp(Keywd, "SPPpar") == 0 )
         {
-//#ifdef __unix
-//            cerr << endl << "writing SPP_SETTING, size = " << size << endl;
-//#endif
             static_cast<SPP_SETTING*>(GetPtr())->write(f);
             //padding
             for( int ii=0; ii<size-758; ii++)
