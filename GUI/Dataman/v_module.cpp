@@ -2019,7 +2019,7 @@ void TCModule::RecListFromJSON()
     QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
     QJsonArray allArray = readDoc.array();
 
-    for( const auto& val : allArray)
+    for( auto val : allArray)
     {
         std::string keyp = db->fromJsonObject( val.toObject() );
         auto Rnum = db->Find( keyp.c_str() );
