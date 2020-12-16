@@ -17,7 +17,7 @@ conda update -q conda
 conda info -a
 conda devenv
 source activate GEMSGUI
-./conda-install-dependencies.sh
+#./conda-install-dependencies.sh
 mkdir build
 cd build
 # Configure step

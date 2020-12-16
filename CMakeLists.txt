@@ -76,6 +76,7 @@ set(GEMSGUI_MODULES_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Modules)
 set(GEMSGUI_GUI_SOURCE_DIR ${CMAKE_SOURCE_DIR}/GUI)
 
 # Set the include directories
+include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${GEMSGUI_MODULES_SOURCE_DIR})
 include_directories(${GEMSGUI_MODULES_SOURCE_DIR}/Submods)
 include_directories(${GEMSGUI_MODULES_SOURCE_DIR}/Numerics)
