@@ -21,10 +21,9 @@ source activate GEMSGUI
 mkdir build
 cd build
 # Configure step
-cmake -GNinja \
+cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_LIBDIR=lib \
-    -DBUILD_APP=OFF \
     ..
 if [ $? -eq 0 ]
 then
@@ -33,7 +32,7 @@ else
     echo "The cmake step failed" >&2
     exit 1
 fi
-ninja install
+make install
 if [ $? -eq 0 ]
 then
     echo "The make step ran OK"
