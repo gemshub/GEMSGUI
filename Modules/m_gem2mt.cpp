@@ -1027,8 +1027,8 @@ TGEM2MT::RecCalc( const char * key )
              return;
       }
      //TMulti::sm->Free_TSolMod();
-     na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
-
+     auto ret = na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
+     ErrorIf( ret, "TGEM2MT", "Error read interrupted by the user: " + lst_f_name );
 
      if( mtp->PsMode != RMT_MODE_S  )
        CalcIPM( NEED_GEM_SIA, 0, mtp->nC, 0 );
@@ -1162,7 +1162,7 @@ void TGEM2MT::RecordPrint( const char* key )
             case GEMS3KGenerator::f_nlohmanjson:
             case GEMS3KGenerator::f_json:
             {
-                io_formats::SimdJsonWrite out_format( ff,  mtp->PsScom!=S_OFF );
+                io_formats::SimdJsonWrite out_format( ff, "", mtp->PsScom!=S_OFF );
                 to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
             }
                 break;

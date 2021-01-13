@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -1571,14 +1571,14 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
           <item row="1" column="0" colspan="3">
            <widget class="QCheckBox" name="chAll">
             <property name="text">
-             <string>Do not write data items that contain only default values (text mode only)</string>
+             <string>Do not write data items that contain only default values </string>
             </property>
            </widget>
           </item>
           <item row="2" column="0" colspan="3">
            <widget class="QCheckBox" name="chComment">
             <property name="text">
-             <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (text mode only)</string>
+             <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (kv mode) or as &quot;pretty JSON&quot;  ( json mode )</string>
             </property>
             <property name="checked">
              <bool>false</bool>
