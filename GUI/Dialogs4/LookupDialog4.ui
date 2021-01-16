@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>580</width>
-    <height>605</height>
+    <height>606</height>
    </rect>
   </property>
   <property name="font">
@@ -41,7 +41,7 @@
           <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="chSelect">
             <property name="text">
-             <string>Select ICs, DCs and phases to be exchanged via DBR file (take all, if unchecked)</string>
+             <string>Select ICs, DCs and phases to be exchanged via DBR file (select all, if unchecked)</string>
             </property>
            </widget>
           </item>
@@ -55,7 +55,7 @@
           <item row="2" column="0" colspan="3">
            <widget class="QCheckBox" name="chComment">
             <property name="text">
-             <string>Write files with comments for all data entries (in text mode)</string>
+             <string>JSON mode: write formatted; KeyValue mode: write comments for data entries</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -75,14 +75,14 @@
           <item row="4" column="0" colspan="3">
            <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>Write IPM, DCH and DBR files in mode: </string>
+             <string>Write IPM, DCH and DBR files in format mode: </string>
             </property>
            </widget>
           </item>
           <item row="5" column="0">
            <widget class="QRadioButton" name="rbJson">
             <property name="text">
-             <string>Json</string>
+             <string>JSON</string>
             </property>
             <property name="checked">
              <bool>true</bool>

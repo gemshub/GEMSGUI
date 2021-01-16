@@ -29,7 +29,7 @@ public:
     /// \param nIV - Number of allocated nodes
     /// \param type_b    defines if the file is in binary format ('b'), in text format ('t') or in json format ('j').
     /// \param brief_mode - Do not write data items that contain only default values
-    /// \param with_comments -Write files with comments for all data entries ( in text mode)
+    /// \param with_comments -Write files with comments for all data entries ( in text mode)  or as "pretty JSON"  ( json mode )
     /// \param addMui - Print internal indices in RMULTS to IPM file for reading into Gems back
     std::string PutGEM2MTFiles(  QWidget* par, long int nIV,
                                  char  type_b, bool brief_mode = false, bool with_comments = true,

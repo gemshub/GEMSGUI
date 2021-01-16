@@ -40,7 +40,7 @@ io_formats::outField GEM2MT_static_fields[57] =  {
      { "PsSIA" , 0, 0, 0, "# PsSIA: Use smart initial approximation in GEM IPM (+); SIA internal (*); AIA (-)" },
      { "PsSdat" , 0, 0, 0, "# PsSdat:Save DataCH and inital DataBR files as text files (+) or binary (-)" },
      { "PsSdef" , 0, 0, 0, "# PsSdef:Do not write data items that contain only default values (+ -)" },
-     { "PsScom" , 0, 0, 0, "# PsScom:Write files with comments for all data entries ( in text mode )(+ -)" },
+     { "PsScom" , 0, 0, 0, "# PsScom:Write files with comments for all data entries ( text mode ) or as pretty JSON (+ -)" },
      { "PsMO" , 0, 0, 0, "# PsMO: Use non stop debug output for nodes (+ -)" },
      { "PsVTK" , 1, 0, 0, "# PsVTK: Use non stop debug output nodes to VTK format(+ -)" },
      { "PsMPh" , 1, 0, 0, "# PsMPh: Type flux Phase ( 0 undef, 1 - aq; 2 - gas; 3 - aq+gas, 4 - solids )" },
@@ -462,6 +462,7 @@ void TGEM2MT::to_text_file( TIO& out_format, bool with_comments, bool brief_mode
 {
     bool _comment = with_comments;
 
+    out_format.put_head( "", "gem2mt");
     io_formats::TPrintArrays<TIO>  prar1(57, GEM2MT_static_fields, out_format );
     io_formats::TPrintArrays<TIO>  prar(26, GEM2MT_dynamic_fields, out_format );
 
