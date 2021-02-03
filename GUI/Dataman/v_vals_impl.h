@@ -3,7 +3,7 @@
 //
 // Declaration of TVal class and its child classes
 //
-// Copyright (C) 1996-2001 A.Rysin
+// Copyright (C) 1996-2021 A.Rysin, S.Dmytriyeva
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -38,17 +38,17 @@
 
 template<class T>
 struct TVal:
-            TValBase
+        TValBase
 {
     // values and string representations for special values: EMPTY and ANY
     static T EMPTY();
     static T ANY();
-    static const char* PATTERN_GET();
-    static const char* PATTERN_SET();
+    //static const char* PATTERN_GET();
+    //static const char* PATTERN_SET();
 
     // basic constructor and descructor
     TVal(bool d):
-            TValBase(d)
+        TValBase(d)
     { }
 
     ~TVal()
@@ -61,7 +61,7 @@ struct TVal:
     int cSize() const;
 
     /* allocates memory for given object
-	Note: IsDynamic() verified in TObject
+    Note: IsDynamic() verified in TObject
     */
     void* Alloc(int sz)
     {
@@ -73,7 +73,7 @@ struct TVal:
     */
     double Get(int ndx) const
     {
-       return static_cast<double>(static_cast<T*>(ptr)[ndx]);
+        return static_cast<double>(static_cast<T*>(ptr)[ndx]);
     }
 
     /* converts double parameter and assigns it to the cell
@@ -94,10 +94,10 @@ struct TVal:
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size) {
-    s.writeArray(static_cast<T*>(ptr), size/cSize());
+        s.writeArray(static_cast<T*>(ptr), size/cSize());
     }
     void read(GemDataStream& s, int size) {
-    s.readArray(static_cast<T*>(ptr), size/cSize());
+        s.readArray(static_cast<T*>(ptr), size/cSize());
     }
 };
 
@@ -107,14 +107,13 @@ struct TVal:
 */
 
 // case when 0 < Type < 127
-
 struct TValFixString:
-            TValBase
+        TValBase
 {
     int len;
 
     TValFixString(int l, bool d):
-            TValBase(d), len(l)
+        TValBase(d), len(l)
     { }
 
     ~TValFixString()
@@ -144,7 +143,6 @@ struct TValFixString:
     void Put(double , int)
     {}
 
-
     bool IsAny(int ndx) const
     {
         return static_cast<char*>(ptr)[ndx*len]=='`';
@@ -161,10 +159,10 @@ struct TValFixString:
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size) {
-    s.writeArray(static_cast<char*>(ptr), size);
+        s.writeArray(static_cast<char*>(ptr), size);
     }
     void read(GemDataStream& s, int size) {
-    s.readArray(static_cast<char*>(ptr), size);
+        s.readArray(static_cast<char*>(ptr), size);
     }
 };
 
@@ -172,12 +170,12 @@ struct TValFixString:
 // Type = S_
 
 struct TValString:
-            TValBase
+        TValBase
 {
     int size;
 
     TValString(int M, bool d):
-            TValBase(d), size(M)
+        TValBase(d), size(M)
     { }
 
     ~TValString()
@@ -222,10 +220,10 @@ struct TValString:
     bool SetString(const char* s, int ndx);
 
     void write(GemDataStream& s, int size1) {
-    s.writeArray(static_cast<char*>(ptr), size1);
+        s.writeArray(static_cast<char*>(ptr), size1);
     }
     void read(GemDataStream& s, int size1) {
-    s.readArray(static_cast<char*>(ptr), size1);
+        s.readArray(static_cast<char*>(ptr), size1);
     }
 };
 
@@ -233,12 +231,9 @@ struct TValString:
 //  TVal<T> functions definitions
 //
 
-/* returns true if values equals to ANY
-*/
+// returns true if values equals to ANY
 template<class T>
-inline
-bool
-TVal<T>::IsAny(int ndx) const
+inline bool TVal<T>::IsAny(int ndx) const
 {
     if( static_cast<T*>(ptr)[ndx] == ANY() )
         return true;
@@ -246,44 +241,34 @@ TVal<T>::IsAny(int ndx) const
 }
 
 template<class T>
-inline
-bool
-TVal<T>::IsEmpty(int ndx) const
+inline bool TVal<T>::IsEmpty(int ndx) const
 {
     if( static_cast<T*>(ptr)[ndx] == EMPTY() )
         return true;
     return false;
 }
 
-template<class T>
-inline
-string
-TVal<T>::GetString(int ndx) const
+template <class T>
+inline string TVal<T>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
         return S_EMPTY;
     if( IsAny(ndx) )
         return S_ANY;
 
-    char vbuf[30];	// double is ~15 digit
-    sprintf(vbuf, PATTERN_GET(), static_cast<T*>(ptr)[ndx]);
-
-    return vbuf;
+    return value2string(static_cast<T*>(ptr)[ndx], doublePrecision );
 }
 
 template<class T>
-//inline
-bool
-TVal<T>::SetString(const char* s, int ndx)
+bool TVal<T>::SetString(const char* s, int ndx)
 {
     string ss = s;
     strip( ss );
-    if( /*ss.empty() ||*/ ss==S_EMPTY )
+    if( ss==S_EMPTY )
     {
         static_cast<T*>(ptr)[ndx] = EMPTY();
         return true;
     }
-
     if( ss == S_ANY )
     {
         static_cast<T*>(ptr)[ndx] = ANY();
@@ -291,9 +276,7 @@ TVal<T>::SetString(const char* s, int ndx)
     }
 
     T v;
-    auto sv = std::make_unique<char[]>(ss.length()+3);
-    //auto sv = std::make_shared<char[]>( ss.length()+3 );
-    if( sscanf(ss.c_str(), PATTERN_SET(), &v, sv.get() ) != 1 )
+    if( !string2value( v, ss ) )
         return false;
 
     static_cast<T*>(ptr)[ndx] = v;
@@ -303,9 +286,7 @@ TVal<T>::SetString(const char* s, int ndx)
 
 // Set/GetString() for <char> need special handling
 template<>
-inline
-bool
-TVal<char>::SetString(const char* s, int ndx)
+inline bool TVal<char>::SetString(const char* s, int ndx)
 {
     static_cast<char*>(ptr)[ndx] = *s;
     return true;
@@ -313,83 +294,56 @@ TVal<char>::SetString(const char* s, int ndx)
 
 // Set/GetString() for <char> need special handling
 template<>
-inline
-bool
-TVal<unsigned char>::SetString(const char* s, int ndx)
+inline bool TVal<unsigned char>::SetString(const char* s, int ndx)
 {
     static_cast<unsigned char*>(ptr)[ndx] = static_cast<unsigned char>(*s);
     return true;
 }
 
 template<>
-inline
-string
-TVal<char>::GetString(int ndx) const
+inline string TVal<char>::GetString(int ndx) const
 {
     return string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 template<>
-inline
-string
-TVal<unsigned char>::GetString(int ndx) const
+inline string TVal<unsigned char>::GetString(int ndx) const
 {
     return string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 
 template<class T>
-inline
-void
-TVal<T>::Put(double v, int ndx)
+inline void TVal<T>::Put(double v, int ndx)
 {
-   static_cast<T*>(ptr)[ndx] = ( fabs(v) <= ANY() ) ? T(v/*+.5*/) : EMPTY();	// truncate
+    static_cast<T*>(ptr)[ndx] = ( fabs(v) <= ANY() ) ? T(v/*+.5*/) : EMPTY();	// truncate
 }
 
 // Put() for <double> need special handling for efficency
-
 template<>
-inline void
-TVal<double>::Put(double v, int ndx)
+inline void TVal<double>::Put(double v, int ndx)
 {
     static_cast<double*>(ptr)[ndx] = v;
 }
 
 // returns size of the cell
 template<class T>
-inline
-int TVal<T>::cSize() const
+inline int TVal<T>::cSize() const
 {
     return sizeof(T);
 }
 
 // returns size of the cell (17/10/2012 using only from GemDataStream )
 template<>
-inline
-int TVal<long>::cSize() const
+inline int TVal<long>::cSize() const
 {
     return sizeof(int32_t);
 }
-
 
 template<> bool TVal<double>::IsAny(int ndx) const;
 template<> bool TVal<double>::IsEmpty(int ndx) const;
 template<> bool TVal<float>::IsAny(int ndx) const;
 template<> bool TVal<float>::IsEmpty(int ndx) const;
-template<> string TVal<double>::GetString(int ndx) const;
-
-/*
-template<class T>
-extern
-bool
-TVal<unsigned char>::SetString(const char* s, int ndx);
-
-template<class T>
-extern
-bool
-TVal<signed char>::SetString(const char* s, int ndx);
-*/
-
 
 #endif // _v_vals_impl_h_
 

@@ -197,64 +197,64 @@ QString TObjectModel::getDescription( TObject* pObj, int N, int M) const
 
 QVariant TObjectModel::data( const QModelIndex& index, int role ) const
 {
-	int nO, iN, iM;
-	
-	if(!index.isValid())
-	 return QVariant();	
+    int nO, iN, iM;
 
-        int ii = getObjFromModel( index.row(), index.column(), nO, iN, iM);
-
-        switch( role )
-        { case Qt::DisplayRole:
-          case Qt::EditRole:
-               if( nO == -1 )
-                   return  QString("");
-            return  QString::fromLatin1( visualizeEmpty( aObj[nO]->GetStringEmpty( iN, iM ) ).c_str() );
-          case Qt::ToolTipRole:
-          case Qt::StatusTipRole:
-               if( nO >= 0 )
-                     return  getDescription(aObj[nO].get(), iN, iM );
-               break;
-          case Qt::TextAlignmentRole:
-               if(ii < 0 )
-                   break;
-               if( flds[ii].fType == ftText )
-                  return int(Qt::AlignLeft | Qt::AlignTop);
-                else if( flds[ii].fType == ftNumeric || flds[ii].fType == ftFloat )
-                       return int(Qt::AlignRight | Qt::AlignVCenter);
-                     else return int(Qt::AlignLeft | Qt::AlignVCenter);
-          case  Qt::SizeHintRole:
-                if(ii >= 0 )
-                { // scroling for TextEdit fields
-                  //22/04/2010 if( !(ii==0 && flds[ii].fType == ftText))
-                   return QSize( wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit),
-                                htF(flds[ii].fType, flds[ii].maxN) );
-                }
-         default: break;
-        }
+    if(!index.isValid())
         return QVariant();
+
+    int ii = getObjFromModel( index.row(), index.column(), nO, iN, iM);
+
+    switch( role )
+    { case Qt::DisplayRole:
+    case Qt::EditRole:
+        if( nO == -1 )
+            return  QString("");
+        return  QString::fromLatin1( visualizeEmpty( aObj[nO]->GetStringEmpty( iN, iM ) ).c_str() );
+    case Qt::ToolTipRole:
+    case Qt::StatusTipRole:
+        if( nO >= 0 )
+            return  getDescription(aObj[nO].get(), iN, iM );
+        break;
+    case Qt::TextAlignmentRole:
+        if(ii < 0 )
+            break;
+        if( flds[ii].fType == ftText )
+            return int(Qt::AlignLeft | Qt::AlignTop);
+        else if( flds[ii].fType == ftNumeric || flds[ii].fType == ftFloat )
+            return int(Qt::AlignRight | Qt::AlignVCenter);
+        else return int(Qt::AlignLeft | Qt::AlignVCenter);
+    case  Qt::SizeHintRole:
+        if(ii >= 0 )
+        { // scroling for TextEdit fields
+            //22/04/2010 if( !(ii==0 && flds[ii].fType == ftText))
+            return QSize( wdF(flds[ii].fType, flds[ii].npos, flds[ii].edit),
+                          htF(flds[ii].fType, flds[ii].maxN) );
+        }
+    default: break;
+    }
+    return QVariant();
 }
 
 bool TObjectModel::setData( const QModelIndex &index, const QVariant &value, int role)
 {
-	int nO, iN, iM;
- 	
-	if( index.isValid() && ( role == Qt::EditRole ) )
-	{
-          int iifld = getObjFromModel( index.row(), index.column(), nO, iN, iM);
-          if( nO >= 0 &&  flds[iifld].edit == eYes)
-	  {
-        std::string txt = QVariant(value).toString().toStdString();
-	
-              if( txt == emptiness /*|| txt == short_emptiness*/ )
-          aObj[nO]->SetString( S_EMPTY, iN, iM );
-	    else
-          aObj[nO]->SetString( txt.c_str(), iN, iM );
-	    emit dataChanged(index, index);
-	  }	  
-	 return true;
-	} 
-	return false;
+    int nO, iN, iM;
+
+    if( index.isValid() && ( role == Qt::EditRole ) )
+    {
+        int iifld = getObjFromModel( index.row(), index.column(), nO, iN, iM);
+        if( nO >= 0 &&  flds[iifld].edit == eYes)
+        {
+            std::string txt = QVariant(value).toString().toStdString();
+
+            if( txt == emptiness /*|| txt == short_emptiness*/ )
+                aObj[nO]->SetString( S_EMPTY, iN, iM );
+            else
+                aObj[nO]->SetString( txt.c_str(), iN, iM );
+            emit dataChanged(index, index);
+        }
+        return true;
+    }
+    return false;
 }
 
 Qt::ItemFlags TObjectModel::flags( const QModelIndex & index ) const  
@@ -1405,49 +1405,50 @@ void TObjectDelegate::updateEditorGeometry( QWidget * editor,
 // TIntValidator,
 //----------------------------------------------
 
-class TIntValidator : public QIntValidator
-{
-   // Q_OBJECT
+ class TIntValidator : public QIntValidator
+ {
+     // Q_OBJECT
 
-public:
-    TIntValidator(QObject * parent):QIntValidator( parent){};
-    ~TIntValidator(){};
+ public:
+     TIntValidator(QObject * parent):QIntValidator( parent){};
+     ~TIntValidator(){};
 
-    QValidator::State validate(QString &, int &) const;
+     QValidator::State validate(QString &, int &) const;
 
-};
+ };
 
-QValidator::State TIntValidator::validate(QString &input, int &pos) const
-{
-  if (input == "--" )
-        return Intermediate;
-  if (input == "---" )
-        return Acceptable;
+ QValidator::State TIntValidator::validate(QString &input, int &pos) const
+ {
+     if (input == "--" )
+         return Intermediate;
+     if (input == "---" )
+         return Acceptable;
 
- return QIntValidator::validate(input, pos);
-}
+     return QIntValidator::validate(input, pos);
+ }
 
-class TDoubleValidator : public QDoubleValidator
-{
-   // Q_OBJECT
+ class TDoubleValidator : public QDoubleValidator
+ {
+     // Q_OBJECT
 
-public:
-    TDoubleValidator(QObject * parent):QDoubleValidator( parent){};
-    ~TDoubleValidator(){};
+ public:
+     TDoubleValidator(QObject * parent):QDoubleValidator( parent){};
+     ~TDoubleValidator(){};
 
-    QValidator::State validate(QString &, int &) const;
+     QValidator::State validate(QString &, int &) const;
 
-};
+ };
 
-QValidator::State TDoubleValidator::validate(QString &input, int &pos) const
-{
-  if (input == "--" )
-        return Intermediate;
-  if (input == "---" )
-        return Acceptable;
+ QValidator::State TDoubleValidator::validate(QString &input, int &pos) const
+ {
+     if ( input == "--" || input == "i" || input == "in" ||
+          input == "-i" || input == "-in" || input == "n" || input == "na" )
+         return Intermediate;
+     if (input == "---" || input == "inf" || input == "-inf" || input == "nan" )
+         return Acceptable;
 
- return QDoubleValidator::validate(input, pos);
-}
+     return QDoubleValidator::validate(input, pos);
+ }
 
 //------------------------------------------------
 // TCellInput
@@ -1467,7 +1468,7 @@ TCellInput::TCellInput( FieldInfo afld, int in, int im, QWidget * parent ):
         break;
     case ftFloat:
     	{ 
-                TDoubleValidator* dVal = new TDoubleValidator( this );
+            TDoubleValidator* dVal = new TDoubleValidator( this );
     	  	dVal->setDecimals( afld.npos-2 );
     	    setValidator( dVal );
             break;

@@ -37,7 +37,7 @@ struct TValBase
     static int doublePrecision;	// precision of double, set by VisorImp
 
     bool dynamic;	// object is dynamic
-    void* ptr;		// pointer to the value 
+    void* ptr;		// pointer to the value
 
     TValBase(bool d) : dynamic(d), ptr(nullptr)
     {}
@@ -69,7 +69,7 @@ struct TValBase
     virtual void read(GemDataStream& s, int size) = 0;
 
 private:
-// forbidding copying and assigning - it's dangerous!
+    // forbidding copying and assigning - it's dangerous!
     TValBase (const TValBase&);
     const TValBase& operator= (const TValBase&);
 };
@@ -99,14 +99,5 @@ extern const char* S_ANY;
 #define SCHAR_ANY       127
 #define CHAR_EMPTY   	     '`'
 #define CHAR_ANY       	     '*'
-
-//inline bool IsFloatEmpty( const float v )
-//{
-//    return ( v>0.f && v <= FLOAT_EMPTY);
-//}
-//inline bool IsDoubleEmpty( const double v )
-//{
-//    return ( v>0. && v <= DOUBLE_EMPTY);
-//}
 
 #endif //_v_vals_h_
