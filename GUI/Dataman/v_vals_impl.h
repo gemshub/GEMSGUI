@@ -43,8 +43,6 @@ struct TVal:
     // values and string representations for special values: EMPTY and ANY
     static T EMPTY();
     static T ANY();
-    //static const char* PATTERN_GET();
-    //static const char* PATTERN_SET();
 
     // basic constructor and descructor
     TVal(bool d):

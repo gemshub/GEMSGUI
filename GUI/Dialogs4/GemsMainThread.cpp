@@ -41,7 +41,7 @@ void TVisorImp::CmRunIPM()
         {
           auto dlg = new ProgressDialog(this/*,sactionStepwise->isChecked()*/  );
           connect( calc_model, &IPNCalcObject::IPM_OK, dlg, &ProgressDialog::CalcFinished );
-          connect( calc_model, &IPNCalcObject::IPM_exception, dlg, &ProgressDialog::close );
+          //connect( calc_model, &IPNCalcObject::IPM_exception, dlg, &ProgressDialog::close );
         }
         ProgressDialog::pDia->show();
         emit run_IPM();
@@ -63,9 +63,10 @@ void TVisorImp::finish_IPN()
 
 void TVisorImp::error_IPN( std::string err_mess )
 {
-    cout << "finish_IPN" << endl;
+    cout << "error_IPN" << endl;
     //Update(true);
     vfMessage(this, "error_IPN", err_mess );
+    ProgressDialog::pDia->close();
 }
 
 void TVisorImp::setCalcClient()
@@ -254,13 +255,12 @@ bool TVisorImp::Message( QWidget* /*parent*/, const char* name,
         qApp->processEvents();
         bool enabled = !(pVisor->ProfileMode == MDD_SYSTEM && LoadMessage::pDia );
         setMenuEnabled( enabled );
-         connect( mssg, SIGNAL(canceled () ), this, SLOT(setMenuEnabled()) );
+        connect( mssg, SIGNAL(canceled() ), this, SLOT(setMenuEnabled()) );
 
        // (new LoadMessage( parent, name, msg, prog, total))->show();
       //  if( move && parent  )
       //    LoadMessage::pDia->move(parent->x()+parent->width(), parent->y());
     }
-
    return false;
 }
 
