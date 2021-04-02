@@ -53,6 +53,14 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
 
     setupUi(this);
 
+    pTname = new TLineEdit(this);
+    pTname->setMaxLength(MAXFORMULA);
+    gridLayout_2->addWidget(pTname, 0, 1, 1, 1);
+
+    pComment = new TLineEdit(this);
+    pComment->setMaxLength(MAXFORMULA);
+    gridLayout_2->addWidget(pComment, 1, 1, 1, 1);
+
     recTable = new TRecipeTable(groupBox_3, this);
     gridLayout->addWidget(recTable, 1, 2, 2, 1);
 
@@ -62,7 +70,19 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
             str += pkey;
             setWindowTitle( str );
 
-    pTname->setText( QString(aObj[o_ssname]->GetStringEmpty(0,0).c_str()));
+    auto name = aObj[o_ssname]->GetStringEmpty(0,0);
+    if( name.empty() || name==S_EMPTY  )
+    {
+       name = "Please, enter here a title explaining what this chemical system is";
+    }
+    auto comment = aObj[o_ssnotes]->GetStringEmpty(0,0);
+    if( comment.empty() || comment==S_EMPTY  )
+    {
+       comment = "Please, enter here a comment about the purpose of this system definition";
+    }
+
+    pTname->setText( QString(name.c_str()));
+    pComment->setText( QString(comment.c_str()));
     // define lists pages
     for(  ii=0; ii<awnData.size()-1; ii++ )  // -1 all exept static window
     {
@@ -195,16 +215,23 @@ InputSystemDialog::~InputSystemDialog()
 
 void InputSystemDialog::getTable( std::vector<tableSetupData>& tab ) const
 {
-  string txt = pTname->text().toStdString();
+    string txt = pTname->text().toStdString();
 
-  if( txt == emptiness /*|| txt == short_emptiness*/ )
-  aObj[o_ssname]->SetString( S_EMPTY, 0, 0 );
-  else
-  aObj[o_ssname]->SetString( txt.c_str(), 0, 0 );
+    if( txt == emptiness /*|| txt == short_emptiness*/ )
+        aObj[o_ssname]->SetString( S_EMPTY, 0, 0 );
+    else
+        aObj[o_ssname]->SetString( txt.c_str(), 0, 0 );
 
-  tab.clear();
-  for( uint ii=0; ii< tbData.size(); ii++ )
-    tab.push_back( tableSetupData(tbData[ii]) );
+    txt = pComment->text().toStdString();
+
+    if( txt == emptiness /*|| txt == short_emptiness*/ )
+        aObj[o_ssnotes]->SetString( S_EMPTY, 0, 0 );
+    else
+        aObj[o_ssnotes]->SetString( txt.c_str(), 0, 0 );
+
+    tab.clear();
+    for( uint ii=0; ii< tbData.size(); ii++ )
+        tab.push_back( tableSetupData(tbData[ii]) );
 
 }
 

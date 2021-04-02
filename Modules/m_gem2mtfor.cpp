@@ -19,7 +19,6 @@
 #include "GEMS3K/io_template.h"
 #include "GEMS3K/io_nlohmann.h"
 #include "GEMS3K/io_simdjson.h"
-//#include "simdjson/simdjson.cpp"
 #include "GEMS3K/io_keyvalue.h"
 
 extern const char* _GEMIPM_version_stamp;

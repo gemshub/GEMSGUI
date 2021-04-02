@@ -121,7 +121,7 @@ template<> char TVal<char>::ANY()
 template<>
 bool TVal<double>::IsAny(int ndx) const
 {
-    if( approximatelyEqual( static_cast<double*>(ptr)[ndx], ANY() ) )
+    if( static_cast<double*>(ptr)[ndx] >= ANY() )
         return true;
     return false;
 }
@@ -129,7 +129,8 @@ bool TVal<double>::IsAny(int ndx) const
 template<>
 bool TVal<double>::IsEmpty(int ndx) const
 {
-    if( approximatelyEqual( static_cast<double*>(ptr)[ndx], EMPTY()) )
+    double value = static_cast<double*>(ptr)[ndx];
+    if(  value > 0 && value <= EMPTY() )
         return true;
     return false;
 }
@@ -137,7 +138,7 @@ bool TVal<double>::IsEmpty(int ndx) const
 template<>
 bool TVal<float>::IsAny(int ndx) const
 {
-    if( approximatelyEqual( static_cast<float*>(ptr)[ndx], ANY() ) )
+    if( static_cast<float*>(ptr)[ndx] >= ANY() )
         return true;
     return false;
 }
@@ -145,7 +146,8 @@ bool TVal<float>::IsAny(int ndx) const
 template<>
 bool TVal<float>::IsEmpty(int ndx) const
 {
-    if( approximatelyEqual( static_cast<float*>(ptr)[ndx], EMPTY()) )
+    float value = static_cast<float*>(ptr)[ndx];
+    if( value > 0 && value <= EMPTY() )
         return true;
     return false;
 }

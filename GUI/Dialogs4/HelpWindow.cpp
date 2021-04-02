@@ -47,7 +47,7 @@
 static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.8.0 c.90785c2 ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.8.1 c.015c7f9 ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = nullptr;
@@ -246,12 +246,12 @@ void HelpWindow::helpVersion()
     QMessageBox::information(this,
 #ifndef _WIN32
 #ifdef __APPLE__
-           "Title", "GEMS3.7 (macOSX 10.13-10.15, C++ clang x64)\n\n"+
+           "Title", "GEMS3.8 (MacOS 10.13-10.15, clang x64)\n\n"+
 #else
-           "GEMS3.7 (Linux x64 C++ gcc7.3 up, Qt5.12 up)",
+           "GEMS3.8 (Linux x64 C++ gcc7.3 up, Qt5.12 up)",
 #endif
 #else
-           "GEMS3.7 (Windows 10 C++ MSVC15 x64 Qt5.15)",
+           "GEMS3.8 (Windows 10 C++ MSVC15 x64 Qt5.15)",
 #endif
             QString("\nThis is GEM-Selektor code package\n\n") +
              _GEMS_version_stamp   +  "\n\nusing "  +

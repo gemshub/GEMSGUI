@@ -40,6 +40,33 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
 
     pDia = this;
 
+    // Added name
+    QList<FieldInfo>	aFlds;
+    aFlds.append(FieldInfo( o_ssname, ftString, 80, false, First, eYes, stIO, 1, 1));
+    MTitle = new TObjectModel( aFlds, this );
+    PTitle =  new TObjectTable( aFlds, this );
+    TObjectDelegate *deleg = new TObjectDelegate( PTitle, this);
+    PTitle->setItemDelegate(deleg);
+    PTitle->setModel(MTitle);
+    PTitle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    int rowSize =0, colSize=0;
+    PTitle->getObjectSize(rowSize, colSize);
+    PTitle->setMaximumSize(QSize(16777215, rowSize));
+    gridLayout->addWidget(PTitle, 1, 1, 1, 1);
+
+    // Added comment
+    aFlds.clear();
+    aFlds.append(FieldInfo( o_ssnotes, ftString, 80, false, First, eYes, stIO, 1, 1));
+    MComment= new TObjectModel( aFlds, this );
+    PComment =  new TObjectTable( aFlds, this );
+    TObjectDelegate *deleg1 = new TObjectDelegate( PComment, this);
+    PComment->setItemDelegate(deleg1);
+    PComment->setModel(MComment);
+    PComment->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    PComment->getObjectSize(rowSize, colSize);
+    PComment->setMaximumSize(QSize(16777215, rowSize));
+    gridLayout->addWidget(PComment, 2, 1, 1, 1);
+
 // define new TTreeView window Input: System Definition
    defineInputList();
     
@@ -136,7 +163,7 @@ void NewSystemDialog::defineInputList()
     	ListViewInput->setColumnWidth( ii, wdF(afldsDC[ii].fType, afldsDC[ii].npos, afldsDC[ii].edit) );
 
     ListViewInput->setAllColumnsShowFocus(false);
-    vboxLayout1->addWidget(ListViewInput);
+    vboxLayout->addWidget(ListViewInput);
 
 // end of setup ListView1
 }
@@ -194,7 +221,7 @@ void NewSystemDialog::defineResultList()
     	ListViewResult->setColumnWidth( ii, wdF(afldsDC[ii].fType, afldsDC[ii].npos, afldsDC[ii].edit) );
 
     ListViewResult->setAllColumnsShowFocus(false);
-    vboxLayout2->addWidget(ListViewResult);
+    vboxLayout1->addWidget(ListViewResult);
 
 // end of setup ListView2
 }
@@ -256,6 +283,9 @@ void NewSystemDialog::Update()
     if(ListViewResult)
       ListViewResult->resetList();
     ListViewInput->resetList();
+
+    MTitle->resetData();
+    MComment->resetData();
 }
 
 void NewSystemDialog::closeEvent(QCloseEvent* ev)

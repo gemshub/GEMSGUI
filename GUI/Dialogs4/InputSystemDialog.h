@@ -82,6 +82,8 @@ class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
 
    QList<QListWidget *> pLists;
    TRecipeTable *recTable;
+   TLineEdit* pTname = nullptr;
+   TLineEdit* pComment = nullptr;
 
    // internal functions
    int tableFindRow( int nO, int ndx );
@@ -120,7 +122,7 @@ public:
    {  tbData[row].val = value; }
 
 protected slots:
-    virtual void languageChange();
+   virtual void languageChange();
 
 public slots:
     void changePage( int nPage );

@@ -20,6 +20,7 @@
 #define _v_vals_h_
 
 #include <string>
+#include <limits>
 
 class GemDataStream;
 
@@ -89,15 +90,20 @@ extern const char* S_ANY;
 #define LONG_ANY               2147483647L
 #define ULONG_EMPTY   0UL
 #define ULONG_ANY     4294967295UL
-#define FLOAT_EMPTY	          1.17549435e-38F
-#define FLOAT_ANY             3.40282346e+38F   // was 3.40282347e+38F - fixed because of MSVC 15.0
-#define DOUBLE_EMPTY         2.2250738585072014e-308
-#define DOUBLE_ANY           1.7976931348623157e+308
+//#define FLOAT_EMPTY	          1.17549435e-38F
+//#define FLOAT_ANY             3.40282346e+38F   // was 3.40282347e+38F - fixed because of MSVC 15.0
+//#define DOUBLE_EMPTY         2.2250738585072014e-308
+//#define DOUBLE_ANY           1.7976931348623157e+308
 #define UCHAR_EMPTY   0
 #define UCHAR_ANY     0xFF
 #define SCHAR_EMPTY     -127
 #define SCHAR_ANY       127
 #define CHAR_EMPTY   	     '`'
 #define CHAR_ANY       	     '*'
+
+//const float FLOAT_EMPTY = std::numeric_limits<float>::min();
+const float FLOAT_ANY = std::numeric_limits<float>::max();
+//const double DOUBLE_EMPTY = std::numeric_limits<double>::min();
+const double DOUBLE_ANY = std::numeric_limits<double>::max();
 
 #endif //_v_vals_h_

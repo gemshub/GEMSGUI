@@ -19,7 +19,6 @@
 #ifndef _m_gem2mt_h_
 #define _m_gem2mt_h_
 
-
 #ifndef NOPARTICLEARRAY
 #include "particlearray.h"
 #endif

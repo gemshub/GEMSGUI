@@ -28,21 +28,11 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>tname</string>
+      <string>Title:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="pTname">
-     <property name="toolTip">
-      <string>Comment line for full identification of this CSD</string>
-     </property>
-     <property name="maxLength">
-      <number>72</number>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
+   <item row="2" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
       <string/>
@@ -155,12 +145,13 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
+   <item row="3" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pHelp">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -196,6 +187,7 @@
       <widget class="QPushButton" name="pPrint">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -212,6 +204,7 @@
       <widget class="QPushButton" name="pOK">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -228,6 +221,7 @@
       <widget class="QPushButton" name="pCancel">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -241,6 +235,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

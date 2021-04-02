@@ -14,8 +14,8 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="2">
      <widget class="QTabWidget" name="TabWid">
       <property name="toolTip">
        <string>To edit, right-click on input values; press Enter to change data</string>
@@ -35,6 +35,20 @@
        </attribute>
        <layout class="QVBoxLayout"/>
       </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Title:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Comment:</string>
+      </property>
      </widget>
     </item>
    </layout>
@@ -109,8 +123,7 @@
   <action name="actionDelete">
    <property name="icon">
     <iconset>
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Delete</string>

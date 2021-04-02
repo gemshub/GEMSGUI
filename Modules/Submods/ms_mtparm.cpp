@@ -339,10 +339,10 @@ if( P < 1e-5 )  // trial check  5.12.2006
 
     if( tp.La && TC < 120. && TC >= 0.0 )
     { /* calc approximation of water properties Nordstrom ea, 1990 */
-        if( TC < 0.01 )
+        if( TC < 1.75 )
         {
-            TC = 0.01;
-            TK = TC + C_to_K;
+            TC = 1.75;
+            TK = 273.16;
         }
         tp.RoW = 1.-pow(TC-3.9863,2)*(TC+288.9414)/508929.2/(TC+68.12963)+
                  0.011445*exp(-374.3/TC);

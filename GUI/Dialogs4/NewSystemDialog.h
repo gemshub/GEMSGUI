@@ -38,6 +38,11 @@ class NewSystemDialog : public QMainWindow, public Ui::NewSystemDialogData
 
     TTreeView *ListViewInput;
     TTreeView *ListViewResult;
+    TObjectTable* PTitle = nullptr;
+    TObjectTable* PComment = nullptr;
+
+    TObjectModel* MTitle = nullptr;
+    TObjectModel* MComment = nullptr;
 
     //--QLineEdit* pLine;
     //--QMenuBar * menu;
