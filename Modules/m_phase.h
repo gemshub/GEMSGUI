@@ -277,10 +277,9 @@ protected:
     void Set_SolMod_Phase_coef();
     void Set_KinMet_Phase_coef();   // new
     void Set_SorpMod_Phase_coef();  // new
-    void makeReacDCompList( const char *caption, TCStringArray& aDclist,
-                            short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT);
-    void makePhaseList( const char *caption, TCStringArray& aPhlist );
-    void makeICompList( const char *caption, TCStringArray& aIclist );
+    void makeReacDCompListNew( TCStringArray& aDclist, short nDC,  char (*SM)[DC_RKLEN], char* DCS );
+    void makePhaseListNew( TCStringArray& aPhlist );
+    //void makeICompList( const char *caption, TCStringArray& aIclist );
     void DetNumbCatAn(TCStringArray& aDclist);
     void LoadDCC();
     void set_def_comments( bool clearall,

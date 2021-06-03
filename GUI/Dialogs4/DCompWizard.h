@@ -21,28 +21,29 @@
 
 
 #include <QDialog>
-#include "ui_DCompWizard4.h"
 
-class DCompWizard : public QDialog, public Ui::DCompWizardData
+namespace Ui {
+class DCompWizardData;
+}
+
+class DCompWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::DCompWizardData *ui;
     void 	resetNextButton();
     void 	resetBackButton();
 
 public:
 
     DCompWizard( const char* pkey, char flgs[15], int size[4],
-                  QWidget* parent = nullptr);
+    QWidget* parent = nullptr);
     virtual ~DCompWizard();
 
 
     void   getSizes( int size[4] );
     void   getFlags( char flgs[15] );
-//    double   getR2();
-
-protected slots:
-    virtual void languageChange();
+    //    double   getR2();
 
 protected slots:
 

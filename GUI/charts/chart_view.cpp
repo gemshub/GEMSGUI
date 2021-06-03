@@ -723,7 +723,11 @@ void PlotChartView::dropEvent( QDropEvent* event )
     if (event->mimeData()->hasFormat("text/plain"))
     {
         QString text_ = event->mimeData()->text();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         auto posF =  event->posF();
+#else
+        auto posF =  event->position();
+#endif
         pdata->addLabel( posF, text_ );
         //std::cout << "pos " << pos.x() <<  " " << pos.y() << "Test drop" << text_.toStdString() << std::endl;
     }

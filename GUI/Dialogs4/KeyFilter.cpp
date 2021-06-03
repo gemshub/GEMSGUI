@@ -19,7 +19,8 @@
 #include <iostream>
 using namespace std;
 
-#include <qtooltip.h>
+#include <QPushButton>
+#include <QLabel>
 
 #include "service.h"
 #include "KeyFilter.h"
@@ -34,9 +35,9 @@ using namespace std;
 
 KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
                      const char* caption, bool allowTempl ):
-        QDialog( win ),
-        iRt(irt),
-        allowTemplates(allowTempl)
+    QDialog( win ),
+    iRt(irt),
+    allowTemplates(allowTempl)
 {
     QLineEdit* pEdit;
     QLabel* pLabel;
@@ -64,7 +65,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
         string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
         pEdit->setText( s.c_str() );
-        connect( pEdit, SIGNAL(editingFinished ()), this, SLOT(setKeyLine()) );
+        connect( pEdit, SIGNAL(editingFinished()), this, SLOT(setKeyLine()) );
 
         editBox->addWidget( pEdit, ii, 0, Qt::AlignRight);
         pLabel = new QLabel( str, this);
@@ -103,7 +104,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
 
     btn = new QPushButton(this);
     btn->setText("&Cancel");
-// qt3to4    btn->setAccel( Qt::Key_Escape );
+    // qt3to4    btn->setAccel( Qt::Key_Escape );
     connect( btn, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonBox->addWidget( btn );
 
@@ -133,17 +134,15 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
 }
 
 ///  pVisor->SetStatus( aMod[iRt]->GetFldHelp(ii).c_str() );
-void
-KeyFilter::CmHelp()
+void KeyFilter::CmHelp()
 {                               
-   string dbName =  DBM;
-   dbName +="_";
-   dbName += string(aMod[iRt]->GetName());
-   pVisorImp->OpenHelp(  GEMS_REKEY_HTML, dbName.c_str() );
+    string dbName =  DBM;
+    dbName +="_";
+    dbName += string(aMod[iRt]->GetName());
+    pVisorImp->OpenHelp(  GEMS_REKEY_HTML, dbName.c_str() );
 }
 
-void
-KeyFilter::CmOk()
+void KeyFilter::CmOk()
 {
     if( allowTemplates || SetKeyString().find_first_of("*?") == string::npos )
     {
@@ -154,8 +153,7 @@ KeyFilter::CmOk()
     vfMessage(this, "Key error", "No templates allowed!", vfErr);
 }
 
-string
-KeyFilter::SetKeyString()
+string KeyFilter::SetKeyString()
 {
     //TDBKey dbKey( rt[iRt].GetDBKey() );
     string Key;
@@ -166,29 +164,26 @@ KeyFilter::SetKeyString()
         string s = aEdit[ii]->text().toStdString();
         Key += s;
         StripLine(Key);
-//Sveta 04/09/01 ????  if( Key.length()-jj < dbKey.FldLen(ii) )
-            Key += ":";
+        //Sveta 04/09/01 ????  if( Key.length()-jj < dbKey.FldLen(ii) )
+        Key += ":";
     }
 
     return Key;
 }
 
-void
-KeyFilter::setKeyLine()
+void KeyFilter::setKeyLine()
 {
     fullKey->setText(SetKeyString().c_str());
 }
 
-void
-KeyFilter::EvSetAll()
+void KeyFilter::EvSetAll()
 {
     for( size_t ii=0; ii<aEdit.size(); ii++ )
         aEdit[ii]->setText("*");
     setKeyLine();
 }
 
-void
-KeyFilter::EvGetList()
+void KeyFilter::EvGetList()
 {
     KeyDialog dlg(this, iRt, SetKeyString().c_str(), "Key template", false);
     if( !dlg.exec() )
@@ -207,8 +202,7 @@ KeyFilter::EvGetList()
     setKeyLine();
 }
 
-string
-KeyFilter::getFilter()
+string KeyFilter::getFilter()
 {
     //  if( result )
     return SetKeyString();

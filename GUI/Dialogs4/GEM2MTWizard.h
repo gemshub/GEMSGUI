@@ -19,10 +19,12 @@
 #ifndef GEM2MTWizard_included
 #define GEM2MTWizard_included
 
-#include "ui_GEM2MTWizard4.h"
 #include "EquatSetupWidget.h"
 #include "model_w.h"
 
+namespace Ui {
+class GEM2MTWizardData;
+}
 
 enum gem2mt_remake_pages {
     mode_RMT = 0,
@@ -36,10 +38,11 @@ enum gem2mt_remake_pages {
     other_options
 };
 
-class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
+class GEM2MTWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::GEM2MTWizardData *ui;
     string calcScript;
     string outScript;
     EquatSetup *pageScript;
@@ -80,10 +83,10 @@ class GEM2MTWizard : public QDialog, public Ui::GEM2MTWizardData
 public:
 
     GEM2MTWizard( const char* pkey, char flgs[32], int sizes[20],
-                     double Tai[4], double Pai[4], double Tau[3],
-                     const char *acalcScript, const char *aoutScript,
-                     const char* aXname, const char* aYname,
-                     TCIntArray vtk1, TCIntArray vtk2, QWidget* parent = nullptr);
+    double Tai[4], double Pai[4], double Tau[3],
+    const char *acalcScript, const char *aoutScript,
+    const char* aXname, const char* aYname,
+    TCIntArray vtk1, TCIntArray vtk2, QWidget* parent = nullptr);
 
     virtual ~GEM2MTWizard();
 
@@ -93,10 +96,7 @@ public:
     void   getPdata( double Pai[4] );
     void   getTaudata( double Tau[3] );
 
-    string getCalcScript() const
-    { string res= pScript_t->toPlainText().toStdString();
-      return res;
-    }
+    string getCalcScript() const;
     string getOutScript() const
     { return pageScript->getScript(); }
 
@@ -107,27 +107,22 @@ public:
     void setVTK( TCIntArray vtk1, TCIntArray vtk2  );
 
 protected slots:
-    virtual void languageChange();
+
     void arrayChecked( bool check );
     void UnCheckSolid( bool check );
     void UnCheckAqGas( bool check );
-
-protected slots:
 
     void help();
     void CmNext();
     void CmBack();
     void resetPageList(const char* aXname, const char* aYname);
     void setTScript( bool c_PvMSt_checked );
-    void ScriptChange(int );
+    void ScriptChange(QAbstractButton*);
     void changePage( int nPage );
     void changeTable(const QItemSelection & selected, const QItemSelection & deselected);
     void disableVTK();
     void objectChanged();
 
-
-private slots:
-    void on_moveAq_toggled(bool checked);
 };
 
 #endif // GEM2MTWizard_included

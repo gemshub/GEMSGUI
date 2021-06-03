@@ -16,162 +16,151 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qcombobox.h>
-#include <qvariant.h>
-
-
+#include "ui_ComposWizard4.h"
 #include "ComposWizard.h"
 #include "GemsMainWindow.h"
 #include "service.h"
 
-void ComposWizard::languageChange()
-{
-    retranslateUi(this);
-}
 
-void
-ComposWizard::CmBack()
+void ComposWizard::CmBack()
 {
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()-1 );
+    ui->stackedWidget->setCurrentIndex ( ui->stackedWidget->currentIndex()-1 );
     resetNextButton();
     resetBackButton();
 }
 
-void
-ComposWizard::CmNext()
+void ComposWizard::CmNext()
 {
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
+    ui->stackedWidget->setCurrentIndex ( ui->stackedWidget->currentIndex()+1 );
     resetNextButton();
     resetBackButton();
 }
 
-void 	ComposWizard::resetNextButton()
+void ComposWizard::resetNextButton()
 {
-	if( stackedWidget->currentIndex() == stackedWidget->count() - 1 )
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(accept()) );
-		pNext->setText("&Finish");
-	}
-	else
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
-		pNext->setText("&Next>");
-	}
+    if( ui->stackedWidget->currentIndex() == ui->stackedWidget->count() - 1 )
+    {
+        ui->pNext->disconnect();
+        connect( ui->pNext, SIGNAL(clicked()), this, SLOT(accept()) );
+        ui->pNext->setText("&Finish");
+    }
+    else
+    {
+        ui->pNext->disconnect();
+        connect( ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
+        ui->pNext->setText("&Next>");
+    }
 }
 
-void 	ComposWizard::resetBackButton()
+void ComposWizard::resetBackButton()
 {
-	pBack->setEnabled( stackedWidget->currentIndex() > 0 );
+    ui->pBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
 
 ComposWizard::ComposWizard( const char* pkey, char flgs[6], int size[2],
-                            double r2, QWidget* parent):
-    QDialog( parent )
+double r2, QWidget* parent):
+    QDialog( parent ),
+    ui(new Ui::ComposWizardData)
 {
-    setupUi(this);
+    ui->setupUi(this);
     string str1= "GEM-Selektor Compos Setup:  ";
-            str1 += pkey;
-            setWindowTitle( str1.c_str() );
-    QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
-    QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
-    QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
-    stackedWidget->setCurrentIndex (0);
+    str1 += pkey;
+    setWindowTitle( str1.c_str() );
+    ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();
     
-    
-// set up startup sizes
-    spinBox11->setValue(size[0]);
-    spinBox18->setValue(size[1]);
+    // set up startup sizes
+    ui->spinBox11->setValue(size[0]);
+    ui->spinBox18->setValue(size[1]);
 
-// set up startup cheks
+    // set up startup cheks
     if( flgs[0] == '+' || flgs[0] == '*' )
-      checkBox2->setChecked( true );
-    else checkBox2->setChecked( false );
+        ui->checkBox2->setChecked( true );
+    else ui->checkBox2->setChecked( false );
 
     if( flgs[1] == '+' || flgs[1] == '*' )
-      checkBox2_2->setChecked( true );
-    else checkBox2_2->setChecked( false );
+        ui->checkBox2_2->setChecked( true );
+    else ui->checkBox2_2->setChecked( false );
 
     if( flgs[4] == '+' || flgs[4] == '*' )
-      checkBox8->setChecked( true );
-    else checkBox8->setChecked( false );
+        ui->checkBox8->setChecked( true );
+    else ui->checkBox8->setChecked( false );
 
-// Ctext calculation
+    // Ctext calculation
 
     if( flgs[3] == '+' || flgs[3] == '*' )
-      checkBox2_2_2->setChecked( true );
-    else checkBox2_2_2->setChecked( false );
+        ui->checkBox2_2_2->setChecked( true );
+    else ui->checkBox2_2_2->setChecked( false );
 
     QString str;
-    lineEdit1->setValidator( new QDoubleValidator( lineEdit1 ) );
-    lineEdit1->setText( str.setNum(r2) );
+    ui->lineEdit1->setValidator( new QDoubleValidator( ui->lineEdit1 ) );
+    ui->lineEdit1->setText( str.setNum(r2) );
 
-    int ii = comboBox1->findText(QChar(flgs[5]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    int ii = ui->comboBox1->findText(QChar(flgs[5]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-    	comboBox1->setCurrentIndex(ii);
+        ui->comboBox1->setCurrentIndex(ii);
+
+    QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));
+    QObject::connect( ui->pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
+    QObject::connect( ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
+    QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 
 ComposWizard::~ComposWizard()
-{}
+{
+    delete ui;
+}
 
 void   ComposWizard::getSizes( int size[2] )
 {
-    size[0]= spinBox11->value();
-    size[1]= spinBox18->value();
+    size[0]= ui->spinBox11->value();
+    size[1]= ui->spinBox18->value();
 }
 
 double   ComposWizard::getR2()
 {
- double r=lineEdit1->text().toDouble();
+    double r=ui->lineEdit1->text().toDouble();
 
- if( approximatelyZero(r) && checkBox2_2_2->isChecked() )
-       r = 1.;
-  return r;
+    if( approximatelyZero(r) && ui->checkBox2_2_2->isChecked() )
+        r = 1.;
+    return r;
 }
 
 
 void ComposWizard::getFlags( char flgs[6] )
 {
-  if( checkBox2->isChecked() )
-       flgs[0] = '+';
-  else flgs[0] = '-';
+    if( ui->checkBox2->isChecked() )
+        flgs[0] = '+';
+    else flgs[0] = '-';
 
-  if( checkBox2_2->isChecked() )
-       flgs[1] = '+';
-  else flgs[1] = '-';
+    if( ui->checkBox2_2->isChecked() )
+        flgs[1] = '+';
+    else flgs[1] = '-';
 
-  if( checkBox2_2_2->isChecked() )
-       flgs[3] = '+';
-  else flgs[3] = '-';
+    if( ui->checkBox2_2_2->isChecked() )
+        flgs[3] = '+';
+    else flgs[3] = '-';
 
-  if( spinBox11->value() > 0 )
-       flgs[2] = '+';
-  else flgs[2] = '-';
+    if( ui->spinBox11->value() > 0 )
+        flgs[2] = '+';
+    else flgs[2] = '-';
 
-  if( checkBox8->isChecked() )
-       flgs[4] = '+';
-  else flgs[4] = '-';
+    if( ui->checkBox8->isChecked() )
+        flgs[4] = '+';
+    else flgs[4] = '-';
 
-  QString str = comboBox1->currentText();
-  flgs[5] = str[0].toLatin1();
+    QString str = ui->comboBox1->currentText();
+    flgs[5] = str[0].toLatin1();
 
 }
 
 
-void
-ComposWizard::help()
+void ComposWizard::help()
 {
-  pVisorImp->OpenHelp( GM_COMPOS_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
+    pVisorImp->OpenHelp( GM_COMPOS_WZ_HTML, WZSTEP, ui->stackedWidget->currentIndex()+1 );
 }
 
 //--------------------- End of ComposWizard.cpp ---------------------------

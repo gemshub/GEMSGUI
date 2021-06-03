@@ -2,13 +2,15 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.6.0
+#VERSION         = 3.7.1
 
 DEFINES         += NODEARRAYLEVEL
 #DEFINES += NOPARTICLEARRAY
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
-#DEFINES += USE_OLD_NLOHMANJSON
+#DEFINES += USE_NLOHMANNJSON
+DEFINES += NDEBUG
+!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++17
@@ -26,26 +28,18 @@ lessThan( QT_MAJOR_VERSION, 5 ): CONFIG += help
 greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 
 #RESOURCES += img.qrc
+win32:RC_ICONS += Gems3.ico
 
 !win32 {
   DEFINES += __unix
+  QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
 
-#CFLAGS += -Wall
-#CXXFLAGS += -Wall
 
-#  CONFIG( release ) {
-#    QMAKE_CFLAGS_RELEASE = -O3
-#    QMAKE_CXXFLAGS_RELEASE = -O3
-#  }
-
-QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
-
-QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
-   -Wmissing-declarations -Winline -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral \
+  QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
+   -Wmissing-declarations -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral -Winline
    -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
-   -Wfloat-equal -Wno-pedantic -ansi
+   -Wfloat-equal -pedantic -ansi #-fsignaling-nans -ffinite-math-only
 
-#QMAKE_CXXFLAGS += -Wall -Wno-ignored-attributes -Wno-pedantic -Wno-variadic-macros -Wno-deprecated
 }
 
 macx-g++ {

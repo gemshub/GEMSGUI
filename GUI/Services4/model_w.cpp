@@ -22,6 +22,7 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QAction>
+#include <QApplication>
 
 #include "model_w.h"
 #include "units.h"
@@ -1150,7 +1151,11 @@ void TObjectTable::CmCalc()
   	    return;
   	
      QModelIndex wIndex;
-     const QStringList rows = str.split(splitrow, QString::KeepEmptyParts/*Qt::KeepEmptyParts*/);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+     const QStringList rows = str.split(splitrow, QString::KeepEmptyParts);
+#else
+     const QStringList rows = str.split(splitrow, Qt::KeepEmptyParts);
+#endif
 
      int ii, jj;
      int rowNum = sel.N1;
@@ -1161,7 +1166,11 @@ void TObjectTable::CmCalc()
   	    //if( rows[it].isEmpty() ) sd 29/10/2008 
   		// continue;
 
-        const QStringList cells = rows[it].split('\t', QString::KeepEmptyParts/*Qt::KeepEmptyParts*/);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+     const QStringList cells = rows[it].split('\t', QString::KeepEmptyParts);
+#else
+     const QStringList cells = rows[it].split('\t', Qt::KeepEmptyParts );
+#endif
   	    int cellNum = sel.M1;
   	    const int mLimit = (transpose) ? (sel.M1 + sel.N2-sel.N1) : sel.M2;
   	    for( int cellIt = 0;  cellIt < cells.count() && cellNum <= mLimit; cellIt++, cellNum++) 

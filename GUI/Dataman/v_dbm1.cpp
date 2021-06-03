@@ -621,7 +621,7 @@ TDBKey::SetFldKey( uint i, const char *key )
     ErrorIf( i>= rkFlds, key, "Invalid key field number");
 
     memset( uKey+rkInd[i], ' ' , rkLen[i] );
-    strncpy( uKey+rkInd[i], key, rkLen[i] );
+    strncpy( uKey+rkInd[i], key, min<int>(rkLen[i], strlen(key) ) );
 }
 
 /*

@@ -127,8 +127,7 @@ protected:
     void showEvent( QShowEvent * event );
 
 public slots:
-    void EvTabSelChange(int);
-    void EmitEvTabSelChange(int);
+    void EvTabSelChange(QAbstractButton* button);
 
 public:
     TCWindow(TCModuleImp* pImp, CWinInfo& w, int page=0);

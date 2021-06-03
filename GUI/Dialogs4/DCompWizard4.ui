@@ -57,6 +57,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -548,6 +549,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -925,6 +927,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1050,6 +1053,7 @@
       <widget class="QPushButton" name="pHelp">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1079,6 +1083,7 @@
       <widget class="QPushButton" name="pBack">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1092,6 +1097,7 @@
       <widget class="QPushButton" name="pNext">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1105,6 +1111,7 @@
       <widget class="QPushButton" name="pCancel">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1139,22 +1146,5 @@
   <tabstop>pCancel</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>pCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>DCompWizardData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>587</x>
-     <y>518</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>317</x>
-     <y>270</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

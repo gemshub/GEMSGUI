@@ -18,15 +18,11 @@
 #ifndef EXCLUDEFILLDIALOG_H
 #define EXCLUDEFILLDIALOG_H
 
-#include <qvariant.h>
-#include <qdialog.h>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QCheckBox>
+#include <QDialog>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QButtonGroup>
+
 #include "v_user.h"
 
 class ExcludeFillDialog : public QDialog
@@ -40,12 +36,11 @@ protected slots:
 
 public:
     ExcludeFillDialog(QWidget* win, const char* caption,
-      TCStringArray& aICkeys, double fill_data );
-   ~ExcludeFillDialog();
+                      TCStringArray& aICkeys, double fill_data );
+    ~ExcludeFillDialog();
 
     std::vector<bool> getFillType();
     double getFillValue();
-
 
 protected:
 

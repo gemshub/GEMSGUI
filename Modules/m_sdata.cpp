@@ -36,6 +36,8 @@ TSData::TSData( uint nrt ):
     //startKeyEdit = 0;
     set_def();
     start_title = " Scripts or Bibliographic References ";
+    aObj[o_ssname]->set_empty_string("Please, enter here a title explaining what this chemical system is");
+    aObj[o_ssnotes]->set_empty_string("Please, enter here a comment about the purpose of this system definition");
 }
 
 // link values to objects

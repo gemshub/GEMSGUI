@@ -27,14 +27,7 @@ const double dfImax1 = 0.01;
 const double dfImaxS = 3.0;
 const double dfImaxU = 9.9;*/
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qradiobutton.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qvariant.h>
-
+#include "ui_AutoPhaseDialog4.h"
 #include "AutoPhaseDialog.h"
 #include "GemsMainWindow.h"
 #include "service.h"
@@ -56,214 +49,205 @@ const char * dfFluKeyU = "f   FLUID   fluid_spec      gm  User-Provided   ";
 
 
 AutoPhaseDialog::AutoPhaseDialog (
-    const char *pr_key, char acode, char gcode, QWidget* parent):
-         QDialog( parent )
+        const char *pr_key, char acode, char gcode, QWidget* parent):
+    QDialog( parent ),
+    ui(new Ui::AutoPhaseDialogData)
 {
     
-    setupUi(this);
+    ui->setupUi(this);
     string str= "Setup of aqueous and gas phases in project:  ";
-            str += pr_key;
-            setWindowTitle( str.c_str() );
+    str += pr_key;
+    setWindowTitle( str.c_str() );
 
     aqu_code = acode;
     switch( acode )
     {
-      case '-': aselNo->setChecked( true ); break;
-      case 'U': aselU->setChecked( true );  break;
-      case 'Y': aselY->setChecked( true ); break;
-      case 'H': aselH->setChecked( true ); break;
-      case '3': asel3->setChecked( true ); break;
-      case '2': asel2->setChecked( true ); break;
-      case '1': asel1->setChecked( true ); break;
-      default:
-      case 'D': aselD->setChecked( true ); break;
+    case '-': ui->aselNo->setChecked( true ); break;
+    case 'U': ui->aselU->setChecked( true );  break;
+    case 'Y': ui->aselY->setChecked( true ); break;
+    case 'H': ui->aselH->setChecked( true ); break;
+    case '3': ui->asel3->setChecked( true ); break;
+    case '2': ui->asel2->setChecked( true ); break;
+    case '1': ui->asel1->setChecked( true ); break;
+    default:
+    case 'D': ui->aselD->setChecked( true ); break;
     }
 
     gas_code = gcode;
     switch( gcode )
     {
-      case '-': gselNo->setChecked( true ); break;
-      case 'U': gselU->setChecked( true );  break;
-      case 'F': gselF->setChecked( true ); break;
-      case '7': gsel7->setChecked( true ); break;
-      case 'P': gselP->setChecked( true ); break;
-      case 'E': gselE->setChecked( true ); break;
-        case 'I':
-      default: gselI->setChecked( true ); break;
+    case '-': ui->gselNo->setChecked( true ); break;
+    case 'U': ui->gselU->setChecked( true );  break;
+    case 'F': ui->gselF->setChecked( true ); break;
+    case '7': ui->gsel7->setChecked( true ); break;
+    case 'P': ui->gselP->setChecked( true ); break;
+    case 'E': ui->gselE->setChecked( true ); break;
+    case 'I':
+    default: ui->gselI->setChecked( true ); break;
     }
 
-    connect(buttonHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
-    connect(buttonCheck, SIGNAL(clicked()), this, SLOT(CmCheck()));
-    connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
-
+    connect(ui->buttonHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
+    connect(ui->buttonCheck, SIGNAL(clicked()), this, SLOT(CmCheck()));
+    connect(ui->buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(ui->buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 AutoPhaseDialog::~AutoPhaseDialog()
-{}
-
-void AutoPhaseDialog::languageChange()
 {
-    retranslateUi(this);
+    delete ui;
 }
+
 
 void AutoPhaseDialog::get_apar ( float par[8] )
 {
-    par[0] = QString( apEdit0->currentText() ).toFloat();
-    par[1] = QString( apEdit1->currentText() ).toFloat();
-    par[2] = apEdit2->currentIndex();
-    par[3] = apEdit3->currentIndex();
-    par[4] = pBG_T->currentIndex();
-    par[5] = comMolal->currentIndex();
+    par[0] = QString( ui->apEdit0->currentText() ).toFloat();
+    par[1] = QString( ui->apEdit1->currentText() ).toFloat();
+    par[2] = ui->apEdit2->currentIndex();
+    par[3] = ui->apEdit3->currentIndex();
+    par[4] = ui->pBG_T->currentIndex();
+    par[5] = ui->comMolal->currentIndex();
 }
 
 void AutoPhaseDialog::set_apar ( float par[8] )
 {
     QString str;
- //   double I_max;
+    //   double I_max;
 
-    apEdit0->setValidator( new QDoubleValidator( apEdit0 ) );
-    apEdit0->setEditText( str.setNum( par[0] ) );
+    ui->apEdit0->setValidator( new QDoubleValidator( ui->apEdit0 ) );
+    ui->apEdit0->setEditText( str.setNum( par[0] ) );
 
-    apEdit1->setValidator( new QDoubleValidator( apEdit1 ) );
-    apEdit1->setEditText( str.setNum( par[1] ) );
+    ui->apEdit1->setValidator( new QDoubleValidator( ui->apEdit1 ) );
+    ui->apEdit1->setEditText( str.setNum( par[1] ) );
 
-    apEdit2->setCurrentIndex( static_cast<int>(par[2])  );
-    apEdit3->setCurrentIndex( static_cast<int>(par[3]) );
-    pBG_T->setCurrentIndex( static_cast<int>(par[4]) );
-    comMolal->setCurrentIndex( static_cast<int>(par[5]) );
+    ui->apEdit2->setCurrentIndex( static_cast<int>(par[2])  );
+    ui->apEdit3->setCurrentIndex( static_cast<int>(par[3]) );
+    ui->pBG_T->setCurrentIndex( static_cast<int>(par[4]) );
+    ui->comMolal->setCurrentIndex( static_cast<int>(par[5]) );
 }
 
-char
-AutoPhaseDialog::get_acode()
+char AutoPhaseDialog::get_acode()
 {
-     aqu_code='D'; // default code
+    aqu_code='D'; // default code
 
-     if( aselU->isChecked())
-       aqu_code ='U';
-     else if( aselH->isChecked())
-           aqu_code ='H';
-        else if( asel3->isChecked())
-              aqu_code ='3';
-            else if( asel2->isChecked())
-                  aqu_code ='2';
-               else if( asel1->isChecked())
-                     aqu_code = '1';
-                 else if( aselY->isChecked())
-                       aqu_code = 'Y';
-                   else if( aselNo->isChecked())
-                         aqu_code = '-';
-  return aqu_code;
+    if( ui->aselU->isChecked())
+        aqu_code ='U';
+    else if( ui->aselH->isChecked())
+        aqu_code ='H';
+    else if( ui->asel3->isChecked())
+        aqu_code ='3';
+    else if( ui->asel2->isChecked())
+        aqu_code ='2';
+    else if( ui->asel1->isChecked())
+        aqu_code = '1';
+    else if( ui->aselY->isChecked())
+        aqu_code = 'Y';
+    else if( ui->aselNo->isChecked())
+        aqu_code = '-';
+    return aqu_code;
 }
 
-void
-AutoPhaseDialog::get_akey( string& a_key )
+void AutoPhaseDialog::get_akey( string& a_key )
 {
-   a_key = aqu_key;
+    a_key = aqu_key;
 }
 
-void
-AutoPhaseDialog::set_akey( string& a_key )
+void AutoPhaseDialog::set_akey( string& a_key )
 {
-  aqu_key = a_key;
-/*  if( aselU->isChecked())
+    aqu_key = a_key;
+    /*  if( ui->aselU->isChecked())
       aqu_key = "a:*:*:*:*:";
   else*/
-  if( aselD->isChecked())
-  {    aqu_key = dfAqKeyD;
-  }
-     else if( aselH->isChecked())
-           aqu_key = dfAqKeyH;
-        else if( asel3->isChecked())
-              aqu_key = dfAqKey3;
-            else if( asel2->isChecked())
-                  aqu_key = dfAqKey2;
-               else if( asel1->isChecked())
-                      aqu_key = dfAqKey1;
-                   else if( aselY->isChecked())
-                         aqu_key = dfAqKeyY;
-                      else if( aselNo->isChecked())
-                            aqu_key ="";
+    if( ui->aselD->isChecked())
+    {    aqu_key = dfAqKeyD;
+    }
+    else if( ui->aselH->isChecked())
+        aqu_key = dfAqKeyH;
+    else if( ui->asel3->isChecked())
+        aqu_key = dfAqKey3;
+    else if( ui->asel2->isChecked())
+        aqu_key = dfAqKey2;
+    else if( ui->asel1->isChecked())
+        aqu_key = dfAqKey1;
+    else if( ui->aselY->isChecked())
+        aqu_key = dfAqKeyY;
+    else if( ui->aselNo->isChecked())
+        aqu_key ="";
 
-  apRkeyEdit->setText( aqu_key.c_str() );
+    ui->apRkeyEdit->setText( aqu_key.c_str() );
 }
 
 
 char AutoPhaseDialog::get_gcode()
 {
-  gas_code = 'I';  // default code
+    gas_code = 'I';  // default code
 
-    if( gselU->isChecked())
-      gas_code ='U';
-    else if( gselF->isChecked())
-          gas_code ='F';
-       else if( gselNo->isChecked())
-             gas_code ='-';
-              else if( gselP->isChecked())
-                   gas_code ='P';
-                   else if( gsel7->isChecked())
-                       gas_code ='7';
-                       else if( gselE->isChecked())
-                            gas_code ='E';
+    if( ui->gselU->isChecked())
+        gas_code ='U';
+    else if( ui->gselF->isChecked())
+        gas_code ='F';
+    else if( ui->gselNo->isChecked())
+        gas_code ='-';
+    else if( ui->gselP->isChecked())
+        gas_code ='P';
+    else if( ui->gsel7->isChecked())
+        gas_code ='7';
+    else if( ui->gselE->isChecked())
+        gas_code ='E';
 
-  return gas_code;
+    return gas_code;
 }
 
-void
-AutoPhaseDialog::get_gkey( string& g_key )
+void AutoPhaseDialog::get_gkey( string& g_key )
 {
-   g_key = gas_key;
+    g_key = gas_key;
 }
 
-void
-AutoPhaseDialog::set_gkey( string& g_key )
+void AutoPhaseDialog::set_gkey( string& g_key )
 {
-  gas_key = g_key;
+    gas_key = g_key;
 
-/*  if( gselU->isChecked())
+    /*  if( ui->gselU->isChecked())
       gas_key = "g:*:*:*:*:";
-    else*/ if( gselI->isChecked())
-            gas_key = dfGasKey;
-         else if( gselF->isChecked())
-               gas_key = dfFluKeyF;
-            else if( gselNo->isChecked())
-                  gas_key ="";
-               else if( gselP->isChecked())
-                      gas_key =dfFluKeyP;
-                   else if( gsel7->isChecked())
-                           gas_key =dfFluKey7;
-                      else if( gselE->isChecked())
-                              gas_key =dfFluKeyE;
-  gpRkeyEdit->setText( gas_key.c_str() );
+    else*/ if( ui->gselI->isChecked())
+        gas_key = dfGasKey;
+    else if( ui->gselF->isChecked())
+        gas_key = dfFluKeyF;
+    else if( ui->gselNo->isChecked())
+        gas_key ="";
+    else if( ui->gselP->isChecked())
+        gas_key =dfFluKeyP;
+    else if( ui->gsel7->isChecked())
+        gas_key =dfFluKey7;
+    else if( ui->gselE->isChecked())
+        gas_key =dfFluKeyE;
+    ui->gpRkeyEdit->setText( gas_key.c_str() );
 }
 
 // slots
 
-void
-AutoPhaseDialog::CmCheck()
+void AutoPhaseDialog::CmCheck()
 {
-  float par[16];
-  string a_key = aqu_key;
-  string g_key = gas_key;
+    float par[16];
+    string a_key = aqu_key;
+    string g_key = gas_key;
 
-  if( a_key.empty()  )
-      a_key = "a:*:*:*:*:";
-  if( g_key.empty()  )
-      g_key = "g:*:*:*:*:";
+    if( a_key.empty()  )
+        a_key = "a:*:*:*:*:";
+    if( g_key.empty()  )
+        g_key = "g:*:*:*:*:";
 
-  set_akey( a_key );
-  get_acode();
-  get_apar( par );
-  set_apar( par );
+    set_akey( a_key );
+    get_acode();
+    get_apar( par );
+    set_apar( par );
 
-  set_gkey( g_key );
-  get_gcode();
+    set_gkey( g_key );
+    get_gcode();
 }
 
-void
-AutoPhaseDialog::CmHelp()
+void AutoPhaseDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_APHSETUP_HTML );
+    pVisorImp->OpenHelp( GEMS_APHSETUP_HTML );
 }
 
 //--------------------- End of ProcessDialog.cpp ---------------------------

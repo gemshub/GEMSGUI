@@ -26,6 +26,7 @@ include(CondaAware)
 option(BUILD_SHARED_LIBS "Build shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build static libraries." ON)
 option(BUILD_APP "Build application." ON)
+option(USE_QT6 "Prefer Qt6 over Qt5 if available" OFF)
 
 # Set the default build type to Release
 if(NOT CMAKE_BUILD_TYPE)

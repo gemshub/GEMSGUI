@@ -92,10 +92,10 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
       ShowLegend();
 
 
-    connect(tbLegend, SIGNAL(cellClicked( int , int  ) ),
-            this, SLOT(changeIcon( int, int )));
-    connect(tbLegend, SIGNAL(cellChanged( int , int  ) ),
-            this, SLOT(changeNdx( int, int )));
+    connect(tbLegend, SIGNAL(cellClicked(int,int)),
+            this, SLOT(changeIcon(int,int)));
+    connect(tbLegend, SIGNAL(cellChanged(int,int)),
+            this, SLOT(changeNdx(int,int)));
 
     bFragment =ui->buttonBox->addButton("&Fragment", QDialogButtonBox::ActionRole );
     QPushButton* bCustomize =ui->buttonBox->addButton("&Customize", QDialogButtonBox::ActionRole );
@@ -185,10 +185,10 @@ void GraphDialog::UpdateAll(const char* title )
     plot->updateAll();
     //emit dataChanged( gr_data );
 
-    connect(tbLegend, SIGNAL(cellClicked( int , int  ) ),
-            this, SLOT(changeIcon( int, int )));
-    connect(tbLegend, SIGNAL(cellChanged( int , int  ) ),
-            this, SLOT(changeNdx( int, int )));
+    connect(tbLegend, SIGNAL(cellClicked(int,int)),
+            this, SLOT(changeIcon(int,int)));
+    connect(tbLegend, SIGNAL(cellChanged(int,int)),
+            this, SLOT(changeNdx(int,int)));
 }
 
 

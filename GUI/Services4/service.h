@@ -174,7 +174,7 @@ vfDCompSet(QWidget* par, const char * p_key,
             char flgs[15], int sizes[4] );
 bool
 vfReacDCSet(QWidget* par, const char * p_key,
-            char flgs[12], int sizes[4] );
+            char flgs[12], int sizes[4], TCStringArray& sel );
 
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
@@ -182,8 +182,9 @@ vfRTparmSet(QWidget* par, const char * p_key,
             std::string& script, std::string& xName, std::string& yName, TCStringArray& names  );
 
 bool
-vfPhaseSet(QWidget* par, const char * p_key,
-            char flgs[37], int sizes[30], double& r2 );
+vfPhaseSet( QWidget* par, const char * p_key,
+            char flgs[37], int sizes[30], double& r2, TCStringArray& rd_sel,
+            TCStringArray& phase_sel, TCStringArray& lDCr_sel );
 
 bool
 vfDualThSet(QWidget* par, const char * p_key,

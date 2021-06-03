@@ -17,6 +17,7 @@
 //-------------------------------------------------------------------
 #include <fstream>
 #include <iostream>
+#include <QRegularExpression>
 using namespace std;
 #include "help.h"
 #include "visor.h"
@@ -256,12 +257,13 @@ int HelpConfigurator::showObjectForKeyword(const QString &keyword)
     nO = aObj.Find(keyword.toLatin1().data());
     if( nO < 0 )
     {
-       QString kwInternal = keyword;
-       int ndx = kwInternal.lastIndexOf('_');  // finding only keyword
-       if(ndx > -1)
-       {    kwInternal= kwInternal.remove(QRegExp("_[0-9]{1,3}")/*ndx*/);
+        QString kwInternal = keyword;
+        int ndx = kwInternal.lastIndexOf('_');  // finding only keyword
+        if(ndx > -1)
+        {
+            kwInternal= kwInternal.remove(QRegularExpression("_[0-9]{1,3}")/*ndx*/);
             nO = aObj.Find(kwInternal.toLatin1().data());
-       }
+        }
     }
 
     return nO;

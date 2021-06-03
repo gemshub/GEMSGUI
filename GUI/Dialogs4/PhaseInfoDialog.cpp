@@ -16,188 +16,184 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <vector>
 #include <QClipboard>
 #include <QMenu>
 #include <QAction>
 
-#include <iostream>
+#include "ui_PhaseInfoDialog4.h"
 #include "PhaseInfoDialog.h"
 #include "v_mod.h"
 #include "model_w.h"
 #include "service.h"
 
-PhaseInfoDialog::PhaseInfoDialog(QWidget* parent, bool system,
-                                 int xph, string phname, vector<int>& xdclist, vector<string>& dcnames, int xdc):
-        QDialog( parent )
+PhaseInfoDialog::PhaseInfoDialog( QWidget* parent, bool system, int xph, string phname,
+                                  vector<int>& xdclist, vector<string>& dcnames, int xdc):
+    QDialog( parent ),
+    ui(new Ui::PhaseInfoDialogData)
 {
     int row = 0;
     string str;
 
-    setupUi(this);
+    ui->setupUi(this);
     setWindowTitle("Phase Information Widget");
 
     if( system )
     {
-        labelSyst->setText("In Modelling Project System:");
-        labelPh->setText("              In Phase with this record key:");
-        labelDC->setText( QString("             %1  Depended Component(s) with record key(s):").arg(xdclist.size()));
+        ui->labelSyst->setText("In Modelling Project System:");
+        ui->labelPh->setText("              In Phase with this record key:");
+        ui->labelDC->setText( QString("             %1  Depended Component(s) with record key(s):").arg(xdclist.size()));
     }
     else
     {
-        labelSyst->setText("In Chemical System Definition:");
-        labelPh->setText("              In Phase:");
-        labelDC->setText( QString("             %1  Depended Component(s):").arg(xdclist.size()));
+        ui->labelSyst->setText("In Chemical System Definition:");
+        ui->labelPh->setText("              In Phase:");
+        ui->labelDC->setText( QString("             %1  Depended Component(s):").arg(xdclist.size()));
     }
 
-    systKey->setText(tr (rt[RT_SYSEQ]->PackKey()));
+    ui->systKey->setText(tr (rt[RT_SYSEQ]->PackKey()));
 
-    // define tablePh
-    tablePh->setEditTriggers( QAbstractItemView::NoEditTriggers );
-    tablePh->setSelectionMode(QAbstractItemView::SingleSelection);
-    //tablePh->setSelectionBehavior ( QAbstractItemView::SelectRows );
-    tablePh->clear();
-    tablePh->setSortingEnabled ( false );
+    // define ui->tablePh
+    ui->tablePh->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    ui->tablePh->setSelectionMode(QAbstractItemView::SingleSelection);
+    //ui->tablePh->setSelectionBehavior ( QAbstractItemView::SelectRows );
+    ui->tablePh->clear();
+    ui->tablePh->setSortingEnabled ( false );
     if( system )
     {
-      tablePh->setColumnCount(6);
-      tablePh->setColumnWidth(2, 80 );
-      tablePh->setColumnWidth(3, 140 );
+        ui->tablePh->setColumnCount(6);
+        ui->tablePh->setColumnWidth(2, 80 );
+        ui->tablePh->setColumnWidth(3, 140 );
     }
     else
     {
-      tablePh->setColumnCount(3);
-      tablePh->setColumnWidth(2, 100 );
+        ui->tablePh->setColumnCount(3);
+        ui->tablePh->setColumnWidth(2, 100 );
     }
-    tablePh->setRowCount(1);
-    tablePh->setRowHeight(0, htF(ftString, 0)+6);
+    ui->tablePh->setRowCount(1);
+    ui->tablePh->setRowHeight(0, htF(ftString, 0)+6);
 
-    tablePh->setItem(0, 0, new QTableWidgetItem(tr("%1").arg( xph)) );
+    ui->tablePh->setItem(0, 0, new QTableWidgetItem(tr("%1").arg( xph)) );
     str = phname;
-    tablePh->setItem(0, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
+    ui->tablePh->setItem(0, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
     str = str.substr(MAXSYMB);
     if( system)
-     { tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, 8).c_str() )) );
+    { ui->tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, 8).c_str() )) );
         str = str.substr(8);
-       tablePh->setItem(0, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXPHNAME).c_str() )) );
-       str = str.substr(MAXPHNAME);
-       tablePh->setItem(0, 4, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
-       str = str.substr(MAXSYMB);
-       tablePh->setItem(0, 5, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
+        ui->tablePh->setItem(0, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXPHNAME).c_str() )) );
+        str = str.substr(MAXPHNAME);
+        ui->tablePh->setItem(0, 4, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
+        str = str.substr(MAXSYMB);
+        ui->tablePh->setItem(0, 5, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
     } else
-        tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
-    tablePh->setMaximumHeight(htF(ftString, 0)+10);
+        ui->tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
+    ui->tablePh->setMaximumHeight(htF(ftString, 0)+10);
 
 
-    // define tableC
-    tableDC->setEditTriggers( QAbstractItemView::NoEditTriggers );
-    tableDC->setSelectionMode(QAbstractItemView::SingleSelection);
-    //tableDC->setSelectionBehavior ( QAbstractItemView::SelectRows );
-    tableDC->clear();
-    tableDC->setSortingEnabled ( false );
+    // define ui->tableC
+    ui->tableDC->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    ui->tableDC->setSelectionMode(QAbstractItemView::SingleSelection);
+    //ui->tableDC->setSelectionBehavior ( QAbstractItemView::SelectRows );
+    ui->tableDC->clear();
+    ui->tableDC->setSortingEnabled ( false );
     if( system )
     {
-      tableDC->setColumnCount(5);
-       tableDC->setColumnWidth(2, 80 );
-       tableDC->setColumnWidth(3, 140 );
+        ui->tableDC->setColumnCount(5);
+        ui->tableDC->setColumnWidth(2, 80 );
+        ui->tableDC->setColumnWidth(3, 140 );
     }
     else
     {
-        tableDC->setColumnCount(2);
-        tableDC->setColumnWidth(1, 140 );
+        ui->tableDC->setColumnCount(2);
+        ui->tableDC->setColumnWidth(1, 140 );
     }
-    tableDC->setRowCount(xdclist.size());
+    ui->tableDC->setRowCount(xdclist.size());
 
     for( size_t ii=0; ii<xdclist.size(); ii++ )
     {
-        tableDC->setRowHeight(ii, htF(ftString, 0)+6);
-        tableDC->setItem(ii, 0, new QTableWidgetItem(tr("%1").arg( xdclist[ii])) );
+        ui->tableDC->setRowHeight(ii, htF(ftString, 0)+6);
+        ui->tableDC->setItem(ii, 0, new QTableWidgetItem(tr("%1").arg( xdclist[ii])) );
 
         if( xdclist[ii] == xdc )
-         row = ii;
+            row = ii;
         if( system)
         {
-           str = dcnames[ii];
-           // std::cout << str.c_str() << xdc << endl;
-           tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
-           str = str.substr(MAXSYMB);
-           tableDC->setItem(ii, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDRGROUP).c_str() )) );
-           str = str.substr(MAXDRGROUP);
-           tableDC->setItem(ii, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDCNAME).c_str() )) );
-           str = str.substr(MAXDCNAME);
-           tableDC->setItem(ii, 4, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
+            str = dcnames[ii];
+            // std::cout << str.c_str() << xdc << endl;
+            ui->tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
+            str = str.substr(MAXSYMB);
+            ui->tableDC->setItem(ii, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDRGROUP).c_str() )) );
+            str = str.substr(MAXDRGROUP);
+            ui->tableDC->setItem(ii, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDCNAME).c_str() )) );
+            str = str.substr(MAXDCNAME);
+            ui->tableDC->setItem(ii, 4, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
         } else
-             tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( dcnames[ii].c_str() )) );
+            ui->tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( dcnames[ii].c_str() )) );
     }
 
-    tableDC->setCurrentItem( tableDC->item(row,0) );
-    tableDC->scrollToItem( tableDC->item(row,0), QAbstractItemView::PositionAtCenter );
+    ui->tableDC->setCurrentItem( ui->tableDC->item(row,0) );
+    ui->tableDC->scrollToItem( ui->tableDC->item(row,0), QAbstractItemView::PositionAtCenter );
 
-    QObject::connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
-    tableDC->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect( tableDC, SIGNAL(customContextMenuRequested(QPoint)),
-         this, SLOT(slotPopupContextMenuDC(QPoint)));
-    tablePh->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect( tablePh, SIGNAL(customContextMenuRequested(QPoint)),
-         this, SLOT(slotPopupContextMenuPh(QPoint)));
-
+    QObject::connect(ui->buttonBox, SIGNAL(helpRequested()), this, SLOT(help()));
+    ui->tableDC->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect( ui->tableDC, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(slotPopupContextMenuDC(QPoint)));
+    ui->tablePh->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect( ui->tablePh, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(slotPopupContextMenuPh(QPoint)));
+    QObject::connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 }
 
 // copy data
 void PhaseInfoDialog::slotPopupContextMenuDC(const QPoint &pos)
 {
-   QMenu *menu = new QMenu(this);
+    QMenu *menu = new QMenu(this);
 
-   QAction *act =  new QAction(tr("&Copy"), this);
-     //act->setShortcut(tr("Ctrl+C"));
-     act->setStatusTip(tr("Copy selected data"));
-           connect(act, SIGNAL(triggered()), this, SLOT(CopyDataDC()));
-     menu->addAction(act);
+    QAction *act =  new QAction(tr("&Copy"), this);
+    //act->setShortcut(tr("Ctrl+C"));
+    act->setStatusTip(tr("Copy selected data"));
+    connect(act, SIGNAL(triggered()), this, SLOT(CopyDataDC()));
+    menu->addAction(act);
 
-     menu->exec( tableDC->viewport()->mapToGlobal(pos) );
-     delete menu;
+    menu->exec( ui->tableDC->viewport()->mapToGlobal(pos) );
+    delete menu;
 }
 
 void PhaseInfoDialog::slotPopupContextMenuPh(const QPoint &pos)
 {
-   QMenu *menu = new QMenu(this);
+    QMenu *menu = new QMenu(this);
 
-   QAction *act =  new QAction(tr("&Copy"), this);
-     //act->setShortcut(tr("Ctrl+C"));
-     act->setStatusTip(tr("Copy selected data"));
-           connect(act, SIGNAL(triggered()), this, SLOT(CopyDataPh()));
-     menu->addAction(act);
+    QAction *act =  new QAction(tr("&Copy"), this);
+    //act->setShortcut(tr("Ctrl+C"));
+    act->setStatusTip(tr("Copy selected data"));
+    connect(act, SIGNAL(triggered()), this, SLOT(CopyDataPh()));
+    menu->addAction(act);
 
-     menu->exec( tablePh->viewport()->mapToGlobal(pos) );
-     delete menu;
+    menu->exec( ui->tablePh->viewport()->mapToGlobal(pos) );
+    delete menu;
 }
 
 void PhaseInfoDialog::CopyDataDC()
 {
-   QString clipText = tableDC->currentItem()->text();
-   clipText = clipText.trimmed();
-   QApplication::clipboard()->setText(clipText/*, QClipboard::Clipboard*/);
+    QString clipText = ui->tableDC->currentItem()->text();
+    clipText = clipText.trimmed();
+    QApplication::clipboard()->setText(clipText/*, QClipboard::Clipboard*/);
 }
 
 void PhaseInfoDialog::CopyDataPh()
 {
-   QString clipText = tablePh->currentItem()->text();
-   clipText = clipText.trimmed();
-   QApplication::clipboard()->setText(clipText/*, QClipboard::Clipboard*/);
+    QString clipText = ui->tablePh->currentItem()->text();
+    clipText = clipText.trimmed();
+    QApplication::clipboard()->setText(clipText/*, QClipboard::Clipboard*/);
 }
 
 PhaseInfoDialog::~PhaseInfoDialog()
-{}
-
-void PhaseInfoDialog::languageChange()
 {
-    retranslateUi(this);
+    delete ui;
 }
-
 
 void PhaseInfoDialog::help()
 {
-   pVisorImp->OpenHelp( GEMS_PHINFO_HTML );
+    pVisorImp->OpenHelp( GEMS_PHINFO_HTML );
 }
 
 //--------------------- End of PhaseInfoDialog.cpp ---------------------------

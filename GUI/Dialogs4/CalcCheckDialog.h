@@ -20,22 +20,20 @@
 #define CalcCheckDialog_included
 
 #include <QDialog>
-#include "ui_CalcCheckDialog4.h"
 #include "v_object.h"
 
-class CalcCheckDialog: public QDialog, public Ui::CalcCheckDialogData
+namespace Ui {
+class CalcCheckDialogData;
+}
+
+class CalcCheckDialog: public QDialog
 {
     Q_OBJECT
 
+    Ui::CalcCheckDialogData *ui;
     TObject* rObj;
     int nO_;
     
-public slots:
-    virtual void CmOk();
-
-protected slots:
-    virtual void languageChange();
-
 public:
 
     CalcCheckDialog(QWidget* parent, const int nO, const string& Vals);

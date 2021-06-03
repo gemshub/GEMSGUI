@@ -20,17 +20,22 @@
 #define SetFiltersDialog_included
 
 #include <QDialog>
-
-#include "ui_SetFiltersDialog4.h"
+#include <QTreeWidgetItem>
 #include "filters_data.h"
 
-class SetFiltersDialog : public QDialog, public Ui::SetFiltersDialogData
+namespace Ui {
+class SetFiltersDialogData;
+}
+
+class SetFiltersDialog : public QDialog
 {
+
+    Q_OBJECT
+
+    Ui::SetFiltersDialogData *ui;
     elmFilesConfData *el_data;
     setFiltersData *data;
     QTreeWidgetItem* pkern;
-    
-    Q_OBJECT
 
     void setData();
     void getData();
@@ -44,15 +49,14 @@ protected slots:
     void CmApply();
     void CmOk();
     void CmChangeFilesCfg();
-    virtual void languageChange();
     
 public:
 
     SetFiltersDialog(QWidget* win,
-         elmFilesConfData *elm_data,
-         setFiltersData *set_data,
-         const char * prfName,
-         const char* caption = nullptr );
+                     elmFilesConfData *elm_data,
+                     setFiltersData *set_data,
+                     const char * prfName,
+                     const char* caption = nullptr );
     virtual ~SetFiltersDialog();
 
 };

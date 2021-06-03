@@ -20,27 +20,27 @@
 #define ProjectWizard_included
 
 #include <QDialog>
-#include <QComboBox>
-#include "ui_ProjectWizard4.h"
 
-class ProjectWizard : public QDialog, public Ui::ProjectWizardData
+namespace Ui {
+class ProjectWizardData;
+}
+
+
+class ProjectWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::ProjectWizardData *ui;
     void 	resetNextButton();
     void 	resetBackButton();
 
 public:
-	// flgs 0-9 MSpmv, 10-29 TPptv, 30-33 TPun, 34-37  TPsv
+    // flgs 0-9 MSpmv, 10-29 TPptv, 30-33 TPun, 34-37  TPsv
     ProjectWizard( const char* pkey, char flgs[38],  QWidget* parent = nullptr);
     virtual ~ProjectWizard();
 
-    int get_Settings()
-        { return pTaskType->currentIndex(); }
+    int get_Settings();
     void   getFlags( char flgs[38] );
-
-protected slots:
-    virtual void languageChange();
 
 protected slots:
 

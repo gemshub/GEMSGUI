@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>726</width>
+    <width>749</width>
     <height>675</height>
    </rect>
   </property>
@@ -2330,22 +2330,5 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>pCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>GEM2MTWizardData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>754</x>
-     <y>532</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>317</x>
-     <y>270</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

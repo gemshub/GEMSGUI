@@ -19,13 +19,21 @@
 #ifndef ReacDCWizard_included
 #define ReacDCWizard_included
 
-
 #include <QDialog>
-#include "ui_ReacDCWizard4.h"
+#include "table_model.h"
 
-class ReacDCWizard : public QDialog, public Ui::ReacDCWizardData
+namespace Ui {
+class ReacDCWizardData;
+}
+
+class ReacDCWizard : public QDialog
 {
     Q_OBJECT
+
+    Ui::ReacDCWizardData *ui;
+    RDKeyModel* keys_model = nullptr;
+    KeysTableProxy* tableKeys = nullptr;
+    TCStringArray old_selection;
 
     void 	resetNextButton();
     void 	resetBackButton();
@@ -33,23 +41,22 @@ class ReacDCWizard : public QDialog, public Ui::ReacDCWizardData
 public:
 
     ReacDCWizard( const char* pkey, char flgs[12], int size[4],
-                  QWidget* parent = nullptr);
+    const TCStringArray& sel, QWidget* parent = nullptr);
     virtual ~ReacDCWizard();
-
 
     void   getSizes( int size[4] );
     void   getFlags( char flgs[12] );
-//    double   getR2();
-
-protected slots:
-    virtual void languageChange();
+    TCStringArray  allSelectedKeys() const;
+    //    double   getR2();
 
 protected slots:
 
     void help();
     void CmNext();
     void CmBack();
-    
+
+    void ChangeFilter();
+    void selectionChanged(int state);
 };
 
 

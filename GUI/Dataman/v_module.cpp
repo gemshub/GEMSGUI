@@ -25,6 +25,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFile>
 #include "v_module.h"
 #include "visor.h"
 #include "service.h"

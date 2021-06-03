@@ -16,10 +16,10 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qstring.h>
-#include <qvalidator.h>
+#include <QLabel>
 #include <QGroupBox>
 #include <QScrollArea>
+#include <QCheckBox>
 
 #include "ExcludeFillDialog.h"
 #include "GemsMainWindow.h"
@@ -27,13 +27,12 @@
 
 
 ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
-      TCStringArray& aICkeys, double fill_data ):
-        QDialog(win )
+                                     TCStringArray& aICkeys, double fill_data ):
+    QDialog(win )
 {
-   setWindowModality(Qt::WindowModal);
+    setWindowModality(Qt::WindowModal);
     
     setWindowTitle( caption );
-    // qt3to4 setSizeGripEnabled( TRUE );
 
     // set up labels
     QVBoxLayout* labelsBox = new QVBoxLayout();
@@ -82,9 +81,9 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     QString str;
     LineEdit->setText( str.setNum( fill_data, 'g' ));
     editBox->addWidget( LineEdit );
-    labelsBox->addLayout(editBox);   
+    labelsBox->addLayout(editBox);
 
-   // buttoms layout 
+    // buttoms layout
     QVBoxLayout* buttonBox = new QVBoxLayout();
     
     pExcludeAll = new QPushButton( this );
@@ -115,7 +114,7 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     buttonCancel->setAutoDefault( true );
     buttonBox->addWidget( buttonCancel );
 
-/// Missin IC
+    /// Missin IC
     QVBoxLayout* scrollBox = new QVBoxLayout();
     label1 = new QLabel( this );
     label1->setText( "Missing ICs" );
@@ -128,15 +127,15 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     GroupBox1->setExclusive(false);
     QVBoxLayout *plotLayout = new QVBoxLayout( grpBox );
     plotLayout->setSpacing(6);
-    plotLayout->setMargin(11);
+    // Qt6 plotLayout->setMargin(11);
     
     QCheckBox* CheckBox1;
     for(size_t ii=0; ii<aICkeys.size(); ii++ )
     {
-      CheckBox1 = new QCheckBox( grpBox );
-      CheckBox1->setText( aICkeys[ii].c_str() );
-      GroupBox1->addButton( CheckBox1, ii );
-      plotLayout->addWidget( CheckBox1 );
+        CheckBox1 = new QCheckBox( grpBox );
+        CheckBox1->setText( aICkeys[ii].c_str() );
+        GroupBox1->addButton( CheckBox1, ii );
+        plotLayout->addWidget( CheckBox1 );
     }
     QScrollArea *scroll = new QScrollArea(this);
     scroll->setWidget(grpBox);
@@ -146,7 +145,7 @@ ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
     //mainBox->addWidget( scroll/*grpBox*/ );
     mainBox->addLayout(scrollBox);
     mainBox->addLayout(labelsBox);
-    mainBox->addLayout(buttonBox);   
+    mainBox->addLayout(buttonBox);
     
     // signals and slots connections
     connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
@@ -162,44 +161,39 @@ ExcludeFillDialog::~ExcludeFillDialog()
 {
 }
 
-void
-ExcludeFillDialog::CmHelp()
+void ExcludeFillDialog::CmHelp()
 {
     pVisorImp->OpenHelp( GEMS_MISSING_HTML );
 }
 
 
-void
-ExcludeFillDialog::CmFillAll()
+void ExcludeFillDialog::CmFillAll()
 {
- for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
-     GroupBox1->button(ii)->setChecked( true );
+    for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
+        GroupBox1->button(ii)->setChecked( true );
 }
 
 
-void
-ExcludeFillDialog::CmExcludeAll()
+void ExcludeFillDialog::CmExcludeAll()
 {
- for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
-     GroupBox1->button(ii)->setChecked( false );
+    for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
+        GroupBox1->button(ii)->setChecked( false );
 }
 
-std::vector<bool>
-ExcludeFillDialog::getFillType()
+std::vector<bool> ExcludeFillDialog::getFillType()
 {
- std::vector<bool> arr;
+    std::vector<bool> arr;
 
- for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
-     arr.push_back( GroupBox1->button(ii)->isChecked() );
+    for(int ii=0; ii<GroupBox1->buttons().count(); ii++ )
+        arr.push_back( GroupBox1->button(ii)->isChecked() );
 
- return arr;
+    return arr;
 }
 
-double
-ExcludeFillDialog::getFillValue()
+double ExcludeFillDialog::getFillValue()
 {
- double dat = LineEdit->text().toDouble();
- return dat;
+    double dat = LineEdit->text().toDouble();
+    return dat;
 }
 
 // --------------------- End ExcludeFillDialog.cpp -------------------------

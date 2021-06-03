@@ -16,71 +16,69 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qcombobox.h>
-#include <qvariant.h>
-
+#include "ui_ChangeKeyDialog4.h"
+#include "ChangeKeyDialog.h"
 #include "GemsMainWindow.h"
 #include "service.h"
-#include "ChangeKeyDialog.h"
 
 
 ChangeKeyDialog::ChangeKeyDialog(QWidget* win, int nsymb, const char* /*caption*/ ):
-        QDialog( win), nSymbols(nsymb)
+    QDialog( win),
+    ui(new Ui::ChangeKeyDialogData),
+    nSymbols(nsymb)
 {
-	setupUi(this);
-//    setCaption( caption );
+    ui->setupUi(this);
+    //    setCaption( caption );
 
-      lTo1->setMaxLength( nSymbols );
-      lfirst->setMaxLength( nSymbols );
-      llast->setMaxLength( nSymbols );
-      nfirst->setMaximum(nSymbols-1);
-      nlast->setMaximum(nSymbols-1);
+    ui->lTo1->setMaxLength( nSymbols );
+    ui->lfirst->setMaxLength( nSymbols );
+    ui->llast->setMaxLength( nSymbols );
+    ui->nfirst->setMaximum(nSymbols-1);
+    ui->nlast->setMaximum(nSymbols-1);
 
-      connect( lTo1, SIGNAL(editingFinished ()), this, SLOT(SetToString()) );
-      connect( lfirst, SIGNAL(editingFinished ()), this, SLOT(SetToString()) );
-      connect( llast, SIGNAL(editingFinished ()), this, SLOT(SetToString()) );
-      connect( bInv1, SIGNAL(toggled( bool )), this, SLOT(SetToString()) );
-      connect( badd1, SIGNAL(toggled( bool )), this, SLOT(SetToString()) );
-      connect( bchange1, SIGNAL(toggled( bool )), this, SLOT(SetToString()) );
-      connect( chfirst, SIGNAL(toggled( bool )), this, SLOT(SetToString()) );
-      connect( chlast, SIGNAL(toggled( bool )), this, SLOT(SetToString()) );
+    connect( ui->lTo1, SIGNAL(editingFinished()), this, SLOT(SetToString()) );
+    connect( ui->lfirst, SIGNAL(editingFinished()), this, SLOT(SetToString()) );
+    connect( ui->llast, SIGNAL(editingFinished()), this, SLOT(SetToString()) );
+    connect( ui->bInv1, SIGNAL(toggled(bool)), this, SLOT(SetToString()) );
+    connect( ui->badd1, SIGNAL(toggled(bool)), this, SLOT(SetToString()) );
+    connect( ui->bchange1, SIGNAL(toggled(bool)), this, SLOT(SetToString()) );
+    connect( ui->chfirst, SIGNAL(toggled(bool)), this, SLOT(SetToString()) );
+    connect( ui->chlast, SIGNAL(toggled(bool)), this, SLOT(SetToString()) );
 
-      connect( nfirst, SIGNAL(valueChanged( int )), this, SLOT(SetFromString()) );
-      connect( nlast, SIGNAL(valueChanged( int )), this, SLOT(SetFromString()) );
+    connect( ui->nfirst, SIGNAL(valueChanged(int)), this, SLOT(SetFromString()) );
+    connect( ui->nlast, SIGNAL(valueChanged(int)), this, SLOT(SetFromString()) );
 
-      connect( rAll, SIGNAL(toggled( bool )), this, SLOT(SetAll( bool )) );
-      connect( rPart, SIGNAL(toggled( bool )), this, SLOT(SetPart( bool )) );
+    connect( ui->rAll, SIGNAL(toggled(bool)), this, SLOT(SetAll(bool)) );
+    connect( ui->rPart, SIGNAL(toggled(bool)), this, SLOT(SetPart(bool)) );
+
+    QObject::connect(ui->pbHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
+    QObject::connect(ui->pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect(ui->pbOk, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
 
 ChangeKeyDialog::~ChangeKeyDialog()
-{}
-
-void ChangeKeyDialog::languageChange()
 {
-    retranslateUi(this);
+    delete ui;
 }
 
-
-string
-ChangeKeyDialog::getTemplFrom()
+string ChangeKeyDialog::getTemplFrom()
 {
- SetFromString();
- string ret = templFrom->text().toStdString();
- return ret;
+    SetFromString();
+    string ret = ui->templFrom->text().toStdString();
+    return ret;
 }
 
-string
-ChangeKeyDialog::getTemplTo()
+string ChangeKeyDialog::getTemplTo()
 {
- SetToString();
- string ret = templTo->text().toStdString();
- return ret;
+    SetToString();
+    string ret = ui->templTo->text().toStdString();
+    return ret;
 }
 
 void ChangeKeyDialog::CmHelp()
 {
-   pVisorImp->OpenHelp( GEMS_TEMPL_HTML );
+    pVisorImp->OpenHelp( GEMS_TEMPL_HTML );
 }
 
 
@@ -88,18 +86,18 @@ void ChangeKeyDialog::SetFromString()
 {
     string ret;
 
-    if(rAll->isChecked())
-      ret = "*";
+    if(ui->rAll->isChecked())
+        ret = "*";
     else //  ??*???, *?, ??*
-     {
-       auto n = nfirst->value();
-       ret = string(n, '?');
-       ret+= "*";
-       n = nlast->value();
-       ret += string(n, '?');
-     }
+    {
+        auto n = ui->nfirst->value();
+        ret = string(n, '?');
+        ret+= "*";
+        n = ui->nlast->value();
+        ret += string(n, '?');
+    }
 
-    templFrom->setText( ret.c_str() );
+    ui->templFrom->setText( ret.c_str() );
 }
 
 void ChangeKeyDialog::SetToString()
@@ -107,48 +105,48 @@ void ChangeKeyDialog::SetToString()
     string ret="";
     string part;
 
-    if(rAll->isChecked()) // *abc, abc, invcase
-     {
-      if( bInv1->isChecked())
-        ret = "invcase";
-      else
-      {
-        if( badd1->isChecked())
-            ret = "*";
-        part = lTo1->text().toStdString();
-        ret += part;
-       }
-     }
+    if(ui->rAll->isChecked()) // *abc, abc, invcase
+    {
+        if( ui->bInv1->isChecked())
+            ret = "invcase";
+        else
+        {
+            if( ui->badd1->isChecked())
+                ret = "*";
+            part = ui->lTo1->text().toStdString();
+            ret += part;
+        }
+    }
     else //  ab*abc, invcase*a, bb*invcase, *bb, a*
-     {
-       if(chfirst->isChecked())
-         ret = "invcase";
-       else
-         ret =  lfirst->text().toStdString();
-       ret += "*";
-       if(chlast->isChecked())
-         ret += "invcase";
-       else
-         ret +=  llast->text().toStdString();
-      }
+    {
+        if(ui->chfirst->isChecked())
+            ret = "invcase";
+        else
+            ret =  ui->lfirst->text().toStdString();
+        ret += "*";
+        if(ui->chlast->isChecked())
+            ret += "invcase";
+        else
+            ret +=  ui->llast->text().toStdString();
+    }
 
-      templTo->setText( ret.c_str() );
+    ui->templTo->setText( ret.c_str() );
 }
 
 void ChangeKeyDialog::SetAll( bool vl )
 {
-   group1->setEnabled(vl);
-   rPart->setChecked(!vl);
-   SetFromString();
-   SetToString();
+    ui->group1->setEnabled(vl);
+    ui->rPart->setChecked(!vl);
+    SetFromString();
+    SetToString();
 }
 
 void ChangeKeyDialog::SetPart( bool vl )
 {
-   group1_2->setEnabled(vl);
-   rAll->setChecked(!vl);
-   SetFromString();
-   SetToString();
+    ui->group1_2->setEnabled(vl);
+    ui->rAll->setChecked(!vl);
+    SetFromString();
+    SetToString();
 }
 
 //--------------------- End of ChangeKeyDialog.cpp ---------------------------

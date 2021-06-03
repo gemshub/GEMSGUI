@@ -17,316 +17,313 @@
 //-------------------------------------------------------------------
 
 #include <cmath>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qvalidator.h>
-#include <qcombobox.h>
-#include <qvariant.h>
 
+#include "ui_RTparmWizard4.h"
 #include "RTparmWizard.h"
 #include "GemsMainWindow.h"
 #include "v_mod.h"
 #include "service.h"
 #include "GEMS3K/num_methods.h"
 
-void RTparmWizard::languageChange()
-{
-    retranslateUi(this);
-}
 
 void RTparmWizard::CmBack()
 {
-    int ndx = stackedWidget->currentIndex();
+    int ndx = ui->stackedWidget->currentIndex();
 
     if( ndx == 2 )
     {
-      if( pMode->currentIndex() != 0 )
-        ndx--;
+        if( ui->pMode->currentIndex() != 0 )
+            ndx--;
     }
 
-    stackedWidget->setCurrentIndex ( ndx-1 );
+    ui->stackedWidget->setCurrentIndex ( ndx-1 );
     resetNextButton();
     resetBackButton();
 }
 
 void RTparmWizard::CmNext()
 {
-    int ndx = stackedWidget->currentIndex();
+    int ndx = ui->stackedWidget->currentIndex();
 
     if( ndx == 0 )
     {
-      if( pMode->currentIndex() != 0 )
-        ndx++;
-      else
-        initPTTable();
+        if( ui->pMode->currentIndex() != 0 )
+            ndx++;
+        else
+            initPTTable();
     }
 
     auto nLines = pageScript->getScriptLinesNum();
     if( ndx == 2 && nLines > 0)
-        pdimY->setValue( nLines );
+        ui->pdimY->setValue( nLines );
 
-    stackedWidget->setCurrentIndex ( ndx+1 );
+    ui->stackedWidget->setCurrentIndex ( ndx+1 );
     resetNextButton();
     resetBackButton();
 }
 
 void 	RTparmWizard::resetNextButton()
 {
-	if( stackedWidget->currentIndex() == stackedWidget->count() - 1 )
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(accept()) );
-		pNext->setText("&Finish");
-	}
-	else
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
-		pNext->setText("&Next>");
-	}
+    if( ui->stackedWidget->currentIndex() == ui->stackedWidget->count() - 1 )
+    {
+        ui->pNext->disconnect();
+        connect( ui->pNext, SIGNAL(clicked()), this, SLOT(accept()) );
+        ui->pNext->setText("&Finish");
+    }
+    else
+    {
+        ui->pNext->disconnect();
+        connect( ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
+        ui->pNext->setText("&Next>");
+    }
 }
 
 void 	RTparmWizard::resetBackButton()
 {
-	pBack->setEnabled( stackedWidget->currentIndex() > 0 );
+    ui->pBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
 RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
-          double val[6],  const char *acalcScript, const char* aXname, const char* aYname,
-          QWidget* parent):
-    QDialog( parent ), calcScript(acalcScript), pageScript(nullptr)
+double val[6],  const char *acalcScript, const char* aXname, const char* aYname,
+QWidget* parent):
+    QDialog( parent ),
+    ui(new Ui::RTparmWizardData),
+    calcScript(acalcScript), pageScript(nullptr)
 {
     int ii;
 
-   if( flgs[0] == SRC_DCOMP )
-      isDC = true;
-   else
-      isDC = false;
+    if( flgs[0] == SRC_DCOMP )
+        isDC = true;
+    else
+        isDC = false;
 
 
-    setupUi(this);
+    ui->setupUi(this);
     string str1= "GEM-Selektor RTparm Setup:  ";
-            str1 += pkey;
+    str1 += pkey;
     setWindowTitle( str1.c_str() );
-    stackedWidget->setCurrentIndex (0);
+    ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();
 
 
-// page1
-    ii = min( size[2],pMode->count()-1 );
-    pMode->setCurrentIndex(ii);
-    pTfrom->setValue(val[0]);
-    pTuntil->setValue(val[1]);
-    pTstep->setValue(val[2]);
-    pPfrom->setValue(val[3]);
-    pPuntil->setValue(val[4]);
-    pPstep->setValue(val[5]);
+    // page1
+    ii = min( size[2],ui->pMode->count()-1 );
+    ui->pMode->setCurrentIndex(ii);
+    ui->pTfrom->setValue(val[0]);
+    ui->pTuntil->setValue(val[1]);
+    ui->pTstep->setValue(val[2]);
+    ui->pPfrom->setValue(val[3]);
+    ui->pPuntil->setValue(val[4]);
+    ui->pPstep->setValue(val[5]);
 
-    ii = pPtun->findText(QChar(flgs[7]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    ii = ui->pPtun->findText(QChar(flgs[7]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-        pPtun->setCurrentIndex(ii);
-    ii = pPun->findText(QChar(flgs[8]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->pPtun->setCurrentIndex(ii);
+    ii = ui->pPun->findText(QChar(flgs[8]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-        pPun->setCurrentIndex(ii);
+        ui->pPun->setCurrentIndex(ii);
     if( flgs[6] == 'T' )
     {
-     butT->setChecked(true);
-     butP->setChecked(false);
+        ui->butT->setChecked(true);
+        ui->butP->setChecked(false);
     }
     else
     {
-        butT->setChecked(false);
-        butP->setChecked(true);
+        ui->butT->setChecked(false);
+        ui->butP->setChecked(true);
     }
 
-    pNP->setValue(size[0]);
-    pNT->setValue(size[1]);
+    ui->pNP->setValue(size[0]);
+    ui->pNT->setValue(size[1]);
 
-//Page 2 equations
-     resetPageList(aXname, aYname);
+    //Page 2 equations
+    resetPageList(aXname, aYname);
 
 
-// Page 3
-    pdimY->setValue(size[6]);
-    pECol->setValue(size[5]);
-    pELine->setValue(size[4]);
+    // Page 3
+    ui->pdimY->setValue(size[6]);
+    ui->pECol->setValue(size[5]);
+    ui->pELine->setValue(size[4]);
 
-   ii = pWhat->findText(QChar(flgs[0]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-   if( ii >= 0  )
-       pWhat->setCurrentIndex(ii);
+    ii = ui->pWhat->findText(QChar(flgs[0]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        ui->pWhat->setCurrentIndex(ii);
 
-   ii = pPunE->findText(QChar(flgs[1]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-   if( ii >= 0  )
-       pPunE->setCurrentIndex(ii);
+    ii = ui->pPunE->findText(QChar(flgs[1]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        ui->pPunE->setCurrentIndex(ii);
 
-   ii = pPunV->findText(QChar(flgs[2]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-   if( ii >= 0  )
-       pPunV->setCurrentIndex(ii);
+    ii = ui->pPunV->findText(QChar(flgs[2]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        ui->pPunV->setCurrentIndex(ii);
 
-   ii = pPunP->findText(QChar(flgs[3]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-   if( ii >= 0  )
-       pPunP->setCurrentIndex(ii);
-   ii = pPunT->findText(QChar(flgs[4]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
-   if( ii >= 0  )
-       pPunT->setCurrentIndex(ii);
+    ii = ui->pPunP->findText(QChar(flgs[3]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        ui->pPunP->setCurrentIndex(ii);
+    ii = ui->pPunT->findText(QChar(flgs[4]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    if( ii >= 0  )
+        ui->pPunT->setCurrentIndex(ii);
 
-   //Page 4
-      spinBox18->setValue(size[3]);
+    //Page 4
+    ui->spinBox18->setValue(size[3]);
 
-   // commands
-   stackedWidget->setCurrentIndex (0);
-   PairwiseChecked();
+    // commands
+    ui->stackedWidget->setCurrentIndex (0);
+    PairwiseChecked();
 
-   QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
-   QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
-   QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
+    QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect( ui->butT, SIGNAL(clicked(bool)),  ui->butP, SLOT(toggle()));
+    QObject::connect( ui->butP, SIGNAL(clicked(bool)),  ui->butT, SLOT(toggle()));
+    QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));
+    QObject::connect( ui->pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
+    QObject::connect( ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
 
-   QObject::connect( pTfrom, SIGNAL(valueChanged( double  )), this, SLOT(TChange()));
-   QObject::connect( pTuntil, SIGNAL(valueChanged( double  )), this, SLOT(TChange()));
-   QObject::connect( pTstep, SIGNAL(valueChanged( double  )), this, SLOT(TChange()));
-   QObject::connect( pPfrom, SIGNAL(valueChanged( double  )), this, SLOT(PChange()));
-   QObject::connect( pPuntil, SIGNAL(valueChanged( double  )), this, SLOT(PChange()));
-   QObject::connect( pPstep, SIGNAL(valueChanged( double  )), this, SLOT(PChange()));
-   QObject::connect( pMode, SIGNAL(currentIndexChanged( int ) ), this, SLOT(PairwiseChecked()));
+    QObject::connect( ui->pTfrom, SIGNAL(valueChanged(double)), this, SLOT(TChange()));
+    QObject::connect( ui->pTuntil, SIGNAL(valueChanged(double)), this, SLOT(TChange()));
+    QObject::connect( ui->pTstep, SIGNAL(valueChanged(double)), this, SLOT(TChange()));
+    QObject::connect( ui->pPfrom, SIGNAL(valueChanged(double)), this, SLOT(PChange()));
+    QObject::connect( ui->pPuntil, SIGNAL(valueChanged(double)), this, SLOT(PChange()));
+    QObject::connect( ui->pPstep, SIGNAL(valueChanged(double)), this, SLOT(PChange()));
+    QObject::connect( ui->pMode, SIGNAL(currentIndexChanged(int) ), this, SLOT(PairwiseChecked()));
 
 }
 
 
 RTparmWizard::~RTparmWizard()
-{}
+{
+    delete ui;
+}
 
 void   RTparmWizard::getSizes( int size[7] )
 {
-    size[0]= pNP->value();
-    size[1]= pNT->value();
-    size[6]= pdimY->value();
-    size[5]= pECol->value();
-    size[4]= pELine->value();
-    size[3]= spinBox18->value();
+    size[0]= ui->pNP->value();
+    size[1]= ui->pNT->value();
+    size[6]= ui->pdimY->value();
+    size[5]= ui->pECol->value();
+    size[4]= ui->pELine->value();
+    size[3]= ui->spinBox18->value();
 
-    size[2] = pMode->currentIndex();
+    size[2] = ui->pMode->currentIndex();
 }
 
 void RTparmWizard::getFlags( char flgs[6], string& xName )
 {
-// Page 1 - not return
-    QString str = pPtun->currentText();
+    // Page 1 - not return
+    QString str = ui->pPtun->currentText();
     flgs[7] = str[0].toLatin1();
 
-    str = pPun->currentText();
+    str = ui->pPun->currentText();
     flgs[8] = str[0].toLatin1();
 
-    if(butP->isChecked())
+    if(ui->butP->isChecked())
     {  flgs[6] = 'P';
-       xName = pPun->currentText().toStdString();
+        xName = ui->pPun->currentText().toStdString();
     }
     else
     {  flgs[6] = 'T';
-       xName = pPtun->currentText().toStdString();
+        xName = ui->pPtun->currentText().toStdString();
     }
 
-// Page 2
-  if( pECol->value() > 0 && pELine->value() > 0 )
-       flgs[5] = '+';
-  else flgs[5] = '-';
+    // Page 2
+    if( ui->pECol->value() > 0 && ui->pELine->value() > 0 )
+        flgs[5] = '+';
+    else flgs[5] = '-';
 }
 
 void   RTparmWizard::getFloat( double val[6] )
 {
-    val[0] = pTfrom->value();
-    val[1] = pTuntil->value();
-    val[2] = pTstep->value();
-    val[3] = pPfrom->value();
-    val[4] = pPuntil->value();
-    val[5] = pPstep->value();
+    val[0] = ui->pTfrom->value();
+    val[1] = ui->pTuntil->value();
+    val[2] = ui->pTstep->value();
+    val[3] = ui->pPfrom->value();
+    val[4] = ui->pPuntil->value();
+    val[5] = ui->pPstep->value();
 }
 
 
 void RTparmWizard::help()
 {
-  pVisorImp->OpenHelp( GM_RTPARM_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
+    pVisorImp->OpenHelp( GM_RTPARM_WZ_HTML, WZSTEP, ui->stackedWidget->currentIndex()+1 );
 }
 
 
 void RTparmWizard::TChange()
 {
     double Tai[4];
-    Tai[0] = pTfrom->value();
-    Tai[1] = pTuntil->value();
-    Tai[2] = pTstep->value();
+    Tai[0] = ui->pTfrom->value();
+    Tai[1] = ui->pTuntil->value();
+    Tai[2] = ui->pTstep->value();
     auto nT = getNpoints( Tai );
-    pNT->setValue(nT);
+    ui->pNT->setValue(nT);
 }
 
 void RTparmWizard::PChange()
 {
-  double Pai[4];
-  Pai[0] = pPfrom->value();
-  Pai[1] = pPuntil->value();
-  Pai[2] = pPstep->value();
-  auto nP = getNpoints( Pai );
-  pNP->setValue(nP);
+    double Pai[4];
+    Pai[0] = ui->pPfrom->value();
+    Pai[1] = ui->pPuntil->value();
+    Pai[2] = ui->pPstep->value();
+    auto nP = getNpoints( Pai );
+    ui->pNP->setValue(nP);
 }
 
 
 void RTparmWizard::PairwiseChecked()
 {
-  bool modeNoPair = ( pMode->currentIndex() != 0);
+    bool modeNoPair = ( ui->pMode->currentIndex() != 0);
 
-  pTfrom->setEnabled ( modeNoPair );
-  pTuntil->setEnabled ( modeNoPair );
-  pTstep->setEnabled ( modeNoPair );
-  pPfrom->setEnabled ( modeNoPair );
-  pPuntil->setEnabled ( modeNoPair );
-  pPstep->setEnabled ( modeNoPair );
+    ui->pTfrom->setEnabled ( modeNoPair );
+    ui->pTuntil->setEnabled ( modeNoPair );
+    ui->pTstep->setEnabled ( modeNoPair );
+    ui->pPfrom->setEnabled ( modeNoPair );
+    ui->pPuntil->setEnabled ( modeNoPair );
+    ui->pPstep->setEnabled ( modeNoPair );
 
-  pNP->setEnabled ( !modeNoPair );
-  pNT->setEnabled ( !modeNoPair );
-
-
+    ui->pNP->setEnabled ( !modeNoPair );
+    ui->pNT->setEnabled ( !modeNoPair );
 }
 
 
 void RTparmWizard::definePTArray()
 {
-   int nPT;
-   //double *arP, *arT;
+    int nPT;
+    //double *arP, *arT;
 
-   nPT = max( pNP->value(), pNT->value());
-   /*arP = (double *)*/ aObj[ o_rpxp]->Alloc( nPT, 1, D_);
-   /*arT = (double *)*/ aObj[ o_rpxt]->Alloc( nPT, 1, D_);
+    nPT = max( ui->pNP->value(), ui->pNT->value());
+    /*arP = (double *)*/ aObj[ o_rpxp]->Alloc( nPT, 1, D_);
+    /*arT = (double *)*/ aObj[ o_rpxt]->Alloc( nPT, 1, D_);
 }
 
 void RTparmWizard::initPTTable()
- {
+{
     // init table
-   TObjectModel* model;
-   TObjectTable* fieldTable;
-   QList<FieldInfo>	aFlds;
+    TObjectModel* model;
+    TObjectTable* fieldTable;
+    QList<FieldInfo>	aFlds;
 
-   definePTArray();
+    definePTArray();
 
-   aFlds.clear();
-   aFlds.append(FieldInfo( o_rpxp, ftFloat, 15, false, First, eYes, stIO, 20, 1));
-   aFlds.append(FieldInfo( o_rpxt, ftFloat, 15, false, Tied, eYes, stIO, 20, 1));
+    aFlds.clear();
+    aFlds.append(FieldInfo( o_rpxp, ftFloat, 15, false, First, eYes, stIO, 20, 1));
+    aFlds.append(FieldInfo( o_rpxt, ftFloat, 15, false, Tied, eYes, stIO, 20, 1));
 
-   model = new TObjectModel( aFlds, this );
-   fieldTable =  new TObjectTable( aFlds, this );
-   TObjectDelegate *deleg = new TObjectDelegate( fieldTable, this);
-   fieldTable->setItemDelegate(deleg);
-   fieldTable->setModel(model);
+    model = new TObjectModel( aFlds, this );
+    fieldTable =  new TObjectTable( aFlds, this );
+    TObjectDelegate *deleg = new TObjectDelegate( fieldTable, this);
+    fieldTable->setItemDelegate(deleg);
+    fieldTable->setModel(model);
 
-   QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
-   sizePolicy1.setHorizontalStretch(0);
-   sizePolicy1.setVerticalStretch(0);
-   fieldTable->setSizePolicy(sizePolicy1);
+    QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    sizePolicy1.setHorizontalStretch(0);
+    sizePolicy1.setVerticalStretch(0);
+    fieldTable->setSizePolicy(sizePolicy1);
 
-   int rowSize =0, colSize=0;
-   fieldTable->getObjectSize(rowSize, colSize);
-   fieldTable->setMaximumSize(QSize(colSize, 16777215));
+    int rowSize =0, colSize=0;
+    fieldTable->getObjectSize(rowSize, colSize);
+    fieldTable->setMaximumSize(QSize(colSize, 16777215));
 
-   gridLayout_4->addWidget(fieldTable, 1, 0, 1, 2);
+    ui->gridLayout_4->addWidget(fieldTable, 1, 0, 1, 2);
 
 }
 
@@ -347,7 +344,7 @@ void RTparmWizard::resetPageList(const char* aXname, const char* aYname)
 
     GetListsnRT( -1, pgData,  scalarsList );
     GetListsnRT( RT_RTPARM, pgData,  scalarsList );
-/*
+    /*
    if( isDC )
    {
        GetListsnRT( RT_DCOMP,  pgData,  scalarsList );
@@ -357,9 +354,9 @@ void RTparmWizard::resetPageList(const char* aXname, const char* aYname)
        GetListsnRT( RT_REACDC, pgData,  scalarsList );
    }
 */
-   pageScript = new EquatSetup( page_3, eq,
-             RT_PROCES, pgData, scalarsList, calcScript.c_str(), aXname, aYname  );
-    verticalLayout_5->addWidget(pageScript);
+    pageScript = new EquatSetup( ui->page_3, eq,
+                                 RT_PROCES, pgData, scalarsList, calcScript.c_str(), aXname, aYname  );
+    ui->verticalLayout_5->addWidget(pageScript);
 
 }
 

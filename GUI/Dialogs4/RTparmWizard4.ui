@@ -57,6 +57,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -588,6 +589,7 @@ Simple 'tExpr' scripts can be created using a selection dialog on the next page 
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -611,6 +613,7 @@ Simple 'tExpr' scripts can be created using a selection dialog on the next page 
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1025,6 +1028,7 @@ Default: 0 (arrays not provided).</string>
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1155,6 +1159,7 @@ Default: 0 (arrays not provided).</string>
       <widget class="QPushButton" name="pHelp">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1184,6 +1189,7 @@ Default: 0 (arrays not provided).</string>
       <widget class="QPushButton" name="pBack">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1197,6 +1203,7 @@ Default: 0 (arrays not provided).</string>
       <widget class="QPushButton" name="pNext">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1210,6 +1217,7 @@ Default: 0 (arrays not provided).</string>
       <widget class="QPushButton" name="pCancel">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1251,54 +1259,5 @@ Default: 0 (arrays not provided).</string>
   <tabstop>pCancel</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>pCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>RTparmWizardData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>587</x>
-     <y>518</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>317</x>
-     <y>270</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>butT</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>butP</receiver>
-   <slot>toggle()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>172</x>
-     <y>428</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>468</x>
-     <y>428</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>butP</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>butT</receiver>
-   <slot>toggle()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>468</x>
-     <y>428</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>172</x>
-     <y>428</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

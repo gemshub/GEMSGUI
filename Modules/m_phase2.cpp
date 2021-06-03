@@ -435,37 +435,23 @@ void TPhase::Set_SorpMod_Phase_coef()
     // new
 }
 
+//--------------------------------------------------------------------------------
 
-// Build ReacDC/DComp keys (aDclist) to be included into the Phase
-void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
-                   short& nDC,  char (*SM)[DC_RKLEN], char * DCS, bool bNsuT)
+
+// Build old selections DCOMP and REACDC
+void TPhase::makeReacDCompListNew( TCStringArray& aDclist, short nDC,  char (*SM)[DC_RKLEN], char* DCS)
 {
-    int i, aNsuT = 0;
-    char pkeyrd[81];
-    TCStringArray aDclist_old;
-
     aDclist.clear();
-
-    //REACDC&DCOMP  keypart
-    rt[RT_REACDC]->MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
-   if( pkeyrd[1] != ':')
-       pkeyrd[1] = '*';
-   if( bNsuT && php->NsuT > 0 )  // template for adsorption
-    {   pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
-        aNsuT = php->NsuT;
-    }
 
     if( nDC && SM )
     {
-      // Build old selections DCOMP and REACDC
-       aDclist_old.clear();
-       for( i=0; i<nDC; i++ )
+       for(int i=0; i<nDC; i++ )
        {
           std::string key_dr = std::string( SM[i], 0, DC_RKLEN );
           if( DCS[i] == SRC_DCOMP )
           {
             rt[RT_DCOMP]->SetKey( key_dr.c_str() );
-            rt[RT_DCOMP]->SetFldKey( 3, "*" );
+            //rt[RT_DCOMP]->SetFldKey( 3, "*" );
             key_dr  = string(1, DCS[i]);
             key_dr += ' ';
             key_dr += rt[RT_DCOMP]->UnpackKey();
@@ -474,115 +460,29 @@ void TPhase::makeReacDCompList( const char *caption, TCStringArray& aDclist,
             if( DCS[i] == SRC_REACDC )
             {
               rt[RT_REACDC]->SetKey( key_dr.c_str() );
-              rt[RT_REACDC]->SetFldKey( 3, "*" );
+              //rt[RT_REACDC]->SetFldKey( 3, "*" );
               key_dr  = std::string(1, DCS[i]);
               key_dr += ' ';
               key_dr += rt[RT_REACDC]->UnpackKey();
             }
-         aDclist_old.push_back( key_dr );
+         aDclist.push_back( key_dr );
       }
     }
-
-AGAINRC:
-     aDclist = vfRDMultiKeysSet( window(), caption,
-                  pkeyrd, aDclist_old, aNsuT  );
-
-     if( aDclist.size() < 1 )
-     {
-        switch ( vfQuestion3(window(), GetName(),
-        "W08PHrem: Number of selected ReacDC/DComp keys < 1.\n"
-        " Mark again, proceed without ReacDC/DComp or Cancel?",
-        "&Repeat", "&Proceed"))
-        {
-          case VF3_1:
-            goto AGAINRC;
-
-          case VF3_2:
-            break;
-          case VF3_3:  Error( GetName(),
-             "E09PHrem: No ReacDC/DComp records selected into Phase...");
-        }
-      }
-      nDC = aDclist.size();
 }
 
-// Build Phase keys (aPhlist) to be included into the Phase
-void TPhase::makePhaseList( const char *caption, TCStringArray& aPhlist )
+// Build old Phase keys (aPhlist) to be included into the Phase
+void TPhase::makePhaseListNew( TCStringArray& aPhlist )
 {
-    std::string pkeyrd = "*:*:*:*:*:";
-    TCStringArray aPhlist_old;
-
     aPhlist.clear();
     if( php->nlPh && php->lPh )
     {
-      // Build old selections DCOMP and REACDC
-       aPhlist_old.clear();
-       for(int i=0; i<php->nlPh; i++ )
-       {
-          std::string key_dr = std::string( php->lPh[i], 0, PH_RKLEN );
-          aPhlist_old.push_back( key_dr );
-       }
-    }
-AGAINRC:
-     aPhlist = vfMultiKeysSet( window(), caption, RT_PHASE, pkeyrd.c_str(), aPhlist_old  );
-     if( aPhlist.size() < 1 )
-     {
-        switch ( vfQuestion3(window(), GetName(),
-        "W08PHrem: Number of selected Phase keys < 1.\n"
-        " Mark again, proceed without Phase or Cancel?",
-        "&Repeat", "&Proceed"))
+        for(int i=0; i<php->nlPh; i++ )
         {
-          case VF3_1:
-            goto AGAINRC;
-
-          case VF3_2:
-            break;
-          case VF3_3:  Error( GetName(),
-             "E09PHrem: No Phase records selected into Phase...");
+            std::string key_dr = std::string( php->lPh[i], 0, PH_RKLEN );
+            aPhlist.push_back( key_dr );
         }
-      }
-      php->nlPh = aPhlist.size();
- }
-
-/*
-// Build Phase keys (aIclist) to be included into the Phase
-void TPhase::makeICompList( const char *caption, TCStringArray& aIclist )
-{
-    std::string ikeyrd = "*:*:*:";
-    TCStringArray aIclist_old;
-
-    aIclist.Clear();
-    if( php->PumpCon )
-    {
-      // Build old selections DCOMP and REACDC
-       aIclist_old.Clear();
-       for(int j=0; j<php->nDC; j++ )
-       {
-          std::string key_dr = std::string( php->lICu[j], 0, IC_RKLEN );
-          aIclist_old.Add( key_dr );
-       }
     }
-AGAINRC:
-     aIclist = vfMultiKeysSet( window(), caption, RT_ICOMP, ikeyrd.c_str(), aIclist_old  );
-     if( aIclist.GetCount() < 1 )
-     {
-        switch ( vfQuestion3(window(), GetName(),
-        "W08PHrem: Number of selected IComp keys < 1.\n"
-        " Mark again, proceed without ICs, or Cancel?",
-        "&Repeat", "&Proceed"))
-        {
-          case VF3_1:
-            goto AGAINRC;
-            ;
-          case VF3_2:
-            break;
-          case VF3_3:  Error( GetName(),
-             "E09PHrem: No IComp records selected into Phase uptake kinetics model...");
-        }
-      }
-//      php->nlICu = (short)(aIclist.GetCount());
- }
-*/
+}
 
 // Load DC classes from records and set to DCC
 void TPhase::LoadDCC()

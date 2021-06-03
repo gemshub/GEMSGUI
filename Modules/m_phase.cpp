@@ -831,13 +831,15 @@ void TPhase::RecInput( const char *key )
     TCModule::RecInput( key );
 }
 
+static TCStringArray aDclist;
+static TCStringArray aPhlist;
+static TCStringArray aDcSkrl;
 
 // opens window with 'Remake record' parameters
-void
-TPhase::MakeQuery()
+void TPhase::MakeQuery()
 {
 //    pImp->MakeQuery();   Preparing for calling Phase Wizard
-    const char * p_key;
+    std::string p_key;
     char flgs[37];
     int size[30];
     double r2 = php->Asur;
@@ -877,11 +879,12 @@ TPhase::MakeQuery()
     size[28] = php->nAscC;
     size[29] = php->nSiT;
 
-
-    if( !vfPhaseSet( window(), p_key, flgs, size, r2 ))
-         Error( p_key, "Phase record configuration cancelled by the user!" );
-     //  return;   // cancel
-
+    if( !vfPhaseSet( window(), p_key.c_str(), flgs, size, r2, aDclist, aPhlist, aDcSkrl ))
+    {
+       db->SetKey(p_key.c_str());
+       Error( p_key, "Phase record configuration cancelled by the user!" );
+    }
+    db->SetKey(p_key.c_str());
     memcpy( php->sol_t, flgs, 37);
     php->Nsd = static_cast<short>(size[0]);
     php->ncpN = static_cast<short>(size[1]);
@@ -916,16 +919,18 @@ TPhase::MakeQuery()
     php->nSiT= static_cast<short>(size[29]);
 
     php->Asur = r2;
+    php->nDC = aDclist.size();
+    php->nlPh = aPhlist.size();
+    php->nSkr = aDcSkrl.size();
 }
 
 
 //Remake/Create mode: rebuild Phase record structure before calculations
-int
-TPhase::RecBuild( const char *key, int mode  )
+int TPhase::RecBuild( const char *key, int mode  )
 {
-    TCStringArray aDclist;
-    TCStringArray aPhlist;
-    TCStringArray aDcSkrl;
+    ///TCStringArray aDclist;
+    ///TCStringArray aPhlist;
+    ///TCStringArray aDcSkrl;
 //    TCStringArray aIclist;
 //    std::string str;
     TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
@@ -944,6 +949,25 @@ TPhase::RecBuild( const char *key, int mode  )
 
     strncpy( old_sol, php->sol_t, 6);
     strncpy( old_kin, php->kin_t, 8);
+
+    // build old selection keys
+    aDclist.clear();
+    aPhlist.clear();
+    aDcSkrl.clear();
+    makeReacDCompListNew( aDclist, php->nDC, php->SM, php->DCS );
+    if( php->PlPhl != S_OFF )
+    {
+        makePhaseListNew( aPhlist );
+        //db->SetKey(php->pst_);
+     }
+    if( php->PapCon != S_OFF )
+    {
+       //php->pst_[0] = '*';
+       //db->SetKey(php->pst_);
+       makeReacDCompListNew( aDcSkrl, php->nSkr, php->lDCr, php->lDCd );
+       //php->pst_[0] = php->PphC;
+       //db->SetKey(php->pst_);
+    }
 
 AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
@@ -966,40 +990,9 @@ AGAIN_SETUP:
         SetString("PH_make   Remaking Phase definition");
         pVisor->Update();
 
-        // mark ReacDC/DComp keys to be included into the Phase
-        makeReacDCompList( "Please, mark ReacDC/DComp keys to be included into the Phase",
-                           aDclist, php->nDC, php->SM, php->DCS, false);
         // Pre-proc. loop for SIT or Pitzer: determining number of cations and anion
         DetNumbCatAn(aDclist);
 
-        if( php->PlPhl != S_OFF )
-        {
-            makePhaseList( "Please, mark record keys of phases to be linked with this phase",
-                           aPhlist );
-            db->SetKey(php->pst_);
-         }
-
-        if( php->PapCon != S_OFF )
-        { // mark ReacDC/DComp keys list
-           php->pst_[0] = '*';
-           db->SetKey(php->pst_);
-           makeReacDCompList(
-             "Please, mark ReacDC/DComp keys list of record keys of aq, gas or surface catalyzing"
-                             " or inhibiting species for parallel reactions",
-                       aDcSkrl, php->nSkr, php->lDCr, php->lDCd, false);
-           php->pst_[0] = php->PphC;
-           db->SetKey(php->pst_);
-        }
-//
-/*
-        if( php->PumpCon != S_OFF )
-        {
-            makeICompList( "Please, mark record keys of ICs assigned to end members in this"
-                           "SS uptake kinetics model (in the order of end members)", aIclist );
-            db->SetKey(php->pst_);
-         }
-*/
-//
     //---------------------------------------------------------------------
 
     // Setting up the DC/phase coeffs depending on the
@@ -1582,7 +1575,7 @@ int TPhase::CompressDecomp(int , const TCIntArray &DCused)
         if( DCndx  < 0  ) // non-existent component
           break;
         //if( !onlyIPX )
-          php->ipxt[ii*php->npxM+jj] = static_cast<short>(DCndx);
+        php->ipxt[ii*php->npxM+jj] = static_cast<short>(DCndx);
       }
       if( jj<php->npxM ) // row with a non-existent component
         continue;

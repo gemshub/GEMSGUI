@@ -15,12 +15,12 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
+
 #ifndef KeyFilter_h_
 #define KeyFilter_h_
 #include <memory>
 #include <QDialog>
 #include <QLineEdit>
-#include <QLabel>
 #include "v_user.h"
 
 //=============================================
@@ -35,14 +35,14 @@ class KeyFilter:   public QDialog
     QLineEdit *fullKey;
 
     size_t iRt;
- //   int iEd;
+    //   int iEd;
     bool allowTemplates;
 
 protected slots:
     void EvSetAll();
     void EvGetList();
     void CmOk();
-    void CmHelp();    
+    void CmHelp();
     void setKeyLine();
 
 protected:

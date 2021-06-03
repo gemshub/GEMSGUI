@@ -31,47 +31,47 @@
 LoadMessage* LoadMessage::pDia = nullptr;
 
 LoadMessage::LoadMessage( QWidget* parent,
-             const char* name,
-             const char* msg,
-             int prog,
-             int total):
-               QProgressDialog ( msg, "&Cancel", 0, 100, parent )
+                          const char* name,
+                          const char* msg,
+                          int prog,
+                          int total):
+    QProgressDialog ( msg, "&Cancel", 0, 100, parent )
 {
-       pDia = this;
+    pDia = this;
 
-       setWindowModality(Qt::WindowModal);
-       // change calcel button
-       QPushButton *cancelBut = new QPushButton("");
-       QIcon icon5;
-       icon5.addFile(
-          QString::fromUtf8(":/message/Icons/CancelIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
-       cancelBut->setIcon(icon5);
-       //QString styleTemp ="border-radius: 1em";
-       //cancelBut->setStyleSheet(styleTemp);
-       setCancelButton(cancelBut);
+    setWindowModality(Qt::WindowModal);
+    // change calcel button
+    QPushButton *cancelBut = new QPushButton("");
+    QIcon icon5;
+    icon5.addFile(
+                QString::fromUtf8(":/message/Icons/CancelIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
+    cancelBut->setIcon(icon5);
+    //QString styleTemp ="border-radius: 1em";
+    //cancelBut->setStyleSheet(styleTemp);
+    setCancelButton(cancelBut);
 
-       QList<QLabel *>llab = findChildren<QLabel *>();
-       QList<QProgressBar *>lbar = findChildren<QProgressBar *>();
-       //lbar.at(0)->setAlignment(Qt::AlignHCenter);
-       QList<QPushButton *>lbut = findChildren<QPushButton *>();
-       QGridLayout *layoutTab = new QGridLayout(this);
-       layoutTab->setContentsMargins( 0, 0, 0, 0 );
-       layoutTab->setSpacing(2);
-       //layoutTab->setRowStretch( 1, 0 );
-       //layoutTab->setMargin(1);
-       llab.at(0)->setAlignment( Qt::AlignTop|Qt::AlignHCenter);
+    QList<QLabel *>llab = findChildren<QLabel *>();
+    QList<QProgressBar *>lbar = findChildren<QProgressBar *>();
+    //lbar.at(0)->setAlignment(Qt::AlignHCenter);
+    QList<QPushButton *>lbut = findChildren<QPushButton *>();
+    QGridLayout *layoutTab = new QGridLayout(this);
+    layoutTab->setContentsMargins( 0, 0, 0, 0 );
+    layoutTab->setSpacing(2);
+    //layoutTab->setRowStretch( 1, 0 );
+    //layoutTab->setMargin(1);
+    llab.at(0)->setAlignment( Qt::AlignTop|Qt::AlignHCenter);
 
-       layoutTab->addWidget( lbut.at(0), 0,0 );
-       layoutTab->addWidget( lbar.at(0), 0,1 );
-       layoutTab->addWidget( llab.at(0), 1,1 );
+    layoutTab->addWidget( lbut.at(0), 0,0 );
+    layoutTab->addWidget( lbar.at(0), 0,1 );
+    layoutTab->addWidget( llab.at(0), 1,1 );
 
-       if( total > 0)
-         setMaximum(total);
-        setValue(prog);
-        qApp->processEvents();
-        setWindowTitle( name );
-        //setAutoClose ( false );
-        //setAutoReset ( false );
+    if( total > 0)
+        setMaximum(total);
+    setValue(prog);
+    qApp->processEvents();
+    setWindowTitle( name );
+    //setAutoClose ( false );
+    //setAutoReset ( false );
 }
 
 void LoadMessage::resizeEvent(QResizeEvent *e)
@@ -81,20 +81,20 @@ void LoadMessage::resizeEvent(QResizeEvent *e)
 
 void LoadMessage::Update( const char* mess, int prog, int total )
 {
-        qApp->processEvents();
-        if( total > 0)
-         setMaximum(total);
-        QString str = mess;
-        setLabelText(str);
-        setValue(prog);
-        qApp->processEvents();
+    qApp->processEvents();
+    if( total > 0)
+        setMaximum(total);
+    QString str = mess;
+    setLabelText(str);
+    setValue(prog);
+    qApp->processEvents();
 }
 
 void LoadMessage::closeEvent(QCloseEvent* ev)
 {
-      pDia = nullptr;
-      pVisorImp->setMenuEnabled( true );
-      QProgressDialog::closeEvent(ev);
+    pDia = nullptr;
+    pVisorImp->setMenuEnabled( true );
+    QProgressDialog::closeEvent(ev);
 }
 
 //-------------------------------------------------------------------
@@ -102,7 +102,7 @@ void LoadMessage::closeEvent(QCloseEvent* ev)
 ProcessProgressDialog* ProcessProgressDialog::pDia = nullptr;
 
 ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
-               QDialog(parent), nRT(anRT)
+    QDialog(parent), nRT(anRT)
 {
     pDia = this;
     //TProfil::pm->userCancel = false;
@@ -126,21 +126,21 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
 
     switch(nRT)
     {
-     case RT_PROCES: TProcess::pm->stepWise = true;
-                     pProgress->setMaximum( TProcess::pm->pep->NR1 );
-                     break;
-     case RT_GEM2MT: TGEM2MT::pm->stepWise = true;
-                     pProgress->setMaximum( static_cast<int>(TGEM2MT::pm->mtp->ntM) );
-                     break;
-     default:        pProgress->setMaximum( 100. );
-                     break;
-     }
+    case RT_PROCES: TProcess::pm->stepWise = true;
+        pProgress->setMaximum( TProcess::pm->pep->NR1 );
+        break;
+    case RT_GEM2MT: TGEM2MT::pm->stepWise = true;
+        pProgress->setMaximum( static_cast<int>(TGEM2MT::pm->mtp->ntM) );
+        break;
+    default:        pProgress->setMaximum( 100. );
+        break;
+    }
 
     pProgress->setToolTip( "Shows number of steps" );
     mainBox->addWidget( pProgress );
-    
+
     QHBoxLayout* buttonBox = new QHBoxLayout();
- 
+
     pStopStep = new QPushButton( "&Step", this );
     pStopStep->setToolTip( "Make next iteration in Stepwise mode");
     connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStep()) );
@@ -166,20 +166,20 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
 
     switch(nRT)
     {
-     case RT_PROCES: calcThread = new ProcessThread(this);
-                     break;
-     case RT_GEM2MT: calcThread = new GEM2MTThread(this);
-                     break;
-     default:        CalcFinished();
-                     break;
-     }
+    case RT_PROCES: calcThread = new ProcessThread(this);
+        break;
+    case RT_GEM2MT: calcThread = new GEM2MTThread(this);
+        break;
+    default:        CalcFinished();
+        break;
+    }
 
     connect( calcThread, SIGNAL(finished()), this, SLOT(close()) );
     calcThread->start();
 }
 /*
 void ProcessProgressDialog::slUpdate(bool force)
-{ 
+{
    // cout << "Update " <<QThread::currentThreadId() << "  " << pThread  << "  " <<  force << endl;
     pVisorImp->Update(force);
 }
@@ -187,13 +187,13 @@ void ProcessProgressDialog::slUpdate(bool force)
 void ProcessProgressDialog::slQuestion( void *result, QWidget* par, QString title, QString mess)
 {
   cout << "Question " <<QThread::currentThreadId() << "  " << pThread   << endl;
-  *((int *)result) = vfQuestion( par, 
+  *((int *)result) = vfQuestion( par,
           (const char*)title.toStdString(), (const char*)mess.toStdString());
   ThreadControl::wakeOne();	// let's calc
 }
 */
 ProcessProgressDialog::~ProcessProgressDialog()
-{ 
+{
 
     //pVisorImp->setMenuEnabled( true );
     delete calcThread;
@@ -201,24 +201,24 @@ ProcessProgressDialog::~ProcessProgressDialog()
 
 void ProcessProgressDialog::Update()
 {
-  switch(nRT)
+    switch(nRT)
     {
-     case RT_PROCES: pProgress->setValue(TProcess::pm->pep->c_nrk);
-                     label->setText(TProcess::pm->Vmessage.c_str());
-                     setWindowTitle( TProcess::pm->pep->stkey );
-                     break;
-     case RT_GEM2MT: pProgress->setValue(static_cast<int>(TGEM2MT::pm->mtp->ct));
-                     label->setText(TGEM2MT::pm->Vmessage.c_str());
-                     //setWindowTitle( TGEM2MT::pm->mtp->sykey );
-                     break;
-     default:        break;
-     }
+    case RT_PROCES: pProgress->setValue(TProcess::pm->pep->c_nrk);
+        label->setText(TProcess::pm->Vmessage.c_str());
+        setWindowTitle( TProcess::pm->pep->stkey );
+        break;
+    case RT_GEM2MT: pProgress->setValue(static_cast<int>(TGEM2MT::pm->mtp->ct));
+        label->setText(TGEM2MT::pm->Vmessage.c_str());
+        //setWindowTitle( TGEM2MT::pm->mtp->sykey );
+        break;
+    default:        break;
+    }
 }
 
-// CalcFinished, close window, stop thread 
+// CalcFinished, close window, stop thread
 void ProcessProgressDialog::CalcFinished()
 {
-//    pVisorImp->setMenuEnabled( true );
+    //    pVisorImp->setMenuEnabled( true );
     close();
 }
 
@@ -227,22 +227,22 @@ void ProcessProgressDialog::CmStep()
 {
     try
     {
- 	  if( !(calcThread->error.title == "") )
-		throw calcThread->error;
+        if( !(calcThread->error.title == "") )
+            throw calcThread->error;
 
-         // calcThread->emitWakeOne();
-         ThreadControl::wakeOne();	// let's calc
+        // calcThread->emitWakeOne();
+        ThreadControl::wakeOne();	// let's calc
 
-    switch(nRT)
-    {
-     case RT_PROCES: if( TProcess::pm->calcFinished )
-                       CalcFinished();
-                     break;
-     case RT_GEM2MT: if( TGEM2MT::pm->calcFinished )
-                            CalcFinished();
-                     break;
-     default:        break;
-     }
+        switch(nRT)
+        {
+        case RT_PROCES: if( TProcess::pm->calcFinished )
+                CalcFinished();
+            break;
+        case RT_GEM2MT: if( TGEM2MT::pm->calcFinished )
+                CalcFinished();
+            break;
+        default:        break;
+        }
     }
     catch( TError& err )
     {
@@ -252,36 +252,35 @@ void ProcessProgressDialog::CmStep()
 
 void ProcessProgressDialog::CmResume()
 {
-  try
+    try
     {
+        switch(nRT)
+        {
+        case RT_PROCES: TProcess::pm->stepWise = false;
+            break;
+        case RT_GEM2MT: TGEM2MT::pm->stepWise = false;
+            break;
+        default:        break;
+        }
 
-    switch(nRT)
-    {
-     case RT_PROCES: TProcess::pm->stepWise = false;
-                     break;
-     case RT_GEM2MT: TGEM2MT::pm->stepWise = false;
-                     break;
-     default:        break;
-     }
+        pResume->hide();
+        pStopStep->disconnect();
+        pStopStep->setText("&Stop");
+        connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStop()) );
 
-     pResume->hide();
-     pStopStep->disconnect();
-     pStopStep->setText("&Stop");
-     connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStop()) );
- 
- //    calcThread->emitWakeOne();
-    ThreadControl::wakeOne();	// let's calc
+        //    calcThread->emitWakeOne();
+        ThreadControl::wakeOne();	// let's calc
 
-    switch(nRT)
-    {
-     case RT_PROCES: if( TProcess::pm->calcFinished )
-                       CalcFinished();
-                     break;
-     case RT_GEM2MT: if( TGEM2MT::pm->calcFinished )
-                            CalcFinished();
-                     break;
-     default:        break;
-     }
+        switch(nRT)
+        {
+        case RT_PROCES: if( TProcess::pm->calcFinished )
+                CalcFinished();
+            break;
+        case RT_GEM2MT: if( TGEM2MT::pm->calcFinished )
+                CalcFinished();
+            break;
+        default:        break;
+        }
     }
     catch( TError& err )
     {
@@ -291,20 +290,20 @@ void ProcessProgressDialog::CmResume()
 
 void ProcessProgressDialog::CmStop()
 {
-  try
+    try
     {
-    switch(nRT)
-    {
-     case RT_PROCES: TProcess::pm->stepWise = true;
-                     break;
-     case RT_GEM2MT: TGEM2MT::pm->stepWise = true;
-                     break;
-     default:        break;
-     }
-      pResume->show();
-      pStopStep->disconnect();
-      connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStep()) );
-      pStopStep->setText("&Step");
+        switch(nRT)
+        {
+        case RT_PROCES: TProcess::pm->stepWise = true;
+            break;
+        case RT_GEM2MT: TGEM2MT::pm->stepWise = true;
+            break;
+        default:        break;
+        }
+        pResume->show();
+        pStopStep->disconnect();
+        connect( pStopStep, SIGNAL(clicked()), this, SLOT(CmStep()) );
+        pStopStep->setText("&Step");
     }
     catch( TError& err)
     {
@@ -315,55 +314,55 @@ void ProcessProgressDialog::CmStop()
 void ProcessProgressDialog::CmClose()
 {
     // we have to cancel calculation here
-   if( calcThread->isRunning() )
+    if( calcThread->isRunning() )
     {
-      switch(nRT)
-      {
+        switch(nRT)
+        {
         case RT_PROCES: TProcess::pm->userCancel = true;
-                        TProcess::pm->pep->Istat = P_MT_MODE/*'5'mt mode*/;;
-                     break;
+            TProcess::pm->pep->Istat = P_MT_MODE/*'5'mt mode*/;;
+            break;
         case RT_GEM2MT: TGEM2MT::pm->userCancel = true;
-                        TGEM2MT::pm->mtp->iStat = 0/*'5'mt mode*/;
-                        break;
-         default:       break;
-      }
-   }
-   close();
+            TGEM2MT::pm->mtp->iStat = 0/*'5'mt mode*/;
+            break;
+        default:       break;
+        }
+    }
+    close();
 }
 
 void ProcessProgressDialog::CmBreak()
 {
     // we have to cancel calculation here
-   if( calcThread->isRunning() )
-   {
-      switch(nRT)
-      {
+    if( calcThread->isRunning() )
+    {
+        switch(nRT)
+        {
         case RT_PROCES: TProcess::pm->userCancel = true;
-                        break;
+            break;
         case RT_GEM2MT: TGEM2MT::pm->userCancel = true;
-                        TGEM2MT::pm->savePoint();
-                        break;
-         default:       break;
-      }
+            TGEM2MT::pm->savePoint();
+            break;
+        default:       break;
+        }
     }
     close();
 }
 
 void ProcessProgressDialog::closeEvent(QCloseEvent* ev)
 {
-   if( calcThread->isRunning() ) 
-   {
+    if( calcThread->isRunning() )
+    {
         switch(nRT)
-      {
+        {
         case RT_PROCES: TProcess::pm->userCancel = true;
-                     break;
+            break;
         case RT_GEM2MT: TGEM2MT::pm->userCancel = true;
-                        break;
-         default:       break;
-      }
-   }
-   // calcThread->wait();
-   ThreadControl::wakeOne();	// let's calc
+            break;
+        default:       break;
+        }
+    }
+    // calcThread->wait();
+    ThreadControl::wakeOne();	// let's calc
     pDia = nullptr;
     pVisorImp->setMenuEnabled( true );
     QDialog::closeEvent(ev);

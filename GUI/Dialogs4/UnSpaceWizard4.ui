@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>644</width>
-    <height>631</height>
+    <height>642</height>
    </rect>
   </property>
   <property name="font">
@@ -57,6 +57,7 @@
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -520,6 +521,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -884,6 +886,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1126,6 +1129,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1396,6 +1400,7 @@ p, li { white-space: pre-wrap; }
         <widget class="QLabel" name="label_11">
          <property name="font">
           <font>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1610,6 +1615,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QPushButton" name="pHelp">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1639,6 +1645,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QPushButton" name="pBack">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1652,6 +1659,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QPushButton" name="pNext">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1665,6 +1673,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QPushButton" name="pCancel">
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -1680,22 +1689,5 @@ p, li { white-space: pre-wrap; }
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>pCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>UnSpaceWizardData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>587</x>
-     <y>518</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>317</x>
-     <y>270</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

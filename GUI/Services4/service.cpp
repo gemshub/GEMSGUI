@@ -828,16 +828,15 @@ vfDCompSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool
-vfReacDCSet(QWidget* par, const char * p_key,
-            char flgs[12], int size[4]  )
+bool vfReacDCSet(QWidget* par, const char * p_key,
+                 char flgs[12], int size[4], TCStringArray& sel  )
 {
-     ReacDCWizard cdlg( p_key, flgs, size, par );
-     if( !cdlg.exec() )
-       return false;
+    ReacDCWizard cdlg( p_key, flgs, size, sel, par );
+    if( !cdlg.exec() )
+        return false;
     cdlg.getFlags( flgs );
     cdlg.getSizes( size );
-
+    sel = cdlg.allSelectedKeys();
     return true;
 }
 
@@ -863,18 +862,17 @@ vfRTparmSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool
-vfPhaseSet(QWidget* par, const char * p_key,
-            char flgs[37], int size[30], double& r2  )
+bool vfPhaseSet( QWidget* par, const char * p_key,
+                 char flgs[37], int size[30], double& r2, TCStringArray& rd_sel,
+                 TCStringArray& phase_sel, TCStringArray& lDCr_sel  )
 {
-     PhaseWizard cdlg( p_key, flgs, size, r2, par );
-     if( !cdlg.exec() )
-      return false;
+    PhaseWizard cdlg( p_key, flgs, size, r2, rd_sel, phase_sel, lDCr_sel, par );
+    if( !cdlg.exec() )
+        return false;
 
     cdlg.getFlags( flgs );
-    cdlg.getSizes( size );
+    cdlg.getSizes( size, rd_sel, phase_sel, lDCr_sel);
     r2 = cdlg.getR2();
-
     return true;
 }
 

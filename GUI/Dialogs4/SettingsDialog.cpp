@@ -16,14 +16,9 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qfontdialog.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qvariant.h>
+#include <QFontDialog>
 
+#include "ui_SettingsDialog4.h"
 #include "SettingsDialog.h"
 #include "service.h"
 #include "visor.h"
@@ -32,74 +27,74 @@
 
 
 SettingsDialog::SettingsDialog (QWidget* parent)
-    : QDialog(parent )
+    : QDialog(parent ),
+      ui(new Ui::SettingsDialogData)
 {
-
-    setupUi(this);
+    ui->setupUi(this);
     cellFont = pVisorImp->getCellFont();
 
     setWindowTitle( "GEM-Selektor: Settings and preferences" );
 
-    pUpdateInterval->setValue( pVisorImp->updateInterval() );
+    ui->pUpdateInterval->setValue( pVisorImp->updateInterval() );
 
-    pLocalDocDir->setText(pVisor->localDocDir().c_str());
-    pRemoteHTML->setText(pVisor->remoteHTML().c_str());
+    ui->pLocalDocDir->setText(pVisor->localDocDir().c_str());
+    ui->pRemoteHTML->setText(pVisor->remoteHTML().c_str());
     //pLocalDoc->setChecked(pVisor->localDoc());
     //pRemoteDoc->setChecked(!pVisor->localDoc());
-    pSysDBDir->setText(pVisor->sysGEMDir().c_str());
-    pUserDBDir->setText(pVisor->userGEMDir().c_str());
-    pUserDBDir->setText(pVisor->userProfDir().c_str());
-    pFontRawName->setText(cellFont.toString());
-    pNumDigits->setValue(pVisorImp->getDoubleDigits());
-    pUpdateInterval->setValue(pVisorImp->updateInterval());
-    pConfigAutosave->setChecked(pVisorImp->getConfigAutosave());
-//    pConfigAutosave->setChecked( true );
+    ui->pSysDBDir->setText(pVisor->sysGEMDir().c_str());
+    ui->pUserDBDir->setText(pVisor->userGEMDir().c_str());
+    ui->pUserDBDir->setText(pVisor->userProfDir().c_str());
+    ui->pFontRawName->setText(cellFont.toString());
+    ui->pNumDigits->setValue(pVisorImp->getDoubleDigits());
+    ui->pUpdateInterval->setValue(pVisorImp->updateInterval());
+    ui->pConfigAutosave->setChecked(pVisorImp->getConfigAutosave());
+    //    pConfigAutosave->setChecked( true );
 
     if( pVisor->getElemPrMode() )
-    {   rbNewPrMode->setChecked( true );
-        rbOldPrMode->setChecked( false );
+    {   ui->rbNewPrMode->setChecked( true );
+        ui->rbOldPrMode->setChecked( false );
     }
     else
-    {   rbNewPrMode->setChecked( false );
-        rbOldPrMode->setChecked( true );
+    {   ui->rbNewPrMode->setChecked( false );
+        ui->rbOldPrMode->setChecked( true );
     }
-    pBuiltinTDB->setText(pVisor->defaultBuiltinTDBL().c_str());
+    ui->pBuiltinTDB->setText(pVisor->defaultBuiltinTDBL().c_str());
 
-    connect(butGenerate, SIGNAL(clicked()), this, SLOT(CmHelpGenerate()));
+    QObject::connect(ui->pButtonOK, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect(ui->pButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect(ui->pButtonHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
+    QObject::connect(ui->pButtonChFont, SIGNAL(clicked()), this, SLOT(CmChangeFont()));
+    QObject::connect(ui->pushButton5, SIGNAL(clicked()), this, SLOT(CmDefaultFont()));
+    connect(ui->butGenerate, SIGNAL(clicked()), this, SLOT(CmHelpGenerate()));
 
-    pFontRawName->setReadOnly(true);	// no meaning for Win32 (now)
+    ui->pFontRawName->setReadOnly(true);	// no meaning for Win32 (now)
 }
 
 
 SettingsDialog::~SettingsDialog()
-{}
-
-void SettingsDialog::languageChange()
 {
-    retranslateUi(this);
+    delete ui;
 }
 
-void
-SettingsDialog::accept()
+void SettingsDialog::accept()
 {
     CmApply();
     QDialog::accept();
 }
 
-void
-SettingsDialog::CmApply()
+void SettingsDialog::CmApply()
 {
     pVisorImp->setCellFont(cellFont);
 
-    pVisorImp->setDoubleDigits(pNumDigits->value());
-    pVisorImp->setUpdateInterval( pUpdateInterval->value() );
-    pVisorImp->setConfigAutosave( pConfigAutosave->isChecked() );
-    pVisor->setElemPrMode(rbNewPrMode->isChecked());
+    pVisorImp->setDoubleDigits(ui->pNumDigits->value());
+    pVisorImp->setUpdateInterval( ui->pUpdateInterval->value() );
+    pVisorImp->setConfigAutosave( ui->pConfigAutosave->isChecked() );
+    pVisor->setElemPrMode(ui->rbNewPrMode->isChecked());
 
-    pVisor->setLocalDocDir(pLocalDocDir->text().toStdString());
-    pVisor->setRemoteHTML(pRemoteHTML->text().toStdString());
+    pVisor->setLocalDocDir(ui->pLocalDocDir->text().toStdString());
+    pVisor->setRemoteHTML(ui->pRemoteHTML->text().toStdString());
 
-    pVisor->setDefaultBuiltinTDB(pBuiltinTDB->text().toStdString());
+    pVisor->setDefaultBuiltinTDB(ui->pBuiltinTDB->text().toStdString());
 
     //pVisor->setLocalDoc(pLocalDoc->isChecked());
 
@@ -107,71 +102,70 @@ SettingsDialog::CmApply()
 }
 
 
-void
-SettingsDialog::CmHelp()
+void SettingsDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_SETUP_HTML, nullptr );
+    pVisorImp->OpenHelp( GEMS_SETUP_HTML, nullptr );
 }
 
 void SettingsDialog::CmHelpGenerate()
 {
-  try
+    try
     {
-           QString qhpFile = pRemoteHTML->text()+"gems3helpconfig.qhp";
-             HelpConfigurator rr;
-             if( rr.readDir(pRemoteHTML->text().toLatin1().data()))
-                rr.writeFile(qhpFile.toLatin1().data());
+        QString qhpFile = ui->pRemoteHTML->text()+"gems3helpconfig.qhp";
+        HelpConfigurator rr;
+        if( rr.readDir(ui->pRemoteHTML->text().toLatin1().data()))
+            rr.writeFile(qhpFile.toLatin1().data());
 
-             //if( HelpWindow::pDia )
-             //{
-             //   HelpWindow::pDia->close();
-             //   delete HelpWindow::pDia;
-             //   build new file
-                if (!pVisorImp->proc)
-                    pVisorImp->proc = new QProcess();
+        //if( HelpWindow::pDia )
+        //{
+        //   HelpWindow::pDia->close();
+        //   delete HelpWindow::pDia;
+        //   build new file
+        if(!pVisorImp->proc) {
+            pVisorImp->proc = new QProcess();
+        }
+        if (pVisorImp->proc->state() != QProcess::Running)
+        {
+
+            QString docPath =  ui->pRemoteHTML->text();
+            QString app;
+#ifndef _WIN32
+#ifdef __APPLE__
+            //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
+            app += QLatin1String("qcollectiongenerator");
+#else
+            // app = pVisor->sysGEMDir().c_str() + QLatin1String("/qcollectiongenerator");
+            //                   app = QLatin1String(getenv("HOME"));
+            //                   app += QLatin1String("/Gems3-app/qcollectiongenerator");
+            app += QLatin1String("qcollectiongenerator");
+#endif
+#else    // windows
+            app += QLatin1String("qcollectiongenerator.exe");
+#endif
+            QStringList args;
+            args << docPath + QLatin1String("gems3helpconfig.qhcp")
+                 << QLatin1String("-o")
+                 << docPath + QLatin1String("gems3help.qhc");
+            ;
+
+            pVisorImp->proc->start(app, args);
+            cout << app.toStdString() << endl;
+            cout << args[2].toStdString() << endl;
             
-                if (pVisorImp->proc->state() != QProcess::Running) 
-                {
-                    
-                   QString docPath =  pRemoteHTML->text();
-                   QString app;
-            #ifndef _WIN32
-            #ifdef __APPLE__
-//                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
-                    app += QLatin1String("qcollectiongenerator");
-            #else
-// app = pVisor->sysGEMDir().c_str() + QLatin1String("/qcollectiongenerator");
-//                   app = QLatin1String(getenv("HOME"));
-//                   app += QLatin1String("/Gems3-app/qcollectiongenerator");
-                     app += QLatin1String("qcollectiongenerator");
-            #endif
-            #else    // windows
-                    app += QLatin1String("qcollectiongenerator.exe");
-            #endif        
-                    QStringList args;
-                    args << docPath + QLatin1String("gems3helpconfig.qhcp")
-                        << QLatin1String("-o")
-                        << docPath + QLatin1String("gems3help.qhc");
-                        ;
+            if (!pVisorImp->proc->waitForStarted())
+            {
+                Error( "Gems3", "Unable to launch qcollectiongenerator");
+            }
+        }
+        // open it
+        //   (new HelpWindow(  0  ));
+        // }
 
-                    pVisorImp->proc->start(app, args);
-                    cout << app.toStdString() << endl;
-                    cout << args[2].toStdString() << endl;
-            
-                    if (!pVisorImp->proc->waitForStarted()) 
-                    {
-                        Error( "Gems3", "Unable to launch qcollectiongenerator");
-                    }    
-                }
-             // open it
-             //   (new HelpWindow(  0  ));
-             // }
-
-   }
-   catch(TError& e)
-   {
-       vfMessage(this, e.title.c_str(), e.mess.c_str() );
-   }
+    }
+    catch(TError& e)
+    {
+        vfMessage(this, e.title.c_str(), e.mess.c_str() );
+    }
 }
 
 
@@ -196,7 +190,7 @@ SettingsDialog::CmSysDBDirSelect()
     if( file_dlg.exec() )
     {
 //	pDBDir->setText( file_dlg.dirPath() );
-	pDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
+    pDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
     }
 }
 
@@ -211,13 +205,12 @@ SettingsDialog::CmUserDBDirSelect()
     if( file_dlg.exec() )
     {
 //	pUserDBDir->setText( file_dlg.dirPath() );
-	pUserDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
+    pUserDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
     }
 }
 */
 
-void
-SettingsDialog::CmChangeFont()
+void SettingsDialog::CmChangeFont()
 {
     bool ok;
     QFont selected_font = QFontDialog::getFont(&ok, cellFont, this);
@@ -225,15 +218,14 @@ SettingsDialog::CmChangeFont()
     if( ok )
     {
         cellFont = selected_font;
-        pFontRawName->setText( cellFont.toString() );
+        ui->pFontRawName->setText( cellFont.toString() );
     }
 }
 
-void
-SettingsDialog::CmDefaultFont()
+void SettingsDialog::CmDefaultFont()
 {
     cellFont = pVisorImp->getDefaultFont();
-    pFontRawName->setText( cellFont.toString() );
+    ui->pFontRawName->setText( cellFont.toString() );
 }
 
 //--------------------- End of SettingsDialog.cpp ---------------------------

@@ -21,18 +21,20 @@
 
 #include <QDialog>
 
-#include "ui_AutoPhaseDialog4.h"
+namespace Ui {
+class AutoPhaseDialogData;
+}
 
-class AutoPhaseDialog : public QDialog, public Ui::AutoPhaseDialogData
+class AutoPhaseDialog : public QDialog
 {
     Q_OBJECT
 
 public slots:
-//    void CmCheck();
+    //    void CmCheck();
 
 public:
     AutoPhaseDialog(
-         const char* pr_key, char acode, char gcode, QWidget* parent = nullptr);
+            const char* pr_key, char acode, char gcode, QWidget* parent = nullptr);
     virtual ~AutoPhaseDialog();
 
     void set_apar( float apar[8] );
@@ -46,17 +48,16 @@ public:
     char get_acode();
     char get_gcode();
 
-   
 private:
-   float a_param[8];  // Changed size from 4 to 8 on 22.05.2009 (DK,TW)
-   char aqu_code;
-   char gas_code;
-   std::string aqu_key;
-   std::string gas_key;
+    Ui::AutoPhaseDialogData *ui;
+    float a_param[8];  // Changed size from 4 to 8 on 22.05.2009 (DK,TW)
+    char aqu_code;
+    char gas_code;
+    std::string aqu_key;
+    std::string gas_key;
 
 protected slots:
     virtual void CmHelp();
-    virtual void languageChange();
     virtual void CmCheck();
 
 };

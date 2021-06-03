@@ -401,6 +401,7 @@
        </property>
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -426,6 +427,7 @@
        </property>
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -461,6 +463,7 @@
        </property>
        <property name="font">
         <font>
+         <pointsize>10</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -494,86 +497,5 @@
   <tabstop>pButtonHelp</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>pButtonOK</sender>
-   <signal>clicked()</signal>
-   <receiver>SettingsDialogData</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>42</x>
-     <y>370</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pButtonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>SettingsDialogData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>219</x>
-     <y>370</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pButtonHelp</sender>
-   <signal>clicked()</signal>
-   <receiver>SettingsDialogData</receiver>
-   <slot>CmHelp()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>569</x>
-     <y>370</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pButtonChFont</sender>
-   <signal>clicked()</signal>
-   <receiver>SettingsDialogData</receiver>
-   <slot>CmChangeFont()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>484</x>
-     <y>300</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton5</sender>
-   <signal>clicked()</signal>
-   <receiver>SettingsDialogData</receiver>
-   <slot>CmDefaultFont()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>569</x>
-     <y>300</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

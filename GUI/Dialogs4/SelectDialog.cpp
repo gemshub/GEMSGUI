@@ -17,10 +17,7 @@
 //-------------------------------------------------------------------
 
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qvariant.h>
-
+#include "ui_SelectDialog4.h"
 #include "SelectDialog.h"
 #include "GemsMainWindow.h"
 #include "service.h"
@@ -28,31 +25,37 @@
 
 SelectDialog::SelectDialog( QWidget* parent, const char* title,
                             TCStringArray& list, int sel):
-	    QDialog(parent),
-        multi(false), sel_to_all(false)
+    QDialog(parent),
+    ui(new Ui::SelectDialogData),
+    multi(false), sel_to_all(false)
 {
-    setupUi(this);
-    pList->setFont( pVisorImp->getCellFont() );
+    ui->setupUi(this);
+    QObject::connect(ui->PushButton1, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect(ui->PushButton4, SIGNAL(clicked()), this, SLOT(reject()));
+    //QObject::connect(ui->pButton2, SIGNAL(clicked()), this, SLOT(CmSelectAll()));
+    //QObject::connect(ui->pButton3, SIGNAL(clicked()), this, SLOT(CmClearAll()));
+
+    ui->pList->setFont( pVisorImp->getCellFont() );
 
     setWindowTitle(title);
     size_t lens=30;
     for( size_t ii=0; ii<list.size(); ii++ )
     {
-        pList->addItem(list[ii].c_str());
+        ui->pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
             lens = list[ii].length();
     }
 
-    pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
+    ui->pList->setSelectionMode(QAbstractItemView::SingleSelection); //ui->pList->setMultiSelection(false);
     if( sel < 0 || sel > static_cast<int>(list.size()) )
-	    sel = 0;
-    pList->setCurrentRow(sel); // setSelected(sel, true);
+        sel = 0;
+    ui->pList->setCurrentRow(sel); // setSelected(sel, true);
 
-    pButton3->hide();
-    pButton2->hide();
-    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
+    ui->pButton3->hide();
+    ui->pButton2->hide();
+    QObject::connect( ui->bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
-    pList->setFocus();
+    ui->pList->setFocus();
     if( lens > 70 ) lens = 70;
     resize( lens*10, 300);
 }
@@ -60,121 +63,138 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
 // Added Sveta 14/06/01 Selection to all
 SelectDialog::SelectDialog( QWidget* parent, const char* title,
                             TCStringArray& list, int sel, bool ):
-   	    QDialog(parent),
-        multi(false), sel_to_all(false)
+    QDialog(parent),
+    ui(new Ui::SelectDialogData),
+    multi(false), sel_to_all(false)
 {
-    setupUi(this);
-    pList->setFont( pVisorImp->getCellFont() );
+    ui->setupUi(this);
+    QObject::connect(ui->PushButton1, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect(ui->PushButton4, SIGNAL(clicked()), this, SLOT(reject()));
+    //QObject::connect(ui->pButton2, SIGNAL(clicked()), this, SLOT(CmSelectAll()));
+    //QObject::connect(ui->pButton3, SIGNAL(clicked()), this, SLOT(CmClearAll()));
+
+    ui->pList->setFont( pVisorImp->getCellFont() );
 
     setWindowTitle(title);
     size_t lens=30;
     for( size_t ii=0; ii<list.size(); ii++ )
     {
-        pList->addItem(list[ii].c_str());
+        ui->pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
             lens = list[ii].length();
     }
 
-    pList->setSelectionMode(QAbstractItemView::SingleSelection); //pList->setMultiSelection(false);
+    ui->pList->setSelectionMode(QAbstractItemView::SingleSelection); //ui->pList->setMultiSelection(false);
     if( sel < 0 || sel > static_cast<int>(list.size()) )
- 	    sel = 0;
-     pList->setCurrentRow(sel); // setSelected(sel, true);
+        sel = 0;
+    ui->pList->setCurrentRow(sel); // setSelected(sel, true);
 
-    pButton3->hide();
-    pButton2->setText( tr( "Ok to &All"  ) );
-    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
+    ui->pButton3->hide();
+    ui->pButton2->setText( tr( "Ok to &All"  ) );
+    QObject::connect( ui->bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
-    pList->setFocus();
+    ui->pList->setFocus();
     if( lens > 70 ) lens = 70;
     resize( lens*10, 300);
 }
 
 SelectDialog::SelectDialog( QWidget* parent, const char* title,
                             TCStringArray& list, TCIntArray& sel ):
-   	    QDialog(parent),
-        multi(true), sel_to_all(false)
+    QDialog(parent),
+    ui(new Ui::SelectDialogData),
+    multi(true), sel_to_all(false)
 {
-    setupUi(this);
-    pList->setFont( pVisorImp->getCellFont() );
+    ui->setupUi(this);
+    QObject::connect(ui->PushButton1, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect(ui->PushButton4, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect(ui->pButton2, SIGNAL(clicked()), this, SLOT(CmSelectAll()));
+    QObject::connect(ui->pButton3, SIGNAL(clicked()), this, SLOT(CmClearAll()));
+
+    ui->pList->setFont( pVisorImp->getCellFont() );
 
     setWindowTitle(title);
 
-    pList->setSelectionMode(QAbstractItemView::MultiSelection); //pList->setMultiSelection(true);
+    ui->pList->setSelectionMode(QAbstractItemView::MultiSelection); //ui->pList->setMultiSelection(true);
     size_t lens=30;
     for( size_t ii=0; ii<list.size(); ii++ )
     {
-        pList->addItem(list[ii].c_str());
+        ui->pList->addItem(list[ii].c_str());
         if( list[ii].length() > lens )
             lens = list[ii].length();
     }
 
-    //  pList->setCurrentRow(0);
+    //  ui->pList->setCurrentRow(0);
     for( size_t jj=0; jj< sel.size(); jj++ )
     {
-        if( sel[jj] < pList->count() )
-            pList->item(sel[jj])->setSelected( true);
+        if( sel[jj] < ui->pList->count() )
+            ui->pList->item(sel[jj])->setSelected( true);
     }
-    QObject::connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
+    QObject::connect(  ui->bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
-    pList->setFocus();
+    ui->pList->setFocus();
     if( lens > 70 ) lens = 70;
     resize( lens*10, 300);
 }
 
-void
-SelectDialog::CmSelectAll()
+void SelectDialog::CmSelectAll()
 {
     if( multi == true )
     {// select all strings
-      pList->selectAll();
-      //pList->setFocus();
-      //for( uint ii=0; ii<pList->count(); ii++ )
-      //   pList->item(ii)->setSelected(true);
-     }
-     else
+        ui->pList->selectAll();
+        //ui->pList->setFocus();
+        //for( uint ii=0; ii<ui->pList->count(); ii++ )
+        //   ui->pList->item(ii)->setSelected(true);
+    }
+    else
     {
-     sel_to_all = true;
-     accept();
+        sel_to_all = true;
+        accept();
     }
 }
 
 
-void
-SelectDialog::CmClearAll()
+void SelectDialog::CmClearAll()
 {
-    pList->clearSelection();
+    ui->pList->clearSelection();
 }
 
 /*! returns selection array
     array is empty if nothing is selected
 */
 
-TCIntArray
-SelectDialog::allSelected()
+TCIntArray SelectDialog::allSelected()
 {
     TCIntArray arr;
 
     if( !result() )
         return arr;
 
-    for( int ii=0; ii<pList->count(); ii++ )
-        if( pList->item(ii)->isSelected() )
+    for( int ii=0; ii<ui->pList->count(); ii++ )
+        if( ui->pList->item(ii)->isSelected() )
             arr.push_back(ii);
     
     return arr;
 }
 
 SelectDialog::~SelectDialog()
-{}
-
-void SelectDialog::languageChange()
 {
-    retranslateUi(this);
+    delete ui;
+}
+
+int SelectDialog::selected()
+{
+    return (( result() ) ? ui->pList->currentRow() : -1);
+}
+
+int SelectDialog::selected(bool &all_)
+{
+    all_ = sel_to_all;
+    return ( ( result() ) ? ui->pList->currentRow() : -1);
 }
 
 void SelectDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_MARK_HTML );
+    pVisorImp->OpenHelp( GEMS_MARK_HTML );
 }
 
 //--------------------- End of SelectDialog.cpp ---------------------------

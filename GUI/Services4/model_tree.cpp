@@ -20,6 +20,7 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QAction>
+#include <QApplication>
 
 #include "model_tree.h"
 #include "units.h"

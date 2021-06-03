@@ -18,24 +18,22 @@
 
 #include <QMenu>
 
+#include "ui_EquatSetupWidget4.h"
 #include "EquatSetupWidget.h"
 #include "CalcDialog.h"
 #include "m_param.h"
 #include "service.h"
 
-void EquatSetup::languageChange()
-{
-    retranslateUi(this);
-}
-
 
 EquatSetup::EquatSetup( QWidget* parent, equatSetupData aEqData,
- int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList,
+                        int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList,
                         const char* script, const char* aXname, const char* aYname ):
-        QWidget( parent ), cPage(-1), cnRT(-1), eqData(aEqData), useCalc(false)
+    QWidget( parent ),
+    ui(new Ui::EquatWidgetForm),
+    cPage(-1), cnRT(-1), eqData(aEqData), useCalc(false)
 {
 
-    setupUi(this);
+    ui->setupUi(this);
 
     if( aXname )
         xNam = aXname;
@@ -46,27 +44,29 @@ EquatSetup::EquatSetup( QWidget* parent, equatSetupData aEqData,
     else
         yNam = eqData.yName;
 
-    listStatic->setWrapping( true );
-    listStatic->setSelectionMode(QAbstractItemView::MultiSelection);
+    ui->listStatic->setWrapping( true );
+    ui->listStatic->setSelectionMode(QAbstractItemView::MultiSelection);
 
     // define lists pages
     resetPageList( nRT,wnData, scalarsList );
 
     // define Script
-    textScript->setText(script);
+    ui->textScript->setText(script);
 
     // define commands
-    QObject::connect( keywdList, SIGNAL(currentRowChanged ( int  ) ),
-                      this, SLOT(changePage( int ) ));
+    QObject::connect( ui->keywdList, SIGNAL(currentRowChanged(int)),
+                      this, SLOT(changePage(int)));
 }
 
 
 EquatSetup::~EquatSetup()
-{}
+{
+    delete ui;
+}
 
 // work with lists
 void EquatSetup::resetPageList( int newRT,
-   std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList )
+                                std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList )
 {
     size_t ii, jj;
     int nO;
@@ -78,116 +78,117 @@ void EquatSetup::resetPageList( int newRT,
 
 
     if( cnRT == newRT )
-      return;
+        return;
 
- try
- {
-    // delete old data
-    cPage = 0;
-    //keywdList->setCurrentItem(0);
-    if( winStac->count() > 1)
-    { for(ii=winStac->count()-1; ii>0; ii--)
-      {
-        winStac->removeWidget( winStac->widget(ii) );
-      }
-    }
-    pgData.clear();
-    pLists.clear();
-    // define lists pages
-    pgData.push_back( pagesSetupData("Scalars", -1));
-    pLists.append( listStatic  );
-    keywdList->clear();
-    new QListWidgetItem( "Scalars",  keywdList);
-    emptyScriptTable();
-
-    cnRT = newRT;
-
-    //define scalars
-    QObject::disconnect( listStatic->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
-       this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
-    QObject::disconnect( listStatic, SIGNAL(customContextMenuRequested(QPoint)),
-         this, SLOT(slotPopupContextMenu(QPoint)));
-
-    listStatic->clear();
-    for(  ii=0; ii<scalarsList.size(); ii++ )
+    try
     {
-      stData.push_back( pagesSetupData(scalarsList[ii]));
-      item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),  listStatic);
-      int nJ = scalarsList[ii].ndx;
-      if(nJ<0) nJ = 0;
-      nO = scalarsList[ii].nObj;
-      if( aObj[nO]->GetM() > 1 )
-       item1->setToolTip( aObj[nO]->GetDescription(0,nJ).c_str() );
-      else
-       item1->setToolTip( aObj[nO]->GetDescription(nJ,0).c_str() );
-    }
-
-    // init new pages
-    for( ii=0; ii<wnData.size(); ii++ )
-    {
-        nO = wnData[ii].nObj;
-
-        TCStringArray lst;
-        TProfil::pm->getNamesList( nO, lst);
-        if( lst.size() < 1 )  // undefined indexation
-          continue;
-
-        pgData.push_back( pagesSetupData(wnData[ii]));
-        //cout << pgData[pgData.size()-1].pageName.c_str() << " " << pgData[pgData.size()-1].ndxName.c_str() << endl;
-        // insert to list
-        //str = QString("%1 (%2)").arg(
-        //    wnData[ii].pageName.c_str(), aObj[nO]->GetKeywd());
-        str = QString("%1").arg( wnData[ii].pageName.c_str());
-        item1 = new QListWidgetItem( str,  keywdList);
-
-        // add page
-        page1 = new QWidget();
-        //page1->setObjectName(wnData[nWin].pageName.c_str());
-        horizontalLayout1 = new QHBoxLayout(page1);
-        lstIndexes1 = new QListWidget(page1);
-        lstIndexes1->setWrapping( true );
-        lstIndexes1->setResizeMode(QListView::Adjust);
-        lstIndexes1->setSelectionMode(QAbstractItemView::MultiSelection);
-        horizontalLayout1->addWidget(lstIndexes1);
-        winStac->addWidget(page1);
-
-        // insert items to list of indexes
-        for(  jj=0; jj<lst.size(); jj++ )
-        {
-          item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
-          //str = QString("%1").arg(jj);
-          // item1->setToolTip( str );
+        // delete old data
+        cPage = 0;
+        // ui->keywdList->setCurrentItem(0);
+        if(  ui->winStac->count() > 1)
+        { for(ii= ui->winStac->count()-1; ii>0; ii--)
+            {
+                ui->winStac->removeWidget(  ui->winStac->widget(ii) );
+            }
         }
-        pLists.append(lstIndexes1);
+        pgData.clear();
+        pLists.clear();
+        // define lists pages
+        pgData.push_back( pagesSetupData("Scalars", -1));
+        pLists.append(  ui->listStatic  );
+        ui->keywdList->clear();
+        new QListWidgetItem( "Scalars",   ui->keywdList);
+        emptyScriptTable();
+
+        cnRT = newRT;
+
+        //define scalars
+        QObject::disconnect(  ui->listStatic->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
+                              this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
+        QObject::disconnect(  ui->listStatic, SIGNAL(customContextMenuRequested(QPoint)),
+                              this, SLOT(slotPopupContextMenu(QPoint)));
+
+        ui->listStatic->clear();
+        for(  ii=0; ii<scalarsList.size(); ii++ )
+        {
+            stData.push_back( pagesSetupData(scalarsList[ii]));
+            item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),   ui->listStatic);
+            int nJ = scalarsList[ii].ndx;
+            if(nJ<0) nJ = 0;
+            nO = scalarsList[ii].nObj;
+            if( aObj[nO]->GetM() > 1 )
+                item1->setToolTip( aObj[nO]->GetDescription(0,nJ).c_str() );
+            else
+                item1->setToolTip( aObj[nO]->GetDescription(nJ,0).c_str() );
+        }
+
+        // init new pages
+        for( ii=0; ii<wnData.size(); ii++ )
+        {
+            nO = wnData[ii].nObj;
+
+            TCStringArray lst;
+            TProfil::pm->getNamesList( nO, lst);
+            if( lst.size() < 1 )  // undefined indexation
+                continue;
+
+            pgData.push_back( pagesSetupData(wnData[ii]));
+            //cout << pgData[pgData.size()-1].pageName.c_str() << " " << pgData[pgData.size()-1].ndxName.c_str() << endl;
+            // insert to list
+            //str = QString("%1 (%2)").arg(
+            //    wnData[ii].pageName.c_str(), aObj[nO]->GetKeywd());
+            str = QString("%1").arg( wnData[ii].pageName.c_str());
+            item1 = new QListWidgetItem( str,   ui->keywdList);
+
+            // add page
+            page1 = new QWidget();
+            //page1->setObjectName(wnData[nWin].pageName.c_str());
+            horizontalLayout1 = new QHBoxLayout(page1);
+            lstIndexes1 = new QListWidget(page1);
+            lstIndexes1->setWrapping( true );
+            lstIndexes1->setResizeMode(QListView::Adjust);
+            lstIndexes1->setSelectionMode(QAbstractItemView::MultiSelection);
+            horizontalLayout1->addWidget(lstIndexes1);
+            ui->winStac->addWidget(page1);
+
+            // insert items to list of indexes
+            for(  jj=0; jj<lst.size(); jj++ )
+            {
+                item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
+                //str = QString("%1").arg(jj);
+                // item1->setToolTip( str );
+            }
+            pLists.append(lstIndexes1);
+        }
+
+        // define current page
+        cPage = 0;
+        ui->keywdList->setCurrentItem(nullptr);
+        ui->keywdList->item(0)->setSelected(true);
+        changePage( cPage );
+
+        for(int  ii1=0; ii1<pLists.count(); ii1++ ) //  ui->listStatic added as first
+        {
+            QObject::connect( pLists[ii1]->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+                               this, SLOT(changeTable(const QItemSelection&, const QItemSelection&)));
+
+            pLists[ii1]->setContextMenuPolicy(Qt::CustomContextMenu);
+            connect( pLists[ii1], SIGNAL(customContextMenuRequested(QPoint)),
+                     this, SLOT(slotPopupContextMenu(QPoint)));
+        }
     }
-
-    // define current page
-    cPage = 0;
-    keywdList->setCurrentItem(nullptr);
-    keywdList->item(0)->setSelected(true);
-    changePage( cPage );
-
-    for(int  ii1=0; ii1<pLists.count(); ii1++ ) // listStatic added as first
-    {    QObject::connect( pLists[ii1]->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
-           this, SLOT( changeTable( const QItemSelection&, const QItemSelection& )) );
-
-        pLists[ii1]->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect( pLists[ii1], SIGNAL(customContextMenuRequested(QPoint)),
-             this, SLOT(slotPopupContextMenu(QPoint)));
+    catch( TError& xcpt )
+    {
+        vfMessage( this, xcpt.title, xcpt.mess);
+        throw;
     }
-}
-catch( TError& xcpt )
-{
-    vfMessage( this, xcpt.title, xcpt.mess);
-    throw;
-}
 
 }
 
 string EquatSetup::getScript() const
 {
-  string res = textScript->toPlainText().toStdString();
-  return res;
+    string res = ui->textScript->toPlainText().toStdString();
+    return res;
 }
 
 TCStringArray EquatSetup::getNames(string& xName, string& yName) const
@@ -200,56 +201,66 @@ TCStringArray EquatSetup::getNames(string& xName, string& yName) const
 
 void EquatSetup::setNames(TCStringArray lst )
 {
-   namLines.clear();
-   for(size_t ii=0; ii<lst.size(); ii++ )
-       namLines.push_back(lst[ii]);
+    namLines.clear();
+    for(size_t ii=0; ii<lst.size(); ii++ )
+        namLines.push_back(lst[ii]);
+}
+
+QString EquatSetup::getTextScript() const
+{
+    return ui->textScript->toPlainText();
+}
+
+void EquatSetup::setTextScript(const QString &text)
+{
+    ui->textScript->setText( text );
 }
 
 void EquatSetup::changePage( int nPage )
 {
     if(nPage < 0 )
-      return;
+        return;
     cPage = nPage;
-    winStac->setCurrentIndex ( nPage );
+    ui->winStac->setCurrentIndex ( nPage );
     int nJ = pgData[nPage].ndx;
     if(nJ<0) nJ = 0;
 
     if( cPage <= 0 )
-     lDesc->setText( "List of static data objects (see tooltip on each object name)");
+        ui->lDesc->setText( "List of static data objects (see tooltip on each object name)");
     else
-      lDesc->setText( aObj[pgData[nPage].nObj]->GetDescription(0,nJ).c_str());
+        ui->lDesc->setText( aObj[pgData[nPage].nObj]->GetDescription(0,nJ).c_str());
 }
 
 void EquatSetup::changeTable(const QItemSelection & selected, const QItemSelection & deselected)
 {
-   QModelIndex  ndx;
-   int row;
+    QModelIndex  ndx;
+    int row;
 
-  // added selected
-  foreach( ndx,  selected.indexes()  )
-  {
-    string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
-    tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
-  }
-  // delete deselected
-  foreach( ndx,  deselected.indexes()  )
-  {
-    row = tableFindRow( pgData[cPage].nObj, ndx.row());
-    if( row >= 0)
-       tableDeleteRow( row );
-  }
+    // added selected
+    foreach( ndx,  selected.indexes()  )
+    {
+        string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
+        tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
+    }
+    // delete deselected
+    foreach( ndx,  deselected.indexes()  )
+    {
+        row = tableFindRow( pgData[cPage].nObj, ndx.row());
+        if( row >= 0)
+            tableDeleteRow( row );
+    }
 }
 
 // internal functions
 int EquatSetup::tableFindRow( int nO, int ndx)
 {
-  int nRow = -1;
-  for(size_t ii=0; ii<scriptData.size(); ii++ )
-  {
-   if(scriptData[ii].nObj == nO && scriptData[ii].nIdx == ndx )
-      { nRow = ii; break; }
-  }
-  return nRow;
+    int nRow = -1;
+    for(size_t ii=0; ii<scriptData.size(); ii++ )
+    {
+        if(scriptData[ii].nObj == nO && scriptData[ii].nIdx == ndx )
+        { nRow = ii; break; }
+    }
+    return nRow;
 }
 
 string EquatSetup::getStringValue( int nO, int ndx, const char * andName )
@@ -260,36 +271,36 @@ string EquatSetup::getStringValue( int nO, int ndx, const char * andName )
     strip( str );
     if(cPage == 0)
     {
-      if( stData[ndx].ndx == -1 )
-      {
-       textS = QString("%1[%2]").arg(str.c_str(), eqData.indexName.c_str() );
-      }
-      else
-      {
-       textS = QString("%1").arg(str.c_str());
-      }
+        if( stData[ndx].ndx == -1 )
+        {
+            textS = QString("%1[%2]").arg(str.c_str(), eqData.indexName.c_str() );
+        }
+        else
+        {
+            textS = QString("%1").arg(str.c_str());
+        }
     }
     else
     {
 
-       if( aObj[nO]->GetM() > 1)
+        if( aObj[nO]->GetM() > 1)
         {
-           QString ndxS;
+            QString ndxS;
 
-           if( !pgData[cPage].ndxName.empty() )
-           {
-             ndxS =  pgData[cPage].ndxName.c_str();//
-             textS = QString("%1[{%2}][{%3}]").arg( aObj[nO]->GetKeywd(), ndxS, str.c_str() );
+            if( !pgData[cPage].ndxName.empty() )
+            {
+                ndxS =  pgData[cPage].ndxName.c_str();//
+                textS = QString("%1[{%2}][{%3}]").arg( aObj[nO]->GetKeywd(), ndxS, str.c_str() );
             }
-           else
-           {  ndxS = QString("%1").arg(pgData[cPage].ndx);
-              textS = QString("%1[{%2}][%3]").arg( aObj[nO]->GetKeywd(), str.c_str(), ndxS );
-           }
+            else
+            {  ndxS = QString("%1").arg(pgData[cPage].ndx);
+                textS = QString("%1[{%2}][%3]").arg( aObj[nO]->GetKeywd(), str.c_str(), ndxS );
+            }
         }
         else
-         {
+        {
             textS = QString("%1[{%2}]").arg( aObj[nO]->GetKeywd(), str.c_str() );
-         }
+        }
     }
 
     str = textS.toStdString();
@@ -341,98 +352,98 @@ void EquatSetup::CmCalc()
     int nO =  pgData[cPage].nObj;
     int nLine = tableFindRow( nO, row );
     if( nLine >=0 )
-      tableDeleteRow( nLine );
+        tableDeleteRow( nLine );
     //pLists[cPage]->item(row)->setSelected(false);
 
-   useCalc = true;
+    useCalc = true;
 
-   if( nLine < 0 )
+    if( nLine < 0 )
     {
-       pLists[cPage]->item(row)->setSelected(true);
-   }
-   else
-   {
-     QListWidgetItem* ndx = pLists[cPage]->item(row);
-     string stt = ndx->data(Qt::DisplayRole).toString().toStdString();
-     tableInsertRow( nO, row, stt.c_str() );
-   }
+        pLists[cPage]->item(row)->setSelected(true);
+    }
+    else
+    {
+        QListWidgetItem* ndx = pLists[cPage]->item(row);
+        string stt = ndx->data(Qt::DisplayRole).toString().toStdString();
+        tableInsertRow( nO, row, stt.c_str() );
+    }
 }
 
 
 void EquatSetup::tableDeleteRow( int nRow )
 {
-   scriptData.erase(scriptData.begin()+nRow);
-   namLines.erase(namLines.begin() +nRow);
-   scriptUpdate();
+    scriptData.erase(scriptData.begin()+nRow);
+    namLines.erase(namLines.begin() +nRow);
+    scriptUpdate();
 }
 
 void EquatSetup::emptyScriptTable()
 {
-   scriptData.clear();;
-   namLines.clear();
-   //scriptUpdate();
+    scriptData.clear();;
+    namLines.clear();
+    //scriptUpdate();
 }
 
 
 void EquatSetup::scriptUpdate()
 {
-   size_t ii;
-   QString buf, tScript;
+    size_t ii;
+    QString buf, tScript;
 
-  if( !eqData.xName.empty() )
-  {
-      tScript = QString("%1[%2] =: %3;\n").arg( eqData.xName.c_str(),
-                    eqData.indexName.c_str(), eqData.abscissaEquat.c_str() );
-      for( ii=0; ii<eqData.abscissaLines.size(); ii++ )
-      {
-          buf = QString("%1[%2][%3] =: %4;\n").arg(
-                  eqData.xName.c_str(), eqData.indexName.c_str(),
-                  QString("%1").arg(ii+1), eqData.abscissaLines[ii].c_str() );
-          tScript += buf;
-      }
+    if( !eqData.xName.empty() )
+    {
+        tScript = QString("%1[%2] =: %3;\n").arg( eqData.xName.c_str(),
+                                                  eqData.indexName.c_str(), eqData.abscissaEquat.c_str() );
+        for( ii=0; ii<eqData.abscissaLines.size(); ii++ )
+        {
+            buf = QString("%1[%2][%3] =: %4;\n").arg(
+                        eqData.xName.c_str(), eqData.indexName.c_str(),
+                        QString("%1").arg(ii+1), eqData.abscissaLines[ii].c_str() );
+            tScript += buf;
+        }
 
-  }
+    }
 
-  for( ii=0; ii<scriptData.size(); ii++ )
-  {
-      buf = QString("%1[%2][%3] =: %4;\n").arg(
-              eqData.yName.c_str(), eqData.indexName.c_str(),
-              QString("%1").arg(ii), scriptData[ii].lineText.c_str() );
-    tScript += buf;
-  }
+    for( ii=0; ii<scriptData.size(); ii++ )
+    {
+        buf = QString("%1[%2][%3] =: %4;\n").arg(
+                    eqData.yName.c_str(), eqData.indexName.c_str(),
+                    QString("%1").arg(ii), scriptData[ii].lineText.c_str() );
+        tScript += buf;
+    }
 
-  textScript->setText(tScript);
+    ui->textScript->setText(tScript);
 }
 
 // copy data
 void EquatSetup::slotPopupContextMenu(const QPoint &pos)
 {
-   QMenu *menu = new QMenu( pLists[cPage]/*this*/);
+    QMenu *menu = new QMenu( pLists[cPage]/*this*/);
 
-   QAction *act =  new QAction(tr("Calculator"), this);
-           act->setStatusTip(tr("Use Calculator for specified equation"));
-           connect(act, SIGNAL(triggered()), this, SLOT(CmCalc()));
-           menu->addAction(act);
+    QAction *act =  new QAction(tr("Calculator"), this);
+    act->setStatusTip(tr("Use Calculator for specified equation"));
+    connect(act, SIGNAL(triggered()), this, SLOT(CmCalc()));
+    menu->addAction(act);
 
-  menu->addSeparator();
+    menu->addSeparator();
 
     act =  new QAction(tr("&Abscissa"), this);
     act->setStatusTip(tr("Define value as Abscissa"));
-          connect(act, SIGNAL(triggered()), this, SLOT(CmAbscissa()));
+    connect(act, SIGNAL(triggered()), this, SLOT(CmAbscissa()));
     menu->addAction(act);
 
     if( eqData.useSeveral )
     {
         act =  new QAction(tr("&AbscissaAdd"), this);
         act->setStatusTip(tr("Define value as new Abscissa"));
-              connect(act, SIGNAL(triggered()), this, SLOT(CmAbscissaAdd()));
+        connect(act, SIGNAL(triggered()), this, SLOT(CmAbscissaAdd()));
         menu->addAction(act);
 
     }
 
 
-   menu->exec( pLists[cPage]->mapToGlobal(pos) );
-     delete menu;
+    menu->exec( pLists[cPage]->mapToGlobal(pos) );
+    delete menu;
 }
 
 void EquatSetup::CmAbscissa()
@@ -443,9 +454,9 @@ void EquatSetup::CmAbscissa()
 
     eqData.abscissaEquat = getStringValue( nO, pLists[cPage]->currentRow(), str.c_str() );
     if(nO<0)
-      xNam = str;
+        xNam = str;
     else
-      xNam = aObj[nO]->GetKeywd();
+        xNam = aObj[nO]->GetKeywd();
 
     eqData.abscissaLines.clear();
     scriptUpdate();
@@ -463,7 +474,7 @@ void EquatSetup::CmAbscissaAdd()
     else
       xNam = aObj[nO]->GetKeywd();
    */
-   scriptUpdate();
+    scriptUpdate();
 }
 
 //--------------------- End of InputSystemDialog.cpp ---------------------------

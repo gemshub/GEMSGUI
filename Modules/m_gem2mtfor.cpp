@@ -852,12 +852,13 @@ void TGEM2MT::from_text_file(TIO& in_format)
 
 }
 
-#ifdef USE_OLD_NLOHMANJSON
+#ifdef USE_NLOHMANNJSON
 template void  TGEM2MT::to_text_file<io_formats::NlohmannJsonWrite>( io_formats::NlohmannJsonWrite& out_format, bool with_comments, bool brief_mode ) const;
 template void  TGEM2MT::from_text_file<io_formats::NlohmannJsonRead>( io_formats::NlohmannJsonRead& out_format );
-#endif
+#else
 template void  TGEM2MT::to_text_file<io_formats::SimdJsonWrite>( io_formats::SimdJsonWrite& out_format, bool with_comments, bool brief_mode ) const;
 template void  TGEM2MT::from_text_file<io_formats::SimdJsonRead>( io_formats::SimdJsonRead& out_format );
+#endif
 template void  TGEM2MT::to_text_file<io_formats::KeyValueWrite>( io_formats::KeyValueWrite& out_format, bool with_comments, bool brief_mode ) const;
 template void  TGEM2MT::from_text_file<io_formats::KeyValueRead>( io_formats::KeyValueRead& out_format );
 

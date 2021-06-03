@@ -142,13 +142,6 @@ void TCModuleImp::Update(bool force)
     last_update = time(0);
 }
 
-/*void TCModuleImp::Raise(int page)
-{
-    show();
-    raise();
-    pWin->EmitEvTabSelChange(page);
-}*/
-
 void TCModuleImp::SelectStart()
 {
    //if( qApp->focusWidget() )

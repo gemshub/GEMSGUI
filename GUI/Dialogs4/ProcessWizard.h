@@ -20,9 +20,11 @@
 #define ProcessWizard_included
 
 #include <QDialog>
-#include "ui_ProcessWizard4.h"
 #include "EquatSetupWidget.h"
 
+namespace Ui {
+class ProcessWizardData;
+}
 
 /*!
   \ class TProcesDelegate
@@ -30,21 +32,22 @@
 */
 class TProcesDelegate: public QItemDelegate
 {
-        Q_OBJECT
+    Q_OBJECT
 
 public:
 
-         TProcesDelegate( QObject * parent = nullptr );
-         QWidget *createEditor(QWidget *parent,
-                               const QStyleOptionViewItem &option,
-                               const QModelIndex &index) const;
+    TProcesDelegate( QObject * parent = nullptr );
+    QWidget *createEditor(QWidget *parent,
+                          const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
 };
 
 
-class ProcessWizard : public QDialog, public Ui::ProcessWizardData
+class ProcessWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::ProcessWizardData *ui;
     char curType;
     string calcScript;
     string outScript;
@@ -80,27 +83,22 @@ class ProcessWizard : public QDialog, public Ui::ProcessWizardData
 public:
 
     ProcessWizard( const char* pkey, char flgs[24], int sizes[8],
-                   short tabInt[6], double tabDoubl[24],
-       const char *acalcScript, const char *aoutScript,
-       const char* aXname, const char* aYname,  QWidget* parent = nullptr);
+    short tabInt[6], double tabDoubl[24],
+    const char *acalcScript, const char *aoutScript,
+    const char* aXname, const char* aYname,  QWidget* parent = nullptr);
     virtual ~ProcessWizard();
 
     void   getSizes( int size[8] );
     void   getTable( short size[6], double dbl[24] );
     void   getFlags( char flgs[24] );
 
-    string getCalcScript() const
-    { string res = textEquat1->toPlainText().toStdString();
-      return res;
-    }
+    string getCalcScript() const;
     string getOutScript() const
     { return pageScript->getScript(); }
 
     TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
-protected slots:
-    virtual void languageChange();
 
 protected slots:
 
@@ -109,7 +107,7 @@ protected slots:
     void CmBack();
 
     void resetPageList(const char* aXname, const char* aYname);
-    void setMode(int);
+    void setMode(QAbstractButton*);
     void CmItersEdit(int , int );
     void CmSetMode();
     void changePage( int );

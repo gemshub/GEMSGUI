@@ -16,56 +16,46 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-
+#include "ui_CalcCheckDialog4.h"
 #include "CalcCheckDialog.h"
 #include "units.h"
-//#include "service.h"
 #include "page_f.h"
 
 CalcCheckDialog::CalcCheckDialog(QWidget* parent,
-     const int nO, const string& Vals):
-        QDialog( parent ),
-        nO_(nO)
+                                 const int nO, const string& Vals):
+    QDialog( parent ),
+    ui(new Ui::CalcCheckDialogData),
+    nO_(nO)
 {
-   setupUi(this);;
-   setWindowTitle( "Check boxes Calculator" );
+    ui->setupUi(this);;
+    setWindowTitle( "Check boxes Calculator" );
 
-   if( nO >= 0 )
+    if( nO >= 0 )
         rObj = aObj[static_cast<size_t>(nO)].get();
-   else
+    else
         rObj = new TObject( "tempor", ftCheckBox, 1, 1, false, 'N', "temporary object");
-	
-   // QString str =  rObj->GetKeywd();
-   //        str += " cell range";
+
+    // QString str =  rObj->GetKeywd();
+    //        str += " cell range";
 
     for( uint ii=0; ii<Vals.length(); ii++ )
-        pValue->addItem( Vals.substr(ii, 1).c_str() );
+        ui->pValue->addItem( Vals.substr(ii, 1).c_str() );
 
-    pValue->setCurrentIndex(0);
+    ui->pValue->setCurrentIndex(0);
+    QObject::connect(ui->PushButton1_2, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect(ui->PushButton1, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
- CalcCheckDialog::~CalcCheckDialog()
- {
-   if( nO_ < 0 && rObj )
-	delete rObj;  
-  }
-
-void CalcCheckDialog::languageChange()
+CalcCheckDialog::~CalcCheckDialog()
 {
-    retranslateUi(this);
-}
-
-void CalcCheckDialog::CmOk()
-{
-    accept();
+    if( nO_ < 0 && rObj )
+        delete rObj;
+    delete ui;
 }
 
 int CalcCheckDialog::fun()
 {
-    return pValue->currentIndex();
+    return ui->pValue->currentIndex();
 }
 
 //--------------------- End of CalcCheckDialog.cpp ---------------------------

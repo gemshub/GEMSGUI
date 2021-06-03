@@ -20,28 +20,29 @@
 #define UnSpaceWizard_included
 
 #include <QDialog>
-#include "ui_UnSpaceWizard4.h"
 
-class UnSpaceWizard : public QDialog, public Ui::UnSpaceWizardData
+namespace Ui {
+class UnSpaceWizardData;
+}
+
+class UnSpaceWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::UnSpaceWizardData *ui;
     void 	resetNextButton();
     void 	resetBackButton();
 
 public:
 
     UnSpaceWizard( const char* pkey, char flgs[38], int sizes[10],
-                   QWidget* parent = nullptr);
+    QWidget* parent = nullptr);
     virtual ~UnSpaceWizard();
 
 
     void   getSizes( int size[10] );
     void   getFlags( char flgs[38] );
-//    double   getR2();
-
-protected slots:
-    virtual void languageChange();
+    //    double   getR2();
 
 protected slots:
 

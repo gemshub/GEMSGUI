@@ -409,15 +409,22 @@ TObject::Free()
 
 
 // puts string into data object cell
-bool
-TObject::SetString(const char *vbuf, int aN, int aM)
+bool TObject::SetString(const char *vbuf, int aN, int aM)
 {
     check_dim( aN, aM);
     ErrorIf( !vbuf, GetKeywd(),"TObject:W06 Cannot set empty string to object");
     //???
 
-    if( !pV->SetString(vbuf, ndx(aN,aM)) )
-        return false;
+    if( Type >= 0 && vbuf == string_empty_value)
+    {
+        if( !pV->SetString(S_EMPTY, ndx(aN,aM)) )
+            return false;
+    }
+    else
+    {
+        if( !pV->SetString(vbuf, ndx(aN,aM)) )
+            return false;
+    }
 
     if( Type == S_ && IsDynamic() )  // oct 2005
         M = GetCellSize();
@@ -1088,7 +1095,7 @@ void TObject::fromJsonObject(const QJsonObject &obj)
     if( strcmp(Keywd+2, "plt") == 0 )
     {
         QJsonArray pltArray = obj["val"].toArray();
-        for(int ii=0; ii< min( N, pltArray.size()); ii++)
+        for(int ii=0; ii< min<int>( N, pltArray.size()); ii++)
         {
             QJsonObject pltObject = pltArray[ii].toObject();
             ((TPlotLine*)GetPtr() + ii)->fromJsonObject( pltObject );

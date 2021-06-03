@@ -361,6 +361,7 @@ class TGEM2MT
     jsonui::GraphDialog *gd_gr = nullptr;
     TPlotLine* plot;
     std::string title;           // changed titler to title
+    std::string error_lst_path;
 #endif
 
   TNodeArrayGUI* na = nullptr;       // pointer to nodearray class instance
@@ -539,6 +540,7 @@ public:
    bool internalCalc();
    void savePoint();
 
+   GEMS3KGenerator GEMS3k_generator();
 };
 
 enum gem2mt_inernal {
