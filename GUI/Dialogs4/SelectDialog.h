@@ -21,19 +21,22 @@
 
 #include <QDialog>
 #include <QListWidget>
-
-#include "ui_SelectDialog4.h"
 #include "v_user.h"
 
-class SelectDialog : public QDialog, public Ui::SelectDialogData
+namespace Ui {
+class SelectDialogData;
+}
+
+class SelectDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::SelectDialogData *ui;
     bool multi;
     bool sel_to_all;
 
 protected slots:
-    virtual void languageChange();
+
     void CmHelp();
     virtual void CmSelectAll();
     virtual void CmClearAll();
@@ -59,16 +62,9 @@ public:
     /*! returns single selection
         returns '-1' if nothing selected
     */
-    int selected()
-    {
-        return (( result() ) ? pList->currentRow() : -1);
-    }
+    int selected();
 
-    int selected( bool& all_ )
-    {
-        all_ = sel_to_all;
-        return ( ( result() ) ? pList->currentRow() : -1);
-    }
+    int selected( bool& all_ );
 
     TCIntArray allSelected();
 

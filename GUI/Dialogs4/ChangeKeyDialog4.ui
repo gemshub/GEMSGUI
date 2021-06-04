@@ -230,6 +230,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -252,6 +253,7 @@
      </property>
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -284,6 +286,7 @@
     <widget class="QPushButton" name="pbHelp">
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -305,54 +308,5 @@
   <tabstop>pbHelp</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>pbHelp</sender>
-   <signal>clicked()</signal>
-   <receiver>ChangeKeyDialogData</receiver>
-   <slot>CmHelp()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>503</x>
-     <y>110</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pbCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>ChangeKeyDialogData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>136</x>
-     <y>110</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pbOk</sender>
-   <signal>clicked()</signal>
-   <receiver>ChangeKeyDialogData</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>30</x>
-     <y>110</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

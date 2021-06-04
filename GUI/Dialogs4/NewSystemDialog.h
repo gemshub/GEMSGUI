@@ -20,24 +20,30 @@
 #define SystemDialog_included
 
 #include <fstream>
-
-#include <qmenubar.h>
-#include <qlineedit.h>
 #include <QMainWindow>
 #include <QEvent>
 #include <QMouseEvent>
 #include <QCloseEvent>
 #include <QFocusEvent>
 
-#include "ui_NewSystemDialog4.h"
 #include "model_tree.h"
 
-class NewSystemDialog : public QMainWindow, public Ui::NewSystemDialogData
+namespace Ui {
+class NewSystemDialogData;
+}
+
+class NewSystemDialog : public QMainWindow
 {
     Q_OBJECT
 
+    Ui::NewSystemDialogData *ui;
     TTreeView *ListViewInput;
     TTreeView *ListViewResult;
+    TObjectTable* PTitle = nullptr;
+    TObjectTable* PComment = nullptr;
+
+    TObjectModel* MTitle = nullptr;
+    TObjectModel* MComment = nullptr;
 
     //--QLineEdit* pLine;
     //--QMenuBar * menu;
@@ -54,17 +60,14 @@ public:
         Update();
     }
 
-    void setCurrentTab( int ii )
-    {
-       TabWid->setCurrentIndex(ii);
-    }
+    void setCurrentTab( int ii );
 
     QSize sizeHint() const;
 
 protected:
 
-      void closeEvent(QCloseEvent* ev);
-      //--void setActions();
+    void closeEvent(QCloseEvent* ev);
+    //--void setActions();
 
     void defineInputList();
     void printInputList(fstream& f);
@@ -74,7 +77,6 @@ protected:
     
 public slots:
     void Update();
-    virtual void languageChange();
     void objectChanged();
 
     void CmSelect( const char *key=nullptr  );

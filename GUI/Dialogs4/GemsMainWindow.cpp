@@ -33,6 +33,7 @@
 #include "ui_GemsMainWindow4.h"
 
 #include "LoadMessage.h"
+#include "GraphDialogN.h"
 
 //static const char* GEMS_LOGO_ICON = "Icons/gems1.png";
 static const char* GEMS_VERSION_STAMP = "GEM-Selektor 3 (GEMS3)";
@@ -59,10 +60,10 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
     QTableWidget::keyPressEvent(e);
     switch( e->key() )
     {
-      case Qt::Key_Up:
-      case Qt::Key_Down:
-      case Qt::Key_PageUp:
-      case Qt::Key_PageDown:
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_PageUp:
+    case Qt::Key_PageDown:
         pVisorImp->openRecordKey(  currentRow(), currentColumn()  );
     }
 }
@@ -218,21 +219,19 @@ TVisorImp::TVisorImp(int c, char** v):
 
     connect( ui->action_calcMode, SIGNAL( triggered()), this, SLOT(CmCalcMode()));
     connect( ui->actionDataBaseMode, SIGNAL( triggered()), this, SLOT(CmDataBaseMode()));
-    //connect(bModeGroup, SIGNAL(buttonClicked(int)),
-    //        this, SLOT(buttonGroupClicked(int)));
 
-    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
+    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
             this, SLOT(updateMenus()));
 
-    connect(splH, SIGNAL(splitterMoved( int , int  )),
-            this, SLOT(moveToolBar( int , int  )));
+    connect(splH, SIGNAL(splitterMoved(int,int)),
+            this, SLOT(moveToolBar(int,int)));
 
     //connect(tbKeys, SIGNAL(cellDoubleClicked ( int , int )  ),
     //        this, SLOT(openRecordKey( int, int )));
-    connect(tbKeys, SIGNAL(cellClicked ( int , int  ) ),
-            this, SLOT(openRecordKey( int, int )));
+    connect(tbKeys, SIGNAL(cellClicked(int,int)),
+            this, SLOT(openRecordKey(int,int)));
 
-    connect( pFilterKey, SIGNAL(editingFinished ()), this, SLOT(changeKeyList()) );
+    connect( pFilterKey, SIGNAL(editingFinished()), this, SLOT(changeKeyList()) );
 
     // Set up Menus and actions
 
@@ -293,15 +292,15 @@ void TVisorImp::closeEvent(QCloseEvent* e)
 
         for(int ii=0; ii<10000; ii++);
         if( LoadMessage::pDia )
-             LoadMessage::pDia->cancel();
+            LoadMessage::pDia->cancel();
 
-       if( HelpWindow::pDia )
-          delete HelpWindow::pDia;
-       mdiArea->closeAllSubWindows();
-       if( mdiArea->subWindowList().count() > 0 )
-           e->ignore();
-       else
-           QWidget::closeEvent(e);
+        if( HelpWindow::pDia )
+            delete HelpWindow::pDia;
+        mdiArea->closeAllSubWindows();
+        if( mdiArea->subWindowList().count() > 0 )
+            e->ignore();
+        else
+            QWidget::closeEvent(e);
     }
 }
 
@@ -322,86 +321,86 @@ void TVisorImp::showEvent ( QShowEvent * event )
 // Define list of Module keys using filter
 void TVisorImp::defineModuleKeysList( size_t nRT )
 {
-  size_t  kk, ln;
-  int jj, ii, colsz;
-  string keyfld;
-  QTableWidgetItem *item, *curItem=nullptr;
-  settedCureentKeyIntotbKeys = false;
+    size_t  kk, ln;
+    int jj, ii, colsz;
+    string keyfld;
+    QTableWidgetItem *item, *curItem=nullptr;
+    settedCureentKeyIntotbKeys = false;
 
-  if( currentNrt != static_cast<int>(nRT) )
-    return;
+    if( currentNrt != static_cast<int>(nRT) )
+        return;
 
-  string oldKey = rt[nRT]->UnpackKey();
-  pFilterKey->setText( dynamic_cast<TCModule*>(aMod[nRT].get())->getFilter());
+    string oldKey = rt[nRT]->UnpackKey();
+    pFilterKey->setText( dynamic_cast<TCModule*>(aMod[nRT].get())->getFilter());
 
-  // define tbKeys
-  tbKeys->clear();
-  tbKeys->setSortingEnabled ( false );
-  tbKeys->setColumnCount( rt[nRT]->KeyNumFlds());
+    // define tbKeys
+    tbKeys->clear();
+    tbKeys->setSortingEnabled ( false );
+    tbKeys->setColumnCount( rt[nRT]->KeyNumFlds());
 
 
-  // get list or record keys
-  string keyFilter = pFilterKey->text().toStdString();
-  TCIntArray temp, colSizes;
-  TCStringArray keyList;
-  int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList, temp);
+    // get list or record keys
+    string keyFilter = pFilterKey->text().toStdString();
+    TCIntArray temp, colSizes;
+    TCStringArray keyList;
+    int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList, temp);
 
-  for(jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
-   colSizes.push_back( 0/*rt[nRT]->FldLen(jj)*/ );
+    for(jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
+        colSizes.push_back( 0/*rt[nRT]->FldLen(jj)*/ );
 
-  // define key list
-  tbKeys->setRowCount(nKeys);
+    // define key list
+    tbKeys->setRowCount(nKeys);
 
-  for( ii=0; ii<nKeys; ii++ )
-  {
-      tbKeys->setRowHeight(ii, htF(ftString, 0)+2);
-      for(jj=0, kk=0; jj<rt[nRT]->KeyNumFlds(); jj++)
-      {
+    for( ii=0; ii<nKeys; ii++ )
+    {
+        tbKeys->setRowHeight(ii, htF(ftString, 0)+2);
+        for(jj=0, kk=0; jj<rt[nRT]->KeyNumFlds(); jj++)
+        {
 
-          ln = rt[nRT]->FldLen(jj);
-          keyfld = string(keyList[ii], kk, ln);
-          StripLine(keyfld);
-          colsz = keyfld.length()+1;
-          if( colsz > colSizes[jj])
-              colSizes[jj] = colsz;
-          kk += ln;
-          item = new QTableWidgetItem(tr("%1").arg( keyfld.c_str()));
-          tbKeys->setItem(ii, jj, item );
-       }
-      if( oldKey == keyList[ii] )
-      {    curItem = tbKeys->item(ii,0);
-           settedCureentKeyIntotbKeys = true;
-      }
+            ln = rt[nRT]->FldLen(jj);
+            keyfld = string(keyList[ii], kk, ln);
+            StripLine(keyfld);
+            colsz = keyfld.length()+1;
+            if( colsz > colSizes[jj])
+                colSizes[jj] = colsz;
+            kk += ln;
+            item = new QTableWidgetItem(tr("%1").arg( keyfld.c_str()));
+            tbKeys->setItem(ii, jj, item );
+        }
+        if( oldKey == keyList[ii] )
+        {    curItem = tbKeys->item(ii,0);
+            settedCureentKeyIntotbKeys = true;
+        }
 
-  }
-  for( jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
-  {
-      tbKeys->setColumnWidth(jj, wdF( ftString, colSizes[jj], eNo ) );
-      item = new QTableWidgetItem(tr("%1").arg( jj+1));
-      item->setToolTip( dynamic_cast<TCModule*>(aMod[nRT].get())->GetFldHelp(jj));
-      tbKeys->setHorizontalHeaderItem( jj, item );
-  }
+    }
+    for( jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
+    {
+        tbKeys->setColumnWidth(jj, wdF( ftString, colSizes[jj], eNo ) );
+        item = new QTableWidgetItem(tr("%1").arg( jj+1));
+        item->setToolTip( dynamic_cast<TCModule*>(aMod[nRT].get())->GetFldHelp(jj));
+        tbKeys->setHorizontalHeaderItem( jj, item );
+    }
 
-  tbKeys->setSortingEnabled ( true );
-  if(curItem )
-  {
-    tbKeys->setCurrentItem( curItem );
-    tbKeys->scrollToItem( curItem, QAbstractItemView::PositionAtCenter );
-  }
+    tbKeys->setSortingEnabled ( true );
+    if(curItem )
+    {
+        tbKeys->setCurrentItem( curItem );
+        tbKeys->scrollToItem( curItem, QAbstractItemView::PositionAtCenter );
+    }
 
-  if( pVisor->ProfileMode && (nRT == RT_SYSEQ || nRT == RT_PROCES
-    || nRT == RT_UNSPACE  || nRT > RT_GTDEMO ) )
-  {
-     tbKeys->hideColumn(0);
-     tbKeys->hideColumn(1);
-  }
-  else
-  {
-     tbKeys->showColumn(0);
-     tbKeys->showColumn(1);
-  }
+    if( pVisor->ProfileMode && (nRT == RT_SYSEQ || nRT == RT_PROCES
+                                || nRT == RT_UNSPACE  || nRT > RT_GTDEMO ) )
+    {
+        tbKeys->hideColumn(0);
+        tbKeys->hideColumn(1);
+    }
+    else
+    {
+        tbKeys->showColumn(0);
+        tbKeys->showColumn(1);
+    }
 
-  rt[nRT]->SetKey(oldKey.c_str());
+    rt[nRT]->SetKey(oldKey.c_str());
 }
 
 // Change list of Modules for General or Project mode
@@ -409,7 +408,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 {
 
     if( nRT >=0 )
-      pLine->setText(tr(rt[nRT]->PackKey()));
+        pLine->setText(tr(rt[nRT]->PackKey()));
     else
         pLine->setText(tr(""));
 
@@ -427,9 +426,9 @@ void TVisorImp::changeModulesKeys( int nRT )
     }
     else
     {    //pFilterKey->setText(dynamic_cast<TCModule *>(aMod[nRT].get())->getFilter());
-         defineModuleKeysList( nRT );
+        defineModuleKeysList( nRT );
     }
-   // currentNrt = nRT;
+    // currentNrt = nRT;
 }
 
 
@@ -445,7 +444,7 @@ void TVisorImp::openRecordKey( int row, int    )
         currentKey += tbKeys->item( row, jj)->text().toStdString();
         StripLine(currentKey);
         currentKey +=":";
-     }
+    }
 
     CmShow( currentKey.c_str() );
 }
@@ -467,55 +466,55 @@ void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, b
 {
     try
     {
-       if( irt==RT_SYSEQ && pVisor->ProfileMode == MDD_SYSTEM )
-       {
-         if( !NewSystemDialog::pDia )
-         {
-           (new NewSystemDialog(nullptr/*pVisorImp*/));
-           //----if( select )
-           //----   NewSystemDialog::pDia->CmSelect();
-           openMdiChild( NewSystemDialog::pDia, true );
+        if( irt==RT_SYSEQ && pVisor->ProfileMode == MDD_SYSTEM )
+        {
+            if( !NewSystemDialog::pDia )
+            {
+                (new NewSystemDialog(nullptr/*pVisorImp*/));
+                //----if( select )
+                //----   NewSystemDialog::pDia->CmSelect();
+                openMdiChild( NewSystemDialog::pDia, true );
 
-           // Create, if no syseq is present in the project
-           if( rt[RT_SYSEQ]->RecCount() <= 0)
-               NewSystemDialog::pDia->CmCreate();
+                // Create, if no syseq is present in the project
+                if( rt[RT_SYSEQ]->RecCount() <= 0)
+                    NewSystemDialog::pDia->CmCreate();
 
-           //mdiArea->addSubWindow(NewSystemDialog::pDia);
-           //NewSystemDialog::pDia->showMaximized();//show();
-           if( !settedCureentKeyIntotbKeys )
-               openRecordKey(0,0);
+                //mdiArea->addSubWindow(NewSystemDialog::pDia);
+                //NewSystemDialog::pDia->showMaximized();//show();
+                if( !settedCureentKeyIntotbKeys )
+                    openRecordKey(0,0);
+            }
+            else
+            {
+                QMdiSubWindow *wn = findNewSystem();
+                NewSystemDialog::pDia->Update();
+                setActiveSubWindow(wn);
+            }
         }
         else
-         {
-           QMdiSubWindow *wn = findNewSystem();
-           NewSystemDialog::pDia->Update();
-           setActiveSubWindow(wn);
-         }
-       }
-       else
-       {
-         TCModuleImp* p = aMod[irt]->pImp;
-         if( !p )
-         {   p = new TCModuleImp(irt, page, viewmode);
-            //--p->Raise(page);
-            // Select record if list not empty
-            //----if( select )
-            //----    p->SelectStart();
-            openMdiChild( p );
-            //mdiArea->addSubWindow(p);
-            //p->show();
-            if( !settedCureentKeyIntotbKeys )
-                openRecordKey(0,0);
-          }
-          else
-          {
-            QMdiSubWindow *wn = findMdiChild(p->moduleName().c_str());
-            p->setViewMode(viewmode);
-            p->Update(true);
-            setActiveSubWindow(wn);
-             //--p->Raise(page);
-           }
-      }
+        {
+            TCModuleImp* p = aMod[irt]->pImp;
+            if( !p )
+            {   p = new TCModuleImp(irt, page, viewmode);
+                //--p->Raise(page);
+                // Select record if list not empty
+                //----if( select )
+                //----    p->SelectStart();
+                openMdiChild( p );
+                //mdiArea->addSubWindow(p);
+                //p->show();
+                if( !settedCureentKeyIntotbKeys )
+                    openRecordKey(0,0);
+            }
+            else
+            {
+                QMdiSubWindow *wn = findMdiChild(p->moduleName().c_str());
+                p->setViewMode(viewmode);
+                p->Update(true);
+                setActiveSubWindow(wn);
+                //--p->Raise(page);
+            }
+        }
     }
     catch(TError& e)
     {
@@ -527,19 +526,19 @@ TCModuleImp *TVisorImp::activeMdiChild()
 {
     if (QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow())
     {
-       TCModuleImp *child = qobject_cast<TCModuleImp *>(activeSubWindow->widget());
-       if(child)
-          return child;
-       else
-       { // find module for graphic window
-         GraphDialog *dlg = qobject_cast<GraphDialog *>(activeSubWindow->widget());
-         if( dlg )
-         {
-             QMdiSubWindow *mdi = findMdiChild(dlg->mainModuleName().c_str());
-             if( mdi )
-             return(qobject_cast<TCModuleImp *>(mdi->widget()));
-         }
-       }
+        TCModuleImp *child = qobject_cast<TCModuleImp *>(activeSubWindow->widget());
+        if(child)
+            return child;
+        else
+        { // find module for graphic window
+            GraphDialog *dlg = qobject_cast<GraphDialog *>(activeSubWindow->widget());
+            if( dlg )
+            {
+                QMdiSubWindow *mdi = findMdiChild(dlg->mainModuleName().c_str());
+                if( mdi )
+                    return(qobject_cast<TCModuleImp *>(mdi->widget()));
+            }
+        }
     }
     return nullptr;
 }
@@ -548,7 +547,7 @@ NewSystemDialog *TVisorImp::activeNewSystem()
 {
     if (QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow())
     {
-     return qobject_cast<NewSystemDialog *>(activeSubWindow->widget());
+        return qobject_cast<NewSystemDialog *>(activeSubWindow->widget());
     }
     return nullptr;
 }
@@ -557,24 +556,24 @@ NewSystemDialog *TVisorImp::activeNewSystemCommand()
 {
     if (QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow())
     {
-       NewSystemDialog * systwindow = qobject_cast<NewSystemDialog *>(activeSubWindow->widget());
-       if( systwindow )
-         return systwindow;
-       else
-       {
-         TCModuleImp *child = qobject_cast<TCModuleImp *>(activeSubWindow->widget());
-         if( child && child->rtNum() >= MD_RMULTS)
-         {
-           QMdiSubWindow *win = findNewSystem();
-           if( win )
-             return qobject_cast<NewSystemDialog *>(win->widget());
-           else  // open   main NewSystemDialog
-           {  OpenModule(this, RT_SYSEQ, 0, true, true);
-              activeSubWindow = mdiArea->activeSubWindow();
-              return qobject_cast<NewSystemDialog *>(activeSubWindow->widget());
-           }
-         }
-       }
+        NewSystemDialog * systwindow = qobject_cast<NewSystemDialog *>(activeSubWindow->widget());
+        if( systwindow )
+            return systwindow;
+        else
+        {
+            TCModuleImp *child = qobject_cast<TCModuleImp *>(activeSubWindow->widget());
+            if( child && child->rtNum() >= MD_RMULTS)
+            {
+                QMdiSubWindow *win = findNewSystem();
+                if( win )
+                    return qobject_cast<NewSystemDialog *>(win->widget());
+                else  // open   main NewSystemDialog
+                {  OpenModule(this, RT_SYSEQ, 0, true, true);
+                    activeSubWindow = mdiArea->activeSubWindow();
+                    return qobject_cast<NewSystemDialog *>(activeSubWindow->widget());
+                }
+            }
+        }
     }
     return nullptr;
 }
@@ -623,24 +622,24 @@ void TVisorImp::setActiveSubWindow(QWidget *window)
 
 void TVisorImp::setActiveSubWindowIdex( int ndx )
 {
-   if ( ndx >=0 && ndx < mdiArea->subWindowList().size() )
-       mdiArea->setActiveSubWindow(mdiArea->subWindowList().at(ndx));
+    if ( ndx >=0 && ndx < mdiArea->subWindowList().size() )
+        mdiArea->setActiveSubWindow(mdiArea->subWindowList().at(ndx));
 }
 
 void TVisorImp::openMdiChild( QWidget *p, bool showMaximized  )
 {
-  mdiArea->addSubWindow(p);
-  pModuleName->addItem( nameMdiChild( p ).c_str());
-  if( showMaximized )
-   p->showMaximized();
-  else
-   p->show();
+    mdiArea->addSubWindow(p);
+    pModuleName->addItem( nameMdiChild( p ).c_str());
+    if( showMaximized )
+        p->showMaximized();
+    else
+        p->show();
 
-  if( mdiArea->activeSubWindow() )
-  {
-    QIcon icon = iconMdiChild( p );
-    mdiArea->activeSubWindow()->setWindowIcon(icon);
-  }
+    if( mdiArea->activeSubWindow() )
+    {
+        QIcon icon = iconMdiChild( p );
+        mdiArea->activeSubWindow()->setWindowIcon(icon);
+    }
 }
 
 int TVisorImp::indexMdiChild( QWidget *p )
@@ -650,7 +649,7 @@ int TVisorImp::indexMdiChild( QWidget *p )
     {
         if( windows.at(i)->widget() == p )
         {
-          return i;
+            return i;
         }
     }
     return -1;
@@ -658,66 +657,66 @@ int TVisorImp::indexMdiChild( QWidget *p )
 
 void TVisorImp::closeMdiChild( QWidget *p )
 {
-   //pModuleName->removeItem( nameMdiChild( p ).c_str() );
+    //pModuleName->removeItem( nameMdiChild( p ).c_str() );
     int ndx = indexMdiChild( p );
     if( ndx >= 0 )
     {
-      //cout<< "closeMdiChild " << endl;
-      pModuleName->removeItem(ndx);
-      mdiArea->removeSubWindow(p);
+        //cout<< "closeMdiChild " << endl;
+        pModuleName->removeItem(ndx);
+        mdiArea->removeSubWindow(p);
     }
 }
 
 // mode of calculation (System)
 void TVisorImp::CmCalcMode()
 {
-  int newProfileMode;
+    int newProfileMode;
 
-  newProfileMode = MDD_SYSTEM;
+    newProfileMode = MDD_SYSTEM;
 
-  if( newProfileMode == pVisor->ProfileMode )
-  {
-    ui->action_calcMode->setChecked(true);
-    return;
-  }
-  // close all windows
-  mdiArea->closeAllSubWindows();
-  if( mdiArea->subWindowList().count()> 0 )
-  {
-      // cancel closing window
-      ui->action_calcMode->setChecked( false );
-      return;
-  }
-  if( !SetProfileMode())
-    ui->action_calcMode->setChecked( false );
+    if( newProfileMode == pVisor->ProfileMode )
+    {
+        ui->action_calcMode->setChecked(true);
+        return;
+    }
+    // close all windows
+    mdiArea->closeAllSubWindows();
+    if( mdiArea->subWindowList().count()> 0 )
+    {
+        // cancel closing window
+        ui->action_calcMode->setChecked( false );
+        return;
+    }
+    if( !SetProfileMode())
+        ui->action_calcMode->setChecked( false );
 
-  moveToolBar();
+    moveToolBar();
 }
 
 
 // mode of work with DataBase
 void TVisorImp::CmDataBaseMode()
 {
-  int newProfileMode;
+    int newProfileMode;
 
-  newProfileMode = MDD_DATABASE;
+    newProfileMode = MDD_DATABASE;
 
-  if( newProfileMode == pVisor->ProfileMode )
-  {
-    ui->actionDataBaseMode->setChecked(true);
-    return;
-  }
+    if( newProfileMode == pVisor->ProfileMode )
+    {
+        ui->actionDataBaseMode->setChecked(true);
+        return;
+    }
 
-  // close all windows
-  mdiArea->closeAllSubWindows();
-  if( mdiArea->subWindowList().count()> 0 )
-  {
-      // cancel closing window
-      ui->actionDataBaseMode->setChecked( false );
-      return;
-  }
-  SetGeneralMode();
-  moveToolBar();
+    // close all windows
+    mdiArea->closeAllSubWindows();
+    if( mdiArea->subWindowList().count()> 0 )
+    {
+        // cancel closing window
+        ui->actionDataBaseMode->setChecked( false );
+        return;
+    }
+    SetGeneralMode();
+    moveToolBar();
 }
 
 
@@ -796,48 +795,48 @@ void TVisorImp::setCellFont(const QFont& newCellFont)
 
 void TVisorImp::GetHelp( )
 {
-        (new HelpWindow(  nullptr  ));
-        //HelpWindow::pDia->show();
+    (new HelpWindow(  nullptr  ));
+    //HelpWindow::pDia->show();
 }
 
 void TVisorImp::OpenHelp(const char* file, const char* item1, int page )
 {
     if( HelpWindow::pDia )
     {
-       if( item1 && page>=0 )
-       {
-          QString res = item1;
-          res += QString("_%1").arg(page);
-          string txt = res.toStdString();
-          HelpWindow::pDia->showDocumentation( file, txt.c_str() );
+        if( item1 && page>=0 )
+        {
+            QString res = item1;
+            res += QString("_%1").arg(page);
+            string txt = res.toStdString();
+            HelpWindow::pDia->showDocumentation( file, txt.c_str() );
         }
         else
-          HelpWindow::pDia->showDocumentation( file, item1 );
+            HelpWindow::pDia->showDocumentation( file, item1 );
 
-       HelpWindow::pDia->show();
-       HelpWindow::pDia->raise();
+        HelpWindow::pDia->show();
+        HelpWindow::pDia->raise();
     }
-   // old help assistantClient->showDocumentation( file, item);
+    // old help assistantClient->showDocumentation( file, item);
 }
 
 void TVisorImp::CmHelp2()
 {
-  TCModuleImp *actwin = activeMdiChild();
-  if( actwin )
-    aMod[actwin->rtNum()]->CmHelp2();
-  else
-  {
-     NewSystemDialog *wn = activeNewSystem();
-     if( wn )
-          wn->CmHelp2();
-     else
-        OpenHelp( GEMS_HOWTOSTART_HTML );
+    TCModuleImp *actwin = activeMdiChild();
+    if( actwin )
+        aMod[actwin->rtNum()]->CmHelp2();
+    else
+    {
+        NewSystemDialog *wn = activeNewSystem();
+        if( wn )
+            wn->CmHelp2();
+        else
+            OpenHelp( GEMS_HOWTOSTART_HTML );
         /*if(pVisor->ProfileMode == MDD_DATABASE)
         {
           HowToStartDialog dlg(this);
           dlg.exec();
         }*/
-  }
+    }
 }
 
 const char* TVisorImp::version()

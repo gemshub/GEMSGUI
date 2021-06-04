@@ -21,16 +21,18 @@
 
 #include <vector>
 #include <QDialog>
-#include <QButtonGroup>
 
-#include "ui_PhaseInfoDialog4.h"
+namespace Ui {
+class PhaseInfoDialogData;
+}
 
-class PhaseInfoDialog : public QDialog, public Ui::PhaseInfoDialogData
+class PhaseInfoDialog : public QDialog
 {
     Q_OBJECT
     
+    Ui::PhaseInfoDialogData *ui;
+
 protected slots:
-    virtual void languageChange();
     void slotPopupContextMenuDC(const QPoint &pos);
     void slotPopupContextMenuPh(const QPoint &pos);
     void CopyDataDC();
@@ -38,11 +40,10 @@ protected slots:
     void help();
     
 public:
+
     PhaseInfoDialog(QWidget* wpar, bool system,  int xph, std::string phname,
                     std::vector<int>& xdclist, std::vector<std::string>& dcnames, int xdc);
     virtual ~PhaseInfoDialog();
-
-
- };
+};
 
 #endif // PhaseInfoDialog_included

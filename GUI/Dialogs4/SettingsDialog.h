@@ -19,32 +19,36 @@
 #ifndef SettingsDialog_included
 #define SettingsDialog_included
 
-#include <qfont.h>
-#include <QWidget>
+#include <QFont>
+#include <QDialog>
 
-#include "ui_SettingsDialog4.h"
 
-class SettingsDialog : public QDialog, public Ui::SettingsDialogData
+namespace Ui {
+class SettingsDialogData;
+}
+
+class SettingsDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::SettingsDialogData *ui;
     QFont cellFont;
+
 public:
 
     SettingsDialog( QWidget* parent = nullptr);
     virtual ~SettingsDialog();
 
 protected slots:
-   virtual void languageChange();
 
-   virtual void CmChangeFont();
-   virtual void CmSysDBDirSelect();
-   virtual void CmUserDBDirSelect();
-   virtual void CmApply();
-   virtual void CmHelp();
-   virtual void CmHelpGenerate();
-   virtual void CmDefaultFont();
-   void accept();
+    virtual void CmChangeFont();
+    virtual void CmSysDBDirSelect();
+    virtual void CmUserDBDirSelect();
+    virtual void CmApply();
+    virtual void CmHelp();
+    virtual void CmHelpGenerate();
+    virtual void CmDefaultFont();
+    void accept();
 };
 
 #endif // SettingsDialog_included

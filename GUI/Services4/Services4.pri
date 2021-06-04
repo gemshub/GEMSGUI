@@ -1,4 +1,5 @@
 HEADERS += $$SERVICES4_H/calcthread.h \
+           $$SERVICES4_H/table_model.h \
            $$SERVICES4_H/units.h \
            $$SERVICES4_H/service.h \
            $$SERVICES4_H/visor.h \
@@ -12,6 +13,7 @@ HEADERS += $$SERVICES4_H/calcthread.h \
            $$SERVICES4_H/module_w.h
 
 SOURCES += $$SERVICES4_CPP/units.cpp \
+           $$SERVICES4_CPP/table_model.cpp \
            $$SERVICES4_CPP/service.cpp \
            $$SERVICES4_CPP/visor.cpp \
            $$SERVICES4_CPP/help.cpp \

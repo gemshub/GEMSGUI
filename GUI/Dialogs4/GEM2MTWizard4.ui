@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>726</width>
+    <width>749</width>
     <height>675</height>
    </rect>
   </property>
@@ -1544,7 +1544,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
           </font>
          </property>
          <property name="text">
-          <string>Step 7 -  Settings for the GEMS3K data exchange interface</string>
+          <string>Step 7 -  Settings for the GEMS3K data exchange I/O interface</string>
          </property>
         </widget>
        </item>
@@ -1558,7 +1558,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
        <item>
         <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>(1) GEMS3K memory and I/O file data exchange</string>
+          <string>(1) GEMS3K memory and I/O files data exchange</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_15">
           <item row="0" column="0" colspan="3">
@@ -1578,7 +1578,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
           <item row="2" column="0" colspan="3">
            <widget class="QCheckBox" name="chComment">
             <property name="text">
-             <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (kv mode) or as &quot;pretty JSON&quot;  ( json mode )</string>
+             <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (KV mode) or as formatted JSON (JSON mode)</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -1588,14 +1588,14 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
           <item row="3" column="0" colspan="3">
            <widget class="QLabel" name="label_28">
             <property name="text">
-             <string>Write IPM, DCH and DBR files in mode: </string>
+             <string>Write IPM, DCH and DBR files in format mode: </string>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QRadioButton" name="rbJson">
             <property name="text">
-             <string>Json</string>
+             <string>JSON (default)</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1622,7 +1622,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
        <item>
         <widget class="QGroupBox" name="pTPInput">
          <property name="title">
-          <string>(2) Automatic setup of GEMS3K look-up arrays with thermodynamic data </string>
+          <string>(2) Automatic setup for exporting GEMS3K look-up arrays with standard thermodynamic data </string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -1845,13 +1845,13 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
        <item>
         <widget class="QGroupBox" name="pTPlookup">
          <property name="title">
-          <string> (3) T and P grid values for look-up arrays</string>
+          <string> (3) T and P grid values for exporting GEMS3K look-up arrays</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="checkArrays">
             <property name="text">
-             <string>Enter pressure and temperature grid values instead of automatic setup </string>
+             <string>Enter pressure P and temperature T grid values instead of automatic setup </string>
             </property>
            </widget>
           </item>
@@ -1861,7 +1861,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Disable data interpolation between grid T values (or P values), use data for TP pairs instead</string>
+             <string>Disable data interpolation between grid T values (or P values), use the data for TP pairs instead</string>
             </property>
            </widget>
           </item>
@@ -2330,22 +2330,5 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>pCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>GEM2MTWizardData</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>754</x>
-     <y>532</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>317</x>
-     <y>270</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

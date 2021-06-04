@@ -260,7 +260,7 @@ void TSupcrt::resid(double t, double *d)
                 del = 1.0e-10;
             ex1   = -ad->aad[j-36] * pow(del,(double)k);
 
-            if (ex1 < to->EXPTOL)
+              if (ex1 < -215)   // if (ex1 < to->EXPTOL)   exp(-215) produces nan
                 dex = 0.0e0;
             else
                 dex = exp(ex1)  * pow(del,(double)km);
@@ -270,7 +270,7 @@ void TSupcrt::resid(double t, double *d)
             tau   = t / tx - 1.0e0;
             ex2   = -att * tau * tau;
 
-            if (ex2 <=  to->EXPTOL)
+            if (ex2 <= -215)  // if (ex2 <=  to->EXPTOL)
                 tex = 0.0e0;
             else
                 tex = exp(ex2);
@@ -742,8 +742,9 @@ double TSupcrt::thcond(double Tk, double Pbars, double Dkgm3, double alph,
     u1   = exp(D * sum);
     xt   = Pstar / pow(Dstar,2.) * betaPa * pow(Dkgm3,2.);
     dPdT = Tstar / Pstar * alph/betaPa;
+
     L2   = C / (u0 * u1) * pow((T / D),2.) * pow(dPdT,2.) *
-           pow(xt,0.4678e0) * pow(D,0.5) * exp(-18.66e0 *
+           pow( abs(xt),0.4678e0) * pow(D,0.5) * exp(-18.66e0 *
                                                pow((T - 1),2.) - pow((D - 1),4.));
     thCOND = L0 * L1 + L2;
     return(thCOND);

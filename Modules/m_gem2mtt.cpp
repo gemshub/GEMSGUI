@@ -77,8 +77,8 @@ void  TGEM2MT::putHydP( DATABRPTR* C0 )
             C0[jj]->Km = mtp->HydP[jj][3];
             C0[jj]->al = mtp->HydP[jj][4];
             C0[jj]->Dif = mtp->HydP[jj][5];
-            C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+C0[jj]->Dif;
             C0[jj]->nto = mtp->HydP[jj][6];
+            C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+(C0[jj]->Dif*C0[jj]->eps/C0[jj]->nto); // C0[jj]->Dif;
         }
 #endif
     }

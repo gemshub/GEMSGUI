@@ -55,7 +55,7 @@ TProfil* TProfil::pm;
 extern char *_GEMS_version_stamp;
 extern char *_GEMIPM_version_stamp;
 SPP_SETTING pa_ = {
-    " Tolerances and controls: GEMSGUI v.3.8.0  and " " GEMS3K v.3.8.0 ",
+    " Tolerances and controls: GEMSGUI v.3.9.0  and " " GEMS3K v.3.9.0 ",
     {   // Typical default set (24.03.2020) new PSSC( logSI ) & uDD()
         2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
@@ -620,8 +620,7 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
 
     if( na->GEM_init( path ) )
     {
-      Error( path, "GEMS3K Init() error: \n"
-             "Some GEMS3K input files are corrupt or cannot be found.");
+      Error( path, "GEMS3K Init() error: \n" + na->ipmLogError() );
     }
     multi->dyn_set();
 

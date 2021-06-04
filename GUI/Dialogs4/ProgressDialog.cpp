@@ -21,6 +21,7 @@
 #include <QMutex>
 
 #include "ProgressDialog.h"
+#include "ui_ProgressDialog4.h"
 #include "NewSystemDialog.h"
 #include "m_param.h"
 
@@ -54,43 +55,41 @@ ProgressDialog* ProgressDialog::pDia = nullptr;
 
 void ProgressDialog::switchToAccept(bool isAccept)
 {
-    pClose->setToolTip( tr( "Cancel this GEM IPM calculation" ) );
+    ui->pClose->setToolTip( tr( "Cancel this GEM IPM calculation" ) );
 
     if( isAccept ) {
-        pAccept->disconnect();
-        connect( pAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
-        pAccept->setToolTip( tr("Close and save results to SysEq database record" ) );
-        pAccept->show();
+        ui->pAccept->disconnect();
+        connect( ui->pAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
+        ui->pAccept->setToolTip( tr("Close and save results to SysEq database record" ) );
+        ui->pAccept->show();
     }
     else {
-        pAccept->disconnect();
+        ui->pAccept->disconnect();
     }
 }
 
 
 ProgressDialog::ProgressDialog(QWidget* parent ):
-    QDialog( parent )
+    QDialog( parent ),
+    ui(new Ui::ProgressDialogData)
 {
-    setupUi(this);
+    ui->setupUi(this);
     
     pDia = this;
     //TProfil::pm->userCancel = false;
     //TProfil::pm->stepWise = step;
-    pAccept->hide();
+    ui->pAccept->hide();
 
     setWindowTitle( "Running..." );
-    pAccept->hide();
-    pClose->setText("&Cancel");
+    ui->pAccept->hide();
+    ui->pClose->setText("&Cancel");
     Update(true);
 }
 
 
 ProgressDialog::~ProgressDialog()
-{}
-
-void ProgressDialog::languageChange()
 {
-    retranslateUi(this);
+     delete ui;
 }
 
 
@@ -101,9 +100,9 @@ void ProgressDialog::languageChange()
 void ProgressDialog::CalcFinished()
 {
     switchToAccept(true);
-    pAccept->show();
-    pClose->setText("&Dismiss");
-    pClose->setToolTip( tr( "Close and do not save results to SysEq database record" ) );
+    ui->pAccept->show();
+    ui->pClose->setText("&Dismiss");
+    ui->pClose->setToolTip( tr( "Close and do not save results to SysEq database record" ) );
     QString str = QString("Converged at DK=%1").arg(TMulti::sm->GetPM()->PCI);
     setWindowTitle(str);
     Update(true);
@@ -162,7 +161,7 @@ void ProgressDialog::closeEvent(QCloseEvent* ev)
 void ProgressDialog::paintEvent(QPaintEvent* ev)
 {
     QPainter p(this);
-    QRect r = pBottle->geometry();
+    QRect r = ui->pBottle->geometry();
     r.setHeight( ht_g );
     p.fillRect(r, QBrush(Qt::white));
     r.setY( r.y()+ ht_g + 1);
@@ -195,15 +194,15 @@ void ProgressDialog::Update(bool force)
 
     //str.sprintf( "%2lu:%4lu:%4lu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
     //str.sprintf( "%4lu ",  pData->IT );
-    pIT->setText( QString("%1:%2:%3").arg(pData->W1+pData->K2,2).arg(pData->ITF,4).arg(pData->ITG,4) );
+    ui->pIT->setText( QString("%1:%2:%3").arg(pData->W1+pData->K2,2).arg(pData->ITF,4).arg(pData->ITG,4) );
     //str.sprintf( "%*g", 8, pData->pH );
-    pPH->setText(  QString("%1").arg(pData->pH,8) );
+    ui->pPH->setText(  QString("%1").arg(pData->pH,8) );
     //str.sprintf( "%*g", 8, pData->pe );
-    pPE->setText(  QString("%1").arg(pData->pe,8) );
+    ui->pPE->setText(  QString("%1").arg(pData->pe,8) );
     //str.sprintf( "%*g", 8, pData->IC );
-    pIC->setText(  QString("%1").arg(pData->IC,8) );
+    ui->pIC->setText(  QString("%1").arg(pData->IC,8) );
 
-    pKey->setText(rt[RT_SYSEQ]->PackKey());
+    ui->pKey->setText(rt[RT_SYSEQ]->PackKey());
 
     double g=0, a=0, s=0, l=0;
     for( int ii=0; ii<pData->FI; ii++ )
@@ -230,16 +229,16 @@ void ProgressDialog::Update(bool force)
     }
 
     //str.sprintf( "%*g", 8, g );
-    pGas->setText(  QString("%1").arg(g,8) );
+    ui->pGas->setText(  QString("%1").arg(g,8) );
     //str.sprintf( "%*g", 8, a );
-    pWater->setText(  QString("%1").arg(a,8) );
+    ui->pWater->setText(  QString("%1").arg(a,8) );
     //str.sprintf( "%*g", 8, l );
-    pLiquid->setText(  QString("%1").arg(l,8) );
+    ui->pLiquid->setText(  QString("%1").arg(l,8) );
     //str.sprintf( "%*g", 8, s );
-    pSolid->setText(  QString("%1").arg(s,8) );
+    ui->pSolid->setText(  QString("%1").arg(s,8) );
 
 
-    int ht = pBottle->height();
+    int ht = ui->pBottle->height();
     double all = g + a + s +l;
     ht_g = noZero(all) ? int(ceil(g * ht / all)) :0;
     ht_a = noZero(all) ? int(ceil(a * ht / all)) :0;
@@ -247,7 +246,7 @@ void ProgressDialog::Update(bool force)
     ht_s = noZero(all) ? int(ceil(s * ht / all)) :0;
 
     int progr = 24;
-    pProgress->setMaximum(progr);
+    ui->pProgress->setMaximum(progr);
     double dist = progr/6.;
     if( pData->PCI >0. && pData->DXM >0.)
         dist = log10( pData->PCI/ pData->DXM );
@@ -256,13 +255,13 @@ void ProgressDialog::Update(bool force)
         progr = 0;
     if(progr > 24 )
         progr = 24;
-    pProgress->setValue(progr);//pProgress->setProgress(progr);
+    ui->pProgress->setValue(progr);//pProgress->setProgress(progr);
 
     //    clock_t t_end = clock();
     //    clock_t dtime = ( t_end- t_start );
     //str.sprintf("GEM IPM calculation (run time: %lg s).",
     //            pData->t_elap_sec );   //  (double)dtime/(double)CLOCKS_PER_SEC);
-    TextLabel1->setText(  QString("GEM IPM calculation (run time: %1 s).").arg(pData->t_elap_sec) );
+    ui->TextLabel1->setText(  QString("GEM IPM calculation (run time: %1 s).").arg(pData->t_elap_sec) );
     //    last_update = time(0);
     update();
     // this really updates window when CPU is heavily loaded

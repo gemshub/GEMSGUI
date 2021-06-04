@@ -18,23 +18,25 @@
 #ifndef LookupDialog_included
 #define LookupDialog_included
 
-
-#include "ui_LookupDialog4.h"
 #include "model_w.h"
 
-class LookupDialog : public QDialog, public Ui::LookupDialogData
+namespace Ui {
+class LookupDialogData;
+}
+
+class LookupDialog : public QDialog
 {
     Q_OBJECT
 
-     TObjectTable* PTable;
-     TObjectTable* TTable;
+    Ui::LookupDialogData *ui;
+    TObjectTable* PTable;
+    TObjectTable* TTable;
 
     void defineTArray();
     void definePArray();
     void initPTable();
     void initTTable();
     void setupPTArrays();
-
 
 public:
 
@@ -49,13 +51,12 @@ public:
     void   getFlags( char flgs[6] );
 
 protected slots:
+
     void CmHelp();
     void CmNext();
     void CmBack();
     void arrayChecked(bool check );
-    virtual void languageChange();
     void objectChanged();
-
 };
 
 #endif // LookupDialog_included

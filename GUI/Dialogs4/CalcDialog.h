@@ -22,21 +22,23 @@
 #include <QDialog>
 #include <QButtonGroup>
 
-#include "ui_CalcDialog4.h"
+namespace Ui {
+class CalcDialogData;
+}
 
-class CalcDialog : public QDialog, public Ui::CalcDialogData
+class CalcDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::CalcDialogData *ui;
     int  nObj;
     QButtonGroup *allButtons;
     
 protected slots:
-    virtual void languageChange();
 
-    virtual void setMode( int id);
-    virtual void ok();
-    virtual void unaryMode();
+    void setMode(QAbstractButton*);
+    void ok();
+    void unaryMode();
     void help();
     
 public:
@@ -47,6 +49,6 @@ public:
     int    funName(double& val);
     std::string funText(const char * valText );
 
- };
+};
 
 #endif // CalcDialog_included

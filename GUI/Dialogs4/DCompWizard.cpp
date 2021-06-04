@@ -16,37 +16,22 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
-#include <qcombobox.h>
-#include <qvariant.h>
-
+#include "ui_DCompWizard4.h"
 #include "DCompWizard.h"
 #include "GemsMainWindow.h"
 #include "service.h"
 
-void DCompWizard::languageChange()
+void DCompWizard::CmBack()
 {
-    retranslateUi(this);
-}
-
-
-void
-DCompWizard::CmBack()
-{
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()-1 );
+    ui->stackedWidget->setCurrentIndex (  ui->stackedWidget->currentIndex()-1 );
     resetNextButton();
     resetBackButton();
 }
 
 
-void
-DCompWizard::CmNext()
+void DCompWizard::CmNext()
 {
-	stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
+    ui->stackedWidget->setCurrentIndex (  ui->stackedWidget->currentIndex()+1 );
     resetNextButton();
     resetBackButton();
 }
@@ -54,143 +39,147 @@ DCompWizard::CmNext()
 
 void DCompWizard::resetNextButton()
 {
-	if( stackedWidget->currentIndex() == stackedWidget->count() - 1 )
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(accept()) );
-		pNext->setText("&Finish");
-	}
-	else
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
-		pNext->setText("&Next>");
-	}
+    if(  ui->stackedWidget->currentIndex() ==  ui->stackedWidget->count() - 1 )
+    {
+        ui->pNext->disconnect();
+        connect(  ui->pNext, SIGNAL(clicked()), this, SLOT(accept()) );
+        ui->pNext->setText("&Finish");
+    }
+    else
+    {
+        ui->pNext->disconnect();
+        connect(  ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
+        ui->pNext->setText("&Next>");
+    }
 }
 
 
 void DCompWizard::resetBackButton()
 {
-	pBack->setEnabled( stackedWidget->currentIndex() > 0 );
+    ui->pBack->setEnabled(  ui->stackedWidget->currentIndex() > 0 );
 }
 
 
 DCompWizard::DCompWizard( const char* pkey, char flgs[15], int size[4],
-                            QWidget* parent):
-      QDialog( parent )
+QWidget* parent):
+    QDialog( parent ),
+    ui(new Ui::DCompWizardData)
 {
 
-    setupUi(this);
+    ui->setupUi(this);
     string str1= "GEM-Selektor DComp Setup:  ";
-            str1 += pkey;
-            setWindowTitle( str1.c_str() );
+    str1 += pkey;
+    setWindowTitle( str1.c_str() );
 
-    QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
-    QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
-    QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
-    stackedWidget->setCurrentIndex (0);
+    ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();
 
-
-//Page 1
+    //Page 1
     int ii;
-    ii = p_pct_1->findText(QChar(flgs[0]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    ii = ui->p_pct_1->findText(QChar(flgs[0]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-        p_pct_1->setCurrentIndex(ii);
-    ii = p_pct_2->findText(QChar(flgs[1]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->p_pct_1->setCurrentIndex(ii);
+    ii = ui->p_pct_2->findText(QChar(flgs[1]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-        p_pct_2->setCurrentIndex(ii);
-    ii = p_pct_3->findText(QChar(flgs[2]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->p_pct_2->setCurrentIndex(ii);
+    ii = ui->p_pct_3->findText(QChar(flgs[2]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-        p_pct_3->setCurrentIndex(ii);
-    ii = p_pct_4->findText(QChar(flgs[3]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->p_pct_3->setCurrentIndex(ii);
+    ii = ui->p_pct_4->findText(QChar(flgs[3]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-        p_pct_4->setCurrentIndex(ii);
-    ii = pPdcC->findText(QChar(flgs[6]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->p_pct_4->setCurrentIndex(ii);
+    ii =  ui->pPdcC->findText(QChar(flgs[6]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-	   pPdcC->setCurrentIndex(ii);
+        ui->pPdcC->setCurrentIndex(ii);
 
-//Page 2
-    pNeCp->setValue(size[0]);
-    pNft->setValue(size[1]);
-    pNemp->setValue(size[3]);
-    pPdcVT->setChecked( flgs[14] == '+' );
+    //Page 2
+    ui->pNeCp->setValue(size[0]);
+    ui->pNft->setValue(size[1]);
+    ui->pNemp->setValue(size[3]);
+    ui->pPdcVT->setChecked( flgs[14] == '+' );
 
-    ii = pPunE->findText(QChar(flgs[7]),Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+    ii = ui->pPunE->findText(QChar(flgs[7]),Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-    	pPunE->setCurrentIndex(ii);
-    ii = pPunV->findText(QChar(flgs[8]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->pPunE->setCurrentIndex(ii);
+    ii = ui->pPunV->findText(QChar(flgs[8]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-    	pPunV->setCurrentIndex(ii);
-    ii = pPunP->findText(QChar(flgs[9]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->pPunV->setCurrentIndex(ii);
+    ii = ui->pPunP->findText(QChar(flgs[9]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-    	pPunP->setCurrentIndex(ii);
-    ii = pPunT->findText(QChar(flgs[10]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+        ui->pPunP->setCurrentIndex(ii);
+    ii = ui->pPunT->findText(QChar(flgs[10]), Qt::MatchStartsWith|Qt::MatchCaseSensitive);
     if( ii >= 0  )
-    	pPunT->setCurrentIndex(ii);
+        ui->pPunT->setCurrentIndex(ii);
 
-//Page3
-    spinBoxSDrefLnk->setValue(size[2]);
+    //Page3
+    ui->spinBoxSDrefLnk->setValue(size[2]);
+
+    QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));
+    QObject::connect( ui->pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
+    QObject::connect( ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
+    QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
+
 }
 
 
 DCompWizard::~DCompWizard()
-{}
+{
+    delete ui;
+}
 
 
 void   DCompWizard::getSizes( int size[4] )
 {
-    size[0]= pNeCp->value();
-    size[1]= pNft->value();
-    size[2]= spinBoxSDrefLnk->value();
-    size[3]= pNemp->value();
+    size[0]= ui->pNeCp->value();
+    size[1]= ui->pNft->value();
+    size[2]= ui->spinBoxSDrefLnk->value();
+    size[3]= ui->pNemp->value();
 
 }
 
 
 void DCompWizard::getFlags( char flgs[15] )
 {
-  QString str;
+    QString str;
 
-  str = p_pct_1->currentText();
+    str = ui->p_pct_1->currentText();
     flgs[0] = str[0].toLatin1();
-  str = p_pct_2->currentText();
+    str = ui->p_pct_2->currentText();
     flgs[1] = str[0].toLatin1();
-  str = p_pct_3->currentText();
+    str = ui->p_pct_3->currentText();
     flgs[2] = str[0].toLatin1();
-  str = p_pct_4->currentText();
+    str = ui->p_pct_4->currentText();
     flgs[3] = str[0].toLatin1();
-        // 4, 5 (reserved)
-  str = pPdcC->currentText();
+    // 4, 5 (reserved)
+    str = ui->pPdcC->currentText();
     flgs[6] = str[0].toLatin1();
-        // 7,8,9,10 not changed
-  if( pNeCp->value() > 0  )
-    flgs[11] = '+';
-  else
-    flgs[11] = '-';
+    // 7,8,9,10 not changed
+    if( ui->pNeCp->value() > 0  )
+        flgs[11] = '+';
+    else
+        flgs[11] = '-';
 
-  if( pNft->value() > 0  )
-    flgs[12] = '+';
-  else
-    flgs[12] = '-';
+    if( ui->pNft->value() > 0  )
+        flgs[12] = '+';
+    else
+        flgs[12] = '-';
 
-  if( flgs[0] == 'H'  )
-    flgs[13] = '+';
-  else
-    flgs[13] = '-';
-// check
-  if( pPdcVT->isChecked() )
-    flgs[14] = '+';
-  else
-    flgs[14] = '-';
+    if( flgs[0] == 'H'  )
+        flgs[13] = '+';
+    else
+        flgs[13] = '-';
+    // check
+    if( ui->pPdcVT->isChecked() )
+        flgs[14] = '+';
+    else
+        flgs[14] = '-';
 }
 
 
-void
-DCompWizard::help()
+void DCompWizard::help()
 {
-   pVisorImp->OpenHelp( GM_DCOMP_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
+    pVisorImp->OpenHelp( GM_DCOMP_WZ_HTML, WZSTEP, ui->stackedWidget->currentIndex()+1 );
 }
 
 

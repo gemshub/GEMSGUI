@@ -20,14 +20,18 @@
 #define GtDemoWizard_included
 
 #include <QDialog>
-#include "ui_GtDemoWizard4.h"
 #include "EquatSetupWidget.h"
 
+namespace Ui {
+class GtDemoWizardData;
+}
 
-class GtDemoWizard : public QDialog, public Ui::GtDemoWizardData
+
+class GtDemoWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::GtDemoWizardData *ui;
     int nRT;
     string script;
     EquatSetup *pageScript;
@@ -40,8 +44,8 @@ class GtDemoWizard : public QDialog, public Ui::GtDemoWizardData
 public:
 
     GtDemoWizard( const char* pkey, int sizes[8], const char *ascript,
-                  const char *proc_key, const char* aXname, const char* aYname,
-                  QWidget* parent = nullptr);
+    const char *proc_key, const char* aXname, const char* aYname,
+    QWidget* parent = nullptr);
     virtual ~GtDemoWizard();
 
 
@@ -52,8 +56,6 @@ public:
     TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
-protected slots:
-    virtual void languageChange();
 
 public slots:
     void resetPageList( int, const char* aXname=nullptr, const char* aYname=nullptr );

@@ -18,7 +18,6 @@
 //-------------------------------------------------------------------
 //
 
-//#include <cmath>
 #include "m_reacdc.h"
 #include "m_param.h"
 #include "s_supcrt.h"
@@ -348,6 +347,8 @@ void TReacDC::RecInput( const char *key )
 
 }
 
+static TCStringArray aDclist;
+
 // opens window with 'Remake record' parameters
 void
 TReacDC::MakeQuery()
@@ -364,7 +365,7 @@ TReacDC::MakeQuery()
     size[2] = rcp->nPp;
     size[3] = rcp->Nsd;
 
-    if( !vfReacDCSet( window(), p_key, flgs, size ))
+    if( !vfReacDCSet( window(), p_key, flgs, size, aDclist ))
          Error( p_key, "ReacDC record configuration cancelled by the user!" );
      //  return;   // cancel
 
@@ -380,21 +381,62 @@ TReacDC::MakeQuery()
 
 int TReacDC::RecBuild( const char *key, int mode  )
 {
-    int /*i, iir, Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
+    int  Nc1=0, Nn1=0, Nf1=0, Nr1=0;
     char pkey[81];
     int CM,CE,CV;
-    //short oldnDC = rcp->nDC/*, newnDC*/;
 
-    TCStringArray aDclist;
-    //TCStringArray aRclist;
-    TCStringArray aDclist_old;
-    //TCStringArray aRclist_old;
+    //TCStringArray aDclist;
+    aDclist.clear();
+    //REACDC&DCOMP  keypart
+    rt[RT_REACDC]->MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+
+    if( rcp->rDC )
+    { // calc count DC and RC
+        for(int i=0; i<rcp->nDC; i++ )
+        {
+            switch( rcp->rDC[i] )
+            {
+            case SRC_DCOMP:
+                Nc1++;
+                continue;
+            case SRC_REACDC:
+                Nr1++;
+                continue;
+            case SRC_NEWISO:
+            case SRC_NEWDC:
+                Nn1++;
+                continue;
+            case SRC_FICT:
+                Nf1++;
+                continue;
+            default:
+                Error( GetName(), "E08RErem: Invalid reaction species code!");
+            }
+        }
+     }
+
+    // made vectors selections DCOMP and REACDC
+    if( Nc1>0 || Nr1>0 )
+    {
+        /* Build old selections DCOMP and REACDC */
+        aDclist.clear();
+        std::string key_dr;
+
+        for( int i=0; i<rcp->nDC; i++ )
+        {
+          if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
+          {
+              key_dr  = std::string(1, rcp->rDC[i]);
+              key_dr += ' ';
+              key_dr += std::string( rcp->DCk[i], 0, DC_RKLEN/*-MAXSYMB*/ );
+              aDclist.push_back( key_dr.c_str() );
+          }
+      }
+    }
 
 AGAIN_MOD:
     int ret = TCModule::RecBuild( key, mode );
     memcpy( rcp->pstate, key/*rt[nRT].UnpackKey()*/, RE_RKLEN );
-    /*newnDC = rcp->nDC;
-    rcp->nDC = oldnDC; */
     if( ret == VF3_3 && !( !rcp->PreC || rcp->PreC == ' ' ) )
         return ret;
     if( ret == VF3_1 )
@@ -402,7 +444,7 @@ AGAIN_MOD:
         strncpy( rcp->rmtm, curDateSmol().c_str(), 9);
         strncpy( rcp->name, db->FldKey(2), db->FldLen(2));
         rcp->name[db->FldLen(2)] = '\0';
-        Nn1 = 1;
+        Nn1++;
     }
     if( rcp->nTp < 0 || rcp->nPp < 0 || rcp->Nsd < 0 || rcp->Nsd > 4 )
     {    if( vfQuestion( window(), GetName(),
@@ -474,82 +516,16 @@ AGAIN_MOD:
     case CPM_PCR:
         rcp->PrAki = S_ON;
     }
-    /************/
-    Nc1 = 0;
-    Nr1 = 0;
-    Nf1 = 0;
 
-    //REACDC&DCOMP  keypart
-    rt[RT_REACDC]->MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-
-    if( rcp->rDC )
-    { // calc count DC and RC
-        for(int i=0; i<rcp->nDC; i++ )
-        {
-            switch( rcp->rDC[i] )
-            {
-            case SRC_DCOMP:
-                Nc1++;
-                continue;
-            case SRC_REACDC:
-                Nr1++;
-                continue;
-            case SRC_NEWISO:
-            case SRC_NEWDC:
-                Nn1++;
-                continue;
-            case SRC_FICT:
-                Nf1++;
-                continue;
-            default:
-                Error( GetName(), "E08RErem: Invalid reaction species code!");
-            }
-        }
-     }
-
-
-    // made vectors selections DCOMP and REACDC
-    if( Nc1>0 || Nr1>0 )
-    {
-        /* Build old selections DCOMP and REACDC */
-        aDclist_old.clear();
-        //aRclist_old.Clear();
-        std::string key_dr;
-
-        for( int i=0; i<rcp->nDC; i++ )
-        {
-          if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
-          {
-              key_dr  = std::string(1, rcp->rDC[i]);
-              key_dr += ' ';
-              key_dr += std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB );
-              aDclist_old.push_back( key_dr.c_str() );
-          }
-          /*
-          std::string key_dr = std::string( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
-          if( rcp->rDC[i] == SRC_DCOMP )
-              aDclist_old.Add( key_dr.c_str() );
-          else
-             if( rcp->rDC[i] == SRC_REACDC )
-                aRclist_old.Add( key_dr.c_str() );
-         */
-      }
-    }
-
+    /**
 AGAINRC:
-    /*aRclist = vfMultiKeysSet( window(),
-       "Please, mark ReacDC keys to be included",
-       RT_REACDC, pkey, aRclist_old );
-    aDclist = vfMultiKeysSet( window(),
-       "Please, mark DComp keys to be included",
-       RT_DCOMP, pkey, aDclist_old );
-    */
+
    aDclist = vfRDMultiKeysSet( window(),
        "Please, mark ReacDC/DComp keys to be included",
         pkey, aDclist_old );
 
 
-    if( /*aRclist.GetCount() < 1 &&*/ aDclist.size() < 1 )
+    if(  aDclist.size() < 1 )
     {
        switch ( vfQuestion3(window(), GetName(),
             "W09RErem: Number of selected ReacDC/DComp keys < 1.\n"
@@ -565,12 +541,9 @@ AGAINRC:
                 "E10RErem: No ReacDC/DComp records selected - bailing out!");
        }
     }
-
+**/
     /*================================*/
-    rcp->nDC = ( aDclist.size()/*+aRclist.GetCount()*/+Nn1+Nf1);
-    // ???? 28/02/02 Sveta
-    // if( (oldnDC != newnDC) && (newnDC != rcp->nDC) )
-    //    rcp->nDC = newnDC;
+    rcp->nDC = ( aDclist.size()+Nn1+Nf1);
     dyn_new();
 
     /*================================*/

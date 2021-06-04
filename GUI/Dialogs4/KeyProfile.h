@@ -21,12 +21,15 @@
 
 #include <QDialog>
 
-#include "ui_KeyProfile4.h"
+namespace Ui {
+class KeyProfileData;
+}
 
-class KeyProfile : public QDialog, public Ui::KeyProfileData
+class KeyProfile : public QDialog
 {
     Q_OBJECT
 
+    Ui::KeyProfileData *ui;
     uint iRt;
     bool newKey;
 
@@ -35,7 +38,6 @@ protected slots:
     virtual void CmHelp();
     void CmReturnIA();
     void CmReturnSmart();
-    virtual void languageChange();
 
 public:
 

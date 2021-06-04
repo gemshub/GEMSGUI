@@ -19,30 +19,30 @@
 #ifndef DualThWizard_included
 #define DualThWizard_included
 
-
 #include <QDialog>
-#include "ui_DualThWizard4.h"
 
-class DualThWizard : public QDialog, public Ui::DualThWizardData
+namespace Ui {
+class DualThWizardData;
+}
+
+class DualThWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::DualThWizardData *ui;
     void 	resetNextButton();
     void 	resetBackButton();
 
 public:
 
     DualThWizard( const char* pkey, char flgs[20], int sizes[8],
-                  QWidget* parent = nullptr);
+    QWidget* parent = nullptr);
     virtual ~DualThWizard();
 
 
     void   getSizes( int size[8] );
     void   getFlags( char flgs[20] );
-//    double   getR2();
-
-protected slots:
-    virtual void languageChange();
+    //    double   getR2();
 
 protected slots:
 

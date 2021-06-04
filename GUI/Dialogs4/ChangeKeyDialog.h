@@ -21,17 +21,19 @@
 
 #include <QDialog>
 
-#include "ui_ChangeKeyDialog4.h"
+namespace Ui {
+class ChangeKeyDialogData;
+}
 
-class ChangeKeyDialog : public QDialog, public Ui::ChangeKeyDialogData
+class ChangeKeyDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::ChangeKeyDialogData *ui;
     int nSymbols; // max number of simbols in key field
 
 protected slots:
     virtual void CmHelp();
-    virtual void languageChange();
     void SetFromString();
     void SetToString();
     void SetAll( bool );

@@ -25,6 +25,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFile>
 #include "v_module.h"
 #include "visor.h"
 #include "service.h"
@@ -2019,7 +2020,7 @@ void TCModule::RecListFromJSON()
     QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
     QJsonArray allArray = readDoc.array();
 
-    for( auto val : allArray)
+    for( const auto& val : allArray)
     {
         std::string keyp = db->fromJsonObject( val.toObject() );
         auto Rnum = db->Find( keyp.c_str() );

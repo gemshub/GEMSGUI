@@ -121,6 +121,11 @@ class TObjectModel: public QAbstractTableModel
 	 // return plase object defined by Model
 	 ePlaceMode getObjectPlace();
 
+     void resetData()
+     {
+         beginResetModel();
+         endResetModel();
+     }
 };
 
 /*!
@@ -411,5 +416,14 @@ inline int htF(eFieldType ft, int ht)
     }
 }
 
+class TLineEdit : public QLineEdit {
+public:
+    TLineEdit(QWidget *parent = 0) : QLineEdit(parent) {}
+protected:
+    void focusInEvent(QFocusEvent *e) {
+        QLineEdit::focusInEvent(e);
+        QTimer::singleShot(0, [this](){ selectAll(); });
+    }
+};
 
 #endif   // _model_w_h

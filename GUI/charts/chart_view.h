@@ -36,7 +36,9 @@
 #include <memory>
 #include <QtCharts/QChartView>
 
-QT_CHARTS_USE_NAMESPACE
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QT_CHARTS_USE_NAMESPACE
+#endif
 
 namespace jsonui {
 

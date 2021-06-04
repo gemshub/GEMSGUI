@@ -23,10 +23,11 @@
 #include <QMainWindow>
 #include <QTextBrowser>
 #include <QLineEdit>
+#include <QVBoxLayout>
 
-#include "ui_HelpWindow4.h"
-//#include "ui_AboutDialog4.h"
-//#include "ui_HowToStartDialog4.h"
+namespace Ui {
+class HelpWindowData;
+}
 
 QT_BEGIN_NAMESPACE
 class QHelpEngineCore;
@@ -36,7 +37,7 @@ class QHelpIndexWidget;
 class QHelpSearchEngine;
 class QHelpSearchResultWidget;
 class QLabel
-QT_END_NAMESPACE;
+        QT_END_NAMESPACE;
 
 class HelpBrowser : public QTextBrowser
 {
@@ -44,7 +45,7 @@ class HelpBrowser : public QTextBrowser
 
 public:
     HelpBrowser(QHelpEngine *hEngine, QWidget *parent);
-//    void showHelpForKeyword(const QString &id);
+    //    void showHelpForKeyword(const QString &id);
 
 private:
     QVariant loadResource(int type, const QUrl &name);
@@ -59,7 +60,7 @@ class SearchWidget : public QWidget
     QHelpSearchEngine *srchEngine;
     QHelpSearchResultWidget *rsltWidget;
 
-   // bool eventFilter(QObject* o, QEvent *e);
+    // bool eventFilter(QObject* o, QEvent *e);
 
 public:
     SearchWidget(QHelpSearchEngine *engine, QWidget *parent = nullptr);
@@ -76,10 +77,11 @@ private slots:
 };
 
 
-class HelpWindow : public QMainWindow, public Ui::HelpWindowData
+class HelpWindow : public QMainWindow
 {
     Q_OBJECT
 
+    Ui::HelpWindowData *ui;
     QHelpEngine *hEngine;
     QHelpContentWidget *wContents;
     QHelpIndexWidget *wIndex;
@@ -110,14 +112,14 @@ protected:
 
     QUrl showHelpForKeyword(const QString &id);
 
- //   void closeEvent(QCloseEvent* ev);
+    //   void closeEvent(QCloseEvent* ev);
     void setActions();
 
 protected slots:
-    virtual void languageChange();
-    void loadResource( const QUrl &name );
+
+    void loadResource(QUrl name);
     void filterIndices(const QString &filter);
-    void showAddres(const QUrl &name);
+    void showAddres(QUrl name);
     void syncContents();
     //void searchLine();
     void helpAbout();

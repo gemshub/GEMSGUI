@@ -203,10 +203,12 @@ double TPlot::getValue(int row, int col) const
             value = aObj[getObjY()]->GetEmpty( col-getNAbs(), row );
     }
 
+#ifndef OVERFLOW_EXCEPT
     if( IsDoubleEmpty( value ) && row > 0  )
         return std::numeric_limits<double>::lowest();
     else
-       return value;
+#endif
+        return value;
 }
 
 QString TPlot::getColumnName(int col) const
@@ -252,15 +254,15 @@ void TPlot::getMaxMinLine( double& minX, double& maxX, double& minY, double& max
     for( int ii =0; ii<dX; ii++)
     {
         point = getPoint( jj, ii, ndxAbs );
-        if( approximatelyEqual( point.x(), DOUBLE_EMPTY) || approximatelyEqual( point.y(), DOUBLE_EMPTY ) )
+        if( IsDoubleEmpty( point.x()) || IsDoubleEmpty( point.y() ) )
             continue;
-        if( minX > point.x() || approximatelyEqual( minX, DOUBLE_EMPTY ) )
+        if( minX > point.x() || IsDoubleEmpty( minX) )
             minX = point.x();
-        if( maxX < point.x() || approximatelyEqual( maxX, DOUBLE_EMPTY ) )
+        if( maxX < point.x() || IsDoubleEmpty( maxX ) )
             maxX = point.x();
-        if( minY > point.y() || approximatelyEqual( minY, DOUBLE_EMPTY ) )
+        if( minY > point.y() || IsDoubleEmpty( minY ) )
             minY = point.y();
-        if( maxY < point.y() || approximatelyEqual( maxY, DOUBLE_EMPTY ) )
+        if( maxY < point.y() || IsDoubleEmpty( maxY ) )
             maxY = point.y();
     }
 }

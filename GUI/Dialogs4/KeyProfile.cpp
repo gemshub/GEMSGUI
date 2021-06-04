@@ -16,11 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <QListWidget>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qvariant.h>
-
+#include "ui_KeyProfile4.h"
 #include "KeyProfile.h"
 #include "GemsMainWindow.h"
 #include "visor.h"
@@ -28,23 +24,24 @@
 
 KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
     QDialog( win),
+    ui(new Ui::KeyProfileData),
     iRt(irt), newKey(false)
 {
-    setupUi(this);
+    ui->setupUi(this);
 
-    pList->setFont( pVisorImp->getCellFont() );
+    ui->pList->setFont( pVisorImp->getCellFont() );
 
     TCIntArray    temp;
     TCStringArray keyList;
 
     setWindowTitle( caption );
     if( pVisor->getElemPrMode() )
-    {   rbNewPrMode->setChecked( true );
-        rbOldPrMode->setChecked( false );
+    {   ui->rbNewPrMode->setChecked( true );
+        ui->rbOldPrMode->setChecked( false );
     }
     else
-    {   rbNewPrMode->setChecked( false );
-        rbOldPrMode->setChecked( true );
+    {   ui->rbNewPrMode->setChecked( false );
+        ui->rbOldPrMode->setChecked( true );
     }
 
     //    string s = "Select Project record";
@@ -52,49 +49,48 @@ KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
 
     auto n = rt[irt]->GetKeyList( "*", keyList, temp);
     for( size_t ii=0; ii<n; ii++ )
-        pList->addItem(keyList[ii].c_str());
-    pList->setCurrentRow(0);
-    pList->item(0)->setSelected(true);
+        ui->pList->addItem(keyList[ii].c_str());
+    ui->pList->setCurrentRow(0);
+    ui->pList->item(0)->setSelected(true);
 
     // signals and slots connections
-    QObject::connect( pRe_runIA, SIGNAL( clicked() ), this, SLOT( CmReturnIA() ) );
-    QObject::connect( pRe_runSmart, SIGNAL( clicked() ), this, SLOT( CmReturnSmart() ) );
-    QObject::connect(pList, SIGNAL(itemDoubleClicked ( QListWidgetItem *) ), this, SLOT(accept()));
-    //     QObject::connect(pList, SIGNAL(returnPressed(QListWidgetItem *)), this, SLOT(accept()));
+    QObject::connect( ui->pNewProfBtn, SIGNAL(clicked()), this, SLOT(CmNew()));
+    QObject::connect( ui->pGO_OKButton, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect( ui->pCancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect( ui->pHelpButton, SIGNAL(clicked()), this, SLOT(CmHelp()));
+    QObject::connect( ui->pRe_runIA, SIGNAL( clicked() ), this, SLOT( CmReturnIA() ) );
+    QObject::connect( ui->pRe_runSmart, SIGNAL( clicked() ), this, SLOT( CmReturnSmart() ) );
+    QObject::connect( ui->pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(accept()));
+    //     QObject::connect(ui->pList, SIGNAL(returnPressed(QListWidgetItem *)), this, SLOT(accept()));
 }
 
 KeyProfile::~KeyProfile()
-{}
-
-
-
-void KeyProfile::languageChange()
 {
-    retranslateUi(this);
+    delete ui;
 }
 
 string KeyProfile::getKey() const
 {
-    pVisor->setElemPrMode(rbNewPrMode->isChecked());
+    pVisor->setElemPrMode(ui->rbNewPrMode->isChecked());
     if( newKey == true )
         return ALLKEY;
-    int sel = pList->currentRow();
+    int sel = ui->pList->currentRow();
     if( sel != -1 )
-        return pList->item(sel)->text().toStdString();
+        return ui->pList->item(sel)->text().toStdString();
 
     return string();
 }
 
 void KeyProfile::CmReturnIA()
 {
-    if( pRe_runIA->isChecked() )
-        pRe_runSmart->setChecked(false);
+    if( ui->pRe_runIA->isChecked() )
+        ui->pRe_runSmart->setChecked(false);
 }
 
 void KeyProfile::CmReturnSmart()
 {
-    if( pRe_runSmart->isChecked() )
-        pRe_runIA->setChecked(false);
+    if( ui->pRe_runSmart->isChecked() )
+        ui->pRe_runIA->setChecked(false);
 }
 
 void KeyProfile::CmNew()
@@ -108,16 +104,14 @@ void KeyProfile::CmHelp()
     pVisorImp->OpenHelp( GEMS_MPROJ_HTML );
 }
 
-bool
-KeyProfile::getAqGasState() const
+bool KeyProfile::getAqGasState() const
 {
     if( newKey == true )
         return true;    // new record => selection aqueous and gas phases
 
-    if( pAqGas->isChecked() )
+    if( ui->pAqGas->isChecked() )
         return false;
     else return true; // new selection aqueous and gas phases
-
 }
 
 int KeyProfile::getMakeDump() const
@@ -125,10 +119,10 @@ int KeyProfile::getMakeDump() const
     if( newKey == true )
         return 0;    // new record => no dump
 
-    if( pRe_runIA->isChecked() )
+    if( ui->pRe_runIA->isChecked() )
         return 1;  // Re-run and save all sysEq in auto IA mode
 
-    if( pRe_runSmart->isChecked() )
+    if( ui->pRe_runSmart->isChecked() )
         return 2;  // Re-run and save all sysEq in smart
     
     return 0;
@@ -139,7 +133,7 @@ bool KeyProfile::getFilesState() const
     if( newKey == true )
         return false;    // new record => add all files
 
-    if( pFiles->isChecked() )
+    if( ui->pFiles->isChecked() )
         return true;
     else return false; // add files from project directory
 
@@ -147,7 +141,7 @@ bool KeyProfile::getFilesState() const
 
 bool KeyProfile::getRemakeState() const
 {
-    if( CheckBox4->isChecked() )
+    if( ui->CheckBox4->isChecked() )
         return true;   // remake flags
     else return false;
 
@@ -155,11 +149,11 @@ bool KeyProfile::getRemakeState() const
 
 string KeyProfile::getTemplateKey() const
 {
-    if( newKey == true && pTemplate->isChecked() )
+    if( newKey == true && ui->pTemplate->isChecked() )
     {
-        int sel = pList->currentRow();
+        int sel = ui->pList->currentRow();
         if( sel != -1 )
-            return pList->item(sel)->text().toStdString();
+            return ui->pList->item(sel)->text().toStdString();
         Error( "New Modelling Project", "No template record selected");
     }
     return string();
@@ -167,12 +161,12 @@ string KeyProfile::getTemplateKey() const
 
 bool KeyProfile::getGEMSExport() const
 {
-    return checkGEMS3k->isChecked();
+    return ui->checkGEMS3k->isChecked();
 }
 
 bool KeyProfile::getGEMSExportMode() const
 {
-    return checkBrief->isChecked();
+    return ui->checkBrief->isChecked();
 }
 
 // --------------------- End KeyProfile.cpp -------------------------

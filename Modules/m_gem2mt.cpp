@@ -30,7 +30,7 @@
 #include "m_syseq.h"
 #include "GEMS3K/io_keyvalue.h"
 #include "GEMS3K/io_simdjson.h"
-//#include "GEMS3K/io_nlohmann.h"
+#include "GEMS3K/io_nlohmann.h"
 
 TGEM2MT* TGEM2MT::pm;
 
@@ -972,6 +972,8 @@ TGEM2MT::RecCalc( const char * key )
      if( !pVisor->ProfileMode  )
        Error( GetName(), "E02GTexec: Please, do it in the Equilibria Calculation mode" );
 
+     error_lst_path.clear();
+
    if( mtp->PsVTK != S_OFF )
    {
      prefixVTK = std::string( db->FldKey(8), 0, db->FldLen(8) );
@@ -1028,7 +1030,7 @@ TGEM2MT::RecCalc( const char * key )
       }
      //TMulti::sm->Free_TSolMod();
      auto ret = na->GEM_init( lst_f_name.c_str(), dbr_lst_f_name.c_str(), 0, true );
-     ErrorIf( ret, "TGEM2MT", "Error read interrupted by the user: " + lst_f_name );
+     ErrorIf( ret, "TGEM2MT", "Error read " + lst_f_name +": \n" + na->getCalcNode()->ipmLogError() );
 
      if( mtp->PsMode != RMT_MODE_S  )
        CalcIPM( NEED_GEM_SIA, 0, mtp->nC, 0 );
@@ -1128,6 +1130,28 @@ const char* TGEM2MT::GetHtml()
    return GM_GEM2MT_HTML;
 }
 
+GEMS3KGenerator TGEM2MT::GEMS3k_generator()
+{
+    GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
+    switch( mtp->PsSdat )
+    {
+    case '-':
+    case 'b': type_f = GEMS3KGenerator::f_binary; break;
+    case 'j': type_f = GEMS3KGenerator::f_json; break;
+    }
+    if( error_lst_path.empty() )
+    {
+        error_lst_path = std::string( rt[RT_SYSEQ]->FldKey(2), 0, rt[RT_SYSEQ]->FldLen(2));;
+        strip(error_lst_path);
+        error_lst_path += "-err.lst";
+        // open file to output
+        vfChooseFileSave(window(), error_lst_path, "Please, enter IPM work structure file name", "*.lst" );
+    }
+    return GEMS3KGenerator( error_lst_path, mtp->nC, type_f );
+}
+
+
+
 void TGEM2MT::RecordPrint( const char* key )
 {
     int res = vfQuestion3(window(), "Question",
@@ -1159,12 +1183,18 @@ void TGEM2MT::RecordPrint( const char* key )
             ErrorIf( !ff.good() , filename, "Fileopen error");
             switch( type_f )
             {
-            case GEMS3KGenerator::f_nlohmanjson:
             case GEMS3KGenerator::f_json:
+#ifdef USE_NLOHMANNJSON
+            {
+                io_formats::NlohmannJsonWrite out_format( ff, "" );
+                to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
+            }
+#else
             {
                 io_formats::SimdJsonWrite out_format( ff, "", mtp->PsScom!=S_OFF );
                 to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );
             }
+#endif
                 break;
             case GEMS3KGenerator::f_binary:
             case GEMS3KGenerator::f_key_value:
@@ -1192,12 +1222,12 @@ void TGEM2MT::RecordPrint( const char* key )
 
 // insert changes in Project to GEM2MT
 void TGEM2MT::InsertChanges( std::vector<CompItem>& aIComp,
-      std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp )
+                             std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp )
 {
 
     // insert changes to IComp
     if(aIComp.size()<1 && aPhase.size()<1 && aDComp.size()<1)
-       return;
+        return;
 
    // alloc memory & copy data from db
 

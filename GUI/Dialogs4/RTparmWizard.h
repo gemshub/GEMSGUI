@@ -20,15 +20,17 @@
 #define RTparmWizard_included
 
 #include <QDialog>
-#include "ui_RTparmWizard4.h"
 #include "EquatSetupWidget.h"
 
+namespace Ui {
+class RTparmWizardData;
+}
 
-
-class RTparmWizard : public QDialog, public Ui::RTparmWizardData
+class RTparmWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::RTparmWizardData *ui;
     bool isDC;
     string calcScript;
     EquatSetup *pageScript;
@@ -41,8 +43,8 @@ class RTparmWizard : public QDialog, public Ui::RTparmWizardData
 public:
 
     RTparmWizard( const char* pkey, char flgs[10], int sizes[7], double val[6],
-                  const char *acalcScript, const char* aXname, const char* aYname,
-                  QWidget* parent = nullptr);
+    const char *acalcScript, const char* aXname, const char* aYname,
+    QWidget* parent = nullptr);
     virtual ~RTparmWizard();
 
     void   getSizes( int size[7] );
@@ -50,13 +52,9 @@ public:
     void   getFloat( double val[6] );
 
     string getScript() const
-    { return pageScript->getScript();
-    }
+    { return pageScript->getScript(); }
     TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
-
-protected slots:
-    virtual void languageChange();
 
 protected slots:
 
@@ -68,8 +66,6 @@ protected slots:
     void TChange();
     void PairwiseChecked();
     void objectChanged(){}
-
-
 };
 
 

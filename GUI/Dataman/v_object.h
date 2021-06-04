@@ -57,6 +57,8 @@ class TObject
     char IndexationCode;
     char Keywd[MAXKEYWD];
 
+    std::string string_empty_value = S_EMPTY;
+
     //void* GetCellPtr(int N = 0, int M = 0);
     TValBase* BuildVal(ObjType t, int M);
 
@@ -92,6 +94,12 @@ protected:
     //*  void PutEmpty( uint n=0, uint m=0 );
 
 public:
+
+    void set_empty_string( const string& object_empty )
+    {
+        string_empty_value = object_empty;
+    }
+
     TObject (const char* name, ObjType type, int n, int m,
              bool dyn, char indexCode, const string descr);
     TObject (istream & f);
@@ -195,12 +203,16 @@ public:
     string GetString(int aN = 0, int aM = 0) const
     {
         check_dim(aN, aM);
-        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string (S_EMPTY));
+        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string(S_EMPTY));
     }
     string GetStringEmpty(int aN = 0, int aM = 0) const
     {
-        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string (S_EMPTY));
+        auto str_value = ((GetPtr())? pV->GetString(ndx(aN, aM)) : string(S_EMPTY) );
+        if(  Type >= 0 && str_value == string(S_EMPTY))
+            str_value = string_empty_value;
+        return str_value;
     }
+
     bool SetString(const char* vbuf, int aN = 0, int aM = 0);
 
     //--- Object manipulation

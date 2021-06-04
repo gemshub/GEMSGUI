@@ -20,29 +20,28 @@
 #define ListFilesDialog_included
 
 #include <QDialog>
-#include <qradiobutton.h>
-
-#include "ui_ListFilesDialog4.h"
+#include <QTreeWidget>
 #include "v_user.h"
 
-class ListFilesDialog : public QDialog, public Ui::ListFilesDialogData
+namespace Ui {
+class ListFilesDialogData;
+}
+
+class ListFilesDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::ListFilesDialogData *ui;
     QTreeWidgetItem* pprf;
     QTreeWidgetItem* pkern;
-
 
 public slots:
     virtual void CmHelp();
 
-protected slots:
-    virtual void languageChange();
-
 public:
 
     ListFilesDialog(QWidget* win, const char * prfName,
-         const char* caption = nullptr );
+                    const char* caption = nullptr );
     virtual ~ListFilesDialog();
 
     void allSelected( TCStringArray& aFls, TCIntArray& aCnt);

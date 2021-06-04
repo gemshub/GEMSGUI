@@ -17,33 +17,33 @@
 //-------------------------------------------------------------------
 
 #include <QTreeWidget>
-#include <qlabel.h>
-#include <qvariant.h>
 
-#include "GemsMainWindow.h"
+#include "ui_ListFilesDialog4.h"
 #include "ListFilesDialog.h"
+#include "GemsMainWindow.h"
 #include "visor.h"
 #include "service.h"
 
 ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const char* /*caption*/ )
-    : QDialog(parent )
+    : QDialog(parent),
+      ui(new Ui::ListFilesDialogData)
 {
     unsigned int i, ii;
-    setupUi(this);
+    ui->setupUi(this);
 
     //setWindowTitle(prfName);
     string label = "Please, check database files to be linked to Modeling Project ";
-             label += prfName;
-    pLabel->setText( tr(label.c_str()) );
+    label += prfName;
+    ui->pLabel->setText( tr(label.c_str()) );
 
-    pListFiles->setFont( pVisorImp->getCellFont() );
-    pListFiles->setSelectionMode(QAbstractItemView::MultiSelection);    //setMultiSelection(true);
-    pListFiles->setSortingEnabled( false );                            //setSorting(-1);
-    pListFiles->setRootIsDecorated(true);
-    pListFiles->setAllColumnsShowFocus(true);
+    ui->pListFiles->setFont( pVisorImp->getCellFont() );
+    ui->pListFiles->setSelectionMode(QAbstractItemView::MultiSelection);    //setMultiSelection(true);
+    ui->pListFiles->setSortingEnabled( false );                            //setSorting(-1);
+    ui->pListFiles->setRootIsDecorated(true);
+    ui->pListFiles->setAllColumnsShowFocus(true);
     // setCaption(caption);
     
-    QTreeWidgetItem* pdb = new QTreeWidgetItem( pListFiles );
+    QTreeWidgetItem* pdb = new QTreeWidgetItem( ui->pListFiles );
     pdb->setText(0,"Database");
     pkern = new QTreeWidgetItem( pdb );
     pkern->setText(0,"Built-in" );
@@ -66,17 +66,17 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
         for( ii=0; ii<names.size(); ii++ )
         {
-          // select only DB.default files
-          if( names[ii].find( pVisor->sysDBDir())== string::npos )
-              continue;
-          // get 2 colums
-          pos1 = names[ii].find_first_of(" ");
-          pos2 = names[ii].rfind("/");
-          pFile = new QTreeWidgetItem( pMod );
-          pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
-          pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
-          if( findIndex<int>( sel, indx[ii]) >= 0 )
-               pFile->setSelected( true );
+            // select only DB.default files
+            if( names[ii].find( pVisor->sysDBDir())== string::npos )
+                continue;
+            // get 2 colums
+            pos1 = names[ii].find_first_of(" ");
+            pos2 = names[ii].rfind("/");
+            pFile = new QTreeWidgetItem( pMod );
+            pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
+            pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
+            if( findIndex<int>( sel, indx[ii]) >= 0 )
+                pFile->setSelected( true );
         }
     }
 
@@ -92,30 +92,30 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
         for( ii=0; ii<names.size(); ii++ )
         {
-          // select only Projecte files
-          if( names[ii].find( prfName/*Path*/ ) == string::npos )
-              continue;
-          // get 2 colums
-          pos1 = names[ii].find_first_of(" ");
-          pos2 = names[ii].rfind("/");
-          pFile = new QTreeWidgetItem( pMod );
-          pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
-          pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
-          if(  findIndex<int>( sel, indx[ii] ) >= 0 )
-               pFile->setSelected( true );
+            // select only Projecte files
+            if( names[ii].find( prfName/*Path*/ ) == string::npos )
+                continue;
+            // get 2 colums
+            pos1 = names[ii].find_first_of(" ");
+            pos2 = names[ii].rfind("/");
+            pFile = new QTreeWidgetItem( pMod );
+            pFile->setText(0,  names[ii].substr( 0, pos1 ).c_str() );
+            pFile->setText(1,  names[ii].substr( pos2+1 ).c_str() );
+            if(  findIndex<int>( sel, indx[ii] ) >= 0 )
+                pFile->setSelected( true );
         }
     }
-    pListFiles->expandToDepth( 0);
-    pListFiles->setFocus();
+    ui->pListFiles->expandToDepth( 0);
+    ui->pListFiles->setFocus();
 
+    QObject::connect( ui->pGO_OKButton, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect( ui->pHelpButton, SIGNAL(clicked()), this, SLOT(CmHelp()));
+    QObject::connect( ui->pCancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 ListFilesDialog::~ListFilesDialog()
-{}
-
-void ListFilesDialog::languageChange()
 {
-    retranslateUi(this);
+    delete ui;
 }
 
 void ListFilesDialog::CmHelp()
@@ -136,45 +136,44 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
     int npMod1 = pkern->childCount();
     int npMod2 = pprf->childCount();
     ErrorIf( npMod1 != npMod2, "ListFilesDialog", "Test point");
-   
+
     QTreeWidgetItem* pMod;
     QTreeWidgetItem* pFile;
 
     for( ii=0; ii< npMod1; ii++ )
     {
-      cnt = 0;
-     
-      pMod = pkern->child(ii);
-      nF = pMod->childCount();
-      for( jj = 0; jj< nF; jj++ )
-      {
-        pFile = pMod->child( jj );
-       if( pFile->isSelected() )
-       {
-         string col =pFile->text( 0 ).toStdString();
-         cnt++;
-         aFls.push_back( col.c_str() );
-       }
-      }
+        cnt = 0;
 
-      pMod = pprf->child(ii);
-      nF = pMod->childCount();
-      for( jj = 0; jj< nF; jj++ )
-      {
-        pFile = pMod->child( jj );
-       if( pFile->isSelected() )
-       {
-         string col =pFile->text( 0 ).toStdString();
-         cnt++;
-         aFls.push_back( col.c_str() );
-       }
-      }
-      aCnt.push_back( cnt );
+        pMod = pkern->child(ii);
+        nF = pMod->childCount();
+        for( jj = 0; jj< nF; jj++ )
+        {
+            pFile = pMod->child( jj );
+            if( pFile->isSelected() )
+            {
+                string col =pFile->text( 0 ).toStdString();
+                cnt++;
+                aFls.push_back( col.c_str() );
+            }
+        }
+
+        pMod = pprf->child(ii);
+        nF = pMod->childCount();
+        for( jj = 0; jj< nF; jj++ )
+        {
+            pFile = pMod->child( jj );
+            if( pFile->isSelected() )
+            {
+                string col =pFile->text( 0 ).toStdString();
+                cnt++;
+                aFls.push_back( col.c_str() );
+            }
+        }
+        aCnt.push_back( cnt );
 
     }
 
 }
-
 
 // --------------------- End ListFilesDialog.cpp -------------------------
 

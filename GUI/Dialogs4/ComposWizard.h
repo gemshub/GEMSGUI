@@ -21,28 +21,29 @@
 
 
 #include <QDialog>
-#include "ui_ComposWizard4.h"
 
-class ComposWizard : public QDialog, public Ui::ComposWizardData
+namespace Ui {
+class ComposWizardData;
+}
+
+class ComposWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::ComposWizardData *ui;
     void 	resetNextButton();
     void 	resetBackButton();
 
 public:
 
     ComposWizard( const char* pkey, char flgs[6], int sizes[2],
-                  double r2, QWidget* parent = nullptr);
+    double r2, QWidget* parent = nullptr);
     virtual ~ComposWizard();
 
 
     void   getSizes( int sizs[2] );
     void   getFlags( char flgs[6] );
     double   getR2();
-
-protected slots:
-    virtual void languageChange();
 
 protected slots:
 

@@ -20,9 +20,12 @@
 #define InputSystemDialog_included
 
 #include <QDialog>
-#include "ui_InputSystemDialog4.h"
 #include "filters_data.h"
 #include "EquatSetupWidget.h"
+
+namespace Ui {
+class InputSystemDialogData;
+}
 
 /*!
   \ class TSystemDelegate
@@ -30,24 +33,24 @@
 */
 class TSystemDelegate: public QItemDelegate
 {
-        Q_OBJECT
+    Q_OBJECT
 
 public:
 
-         TSystemDelegate( QObject * parent = nullptr );
-         QWidget *createEditor(QWidget *parent,
-                               const QStyleOptionViewItem &option,
-                               const QModelIndex &index) const;
-         void setEditorData(QWidget *editor, const QModelIndex &index) const;
-         void setModelData(QWidget *editor, QAbstractItemModel *model,
-                             const QModelIndex &index) const;
+    TSystemDelegate( QObject * parent = nullptr );
+    QWidget *createEditor(QWidget *parent,
+                          const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const;
 };
 
 class InputSystemDialog;
 
 class TRecipeTable: public QTableWidget
 {
-        Q_OBJECT
+    Q_OBJECT
 
     InputSystemDialog *parentDlg;
 
@@ -56,7 +59,7 @@ class TRecipeTable: public QTableWidget
     QString createString();
     QString createHeader();
 
-  protected slots:
+protected slots:
     void slotPopupContextMenu(const QPoint &pos);
     void SelectAll();
     void CopyData();
@@ -66,61 +69,61 @@ class TRecipeTable: public QTableWidget
     void CmHelp();
     void PasteData();
 
-  public:
-       TRecipeTable( QWidget *parent, InputSystemDialog *parentDlg  );
+public:
+    TRecipeTable( QWidget *parent, InputSystemDialog *parentDlg  );
 };
 
-class InputSystemDialog : public QDialog, public Ui::InputSystemDialogData
+class InputSystemDialog : public QDialog
 {
 
-   Q_OBJECT
+    Q_OBJECT
 
-   std::vector<windowSetupData> wnData;
-   std::vector<tableSetupData>  tbData;
-   std::vector<pagesSetupData> stData;
-   uint curPage;
+    Ui::InputSystemDialogData *ui;
+    std::vector<windowSetupData> wnData;
+    std::vector<tableSetupData>  tbData;
+    std::vector<pagesSetupData> stData;
+    uint curPage;
 
-   QList<QListWidget *> pLists;
-   TRecipeTable *recTable;
+    QList<QListWidget *> pLists;
+    TRecipeTable *recTable;
+    TLineEdit* pTname = nullptr;
+    TLineEdit* pComment = nullptr;
 
-   // internal functions
-   int tableFindRow( int nO, int ndx );
-   //int tableChangeRow( int row, tableSetupData& d);
-   int tableInsertRow( tableSetupData& d);
-   int tableInsertRow( int nO, int ndx, const char * andName);
-   size_t tableDeleteRow( int row );
-   void tableShowRow( int row );
-   // working with static list
-   int staticFindRow( int nO, int ndx);
+    // internal functions
+    int tableFindRow( int nO, int ndx );
+    //int tableChangeRow( int row, tableSetupData& d);
+    int tableInsertRow( tableSetupData& d);
+    int tableInsertRow( int nO, int ndx, const char * andName);
+    size_t tableDeleteRow( int row );
+    void tableShowRow( int row );
+    // working with static list
+    int staticFindRow( int nO, int ndx);
 
 
 
 public:
 
     InputSystemDialog( QWidget* parent, const char* pkey,
-       const std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
-       const std::vector<pagesSetupData>& scalarsList );
+                       const std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
+                       const std::vector<pagesSetupData>& scalarsList );
     virtual ~InputSystemDialog();
 
 
 
-   void getTable( std::vector<tableSetupData>& tab ) const;
-   void deleteRows( int f_from, int r_to );
+    void getTable( std::vector<tableSetupData>& tab ) const;
+    void deleteRows( int f_from, int r_to );
 
-   int getObjTable( size_t row ) const
-       { return tbData[row].nObj; }
-   int getUnitsTable( size_t row ) const
-       { return wnData[ tbData[row].nWin].nOunit; }
-   int getListTable( size_t row ) const
-   { return wnData[ tbData[row].nWin ].unitLine; }
+    int getObjTable( size_t row ) const
+    { return tbData[row].nObj; }
+    int getUnitsTable( size_t row ) const
+    { return wnData[ tbData[row].nWin].nOunit; }
+    int getListTable( size_t row ) const
+    { return wnData[ tbData[row].nWin ].unitLine; }
 
-   double getTableVal( size_t row ) const
-   {  return tbData[row].val; }
-   void setTableVal( size_t row, double value )
-   {  tbData[row].val = value; }
-
-protected slots:
-    virtual void languageChange();
+    double getTableVal( size_t row ) const
+    {  return tbData[row].val; }
+    void setTableVal( size_t row, double value )
+    {  tbData[row].val = value; }
 
 public slots:
     void changePage( int nPage );

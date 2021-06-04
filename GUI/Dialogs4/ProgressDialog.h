@@ -22,9 +22,11 @@
 #include <QPaintEvent>
 #include <QCloseEvent>
 #include <QDialog>
-
 #include <ctime>
-#include "ui_ProgressDialog4.h"
+
+namespace Ui {
+class ProgressDialogData;
+}
 
 class CalcThread;
 class QTimer;
@@ -59,10 +61,11 @@ public:
 
 };
 
-class ProgressDialog : public QDialog, public Ui::ProgressDialogData
+class ProgressDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::ProgressDialogData *ui;
     int ht_g;
     int ht_a;
     int ht_s;
@@ -81,16 +84,13 @@ public slots:
 
 protected slots:
 
-    virtual void languageChange();
     virtual void CmAccept();
 
 protected:
-
     void closeEvent(QCloseEvent* ev);
     void paintEvent(QPaintEvent* ev);
 
 public:
-
     static ProgressDialog* pDia;
 
     ProgressDialog(QWidget* parent);

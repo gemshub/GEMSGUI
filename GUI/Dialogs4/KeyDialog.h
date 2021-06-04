@@ -20,14 +20,17 @@
 #define KeyDialog_included
 
 #include <QDialog>
-
-#include "ui_KeyDialog4.h"
 #include "v_user.h"
 
-class KeyDialog : public QDialog, public Ui::KeyDialogData
+namespace Ui {
+class KeyDialogData;
+}
+
+class KeyDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::KeyDialogData *ui;
     //  TStringArray keyList;
     bool multi;
     std::string keyFilter;
@@ -39,7 +42,6 @@ class KeyDialog : public QDialog, public Ui::KeyDialogData
 protected slots:
     virtual void CmSelectAll();
     virtual void CmClearAll();
-    virtual void languageChange();
     virtual void CmFilter();
     void CmHelp();
 
@@ -59,10 +61,11 @@ public:
 };
 
 // work with ReacDC&DComp keys lists
-class RDKeyDialog : public QDialog, public Ui::KeyDialogData
+class RDKeyDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::KeyDialogData *ui;
     string keyFilter;
     QStringList old_sel;
     short NsuT;     // N of surface site types (to set up on remake)
@@ -72,17 +75,16 @@ class RDKeyDialog : public QDialog, public Ui::KeyDialogData
 protected slots:
     virtual void CmSelectAll();
     virtual void CmClearAll();
-    virtual void languageChange();
     virtual void CmFilter();
     void CmHelp();
 
 public:
 
     RDKeyDialog(QWidget* win, TCStringArray& sel,
-              const char* key = "*", const char* caption = nullptr, short NsuT=0 );
+                const char* key = "*", const char* caption = nullptr, short NsuT=0 );
     virtual ~RDKeyDialog();
     TCStringArray allSelectedKeys();
-//    string getKey();
+    //    string getKey();
 };
 
 

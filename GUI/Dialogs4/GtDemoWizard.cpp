@@ -16,133 +16,127 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qradiobutton.h>
-#include <qlineedit.h>
-#include <qvariant.h>
 
+#include "ui_GtDemoWizard4.h"
 #include "GtDemoWizard.h"
 #include "GemsMainWindow.h"
 #include "m_param.h"
 #include "service.h"
 
-void GtDemoWizard::languageChange()
-{
-    retranslateUi(this);
-}
-
 void GtDemoWizard::CmBack()
 {
-    stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()-1 );
+    ui->stackedWidget->setCurrentIndex ( ui->stackedWidget->currentIndex()-1 );
     resetNextButton();
     resetBackButton();
 }
 
 void GtDemoWizard::CmNext()
 {
-    int ndx = stackedWidget->currentIndex();
+    int ndx = ui->stackedWidget->currentIndex();
     auto nLines = pageScript->getScriptLinesNum();
     if( ndx == 1 && nLines > 0)
     {
-             pGraphY->setValue( nLines );
-             pGraphX->setValue( pageScript->getAbscissaNum() );
+        ui->pGraphY->setValue( nLines );
+        ui->pGraphX->setValue( pageScript->getAbscissaNum() );
     }
 
     if( ndx == 0 ) // define graph window
     {
-      CmChangePage2(0);
+        CmChangePage2(0);
     }
 
-    stackedWidget->setCurrentIndex ( stackedWidget->currentIndex()+1 );
+    ui->stackedWidget->setCurrentIndex ( ui->stackedWidget->currentIndex()+1 );
     resetNextButton();
     resetBackButton();
 }
 
 void 	GtDemoWizard::resetNextButton()
 {
-	if( stackedWidget->currentIndex() == stackedWidget->count() - 1 )
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(accept()) );
-		pNext->setText("&Finish");
-	}
-	else
-	{	
-		pNext->disconnect();
-		connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
-		pNext->setText("&Next>");
-	}
+    if( ui->stackedWidget->currentIndex() == ui->stackedWidget->count() - 1 )
+    {
+        ui->pNext->disconnect();
+        connect( ui->pNext, SIGNAL(clicked()), this, SLOT(accept()) );
+        ui->pNext->setText("&Finish");
+    }
+    else
+    {
+        ui->pNext->disconnect();
+        connect( ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()) );
+        ui->pNext->setText("&Next>");
+    }
 }
 
-void 	GtDemoWizard::resetBackButton()
+void GtDemoWizard::resetBackButton()
 {
-	pBack->setEnabled( stackedWidget->currentIndex() > 0 );
+    ui->pBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
 
 GtDemoWizard::GtDemoWizard( const char* pkey, int size[8], const char *ascript,
-                            const char *proc_key, const char* aXname, const char* aYname, QWidget* parent):
-            QDialog( parent ), script(ascript), pageScript(nullptr)
+const char *proc_key, const char* aXname, const char* aYname, QWidget* parent):
+    QDialog( parent ),
+    ui(new Ui::GtDemoWizardData),
+    script(ascript), pageScript(nullptr)
 {
-    setupUi(this);
+    ui->setupUi(this);
 
     string str1= "GEM-Selektor GtDemo Setup:  ";
-            str1 += pkey;
-            setWindowTitle( str1.c_str() );
+    str1 += pkey;
+    setWindowTitle( str1.c_str() );
 
-    allButtons = new QButtonGroup( groupBox_7 );
-    allButtons->addButton(psIC, 0);
-    allButtons->addButton(psDC, 1);
-    allButtons->addButton(psBC, 2);
-    allButtons->addButton(psRE, 3);
-    allButtons->addButton(psRP, 4);
-    allButtons->addButton(psPH, 5);
-    allButtons->addButton(psST, 6);
-    allButtons->addButton(psPE, 7);
-    allButtons->addButton(psPB, 8);
-    allButtons->addButton(psUT, 9);
-    allButtons->addButton(psTR, 10);
+    allButtons = new QButtonGroup( ui->groupBox_7 );
+    allButtons->addButton(ui->psIC, 0);
+    allButtons->addButton(ui->psDC, 1);
+    allButtons->addButton(ui->psBC, 2);
+    allButtons->addButton(ui->psRE, 3);
+    allButtons->addButton(ui->psRP, 4);
+    allButtons->addButton(ui->psPH, 5);
+    allButtons->addButton(ui->psST, 6);
+    allButtons->addButton(ui->psPE, 7);
+    allButtons->addButton(ui->psPB, 8);
+    allButtons->addButton(ui->psUT, 9);
+    allButtons->addButton(ui->psTR, 10);
 
-    stackedWidget->setCurrentIndex (0);
+    ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();
     
-//Page1
-   nRT = -1;// size[0];
-   switch( size[0]) //nRT - chain index
-   {
-     case RT_ICOMP:  psIC->setChecked( true ); break;
-     case RT_DCOMP:  psDC->setChecked( true ); break;
-     case RT_COMPOS: psBC->setChecked( true ); break;
-     case RT_REACDC: psRE->setChecked( true ); break;
-     case RT_RTPARM: psRP->setChecked( true ); break;
-     case RT_PHASE:  psPH->setChecked( true ); break;
-     default:
-     case RT_SYSEQ:  psST->setChecked( true ); break;
-     case RT_PROCES: psPE->setChecked( true ); break;
-     case RT_UNSPACE: psPB->setChecked( true ); break;
-     case RT_DUALTH: psUT->setChecked( true ); break;
-     case RT_GEM2MT: psTR->setChecked( true ); break;
-   }
-//Page 2
-   resetPageList(size[0], aXname, aYname);
+    //Page1
+    nRT = -1;// size[0];
+    switch( size[0]) //nRT - chain index
+    {
+    case RT_ICOMP:  ui->psIC->setChecked( true ); break;
+    case RT_DCOMP:  ui->psDC->setChecked( true ); break;
+    case RT_COMPOS: ui->psBC->setChecked( true ); break;
+    case RT_REACDC: ui->psRE->setChecked( true ); break;
+    case RT_RTPARM: ui->psRP->setChecked( true ); break;
+    case RT_PHASE:  ui->psPH->setChecked( true ); break;
+    default:
+    case RT_SYSEQ:  ui->psST->setChecked( true ); break;
+    case RT_PROCES: ui->psPE->setChecked( true ); break;
+    case RT_UNSPACE: ui->psPB->setChecked( true ); break;
+    case RT_DUALTH: ui->psUT->setChecked( true ); break;
+    case RT_GEM2MT: ui->psTR->setChecked( true ); break;
+    }
+    //Page 2
+    resetPageList(size[0], aXname, aYname);
 
-//Page3
-    pGraphY->setValue(size[6]);
-    pGraphX->setValue(size[7]);
-    pNwc->setValue(size[2]);
-    pNqp->setValue(size[3]);
-    pELine->setValue(size[4]);
-    pECol->setValue(size[5]);
-//Page4
-    spinBox18->setValue(size[1]);
-    lineEditProcesKey->setText( proc_key );
+    //Page3
+    ui->pGraphY->setValue(size[6]);
+    ui->pGraphX->setValue(size[7]);
+    ui->pNwc->setValue(size[2]);
+    ui->pNqp->setValue(size[3]);
+    ui->pELine->setValue(size[4]);
+    ui->pECol->setValue(size[5]);
+    //Page4
+    ui->spinBox18->setValue(size[1]);
+    ui->lineEditProcesKey->setText( proc_key );
 
-    QObject::connect( pHelp, SIGNAL(clicked()), this, SLOT(help()));
-    QObject::connect( pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
-    QObject::connect( pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
-    //QObject::connect( allButtons, SIGNAL(buttonClicked(int)), this, SLOT(CmChangePage2(int)));
+    QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));
+    QObject::connect( ui->pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
+    QObject::connect( ui->pNext, SIGNAL(clicked()), this, SLOT(CmNext()));
+    //QObject::connect( allButtons, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(CmChangePage2(int)));
 
     //groupBox_7->toggled();
 
@@ -150,53 +144,55 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[8], const char *ascript,
 
 
 GtDemoWizard::~GtDemoWizard()
-{}
+{
+    delete ui;
+}
 
 void   GtDemoWizard::getSizes( int size[8] )
 {
     size[0] = getnRT();
 
-    size[1]= spinBox18->value();
-    size[2]= pNwc->value();
-    size[3]= pNqp->value();
-    size[4]= pELine->value();
-    size[5]= pECol->value();
-    size[6]= pGraphY->value();
-    size[7]= pGraphX->value();
+    size[1]= ui->spinBox18->value();
+    size[2]= ui->pNwc->value();
+    size[3]= ui->pNqp->value();
+    size[4]= ui->pELine->value();
+    size[5]= ui->pECol->value();
+    size[6]= ui->pGraphY->value();
+    size[7]= ui->pGraphX->value();
 }
 
 int   GtDemoWizard::getnRT()
 {
     int newRT;
 
-    if( psST->isChecked() )
+    if( ui->psST->isChecked() )
         newRT = RT_SYSEQ;
     else
-        if( psPE->isChecked() )
+        if( ui->psPE->isChecked() )
             newRT = RT_PROCES;
         else
-            if( psPB->isChecked() )
+            if( ui->psPB->isChecked() )
                 newRT = RT_UNSPACE;
             else
-                if( psIC->isChecked() )
+                if( ui->psIC->isChecked() )
                     newRT = RT_ICOMP;
                 else
-                    if( psDC->isChecked() )
+                    if( ui->psDC->isChecked() )
                         newRT = RT_DCOMP;
                     else
-                        if( psBC->isChecked() )
+                        if( ui->psBC->isChecked() )
                             newRT = RT_COMPOS;
                         else
-                            if( psRE->isChecked() )
+                            if( ui->psRE->isChecked() )
                                 newRT = RT_REACDC;
                             else
-                                if( psRP->isChecked() )
+                                if( ui->psRP->isChecked() )
                                     newRT = RT_RTPARM;
                                 else
-                                    if( psPH->isChecked() )
+                                    if( ui->psPH->isChecked() )
                                         newRT = RT_PHASE;
                                     else
-                                        if( psUT->isChecked() )
+                                        if( ui->psUT->isChecked() )
                                             newRT = RT_DUALTH;
                                         else
                                             newRT = RT_GEM2MT;
@@ -206,20 +202,19 @@ int   GtDemoWizard::getnRT()
 
 void GtDemoWizard::CmChangePage2(int)
 {
-   int	newRT = getnRT();
-   resetPageList(  newRT );
+    int	newRT = getnRT();
+    resetPageList(  newRT );
 }
 
-string
-GtDemoWizard::getPrKey()
+string GtDemoWizard::getPrKey()
 {
-  string str = lineEditProcesKey->text().toStdString();
-  return str;
+    string str = ui->lineEditProcesKey->text().toStdString();
+    return str;
 }
 
 void GtDemoWizard::help()
 {
-  pVisorImp->OpenHelp( GM_GTDEMO_WZ_HTML, WZSTEP, stackedWidget->currentIndex()+1 );
+    pVisorImp->OpenHelp( GM_GTDEMO_WZ_HTML, WZSTEP, ui->stackedWidget->currentIndex()+1 );
 }
 
 //==============================================================================
@@ -236,7 +231,7 @@ void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYna
     std::vector<pagesSetupData> pgData;
 
     if( nRT == newRT )
-      return;
+        return;
 
     nRT = newRT;
 
@@ -248,7 +243,7 @@ void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYna
             TCIntArray anRk;
             auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist, anRk );
             if( Nr > 0 )
-              TProfil::pm->loadSystat( aRklist[0].c_str() );
+                TProfil::pm->loadSystat( aRklist[0].c_str() );
         }
         GetListsnRT( MD_MULTI, pgData,  scalarsList );
         GetListsnRT( MD_SYSTEM, pgData,  scalarsList );
@@ -265,12 +260,12 @@ void GtDemoWizard::resetPageList( int newRT,const char* aXname, const char* aYna
 
 
     if( pageScript )
-      pageScript->resetPageList( newRT, pgData, scalarsList );
+        pageScript->resetPageList( newRT, pgData, scalarsList );
     else
     {
-      pageScript = new EquatSetup( page_3, eqd, nRT, pgData, scalarsList,
-                                   script.c_str(), aXname, aYname  );
-      verticalLayout_2->addWidget(pageScript);
+        pageScript = new EquatSetup( ui->page_3, eqd, nRT, pgData, scalarsList,
+                                     script.c_str(), aXname, aYname  );
+        ui->verticalLayout_2->addWidget(pageScript);
     }
 
 }

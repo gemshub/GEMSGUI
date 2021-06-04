@@ -22,11 +22,13 @@
 #include <QDialog>
 #include <QButtonGroup>
 #include <QStandardItemModel>
-
-#include "ui_ElementsDialog4.h"
 #include "filters_data.h"
 
-class ElementsDialog : public QDialog, public Ui::ElementsDialogData
+namespace Ui {
+class ElementsDialogData;
+}
+
+class ElementsDialog : public QDialog
 {
     string prf_name;
     setFiltersData sf_data;
@@ -73,6 +75,7 @@ class ElementsDialog : public QDialog, public Ui::ElementsDialogData
     void 	resetNextButton();
     void 	resetBackButton();
 
+    Ui::ElementsDialogData *ui;
     QButtonGroup* bgElem;
     QButtonGroup* bgOther;
     QStandardItem* pkern;
@@ -89,14 +92,12 @@ protected slots:
     void SetAqueous();
     void SetSorption();
     void SetIsotopes();
-
     void SetFiles();
-    virtual void languageChange();
-    
+
 public:
 
     ElementsDialog(QWidget* win, const char * prfName, elmWindowData  data,
-         const char* caption = nullptr );
+                   const char* caption = nullptr );
     virtual ~ElementsDialog();
 
     const setFiltersData&  getFilters();

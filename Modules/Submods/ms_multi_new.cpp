@@ -206,7 +206,7 @@ long int TMulti::testMulti()
     {
         if( pa_p_ptr()->PSM >= 2 )
         {
-            fstream f_log(TNode::ipmLogFile.c_str(), ios::out|ios::app );
+            fstream f_log(  node1->ipmLogFile(), ios::out|ios::app );
             f_log << "Warning " << pm.stkey << ": " <<  pm.errorCode << ":" << endl;
             f_log << pm.errorBuf << endl;
         }

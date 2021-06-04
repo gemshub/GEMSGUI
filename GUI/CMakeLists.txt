@@ -23,7 +23,11 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
 file(GLOB QRC_FILES *.qrc)
 set(RESOURCE ${QRC_FILES})
-qt5_add_resources(GEMSGUI_SRCS ${RESOURCE})
+if(Qt6_FOUND)
+  qt6_add_resources(GEMSGUI_SRCS ${RESOURCE})
+elseif()
+  qt5_add_resources(GEMSGUI_SRCS ${RESOURCE})
+endif()
 
 # Create a library using the collected source files
 add_library( GEMSGUI_OBJECT OBJECT ${HEADER_FILES} ${SOURCE_FILES} ${GEMSGUI_SRCS})

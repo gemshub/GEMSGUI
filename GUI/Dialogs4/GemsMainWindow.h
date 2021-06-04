@@ -60,11 +60,11 @@ using namespace std;
 #endif
 
 struct ModuleListItem
- {
-   int nRT;         // record/module num
-   QString name;    // text of item
-   //QString modName; // short name (aMod[nRT].GetName())
-   QString toolTip;
+{
+    int nRT;         // record/module num
+    QString name;    // text of item
+    //QString modName; // short name (aMod[nRT].GetName())
+    QString toolTip;
 };
 
 // new enums
@@ -75,70 +75,70 @@ enum myThreadEvents { thMessage = 0, thQuestion, thQuestion3,
 // data for thread
 struct DThread
 {
-  int res;
-  bool wait;
-  //vfMessage & vfQuestion
-  std::string title;     //prompt(vfChoice), caption
-  std::string mess;
-  //vfQuestion3
-  std::string s1;
-  std::string s2;
-  std::string s3;
-  //vfChoice (error, open only one SysEq)
-  TCStringArray list;
-  int seli;
-  //vfChoise3
-  bool all; // only return
-  //vfExcludeFillEdit
-  std::vector<bool> sel;
-  double fill_data;
+    int res;
+    bool wait;
+    //vfMessage & vfQuestion
+    std::string title;     //prompt(vfChoice), caption
+    std::string mess;
+    //vfQuestion3
+    std::string s1;
+    std::string s2;
+    std::string s3;
+    //vfChoice (error, open only one SysEq)
+    TCStringArray list;
+    int seli;
+    //vfChoise3
+    bool all; // only return
+    //vfExcludeFillEdit
+    std::vector<bool> sel;
+    double fill_data;
 
-  //Message&Quastion&Question3
-  void setDThread( const std::string& title_, const std::string& mess_,
-                  const std::string& s1_="", const std::string& s2_="", const std::string& s3_="")
-  {  res =0;
-     wait = true;
-     title = title_;
-     mess =mess_;
-     s1 =s1_;
-     s2 =s2_;
-     s3 =s3_;
-  }
-  //vfChoice&vfChoice2
-  void setDThread( TCStringArray& arr, const char* prompt, int sel_, bool all_=false )
-  {  res =0;
-     wait = true;
-     title = prompt;
-     mess ="";
-     all = all_;
-     seli = sel_;
-     list.clear();
-     for( size_t ii=0; ii<arr.size(); ii++ )
-       list.push_back( arr[ii]);
-  }
-  //vfExcludeFillEdit
-  void setDThread( const char* caption, TCStringArray& aICkeys,
-             double fill_data_ )
-  {  res = 0;
-     wait = true;
-     title = caption;
-     fill_data = fill_data_;
-     list.clear();
-     for( size_t ii=0; ii<aICkeys.size(); ii++ )
-       list.push_back( aICkeys[ii]);
-  }
+    //Message&Quastion&Question3
+    void setDThread( const std::string& title_, const std::string& mess_,
+                     const std::string& s1_="", const std::string& s2_="", const std::string& s3_="")
+    {  res =0;
+        wait = true;
+        title = title_;
+        mess =mess_;
+        s1 =s1_;
+        s2 =s2_;
+        s3 =s3_;
+    }
+    //vfChoice&vfChoice2
+    void setDThread( TCStringArray& arr, const char* prompt, int sel_, bool all_=false )
+    {  res =0;
+        wait = true;
+        title = prompt;
+        mess ="";
+        all = all_;
+        seli = sel_;
+        list.clear();
+        for( size_t ii=0; ii<arr.size(); ii++ )
+            list.push_back( arr[ii]);
+    }
+    //vfExcludeFillEdit
+    void setDThread( const char* caption, TCStringArray& aICkeys,
+                     double fill_data_ )
+    {  res = 0;
+        wait = true;
+        title = caption;
+        fill_data = fill_data_;
+        list.clear();
+        for( size_t ii=0; ii<aICkeys.size(); ii++ )
+            list.push_back( aICkeys[ii]);
+    }
 };
 
 class TKeyTable: public QTableWidget
 {
-        Q_OBJECT
+    Q_OBJECT
 
-       void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent* e);
 
-  public:
-       TKeyTable( QWidget * parent  ):
-           QTableWidget(parent)
-       {}
+public:
+    TKeyTable( QWidget * parent  ):
+        QTableWidget(parent)
+    {}
 };
 
 namespace Ui {
@@ -178,9 +178,9 @@ class TVisorImp: public QMainWindow
     void showEvent( QShowEvent * event );
 
 public:
-     DThread thdata;
-     QProcess *proc;
-     QMdiArea *mdiArea;
+    DThread thdata;
+    QProcess *proc;
+    QMdiArea *mdiArea;
 
     TVisorImp(int c, char** v);
     ~TVisorImp();
@@ -190,11 +190,11 @@ public:
 
     // Sets the caption of the module
     void SetCaption(const char* mess)
-         {  setWindowTitle(mess);   }
+    {  setWindowTitle(mess);   }
     
     // Sets the status of the module (in the statusbar)
     void SetStatus( const char* s )
-         {  statusBar()->showMessage(s);   }
+    {  statusBar()->showMessage(s);   }
 
     void SetRecordKey( const char*s)
     { pLine->setText( tr(s)); }
@@ -209,50 +209,50 @@ public:
     void GetHelp();
     void OpenHelp(const char* file, const char* item=nullptr, int page =-1);
     bool Message( QWidget* parent, const char* name,
-             const char* msg, int prog, int total, bool move);
+                  const char* msg, int prog, int total, bool move);
     void CloseMessage();
     void ProcessProgress( QWidget* parent, int nRT );
 
     // work with default values
     int updateInterval() const
-       {   return updateTime;   }
+    {   return updateTime;   }
     void setUpdateInterval(int updInterval)
-       {
-          if( updInterval > 0 && updInterval < 60 )
-                 updateTime = updInterval;
-       }
+    {
+        if( updInterval > 0 && updInterval < 60 )
+            updateTime = updInterval;
+    }
 
     const char* version();
     const char* getGEMTitle();
     const QFont& getCellFont() const
-         { return CellFont; }
+    { return CellFont; }
     void setCellFont(const QFont& newCellFont);
     const QFont& getAxisLabelFont() const
-        {  return axisLabelFont; }
+    {  return axisLabelFont; }
     void setAxisLabelFont(const QFont& newAxisLabelFont)
-        {  axisLabelFont = newAxisLabelFont;  }
+    {  axisLabelFont = newAxisLabelFont;  }
     const QFont& getDefaultFont() const
-        {  return defaultFont; }
+    {  return defaultFont; }
 
     int getCharWidth() const
-        {  return charWidth;  }
+    {  return charWidth;  }
     int getCharHeight() const
-        {  return charHeight; /* + 4;*/  }
+    {  return charHeight; /* + 4;*/  }
 
     int getDoubleDigits() const
-        {  return TValBase::doublePrecision;  }
+    {  return TValBase::doublePrecision;  }
     void setDoubleDigits(int newDoubleDigits)
-        {  TValBase::doublePrecision = newDoubleDigits;   }
+    {  TValBase::doublePrecision = newDoubleDigits;   }
 
     void setConfigAutosave(bool autosave)
-        {  configAutosave = autosave;  }
+    {  configAutosave = autosave;  }
     bool getConfigAutosave() const
-        {  return configAutosave;   }
+    {  return configAutosave;   }
 
     char* getTCpoint()
-        {  return TCpoint;   }
+    {  return TCpoint;   }
     void setTCpoint( const char* str )
-        {  memcpy( TCpoint, str, 15 );   }
+    {  memcpy( TCpoint, str, 15 );   }
 
     void setActionPrecise();
 
@@ -361,7 +361,7 @@ public slots:
     void CmMoreIPM();
     void CmHowto();
 
-// Top level dialog
+    // Top level dialog
 
     bool SetProfileMode( const char * profileKey = nullptr);
     bool SetGeneralMode();
@@ -396,7 +396,7 @@ private slots:
 
     void readOutput();
 
- private:
+private:
 
     /// GEMS3 server application run
     QProcess *GEMS3_proc = nullptr;
@@ -426,7 +426,7 @@ private slots:
 
     //void createStatusBar();
 
- // main window fields
+    // main window fields
     int currentNrt;
     bool settedCureentKeyIntotbKeys;
     //QIcon iconDatabase;
@@ -441,7 +441,7 @@ private slots:
     QHBoxLayout *layout2;
     QLabel *messageText;
 
- // menu collection
+    // menu collection
     QToolBar *toolDataBase;
     QToolBar *toolProject;
     QAction *separatorAct;

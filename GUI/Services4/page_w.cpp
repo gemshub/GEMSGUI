@@ -302,7 +302,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
     
     // setup buttons
     pTab = new QButtonGroup;//(pWin);
-    connect( pTab, SIGNAL(buttonClicked(int)), SLOT(EvTabSelChange(int)) );
+    connect( pTab, SIGNAL(buttonClicked(QAbstractButton*)), SLOT(EvTabSelChange(QAbstractButton*)) );
 
     QHBoxLayout* buttonBox = new QHBoxLayout();
 
@@ -390,26 +390,14 @@ void TCWindow::showEvent( QShowEvent * event )
 }
 
 //    Changes the page tab for module and calls TCModule::EvPageChanged()
-void TCWindow::EmitEvTabSelChange(int newSel)
+void TCWindow::EvTabSelChange(QAbstractButton* button)
 {
-    if( getPageCnt() > 1 )
-        pTab->button(newSel)->click();
-}
-
-//    Changes the page tab for module and calls TCModule::EvPageChanged()
-void TCWindow::EvTabSelChange(int newSel)  
-{
-        pages->setCurrentIndex( newSel );
-        if( newSel != iCurPage && getCModule().IsSubModule() )
-            getCModule().EvPageChanged( iCurPage );
-	iCurPage = newSel;
-	 
-//	TCModuleImp *topw =
-//		 qobject_cast<TCModuleImp *>( topLevelWidget());
-//	 if( topw )
-//	    topw->SetStatus( "" );
-             pVisorImp->SetStatus( "" );
-
+    auto  newSel = pTab->id(button);
+    pages->setCurrentIndex( newSel );
+    if( newSel != iCurPage && getCModule().IsSubModule() )
+        getCModule().EvPageChanged( iCurPage );
+    iCurPage = newSel;
+    pVisorImp->SetStatus( "" );
 }
 
 // Shows information on current record

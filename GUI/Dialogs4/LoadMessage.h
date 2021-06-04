@@ -68,8 +68,8 @@ class ProcessProgressDialog: public QDialog
 
 public slots:
     void CmClose();
-//    void slUpdate(bool force);
-//    void slQuestion( void *result, QWidget* par, QString title, QString mess);
+    //    void slUpdate(bool force);
+    //    void slQuestion( void *result, QWidget* par, QString title, QString mess);
 
 protected slots:
     void CmStep();

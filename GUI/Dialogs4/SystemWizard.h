@@ -20,21 +20,23 @@
 #define SystemWizard_included
 
 #include <QDialog>
-#include <QComboBox>
-#include "ui_SystemWizard4.h"
 
+namespace Ui {
+class SystemWizardData;
+}
 
-class SystemWizard : public QDialog, public Ui::SystemWizardData
+class SystemWizard : public QDialog
 {
     Q_OBJECT
 
+    Ui::SystemWizardData *ui;
     void 	resetNextButton();
     void 	resetBackButton();
 
 public:
 
     SystemWizard( const char* pkey, char flgs[40],
-         std::string name, std::string comment, std::string EQkey,  QWidget* parent = nullptr);
+    std::string name, std::string comment, std::string EQkey,  QWidget* parent = nullptr);
     virtual ~SystemWizard();
 
     std::string getName();
@@ -42,9 +44,6 @@ public:
     std::string getEQkey();
 
     void   getFlags( char flgs[40] );
-
-protected slots:
-    virtual void languageChange();
 
 protected slots:
 
