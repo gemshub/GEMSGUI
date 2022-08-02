@@ -188,16 +188,14 @@ void TProfil::ChangeSettings(int nSettings)
     pa.ver[TDBVERSION-1]='\0';
 }
 
-void
-BASE_PARAM::write(GemDataStream& oss)
+void BASE_PARAM::write(GemDataStream& oss)
 {
     oss.writeArray( &PC, 10 );
     oss.writeArray( &DG, 28 );
     oss.writeArray( "0000", 4 );
 }
 
-void
-BASE_PARAM::read(GemDataStream& iss)
+void BASE_PARAM::read(GemDataStream& iss)
 {
     char tmp[4];
     iss.readArray( &PC, 10 );
@@ -206,8 +204,7 @@ BASE_PARAM::read(GemDataStream& iss)
 }
 
 
-void
-SPP_SETTING::write(GemDataStream& oss)
+void SPP_SETTING::write(GemDataStream& oss)
 {
     oss.writeArray( ver, TDBVERSION );
     p.write( oss );
@@ -216,8 +213,7 @@ SPP_SETTING::write(GemDataStream& oss)
     oss.writeArray( Pi, 19 );
 }
 
-void
-SPP_SETTING::read(GemDataStream& iss)
+void SPP_SETTING::read(GemDataStream& iss)
 {
     iss.readArray( ver, TDBVERSION );
     p.read( iss );

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>870</width>
-    <height>785</height>
+    <width>891</width>
+    <height>714</height>
    </rect>
   </property>
   <property name="font">
@@ -40,7 +40,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -683,7 +683,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - Selection of ReacDC/DComp chemical species to define this Phase</string>
+          <string>Step 2 - Selection of ReacDC/DComp chemical species to define this Phase by its components (endmembers)</string>
          </property>
         </widget>
        </item>
@@ -845,7 +845,7 @@
              </size>
             </property>
             <property name="maximum">
-             <number>999</number>
+             <number>9999</number>
             </property>
            </widget>
           </item>
@@ -1357,7 +1357,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 5 - Optionally, mark ReacDC/DComp keys of aqueous, gas or surface catalyzing or inhibiting species for parallel reactions</string>
+          <string>Step 5 - Kinetics: optionally, mark ReacDC/DComp keys of aqueous, gas or surface species for the activity product term</string>
          </property>
         </widget>
        </item>
@@ -1384,7 +1384,7 @@
           <item row="0" column="0" colspan="3">
            <widget class="QLabel" name="label_36">
             <property name="text">
-             <string>To (re)select different species to be involved in activity product terms, activate the 'Full-list selection' checkbox; toggle it back to see only the selected records again. In the full list, first the ReacDC 'r' and then the DComp 'd' record keys appear; use the filtering settings below to show only relevant records. </string>
+             <string>To (re)select different catalysis or inhibition species to be involved in the activity product terms, activate the 'Full-list selection' checkbox; toggle it back to see only the selected records again. In the full list, first the ReacDC 'r' and then the DComp 'd' record keys appear; use the filtering settings below to show only relevant records. In the next wizard page, set power coefficients at activities of selected species.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -1855,7 +1855,7 @@ Any parameter coefficients table will be allocated only if all its dimensions ar
           </font>
          </property>
          <property name="text">
-          <string>Step 7 - Optionally, mark record key(s) of phase(s) to be linked with this phase for defining its metastability</string>
+          <string>Step 7 - Optionally, mark record key(s) of phase(s) for metastability link(s) with this phase</string>
          </property>
         </widget>
        </item>

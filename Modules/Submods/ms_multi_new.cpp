@@ -201,14 +201,11 @@ void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb
 
 long int TMulti::testMulti()
 {
-    //MULTI *pmp = multi->GetPM();
     if( pm.MK || pm.PZ )
     {
         if( pa_p_ptr()->PSM >= 2 )
         {
-            fstream f_log(  node1->ipmLogFile(), ios::out|ios::app );
-            f_log << "Warning " << pm.stkey << ": " <<  pm.errorCode << ":" << endl;
-            f_log << pm.errorBuf << endl;
+            node->ipmlog_file->warn(" {} : {}:{}", pm.stkey, pm.errorCode, pm.errorBuf);
         }
         if( showMss )
         {
@@ -224,11 +221,9 @@ long int TMulti::testMulti()
                 Error(pmp->errorCode, pmp->errorBuf);
             }
         }
-
         return 1L;
     }
-
-    return 0L	;
+    return 0L;
 }
 
 bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int k, long int jb,
@@ -354,17 +349,23 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
 // Calculation by IPM (preparing for calculation, unpacking data) in GUI part
 void TMulti::initalizeGEM_IPM_Data_GUI()
 {
+
     // for GEMIPM unpackDataBr( bool uPrimalSol );
     // to define quantities
 
-    ///   bool newInterval = false;
+    bool newInterval = false;
 
     //   MultiKeyInit( key ); //into PMtest
 
     ipm_logger->trace(" pm.pBAL =  {}", pm.pBAL);
 
-    /// if( !pm.pBAL )
-    ///     newInterval = true;    // to rebuild lookup arrays
+    if( !pm.pBAL )
+         newInterval = true;    // to rebuild lookup arrays
+
+    if( pm.pBAL < 2  || pm.pTPD < 2 )
+    {
+        SystemToLookup();
+    }
 
     if( pm.pBAL < 2  )
     {
@@ -381,22 +382,7 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
     if( pm.pESU == 0 )
         pm.pNP = 0;
 
-    TProfil::pm->CheckMtparam(); //load tpp structure
-
-
-    // build new TNode
-    ///  if( !node1 )
-    ///  {
-    ///    node1 = new TNode( pmp );
-    ///    newInterval = true;
-    ///  }
-    ///  else if( !node1->TestTPGrid(pm.Tai, pm.Pai ))
-    ///               newInterval = true;
-
-    /// if( newInterval )
-    /// {   // build/rebuild internal lookup arrays
-    ///    node1->MakeNodeStructures(window(), true, pm.Tai, pm.Pai );
-    /// }
+    /// TProfil::pm->CheckMtparam(); //load tpp structure
 
     ipm_logger->trace("newInterval = {}   pm.pTPD =  {}", newInterval, pm.pTPD);
 

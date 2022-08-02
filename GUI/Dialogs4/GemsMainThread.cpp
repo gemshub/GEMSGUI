@@ -16,7 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-
+#include <iostream>
 #include "visor.h"
 #include "GemsMainWindow.h"
 #include "ui_GemsMainWindow4.h"
@@ -309,7 +309,7 @@ void TVisorImp::theadService( int nFunction, QWidget* par )
                        break;
         case thChoice2:
           thdata.res = vfChoice2( par, thdata.list, thdata.title.c_str(),
-                              thdata.seli, thdata.all  );
+                              thdata.seli, thdata.all_no  );
                        break;
         case thExcludeFillEdit:
           thdata.res = vfExcludeFillEdit( par, thdata.title.c_str(),

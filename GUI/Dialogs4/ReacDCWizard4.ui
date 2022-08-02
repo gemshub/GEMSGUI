@@ -43,7 +43,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -161,12 +161,12 @@
             </item>
             <item>
              <property name="text">
-              <string>M   Major solution independent end-member (solvent)</string>
+              <string>M   Major solution independent end-member, also on ClaySor ion exchange</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>J    Junior solution independent end-member (solute)</string>
+              <string>J    Junior solution independent end-member, also on ClaySor ion exchange</string>
              </property>
             </item>
             <item>
@@ -271,7 +271,7 @@
             </item>
             <item>
              <property name="text">
-              <string>U   Surface complex on amphoteric groups (new SCMs)</string>
+              <string>U   Surface complex on amphoteric (edge) site, ClaySor model implementation</string>
              </property>
             </item>
            </widget>
@@ -316,7 +316,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
-          <string>Select here method codes of T,P correction for molar properties of the reaction-defined DC</string>
+          <string>Select here method codes for T,P correction of standard molar properties of the reaction and DC</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -665,7 +665,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Step 2 - ReacDC/DComp selection</string>
+          <string>Step 2 - Selection of ReacDC/DComp involved in the reaction</string>
          </property>
         </widget>
        </item>
@@ -741,7 +741,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Number of &amp;DCs involved in the reaction, &gt;= 2 (decrease by one to compute standard properties of reaction only from standard properties of existing DCs)</string>
+             <string>Number of &amp;DCs involved in the reaction, &gt;= 2 (to compute standard properties of reaction from standard properties of existing DCs only, later on set the latest component of the reaction as 'f' - fictive)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1128,7 +1128,9 @@
           <item row="0" column="0">
            <widget class="QLabel" name="textLabel12">
             <property name="text">
-             <string>(1) When Page 1 of ReacDC window appears, fill out the title into RDname field, and enter the formula of new (last) DC into RDform field. Next, enter the reaction stoichiometry coefficients into the SC_DC column (convention: positive for products, negative for reactants). Then, if a new DC is defined by this reaction, enter the available dVr; K or logK or dGr; dHr or dSr; dCpr values. If some properties are unknown (e.g. dHr), enter the 'empty' value '---' there.</string>
+             <string>(1) When Page 1 of ReacDC window appears, fill out the title into RDname field, and enter the formula of new (last) DC into RDform field. Next, enter the reaction stoichiometry coefficients into the SC_DC column (convention: positive for products, negative for reactants). Then, if a new DC is defined by this reaction, enter the available dVr; K or logK or dGr; dHr or dSr; dCpr values. If some properties are unknown (e.g. dHr) then enter the 'empty' value '---' there.
+
+If you only need to calculate standard properties of the reaction from properties from the involved DComp or ReacDC records only, then change the last component of reaction from 'n' (new) to 'f' (fictive). In this case, the data fields will be simply replaced by the results.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>

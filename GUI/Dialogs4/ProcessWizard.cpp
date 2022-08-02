@@ -814,7 +814,6 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
         break;
     case P_LIP:
         ret = getNPoints( 6 ); // iPxi
-
         if( ret == -1 )
         {
             setIterColumn( 6, -5., 5., 0.1 );

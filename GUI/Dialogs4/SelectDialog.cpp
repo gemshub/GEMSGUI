@@ -90,7 +90,8 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     ui->pList->setCurrentRow(sel); // setSelected(sel, true);
 
     ui->pButton3->hide();
-    ui->pButton2->setText( tr( "Ok to &All"  ) );
+    ui->pButton2->setText(tr( "Ok to &All"));
+    QObject::connect(ui->pButton2, SIGNAL(clicked()), this, SLOT(CmSelectAll()));
     QObject::connect( ui->bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
     ui->pList->setFocus();
@@ -139,11 +140,8 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
 void SelectDialog::CmSelectAll()
 {
     if( multi == true )
-    {// select all strings
+    {
         ui->pList->selectAll();
-        //ui->pList->setFocus();
-        //for( uint ii=0; ii<ui->pList->count(); ii++ )
-        //   ui->pList->item(ii)->setSelected(true);
     }
     else
     {
@@ -189,7 +187,7 @@ int SelectDialog::selected()
 int SelectDialog::selected(bool &all_)
 {
     all_ = sel_to_all;
-    return ( ( result() ) ? ui->pList->currentRow() : -1);
+    return ( (result()) ? ui->pList->currentRow() : -1);
 }
 
 void SelectDialog::CmHelp()

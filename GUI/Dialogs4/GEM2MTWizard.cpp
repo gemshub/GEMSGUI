@@ -60,7 +60,7 @@ void GEM2MTWizard::CmBack()
 
 void GEM2MTWizard::CmNext()
 {
-    bool chk =  ui->pselS->isChecked()|| ui->pselF->isChecked()|| ui->pselB->isChecked();  // F mode
+    bool chk =  ui->pselS->isChecked() || ui->pselF->isChecked() || ui->pselB->isChecked();  // S, F or B mode
     int ndx =  ui->stackedWidget->currentIndex();
 
     if( ndx == mode_RMT )
@@ -84,7 +84,7 @@ void GEM2MTWizard::CmNext()
 
     if( ndx == fluxes_transport )
     {
-        if(  ui->pselS->isChecked() ||  ui->pselF->isChecked() ||  ui->pselB->isChecked() )
+        if(  ui->pselS->isChecked() ||  ui->pselF->isChecked() ) // ||  ui->pselB->isChecked() )
             ui->pnFD->setValue(  ui->pnC->value() +  ui->pnSFD->value() );
     }
 
@@ -111,7 +111,7 @@ void GEM2MTWizard::CmNext()
             }
             ui->pnPG->setEnabled( !(  ui->pselS->isChecked() ||  ui->pselF->isChecked() ) );
             ui->pnFD->setEnabled( !(  ui->pselS->isChecked() ||  ui->pselF->isChecked() ) );
-            //       ui->pnSFD->setEnabled( !(  ui->pselS->isChecked() ||  ui->pselF->isChecked() ));
+            // ui->pnSFD->setEnabled( !(  ui->pselS->isChecked() || ui->pselF->isChecked() ) && ui->pnSFD->value() > 0 );
         }
     }
 
@@ -253,6 +253,9 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
     if( flgs[6] != '-' )
         ui->c_PvMSt->setChecked( true );
     else  ui->c_PvMSt->setChecked( false );
+    if( flgs[17] != '-' )
+        ui->c_PvMSc->setChecked( true );
+    else  ui->c_PvMSc->setChecked( false );
     if( flgs[7] != '-' )
         ui->c_PvMSg->setChecked( true );
     else  ui->c_PvMSg->setChecked( false );
@@ -278,6 +281,10 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
         ui->rbJson->setChecked( true );
     else if( flgs[23] == 'b' || flgs[23] == '-' )
         ui->rbBinary->setChecked( true );
+    else if( flgs[23] == 'f' )
+        ui->rbFunJson->setChecked( true );
+    else if( flgs[23] == 'o' )
+        ui->rbFunKeyValue->setChecked( true );
     else
         ui->rbKeyVal->setChecked( true );
 
@@ -288,15 +295,15 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
         ui->chComment->setChecked( true );
     else ui->chComment->setChecked( false );
 
-    ui->pPfrom->setValue(Pai[0]);;
-    ui->pPuntil->setValue(Pai[1]);;
-    ui->pPstep->setValue(Pai[2]);;
-    ui->pPtol->setValue(Pai[3]);;
+    ui->pPfrom->setValue(Pai[0]);
+    ui->pPuntil->setValue(Pai[1]);
+    ui->pPstep->setValue(Pai[2]);
+    ui->pPtol->setValue(Pai[3]);
 
-    ui->pTfrom->setValue(Tai[0]);;
-    ui->pTuntil->setValue(Tai[1]);;
-    ui->pTstep->setValue(Tai[2]);;
-    ui->pTtol->setValue(Tai[3]);;
+    ui->pTfrom->setValue(Tai[0]);
+    ui->pTuntil->setValue(Tai[1]);
+    ui->pTstep->setValue(Tai[2]);
+    ui->pTtol->setValue(Tai[3]);
 
 
     if( flgs[26] != '-' )
@@ -578,6 +585,9 @@ void   GEM2MTWizard::getFlags( char flgs[32] )
     if(  ui->c_PvMSt->isChecked() )
         flgs[6] = '+';
     else flgs[6] = '-';
+    if(  ui->c_PvMSc->isChecked() )
+        flgs[17] = '+';
+    else flgs[17] = '-';
     if(  ui->c_PvMSg->isChecked() )
         flgs[7] = '+';
     else flgs[7] = '-';
@@ -600,6 +610,10 @@ void   GEM2MTWizard::getFlags( char flgs[32] )
         flgs[23] = 'j';
     else if( ui->rbBinary->isChecked() )
         flgs[23] = 'b';
+    else if( ui->rbFunJson->isChecked() )
+        flgs[23] = 'f';
+    else if( ui->rbFunKeyValue->isChecked() )
+        flgs[23] = 'o';
     else
         flgs[23] = 't';
 
@@ -665,7 +679,7 @@ void   GEM2MTWizard::getFlags( char flgs[32] )
     else flgs[14] = '-';
 
 
-    // flags 0,1,2,3, 19, 20, 17, 30, 31 not used or internal
+    // flags 0,1,2,3, 19, 20, 30, 31 not used or internal
 }
 
 void GEM2MTWizard::help()

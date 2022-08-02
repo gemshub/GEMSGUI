@@ -32,12 +32,10 @@
 #include "GraphDialogN.h"
 #include "ui_GemsMainWindow4.h"
 
-
 void TVisorImp::updateMenus()
 {
     // addition work with MdiChild
     bool hasMdiChild = (mdiArea->activeSubWindow() != nullptr);
-
     ui->menubar->clear();
     ui->toolBar_2->hide();
     ui->toolBar_3->hide();
@@ -51,8 +49,7 @@ void TVisorImp::updateMenus()
         TCModuleImp *mdwin = activeMdiChild();
         if( mdwin && mdwin->getViewMode()   )
         { // if we open graph, submodules and ... hide menu_record !!!
-            //pModuleName->setText(mdwin->moduleName().c_str());
-            if( mdwin->rtNum() >= MD_RMULTS
+             if( mdwin->rtNum() >= MD_RMULTS
                     && pVisor->ProfileMode == MDD_SYSTEM )
             {
                 changeModulesKeys( RT_SYSEQ  );
@@ -93,7 +90,6 @@ void TVisorImp::updateMenus()
             NewSystemDialog *syswin = activeNewSystem();
             if( syswin )
             { // if we open graph, submodules and ... hide menu_record !!!
-                //pModuleName->setText("SingleSystem");
                 changeModulesKeys( RT_SYSEQ );
                 ui->menubar->addAction(ui->menu_Record->menuAction());
                 ui->action_Calculate->setEnabled(false);
@@ -113,9 +109,10 @@ void TVisorImp::updateMenus()
         changeModulesKeys( -1 );
 
     if(hasMdiChild)
-    {  int ndx = indexMdiChild( mdiArea->activeSubWindow()->widget() );
-        if( ndx >= 0 )
-            pModuleName->setCurrentIndex(ndx);
+    {
+        disconnect( pModuleName, &QComboBox::currentTextChanged, this, &TVisorImp::setActiveSubWindowName);
+        pModuleName->setCurrentText( nameMdiChild( mdiArea->activeSubWindow()->widget() ).c_str());
+        connect( pModuleName, &QComboBox::currentTextChanged, this, &TVisorImp::setActiveSubWindowName);
     }
     //else
     //    pModuleName->clear();
@@ -160,7 +157,8 @@ string TVisorImp::nameMdiChild( QWidget *p )
         if( wn )
             mdName = "SingleSystem";
         else
-        {   GraphDialog *dlg = qobject_cast<GraphDialog *>(p);
+        {
+            GraphDialog *dlg = qobject_cast<GraphDialog *>(p);
             if( dlg )
                 mdName = dlg->moduleName();
             else
@@ -183,7 +181,8 @@ QIcon TVisorImp::iconMdiChild( QWidget *p )
         if( wn )
             iconName = ":/modules/Icons/SysEqModuleIcon.png";
         else
-        {   GraphDialog *dlg = qobject_cast<GraphDialog *>(p);
+        {
+            GraphDialog *dlg = qobject_cast<GraphDialog *>(p);
             if( dlg )
                 iconName = dlg->iconFile();
             else
@@ -374,22 +373,11 @@ void TVisorImp::setActions()
     connect( ui->sactionPrInput, SIGNAL( triggered()), this, SLOT(CmPrInput()));
     connect( ui->sactionPrResults, SIGNAL( triggered()), this, SLOT(CmPrResults()));
 
-
-    //pModuleName = new QLabel( toolModule );
     pModuleName = new QComboBox( ui->toolModule );
     pModuleName->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    connect( pModuleName, SIGNAL( currentIndexChanged(int)), this, SLOT(setActiveSubWindowIdex(int)));
+    connect( pModuleName, &QComboBox::currentTextChanged, this, &TVisorImp::setActiveSubWindowName);
     ui->toolModule->addWidget( pModuleName );
 
-    //pModeName = new QLabel( toolBar );
-    //QFont fnt = pModeName->font();
-    //fnt.setBold(true);
-    //fnt.setPointSize(12);
-    //fnt.setStyleHint(QFont::Decorative);
-    //pModeName->setFont(fnt);
-    //toolBar->addWidget( pModeName );
-
-    //
     pLine = new QLineEdit( ui->toolBar_6 );
     pLine->setEnabled( true );
     pLine->setFocusPolicy( Qt::ClickFocus );
@@ -527,8 +515,6 @@ void TVisorImp::CmHowto()
 void TVisorImp::CmHelpAbout()
 {
     OpenHelp( GEMS_ABOUT_HTML );
-    //AboutDialog dlg(this);
-    //dlg.exec();
 }
 
 void TVisorImp::CmHelpAuthors()
@@ -611,7 +597,8 @@ void TVisorImp::CmShow( const char * key )
 {
     NewSystemDialog *wn = activeNewSystemCommand();
     if( wn )
-    {       wn->CmSelect( key );
+    {
+        wn->CmSelect( key );
         defineModuleKeysList( RT_SYSEQ );
     }
     else
@@ -628,7 +615,7 @@ void TVisorImp::CmShow( const char * key )
             QMdiSubWindow * grDlg = findMdiGraph(actwin->moduleName().c_str());
             if( grDlg )
             {
-                grDlg->widget()->close();
+                //// grDlg->widget()->close();
                 QMdiSubWindow *wn1 = findMdiChild(actwin->moduleName().c_str());
                 //mdiArea->setActiveSubWindow( grDlg );
                 //mdiArea->closeActiveSubWindow();
@@ -868,7 +855,7 @@ TVisorImp::CmInsert_SYSTEM()
 
 void TVisorImp::CmOutMulti()
 {
-    NewSystemDialog *wn = activeNewSystemCommand();;
+    NewSystemDialog *wn = activeNewSystemCommand();
     if( wn )
         wn->CmOutMulti();
 }

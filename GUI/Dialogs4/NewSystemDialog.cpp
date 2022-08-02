@@ -55,9 +55,10 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
 
     // Added comment
     aFlds.clear();
-    aFlds.append(FieldInfo( o_ssnotes, ftString, 80, false, First, eYes, stIO, 1, 1));
-    MComment= new TObjectModel( aFlds, this );
-    PComment =  new TObjectTable( aFlds, this );
+    QList<FieldInfo>	aFlds1;
+    aFlds1.append(FieldInfo( o_ssnotes, ftString, 80, false, First, eYes, stIO, 1, 1));
+    MComment= new TObjectModel( aFlds1, this );
+    PComment =  new TObjectTable( aFlds1, this );
     TObjectDelegate *deleg1 = new TObjectDelegate( PComment, this);
     PComment->setItemDelegate(deleg1);
     PComment->setModel(MComment);
@@ -153,8 +154,8 @@ void NewSystemDialog::defineInputList()
     header.append(  tr("Upper_KC"));
     header.append(  tr("KC type"));
 
-    model = new TTreeModel( afldsPh, afldsDC, header, this /*tab*/ );
-    deleg = new TTreeDelegate( this/*tab*/ );
+    model = new TTreeModel( afldsPh, afldsDC, header, this /*ui->tab*/ );
+    deleg = new TTreeDelegate( this /*ui->tab*/ );
 
     ListViewInput = new TTreeView(ui->tab);
     ListViewInput->setObjectName(QString::fromUtf8("ListViewInput"));
@@ -325,10 +326,11 @@ void NewSystemDialog::printInputList( fstream& f )
 // returns true if user pressed 'save' or 'discard' and false on 'cancel'
 bool NewSystemDialog::MessageToSave()
 {
+    clearEditFocus();
     string key_str = rt[RT_SYSEQ]->PackKey();
     if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == string::npos )
     {
-        int res = vfQuestion3(this, key_str.c_str(),
+        int res = vfQuestion3(this, key_str,
                               "Data record has been changed!",
                               "Save changes", "Discard changes", "Cancel");
         if( res == VF3_3 )
@@ -339,6 +341,17 @@ bool NewSystemDialog::MessageToSave()
     }
     TSysEq::pm->CellChanged( false );
     return true;
+}
+
+void NewSystemDialog::clearEditFocus()
+{
+    if( window() )  {
+        auto* focus_w = window()->focusWidget();
+        TCellInput* cell_w = dynamic_cast<TCellInput*>(focus_w);
+        if( cell_w ) {
+            cell_w->clearFocus();
+        }
+    }
 }
 
 void NewSystemDialog::CmHelp2()
@@ -406,6 +419,7 @@ void NewSystemDialog::CmRunBCC()
 {
     try
     {
+        clearEditFocus();
         TProfil::pm->CalcBcc(); // Calc bulk composition
         //ListViewResult->resetList();
         Update();
@@ -587,6 +601,7 @@ void NewSystemDialog::CmSave()
 {
     try
     {
+        clearEditFocus();
         if( TSysEq::pm->ifCalcFlag()== false )
         {
             string key_s = rt[RT_SYSEQ]->PackKey();
@@ -609,6 +624,7 @@ void NewSystemDialog::CmSaveAs()
 {
     try
     {
+        clearEditFocus();
         TProfil::pm->SyTestSizes();
         TSysEq::pm->CmSaveAs();
     }

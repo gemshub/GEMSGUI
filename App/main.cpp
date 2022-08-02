@@ -31,7 +31,7 @@
 #include <QMessageBox>
 #include <QWindowsStyle>
 #endif
-
+#include <iostream>
 #include "visor.h"
 #include "GemsMainWindow.h"
 

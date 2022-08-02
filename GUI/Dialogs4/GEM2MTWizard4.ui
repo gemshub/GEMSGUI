@@ -46,7 +46,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -181,7 +181,7 @@
           <item>
            <widget class="QRadioButton" name="pselB">
             <property name="text">
-             <string>&amp;B     Box-flux megasystem with time-step integration of arbitrary MPG fluxes (TBD)</string>
+             <string>&amp;B     Box-flux megasystem with time-step integration of complex arbitrary MPG fluxes</string>
             </property>
             <property name="shortcut">
              <string>Alt+F</string>
@@ -236,7 +236,7 @@
           <item>
            <widget class="QRadioButton" name="pselC">
             <property name="text">
-             <string>&amp;C     1-D (advection-dispersion) reactive transport using Crank-Nicolson scheme (TBD)</string>
+             <string>&amp;C     1-D (advection-dispersion) reactive transport using Crank-Nicolson scheme</string>
             </property>
             <property name="shortcut">
              <string>Alt+A</string>
@@ -291,7 +291,7 @@
           <item>
            <widget class="QRadioButton" name="pselW">
             <property name="text">
-             <string>&amp;W    1-D (advection-diffusion) reactive transport using random-walk algorithm</string>
+             <string>&amp;W    1-D (advection-diffusion) reactive transport using RW (random-walk) algorithm</string>
             </property>
             <property name="shortcut">
              <string>Alt+W</string>
@@ -667,14 +667,27 @@ p, li { white-space: pre-wrap; }
           <item>
            <widget class="QCheckBox" name="c_PvMSt">
             <property name="text">
-             <string>Use math script for node initialization and/or time step changes of node properties</string>
+             <string>Use control math script for node initialization of nodes (properties, composition, etc.)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="c_PvMSc">
+            <property name="text">
+             <string>Execute control math script for additional changes on each time step (if this is not needed, deactivate to speed up)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="c_PvMSg">
             <property name="text">
-             <string>Use math script to specify graphic presentation of node profiles (monitoring at time steps) </string>
+             <string>Use math script to sample results for graphic presentation of node profiles (monitoring at time steps) </string>
             </property>
            </widget>
           </item>
@@ -1216,7 +1229,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
              <number>0</number>
             </property>
             <property name="maximum">
-             <number>20</number>
+             <number>60</number>
             </property>
             <property name="value">
              <number>0</number>
@@ -1226,7 +1239,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
           <item row="0" column="1">
            <widget class="QLabel" name="TextLabel1_2">
             <property name="text">
-             <string>Number of plots (columns in the yt table, from 0 to 20) to sample data from all nodes</string>
+             <string>Number of plots (columns in the yt table, from 0 to 60) to sample data from all nodes</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignVCenter</set>
@@ -1295,7 +1308,7 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
              <number>0</number>
             </property>
             <property name="maximum">
-             <number>10</number>
+             <number>30</number>
             </property>
             <property name="value">
              <number>1</number>
@@ -1561,38 +1574,42 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
           <string>(1) GEMS3K memory and I/O files data exchange</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_15">
-          <item row="0" column="0" colspan="3">
-           <widget class="QCheckBox" name="chSelect">
+          <item row="7" column="1">
+           <widget class="QRadioButton" name="rbKeyVal">
             <property name="text">
-             <string>Select ICs, DCs and phases to be exchanged via DBR files and DATABR structure (take all, if unchecked)</string>
+             <string>KeyValue</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="3">
-           <widget class="QCheckBox" name="chAll">
-            <property name="text">
-             <string>Do not write data items that contain only default values </string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="3">
-           <widget class="QCheckBox" name="chComment">
-            <property name="text">
-             <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (KV mode) or as formatted JSON (JSON mode)</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="3">
+          <item row="3" column="0" colspan="5">
            <widget class="QLabel" name="label_28">
             <property name="text">
              <string>Write IPM, DCH and DBR files in format mode: </string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="7" column="2">
+           <widget class="QRadioButton" name="rbFunJson">
+            <property name="text">
+             <string>Fun-JSON</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="5">
+           <widget class="QCheckBox" name="chAll">
+            <property name="text">
+             <string>Do not write data items that contain only default values </string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="4">
+           <widget class="QRadioButton" name="rbBinary">
+            <property name="text">
+             <string>Binary</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
            <widget class="QRadioButton" name="rbJson">
             <property name="text">
              <string>JSON (default)</string>
@@ -1602,17 +1619,27 @@ To retain the old sampling script, just click 'Next &gt;' on this page.</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QRadioButton" name="rbKeyVal">
+          <item row="0" column="0" colspan="5">
+           <widget class="QCheckBox" name="chSelect">
             <property name="text">
-             <string>KeyValue</string>
+             <string>Select ICs, DCs and phases to be exchanged via DBR files and DATABR structure (take all, if unchecked)</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="2">
-           <widget class="QRadioButton" name="rbBinary">
+          <item row="2" column="0" colspan="5">
+           <widget class="QCheckBox" name="chComment">
             <property name="text">
-             <string>Binary</string>
+             <string>Write .DCH, .IPM, .DBR I/O files with comments for all data entries (KV mode) or as formatted JSON (JSON mode)</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="3">
+           <widget class="QRadioButton" name="rbFunKeyValue">
+            <property name="text">
+             <string>Fun-KeyValue</string>
             </property>
            </widget>
           </item>

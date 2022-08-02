@@ -173,6 +173,7 @@ private:
 
     // These pointers and methods are only used in GEMS-PSI
     void MultiSystemInit();
+    void SystemToLookup();
     void multi_sys_dc();
     void multi_sys_ph();
     void ph_sur_param( int k, int kk );
@@ -192,6 +193,8 @@ private:
     int find_phnum_multi( const char *name);
     int find_dcnum_multi( const char *name);
     int find_icnum_multi( const char *name);
+    int find_mgpnum(const char *name);
+    int find_flnum(const char *name);
     const char* GetHtml() override;
 };
 

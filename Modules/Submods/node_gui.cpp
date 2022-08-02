@@ -9,9 +9,6 @@ TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
     internal_multi.reset();
     multi = apm;
     pmm = multi->GetPM();
-    std::string ipmlog_f = pVisor->userGEMDir().c_str();
-    ipmlog_f += "ipmlog.txt";
-    setipmLogFile(ipmlog_f);
 }
 
 

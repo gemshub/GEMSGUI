@@ -133,7 +133,7 @@ protected:
     bool check_RT( int nrt );
 
     void gd_ps_set();
-//    void bld_rec_list();
+    void bld_rec_list();
     void gd_text_analyze();
     void gd_EF_calc();
     void gd_rec_read( int nI );

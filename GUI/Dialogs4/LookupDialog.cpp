@@ -24,7 +24,6 @@
 #include "service.h"
 #include "v_mod.h"
 #include "GEMS3K/num_methods.h"
-//#include "model_w.h"
 
 #define Inherited LookupDialogData
 
@@ -324,6 +323,10 @@ void   LookupDialog::getFlags( char flgs[6] )
         flgs[1] = 'j';
     else if( ui->rbBinary->isChecked() )
         flgs[1] = 'b';
+    else if( ui->rbFunJson->isChecked() )
+        flgs[1] = 'f';
+    else if( ui->rbFunKeyValue->isChecked() )
+        flgs[1] = 'o';
     else
         flgs[1] = 't';
 

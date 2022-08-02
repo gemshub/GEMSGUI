@@ -118,7 +118,8 @@ PhaseInfoDialog::PhaseInfoDialog( QWidget* parent, bool system, int xph, string 
         if( system)
         {
             str = dcnames[ii];
-            // std::cout << str.c_str() << xdc << endl;
+            gui_logger->trace("PhaseInfoDialog {} {}", str, xdc);
+
             ui->tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
             str = str.substr(MAXSYMB);
             ui->tableDC->setItem(ii, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDRGROUP).c_str() )) );

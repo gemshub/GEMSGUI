@@ -15,13 +15,9 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#include <cstdio>
-#include <iostream>
-using namespace std;
 
 #include <QPushButton>
 #include <QLabel>
-
 #include "service.h"
 #include "KeyFilter.h"
 #include "KeyDialog.h"

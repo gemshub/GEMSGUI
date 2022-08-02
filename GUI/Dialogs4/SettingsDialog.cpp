@@ -129,18 +129,29 @@ void SettingsDialog::CmHelpGenerate()
 
             QString docPath =  ui->pRemoteHTML->text();
             QString app;
+            QString exeunix;
+            QString exewin;
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+            exeunix = QLatin1String("qcollectiongenerator");
+            exewin = QLatin1String("qcollectiongenerator.exe");
+#else
+            exeunix = QLatin1String("qhelpgenerator");      // qcollectiongenerator was removed since Qt 6.0
+            exewin = QLatin1String("qhelpgenerator.exe");
+#endif
+
 #ifndef _WIN32
 #ifdef __APPLE__
             //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
-            app += QLatin1String("qcollectiongenerator");
+            app += exeunix;       // app += QLatin1String("qcollectiongenerator");
 #else
             // app = pVisor->sysGEMDir().c_str() + QLatin1String("/qcollectiongenerator");
             //                   app = QLatin1String(getenv("HOME"));
             //                   app += QLatin1String("/Gems3-app/qcollectiongenerator");
-            app += QLatin1String("qcollectiongenerator");
+            app += exeunix;      //app += QLatin1String("qcollectiongenerator");
 #endif
 #else    // windows
-            app += QLatin1String("qcollectiongenerator.exe");
+            app += exewin;       //app += QLatin1String("qcollectiongenerator.exe");
 #endif
             QStringList args;
             args << docPath + QLatin1String("gems3helpconfig.qhcp")
@@ -149,12 +160,10 @@ void SettingsDialog::CmHelpGenerate()
             ;
 
             pVisorImp->proc->start(app, args);
-            cout << app.toStdString() << endl;
-            cout << args[2].toStdString() << endl;
-            
+            gui_logger->info("CmHelpGenerate start {} {}", app.toStdString(), args[2].toStdString());
             if (!pVisorImp->proc->waitForStarted())
             {
-                Error( "Gems3", "Unable to launch qcollectiongenerator");
+                Error( "Gems3", "Unable to launch qhelpgenerator (in Qt5, qcollectiongenerator)");
             }
         }
         // open it

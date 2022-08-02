@@ -63,6 +63,7 @@ public:
     void setCurrentTab( int ii );
 
     QSize sizeHint() const;
+    void clearEditFocus();  // commit last editor if exist
 
 protected:
 

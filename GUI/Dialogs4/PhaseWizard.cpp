@@ -136,7 +136,8 @@ QWidget* parent):
         filter = QChar(pkey[0]) + QString( pkey[1] != ':' ? "*" : "") + QString(":*:*:*:");
     ui->checkRDFull->setChecked( rd_old_selection.empty() );
     ui->lineRDFilter->setText(filter);
-    rd_keys_model = new RDKeyModel( this, rd_old_selection, filter.toUtf8().data()  );
+    rd_keys_model = new RDKeyModel( this, filter.toUtf8().data()  );
+    rd_keys_model->setSelection(rd_old_selection);
     QStringList headers_list;
     headers_list <<  "Source" <<  "Aggr.State" <<  "Group" <<
                      "Name" <<   "Comment";
@@ -209,7 +210,8 @@ QWidget* parent):
 
     ui->checkDCrFull->setChecked( lDCr_old_selection.empty() );
     ui->lineDCrFilter->setText(filter);
-    lDCr_keys_model = new RDKeyModel( this, lDCr_old_selection, filter.toUtf8().data() );
+    lDCr_keys_model = new RDKeyModel( this, filter.toStdString().c_str() );
+    lDCr_keys_model->setSelection(lDCr_old_selection);
     headers_list.clear();
     headers_list <<  "Source" <<  "Aggr.State" <<  "Group" <<
                      "Name" <<   "Comment";
@@ -262,7 +264,8 @@ QWidget* parent):
 
     ui->checkPhFull->setChecked( phase_old_selection.empty() );
     ui->linePhFilter->setText("*");
-    phase_keys_model = new KeyModel( this, RT_PHASE, phase_old_selection  );
+    phase_keys_model = new KeyModel( this, RT_PHASE );
+    phase_keys_model->setSelection(phase_old_selection);
     headers_list.clear();
     headers_list <<  "Aggr.State" <<  "Group" <<
                      "Name" <<  "Type" <<   "Comment";
