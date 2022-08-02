@@ -23,6 +23,8 @@
 #include "v_module.h"
 #include "s_tpwork.h"
 
+class QJsonArray;
+
 const int
 MAXCPCOEF =      12,
   MAXCPFSCOEF=     7,
@@ -203,6 +205,7 @@ public:
     void CopyRecords( const char * prfName, TCIntArray& cnt,
      elmWindowData el_data, dcSetupData st_data, std::set<std::string>& SDlist );
 
+    QJsonArray all_to_thermofun();
 };
 
 #endif     // _m_dcomp.h

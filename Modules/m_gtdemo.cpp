@@ -33,7 +33,6 @@ bool TGtDemo::check_RT( int nrt )
 {
     return ( nrt >RT_ICOMP && nrt < static_cast<int>(aMod.size()));
 }
-///
 
 TGtDemo::TGtDemo( uint nrt ):
         TCModule( nrt )
@@ -46,13 +45,13 @@ TGtDemo::TGtDemo( uint nrt ):
     aFldKeysHelp.push_back("Record key comment to this GtDemo task");
     setKeyEditField(1);
     gdp=&gd[0];
+    gdp->nRT = RT_ICOMP;
     set_def();
     start_title = " Definition of Data Sampling and Plotting Task ";
     gd_gr = nullptr;
 }
 
-const std::string&
-TGtDemo::GetString()
+const std::string& TGtDemo::GetString()
 {
     titler = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     titler += " : ";
@@ -61,9 +60,8 @@ TGtDemo::GetString()
 }
 
 // get key of record
-std::string
-TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
-                          int keyType )
+std::string TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
+                                     int keyType )
 {
     std::string str;
 
@@ -77,7 +75,7 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of Project
-        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         str = prfKey;
         str+= ":*:*:*:*:";
@@ -86,8 +84,8 @@ TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
     if(  str.empty() )
         return str;
     rt[RT_GTDEMO]->SetKey(str.c_str());
-     if( keyType != KEY_TEMP )
-         keyTest( str.c_str() );
+    if( keyType != KEY_TEMP )
+        keyTest( str.c_str() );
     return str;
 }
 
@@ -97,13 +95,13 @@ void TGtDemo::keyTest( const char *key )
 {
     if( pVisor->ProfileMode  )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Wrong TGtDemo record key (another Modelling Project)!");
-     }
+    }
 }
 
 // link values to objects
@@ -295,93 +293,94 @@ void TGtDemo::gd_ps_set()
     switch( gdp->nRT )
     {
     case RT_ICOMP:
-        memcpy( &gdp->PsIC, "+--------------", 15);
+        memcpy( &gdp->PsIC, "+-----------", 12);
+        gdp->PsIPNCalc = '-';
         break;
     case RT_DCOMP:
-        memcpy( &gdp->PsIC, "-+-------------", 15);
+        memcpy( &gdp->PsIC, "-+----------", 12);
+        gdp->PsIPNCalc = '+';
         break;
     case RT_COMPOS:
-        memcpy( &gdp->PsIC, "--+------------", 15);
+        memcpy( &gdp->PsIC, "--+---------", 12);
+        gdp->PsIPNCalc = '+';
         break;
     case RT_REACDC:
-        memcpy( &gdp->PsIC, "---+-----------", 15);
+        memcpy( &gdp->PsIC, "---+--------", 12);
+        gdp->PsIPNCalc = '+';
         break;
     case RT_RTPARM:
-        memcpy( &gdp->PsIC, "---++----------", 15);
+        memcpy( &gdp->PsIC, "---++-------", 12);
+        gdp->PsIPNCalc = '+';
         break;
     case RT_PHASE:
-        memcpy( &gdp->PsIC, "-----+---------", 15);
+        memcpy( &gdp->PsIC, "-----+------", 12);
+        gdp->PsIPNCalc = '+';
         break;
     case RT_SYSEQ:
-        memcpy( &gdp->PsIC, "------+--------", 15);
+        memcpy( &gdp->PsIC, "------+-----", 12);
+        gdp->PsIPNCalc = '-';
         break;
     case RT_PROCES:
-        memcpy( &gdp->PsIC, "------++-------", 15);
+        memcpy( &gdp->PsIC, "------++----", 12);
+        gdp->PsIPNCalc = '-';
         gdp->nRT = RT_SYSEQ;
         break;
-    case RT_UNSPACE:
-        memcpy( &gdp->PsIC, "------+-+------", 15);
-        gdp->nRT = RT_SYSEQ;
-       break;
-//    case RT_DUALTH:memcpy( &gdp->PsIC,"------+--+-----", 15); break;
+//    case RT_UNSPACE:
+//        memcpy( &gdp->PsIC, "------+-+---", 12);
+//        gdp->nRT = RT_SYSEQ;
+//       break;
+//    case RT_DUALTH:memcpy( &gdp->PsIC,"------+--+--", 12); break;
     default:
         Error( GetName(), " E02GDrem: Wrong record type selected for sampling...");
     }
-
 }
 
-/* opens window with 'Remake record' parameters
-*/
-void
-TGtDemo::MakeQuery()
+int TGtDemo::rt_flags_get()
 {
-//    pImp->MakeQuery();
+    int nRT1 = RT_ICOMP;
+    // nRT1 from flags
+    if( gdp->PsTR != S_OFF )
+        nRT1 = RT_GEM2MT;
+    else if( gdp->PsUT != S_OFF )
+        nRT1 = RT_DUALTH;
+    else if( gdp->PsPB != S_OFF )
+        nRT1 = RT_UNSPACE;
+    else if( gdp->PsPE != S_OFF )
+        nRT1 = RT_PROCES;
+    else if( gdp->PsST != S_OFF )
+        nRT1 = RT_SYSEQ;
+    else if( gdp->PsPH != S_OFF )
+        nRT1 = RT_PHASE;
+    else if( gdp->PsRP != S_OFF )
+        nRT1 = RT_RTPARM;
+    else if( gdp->PsRE != S_OFF )
+        nRT1 = RT_REACDC;
+    else if( gdp->PsBC != S_OFF )
+        nRT1 = RT_COMPOS;
+    else  if( gdp->PsDC != S_OFF )
+        nRT1 = RT_DCOMP;
+
+    return nRT1;
+}
+
+// opens window with 'Remake record' parameters
+void TGtDemo::MakeQuery()
+{
     const char * p_key;
     TCStringArray namesLines;
-    std::string prkey = std::string( gdp->prKey, 0, MAXRKEYLEN);
+    TCStringArray rkeyList;
     int size[8];
-    int nRT1 = RT_ICOMP;
+    char flgs[16];
+
     std::string script;
     if( gdp->expr )
-     script = gdp->expr;
+        script = gdp->expr;
 
     std::string xName = gdp->xNames;
     std::string yName = gdp->yNames;
 
-
-    // nRT1 from flags
-    if( gdp->PsTR != S_OFF )
-     nRT1 = RT_GEM2MT;
-    else
-     if( gdp->PsUT != S_OFF )
-       nRT1 = RT_DUALTH;
-     else
-       if( gdp->PsPB != S_OFF )
-          nRT1 = RT_UNSPACE;
-       else
-         if( gdp->PsPE != S_OFF )
-           nRT1 = RT_PROCES;
-         else
-           if( gdp->PsST != S_OFF )
-              nRT1 = RT_SYSEQ;
-           else
-             if( gdp->PsPH != S_OFF )
-                nRT1 = RT_PHASE;
-             else
-               if( gdp->PsRP != S_OFF )
-                  nRT1 = RT_RTPARM;
-               else
-                 if( gdp->PsRE != S_OFF )
-                   nRT1 = RT_REACDC;
-                 else
-                   if( gdp->PsBC != S_OFF )
-                      nRT1 = RT_COMPOS;
-                   else
-                     if( gdp->PsDC != S_OFF )
-                        nRT1 = RT_DCOMP;
-
     p_key  = db->PackKey();
-    size[0] = nRT1;//gdp->nRT;
+    size[0] = rt_flags_get();//gdp->nRT;
     size[1] = gdp->Nsd;
     size[2] = gdp->Nwc;
     size[3] = gdp->Nqp;
@@ -389,13 +388,20 @@ TGtDemo::MakeQuery()
     size[5] = gdp->dimEF[1];
     size[6] = gdp->dimXY[1];
     size[7] = gdp->dimX;
+
+    std::string prkey = char_array_to_string( gdp->prKey, MAXRKEYLEN);
     if( prkey.empty() || prkey == "`")
         prkey = "*";
 
-    if( !vfGtDemoSet( window(), p_key, size,  prkey, script, namesLines, xName, yName  ))
-         Error( p_key, "GtDemo record configuration cancelled by the user!" );
-     //  return;   // cancel
+    //short rtlen = rt[gdp->nRT]->KeyLen();
+    for(int i=0; i<gdp->Nlrk; i++ )
+        rkeyList.push_back(char_array_to_string( gdp->rkey+i*gdp->rtLen, gdp->rtLen));
 
+    memcpy( flgs, &gdp->PtAEF, 16);
+    if( !vfGtDemoSet( window(), p_key, flgs, size,  prkey, script, namesLines, xName, yName, rkeyList ))
+        Error( p_key, "GtDemo record configuration cancelled by the user!" );
+
+    memcpy( &gdp->PtAEF, flgs, 16);
     gdp->nRT = static_cast<short>(size[0]);
     gdp->Nsd = static_cast<short>(size[1]);
     gdp->Nwc = static_cast<short>(size[2]);
@@ -404,42 +410,54 @@ TGtDemo::MakeQuery()
     gdp->dimEF[1] = static_cast<short>(size[5]);
     gdp->dimXY[1] = static_cast<short>(size[6]);
     gdp->dimX = static_cast<short>(size[7]);
-// set up process key
+    // set up process key
     if( gdp->nRT <= RT_SYSEQ )
-      prkey = "*";
+        prkey = "*";
     strncpy( gdp->prKey, prkey.c_str(), MAXRKEYLEN );
 
-
     if( !gdp->expr )
-       gdp->expr = static_cast<char *>(aObj[ o_gdexpr ]->Alloc(1, 2048, S_));
-    aObj[o_gdexpr]->SetString( script.c_str(),0,0);
+        gdp->expr = static_cast<char *>(aObj[ o_gdexpr ]->Alloc(1, 2048, S_));
+    aObj[o_gdexpr]->SetString( script.c_str(),0,0 );
 
     if(namesLines.size() > 0)
-     {
+    {
         int dimPclnam = gdp->dimXY[1];
         int ndxy = 0;
         if(  gdp->dimX > 1)
-        {      dimPclnam +=  gdp->dimX;
-                ndxy =gdp->dimX;
+        {      
+            dimPclnam +=  gdp->dimX;
+            ndxy =gdp->dimX;
         }
         gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->Alloc( 1,
                      dimPclnam, MAXGRNAME));
         for(size_t ii=0; ii< min<size_t>( namesLines.size(),gdp->dimXY[1]); ii++)
         {
-          strncpy( gdp->lNam0[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
+            strncpy( gdp->lNam0[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
         }
         strncpy(gdp->xNames, xName.c_str(), MAXAXISNAME );
         strncpy(gdp->yNames, yName.c_str(), MAXAXISNAME );
-     }
+    }
 
- // setup flags
+    // setup flags
     gd_ps_set();
     if( gdp->dimEF[0] >0 && gdp->dimEF[1] >0)
-     gdp->PtAEF = S_ON;
+        gdp->PtAEF = S_ON;
     else
-     gdp->PtAEF = S_OFF;
+        gdp->PtAEF = S_OFF;
 
- }
+    if( gdp->nRT == RT_PROCES  ||  gdp->nRT == RT_UNSPACE )
+        gdp->nRT = RT_SYSEQ;
+
+    gdp->rtLen =  rt[ gdp->nRT ]->KeyLen();
+    gdp->Nlrk = rkeyList.size();
+    gdp->rkey = static_cast<char *>(aObj[ o_gdrkey ]->Alloc( gdp->Nlrk, 1, gdp->rtLen ));
+    // make list of record
+    for(int i=0; i<gdp->Nlrk; i++ )
+        memcpy( gdp->rkey+i*gdp->rtLen, rkeyList[i].c_str(), gdp->rtLen );
+    gdp->dimXY[0] = gdp->Nlrk;
+    if(  gdp->dimXY[1] <= 0 )
+        gdp->dimXY[1] = 2;
+}
 
 //set default information
 void TGtDemo::set_def( int q)
@@ -462,6 +480,8 @@ void TGtDemo::set_def( int q)
     memcpy( gdp->yNames, TProfil::pm->pa.GDpcc[1], MAXAXISNAME );
 
     gd_ps_set();
+    gdp->PsSys = '-';
+    gdp->PsRes4 = '-';
     gdp->lNam0 = nullptr;
     gdp->lNamE = nullptr;
     gdp->expr  = nullptr;
@@ -580,8 +600,7 @@ AGAINRC:    //get  keypart
 }
 
 //Rebild record structure before calc
-int
-TGtDemo::RecBuild( const char *key, int mode  )
+int TGtDemo::RecBuild( const char *key, int mode  )
 {
     TProfil *aPa=TProfil::pm;
     char tbuf[100];
@@ -590,11 +609,6 @@ TGtDemo::RecBuild( const char *key, int mode  )
     if( gst.iopt )
         delete[] gst.iopt;
     gst.iopt = nullptr;
-//AGAIN:
-//    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_PROCES;
-//    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_UNSPACE;
 
     int ret = TCModule::RecBuild( key, mode );
     if( gdp->nRT == RT_PROCES  ||  gdp->nRT == RT_UNSPACE )
@@ -606,13 +620,6 @@ TGtDemo::RecBuild( const char *key, int mode  )
     if( ret == VF_CANCEL )
         return ret;
 
-/*    if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
-            ( (gdp->dimEF[0]==0 || gdp->dimEF[1]==0) && gdp->PtAEF != S_OFF ) )
-    {
-        vfMessage(window(), GetName(), "E01GDexec: Inconsistent counters or flags...");
-        goto AGAIN;
-    }
-*/
     gdp->rtLen =  rt[ gdp->nRT ]->KeyLen();
     bld_rec_list();
     gdp->dimXY[0] = gdp->Nlrk;
@@ -622,7 +629,7 @@ TGtDemo::RecBuild( const char *key, int mode  )
 
     if( gdp->PtAEF != S_OFF && gdp->exprE && !*gdp->exprE )
     {
-        strcpy( gdp->exprE, "next=:next;" );
+        strncpy( gdp->exprE, "next=:next;", 20 );
         for( i=0; i<gdp->dimEF[1]; i++ )
         {
             sprintf( tbuf, "%s%d", aPa->pa.GDpsc, i+1 );
@@ -632,7 +639,7 @@ TGtDemo::RecBuild( const char *key, int mode  )
     }
     int ndxy = 0;
     if(  gdp->dimX > 1)
-            ndxy =gdp->dimX;
+        ndxy =gdp->dimX;
     for(int j=0; j< gdp->dimXY[1]; j++ )
     {
         sprintf( tbuf, "%s%d", aPa->pa.GDpsc, j+1 );
@@ -696,8 +703,7 @@ void TGtDemo::gd_EF_calc()
 }
 
 // read record number nI from curent nRT
-void
-TGtDemo::gd_rec_read( int nI )
+void TGtDemo::gd_rec_read( int nI )
 {
 
     ErrorIf( nI < 0 || nI > gdp->Nlrk, GetName(), "E03GDexec: Invalid database record handle" );
@@ -709,6 +715,12 @@ TGtDemo::gd_rec_read( int nI )
     {
         TProfil* PRof = TProfil::pm;
         PRof->loadSystat( gdp->Wkb );
+
+        if( gdp->PsSys ==  S_ON )
+        {
+            double dTime=0.; int kTimeStep =0; double kTime=0.;
+            PRof->CalcEqstat( dTime, kTimeStep, kTime );
+        }
 
         if( gdp->PsPB != S_OFF && *gdp->prKey) // Probe mode
         {
@@ -741,8 +753,7 @@ TGtDemo::gd_rec_read( int nI )
 }
 
 //Recalculate the GtDemo record
-void
-TGtDemo::RecCalc( const char *key )
+void TGtDemo::RecCalc( const char *key )
 {
     if( !pVisor->ProfileMode  && gdp->nRT == RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Equilibria Calculation mode" );
@@ -750,10 +761,11 @@ TGtDemo::RecCalc( const char *key )
 
     strcpy( gdp->SYS_key, "*" );
     if( gdp->PsPE != S_OFF && *gdp->prKey)   /* read process record */
-    {    TProcess::pm->RecInput( gdp->prKey );
-         if( TProcess::pm->NoSave())
-           Error( key, "E04GDexec: The x0, y0 arrays "
-           "can only be updated after the Process simulator re-calculation");
+    {
+        TProcess::pm->RecInput( gdp->prKey );
+        if( TProcess::pm->NoSave())
+           Error( key, "E04GDexec: The x0, y0 arrays can only be updated after"
+                       "the Process simulator re-calculation when saving systems");
     }
     if( gdp->PsPB != S_OFF && *gdp->prKey)    /* read probe record */
         TUnSpace::pm->RecInput( gdp->prKey );
@@ -769,7 +781,7 @@ TGtDemo::RecCalc( const char *key )
             gd_text_analyze();
             strncpy( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey(), EQ_RKLEN );
         }
-        rpn[0].CalcEquat();
+        rpn[0].CalcEquat( gdp->PsIPNCalc == S_ON );
         aMod[RT_GTDEMO]->ModUpdate("GtDemo data sampling in progress...");
         // Stop Process from Andy Sveta
     }
@@ -789,9 +801,7 @@ TGtDemo::RecCalc( const char *key )
 }
 
 
-
-void
-TGtDemo::RecordPlot( const char* /*key*/ )
+void TGtDemo::RecordPlot( const char* /*key*/ )
 {
 
     if(  gdp->PsRes4 == S_ON)
@@ -854,9 +864,9 @@ TGtDemo::RecordPlot( const char* /*key*/ )
         TCStringArray lnames;
         int ii;
         for( ii=0; ii<gdp->dimXY[1]; ii++ )
-            lnames.push_back( std::string(gdp->lNam0[ii+ndxy], 0, MAXGRNAME ));
+            lnames.push_back( char_array_to_string(gdp->lNam0[ii+ndxy], MAXGRNAME ));
         for( ii=0; ii<gdp->dimEF[1]; ii++ )
-            lnames.push_back( std::string( gdp->lNamE[ii], 0, MAXGRNAME ));
+            lnames.push_back( char_array_to_string( gdp->lNamE[ii], MAXGRNAME ));
         gd_gr = updateGraphWindow( gd_gr, this, plt, gdp->name,
                                    gdp->xNames, gdp->yNames, lnames, def_plt_lines );
     }

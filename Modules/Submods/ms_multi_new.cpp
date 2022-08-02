@@ -115,8 +115,8 @@ void TMulti::GasParcP()
 
                 copyValues(SMbuf[jj], pm.SM[j], MAXDCNAME );
                 pm.Fug_l[jj] = -(pm.G0[j] + pm.fDQF[j]);
-                if( pm.Pc > 1e-9 )
-                    pm.Fug_l[jj] += log(pm.Pc);
+                if( pm.P > 1e-9 )
+                    pm.Fug_l[jj] += log(pm.P);
                 for( i=0; i<pm.N; i++ )
                     pm.Fug_l[jj] += *(pm.A+j*pm.N+i) * pm.U[i];
                 if( pm.Fug_l[jj] > -37. && pm.Fug_l[jj] < 16. )
@@ -361,7 +361,7 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
 
     //   MultiKeyInit( key ); //into PMtest
 
-    //  cout << " pm.pBAL = " << pm.pBAL;
+    ipm_logger->trace(" pm.pBAL =  {}", pm.pBAL);
 
     /// if( !pm.pBAL )
     ///     newInterval = true;    // to rebuild lookup arrays
@@ -398,7 +398,7 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
     ///    node1->MakeNodeStructures(window(), true, pm.Tai, pm.Pai );
     /// }
 
-    //cout << "newInterval = " << newInterval << " pm.pTPD = " << pm.pTPD << endl;
+    ipm_logger->trace("newInterval = {}   pm.pTPD =  {}", newInterval, pm.pTPD);
 
     // New: TKinMet stuff
     if( pm.pKMM <= 0 )

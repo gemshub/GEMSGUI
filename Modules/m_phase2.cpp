@@ -447,7 +447,7 @@ void TPhase::makeReacDCompListNew( TCStringArray& aDclist, short nDC,  char (*SM
     {
        for(int i=0; i<nDC; i++ )
        {
-          std::string key_dr = std::string( SM[i], 0, DC_RKLEN );
+          std::string key_dr = char_array_to_string( SM[i], DC_RKLEN );
           if( DCS[i] == SRC_DCOMP )
           {
             rt[RT_DCOMP]->SetKey( key_dr.c_str() );
@@ -478,7 +478,7 @@ void TPhase::makePhaseListNew( TCStringArray& aPhlist )
     {
         for(int i=0; i<php->nlPh; i++ )
         {
-            std::string key_dr = std::string( php->lPh[i], 0, PH_RKLEN );
+            std::string key_dr = char_array_to_string( php->lPh[i], PH_RKLEN );
             aPhlist.push_back( key_dr );
         }
     }
@@ -529,6 +529,26 @@ void TPhase::LoadDCC()
 }
 
 
+void TPhase::CheckNameCatAn(std::string& spName, short& nCat, short& nAn, short& nNs)
+{
+    strip( spName );
+    auto pos = spName.length()-1;
+    while( pos>0 && ( ( spName[pos] <=  '9' && spName[pos] >= '1' ) || spName[pos]== '>' ) ) // 4/5/2022 Fix DM for compatibility with Thereda <0> for neutrals from spName[pos] >= '0'
+        pos--;
+    switch( spName[pos] )
+    {
+    case '-': nAn++;
+        break;
+    case '+': nCat++;
+        break;
+    case '0':
+    case '@': nNs++;   // neutral species except H2O
+        break;
+    default:
+        break;
+    }
+}
+
 // Pre-proc. loop for SIT or Pitzer: determining number of cations and anion
 // in aDclist
 void TPhase::DetNumbCatAn(TCStringArray& aDclist)
@@ -538,30 +558,14 @@ void TPhase::DetNumbCatAn(TCStringArray& aDclist)
  if( php->PphC == PH_AQUEL &&
      ( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ))
  {
-    int pos;
     std::string spName;
     for(int i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
     {
       spName = std::string( aDclist[i], MAXSYMB+MAXDRGROUP+2, MAXDCNAME);
-
-      strip( spName );
-      pos = spName.length()-1;
-      while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
-          pos--;
-      switch( spName[pos] )
-      {
-        case '-': nAn++;
-                  break;
-        case '+': nCat++;
-                  break;
-        case '@': nNs++;   // neutral species except H2O
-                  break;
-        default:
-                  break;
-      }
+      CheckNameCatAn(spName, nCat, nAn, nNs);
     }
 
-    if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
+    if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nAn >= php->nDC )
          Error( GetName(), "E39PHrem: No cations or no anions - SIT model cannot be applied...");
      php->nCat = nCat;
      php->nAn = nAn;
@@ -569,104 +573,88 @@ void TPhase::DetNumbCatAn(TCStringArray& aDclist)
   }
 }
 
-
 // Assembling indices and name lists for cations and anions
-void
-TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
+void TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 {
-   int pos;
-   short i, iCat=0, iAn=0, iNs=0, nAn, nCat, nNs;
-   std::string spName;
+    short i, iCat=0, iAn=0, iNs=0, nAn, nCat, nNs;
+    std::string spName;
 
-   if( WorkCount )
-   {   // pre-proc. loop: determining number of cations, anions and neutral species
-      nAn=0;
-      nCat=0;
-      nNs=0;
-      for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
-      {
-         spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-         strip( spName );
-         pos = spName.length()-1;
-         while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
-             pos--;
-         switch( spName[pos] )
-         {
-           case '-': nAn++;
-                     break;
-           case '+': nCat++;
-                     break;
-           case '@': nNs++;  // H2O@ is not included
-                     break;
-           default:
-                     break;
-         }
-      }
-      if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
-           Error( GetName(), "E39PHrem: No cations or no anions - SIT model cannot be applied...");
-      php->nCat = nCat;
-      php->nAn = nAn;
-      php->nNs = nNs;
-   }
-
-   if( WorkAlloc )
-   {
-      if( php->Ppnc == S_ON
-    		  && (php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ) )
-      {
-         php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Alloc(
-                          php->nCat, 1, MAXDCNAME ));
-         php->lsAn  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Alloc(
-                          php->nAn, 1, MAXDCNAME ));
-         php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Alloc( php->nCat, 1, I_));
-         php->nxAn  = static_cast<short *>(aObj[ o_ph_w_nxa ]->Alloc( php->nAn, 1, I_));
-         if( php->nNs )
-         {
-             php->lsNs  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Alloc(
-                              php->nNs, 1, MAXDCNAME ));
-             php->nxNs  = static_cast<short *>(aObj[ o_ph_w_nxn ]->Alloc( php->nNs, 1, I_));
-         }
-      }
-      else {
-
-        php->nSub =  0;
-        php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Free());
-        php->lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Free());
-        php->lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Free());
-        php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Free());
-        php->nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ]->Free());
-        php->nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ]->Free());
-
-      }
-   }
-
-   if( FillOut )
-   {
-     for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
-     { // Determining if cation or anion
-       spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-       strip( spName );
-       pos = spName.length()-1;
-       while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
-          pos--;
-       switch( spName[pos] )
-       {
-          case '-': memcpy( php->lsAn[iAn], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-                    php->nxAn[iAn++] = i;
-                    break;
-          case '+': memcpy( php->lsCat[iCat], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-                    php->nxCat[iCat++] = i;
-                    break;
-          case '@': memcpy( php->lsNs[iNs], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-				    php->nxNs[iNs++] = i;
-                    break;
-          default:
-                  continue;
+    if( WorkCount )
+    {   // pre-proc. loop: determining number of cations, anions and neutral species
+        nAn=0;
+        nCat=0;
+        nNs=0;
+        for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
+        {
+            spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+            CheckNameCatAn(spName, nCat, nAn, nNs);
         }
-     }
-     if( iCat != php->nCat || iAn != php->nAn || iNs != php->nNs )
-       Error( GetName(), "E38PHrem: Mismatch in the number of cations, anions or neutral species...");
-   }
+        if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nAn >= php->nDC )
+            Error( GetName(), "E39PHrem: No cations or no anions - SIT model cannot be applied...");
+        php->nCat = nCat;
+        php->nAn = nAn;
+        php->nNs = nNs;
+    }
+
+    if( WorkAlloc )
+    {
+        if( php->Ppnc == S_ON
+                && (php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ) )
+        {
+            php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Alloc(
+                                                              php->nCat, 1, MAXDCNAME ));
+            php->lsAn  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Alloc(
+                                                              php->nAn, 1, MAXDCNAME ));
+            php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Alloc( php->nCat, 1, I_));
+            php->nxAn  = static_cast<short *>(aObj[ o_ph_w_nxa ]->Alloc( php->nAn, 1, I_));
+            if( php->nNs )
+            {
+                php->lsNs  = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Alloc(
+                                                                  php->nNs, 1, MAXDCNAME ));
+                php->nxNs  = static_cast<short *>(aObj[ o_ph_w_nxn ]->Alloc( php->nNs, 1, I_));
+            }
+        }
+        else {
+
+            php->nSub =  0;
+            php->lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Free());
+            php->lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Free());
+            php->lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Free());
+            php->nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Free());
+            php->nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ]->Free());
+            php->nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ]->Free());
+
+        }
+    }
+
+    if( FillOut )
+    {
+        for( i=0; i<php->nDC/*-1*/; i++ ) // BugFix SD 26/11/2010  different number of neitral species
+        { // Determining if cation or anion
+            spName = std::string( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+            strip( spName );
+            auto pos = spName.length()-1;
+            while( pos>0 && ( ( spName[pos] <=  '9' && spName[pos] >= '1' ) || spName[pos]== '>' ) ) // 4/5/2022 Fix DM for compatibility with Thereda <0> for neutrals from spName[pos] >= '0'
+                pos--;
+            switch( spName[pos] )
+            {
+            case '-': memcpy( php->lsAn[iAn], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                php->nxAn[iAn++] = i;
+                break;
+            case '+': memcpy( php->lsCat[iCat], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                php->nxCat[iCat++] = i;
+                break;
+            case '0':
+            case '@': memcpy( php->lsNs[iNs], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                php->nxNs[iNs++] = i;
+                break;
+            default:
+                continue;
+            }
+        }
+        if( iCat != php->nCat || iAn != php->nAn || iNs != php->nNs )
+            Error( GetName(), "E38PHrem: Mismatch in the number of cations, anions or neutral species...");
+    }
 }
 
 const int MAXMOIETY = 60;
@@ -970,7 +958,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
     if( approximatelyZero(apar[4]) )
         strcpy( tempdbuf, "0");
     else sprintf( tempdbuf, "%c", (char)(apar[4]+'0'));
-// cout << "newAqGasPhase: " << amod << endl;
+    gui_logger->debug("newAqGasPhase: {} key {}", amod, akey);
 
     switch( amod )
     {
@@ -1063,7 +1051,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
 
 MAKE_GAS_PHASE:
     Name = "Auto-set ";
-// cout << "newAqGasPhase Gas: " << gmod << endl;
+    gui_logger->debug("newAqGasPhase: {} key {}", gmod, gkey);
 
     switch( gmod )
     {

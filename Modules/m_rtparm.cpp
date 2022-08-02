@@ -747,9 +747,9 @@ TRTParm::RecordPlot( const char* /*key*/ )
         TCStringArray lnames;
         int ii;
         for( ii=0; ii<rpp->dimXY[1]; ii++ )
-            lnames.push_back( std::string(rpp->lNam[ii], 0, MAXGRNAME ));
+            lnames.push_back( char_array_to_string(rpp->lNam[ii], MAXGRNAME ));
         for( ii=0; ii<rpp->dimEF[1]; ii++ )
-            lnames.push_back( std::string( rpp->lNamE[ii], 0, MAXGRNAME ));
+            lnames.push_back( char_array_to_string( rpp->lNamE[ii], MAXGRNAME ));
         gd_gr = updateGraphWindow( gd_gr, this, plt, rpp->name,
                                    rpp->xNames, rpp->yNames, lnames, def_plt_lines );
     }

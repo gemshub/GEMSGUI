@@ -74,20 +74,20 @@ Formuan::~Formuan()
 void Formuan::scanFormula( std::vector<ICTERM>& tt )
 {
   scanCharge();
-
- // cout << form_str.c_str() << charge_str.c_str() << endl;
   string term = form_str;
   scanFterm( tt, term, '\0');
-
 
   // added charge item
   if( !charge_str.empty() )
        charge(tt);
 
   // TEST OUTPUT
-  //cout << "Formula " << form_str << " ZZ " << charge_str << endl;
-  //   for( uint ii=0; ii<ict_.GetCount(); ii++)
-  //cout << ict_[ii].ick << " " << ict_[ii].val << "  " << ict_[ii].stoc << endl;
+  if( gui_logger->should_log(spdlog::level::trace)) {
+      std::ostringstream logs;
+      for( uint ii=0; ii<tt.size(); ii++)
+          logs << tt[ii].ick << " " << tt[ii].val << "  " << tt[ii].stoc << "\n";
+      gui_logger->trace("Formula {} ZZ {} \n {} ", form_str, charge_str, logs.str());
+  }
 }
 
 //add component to sorted list
@@ -177,7 +177,8 @@ void Formuan::charge(std::vector<ICTERM>& tt)
  switch( chan[0] )
  {
     case CHARGE_NUL:    break;
-    case CHARGE_MINUS:  sign = -1; [[fallthrough]];
+    case CHARGE_MINUS:  sign = -1;
+                        [[fallthrough]];
     case CHARGE_PLUS:
                         chan = chan.substr(1);
                         getReal( cha, chan );
@@ -486,11 +487,13 @@ int TFormula::BuildMoiety( const char * StrForm, std::vector<MOITERM>& moit_ )
     nSites = aFa.scanMoiety( moit_ );
 
     //only for test
-//cout << "Formula " << StrForm << endl;
-//for( uint ii=0; ii<moit_.GetCount(); ii++)
-//     cout << moit_[ii].name << " " << moit_[ii].site << "  " << moit_[ii].nj << endl;
-
-     return nSites;
+    if( gui_logger->should_log(spdlog::level::trace)) {
+        std::ostringstream logs;
+        for( uint ii=0; ii<moit_.size(); ii++)
+            logs << moit_[ii].name << " " << moit_[ii].site << "  " << moit_[ii].nj << "\n";
+        gui_logger->trace("Formula {}\n {} ", StrForm, logs.str());
+    }
+    return nSites;
 }
 
 // Set new formula and analyze it , calculate charge, get moiety

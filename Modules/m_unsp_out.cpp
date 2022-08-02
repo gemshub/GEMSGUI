@@ -24,11 +24,7 @@ void TUnSpace::out_QT( int Ngr  )
 // UiDC
 
   ii1 = usp->N;
-//#ifndef IPMGEMPLUGIN
   if( TRMults::sm->GetMU()->Laq )
-//#else
-//  if(mup_Laq )
-//#endif
       ii1--;
 
   for( l=0; l<ii1 ; l++ )
@@ -446,13 +442,8 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
             for( int jj=0; jj<pmu->L; jj++)
              if( pmu->muj[jj] == j )
              {
-//#ifndef IPMGEMPLUGIN
                  pmu->fDQF[jj] = (usp->Gs[j][0]-  // not used after 16/07/2011 must be changed
                   float(TMTparm::sm->GetTP()->G[j]))/pmu->RT; // tpp->G may not be at this T,P
-//#else
-//                  pmu->GEX[jj] = (usp->Gs[j][0]-
-//                   float(pmu->tpp_G[j]))/pmu->RT;
-//#endif
                break;
              }
             return;

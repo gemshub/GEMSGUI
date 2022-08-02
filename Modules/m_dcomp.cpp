@@ -51,8 +51,10 @@ TDComp::TDComp( uint nrt ):
     aFldKeysHelp.push_back("Name of this Dependent Component (chemical species)");
     aFldKeysHelp.push_back("Thermodynamic data subset (TDS) code (e.g. database ID)");
     dcp=&dc[1];
+    memcpy( dcp->pstate, "a", MAXSYMB );
     set_def(1);
     dcp=&dc[0];
+    memcpy( dcp->pstate, "a", MAXSYMB );
     set_def();
     start_title = " Thermochemical/EoS data format for Dependent Components ";
 }
@@ -546,7 +548,7 @@ void TDComp::RecCalc( const char *key )      // dcomp_test
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
-    Error( GetName(), "W07DCrun: Please, check stoichiometry, charge or valences in the formula");
+    Error( GetName(), "W07DCrun: Please, check stoichiometry, valences or charge in the formula (depending on DC phase class)");
 NEXT:
     if( ( dcp->pstate[0] == CP_GAS || dcp->pstate[0] == CP_GASI ||
           dcp->pstate[0] == CP_FLUID )
@@ -1215,7 +1217,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += std::string( key_, 0, db->KeyLen() );
+            msg += char_array_to_string( key_, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             if( pVisor->ProfileMode )
                 Error( GetName(), msg );
@@ -1232,7 +1234,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), " E19DCrun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT,0,true);
-            auto str1 = string( db->UnpackKey(), 0, db->KeyLen());
+            auto str1 = char_array_to_string( db->UnpackKey(), db->KeyLen());
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString(" W20DCrun: Remake of the new record finished OK. "
@@ -1247,7 +1249,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
-        msg += std::string( key_, 0, db->KeyLen() );
+        msg += char_array_to_string( key_, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg );
     }
@@ -1367,7 +1369,7 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
      if( AddRecordTest( str.c_str(), fnum_ ))
      {  aICkey_new.push_back( stt );  // 30/11/2006
         for(int isd=0; isd<dcp->Nsd; isd++)
-        { std::string sdkey = std::string( dcp->sdref[isd], 0,V_SD_RKLEN);
+        { std::string sdkey = char_array_to_string( dcp->sdref[isd],V_SD_RKLEN);
           strip( sdkey );
           SDlist.insert( sdkey );
         }

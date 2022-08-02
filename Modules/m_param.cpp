@@ -37,25 +37,13 @@
 #include "gemsreaktoro/zmq_client.hpp"
 #endif
 
-
 TProfil* TProfil::pm;
 
-//const double R_CONSTANT = 8.31451,
-//              NA_CONSTANT = 6.0221367e23,
-//                F_CONSTANT = 96485.309,
-//                  e_CONSTANT = 1.60217733e-19,
-//                    k_CONSTANT = 1.380658e-23,
-//// Conversion factors
-//                      cal_to_J = 4.184,
-//                        C_to_K = 273.15,
-//                          lg_to_ln = 2.302585093,
-//                            ln_to_lg = 0.434294481,
-//                              H2O_mol_to_kg = 55.50837344,
-//                                Min_phys_amount = 1.66e-24;
-extern char *_GEMS_version_stamp;
-extern char *_GEMIPM_version_stamp;
+extern const char *_GEMS_version_stamp;
+extern const char *_GEMIPM_version_stamp;
+
 SPP_SETTING pa_ = {
-    " Tolerances and controls: GEMSGUI v.3.9.0  and " " GEMS3K v.3.9.0 ",
+    " Tolerances and controls: GEMSGUI v.3.9.1  and " " GEMS3K v.3.9.1 ",
     {   // Typical default set (24.03.2020) new PSSC( logSI ) & uDD()
         2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
@@ -381,7 +369,8 @@ aObj[ o_sptext]->SetPtr(  internalBufer );
 void TProfil::dyn_set(int )
 {
     pa.p.tprn= static_cast<char *>(aObj[o_patprn]->GetPtr());
-internalBufer = static_cast<char *>(aObj[ o_sptext]->GetPtr());
+    internalBufer = static_cast<char *>(aObj[ o_sptext]->GetPtr());
+    charge_mismatch_quest_reply = VF_UNDEF;
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
@@ -418,6 +407,7 @@ void TProfil::set_def( int )
 {
     pa = pa_;
     internalBufer = nullptr;
+    charge_mismatch_quest_reply = VF_UNDEF;
     if( rmults ) rmults->set_def();
     if( mtparm ) mtparm->set_def();
     if( syst ) syst->set_def();
@@ -515,12 +505,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 bool TProfil::CompareProjectName( const char* SysKey )
 {
     auto len = rt[RT_PARAM]->FldLen(0);
-//    const char* proj_name = rt[RT_PARAM].UnpackKey();
     const char* proj_key = db->UnpackKey();
-//char project_name[64];
-//memcpy( project_name, proj_key, len );
-//project_name[len] = '\0';
-//cout << len << " proj: " << project_name << " read: " << SysKey << endl;
     if( memcmp( SysKey, proj_key, len ) )
         return true;
     else
@@ -687,7 +672,7 @@ pmp->pKMM = 0;
        jj = pmp->muj[j];
        syp->DLL[jj] = pmp->DLL[j];
        syp->DUL[jj] = pmp->DUL[j];
-       syp->GEX[jj] = na->DC_G0(j, pmp->Pc*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
+       syp->GEX[jj] = na->DC_G0(j, pmp->P*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
     }
 
 // !!! We cannot restore to System  for adsorbtion must be done
@@ -815,7 +800,7 @@ void TProfil::PMtest( const char *key )
 
    // test changes in the modified system relative to MULTI
    pmp->pBAL =  BAL_compare();
-//   cout << "pmp->pBAL " << pmp->pBAL << "  pmp->pTPD " << pmp->pTPD<< endl;
+   gui_logger->debug("BAL_compare: pmp->pBAL {} pmp->pTPD {}", pmp->pBAL, pmp->pTPD);
 
    if( !pmp->pBAL ) // if some vectors were allocated or some dimensions changed
    {
@@ -996,8 +981,9 @@ void TProfil::Clear_XeA_XeD_Phm_BIun()
                syp->XeA[i] = 0.;
     if( syp->PbPH != S_OFF )
         for( i=0; i < mup->Fi; i++)
-               syp->Phm[i] = 0.;
+            syp->Phm[i] = 0.;
 }
+
 
 void TProfil::LoadFromMtparm( QWidget* par, DATACH *CSD , bool no_interpolat)
 {
@@ -1066,7 +1052,7 @@ void  TProfil::CalculateEquilibriumGUI()
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
-double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /*NumIterFIA*/, long int& /*NumIterIPM*/ )
+double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
 {
   TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
   calcFinished = false;
@@ -1080,16 +1066,8 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /
   calcFinished = true;
   STat->setCalcFlag( true );
   // STat->CellChanged(); // SD 28/11/2011 to protect MessageToSave()
-
   return multi->GetPM()->t_elap_sec;
 }
-
-void TProfil::outMultiTxt( const char *path, bool append  )
-{
-    multi->to_text_file( path, append );
-}
-
-
 
 
 // ------------------ End of m_param.cpp -----------------------

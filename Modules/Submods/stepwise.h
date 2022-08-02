@@ -37,5 +37,4 @@ class ThreadControl {
 	}
 
 
-
 #endif

@@ -119,7 +119,7 @@ void TProcess::keyTest( const char *key )
 
     if( pVisor->ProfileMode )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
@@ -1341,16 +1341,12 @@ TProcess::internalCalc()
     bool iRet = false;
     TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
     calcFinished = false;
-    char buf[300];
-
     
     while( pep->Loop ) // main cycle of process
     {
-        sprintf(buf, " step %d (%s)", pep->c_nrk, pep->stkey );
         Vmessage = "Stepwise Process simulation: ";
-        Vmessage += buf;
+        Vmessage += " step "+std::to_string(pep->c_nrk)+" ("+pep->stkey+")";
         Vmessage += ". Please, wait (may take time)...";
-
 
     if( pep->Istat >= P_MT_MODE )
     {
@@ -1452,9 +1448,10 @@ else {
         if( pointShow >= 0 )
         {
           if( pep->PsRT == S_OFF )
-          {   if( pep->PsPro == S_OFF || pep->NP == 1 )
-                 CalcPoint( pep->c_nrk);
-              else
+          {
+              if( pep->PsPro == S_OFF || pep->NP == 0 )
+                 CalcPoint( pep->c_nrk );
+               else
                  CalcPoint( -1 );
           }
           else  // masstransport show
@@ -1624,9 +1621,9 @@ TProcess::RecordPlot( const char* /*key*/ )
         TCStringArray lnames;
         int ii;
         for( ii=0; ii<pep->dimXY[1]; ii++ )
-            lnames.push_back( std::string(pep->lNam[ii+ndxy], 0, MAXGRNAME ));
+            lnames.push_back( char_array_to_string(pep->lNam[ii+ndxy], MAXGRNAME ));
         for( ii=0; ii<pep->dimEF[1]; ii++ )
-            lnames.push_back( std::string( pep->lNamE[ii], 0, MAXGRNAME ));
+            lnames.push_back( char_array_to_string( pep->lNamE[ii], MAXGRNAME ));
         gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
                                    pep->xNames, pep->yNames, lnames, def_plt_lines );
     }
@@ -1701,9 +1698,9 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
     // output base structure
-    ProcessProgressFunction messageF = [](const std::string& , long ){
-              //std::cout << "TProcess GEM3k output" <<  message.c_str() << point << std::endl;
-              return false;
+    ProcessProgressFunction messageF = [](const std::string& message, long point){
+        gui_logger->info("TProcess GEM3k output {} point {}", message, point);
+        return false;
         };
 
     auto dbr_list =  na->genGEMS3KInputFiles(  filepath.c_str(), messageF, 1, GEMS3KGenerator::default_type_f, brief_mode, false, false, add_mui );
@@ -1720,7 +1717,7 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
     auto f_ext = GEMS3KGenerator::default_ext();
     for( int ii=0; ii<pep->NR1 ; ++ii )
     {
-        name = std::string( pep->stl[ii], 0, EQ_RKLEN );
+        name = char_array_to_string( pep->stl[ii], EQ_RKLEN );
         auto nRec = rt[RT_SYSEQ]->Find(name.c_str());
         if( nRec >= 0  )
         {

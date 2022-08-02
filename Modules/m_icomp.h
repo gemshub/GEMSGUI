@@ -24,6 +24,8 @@
 #include "v_mod.h"
 #include "v_module.h"
 
+class QJsonArray;
+
 typedef struct
 { // Description  ICOMP
   char //symb[MAXICNAME], // "Symbol of Independent Component (IC)"
@@ -91,6 +93,7 @@ public:
     void CopyElements( const char * prfName,
                        elmWindowData el_data, icSetupData st_data );
 
+    QJsonArray all_to_thermofun();
 };
 
 #endif  // _m_icomp_h

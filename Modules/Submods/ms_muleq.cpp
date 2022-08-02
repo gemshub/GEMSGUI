@@ -37,7 +37,7 @@ void TMulti::setSizes()
 //    STat->stp->itPar = pm.W1;  // Number of IPM-2 loops KD 29.11.01 obsolete
     STat->stp->itPar = pm.ITaia;  // Added 20.06.2008 DK
     // float
-    STat->stp->V = pm.VXc;
+    STat->stp->V = ( pm.VXc< 1e-38 ? 0: pm.VXc);
     STat->stp->T = pm.Tc;
     STat->stp->P = pm.Pc;
     STat->stp->H = pm.HXc;
@@ -276,7 +276,7 @@ void TMulti::MultiKeyInit( const char*key )
        pmp->pTPD = 0;
    }
 
-   if( V <= 0 ) // no volume balance needed
+   if( V <= 1e-20 ) // no volume balance needed
        {
            pmp->VX_ = pmp->VXc = 0.0;
            pmp->PV = VOL_CALC;

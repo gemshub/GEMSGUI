@@ -22,7 +22,8 @@
                     $$MODULES_H/s_supcrt.h  \
                     $$MODULES_H/s_tpwork.h  \
                     $$MODULES_H/v_ipnc.h  \
-                    $$MODULES_H/v_mod.h  
+                    $$MODULES_H/v_mod.h   \
+                    $$MODULES_H/v_thermofun.h
 
         SOURCES	 +=  $$MODULES_CPP/m_const.cpp \
                      $$MODULES_CPP/m_sdata.cpp \
@@ -45,9 +46,9 @@
                      $$MODULES_CPP/s_lsm_lm.cpp  \
                      $$MODULES_CPP/s_lsm_svd.cpp \
                      $$MODULES_CPP/m_reacdc.cpp  \
-                      $$MODULES_CPP/m_reac2.cpp  \
-                    $$MODULES_CPP/m_phase.cpp \
-                    $$MODULES_CPP/m_phase2.cpp \
+                     $$MODULES_CPP/m_reac2.cpp  \
+                     $$MODULES_CPP/m_phase.cpp \
+                     $$MODULES_CPP/m_phase2.cpp \
                      $$MODULES_CPP/m_proces.cpp \
                      $$MODULES_CPP/m_prfget.cpp \
                      $$MODULES_CPP/m_prfget2.cpp \
@@ -60,5 +61,6 @@
                      $$MODULES_CPP/m_dualth.cpp  \
                      $$MODULES_CPP/m_dualthc.cpp  \
                      $$MODULES_CPP/m_gtdemo.cpp   \
-                     $$MODULES_CPP/m_rtparm.cpp
+                     $$MODULES_CPP/m_rtparm.cpp \
+                     $$MODULES_CPP/v_thermofun.cpp
       

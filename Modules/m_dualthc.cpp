@@ -110,7 +110,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
   for( ii=0; ii<siz_; ii++ )
   {
      aFo.push_back( TFormula() );
-     form = std::string( for_[ii], 0, MAXFORMUNITDT );
+     form = char_array_to_string( for_[ii], MAXFORMUNITDT );
      strip( form );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }
@@ -1389,7 +1389,8 @@ TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
        ScaleF = 1.;
        switch( dtp->PsIPu )  // Analyzing units and setting up the the scale factor
        {                     // such that parameters are dimensionless
-          case DT_IPU_K:   ScaleF *= 1000.; [[fallthrough]];
+          case DT_IPU_K:   ScaleF *= 1000.;
+                            [[fallthrough]];
           case DT_IPU_J:   ScaleF /= RT;
           case DT_IPU_N:
           default:         break;

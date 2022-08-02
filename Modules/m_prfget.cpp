@@ -78,17 +78,17 @@ TProfil::initCalcMode(const char * profileKey)
     // Get Project record key from old list
     bool changeAqGas = false,
             addfiles = false,
-            remakeRec = false,
-            genGEMS3k = false,
-            brief_mode = false;
-    int  makeDump = 0;
+            remakeRec = false;
+    int    recalc_all = 0,
+           genGEMS3k = 0,
+           SIA_or_AIA = 0;
     std::string key_templ;
     std::string str;
 
     if( profileKey==nullptr )
     {
         str = vfKeyProfile( pVisor->window()/*window()*/, "Modelling Projects",
-                            nRT, changeAqGas, addfiles, remakeRec, makeDump, key_templ, genGEMS3k, brief_mode );
+                            nRT, changeAqGas, addfiles, remakeRec, key_templ, recalc_all, genGEMS3k, SIA_or_AIA );
 
         if( str.empty() ) // cancel command
             return false;
@@ -134,14 +134,13 @@ TProfil::initCalcMode(const char * profileKey)
 
     if( str != ALLKEY )
     {
-        if( genGEMS3k ){
-            GEMS3KallSystems( makeDump, brief_mode  );
+        if( genGEMS3k > 0 )
+        {
+            GEMS3KallSystems( SIA_or_AIA, genGEMS3k==2  );
         }
-        else {
-            if( makeDump )
-            {
-                CalcAllSystems( makeDump );
-            }
+        if( recalc_all > 0 )
+        {
+            CalcAllSystems( SIA_or_AIA, recalc_all==2 );
         }
     }
     // Get first  SYSEQ
@@ -526,7 +525,7 @@ void TProfil::loadSystat( const char *key )
 
     // Test MULTY for change (if new System cfg or T, P - new)
     pmp->pESU = 0;  //  new record was readed
-    std::string keyp = std::string( rt[RT_SYSEQ]->UnpackKey(), 0, rt[RT_SYSEQ]->KeyLen() );
+    std::string keyp = char_array_to_string( rt[RT_SYSEQ]->UnpackKey(), rt[RT_SYSEQ]->KeyLen() );
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
@@ -589,7 +588,7 @@ void TProfil::newSystat( int mode )
     std::string key_str = rt[RT_SYSEQ]->PackKey();
     if( key_str.find("*") != std::string::npos )
     {
-        key_str = std::string( db->FldKey(0), 0, db->FldLen(0) );
+        key_str = char_array_to_string( db->FldKey(0), db->FldLen(0) );
         strip( key_str );
         key_str += ":G:MySystem:0:0:1:25:0:";
     }
@@ -687,7 +686,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
 
     std::string keyp = rt[RT_SYSEQ]->UnpackKey();
     // new: setting chemical kinetics time counter and variables
-    // cout << "kdTime: " << kdTime << "  kTimeStep: " << kTimeStep << "  kTime: " << kTime << endl;
+    gui_logger->trace("kdTime: {}   kTimeStep: {} kTime: {}", kdTime, kTimeStep, kTime);
     if( kdTime <= 0.  )
     {  // no kinetics to consider
         multi->GetPM()->kTau = 0.;
@@ -863,7 +862,7 @@ void TProfil::SetFN()
 ///Added after GEM2MT implemented
         if( i == RT_PARAM )
         {
-            s = std::string( rmults->GetMU()->FN[k], 0, MAX_FILENAME_LEN);
+            s = char_array_to_string( rmults->GetMU()->FN[k], MAX_FILENAME_LEN);
             if( s[0] == 'i' && s[1] == 'n') // integ file , use old version DB
             { k+=rmults->GetMU()->Nfl[i];
               nx = 1;
@@ -873,7 +872,7 @@ void TProfil::SetFN()
         aFls.clear();
         for(j=0; j<rmults->GetMU()->Nfl[i+nx]; j++)
         {
-            s = std::string( rmults->GetMU()->FN[k++], 0, MAX_FILENAME_LEN);
+            s = char_array_to_string( rmults->GetMU()->FN[k++], MAX_FILENAME_LEN);
             aFls.push_back(s);
         }
 

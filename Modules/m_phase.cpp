@@ -258,9 +258,9 @@ void TPhase::dyn_set(int q)
     ph[q].SATC  = static_cast<char (*)[MCAS]>(aObj[ o_phsatc ]->GetPtr());
     ph[q].MaSdj = static_cast<float (*)[DFCN]>(aObj[ o_phmasdj ]->GetPtr());
     ph[q].ipxt =  static_cast<short *>(aObj[ o_phpxres ]->GetPtr()); // changed 07.12.2006 KD
-// For safe use of old Phase records without ipxt table   07.12.2006
-if(!ph[q].ipxt )
-   php->npxM = 0;
+    // For safe use of old Phase records without ipxt table   07.12.2006
+    if(!ph[q].ipxt )
+        php->npxM = 0;
     ph[q].pnc =   static_cast<float *>(aObj[ o_phpnc ]->GetPtr());
     ph[q].scoef = static_cast<float *>(aObj[ o_phscoef ]->GetPtr());
     ph[q].SM =    static_cast<char (*)[DC_RKLEN]>(aObj[ o_phsm ]->GetPtr());
@@ -271,17 +271,31 @@ if(!ph[q].ipxt )
     ph[q].sdref = static_cast<char (*)[V_SD_RKLEN]>(aObj[ o_phsdref ]->GetPtr());
     ph[q].sdval = static_cast<char (*)[V_SD_VALEN]>(aObj[ o_phsdval ]->GetPtr());
     ph[q].tprn = static_cast<char *>(aObj[ o_phtprn ]->GetPtr());
+
     // Added for SIT aqueous model
-    ph[q].lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->GetPtr());
-    ph[q].lsAn = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->GetPtr());
-    ph[q].lsNs = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->GetPtr());
-    ph[q].nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->GetPtr());
-    ph[q].nxAn = static_cast<short *>(aObj[ o_ph_w_nxa ]->GetPtr());
-    ph[q].nxNs = static_cast<short *>(aObj[ o_ph_w_nxn ]->GetPtr());
-// added for multi-site mixin models implementation
+    // Work objects for SIT, Pitzer, EUNIQUAC aqueous model
+    if( ph[q].Ppnc == S_ON && ph[q].sol_t[SPHAS_TYP] == SM_AQSIT )
+    {
+        ph[q].lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->GetPtr());
+        ph[q].lsAn = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->GetPtr());
+        ph[q].lsNs = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->GetPtr());
+        ph[q].nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->GetPtr());
+        ph[q].nxAn = static_cast<short *>(aObj[ o_ph_w_nxa ]->GetPtr());
+        ph[q].nxNs = static_cast<short *>(aObj[ o_ph_w_nxn ]->GetPtr());
+    }
+    else
+    {
+        ph[q].lsCat = static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsc ]->Free());
+        ph[q].lsAn =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsa ]->Free());
+        ph[q].lsNs =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_ph_w_lsn ]->Free());
+        ph[q].nxCat = static_cast<short *>(aObj[ o_ph_w_nxc ]->Free());
+        ph[q].nxAn =  static_cast<short *>(aObj[ o_ph_w_nxa ]->Free());
+        ph[q].nxNs =  static_cast<short *>(aObj[ o_ph_w_nxn ]->Free());
+    }
+    // added for multi-site mixin models implementation
     moiety_new( ph[q].nDC, ph[q].nMoi, true );
 
-// new record 06/06/12
+    // new record 06/06/12
     ph[q].xSmD =  static_cast<short *>(aObj[  o_phxsmd ]->GetPtr());
     ph[q].ocPRk =  static_cast<short *>(aObj[ o_phocprk ]->GetPtr());
     ph[q].lPhc =  static_cast<float *>(aObj[ o_phlphc1]->GetPtr());
@@ -296,9 +310,9 @@ if(!ph[q].ipxt )
     ph[q].umpCon =  static_cast<float *>(aObj[ o_phumpcon]->GetPtr());
     ph[q].lPh =  static_cast<char (*)[PH_RKLEN]>(aObj[ o_phlph]->GetPtr());
     ph[q].lDCr =  static_cast<char (*)[DC_RKLEN]>(aObj[ o_phldcr]->GetPtr());
-//
-ph[q].lICu =  static_cast<char (*)[MAXICNAME]>(aObj[ o_phlicu]->GetPtr());
-//
+    //
+    ph[q].lICu =  static_cast<char (*)[MAXICNAME]>(aObj[ o_phlicu]->GetPtr());
+    //
     ph[q].lDCd =  static_cast<char *>(aObj[ o_phldcd]->GetPtr( ));
     ph[q].dcpcl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phdcpcl]->GetPtr());
     ph[q].ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->GetPtr());
@@ -420,7 +434,7 @@ void TPhase::dyn_new(int q)
     if( ph[q].Ppnc == S_ON )
     {
        ph[q].pnc = static_cast<float *>(aObj[ o_phpnc ]->Alloc( ph[q].ncpN, ph[q].ncpM, F_ ));
-//cout <<  ph[q].ncpN << " " << ph[q].ncpM << endl;
+       gui_logger->trace("ph[q].Ppnc == S_ON ncpN={} ncpM={}", ph[q].ncpN, ph[q].ncpM);
        ph[q].ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ph[q].ncpN, 1, MAXDCNAME ));
        ph[q].ipccl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipccl]->Alloc( 1, ph[q].ncpM, MAXDCNAME ));
     }
@@ -1213,7 +1227,7 @@ void TPhase::RecordPrint(const char* /*key_*/)
     {
        // test to exist of DCOMP or REACDC record later
        // only 3 fields
-       std::string key = std::string( php->SM[i], 0, DC_RKLEN);
+       std::string key = char_array_to_string( php->SM[i], DC_RKLEN);
 
        if( key.find("Mg") == std::string::npos )
        { aDCused.push_back(cnt); cnt++; }
@@ -1249,8 +1263,8 @@ const char* TPhase::GetHtml()
 }
 
 void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
-            TCStringArray& aPHtmp, elmWindowData el_data,
-            phSetupData st_data, std::set<std::string>& SDlist )
+                          TCStringArray& aPHtmp, elmWindowData el_data,
+                          phSetupData st_data, std::set<std::string>& SDlist )
 {
     TCIntArray anR;
     TCIntArray aDCused;
@@ -1265,7 +1279,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     TCStringArray aICkey_new;         // 30/11/2006
     aICkey_new.clear();
 
-  // get list of records
+    // get list of records
     db->GetKeyList( "*:*:*:*:*:", aPHkey, anR );
 
     //  test&copy  selected records
@@ -1274,189 +1288,203 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     int i, cnt;
     bool nRec;
     const char *pKey1;//, *pKey4;
+    std::string key_from_template;
+    bool compressible_record;
     for(uint ii=0; ii<aPHkey.size(); ii++ )
     {
+        // compare keys for template project
         uint jj;
-// compare keys for template project
-       for( jj=0; jj<aPHtmp.size(); jj++ )
-        if( !memcmp( aPHtmp[jj].c_str(), aPHkey[ii].c_str(),
-                PH_RKLEN-MAXPHGROUP ))
-         break;
+        compressible_record = false;
+        key_from_template.clear();
+        for( jj=0; jj<aPHtmp.size(); jj++ )
+            if( !memcmp( aPHtmp[jj].c_str(), aPHkey[ii].c_str(),
+                         PH_RKLEN-MAXPHGROUP ))
+                break;
+        if( jj<aPHtmp.size() )
+        {
+            key_from_template = aPHtmp[jj];
+            //continue;
+        }
 
-     if( jj<aPHtmp.size() )
-        continue;
-
-// Sorting out phase recs using setup in Elements and SetFilter dialogs
-     pKey1 = aPHkey[ii].c_str();
-     //pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
-
-// Copy phase record for aqueous and/or gas (fluid) phases
-//     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))
-//       continue;
-
-// Phase Filters
-     if( !el_data.flags[cbAqueous_] && pKey1[0] == 'a' )
-       continue;
-     if( !el_data.flags[cbGaseous_] && ( pKey1[0] == 'g') )
-         continue;
-     if( !el_data.flags[cbFluid_] && ( pKey1[0] == 'f') )
-          continue;
-     if( !el_data.flags[cbPlasma_] && ( pKey1[0] == 'p') )
-        continue;
-     if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's') )
-        continue;
-     if( !el_data.flags[cbSindis_] && ( pKey1[0] == 'd') )
-        continue;
-     if( !el_data.flags[cbLiquid_] && ( pKey1[0] == 'l') )
-        continue;
-     if( !el_data.flags[cbSimelt_] && ( pKey1[0] == 'm') )
-        continue;
-     if( !el_data.flags[cbSorption_] && ( pKey1[0] == 'x' || pKey1[0] == 'i' || pKey1[0] == 'z' ) )
-        continue;
-     if( !el_data.flags[cbPolyel_] && ( pKey1[0] == 'y') )
-        continue;
-     if( !el_data.flags[cbHcarbl_] && ( pKey1[0] == 'h') )
-        continue;
-
-
-// copy liquid phases together with solid ones
-//     if( !st_data.flags[PHcopyL_] && ( pKey1[0] == 'l' || pKey1[0] == 'h' ))
-//       continue;
-
-    // test the same component (overload) 30/11/2006
-    std::string stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
-    for( j=0; j<aICkey_new.size(); j++ )
-       if( stt ==  aICkey_new[j])
-              break;
-     if( j<aICkey_new.size() )
+        // Sorting out phase recs using setup in Elements and SetFilter dialogs
+        pKey1 = aPHkey[ii].c_str();
+        // Phase Filters
+        if( !el_data.flags[cbAqueous_] && pKey1[0] == 'a' )
+            continue;
+        if( !el_data.flags[cbGaseous_] && ( pKey1[0] == 'g') )
+            continue;
+        if( !el_data.flags[cbFluid_] && ( pKey1[0] == 'f') )
+            continue;
+        if( !el_data.flags[cbPlasma_] && ( pKey1[0] == 'p') )
+            continue;
+        if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's') )
+            continue;
+        if( !el_data.flags[cbSindis_] && ( pKey1[0] == 'd') )
+            continue;
+        if( !el_data.flags[cbLiquid_] && ( pKey1[0] == 'l') )
+            continue;
+        if( !el_data.flags[cbSimelt_] && ( pKey1[0] == 'm') )
+            continue;
+        if( !el_data.flags[cbSorption_] && ( pKey1[0] == 'x' || pKey1[0] == 'i' || pKey1[0] == 'z' ) )
+            continue;
+        if( !el_data.flags[cbPolyel_] && ( pKey1[0] == 'y') )
+            continue;
+        if( !el_data.flags[cbHcarbl_] && ( pKey1[0] == 'h') )
             continue;
 
-// Read the record here
-     RecInput( aPHkey[ii].c_str() );
+        // test the same component (overload) 30/11/2006
+        std::string stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
+        for( j=0; j<aICkey_new.size(); j++ )
+            if( stt ==  aICkey_new[j])
+                break;
+        if( j<aICkey_new.size() )
+            continue;
 
-// cbSolutions - multi-component, non-gas, non-electrolyte
-     if( el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
-        && pKey1[0] != 'g' && pKey1[0] != 'f' && pKey1[0] != 'i' && pKey1[0] != 'z'
-        && pKey1[0] != 'p' && pKey1[0] != 'x' && pKey1[0] != 'h' ) )
-         if( php->nDC > 1 )
-           continue;
+        // Read the record here
+        RecInput( aPHkey[ii].c_str() );
 
- // Copy non-ideal phases?
- //    if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
- //        php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
- //      continue;
+        // cbSolutions - multi-component, non-gas, non-electrolyte
+        if( el_data.flags[cbSolutions_] && ( pKey1[0] != 'a'
+                                             && pKey1[0] != 'g' && pKey1[0] != 'f' && pKey1[0] != 'i' && pKey1[0] != 'z'
+                                             && pKey1[0] != 'p' && pKey1[0] != 'x' && pKey1[0] != 'h' ) )
+            if( php->nDC > 1 )
+                continue;
 
-// Test existence of DComp/ReacDC records
-     aDCused.clear();
-     for( i=0, cnt=0; i<php->nDC; i++ )
-     {
-        // test to exist of DCOMP or REACDC record later
-        // only 3 fields
-        std::string key = std::string( php->SM[i], 0, DC_RKLEN);
-        if( php->DCS[i] == SRC_DCOMP )
-            nRec = rt[RT_DCOMP]->FindPart( php->SM[i], 3 );
-        else
-            nRec = rt[RT_REACDC]->FindPart( php->SM[i], 3 );
-        if( nRec )
-        { aDCused.push_back(cnt); cnt++; }
-        else
-          aDCused.push_back(-1);
-     } // i
+        // Copy non-ideal phases?
+        //    if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
+        //        php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
+        //      continue;
 
-     if( cnt < php->nDC && !( !st_data.flags[PHcopyF_] && cnt > 1  )) // copy  that retain full
-     {
-       if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
-         aPHnoused.push_back( aPHkey[ii] );
-       continue;
-     }
-     if( cnt < php->nDC ) // added 14/12/12 test for skipping incompressible phases-solutions
-     {
-         switch( php->sol_t[SGM_MODE] )
-         {
-         case SM_IDEAL: break;  //I
-         case SM_STNGAM: // S
-           switch( php->sol_t[SPHAS_TYP] )
-           {
-             case SM_IDEAL: // =  'I',	// ideal solution or single-component phase
-             case SM_BERMAN: // = 'B',    // built-in multicomponent microscopic (a)symmetric solid-solution model (reserved)
-             case SM_CEF: //  = '$',    //     built-in multicomponent multisite solid-solution model (CALPHAD)
-//             case SM_REDKIS: // = 'G', 	// built-in binary Guggenheim (Redlich-Kister) solid-solution model
-//             case SM_MARGB: // = 'M',	// built-in binary Margules solid-solutions (subregular)
-//             case SM_MARGT: // = 'T',	// built-in ternary Margules solid-solution (regular)
-             case SM_VANLAAR: // = 'V',	// built-in multi-component Van Laar solid-solution model
-             case SM_GUGGENM: // = 'K',	// built-in multi-component Guggenheim solid-solution model
-             case SM_REGULAR: // = 'R',	// built-in multi-component Regular solid-solution model
-             case SM_NRTLLIQ: // = 'L',	// built-in multi-component NRTL model for liquid solutions
-             case SM_WILSLIQ: // = 'W',	// built-in multi-component Wilson model for liquid solutions
-             case SM_CGFLUID: // = 'F',	// built-in multi-component Churakov-Gottschalk (CG) fluid EoS model
-             case SM_PRFLUID: // = 'P',	// built-in Peng-Robinson-Stryjek-Vera (PRSV) fluid EoS model
-//             case SM_PCFLUID: // = '5',   // built-in perturbed-chain statistical-association (PCSAFT) fluid EoS model (reserved)
-             case SM_STFLUID: // = '6',   // built-in Sterner-Pitzer (STP) fluid EoS model
-             case SM_PR78FL: // = '7',	// built-in Peng-Robinson (PR78) fluid EoS model
-             case SM_CORKFL: // = '8',    // built-in compensated Redlich-Kwong (CORK) fluid EoS model
-//             case SM_REFLUID: // = '9',   // built-in reference EoS fluid model (reserved)
-             case SM_SRFLUID: // = 'E',	// built-in Soave-Redlich-Kwong (SRK) fluid EoS model
-             case SM_AQDAV: // = 'D',	// built-in Davies model (with 0.3) for aqueous electrolytes
-             case SM_AQDH1: // = '1',	// built-in Debye-Hueckel limiting law for aqueous electrolytes
-             case SM_AQDH2: // = '2',	// built-in 2-term Debye-Hueckel model for aqueous electrolytes
-             case SM_AQDH3: // = '3',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Karpov version)
-             case SM_AQDHH: // = 'H',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Helgeson version)
-             case SM_AQDHS: // = 'Y',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Shvarov version)
-             case SM_AQSIT: // = 'S',	// built-in SIT model for aqueous electrolytes
-             case SM_AQEXUQ: // = 'Q',    // built-in extended UNIQUAC model for aqueous electrolytes
-             case SM_AQPITZ: // = 'Z',    // built-in Pitzer HMW model for aqueous electrolytes
-//             case SM_AQMIX: // = 'C',     // built-in mixed-solvent aqueous Debye-Hueckel model (reserved)
-//             case SM_AQELVIS: // = 'J',   // built-in modified extended UNIQUAC model (ELVIS) for aqueous electrolytes (reserved)
-//             case SM_IONEX: // = 'X',     // ion exchange (Donnan, Nikolskii) (reserved)
-             case SM_SURCOM: // = 'A',	// models of surface complexation at solid-aqueous interface
-//             case SM_USERDEF: // = 'U',	// user-defined mixing model (scripts in Phase record)
-//             case SM_OTHER: // = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
-                  break;
-             default:
-                 if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
-                     aPHnoused.push_back( aPHkey[ii] );
-                 continue;
+        // Test existence of DComp/ReacDC records
+        aDCused.clear();
+        for( i=0, cnt=0; i<php->nDC; i++ )
+        {
+            // test to exist of DCOMP or REACDC record later
+            // only 3 fields
+            std::string key = char_array_to_string( php->SM[i], DC_RKLEN);
+            if( php->DCS[i] == SRC_DCOMP )
+                nRec = rt[RT_DCOMP]->FindPart( php->SM[i], 3 );
+            else
+                nRec = rt[RT_REACDC]->FindPart( php->SM[i], 3 );
+            if( nRec )
+            { aDCused.push_back(cnt); cnt++; }
+            else
+                aDCused.push_back(-1);
+        } // i
+
+        if( cnt < php->nDC && !( !st_data.flags[PHcopyF_] && cnt > 1  )) // copy  that retain full
+        {
+            if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
+                aPHnoused.push_back( aPHkey[ii] );
+            continue;
+        }
+        // overwrite compressed even all dcomps  if( cnt < php->nDC ) // added 14/12/12 test for skipping incompressible phases-solutions
+        {
+            switch( php->sol_t[SGM_MODE] )
+            {
+            case SM_IDEAL: break;  //I
+            case SM_STNGAM: // S
+                switch( php->sol_t[SPHAS_TYP] )
+                {
+                case SM_IDEAL: // =  'I',	// ideal solution or single-component phase
+                case SM_BERMAN: // = 'B',    // built-in multicomponent microscopic (a)symmetric solid-solution model (reserved)
+                case SM_CEF: //  = '$',    //     built-in multicomponent multisite solid-solution model (CALPHAD)
+                    //             case SM_REDKIS: // = 'G', 	// built-in binary Guggenheim (Redlich-Kister) solid-solution model
+                    //             case SM_MARGB: // = 'M',	// built-in binary Margules solid-solutions (subregular)
+                    //             case SM_MARGT: // = 'T',	// built-in ternary Margules solid-solution (regular)
+                case SM_VANLAAR: // = 'V',	// built-in multi-component Van Laar solid-solution model
+                case SM_GUGGENM: // = 'K',	// built-in multi-component Guggenheim solid-solution model
+                case SM_REGULAR: // = 'R',	// built-in multi-component Regular solid-solution model
+                case SM_NRTLLIQ: // = 'L',	// built-in multi-component NRTL model for liquid solutions
+                case SM_WILSLIQ: // = 'W',	// built-in multi-component Wilson model for liquid solutions
+                case SM_CGFLUID: // = 'F',	// built-in multi-component Churakov-Gottschalk (CG) fluid EoS model
+                case SM_PRFLUID: // = 'P',	// built-in Peng-Robinson-Stryjek-Vera (PRSV) fluid EoS model
+                    //             case SM_PCFLUID: // = '5',   // built-in perturbed-chain statistical-association (PCSAFT) fluid EoS model (reserved)
+                case SM_STFLUID: // = '6',   // built-in Sterner-Pitzer (STP) fluid EoS model
+                case SM_PR78FL: // = '7',	// built-in Peng-Robinson (PR78) fluid EoS model
+                case SM_CORKFL: // = '8',    // built-in compensated Redlich-Kwong (CORK) fluid EoS model
+                    //             case SM_REFLUID: // = '9',   // built-in reference EoS fluid model (reserved)
+                case SM_SRFLUID: // = 'E',	// built-in Soave-Redlich-Kwong (SRK) fluid EoS model
+                case SM_AQDAV: // = 'D',	// built-in Davies model (with 0.3) for aqueous electrolytes
+                case SM_AQDH1: // = '1',	// built-in Debye-Hueckel limiting law for aqueous electrolytes
+                case SM_AQDH2: // = '2',	// built-in 2-term Debye-Hueckel model for aqueous electrolytes
+                case SM_AQDH3: // = '3',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Karpov version)
+                case SM_AQDHH: // = 'H',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Helgeson version)
+                case SM_AQDHS: // = 'Y',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Shvarov version)
+                case SM_AQSIT: // = 'S',	// built-in SIT model for aqueous electrolytes
+                case SM_AQEXUQ: // = 'Q',    // built-in extended UNIQUAC model for aqueous electrolytes
+                case SM_AQPITZ: // = 'Z',    // built-in Pitzer HMW model for aqueous electrolytes
+                    //             case SM_AQMIX: // = 'C',     // built-in mixed-solvent aqueous Debye-Hueckel model (reserved)
+                    //             case SM_AQELVIS: // = 'J',   // built-in modified extended UNIQUAC model (ELVIS) for aqueous electrolytes (reserved)
+                    //             case SM_IONEX: // = 'X',     // ion exchange (Donnan, Nikolskii) (reserved)
+                case SM_SURCOM: // = 'A',	// models of surface complexation at solid-aqueous interface
+                    //             case SM_USERDEF: // = 'U',	// user-defined mixing model (scripts in Phase record)
+                    //             case SM_OTHER: // = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
+                    compressible_record = true;
+                    break;
+                default:
+                    if( cnt < php->nDC )
+                    {
+                    if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
+                        aPHnoused.push_back( aPHkey[ii] );
+                    continue;
+                    }
+                }
+                break;
+            case SM_NOSTGAM: // N
+                if( cnt < php->nDC )
+                {
+                  if( php->sol_t[DCOMP_DEP] != 'N' || php->sol_t[SPHAS_DEP] != 'N' )
+                  {
+                    if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
+                        aPHnoused.push_back( aPHkey[ii] );
+                    continue;
+                  }
+                }
+                break;
             }
-            break;
-         case SM_NOSTGAM: // N
-             if( php->sol_t[DCOMP_DEP] != 'N' || php->sol_t[SPHAS_DEP] != 'N' )
-             {
-               if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
-                   aPHnoused.push_back( aPHkey[ii] );
-               continue;
-             }
-             break;
-         }
         }
 
-     // !!! changing record key
-    std::string str= std::string(db->FldKey( 4 ), 0, db->FldLen( 4 ));
-    ChangeforTempl( str, st_data.from_templ,
-                    st_data.to_templ, db->FldLen( 4 ));
-        str += ":";
-        std::string str1 = std::string(db->FldKey( 3 ), 0, db->FldLen( 3 ));
-        strip( str1 );
-        str = str1 + ":" + str;
-        str1 = std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-        strip( str1 );
-        str = str1 + ":" + str;
-        str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
-        strip( str1 );
-        str = str1 + ":" + str;
-        str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
-        strip( str1 );
-        str = str1 + ":" + str;
-     CompressRecord( cnt, aDCused );
-     //Point SaveRecord
-     if( AddRecordTest( str.c_str(), fnum_ ))
-     {  aICkey_new.push_back( stt );  // 30/11/2006
-        for(int isd=0; isd<php->Nsd; isd++)
-        { std::string sdkey = std::string( php->sdref[isd], 0,V_SD_RKLEN);
-          strip( sdkey );
-          SDlist.insert( sdkey );
+        if( !key_from_template.empty() )
+        {
+            if(compressible_record)
+            {
+                CompressRecord( cnt, aDCused );
+                RecSave(key_from_template.c_str());
+            }
         }
-     }
-   }
+        else
+        {
+            // !!! changing record key
+            std::string str= std::string(db->FldKey( 4 ), 0, db->FldLen( 4 ));
+            ChangeforTempl( str, st_data.from_templ,
+                            st_data.to_templ, db->FldLen( 4 ));
+            str += ":";
+            std::string str1 = std::string(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+            strip( str1 );
+            str = str1 + ":" + str;
+            str1 = std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+            strip( str1 );
+            str = str1 + ":" + str;
+            str1 = std::string(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+            strip( str1 );
+            str = str1 + ":" + str;
+            str1 = std::string(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+            strip( str1 );
+            str = str1 + ":" + str;
+            CompressRecord( cnt, aDCused );
+            //Point SaveRecord
+            if( AddRecordTest( str.c_str(), fnum_ ))
+            {  aICkey_new.push_back( stt );  // 30/11/2006
+                for(int isd=0; isd<php->Nsd; isd++)
+                {
+                    std::string sdkey = char_array_to_string( php->sdref[isd],V_SD_RKLEN);
+                    strip( sdkey );
+                    SDlist.insert( sdkey );
+                }
+            }
+        }
+    }
 
     // close all no project files
     TCStringArray names1;
@@ -1538,7 +1566,10 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArra
 
     if( php->Ppnc == S_ON && php->npxM > 0 )
     {
-        if( php->sol_t[SPHAS_TYP] == SM_BERMAN || php->sol_t[SPHAS_TYP] == SM_CEF )
+        switch(php->sol_t[SPHAS_TYP])
+        {
+        case SM_BERMAN:
+        case SM_CEF:
         {
             TCStringArray form_array = sys_form_array;
             if(!onlyIPX) // cpmpressed list
@@ -1548,8 +1579,32 @@ bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArra
                 form_array = readFormulaes( DCused);
             ncpNnew = CompressSublattice( form_array );
         }
-        else
+            break;
+        case SM_VANLAAR:
+        case SM_GUGGENM:
+        case SM_REGULAR:
+            // Aqueous solutions
+        case SM_AQSIT:
+        case SM_AQEXUQ:
+        case SM_AQPITZ:
+        case SM_AQMIX:
+        case SM_AQELVIS:
+            // These gas/fluid models can optionally contain ipicl list if they contain pnc and ipxt arrays
+        case SM_NRTLLIQ:
+        case SM_WILSLIQ:
+        case SM_CGFLUID:
+        case SM_PRFLUID:
+        case SM_PCFLUID:
+        case SM_STFLUID:
+        case SM_PR78FL:
+        case SM_CORKFL:
+        case SM_REFLUID:
+        case SM_SRFLUID:
+        default:
             ncpNnew = CompressDecomp(nDCnew , DCused);
+            break;
+        }
+
         php->ncpN = ncpNnew;
         php->pnc = static_cast<float *>(aObj[ o_phpnc ]->Alloc( php->ncpN, php->ncpM, F_ ));
         php->ipxt = static_cast<short *>(aObj[ o_phpxres ]->Alloc( php->ncpN, php->npxM, I_));
@@ -1582,9 +1637,13 @@ int TPhase::CompressDecomp(int , const TCIntArray &DCused)
 
       copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
       copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
+      if( php->ipicl )
+         memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
       ncpNnew++;
     }
 
+   if(php->ipicl )
+    php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
    return  ncpNnew;
 }
 
@@ -1598,7 +1657,7 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
     TCStringArray old_lsMoi = getSavedLsMoi();
     MakeSublatticeLists( form_array  );
 
-    ErrorIf( static_cast<int>(old_lsMoi.size()) < php->nMoi, string( php->pst_, 0, MAXPHNAME),
+    ErrorIf( static_cast<int>(old_lsMoi.size()) < php->nMoi, char_array_to_string( php->pst_, MAXPHNAME),
              "Please, recalculate phase record before execution.");
 
     TCIntArray  Moiused;
@@ -1610,7 +1669,7 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
     {
         for( jj=0; jj<php->nMoi; jj++)
         {
-            if( old_lsMoi[i1] == std::string( php->lsMoi[jj], 0, MAXDCNAME) )
+            if( old_lsMoi[i1] == char_array_to_string( php->lsMoi[jj], MAXDCNAME) )
                 break;
         }
         if( jj == php->nMoi )

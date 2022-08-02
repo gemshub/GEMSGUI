@@ -47,7 +47,7 @@ TGEM2MT::TGEM2MT( uint nrt ):
     aFldKeysHelp.push_back("Temperature, C");
     aFldKeysHelp.push_back("Variant number for additional constraints");
     aFldKeysHelp.push_back("Name of this reactive transport simulation task");
-    aFldKeysHelp.push_back("Batch simulator type code, a combination of {}");
+    aFldKeysHelp.push_back("Reactive transport simulation type code { S F B A W D C T }");
     setKeyEditField(8);
 
     mtp=&mt[0];
@@ -107,7 +107,7 @@ void TGEM2MT::keyTest( const char *key )
 
     if( pVisor->ProfileMode )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
@@ -169,8 +169,8 @@ aObj[o_mtchbr]->SetPtr( &mtp->Lsf );  /* l10 */
     aObj[o_mtotau]->SetPtr( &mtp->oTau );
     aObj[o_mtdx]->SetPtr( &mtp->dx );
     aObj[o_mtref2]->SetPtr( &mtp->TimeGEM );
-    aObj[o_mtref3]->SetPtr( &mtp->ref3 );
-    aObj[o_mtref4]->SetPtr( &mtp->ref4 );
+//    aObj[o_mtref3]->SetPtr( &mtp->ref3 );
+//    aObj[o_mtref4]->SetPtr( &mtp->ref4 );
 
 // DBase
     aObj[o_mtname]->SetPtr(  mtp->name );
@@ -293,10 +293,16 @@ aObj[ o_mtxflds]->SetDim( mtp->nVTKfld, 1 );
     aObj[o_mtpartd]->SetPtr( mtp->ParTD );
     aObj[o_mtpartd]->SetDim( mtp->nPTypes, 6 );
 
-aObj[ o_mtres1]->SetPtr( mtp->arr1);
-aObj[ o_mtres1]->SetDim( mtp->nC, 1 );
-aObj[ o_mtres2]->SetPtr( mtp->arr2);
-aObj[ o_mtres2]->SetDim( mtp->nC, 1 );
+// Rearranged on 17.11.2021
+aObj[o_mtres1]->SetPtr( mtp->BM);
+aObj[o_mtres1]->SetDim( mtp->nC, 1 );
+aObj[o_mtres2]->SetPtr( mtp->BdM);
+aObj[o_mtres2]->SetDim( mtp->nC, 1 );
+aObj[o_mtref3]->SetPtr( mtp->BmgpM );
+aObj[o_mtref3]->SetDim( mtp->nC*mtp->nPG, 1 );
+// aObj[o_mtref3]->SetDim( mtp->nC, mtp->nPG );
+aObj[o_mtref4]->SetPtr( mtp->FmgpJ );
+aObj[o_mtref4]->SetDim( mtp->nFD, 1 );
 
 // work
     aObj[ o_mtan]->SetPtr(mtp->An);
@@ -378,9 +384,10 @@ void TGEM2MT::dyn_set(int q)
     mtp->nPmax = (long int *)aObj[o_mtnpmax]->GetPtr();
     mtp->ParTD = (long int (*)[6])aObj[o_mtpartd]->GetPtr();
 
- mtp->arr1 = (double *)aObj[ o_mtres1]->GetPtr();
- mtp->arr2 = (double *)aObj[ o_mtres2]->GetPtr();
-
+ mtp->BM = (double *)aObj[ o_mtres1]->GetPtr();
+ mtp->BdM = (double *)aObj[ o_mtres2]->GetPtr();
+ mtp->BmgpM = (double *)aObj[ o_mtref3]->GetPtr();
+ mtp->FmgpJ = (double *)aObj[ o_mtref4]->GetPtr();
 // work
     mtp->An = (double *)aObj[ o_mtan]->GetPtr();
     mtp->Ae = (double *)aObj[ o_mtae]->GetPtr();
@@ -450,8 +457,10 @@ void TGEM2MT::dyn_kill(int q)
    mtp->nPmax = (long int *)aObj[o_mtnpmax]->Free();
    mtp->ParTD = (long int (*)[6])aObj[o_mtpartd]->Free();
 
-mtp->arr1 = (double *)aObj[ o_mtres1]->Free();
-mtp->arr2 = (double *)aObj[ o_mtres2]->Free();
+mtp->BM = (double *)aObj[ o_mtres1]->Free();
+mtp->BdM = (double *)aObj[ o_mtres2]->Free();
+mtp->BmgpM = (double *)aObj[ o_mtref3]->Free();
+mtp->FmgpJ = (double *)aObj[ o_mtref4]->Free();
 
 // work
    mtp->An = (double *)aObj[ o_mtan]->Free();
@@ -647,9 +656,14 @@ if( mtp->PvFDL == S_OFF )
     mtp->qpc = (double *)aObj[ o_mtqpc]->Free();
 
    if( mtp->PvMSt == S_OFF )
-      mtp->tExpr = (char *)aObj[o_mttexpr]->Free();
-   else
+   {
+       mtp->tExpr = (char *)aObj[o_mttexpr]->Free();
+       mtp->PvMSc = S_OFF;
+   }
+   else {
       mtp->tExpr = (char *)aObj[ o_mttexpr ]->Alloc(1, 4096, S_);
+//      mtp->PvMSc = S_ON;
+   }
 
     if( mtp->PvMSg == S_OFF )
     {
@@ -698,8 +712,20 @@ if( mtp->PvFDL == S_OFF )
       mtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_mtsdval]->Free();
     }
 
-mtp->arr1 = (double *)aObj[ o_mtres1]->Free();
-mtp->arr2 = (double *)aObj[ o_mtres2]->Free();
+//    if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+//    {
+//        mtp->BM = (double *)aObj[o_mtres1]->Alloc( mtp->nC, 1, D_);
+//        mtp->BdM = (double *)aObj[o_mtres2]->Alloc( mtp->nC, 1, D_);
+//        mtp->BmgpM = (double *)aObj[o_mtref3]->Alloc( mtp->nC*mtp->nPG, 1, D_);
+//        mtp->FmgpJ = (double *)aObj[o_mtref4]->Alloc( mtp->nFD, 1, D_);
+//    }
+//    else
+//    {
+//        mtp->BM = (double *)aObj[ o_mtres1]->Free();
+//        mtp->BdM = (double *)aObj[ o_mtres2]->Free();
+//        mtp->BmgpM = (double *)aObj[ o_mtref3]->Free();
+//        mtp->FmgpJ = (double *)aObj[ o_mtref4]->Free();
+//    }
 
     mtp->etext = (char *)aObj[ o_mwetext ]->Alloc(1, 4096, S_);
     mtp->tprn = (char *)aObj[ o_mwtprn ]->Alloc(1, 2048, S_);
@@ -976,10 +1002,10 @@ TGEM2MT::RecCalc( const char * key )
 
    if( mtp->PsVTK != S_OFF )
    {
-     prefixVTK = std::string( db->FldKey(8), 0, db->FldLen(8) );
+     prefixVTK = char_array_to_string( db->FldKey(8), db->FldLen(8) );
      strip( prefixVTK );
      prefixVTK += "_";
-     prefixVTK += std::string( db->FldKey(9), 0, db->FldLen(9) );
+     prefixVTK += char_array_to_string( db->FldKey(9), db->FldLen(9) );
      strip( prefixVTK );
      prefixVTK += "_";
      nameVTK = db->PackKey();
@@ -989,9 +1015,7 @@ TGEM2MT::RecCalc( const char * key )
           "Please, browse or enter the GEM2MT VTK output directory name" ) )
      {
          pathVTK += "/";
-         pathVTK += nameVTK.c_str();
-         pathVTK += "/";
-         vfMakeDirectory(window(), pathVTK.c_str(), 1 );
+         vfMakeDirectory(window(), (pathVTK + nameVTK + "/").c_str(), 1 );
      }
    }
 
@@ -1016,7 +1040,7 @@ TGEM2MT::RecCalc( const char * key )
        std::string lst_f_name;
        std::string dbr_lst_f_name;
      if( mtp->notes[0] == '@' )
-     {   lst_f_name = std::string( mtp->notes, 1, MAXFORMULA-1 );
+     {   lst_f_name = char_array_to_string( mtp->notes+1, MAXFORMULA-1 );
          dbr_lst_f_name = lst_f_name;
          replace(dbr_lst_f_name, "-dat","-dbr");
       } // open file to read
@@ -1042,35 +1066,34 @@ TGEM2MT::RecCalc( const char * key )
      }
     }
 
-   if( mtp->PvMSt != S_OFF )
+   if( mtp->PvMSt != S_OFF )   // Parsing the control script
         Expr_analyze( o_mttexpr );
 
    TCModule::RecCalc( key );
 
    if( mtp->PsMode == RMT_MODE_T )
-   {   // calculate start data
+   {   // calculate initial state of nodes for export by running the control script
      mtp->iStat = AS_READY;
-     CalcStartScript();
-     outMulti();
+     CalcStartScript(); // Run control script in start mode
+     outMulti();        // Output contents of MULTI structure
      mtp->iStat = AS_DONE;
    }
-   else
-   // if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' ) 'W' 'V'
-   {   // calculate start data
+   else  // Any other RT simulation scheme A W C S F B
+   {   // calculate initial state of nodes by running the control script
 
       if( mtp->iStat != AS_RUN )
       {
-          CalcStartScript();
-          NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
+          CalcStartScript();  // Run control script in start mode
+          NewNodeArray();     // set up start DATACH structure and DATABR arrays structure
       }
 
-      allocNodeWork();
-      LinkCSD(0);
+      allocNodeWork();  // alloc memory for work arrays for nodes na->pNodT0() and na->pNodT1()
+      LinkCSD(0);       // Link na->pCSD() structure for internal object list
 
-     if( mtp->PvMSg != S_OFF )
+     if( mtp->PvMSg != S_OFF )   // Parsing the plotting script
          Expr_analyze( o_mtgexpr );
      
-       // internal calc
+       // internal calculations
      if( mtp->PsSmode != S_OFF  )
      { // use thread
         userCancel = false;
@@ -1138,10 +1161,12 @@ GEMS3KGenerator TGEM2MT::GEMS3k_generator()
     case '-':
     case 'b': type_f = GEMS3KGenerator::f_binary; break;
     case 'j': type_f = GEMS3KGenerator::f_json; break;
+    case 'f': type_f = GEMS3KGenerator::f_thermofun; break;
+    case 'o': type_f = GEMS3KGenerator::f_kv_thermofun; break;
     }
     if( error_lst_path.empty() )
     {
-        error_lst_path = std::string( rt[RT_SYSEQ]->FldKey(2), 0, rt[RT_SYSEQ]->FldLen(2));;
+        error_lst_path = char_array_to_string( rt[RT_SYSEQ]->FldKey(2), rt[RT_SYSEQ]->FldLen(2));;
         strip(error_lst_path);
         error_lst_path += "-err.lst";
         // open file to output
@@ -1168,6 +1193,8 @@ void TGEM2MT::RecordPrint( const char* key )
         case '-':
         case 'b': type_f = GEMS3KGenerator::f_binary; break;
         case 'j': type_f = GEMS3KGenerator::f_json; break;
+        case 'f': type_f = GEMS3KGenerator::f_thermofun; break;
+        case 'o': type_f = GEMS3KGenerator::f_kv_thermofun; break;
         }
         auto f_ext = GEMS3KGenerator::ext( type_f );
 
@@ -1184,6 +1211,7 @@ void TGEM2MT::RecordPrint( const char* key )
             switch( type_f )
             {
             case GEMS3KGenerator::f_json:
+            case GEMS3KGenerator::f_thermofun:
 #ifdef USE_NLOHMANNJSON
             {
                 io_formats::NlohmannJsonWrite out_format( ff, "" );
@@ -1198,6 +1226,7 @@ void TGEM2MT::RecordPrint( const char* key )
                 break;
             case GEMS3KGenerator::f_binary:
             case GEMS3KGenerator::f_key_value:
+            case GEMS3KGenerator::f_kv_thermofun:
             {
                 io_formats::KeyValueWrite out_format( ff );
                 to_text_file( out_format,  mtp->PsScom!=S_OFF, mtp->PsSdef!=S_OFF );

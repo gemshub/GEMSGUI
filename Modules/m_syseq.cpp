@@ -85,7 +85,7 @@ void TSysEq::keyTest( const char *key )
 {
     if( pVisor->ProfileMode )
     { // test project key
-        std::string prfKey = std::string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
         StripLine(prfKey);
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
@@ -783,7 +783,7 @@ void TSysEq::RenameList( const char* newName,
     if( strlen(newName) > db->FldLen(0) )
       return;
 
-    std::string str_old = std::string( oldName, 0, db->FldLen(0) );
+    std::string str_old = char_array_to_string( oldName, db->FldLen(0) );
 //04/09/01 ????    if( strlen(oldName)<FldLen(0) )
         str_old += ":";
     for( int i=1; i<db->KeyNumFlds(); i++)
@@ -809,7 +809,7 @@ void TSysEq::RenameList( const char* newName,
         db->Del( nrec );
         replace( str, oldName, newName);
         // change tPhEQ key (o_ssphst,PhmKey)
-        std::string tPhkey = std::string( ssp->PhmKey, 0 , EQ_RKLEN );
+        std::string tPhkey = char_array_to_string( ssp->PhmKey, EQ_RKLEN );
         if( tPhkey.find(oldName) != std::string::npos)
         {
          db->SetKey( tPhkey.c_str() );

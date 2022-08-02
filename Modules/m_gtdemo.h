@@ -23,11 +23,10 @@
 #include "v_ipnc.h"
 #include "graph_window.h"
 
-const int
-MAXGTDNAME =    16,
-                MAXDATATYPE =    8,
-                                 MAXGTDCODE =     16,
-                                                  MAXGDGROUP =    26;
+const int  MAXGTDNAME =    16,
+           MAXDATATYPE =    8,
+           MAXGTDCODE =     16,
+           MAXGDGROUP =    26;
 
 typedef struct
 { // Description  GTDEMO
@@ -48,8 +47,8 @@ typedef struct
     // reserved
     PsTR,  // MASSTRANSPORT + -  !
     PsRes1,  // reserved    + -  !
-    PsRes2,  // reserved    + -  !
-    PsRes3,  // reserved    + -  !
+    PsSys,      // Flag for recalculate generated SysEq records from database  + -  !
+    PsIPNCalc,  // The flag in IPNCalc API with an option to return empty() for non-existing dynamic object   + -  !
     PsRes4,  // reserved    + -
 
     name[MAXGSNAME+1],    // Full name of GTDEMO sampler definition (title)
@@ -90,7 +89,7 @@ typedef struct
     *qp;              // Array of work cells (optional)
     /* work parameters */
   short
-    rtLen,   // len of cuurent record  no object
+    rtLen,   // len of current record  no object
     Next,   // Flag to continue (1) or finish (0) sampling iterations
     jR,     // Index of currently sampled PDB record jRl[x][0]<jR<jRl[x][1]*/
     i0,iE,    //i0, i1, i2, i3, iE indexes 0<i<dimXY[2][0]
@@ -134,13 +133,14 @@ protected:
     bool check_RT( int nrt );
 
     void gd_ps_set();
-    void bld_rec_list();
+//    void bld_rec_list();
     void gd_text_analyze();
     void gd_EF_calc();
     void gd_rec_read( int nI );
 //    void elst(int N,double *U,double *par);
 //    void probe_stat( const char *key );
     void keyTest( const char *key );
+    int rt_flags_get();
 
 public:
 

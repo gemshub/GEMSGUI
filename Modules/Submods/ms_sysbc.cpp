@@ -565,7 +565,7 @@ void TSyst::systbc_calc( int mode )
             for( i=0; i<mup->N; i++ )
                 if( noZero(A[i]) )
                 {   Term = Xincr*(A[i]);
-                   // Term = NormDoubleRound(Term, 15 ); // SD 22/07/2009
+                   // Term = NormDoubleRound(Term, 16 ); // SD 22/07/2009
                    sy.B[i] += Term;
                    R1C += Term;
                 }
@@ -671,12 +671,18 @@ void TSyst::systbc_calc( int mode )
         N = mup->N - 1;
         if( fabs( sy.B[N] ) > TMulti::sm->GetPM()->DHBM/10. )  // Fixed by DAK 30.12.02
         {
-            if( /*( pe && (pe[0].Istat == P_EXECUTE ||
-                pe[0].Istat == P_MT_EXECUTE ))  ||*/
-                vfQuestion(window(), rt[RT_SYSEQ]->PackKey(),
-                           "Warning: Charge mismatch in calculated \n"
-                           "bulk composition!  Compensate(Y) or leave untouched (N)?"  ))
-                sy.BI[N] = -sy.B[N];    // sy.B[N]= 0.0;  fixed on Dec.3,2009 by DK
+            if(aPa->charge_mismatch_quest_reply != VF_YES_ALL &&
+                    aPa->charge_mismatch_quest_reply != VF_NO_ALL )
+            {
+                aPa->charge_mismatch_quest_reply = vfQuestionYesNoAll(window(), rt[RT_SYSEQ]->PackKey(),
+                                                  "Warning: Charge mismatch in calculated \n"
+                                                  "bulk composition!  Compensate(Y) or leave untouched (N)?", "No");
+            }
+            if(aPa->charge_mismatch_quest_reply == VF_YES_ALL ||
+                    aPa->charge_mismatch_quest_reply == VF_YES )
+            {
+                sy.BI[N] = -sy.B[N];
+            }
         }			        //  fixed
         else sy.B[N]= 0.0;   		//  fixed
     }
@@ -730,7 +736,7 @@ void TSyst::systbc_calc( int mode )
             }
         }
     }
- 	// NormDoubleRound(sy.B, N, 15 ); // SD 22/07/2009
+    // NormDoubleRound(sy.B, N, 16 ); // SD 22/07/2009
     if( A )
         delete[] A;
    //  pVisor->Update();  //Sveta
