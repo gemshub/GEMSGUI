@@ -17,13 +17,11 @@
 //-------------------------------------------------------------------
 
 
-#include <iostream>
 #include <cstdio>
 #include <cmath>
-
 #include "v_vals_impl.h"
 
-int TValBase::doublePrecision = 8;
+int TValBase::doublePrecision = 7;
 
 const char* S_EMPTY	=    "`";
 const char* S_ANY  	=    "*";

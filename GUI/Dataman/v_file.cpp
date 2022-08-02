@@ -19,7 +19,6 @@
 #include <memory>
 #include <cstdlib>
 #include <cstdio>
-#include <iostream>
 using namespace std;
 
 #ifndef _WIN32
@@ -138,13 +137,7 @@ TFile::makeKeyword()
     Keywd[MAX_FILENAME_LEN]='\0';
 }
 
-/*
-void TFile::check()
-{
-    ErrorIf( !status || !f.good(), GetKeywd(),
-             "Can't open file...");
-}
-*/
+
 // Set new full file name. Old file closed.
 void TFile::newFile( const std::string& newName, const std::string& newExt,
                      const std::string& newDir )

@@ -33,7 +33,6 @@
 #ifndef CHARTDATAMODEL_H
 #define CHARTDATAMODEL_H
 
-#include <iostream>
 #include <QJsonObject>
 #include <QtCore/QAbstractTableModel>
 

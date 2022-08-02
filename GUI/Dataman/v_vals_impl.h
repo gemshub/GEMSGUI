@@ -130,7 +130,8 @@ struct TValFixString:
         delete[] static_cast<char*>(ptr);
         ptr = new char[len*sz + 1];
         // +1 for simple maintenance w/'\0' at the end
-        *static_cast<char*>(ptr)='\0';
+        /// *static_cast<char*>(ptr)='\0';
+        memset(ptr, '\0', len*sz + 1);
         return ptr;
     }
 
@@ -151,7 +152,9 @@ struct TValFixString:
     }
     string GetString(int ndx) const
     {
-        auto ss = string( static_cast<char*>(ptr)+(ndx*len), 0, len);
+        if(!ptr)
+            return "";
+        auto ss = char_array_to_string( static_cast<char*>(ptr)+(ndx*len), len);
         return ss;
     }
     bool SetString(const char* s, int ndx);
@@ -192,7 +195,8 @@ struct TValString:
     {
         delete[] static_cast<char*>(ptr);
         ptr = new char[(size=sz)+1];
-        *static_cast<char*>(ptr)='\0';
+        memset(ptr, '\0', size + 1);
+        ///*static_cast<char*>(ptr)='\0';
         return ptr;
     }
 
@@ -205,15 +209,21 @@ struct TValString:
 
     bool IsAny(int /*ndx*/) const
     {
+        if(!ptr)
+            return false;
         return (strcmp(static_cast<char*>(ptr),S_ANY)==0);
     }
     bool IsEmpty(int /*ndx*/) const
     {
+        if(!ptr)
+            return true;
         return (strcmp(static_cast<char*>(ptr),S_EMPTY)==0);
     }
     string GetString(int /*ndx*/) const
     {
-        return (!static_cast<char*>(ptr) ? S_EMPTY: static_cast<char*>(ptr));
+        if(!ptr)
+            return S_EMPTY;
+        return (!static_cast<char*>(ptr) ? S_EMPTY: char_array_to_string(static_cast<char*>(ptr), size));
     }
     bool SetString(const char* s, int ndx);
 

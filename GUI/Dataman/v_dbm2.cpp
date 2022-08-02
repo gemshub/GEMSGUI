@@ -492,7 +492,7 @@ void TDataBase::RenameList( const char* newName,
     if( strlen(newName) > FldLen(0) )
       return;
 
-    string str_old = string( oldName, 0, FldLen(0) );
+    string str_old = char_array_to_string( oldName, FldLen(0) );
 //04/09/01 ????    if( strlen(oldName)<FldLen(0) )
         str_old += ":";
     for( int i=1; i<KeyNumFlds(); i++)
@@ -530,7 +530,7 @@ void TDataBase::toJsonObject( QJsonObject &obj ) const
         //      keyObject[ "kf" ] = aFldShot[ii].c_str();
         keyObject[ "fx" ] = ii;
         keyObject[ "fl" ] = FldLen(ii);
-        auto fld_key = std::string( FldKey(ii), 0, FldLen(ii) );
+        auto fld_key = char_array_to_string( FldKey(ii), FldLen(ii) );
         strip(fld_key);
         keyObject[ "fv" ] = fld_key.c_str();
         keyArray.append(keyObject);
@@ -755,8 +755,7 @@ void TDataBase::GetFileList(int mode, TCStringArray& names,
         if( (nF==-1&&(mode&closef))||(nF!=-1&&(mode&openf)) )
         {
             aFile[i]->Makepath();
-            names.push_back( string(aFile[i]->GetKeywd())+string(" ")+
-                       string(aFile[i]->GetPath().c_str()));
+            names.push_back( string(aFile[i]->GetKeywd())+string(" ")+aFile[i]->GetPath());
             indeces.push_back(i);
             if( (mode&oldself) && nF != -1) //select already open files
                 sel.push_back(indeces.size()-1);
@@ -879,8 +878,11 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
     for( ii=0; ii< aFile.size(); ii++)
     {
       for( jj=0; jj< names.size(); jj++)
-        if(  aFile[ii]->Name().find( names[jj].c_str() ) != string::npos )
-         break;
+      {
+          auto all_name =  std::string("."+names[jj]+".");
+          if(  aFile[ii]->GetPath().find( all_name.c_str() ) != string::npos )
+            break;
+      }
       if( jj < names.size() )
          fls.push_back( ii );
     }

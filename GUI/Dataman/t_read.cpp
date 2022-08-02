@@ -60,7 +60,7 @@ TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text
                str_err += input;
                Error( key_format, str_err );
             }
-            mScript = string( input, 0, pose-input );
+            mScript = char_array_to_string( input, pose-input );
             input = pose+2;
             rpn.GetEquat( const_cast<char *>(mScript.c_str()) );
    }
@@ -101,7 +101,7 @@ TReadData::getFormat()
        {
         sscanf(input+1, "%d", &size );
        }
-       aFmts.push_back( RFormat( read_r, size, string( input, 0, i+1) ) );
+       aFmts.push_back( RFormat( read_r, size, char_array_to_string( input, i+1) ) );
        input+=i+1;
        break;
        }
@@ -136,7 +136,7 @@ TReadData::getFormat()
                input[i] != '[' && input[i] != '\0'&&
                input[i] != '\n')
            i++;
-        string str = string( input, 0, i );
+        string str = char_array_to_string( input, i );
         int data = aObj.Find( str.c_str() );
         if( data == -1 )
         {  string str_err = "Invalid object name: \n";
@@ -186,7 +186,7 @@ TReadData::getFormat()
               str_err += input;
           Error( key_format, str_err );
        }
-       aFmts.push_back( RFormat( string_r, 0, string( input, 0, pose-input ) ));
+       aFmts.push_back( RFormat( string_r, 0, char_array_to_string( input, pose-input ) ));
        input = pose+1;
        }
        break;
@@ -241,7 +241,7 @@ TReadData::getData( bool isList )
            && input[i] != '\t'&&
            input[i] != '[' && input[i] != '\0'&& input[i] != '\n')
  i++;
- str = string( input, 0, i );
+ str = char_array_to_string( input, i );
  if( str == "RKEY" )
    data = rkey_s;
  else if( str == "SKIP" )

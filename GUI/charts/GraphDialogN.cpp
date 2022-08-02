@@ -118,7 +118,6 @@ GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::Chart
 
 GraphDialog::~GraphDialog()
 {
-    //cout << "Delete ~GraphDialog" << endl;
     delete tbLegend;
     delete ui;
 }
@@ -134,9 +133,7 @@ void GraphDialog::resetGraphDialog(const std::shared_ptr<ChartData> &data1,
 
 void GraphDialog::closeEvent(QCloseEvent *ev)
 {
-    //cout << "Close GraphDialog " << endl;
     pModule->ClearGraphDialog();
-    parentWidget()->close();
     pVisorImp->closeMdiChild( this );
     ev->accept();
 }
@@ -228,9 +225,7 @@ void GraphDialog::CmSaveImage()
     QStringList filter;
     filter.clear();
     filter += "PDF Documents (*.pdf)";
-#ifndef QWT_NO_SVG
     filter += "SVG Documents (*.svg)";
-#endif
 
     if ( imageFormats.size() > 0 )
     {
@@ -286,7 +281,7 @@ void GraphDialog::CmPrint()
 
 void GraphDialog::CmHelp()
 {
-    helpWin( "GraphDialogJsonui", "" );
+    helpWin( "gems_graph", "" );
 }
 
 // Insert labels in legend box

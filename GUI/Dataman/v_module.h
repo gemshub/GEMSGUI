@@ -37,6 +37,8 @@ namespace jsonui {
 class ChartData;
 }
 
+/// Default logger for gems3gui part
+extern std::shared_ptr<spdlog::logger> gui_logger;
 
 class TSubModule
 {
@@ -99,6 +101,8 @@ public:
         return contentsChanged;
     }
 
+    void clearEditFocus();  // commit last editor if exist
+
     uint rtNum() const
     {
         return nRT;
@@ -154,6 +158,7 @@ public:
 
     virtual void ClearGraphDialog()
     { }
+
 };
 
 // --- Parametres of function GetKeyofRecord()
@@ -270,6 +275,7 @@ public:
     virtual void TryRecInp( const char *key, time_t& time, int q );
     virtual void AddRecord(const char* key);
     virtual void AddRecord(const char* key, int& fnum );
+    virtual void ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply);
     virtual int AddRecordTest(const char* key, int& fnum );
     virtual void DeleteRecord( const char *key, bool errifNo = true  );
     virtual void RecordPrint( const char *key=nullptr ); //sddata key

@@ -1,7 +1,6 @@
 #ifndef PLOTMODEL_H
 #define PLOTMODEL_H
 
-#include <iostream>
 #include <QJsonObject>
 #include <QtCore/QAbstractTableModel>
 #include "graph.h"

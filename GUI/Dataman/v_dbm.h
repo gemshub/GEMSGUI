@@ -20,7 +20,6 @@
 #ifndef V_DBM_H_
 #define V_DBM_H_
 
-#include <iostream>
 #include <ctime>
 #include "v_object.h"
 #include "v_dbfile.h"

@@ -34,9 +34,15 @@
 #include "t_read.h"
 #include "NewSystemDialog.h"
 #include "m_param.h"
-//#include "service.h"
+#include <spdlog/sinks/stdout_color_sinks.h>
+
+// Thread-safe logger to stdout with colors
+std::shared_ptr<spdlog::logger> gui_logger = spdlog::stdout_color_mt("gems3gui");
+
 
 // Default constructor and destructor
+
+const std::string replace_question = "Data record with this key already exists! Replace?";
 
 TSubModule::TSubModule( uint nrt ):
         nRT( nrt ),
@@ -51,6 +57,21 @@ TSubModule::TSubModule( uint nrt ):
 
 TSubModule::~TSubModule()
 {}
+
+void TSubModule::clearEditFocus()
+{
+    if( window() )  {
+        auto* focus_w = window()->focusWidget();
+        TCellInput* cell_w = dynamic_cast<TCellInput*>(focus_w);
+        if( cell_w ) {
+            cell_w->clearFocus();
+        }
+        TCellText* cell_t = dynamic_cast<TCellText*>(focus_w);
+        if( cell_t ) {
+            cell_t->clearFocus();
+        }
+    }
+}
 
 uint TSubModule::keyEditField()
 {
@@ -204,6 +225,8 @@ TCModule::MakeQuery()
 bool
 TCModule::MessageToSave()
 {
+    clearEditFocus();
+
     //--if( nRT != RT_SDATA &&
     //-- (pVisor->ProfileMode == true && nRT < RT_SYSEQ) )
     //--  return true;
@@ -212,7 +235,7 @@ TCModule::MessageToSave()
     if( contentsChanged && key_str.find_first_of("*?") == string::npos )
 //        && ( db->GetStatus()!= UNDF_ ) )   // 09/11/2004 Sveta
     {
-        int res = vfQuestion3(window(), key_str.c_str(),
+        int res = vfQuestion3(window(), key_str,
                        "Data record has been changed!",
 		       "Save changes", "Discard changes", "Cancel");
 	if( res == VF3_3 )
@@ -273,10 +296,10 @@ string  TCModule::makeKeyFilter()
 {
     string strfilt;
     if( pVisor->ProfileMode &&
-         ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
-     RT_GTDEMO== nRT || RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
+         ( RT_PARAM==nRT || RT_SYSEQ==nRT || RT_PROCES==nRT ||
+           RT_GTDEMO==nRT || RT_UNSPACE==nRT || RT_DUALTH==nRT || RT_GEM2MT==nRT ) )
     {
-      strfilt = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
+      strfilt = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
       StripLine(strfilt);
       strfilt += ":";
     }
@@ -296,12 +319,13 @@ bool  TCModule::testKeyFilter()
   if( Filter.empty() || Filter== ALLKEY)
       return true;
   if( pVisor->ProfileMode &&
-       ( RT_PARAM == nRT || RT_SYSEQ== nRT || RT_PROCES== nRT ||
-         RT_UNSPACE== nRT || RT_DUALTH== nRT || RT_GEM2MT== nRT ) )
+       ( RT_PARAM==nRT || RT_SYSEQ==nRT || RT_PROCES==nRT ||
+         RT_GTDEMO==nRT || RT_UNSPACE==nRT || RT_DUALTH==nRT || RT_GEM2MT==nRT ) )
   {
-    string strfilt = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
+    string strfilt = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
     StripLine(strfilt);
-    if( Filter.find( strfilt ) == string::npos )
+    strfilt += ":";
+    if(Filter.rfind(strfilt, 0) != 0)
      return true;
   }
   return false;
@@ -344,8 +368,7 @@ TCModule::RecSave( const char *key, bool onOld )
        pVisorImp->defineModuleKeysList( nRT );
     }
     else
-        if( onOld == true || vfQuestion(window(), key,
-                 "This data record already exists! Replace?") )
+        if( onOld == true || vfQuestion(window(), key, replace_question) )
             db->Rep( Rnum );
     contentsChanged = false;
 
@@ -375,6 +398,7 @@ TCModule::CmSave()
 {
     try
     {
+        clearEditFocus();
         //--if(  pVisor->ProfileMode == true &&
            //--( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA  ))
            //--Error( GetName(), "Please, do it in Database mode!");
@@ -403,6 +427,7 @@ TCModule::CmSaveAs()
 {
     try
     {
+        clearEditFocus();
         if( pVisor->ProfileMode &&
            ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA && nRT != RT_PHASE) )
             Error( GetName(), "Please, do it in Database mode!");
@@ -419,7 +444,7 @@ TCModule::CmSaveAs()
         if( Rnum>=0 ) // name of exist record
         {
 
-           switch( vfQuestion3( window(), str.c_str(),
+           switch( vfQuestion3( window(), str,
                 "This record already exists! What to do?",
                 "&Replace", "Re&name", "&Cancel") )
            {
@@ -727,7 +752,7 @@ TCModule::CmDerive()
         if( ! MessageToSave() )
 	    return;
 
-        string str = string( db->UnpackKey(), 0, db->KeyLen() );
+        string str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
                     //db->PackKey();
         if( str.find_first_of("*?" ) != string::npos
             || ( db->GetStatus() == UNDF_ && nRT != RT_SDATA) )   // 09/11/2004 Sveta
@@ -762,6 +787,7 @@ TCModule::CmCalc()
 {
     try
     {
+        clearEditFocus();
         if( !pVisor->ProfileMode && ( nRT == RT_PARAM || nRT >= RT_SYSEQ ) )
             Error( GetName(), "Please, do it in Project mode!");
         //--if( pVisor->ProfileMode == true &&
@@ -781,7 +807,7 @@ TCModule::CmCalc()
         // "Record to calculate not found!");
         // db->Get( Rnum ); must be done before
         // dyn_set(); must be done before
-        str = string( db->UnpackKey(), 0, db->KeyLen() );
+        str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
         check_input( str.c_str() );
         SetString("Calculation... ");
         clock_t t_start11, t_end11;
@@ -835,7 +861,7 @@ TCModule::CmNew()
           goto AGN;
        } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
 
-        str = string( db->UnpackKey(), 0, db->KeyLen() );
+        str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
         check_input( str.c_str(), 0 ); // SD 18/11/2008
         RecBuild( str. c_str(), VF_REMAKE );
         SetString("Remake of the new record finished OK. "
@@ -877,7 +903,7 @@ TCModule::CmCreate()
         } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
 
 
-        str = string( db->UnpackKey(), 0, db->KeyLen() );
+        str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
         check_input( str.c_str() , 0 ); // SD 18/11/2008
         RecBuild( str.c_str(), VF_CLEARALL );
         SetString("Remake of the new record finished OK. "
@@ -963,7 +989,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), "A record with such key already exists!");
             pVisorImp->OpenModule(pVisorImp, nRT);
-            string str1 = string( db->UnpackKey(), 0, db->KeyLen() );
+            string str1 = char_array_to_string( db->UnpackKey(), db->KeyLen() );
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString("Remake of the new record finished OK. "
@@ -1171,7 +1197,7 @@ TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
         ios::openmode mod = ios::out;
 
         if( !access(filename.c_str(), 0 ) ) //file exists
-            switch( vfQuestion3( window(), filename.c_str(),
+            switch( vfQuestion3( window(), filename,
                              "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
             {
@@ -1670,14 +1696,13 @@ TCModule::AddRecord(const char* key )
 
 // Adds the record, or all records to file Sveta 15/06/01
 
-void
-TCModule::AddRecord(const char* key, int& fnum )
+void TCModule::AddRecord(const char* key, int& fnum )
 {
     int file = db->fNum;
 
     ErrorIf(!key, "TCModule::AddRecord()", "empty record key!");
 
-    if( strpbrk(key,"*?/")!=nullptr )
+    if( strpbrk(key,"*?/") != nullptr )
         Error( GetName(), "Attempt to insert record with template key!");
     if( fnum >= 0 )
       file = fnum;
@@ -1701,7 +1726,26 @@ TCModule::AddRecord(const char* key, int& fnum )
     if( file >= 0 )
       db->AddRecordToFile(key, file);
     else
-       fnum = - 2;
+        fnum = - 2;
+}
+
+void TCModule::ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply)
+{
+    if(quest_reply == VF_YES_ALL)
+    {
+        db->Rep(Rnum);
+    }
+    else if(quest_reply != VF_NO_ALL)
+    {
+        quest_reply = vfQuestionYesNoAll(window(), key, replace_question);
+        switch(quest_reply)
+        {
+        case VF_YES_ALL:
+        case VF_YES:
+            db->Rep(Rnum);
+            break;
+        }
+    }
 }
 
 // Test unique keys name before add the record(s)
@@ -1711,23 +1755,22 @@ int TCModule::AddRecordTest(const char* key, int& fnum )
     string str = key;
 
 AGN: Rnum = db->Find( str.c_str() );
-     if( Rnum>=0 ) // name of exist record
-     {
+    if( Rnum>=0 ) // name of exist record
+    {
         str=db->PackKey();
         str = GetKeyofRecord( str.c_str(),
-              "This key record already exists! Replace please?", KEY_NEW );
-        if(  str.empty() )
-               return 0;
+                              "This key record already exists! Replace please?", KEY_NEW );
+        if(str.empty())
+            return 0;
         goto AGN;
-      }
-     AddRecord( str.c_str(), fnum );
-     return 1;
+    }
+    AddRecord( str.c_str(), fnum );
+    return 1;
 }
 
 // Unloades Data Record keys to txt-file
 
-void
-TCModule::KeysToTXT( const char *pattern )
+void TCModule::KeysToTXT( const char *pattern )
 {
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark record keys to be listed in txt-file",
@@ -1753,8 +1796,7 @@ TCModule::KeysToTXT( const char *pattern )
 }
 
 // Unloads Data Record to txt-file
-void
-TCModule::RecToTXT( const char *pattern )
+void TCModule::RecToTXT( const char *pattern )
 {
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
@@ -1787,20 +1829,20 @@ TCModule::RecToTXT( const char *pattern )
 
 // Loads Data Records from txt-file
 
-void
-TCModule::RecOfTXT()
+void TCModule::RecOfTXT()
 {
     char buf[150];
     int Rnum;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
-    std::string s =std::string( GetName() )+" : Please, select file with unloaded records";
+    std::string s = std::string( GetName() )+" : Please, select file with unloaded records";
     std::string filename;
     if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::in);
     ErrorIf( !f.good() , GetName(), "Fileread error...");
 
+    int quest_reply = VF_UNDEF;
     while( !f.eof() )
     {
         aObj[o_reckey]->SetPtr(buf);
@@ -1808,41 +1850,43 @@ TCModule::RecOfTXT()
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
             aObj[no]->ofTXT(f);
         buf[db->KeyLen()] = '\0';
+
         Rnum = db->Find( buf );
         if( Rnum >= 0 )
         {
-           if( vfQuestion(pImp, buf,
-               "Data record with this key already exists! Replace?"))
-              db->Rep( Rnum);
+           ReplaceRecordwithQuestion(Rnum, buf, quest_reply);
+           if( quest_reply == VF_CANCEL )
+               break;
         }
-        else {  AddRecord( buf, fnum );
-                if( fnum == -2 )
-                  break;
-             }
+        else
+        {
+            AddRecord( buf, fnum );
+            if( fnum == -2 )
+                break;
+        }
         s = std::string( buf );
         do
-         {
+        {
             f.get(buf[0]);
             if( !f.good() )
                 break;
-         } while( buf[0] == ' ' || buf[0]=='\n' );
+        } while( buf[0] == ' ' || buf[0]=='\n' );
         if( f.eof() )
             break;
         f.putback( buf[0] );
     }
     if( f.bad() )
     {
-      std::string str = "File read error! \n";
-              str += "Last good record :";
-              str += s;
-      Error( GetName(), str );
-     }
-     dyn_set();
+        std::string str = "File read error! \n";
+        str += "Last good record :";
+        str += s;
+        Error( GetName(), str );
+    }
+    dyn_set();
 }
 
 // Unloads Data Record to user format
-void
-TCModule::RecExport( const char *pattern )
+void TCModule::RecExport( const char *pattern )
 {
 
     // read sdref record with format prn
@@ -1872,7 +1916,7 @@ TCModule::RecExport( const char *pattern )
         return;
    ios::openmode mod = ios::out;
    if( !(::access(filename.c_str(), 0 )) ) //file exists
-     switch( vfQuestion3( window(), filename.c_str(),
+     switch( vfQuestion3( window(), filename,
                    "This file exists! What to do?",
                   "&Append", "&Overwrite", "&Cancel") )
      {
@@ -1900,8 +1944,7 @@ TCModule::RecExport( const char *pattern )
 }
 
 // Loads Data Records from user format
-void
-TCModule::RecImport()
+void TCModule::RecImport()
 {
     //char buf[150];
     int Rnum;
@@ -1933,21 +1976,25 @@ TCModule::RecImport()
     ErrorIf( !f.good() , GetName(), "Fileread error...");
 
     int iter = 0;
+    int quest_reply = VF_UNDEF;
     while( !f.eof() )
     {
         dat.readRecord( iter, f );
         std::string keyp = db->UnpackKey();
         Rnum = db->Find( keyp.c_str() );
+
         if( Rnum >= 0 )
         {
-           if( vfQuestion(window(), keyp.c_str(),
-               "Data record with this key already exists! Replace?"))
-              db->Rep( Rnum );
+            ReplaceRecordwithQuestion(Rnum, keyp.c_str(), quest_reply);
+            if( quest_reply == VF_CANCEL )
+                break;
         }
-        else {  AddRecord( keyp.c_str(), fnum );
-                if( fnum == -2 )
-                  break;
-             }
+        else
+        {
+            AddRecord( keyp.c_str(), fnum );
+            if( fnum == -2 )
+                break;
+        }
         s = keyp;
         do
          {
@@ -2005,7 +2052,6 @@ void TCModule::RecListToJSON(const char *pattern)
 void TCModule::RecListFromJSON()
 {
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
-    bool yesToAll=false;
 
     // Choose file name
     string s =string( GetName() )+" : Please, select file with unloaded records";
@@ -2019,16 +2065,16 @@ void TCModule::RecListFromJSON()
 
     QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
     QJsonArray allArray = readDoc.array();
-
+    int quest_reply = VF_UNDEF;
     for( const auto& val : allArray)
     {
         std::string keyp = db->fromJsonObject( val.toObject() );
         auto Rnum = db->Find( keyp.c_str() );
         if( Rnum >= 0 )
         {
-            if( vfQuestion(window(), keyp.c_str(),
-                           "Data record with this key already exists! Replace?"))
-                db->Rep( Rnum );
+            ReplaceRecordwithQuestion(Rnum, keyp.c_str(), quest_reply);
+            if( quest_reply == VF_CANCEL )
+                break;
         }
         else
         {
@@ -2042,8 +2088,7 @@ void TCModule::RecListFromJSON()
 
 
 // delete list of records from Data Base
-void
-TCModule::DelList( const char *pattern )
+void TCModule::DelList( const char *pattern )
 {
     TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark record keys to be deleted from database",
@@ -2056,7 +2101,7 @@ TCModule::DelList( const char *pattern )
         str += aKey[i];
         if( ichs )
         {
-         switch( vfQuestion3(window(), GetName(), str.c_str(),
+         switch( vfQuestion3(window(), GetName(), str,
                                 "&Yes", "&No", "&Delete All" ))
             {
             case VF3_3:
@@ -2075,8 +2120,7 @@ TCModule::DelList( const char *pattern )
 // transfer list of records in Data Base to another file
 // (ever used???)  Has to be re-implemented, indeed !
 
-void
-TCModule::Transfer( const char *pattern )
+void TCModule::Transfer( const char *pattern )
 {
     int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
@@ -2095,9 +2139,10 @@ TCModule::Transfer( const char *pattern )
         db->Del( nrec );
         AddRecord( aKey[i].c_str(), fnum );
         if( fnum == -2 )
-        { db->AddRecordToFile( aKey[i].c_str(), oldfile );
+        {
+          db->AddRecordToFile( aKey[i].c_str(), oldfile );
           break;
-         }
+       }
     }
 }
 
@@ -2226,167 +2271,6 @@ TModuleList::~TModuleList()
 
 // public list of modules
 TModuleList aMod;
-
-
-// out     ========================
-/*
-// Unloads Data Record to txt-file
-
-void
-TCModule::RecToTXT( const char *pattern )
-{
-    int ichs;
-    uint i;
-
-    TCStringArray aKey = vfMultiKeys( window(),
-       "Please, mark records to be unloaded into txt-file",
-       nRT, pattern );
-    if( aKey.GetCount() <1 )
-        return;
-
-    string s = GetName();
-    string filename;
-    s += " : Please, give a file name for unloading records";
-    if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
-        return;
-    fstream f(filename.c_str(), ios::out);
-    ErrorIf( !f.good() , GetName(), "File write error");
-    switch( vfQuestion3(window(), GetName(), "Unload all marked records (Y) "
-                        "or show/confirm each one (N)?","&All", "&Each one", "&Skip" ))
-    {
-    case VF3_2:
-        ichs = 1;
-        break;
-    case VF3_1:
-        ichs = 0;
-        break;
-    default:
-        return;
-    }
-
-    i=0;
-    while( i<aKey.GetCount() )
-    {
-       int Rnum = db->Find( aKey[i].c_str() );
-       db->Get( Rnum );
-        if( ichs )
-        {
-            pVisor->Update(); // no objecs change, only title
-            switch( vfQuestion3(window(), aKey[i], "Unload record?",
-                                "&Yes", "&No", "&Unload All" ))
-            {
-            case VF3_3:
-                ichs=0;
-            case VF3_1:
-                break;
-            case VF3_2:
-                i++;
-                continue;
-            }
-        }
-        aObj[o_reckey].SetPtr( (void *)aKey[i].c_str());
-        aObj[o_reckey].toTXT(f);
-        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
-            aObj[no].toTXT(f);
-        i++;
-    }
-    ErrorIf( !f.good() , GetName(), "Filewrite error");
-
-    dyn_set();
-}
-
-// Loads Data Records from txt-file
-
-void
-TCModule::RecOfTXT()
-{
-    char buf[150];
-    int ichs, Rnum;
-    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
-
-    string s =string( GetName() )+" : Please, select file with unloaded records";
-    string filename;
-    if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
-        return;
-    fstream f(filename.c_str(), ios::in);
-    ErrorIf( !f.good() , GetName(), "Fileread error...");
-    switch( vfQuestion3(window(), GetName(), "Load all records (Y) "
-                        "or show/confirm each one (N)?","&All", "&Each one", "&Skip" ))
-    {
-    case VF3_2:
-        ichs = 1;
-        break;
-    case VF3_1:
-        ichs = 0;
-        break;
-    default:
-        return;
-    }
-    while( !f.eof() )
-    {
-        aObj[o_reckey].SetPtr(buf);
-        aObj[o_reckey].ofTXT(f);
-        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
-            aObj[no].ofTXT(f);
-        buf[db->KeyLen()] = '\0';
-        if( ichs )
-        {
-            db->SetKey( buf );
-            pVisor->Update(); // no objecs change, only title
-            switch( vfQuestion3(window(), buf.p, "Load record?" ,
-                                "&Yes", "&No", "&Load All" ))
-            {
-            case VF3_3:
-                ichs=0;
-            case VF3_1:
-                Rnum = db->Find( buf );
-                if( Rnum >= 0 )
-                {
-                    if( vfQuestion(pImp, buf.p,
-                       "Data record with this key already exists! Replace?"))
-                        db->Rep( Rnum);
-                }
-                else
-                {  AddRecord( buf, fnum );
-                   if( fnum == -2 )
-                   break;
-                 }
-                break;
-            case VF3_2: // db->SetKey( buf );
-                break;
-            }
-        }
-        else
-        {
-            Rnum = db->Find( buf );
-            if( Rnum >= 0 )
-            {
-                if( vfQuestion(pImp, buf.p,
-                   "Data record with this key already exists! Replace?"))
-                    db->Rep( Rnum);
-            }
-            else {  AddRecord( buf, fnum );
-                   if( fnum == -2 )
-                    break;
-                 }
-        }
-        do
-        {
-            f.get(buf[0]);
-            if( !f.good() )
-                break;
-        }
-        while( buf[0] == ' ' || buf[0]=='\n' );
-        if( f.eof() )
-            break;
-        f.putback( buf[0] );
-    }
-    ErrorIf( f.bad() , GetName(), "File read error");
-
-    dyn_set();
-}
-
-*/
 
 //--------------------- End of v_module.cpp ---------------------------
 
