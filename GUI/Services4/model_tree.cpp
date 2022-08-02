@@ -79,6 +79,8 @@ TreeLine *TTreeModel::lineFromIndex(const QModelIndex &index) const
 
 void TTreeModel::setupModelData()
 {
+    beginResetModel();
+
     if(rootNode )
 	  delete rootNode;
     
@@ -116,15 +118,8 @@ void TTreeModel::setupModelData()
         prnt->children.append(chld);
       }
    }
-#if QT_VERSION >= 0x050000
+   endResetModel();
 
-    beginResetModel();
-    endResetModel();
-
-#else
-    reset();
-
-#endif
 }
 
 QModelIndex TTreeModel::index(int row, int column, const QModelIndex &parent) const

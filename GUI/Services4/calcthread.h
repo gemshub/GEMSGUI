@@ -72,29 +72,29 @@ public:
 
 class CalcThread: public NewThread 
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     CalcThread(QObject *parent ): NewThread(parent) {}
     ~CalcThread() {}
     
-   
-    void run() 
+
+    void run()
     {
-	   error.title = "";
-	   error.mess = "";
-	try 
-    {      QMutexLocker  loker(&pVisorImp->getMutexCalc());
-               // cout << pVisorImp->getMutexCalc().tryLock()<< endl;
-                showMss = 1L;
-        double dummy = -1.;
-        TProfil::pm->CalcEqstat( dummy, -1, 0. );
-	}
-	catch( TError& err ) 
-	{  error = err; }
-    catch( TMulti::UserCancelException& /*ex*/ )
-	{}
-   }
+        error.title = "";
+        error.mess = "";
+        try
+        {
+            QMutexLocker  loker(&pVisorImp->getMutexCalc());
+            showMss = 1L;
+            double dummy = -1.;
+            TProfil::pm->CalcEqstat( dummy, -1, 0. );
+        }
+        catch( TError& err )
+        {  error = err; }
+        catch( TMulti::UserCancelException& /*ex*/ )
+        {}
+    }
 
 };
 

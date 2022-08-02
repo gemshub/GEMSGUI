@@ -34,7 +34,7 @@ CWinInfo::CWinInfo(TSubModule & m, istream & visor_dat):
     fromDAT(visor_dat);
 }
 
-CWinInfo::CWinInfo(TSubModule & m, TConfig& cnf):
+CWinInfo::CWinInfo(TSubModule & m, const TJsonConfig& cnf):
         pWin(0), rM(m)
 {
     init_width = 600; //400;
@@ -43,28 +43,27 @@ CWinInfo::CWinInfo(TSubModule & m, TConfig& cnf):
 
 }
 
-void
-CWinInfo::load( TConfig& cnf)
+void CWinInfo::load(const TJsonConfig& cnf)
 {
     string sname = rM.GetName();	// section name
 
-    cnf.SetSection(sname);
-
-    string size_params[2];
-    if (cnf.getFirst() == "size")
-    {
-        cnf.getcStrings(2, size_params);
-
-        if (sscanf(size_params[0].c_str(), "%d", &init_width) != 1
-                || sscanf(size_params[1].c_str(), "%d", &init_height) != 1)
-            Error("Visor configuration", "Window size is bad!");
+    auto module_section = cnf.section(sname);
+    if( !module_section ) {
+        Error(sname, "Window for module not defined.");
     }
 
-    string ss = cnf.GetFirstSubSection();
-    while (!ss.empty())
-    {
-        aPageInfo.push_back( std::make_shared<PageInfo>(*this, cnf, ss));
-        ss = cnf.GetNextSubSection();
+    auto size_section = module_section->section("size");
+    if(size_section) {
+        init_width = size_section->value_or_default<int>("width", init_width);
+        init_height = size_section->value_or_default<int>("height", init_height);
+    }
+
+    auto pages_section = module_section->section("pages");
+    if(pages_section) {
+        auto pages_array = pages_section->to_vector();
+        for(const auto& page_cfg: pages_array) {
+            aPageInfo.push_back( std::make_shared<PageInfo>(*this, page_cfg));
+        }
     }
 }
 
@@ -148,80 +147,65 @@ PageInfo::PageInfo( CWinInfo & wi, istream & is):
 }
 
 
-PageInfo::PageInfo( CWinInfo & wi, TConfig& cnf, string s):
-        rWinInfo(wi), /*pPage(0),*/ name(s)
+PageInfo::PageInfo( CWinInfo & wi,const TJsonConfig& cnf):
+        rWinInfo(wi)/*, pPage(0), name(s) */
 {
     load(cnf);
 }
 
-void
-PageInfo::load( TConfig& cnf )
+void PageInfo::load(const TJsonConfig& cnf )
 {
-    // object type len p1 p2 abcd
+    name = cnf.value_or_default<std::string>("page", "page");
+
     string obj;
     string mode;
+    eFieldType type;
     int npos;
+    int maxM, maxN;
 
-    string astr[5];
+    auto tables_section = cnf.section("fields");
+    if(tables_section) {
+        auto objects_array = tables_section->to_vector();
+        for(const auto& obj_line: objects_array) {
 
-    obj = cnf.getFirst();
-    while (!obj.empty())
-    {
-        cnf.getcStrings(5, astr);
+            obj = obj_line.value_must_exist<std::string>("label");
 
-        string field = astr[0];
-        eFieldType type = GetType(field);
+            type = GetType(obj_line.value_must_exist<std::string>("type"));
+            if (type == ftUndefined)
+                throw TError(obj.c_str(), "Bad field type");
 
-        if (type == ftUndefined)
-            throw TError(obj.c_str(), "Bad field type");
+            if (type != ftCheckBox) {
+                npos = obj_line.value_must_exist<int>("lenth");
+            }
+            else {
+                auto units_name = obj_line.value_must_exist<std::string>("lenth");
+                if( (npos = aUnits.Find(units_name)) == -1)
+                    throw TError(units_name, "Bad checkbox description");
+            }
 
-        if (type != ftCheckBox)
-        {
-            if ( /*type!=ftText && */ sscanf(astr[1].c_str(), "%d", &npos) != 1)
-                throw TError(obj.c_str(), "Bad field lenth");
+            maxM = max( obj_line.value_or_default<int>("maxM", DEF_M_BROWSE), DEF_M_BROWSE );
+            maxN = max( obj_line.value_or_default<int>("maxN", DEF_N_BROWSE), DEF_N_BROWSE );
+            mode = obj_line.value_must_exist<std::string>("locus");
+
+            int ind = aObj.Find(obj.c_str());
+            if (ind == -1)
+                throw TError(obj.c_str(), "Object name not found");
+            else  {
+                TObject& rO = *aObj[ind];
+
+                bool label = mode[0] == '+';
+                eEdit edit = eEdit(mode[2]);
+                if (edit != '+' && edit != '-' && edit != '?')
+                    throw TError(obj.c_str(), "Bad edit type");
+
+                ePlaceMode place = ePlaceMode(mode[1]);
+                eShowType showT = eShowType(mode[3]);
+                aFieldInfo.push_back( std::make_shared<FieldInfo>( rO, ind, type, npos,
+                                                                   label, place, edit, showT, maxM, maxN));
+            }
         }
-        else if ((npos = aUnits.Find(astr[1])) == -1)
-            throw TError(astr[1].c_str(), "Bad checkbox description");
-
-        int maxm, maxn;
-        int maxM = DEF_M_BROWSE, maxN = DEF_N_BROWSE;
-        if (sscanf(astr[2].c_str(), "%d", &maxm) != 1)
-            throw TError(obj.c_str(), "Bad field width");
-        if (maxm > DEF_M_BROWSE)
-            maxM = maxm;
-        if (sscanf(astr[3].c_str(), "%d", &maxn) != 1)
-            throw TError(obj.c_str(), "Bad field heigth");
-        if (maxn > DEF_N_BROWSE)
-            maxN = maxn;
-
-
-        mode = astr[4];
-
-        //    int p1, p2;
-        //    sscanf( astr[2].c_str(), "%d", &p1);
-        //    sscanf( astr[3].c_str(), "%u", &p2);
-
-        int ind = aObj.Find(obj.c_str());
-        if (ind == -1)
-            throw TError(obj.c_str(), "Object name not found");
-        else
-        {
-            TObject & rO = *aObj[ind];
-
-            bool label = mode[0] == '+';
-            eEdit edit = eEdit(mode[2]);
-            if (edit != '+' && edit != '-' && edit != '?')
-                throw TError(obj.c_str(), "Bad edit type");
-
-            ePlaceMode place = ePlaceMode(mode[1]);
-            eShowType showT = eShowType(mode[3]);
-            aFieldInfo.push_back( std::make_shared<FieldInfo>( rO, ind, type, npos,
-                                         label, place, edit, showT, maxM, maxN));
-        }
-        obj = cnf.getNext();
     }
 }
-
 
 const char PSigBEG[lnWINSIG + 1] = "Pd";
 const char PSigEND[lnWINSIG + 1] = "dp";

@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include <QItemSelection>
 #include <QHeaderView>
 #include <QMenu>
@@ -18,7 +18,7 @@ QStringList KeyModel::split_key(const char *add_key )
     TDBKey dbKey( rt[iRt]->GetDBKey() );
     dbKey.SetKey(add_key);
     for( int ii=0; ii < dbKey.KeyNumFlds(); ii++)
-        list.append(  string( dbKey.FldKey(ii), 0, dbKey.FldLen( ii )).c_str() );
+        list.append(  char_array_to_string( dbKey.FldKey(ii), dbKey.FldLen( ii )).c_str() );
     return list;
 
 }
@@ -131,14 +131,12 @@ QVariant KeyModel::headerData(int section, Qt::Orientation orientation, int role
 
 // -----------------------------------------------
 
-RDKeyModel::RDKeyModel(QObject *parent, const TCStringArray &sel, const char *akey_filter, short NsuT):
-    KeyModel(parent, RT_DCOMP, sel, akey_filter),
+
+
+RDKeyModel::RDKeyModel(QObject *parent, const char *akey_filter, short NsuT):
+    KeyModel(parent, RT_DCOMP,  akey_filter),
     NsuT_selection( NsuT>0)
-{
-    set_old_selection( sel );
-    if( full_list_selection  )
-        set_full_list();
-}
+{ }
 
 QStringList RDKeyModel::add_key(char type, const char *unpack_key)
 {
@@ -185,13 +183,21 @@ void RDKeyModel::set_full_list()
         all_species.append( add_key(SRC_DCOMP, rec_key.c_str()) );
 }
 
+void FixedKeyModel::define_all_list(const TCStringArray &keys_to_select)
+{
+    all_species.clear();
+    for( const auto& rec_key: keys_to_select)
+        all_species.append( split_key(rec_key.c_str()) );
+}
+
 //-------------------------------------------------------------------------------
 
 KeysTableProxy::KeysTableProxy(QWidget *parent):
     QTableView( parent )
 {
     verticalHeader()->setSectionResizeMode( QHeaderView::ResizeToContents );
-    setSelectionMode( QAbstractItemView::MultiSelection );
+    horizontalHeader()->setSectionResizeMode( QHeaderView::ResizeToContents );
+    setSelectionMode( sel_mode );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSortingEnabled( true );
     setCornerButtonEnabled( false );
@@ -272,7 +278,7 @@ void KeysTableProxy::setFullSelection( QWidget *wdparent, bool select_mode)
     table_model->set_full_selection(select_mode);
     if( select_mode )
     {
-        setSelectionMode( QAbstractItemView::MultiSelection );
+        setSelectionMode( sel_mode );
         set_selection(wdparent);
     }
     else
@@ -467,4 +473,6 @@ void KeysTableProxy::copyDataHeader()
     clipText += create_string( splitCol );
     QApplication::clipboard()->setText( clipText/*, QClipboard::Clipboard*/ );
 }
+
+
 

@@ -16,12 +16,9 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cstdio>
-#include <iostream>
-
 #include "v_user.h"
 #include "units.h"
-#include "config.h"
+#include "jsonconfig.h"
 
 
 //=============================================
@@ -30,35 +27,18 @@
 
 const char *defVALS = "+-* `";
 
-
-string
-sunits::getVals(int m) const
+string sunits::getVals(int m) const
 {
-    if (vals.find('/') == string::npos)	// not splitted
-        return vals;
-
-    size_t pos = 0, p = 0;
-    ;
-    for (int ii = 0; ii < m; ii++)
-    {
-        pos = vals.find('/', pos);
-        if (pos == string::npos)
-            //      return defVALS;
-            return (string (vals, p, string::npos) + " `");	// the last defined vals
-        p = ++pos;
-    }
-
-    size_t sp = vals.find('/', pos);
-    if (sp != string::npos)
-        sp = sp - pos;
-    // else the rest of the string
-    return (string (vals, pos, sp) + " `");
+    if(vals_list.size()<1)	// empty
+        return  defVALS;
+    if(vals_list.size()==1)
+        return vals_list[0];
+    size_t pos = min<size_t>(m, vals_list.size()-1);
+    return vals_list[pos]+" `";
 }
 
 TUnitsList::TUnitsList()
-//  std::vector<sunits>
 {}
-
 
 const int lnUSIG = 2;
 const char USigBEG[lnUSIG + 1] = "Us";
@@ -69,8 +49,7 @@ const char *USigTITLE = "Configurator";
 //,"Config error"
 
 
-void
-TUnitsList::toDAT(ostream& visor_dat)
+void TUnitsList::toDAT(ostream& visor_dat)
 {
     // begin signature
     visor_dat << USigBEG;
@@ -79,20 +58,24 @@ TUnitsList::toDAT(ostream& visor_dat)
     visor_dat.write((char *) &n1, sizeof n1);
     for (int ii = 0; ii < n1; ii++)
     {
+        std::string vals;
+        std::for_each(at(ii).vals_list.begin(), at(ii).vals_list.end(),
+                      [&](const std::string &el){ vals += "/"+el; });
+        vals = vals.substr(1);
+
         int n = at(ii).name.length() + 1;
         visor_dat.write((char *) &n, sizeof n);
         visor_dat.write(at(ii).name.c_str(), n);
-        n = at(ii).vals.length() + 1;
+        n = vals.length() + 1;
         visor_dat.write((char *) &n, sizeof n);
-        visor_dat.write(at(ii).vals.c_str(), n);
+        visor_dat.write(vals.c_str(), n);
     }
 
     // end signature
     visor_dat << USigEND;
 }
 
-void
-TUnitsList::fromDAT(istream& visor_dat)
+void TUnitsList::fromDAT(istream& visor_dat)
 {
     char sg[2];
     visor_dat.read(sg, sizeof sg);
@@ -112,8 +95,8 @@ TUnitsList::fromDAT(istream& visor_dat)
         visor_dat.read(nm, n);
         visor_dat.read((char *) &n, sizeof n);
         visor_dat.read(vl, n);
-        push_back(sunits(string (nm), string (vl)));
-        ;
+        auto units_list = split(vl, "/");
+        push_back(sunits(string (nm), units_list));
     }
 
     visor_dat.read(sg, sizeof sg);
@@ -122,33 +105,35 @@ TUnitsList::fromDAT(istream& visor_dat)
 }
 
 
-void
-TUnitsList::load(const char *f_units)
+void TUnitsList::load(const std::string& f_units)
 {
-    TConfig cnf(f_units, ' ');
-    string par;
-    string str;
+    std::string label;
+    std::vector<std::string> vals_list;
 
-    par = cnf.getFirst();
+    TJsonConfig cnf1(f_units+".json");
+    auto units_array = cnf1.to_vector();
 
-    while (!par.empty())
+    for(const auto& units_ini: units_array)
     {
-        //cout << par << "  " << str << endl;
-        cnf.getcStr(str);
-        //    str += " `";
-
-        push_back(sunits(par, str));
-        par = cnf.getNext();
+        label = units_ini.value_must_exist<std::string>("label");
+//        auto vals_section = units_ini.section("values");
+//        vals_list.clear();
+//        if(vals_section)
+//        {
+//            auto sections = vals_section->to_vector();
+//            for(const auto& block: sections)
+//                vals_list.push_back( block.get_as<std::string>() );
+//        }
+        vals_list = units_ini.value_or_default<std::vector<std::string>>("values", {"+-"});
+        push_back(sunits(label, vals_list));
     }
 }
 
-int
-TUnitsList::Find(const string &s)
+int TUnitsList::Find(const string &s)
 {
     for (size_t ii = 0; ii < size(); ii++)
         if (at(ii).name == s)
             return ii;
-
     return -1;
 }
 

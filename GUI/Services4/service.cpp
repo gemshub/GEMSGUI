@@ -70,41 +70,29 @@ QMutex qmutex;
 
 bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
 {
-  if( pThread != QThread::currentThreadId() )
-  {
-     QMutexLocker  loker(&qmutex);
-     // (1)
-     // int result = 3;
-     // NewThread *thread = dynamic_cast<NewThread*>(QThread::currentThread());
-     // if( thread )	
-     // {  qRegisterMetaType<int>("int");
-     //	   QMetaObject::invokeMethod(ProcessProgressDialog::pDia, "slQuestion", 
-     //	   Q_ARG( void*, &result ),  Q_ARG( QWidget*, par ), Q_ARG( QString , QString(title.c_str()) ), 
-     //	   Q_ARG( QString , QString(mess.c_str()) ));
-     //	   ThreadControl::wait();
-     //    return result;
-     //	 }      
-     // (2)	
-         pVisorImp->thdata.setDThread( title, mess );
-       	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
-       	        Q_ARG( int, thQuestion ),  Q_ARG( QWidget*, par ) );
-         ThreadControl::wait();
-         return pVisorImp->thdata.res;
-     }
-  QString titl, spac, messag;
-  titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
+    if( pThread != QThread::currentThreadId() )
+    {
+        QMutexLocker  loker(&qmutex);
+        pVisorImp->thdata.setDThread( title, mess );
+        QMetaObject::invokeMethod( pVisorImp, "theadService",
+                                   Q_ARG( int, thQuestion ),  Q_ARG( QWidget*, par ) );
+        ThreadControl::wait();
+        return pVisorImp->thdata.res;
+    }
+    QString titl, spac, messag;
+    titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
-  int rest = (QMessageBox::question(par,
-#ifndef _WIN32
-#ifdef __APPLE__
-         "Title", titl.append(spac+=messag),
-#else
-         titl, messag,
-#endif
-#else
-         titl, messag,
-#endif
-         "&Yes", "&No") == 0);
+    int rest = (QMessageBox::question(par,
+                                  #ifndef _WIN32
+                                  #ifdef __APPLE__
+                                      "Title", titl.append(spac+=messag),
+                                  #else
+                                      titl, messag,
+                                  #endif
+                                  #else
+                                      titl, messag,
+                                  #endif
+                                      "&Yes", "&No") == 0);
     return rest;
 }
 
@@ -254,6 +242,53 @@ int vfQuestion3(QWidget* par, const std::string& title, const std::string& mess,
     return VF3_3;
 }
 
+
+// Use only main thread
+int vfQuestionYesNoAll(QWidget* par, const std::string& title, const std::string& mess, const std::string& s1 )
+{
+    if( pThread != QThread::currentThreadId() )
+    {
+        QMutexLocker  loker(&qmutex);
+        pVisorImp->thdata.setDThread( title, mess, s1 );
+        QMetaObject::invokeMethod( pVisorImp, "theadService",
+                                   Q_ARG( int, thQuestionYesNoAll ),  Q_ARG( QWidget*, par ) );
+        ThreadControl::wait();
+        return pVisorImp->thdata.res;
+    }
+
+    QString titl, spac, messag;
+    titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
+    QMessageBox::StandardButton defbutton = QMessageBox::Yes;
+    if( s1 == "No" )
+        defbutton = QMessageBox::No;
+
+    auto res = QMessageBox::question(par,
+                                 #ifdef __unix
+                                 #ifdef __APPLE__
+                                     "Title", titl.append(spac+=messag),
+                                 #else
+                                     titl, messag,
+                                 #endif
+                                 #else
+                                     titl, messag,
+                                 #endif
+                                     QMessageBox::Yes | QMessageBox::YesToAll
+                                     | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel,
+                                     defbutton);
+    switch( res )
+    {
+    default:
+    case QMessageBox::Yes:      return VF_YES;
+    case QMessageBox::No:       return VF_NO;
+    case QMessageBox::YesToAll: return VF_YES_ALL;
+    case QMessageBox::NoToAll:  return VF_NO_ALL;
+    case QMessageBox::Cancel:   return VF_CANCEL;
+    }
+    return VF_YES;
+}
+
+
+
 //=============================================
 // Choice dialogs
 //=============================================
@@ -295,22 +330,22 @@ int vfChoice(QWidget* par, const char* title, const char* prompt,
 
 
 int vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
-               int sel, bool& all_)
+              int sel, bool& all_)
 {
-  if( pThread != QThread::currentThreadId() )
-  {
-     QMutexLocker  loker(&qmutex);
-     // (2)	
-     pVisorImp->thdata.setDThread( arr, prompt, sel, all_ );
-   	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
-  	        Q_ARG( int, thChoice2 ),  Q_ARG( QWidget*, par ) );
-    ThreadControl::wait();
-    all_ = pVisorImp->thdata.all;
-    return pVisorImp->thdata.res;
-  }
+    if( pThread != QThread::currentThreadId() )
+    {
+        QMutexLocker  loker(&qmutex);
+        // (2)
+        pVisorImp->thdata.setDThread( arr, prompt, sel, all_ );
+        QMetaObject::invokeMethod( pVisorImp, "theadService",
+                                   Q_ARG( int, thChoice2 ),  Q_ARG( QWidget*, par ) );
+        ThreadControl::wait();
+        all_ = pVisorImp->thdata.all_no;
+        return pVisorImp->thdata.res;
+    }
     SelectDialog cw(par, prompt, arr, sel, all_);
     cw.exec();
-    return cw.selected( all_ );
+    return cw.selected(all_);
 }
 
 TCIntArray 
@@ -402,10 +437,15 @@ vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
     return dbk.getKey();
 }
 
-string
-vfKeyProfile(QWidget* par, const char* caption, int iRt,
-             bool& chAqGas, bool& addFiles, bool& remake, int& makeDump,
-             string& key_templ, bool& genGEMS3k, bool& brief_mode   )
+
+// Return
+// int genGEMS3k > 0 generate GEMS IPN files for all systems and processes;  genGEMS3k == 2 brife mode
+// int recalc_all > 0 recalculate all systems before open project;  recalc_all == 2 generate dump file with result
+// makeCalc: 0 - no recalculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
+string vfKeyProfile( QWidget* par, const char* caption, int iRt,
+                     bool& chAqGas, bool& addFiles, bool& remake,
+                     string& key_templ,
+                     int& recalc_all, int& genGEMS3k, int& makeCalc )
 {
     KeyProfile dbk(par, iRt, caption);
     if( !dbk.exec() )
@@ -415,10 +455,10 @@ vfKeyProfile(QWidget* par, const char* caption, int iRt,
     addFiles = dbk.getFilesState();
     key_templ = dbk.getTemplateKey();
     remake = dbk.getRemakeState();
-    makeDump = dbk.getMakeDump();
 
-    genGEMS3k = dbk.getGEMSExport();
-    brief_mode = dbk.getGEMSExportMode();
+    makeCalc = dbk.getCalcMode();
+    genGEMS3k =  dbk.getGEMSExportMode();
+    recalc_all = dbk.getDumpMode();
 
     return dbk.getKey();
 }
@@ -785,16 +825,16 @@ vfUnSpaceSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool vfGtDemoSet(QWidget* par, const char * p_key, int size[8],
-            string& prkey, string& script, TCStringArray& names,
-            string& xName, string& yName )
+bool vfGtDemoSet( QWidget* par, const char * p_key, char flgs[16], int size[8],
+                  string& prkey, string& script, TCStringArray& names,
+                  string& xName, string& yName, TCStringArray& keys )
 {
-     GtDemoWizard cdlg( p_key, size, script.c_str(), prkey.c_str(),
-                        xName.c_str(), yName.c_str(),  par );
-     if( !cdlg.exec() )
-       return false;
-    cdlg.getSizes( size );
-    prkey = cdlg.getPrKey();
+    GtDemoWizard cdlg( p_key, flgs, size, script, prkey,
+                       xName, yName, keys, par );
+    if( !cdlg.exec() )
+        return false;
+    cdlg.getSizes( size, prkey, keys );
+    cdlg.getFlags( flgs );
     script = cdlg.getScript();
     names = cdlg.getNames( xName, yName );
 

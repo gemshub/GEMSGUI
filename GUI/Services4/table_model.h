@@ -12,20 +12,48 @@ class KeyModel: public QAbstractTableModel
 {
     Q_OBJECT
 
+    friend class KeysTableProxy;
+
 public:
 
-    explicit KeyModel( QObject * parent, size_t irt, const TCStringArray& sel,
-                       const char* akey_filter = "*" ):
+    explicit KeyModel( QObject * parent, size_t irt, const char* akey_filter = "*" ):
         QAbstractTableModel(parent),
         iRt(irt),
-        full_list_selection( sel.empty() ),
+        full_list_selection( false ),
         key_filter( akey_filter )
-    {
-        set_old_selection( sel );
-        if( full_list_selection  )
-            set_full_list();
-    }
+    {}
     ~KeyModel() {}
+
+    void setSelection(const TCStringArray& sel)
+    {
+      full_list_selection = sel.empty();
+      set_old_selection( sel );
+      if( full_list_selection  )
+          set_full_list();
+    }
+
+    void setHeaders( const QStringList& new_headers )
+    {
+       headers =new_headers;
+    }
+
+protected:
+
+    size_t iRt;
+    bool full_list_selection = false;
+    std::string key_filter = "*";
+    QVector<QStringList> selected_species;
+    QVector<QStringList> all_species;
+    QStringList headers;
+
+    QStringList split_key( const char* key );
+    virtual std::string line_key(const QStringList &table_row) const;
+    virtual int compare_size() const
+    {
+       return rt[iRt]->KeyNumFlds();
+    }
+
+private:
 
     int rowCount( const QModelIndex& parent ) const
     {
@@ -43,11 +71,6 @@ public:
 
     QVariant data ( const QModelIndex & index, int role ) const;
     QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
-
-    void setHeaders( const QStringList& new_headers )
-    {
-       headers =new_headers;
-    }
 
     bool is_full_list_mode()
     {
@@ -74,23 +97,7 @@ public:
     QItemSelection get_full_list_selection( TCStringArray&  not_found_keys );
     virtual void set_old_selection( const TCStringArray& sel );
     virtual TCStringArray  selected_keys( const std::set<int>& rows ) const;
-
-protected:
-
-    size_t iRt;
-    bool full_list_selection = false;
-    std::string key_filter = "*";
-    QVector<QStringList> selected_species;
-    QVector<QStringList> all_species;
-    QStringList headers;
-
-    QStringList split_key( const char* key );
     virtual void set_full_list();
-    virtual std::string line_key(const QStringList &table_row) const;
-    virtual int compare_size() const
-    {
-       return rt[iRt]->KeyNumFlds();
-    }
 
 };
 
@@ -103,29 +110,56 @@ class RDKeyModel: public KeyModel
 
 public:
 
-    explicit RDKeyModel( QObject * parent, const TCStringArray& sel, const char* akey_filter = "*", short NsuT=0 );
+    explicit RDKeyModel( QObject * parent, const char* akey_filter = "*", short NsuT=0 );
     ~RDKeyModel() {}
-
-    int columnCount ( const QModelIndex& parent  ) const override
-    {
-        Q_UNUSED( parent );
-        return 5;
-    }
-
-    void set_old_selection( const TCStringArray& sel ) override;
 
 protected:
 
     bool NsuT_selection = false;
 
     QStringList add_key( char type, const char *key );
-    void set_full_list() override;
     std::string line_key(const QStringList &table_row) const override;
     int compare_size() const override
     {
        return 4;
     }
+
+    int columnCount ( const QModelIndex& parent  ) const override
+    {
+        Q_UNUSED( parent );
+        return 5;
+    }
+    void set_old_selection( const TCStringArray& sel ) override;
+    void set_full_list() override;
+
 };
+
+
+///  \class FixedKeyModel
+/// class for represents the fixed keys lists and
+/// is responsible for fetching the data is needed for viewing.
+class FixedKeyModel: public KeyModel
+{
+    Q_OBJECT
+
+public:
+
+    explicit FixedKeyModel( QObject * parent, size_t irt,
+                            const TCStringArray&  keys_to_select,
+                            const char* akey_filter = "*" ):
+        KeyModel(parent, irt,  akey_filter)
+    {
+        define_all_list( keys_to_select);
+        full_list_selection = true;
+    }
+    ~FixedKeyModel() {}
+
+protected:
+
+    void set_full_list() override {};
+    void define_all_list(const TCStringArray&  keys_to_select);
+};
+
 
 /// The SortFilterProxyModel class provides support for sorting
 /// and filtering data passed between another model and a view.
@@ -191,7 +225,15 @@ public:
     /// Return all selected rows
     virtual std::set<int> allSelectedRows() const;
 
+    void updateSelectionMode( QAbstractItemView::SelectionMode new_sel_mode )
+    {
+       sel_mode = new_sel_mode;
+       setSelectionMode( sel_mode );
+    }
+
 protected:
+
+    QAbstractItemView::SelectionMode sel_mode = QAbstractItemView::MultiSelection;
 
     KeyModel* source_model() const
     {
@@ -207,6 +249,5 @@ protected:
     QString create_string( char split_col_symb );
     QString create_header( char split_col_symb  );
     void set_selection( QWidget *parent );
-
 };
 

@@ -16,8 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <qapplication.h>
-#include <iostream>
+#include <QApplication>
 #ifndef _WIN32
 #include <unistd.h>
 //#else
@@ -28,9 +27,11 @@
 #include <QString>
 #include <QFile>
 #include <QFileInfo>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include <cstdlib>
 
-#include "config.h"
+#include "jsonconfig.h"
 #include "service.h"
 #include "visor.h"
 #include "units.h"
@@ -95,7 +96,7 @@ TVisor::TVisor(int c, char *v[]):
         // non-standard executable path, search for resources starting with current dir
         SysGEMDir = dirExe.toStdString() + "/gems3.app/Contents/Resources/";
     }
-    cout << "SysGEMDir  " << SysGEMDir << endl;
+    gui_logger->info("SysGEMDir {}", SysGEMDir);
 
     UserGEMDir = getenv("HOME");
     UserGEMDir += DEFAULT_USER_DIR; // "/Library/gems3/";
@@ -115,7 +116,7 @@ TVisor::TVisor(int c, char *v[]):
 #ifdef NDEBUG
     UserGEMDir = getenv("HOME");
     UserGEMDir += DEFAULT_USER_DIR;
-    cout << "UserGEMDir: " << UserGEMDir <<  endl;
+    gui_logger->info("UserGEMDir: {}", UserGEMDir);
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
@@ -136,13 +137,12 @@ TVisor::TVisor(int c, char *v[]):
 #ifdef NDEBUG
     char homedir[1000];
     snprintf(homedir, 1000, "%s%s", getenv("HOMEDRIVE"), getenv("HOMEPATH"));
-    cout << "HOMEDRIVE: " << homedir <<  endl;
+    gui_logger->info("HOMEDRIVE: {}", homedir);
     UserGEMDir =  std::string(homedir)/*localDir()*/ + DEFAULT_USER_DIR;
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
-    // cout << SysGEMDir.c_str() << endl;
-// cout << UserGEMDir.c_str() << endl;
+    gui_logger->info("SysGEMDir {} UserGEMDir {}", SysGEMDir, UserGEMDir);
 #endif // win
 
     DefDBDir = DEFAULT_DB_DIR;
@@ -201,13 +201,12 @@ TVisor::TVisor(int c, char *v[]):
 //    DefaultBuiltinTDB = "kernel";   temporary for using old Nagra-PSI (2003) dataset
 //    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
 // For debugging the directories
-// cout << "Local    : " << LocalDir.c_str() << endl;
-// cout << "SysGEM   : " << SysGEMDir.c_str() << endl;
-// cout << "UserGEM  : " << UserGEMDir.c_str() << endl;
-// cout << "UserProj : " << UserProfDir.c_str() << endl;
-// cout << "LocalDoc : " << LocalDocDir.c_str() << endl;
-// cout << "LocalHTML: " << RemoteHTML.c_str() << endl;
-//
+    gui_logger->debug("Local    : {}", LocalDir);
+    gui_logger->debug("SysGEM   : {}", SysGEMDir);
+    gui_logger->debug("UserGEM  : {}", UserGEMDir);
+    gui_logger->debug("UserProj : {}", UserProfDir);
+    gui_logger->debug("LocalDoc : {}", LocalDocDir);
+    gui_logger->debug("LocalHTML: {}", RemoteHTML);
 /*
 #ifndef _WIN32
 #ifndef GEMS_RELEASE
@@ -309,9 +308,9 @@ TVisor::Setup()
                   throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
          }
 //#endif
-// make home GEM directories
-// cout << "UserGEM *: " << UserGEMDir.c_str() << endl;
-// cout << "UserProj*: " << UserProfDir.c_str() << endl;
+        gui_logger->debug("make home GEM directories");
+        gui_logger->debug("UserGEM *: {}", UserGEMDir);
+        gui_logger->debug("UserProj*: {}", UserProfDir);
         if( !userGEM.mkdir(userGEMDir().c_str()) )
             throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
         if( !userGEM.mkdir(userProfDir().c_str()) )
@@ -326,7 +325,7 @@ TVisor::Setup()
         cmd += "* ";
         cmd += userProfDir();
 
-        cout << "Creating GEMS user directory:  " << userProfDir().c_str() << endl;
+        gui_logger->debug("Creating GEMS user directory:  {}", userProfDir());
 #else
 string sprdir = sysProfDir();
 string uprdir = userProfDir();
@@ -381,11 +380,10 @@ const int lnWINSIG = 2;
 const char SigBEG[lnWINSIG + 1] = "Vs";
 const char SigEND[lnWINSIG + 1] = "sX";
 
-void
-TVisor::load()
+void TVisor::load()
 {
     string fname = sysGEMDir() + OBJECT_INI;
-// cout << "fname: " << fname.c_str() << endl;
+    gui_logger->debug("TVisor::load {}", fname);
     aObj.load(fname.c_str());
 
     defaultCFG();
@@ -393,14 +391,14 @@ TVisor::load()
 
     fname = sysGEMDir();
     fname += UNITS_INI;
-    aUnits.load(fname.c_str());
+    aUnits.load(fname);
 
     fname = sysGEMDir();
     fname += VISOR_INI;
 
-    TConfig cnf( fname, ' ');
+    TJsonConfig cnf( std::string(fname) + ".json");
     for (size_t ii = 0; ii < aMod.size(); ii++)
-     aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
+        aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
 
     toDAT();
     toModCFG();
@@ -413,7 +411,7 @@ TVisor::toDAT()
     string fname = sysGEMDir();
     fname += VISOBJ_DAT;
 
-    ofstream obj_dat(fname.c_str(), ios::binary | ios::out);
+    ofstream obj_dat(fname, ios::binary | ios::out);
     // begin signature
     obj_dat << SigBEG;
     aObj.toDAT(obj_dat);
@@ -533,7 +531,7 @@ TVisor::toModCFG()
             "Error writing configuration file (gemsdbf.conf)");
     rt.toCFG(f_gems);
 #ifndef _WIN32
-    cerr << "gems.cfg saved " << endl;
+    gui_logger->info("gems.cfg saved");
 #endif
 }
 
@@ -548,42 +546,36 @@ TVisor::fromModCFG()
             "Error reading configuration file (gemsdbf.conf)");
     rt.fromCFG(f_gems);
 #ifndef _WIN32
-    cerr << "gems.cfg read " << endl;
+    gui_logger->info("gems.cfg read");
 #endif
 }
 
-void
-TVisor::toWinCFG()
+void TVisor::toWinCFG()
 {
-    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF + ".json";
+
+    QJsonObject win_cfg_object;
+    win_cfg_object["double_precision"] = pVisorImp->getDoubleDigits();
+    win_cfg_object["update_interval"] = pVisorImp->updateInterval();
+    win_cfg_object["general_font_string"] = pVisorImp->getCellFont().toString();
+    win_cfg_object["axis_label_font_string"] = pVisorImp->getAxisLabelFont().toString();
+    win_cfg_object["number_of_windows"] = static_cast<int>(aWinInfo.size());
+    win_cfg_object["config_autosave"] = pVisorImp->getConfigAutosave();
+    win_cfg_object["local_dir"] = QString::fromStdString(LocalDir);
+    win_cfg_object["local_doc_dir"] = QString::fromStdString(LocalDocDir);
+    win_cfg_object["remote_doc_url"] = QString::fromStdString(RemoteHTML);
+    win_cfg_object["local_doc"] = LocalDoc;
+    win_cfg_object["current_mode"] = ProfileMode;
+    win_cfg_object["current_project"] = rt[RT_PARAM]->PackKey();
+    win_cfg_object["current_system"] = rt[RT_SYSEQ]->PackKey();
+    win_cfg_object["default_built_in_TDB"] = QString::fromStdString(DefaultBuiltinTDB);
 
     fstream f_win_ini(fname_ini.c_str(), ios::out );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error writing configurator file (visor.conf)");
-
-    int n = pVisorImp->getDoubleDigits();
-    f_win_ini << "double_precision\t=\t" << n << endl;
-    f_win_ini << "update_interval\t=\t" << pVisorImp->updateInterval() << endl;
-
-//    if( pVisorImp->getCellFont() != pVisorImp->getDefaultFont() ) //Qt3to4
-	f_win_ini << "general_font_string\t=\t\"" << 
-               pVisorImp->getCellFont().toString().toStdString() << "\"" << endl;
-//    if( pVisorImp->getAxisLabelFont() != pVisorImp->getDefaultFont() ) //Qt3to4
-	f_win_ini << "axis_label_font_string\t=\t\"" << 
-           pVisorImp->getAxisLabelFont().toString().toStdString() << "\"" << endl;
-
-    auto win_num = aWinInfo.size();
-    f_win_ini << "number_of_windows\t=\t" << win_num << endl;
-    f_win_ini << "config_autosave\t=\t" << pVisorImp->getConfigAutosave() << endl;
-
-    f_win_ini << "local_dir\t=\t\"" << LocalDir.c_str() << "\""  << endl;
-    f_win_ini << "local_doc_dir\t=\t\"" << LocalDocDir.c_str() << "\""  << endl;
-    f_win_ini << "remote_doc_url\t=\t\"" << RemoteHTML.c_str() << "\"" << endl;
-    f_win_ini << "local_doc\t=\t" << LocalDoc << endl;   // obsolete
-    f_win_ini << "current_mode\t=\t" << ProfileMode << endl;
-    f_win_ini << "default_built_in_TDB\t=\t\"" << DefaultBuiltinTDB.c_str() << "\"" << endl;
-    f_win_ini << "current_project\t=\t\"" << rt[RT_PARAM]->PackKey() << "\""  << endl;
-    f_win_ini << "current_system\t=\t\"" << rt[RT_SYSEQ]->PackKey() << "\""  << endl;
+    QJsonDocument doc(win_cfg_object);
+    QString str_json(doc.toJson());
+    f_win_ini << str_json.toStdString()  << endl;
     f_win_ini.close();
 
     // Window-specific settings
@@ -591,96 +583,48 @@ TVisor::toWinCFG()
     f_win_ini.open(fname_ini.c_str(), ios::out );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error writing configurator file (windows.conf)" );
-
-//    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
-    for (size_t ii = 0; ii < win_num; ii++)
+    //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
+    for (size_t ii = 0; ii < aWinInfo.size(); ii++)
         aWinInfo[ii]->toWinCFG(f_win_ini);
-
     f_win_ini.close();
 }
 
-void
-TVisor::fromWinCFG()
+void TVisor::fromWinCFG()
 {
     string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
-    TConfig visor_conf( fname_ini );
-    //int win_num = 0;
-    string name = visor_conf.getFirst();
-
-    while ( !name.empty() )
-    {
-        if( name == "double_precision" ) {
-            pVisorImp->setDoubleDigits( visor_conf.getcInt() );
-        }
-        else
-            if( name == "update_interval" ) {
-                pVisorImp->setUpdateInterval( visor_conf.getcInt() );
-            }
-            else if( name == "general_font_string" ) {
-                    visor_conf.getcStr(name);
-                    strip( name );
-                    QFont cellFont;
-                    cellFont.fromString( name.c_str() );
-                    pVisorImp->setCellFont(cellFont);
-                }
-        	else if( name == "axis_label_font_string" ) {
-                    visor_conf.getcStr(name);
-                    strip( name );
-                    QFont axisLabelFont;
-                    axisLabelFont.fromString( name.c_str() );
-                    pVisorImp->setAxisLabelFont(axisLabelFont);
-                }
-                else if( name == "number_of_windows" ) {
-                    //win_num = visor_conf.getcInt();
-                }
-            	else if( name == "config_autosave" ) {
-				pVisorImp->setConfigAutosave(visor_conf.getcInt());
-			}
-            	else if( name == "local_dir" ) {
-                string gstr;
-				visor_conf.getcStr(gstr);
-				setLocalDir(gstr);
-			}
-            	else if( name == "local_doc_dir" ) {
-                string gstr;
-				visor_conf.getcStr(gstr);
-				setLocalDocDir(gstr);
-			}
-            	else if( name == "remote_doc_url" ) {
-                string gstr;
-				visor_conf.getcStr(gstr);
-                                setRemoteHTML(gstr);
-			}
-            	else if( name == "local_doc" ) {
-				setLocalDoc(visor_conf.getcInt());
-			}
-            else if( name == "current_mode" ) {
-               ProfileMode = visor_conf.getcInt();
-            }
-            else if( name == "default_built_in_TDB" ) {
-                string gstr;
-                visor_conf.getcStr(gstr);
-                setDefaultBuiltinTDB(gstr);
-            }
-            else if( name == "current_project" ) {
-               visor_conf.getcStr(lastProjectKey );
-            }
-            else if( name == "current_system" ) {
-               visor_conf.getcStr(lastSystemKey );
-            }
-
-        name = visor_conf.getNext();
+    TJsonConfig visor_conf( fname_ini+".json" );
+    pVisorImp->setDoubleDigits(visor_conf.value_or_default("double_precision", pVisorImp->getDoubleDigits()));
+    pVisorImp->setUpdateInterval(visor_conf.value_or_default("update_interval", pVisorImp->updateInterval()));
+    std::string font_str = visor_conf.value_or_default<std::string>("general_font_string", "");
+    if( !font_str.empty() ) {
+        strip( font_str );
+        QFont cellFont;
+        cellFont.fromString( font_str.c_str() );
+        pVisorImp->setCellFont(cellFont);
     }
+    font_str = visor_conf.value_or_default<std::string>("axis_label_font_string", "");
+    if( !font_str.empty() ) {
+        strip( font_str );
+        QFont axisLabelFont;
+        axisLabelFont.fromString( font_str.c_str() );
+        pVisorImp->setAxisLabelFont(axisLabelFont);
+    }
+    pVisorImp->setConfigAutosave(visor_conf.value_or_default("config_autosave",  pVisorImp->getConfigAutosave()));
+    setLocalDir(visor_conf.value_or_default<std::string>("local_dir", LocalDir));
+    setLocalDocDir(visor_conf.value_or_default<std::string>("local_doc_dir", LocalDocDir));
+    setRemoteHTML(visor_conf.value_or_default<std::string>("remote_doc_url", RemoteHTML));
+    setLocalDoc(visor_conf.value_or_default("local_doc",  LocalDoc));
+    ProfileMode = visor_conf.value_or_default("current_mode",  ProfileMode);
+    setDefaultBuiltinTDB(visor_conf.value_or_default<std::string>("default_built_in_TDB", DefaultBuiltinTDB));
+    lastProjectKey = visor_conf.value_or_default<std::string>("current_project", lastProjectKey);
+    lastSystemKey = visor_conf.value_or_default<std::string>("current_system", lastSystemKey);
 
     // Window-specific settings
     string fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
     ifstream f_win_ini(fwin_ini_name.c_str() );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error reading configurator file (windows.conf)" );
-
-    // error Sveta 13/06/2001 reads only #
- //   f_win_ini >> name_str.p; // Don't compile in BCB5 without .p
 
     for (size_t ii = 0; ii < aWinInfo.size(); ii++)
         aWinInfo[ii]->fromWinCFG(f_win_ini);
@@ -731,19 +675,6 @@ string TVisor::filePathFromName(const string& filename, const string& extension)
 }
 
 
-//void
-//TVisor::addModule( TCModule* pm, bool selectFiles)
-//{
-//    aMod.push_back( std::shared_ptr<TCModule>(pm));
-//    pm->ods_link();
-//    //  pm->dyn_set();
-
-//    TCIntArray arr;
-//    if (selectFiles)
-//        arr = pm->SelectFileList(openf | closef);
-//    rt[pm->rtNum()].Open(selectFiles, UPDATE_DBV, arr);
-//    rt[pm->rtNum()]->SetKey(ALLKEY);
-//}
 
 //Init work structures
 void
@@ -961,7 +892,7 @@ TVisor::defaultCFG()
 TCStringArray readDirs(const char *dir)
 {
     TCStringArray aFiles;
-// cout << "GEMS DB dir: " << dir << endl;
+    gui_logger->debug("GEMS DB dir: {}", dir);
     QDir thisDir(dir);
     if (!thisDir.isReadable())
         throw TFatalError("GEMS Init", std::string(dir) + ": GEMS DB directory is not readable");
@@ -980,27 +911,11 @@ TCStringArray readDirs(const char *dir)
         f = it.next();;
         if (f.isDir() && f.fileName() != "." && f.fileName() != "..")
         {
-            //          cout << "Adding dir: " << f->fileName() << endl;
+            gui_logger->debug("Adding dir: {}", f.fileName().toStdString());
             aFiles.push_back( f.fileName().toStdString());
         }
         // else 'special file'
     }
-
-    /*   QFileInfo f;
-    while ((f = it.current()) != 0)
-    {
-        ++it;
-        //      if ( f->fileName() == "." || f->fileName() == ".." )
-        //          contunue;
-
-        if (f->isDir() && f->fileName() != "." && f->fileName() != "..")
-        {
-            //          cout << "Adding dir: " << f->fileName() << endl;
-            aFiles.Add((const char *) f->fileName());
-        }
-        // else 'special file'
-    }
-*/
     return aFiles;
 }
 
@@ -1027,7 +942,7 @@ TVisor::deleteDBDir(const char *dir)
         f = it.next();;
         if (f.isSymLink() || f.isFile())
         {
-            //cout << "Adding file: " << f.fileName().toStdString() << endl;
+            gui_logger->debug("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
@@ -1047,7 +962,7 @@ TVisor::deleteDBDir(const char *dir)
                     path = dir;
                     path += "/";
                     path += aFiles[ii];
-                    //cout << path << endl;
+                    gui_logger->debug("DelFile: {}", path);
                     rt[jj]->Close();
                     rt[jj]->DelFile(path);
                     rt[jj]->Open(true, UPDATE_DBV, {});
@@ -1056,7 +971,7 @@ TVisor::deleteDBDir(const char *dir)
         path = dir;
         path += "/";
         path += aFiles[ii].c_str();
-        //cout << path.c_str() << endl;
+        gui_logger->debug("remove: {}", path);
         QFile ff(path.c_str()/*aFiles[ii].c_str()*/);
         ff.remove();
     }
@@ -1114,7 +1029,7 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
     if (!thisDir.isReadable())
     {
 #ifndef _WIN32
-        cout << "Error :" << dir << endl;
+        gui_logger->error("{} directory is not readable", dir);
 #endif
         throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
     }
@@ -1134,27 +1049,12 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
         f = it.next();;
         if (f.isSymLink() || f.isFile())
         {
-            // cout << "Adding file: " << f->fileName() << endl;
+            gui_logger->debug("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
     }
 
-/*    while ((f = it.current()) != 0)
-    {
-        ++it;
-        //      if ( f->fileName() == "." || f->fileName() == ".." )
-        //          contunue;
-
-        if (f->isSymLink() || f->isFile())
-        {
-            // cout << "Adding file: " << f->fileName() << endl;
-            aFiles.Add((const char *) f->fileName());
-        }
-        // else 'special file'
-    }
-
-*/
     return aFiles;
 }
 

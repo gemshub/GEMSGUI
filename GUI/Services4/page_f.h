@@ -20,9 +20,8 @@
 #ifndef __page_s_h
 #define __page_s_h
 
-#include <iostream>
 #include "v_object.h"
-#include "config.h"
+#include "jsonconfig.h"
 
 class TCPage;
 class TField;
@@ -98,8 +97,8 @@ struct PageInfo
     TCWindow& GetWin();
 
     PageInfo( CWinInfo& wi, istream& is);
-    PageInfo( CWinInfo& wi, TConfig& cnf, string name);
-    void load(TConfig& cnf);
+    PageInfo( CWinInfo& wi, const TJsonConfig& cnf);
+    void load(const TJsonConfig& cnf);
 
     void toDAT(ostream& os);
     void fromDAT(istream& os);	// must be protected
@@ -127,8 +126,8 @@ struct CWinInfo
     int init_height;
 
     CWinInfo(TSubModule& r, istream& is);
-    CWinInfo(TSubModule& r, TConfig& cnf);
-    void load(TConfig& cnf);
+    CWinInfo(TSubModule& r, const TJsonConfig& cnf);
+    void load(const TJsonConfig& cnf);
 
     void toDAT(ostream& os);
     void fromDAT(istream& is);	// must be protected
