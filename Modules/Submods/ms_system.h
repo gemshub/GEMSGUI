@@ -270,5 +270,4 @@ public:
 
 };
 
-
 #endif  //_ms_system_h_

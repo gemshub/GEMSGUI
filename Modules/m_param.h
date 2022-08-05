@@ -312,7 +312,10 @@ public:
     void  generate_ThermoFun_input_file_stream( std::iostream& stream );
 
     void makeGEM2MTFiles(QWidget* par);
-    void outMultiTxt( const char *path, bool append=false  );
+    void outMultiTxt( const char *path, bool append=false  )
+    {
+        multi->to_text_file( path, append );
+    }
 
     void CmReadMulti( const char* path, bool new_ipm = false );
     bool CompareProjectName( const char* SysKey );

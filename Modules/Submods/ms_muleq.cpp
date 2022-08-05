@@ -466,5 +466,58 @@ void TMulti::EqstatExpand( /*const char *key,*/ bool calcActivityModels/*, bool 
     GasParcP();
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Variant of GX() function for use in the UnSpace module (non-optimized)
+// Should not be called from within GEMIPM!
+//
+double TMulti::pb_GX( double *Gxx  )
+{
+    long int i, j, k;
+    double Gi, x, XF, XFw, FX;
+    const BASE_PARAM *pa_p = base_param();
+
+    // calculating G(X)
+    FX=0.;
+    j=0;
+    for( k=0; k<pm.FI; k++ )
+    { // phase loop
+        i=j+pm.L1[k];
+        pm.logXw = -101.;
+        XFw = 0.0;  // calculating mole amount of the solvent/sorbent
+        if( pm.FIs && k<pm.FIs )
+            XFw = pm.XFA[k];
+        //       if( XFw > const1 )
+        if( ( pm.PHC[k] == PH_AQUEL && XFw >= pa_p->XwMin )
+                || ( pm.PHC[k] == PH_SORPTION && XFw >= pa_p->ScMin )
+                || ( pm.PHC[k] == PH_POLYEL && XFw >= pa_p->ScMin ) )
+            pm.logXw = log( XFw );
+        /*   */
+        XF = pm.XF[k];
+        if( !(pm.FIs && k < pm.FIs) )
+        {
+            if( XF < pa_p->PhMin )
+                goto NEXT_PHASE;
+        }
+        else if( XF < pa_p->DS && pm.logXw < 100. )
+            goto NEXT_PHASE;
+        pm.logYFk = log( XF );
+
+        for( ; j<i; j++ )
+        { // DC loop
+            x = pm.X[j];
+            if( x < pa_p->DcMin )
+                continue;
+            // calculating DC increment to G(x)
+            Gi = DC_GibbsEnergyContribution( Gxx[j], x, pm.logYFk, pm.logXw,
+                                             pm.DCCW[j] );
+            FX += Gi;
+        }   // j
+NEXT_PHASE:
+        j = i;
+    }  // k
+    return(FX);
+}
+
+
 //--------------------- End of ms_muleq.cpp ---------------------------
 

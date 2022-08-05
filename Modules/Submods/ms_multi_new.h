@@ -67,6 +67,12 @@ public:
         Free_uDD();
     }
 
+//    BASE_PARAM *TMulti::pa_p_ptr() const
+//    {
+//        //return paTProfil1->p;
+//        return &TProfil::pm->pa.p;
+//    }
+
     const char* GetName() const override
     {  return "Multi";  }
     void ods_link( int i=0) override;
@@ -82,7 +88,6 @@ public:
      dyn_new();
    }
    void multi_kill() override {}
-   BASE_PARAM *pa_p_ptr() const;
 
     // ms_muleq.cpp
     void packData();
@@ -102,48 +107,19 @@ public:
     /// connection to UnSpace
     double pb_GX( double *Gxx  );
 
-    //#else
-    //    const TNode *node1;
-
-    //    void multi_realloc( char PAalp, char PSigm );  /// could be virtual dyn_new
-    //#endif
-
     long int testMulti( ) override;
 
-    //connection to mass transport
-//void to_file( GemDataStream& ff ) override;
-//void to_text_file( const char *path, bool append=false  ) override;
-//void from_file( GemDataStream& ff ) override;
-//void to_text_file_gemipm( iostream& ff, bool addMui,
-//                              bool with_comments = true, bool brief_mode = false ) override;
-//void from_text_file_gemipm( iostream& ff,  DATACH  *dCH ) override;
-//void copyMULTI( const TMulti& otherMulti );
 
     // EXTERNAL FUNCTIONS
-    void DC_LoadThermodynamicData();
-  void DC_LoadThermodynamicData( TNode* aNa  ) override
-  {
-     if( aNa == nullptr)
-       DC_LoadThermodynamicData();
-     else
-       TMultiBase::DC_LoadThermodynamicData( aNa );
-  }
+  void DC_LoadThermodynamicData( TNode* aNa  ) override;
+
 
     long get_sizeFIs () { return sizeFIs; }
 
 protected:
 
-    void GasParcP() override;
-    void pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb, long int ipb ) override;
-    bool calculateActivityCoefficients_scripts( long int LinkMode, long k, long jb,
-                                                long jpb, long jdb, long ipb, double pmpXFk ) override;
-    bool testTSyst( int ii ) const  override;
-    void initalizeGEM_IPM_Data_GUI() override;
-    void multiConstInit_PN() override;
-    void GEM_IPM_Init_gui1() override;
-    void GEM_IPM_Init_gui2() override;
-    virtual void get_PAalp_PSigm(char &PAalp, char &PSigm) override;
-
+    void get_PAalp_PSigm(char &PAalp, char &PSigm) override;
+    void STEP_POINT( const char* /*str*/) override;
     void alloc_IPx( long int LsIPxSum ) override;
     void alloc_PMc( long int LsModSum ) override;
     void alloc_DMc( long int LsMdcSum ) override;
@@ -167,13 +143,25 @@ protected:
     void alloc_UMpcC( long int UMpcSum ) override;
     void alloc_xICuC( long int xICuCSum ) override;
 
+    bool calculateActivityCoefficients_scripts( long int LinkMode, long k, long jb,
+                                                long jpb, long jdb, long ipb, double pmpXFk ) override;
+    bool testTSyst() const  override;
+    void initalizeGEM_IPM_Data_GUI() override;
+    void multiConstInit_PN() override;
+    void GEM_IPM_Init_gui1() override;
+    void GEM_IPM_Init_gui2() override;
+    void GasParcP() override;
+    void pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb, long int ipb );
+
     // bool GEM_IPM_InitialApproximation() override;
+    void load_all_thermodynamic_from_grid(TNode *aNa, double TK, double P) override;
 
 private:
 
     // These pointers and methods are only used in GEMS-PSI
     void MultiSystemInit();
     void SystemToLookup();
+
     void multi_sys_dc();
     void multi_sys_ph();
     void ph_sur_param( int k, int kk );
@@ -184,7 +172,7 @@ private:
     // new TKinMet stuff
     void KinMetModLoad();
     bool CompressPhaseIpxt( int kPH );
-    string PressSolMod( int nP );
+    std::string PressSolMod( int nP );
     char *ExtractEG( char *Etext, int jp, size_t& EGlen, int Nes );
     int find_icnum( char *name, int LNmode );
     int find_dcnum( char *name, int jb, int je, int LNmode, char *stmt  );

@@ -1,89 +1,142 @@
 //-------------------------------------------------------------------
-// $Id: ms_multi.cpp 1353 2009-07-14 14:13:35Z gems $
+// $Id$
 //
-// Implementation of TMulti class, configuration functions
+/// \file ms_multi_new.cpp
+/// Implementation of coping IPM internal structure
 //
-// Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2007 S.Dmytriyeva, D.Kulik
+// Copyright (c) 2017-2020 S.Dmytriyeva, D.Kulik
+// <GEMS Development Team, mailto:gems2.support@psi.ch>
 //
+// This file is part of the GEMS3K code for thermodynamic modelling
+// by Gibbs energy minimization <http://gems.web.psi.ch/GEMS3K/>
 //
-// This file may be distributed under the GPL v.3 license
+// GEMS3K is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
 
-//
-// See http://gems.web.psi.ch/ for more information
-// E-mail: gems2.support@psi.ch
+// GEMS3K is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with GEMS3K code. If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------
-//
+
 #include "m_param.h"
+#include "stepwise.h"
 #include "GEMS3K/node.h"
+#include "GEMS3K/num_methods.h"
 
-bool TMulti::testTSyst( int ii ) const
+bool TMulti::testTSyst() const
 {
-    switch (ii)
-    {
-      case 0: return ( TSyst::sm->GetSY()->PYOF != S_OFF);
-    }
-    return false;
+    return ( TSyst::sm->GetSY()->PYOF != S_OFF);
+}
+
+void TMulti::get_PAalp_PSigm( char& PAalp, char& PSigm)
+{
+    PAalp =  TSyst::sm->GetSY()->PAalp;
+    PSigm =  TSyst::sm->GetSY()->PSigm;
+}
+
+void TMulti::STEP_POINT( const char* str)
+{
+    STEP_POINT1(str);
 }
 
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Variant of GX() function for use in the UnSpace module (non-optimized)
-// Should not be called from within GEMIPM!
-//
-BASE_PARAM *TMulti::pa_p_ptr() const
+void TMulti::alloc_IPx( long int LsIPxSum )
 {
-    //return paTProfil1->p;
-    return &TProfil::pm->pa.p;
+    pm.IPx = (long int *)aObj[ o_wi_ipxpm ]->Alloc(LsIPxSum, 1, L_);
+}
+void TMulti::alloc_PMc( long int LsModSum )
+{
+    pm.PMc = (double *)aObj[ o_wi_pmc]->Alloc( LsModSum, 1, D_);
+}
+void TMulti::alloc_DMc( long int LsMdcSum )
+{
+    pm.DMc = (double *)aObj[ o_wi_dmc]->Alloc( LsMdcSum, 1, D_ );
+}
+void TMulti::alloc_MoiSN( long int LsMsnSum )
+{
+    pm.MoiSN = (double *)aObj[ o_wi_moisn]->Alloc( LsMsnSum, 1, D_ );
+}
+void TMulti::alloc_SitFr( long int LsSitSum )
+{
+    pm.SitFr  = (double *)aObj[ o_wo_sitfr ]->Alloc( LsSitSum, 1, D_ );
+}
+void TMulti::alloc_DQFc( long int DQFcSum )
+{
+    pm.DQFc = (double *)aObj[o_wi_dqfc]->Alloc( DQFcSum, 1, D_ );
+}
+void TMulti::alloc_PhLin( long int PhLinSum )
+{
+    pm.PhLin = (long int (*)[2])aObj[ o_wi_phlin]->Alloc( PhLinSum, 2, L_ );
+}
+void TMulti::alloc_lPhc( long int lPhcSum )
+{
+    pm.lPhc = (double*)aObj[o_wi_lphc]->Alloc( lPhcSum, 1, D_ );
 }
 
-double TMulti::pb_GX( double *Gxx  )
+void TMulti::alloc_xSMd( long int xSMdSum )
 {
-    long int i, j, k;
-    double Gi, x, XF, XFw, FX;
-    const BASE_PARAM *pa_p = pa_p_ptr();
-
-    // calculating G(X)
-    FX=0.;
-    j=0;
-    for( k=0; k<pm.FI; k++ )
-    { // phase loop
-        i=j+pm.L1[k];
-        pm.logXw = -101.;
-        XFw = 0.0;  // calculating mole amount of the solvent/sorbent
-        if( pm.FIs && k<pm.FIs )
-            XFw = pm.XFA[k];
-        //       if( XFw > const1 )
-        if( ( pm.PHC[k] == PH_AQUEL && XFw >= pa_p->XwMin )
-                || ( pm.PHC[k] == PH_SORPTION && XFw >= pa_p->ScMin )
-                || ( pm.PHC[k] == PH_POLYEL && XFw >= pa_p->ScMin ) )
-            pm.logXw = log( XFw );
-        /*   */
-        XF = pm.XF[k];
-        if( !(pm.FIs && k < pm.FIs) )
-        {
-            if( XF < pa_p->PhMin )
-                goto NEXT_PHASE;
-        }
-        else if( XF < pa_p->DS && pm.logXw < 100. )
-            goto NEXT_PHASE;
-        pm.logYFk = log( XF );
-
-        for( ; j<i; j++ )
-        { // DC loop
-            x = pm.X[j];
-            if( x < pa_p->DcMin )
-                continue;
-            // calculating DC increment to G(x)
-            Gi = DC_GibbsEnergyContribution( Gxx[j], x, pm.logYFk, pm.logXw,
-                                             pm.DCCW[j] );
-            FX += Gi;
-        }   // j
-NEXT_PHASE:
-        j = i;
-    }  // k
-    return(FX);
+    pm.xSMd = (long int*)aObj[ o_wi_xsmd]->Alloc( xSMdSum, 1, L_ );
 }
+void TMulti::alloc_IsoPc( long int IsoPcSum )
+{
+    pm.IsoPc = (double*)aObj[ o_wi_isopc]->Alloc( IsoPcSum, 1, D_ );
+}
+void TMulti::alloc_IsoSc( long int IsoScSum )
+{
+    pm.IsoSc = (double*)aObj[ o_wi_isosc]->Alloc( IsoScSum, 1, D_ );
+}
+void TMulti::alloc_IsoCt( long int IsoCtSum )
+{
+    pm.IsoCt = (char*)aObj[ o_wi_isoct]->Alloc( IsoCtSum, 1, A_ );
+}
+void TMulti::alloc_EImc( long int EImcSum )
+{
+    pm.EImc = (double*)aObj[ o_wi_eimc]->Alloc( EImcSum, 1, D_ );
+}
+void TMulti::alloc_mCDc( long int mCDcSum )
+{
+    pm.mCDc = (double*)aObj[ o_wi_mcdc]->Alloc( mCDcSum, 1, D_ );
+}
+
+void TMulti::alloc_xSKrC( long int xSKrCSum )
+{
+    pm.xSKrC = (long int*)aObj[ o_wi_jcrdc]->Alloc( xSKrCSum, 1, L_ );
+}
+void TMulti::alloc_ocPRkC( long int ocPRkC_feSArC_Sum )
+{
+    pm.ocPRkC = (long int(*)[2])aObj[ o_wi_ocprkc]->Alloc( ocPRkC_feSArC_Sum, 2, L_ );
+}
+void TMulti::alloc_feSArC( long int ocPRkC_feSArC_Sum )
+{
+    pm.feSArC = (double*)aObj[ o_wi_fsac]->Alloc( ocPRkC_feSArC_Sum, 1, D_ );
+}
+void TMulti::alloc_rpConC( long int rpConCSum )
+{
+    pm.rpConC = (double*)aObj[ o_wi_krpc]->Alloc( rpConCSum, 1, D_ );
+}
+void TMulti::alloc_apConC( long int apConCSum )
+{
+    pm.apConC = (double*)aObj[ o_wi_apconc]->Alloc( apConCSum, 1, D_ );
+}
+void TMulti::alloc_AscpC( long int AscpCSum )
+{
+    pm.AscpC = (double*)aObj[ o_wi_ascpc]->Alloc( AscpCSum, 1, D_ );
+}
+void TMulti::alloc_UMpcC( long int UMpcSum )
+{
+    pm.UMpcC = (double*)aObj[ o_wi_umpc]->Alloc( UMpcSum, 1, D_ );
+}
+void TMulti::alloc_xICuC( long int xICuCSum )
+{
+    pm.xICuC = (long int *)aObj[o_wi_xicuc ]->Alloc( xICuCSum, 1, L_ );
+}
+
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -136,7 +189,6 @@ void TMulti::GasParcP()
 /// Linking DOD for executing Phase mixing model scripts
 void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb, long int ipb )
 {
-
     ErrorIf( k < 0 || k >= pm.FIs , "CalculateActivityCoefficients():", "Invalid link: k=0||>FIs" );
     aObj[ o_nsmod]->SetPtr( pm.sMod[k] );
     aObj[ o_nncp]->SetPtr( pm.LsMod+k*3 );
@@ -199,11 +251,12 @@ void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb
 }
 
 
+/// Output to "ipmlog.txt" file Warnings
 long int TMulti::testMulti()
 {
     if( pm.MK || pm.PZ )
     {
-        if( pa_p_ptr()->PSM >= 2 )
+        if( base_param()->PSM >= 2 )
         {
             node->ipmlog_file->warn(" {} : {}:{}", pm.stkey, pm.errorCode, pm.errorBuf);
         }
@@ -236,7 +289,7 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
     pm.js=0;
     pm.next=1;
     char* sMod = pm.sMod[k];
-    const BASE_PARAM *pa_p = pa_p_ptr();
+    const BASE_PARAM *pa_p = base_param();
 
     switch( LinkMode )
     { // check the calculation mode
@@ -285,7 +338,6 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
         break;
 
     case LINK_UX_MODE:  // the model is dependent on current concentrations on IPM iteration
-
         switch( pm.PHC[k] )
         {  //
         case PH_AQUEL:
@@ -335,8 +387,6 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
                 break;
             }
         }
-        ///if( pm.PHC[k] == PH_AQUEL )  //? 07/05/2020 not used
-        ///    ICold = pm.IC;
         break;
     default:
         Error("CalculateActivityCoefficients()","Invalid LinkMode for a scripted solution model");
@@ -349,7 +399,6 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
 // Calculation by IPM (preparing for calculation, unpacking data) in GUI part
 void TMulti::initalizeGEM_IPM_Data_GUI()
 {
-
     // for GEMIPM unpackDataBr( bool uPrimalSol );
     // to define quantities
 
@@ -358,15 +407,13 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
     //   MultiKeyInit( key ); //into PMtest
 
     ipm_logger->trace(" pm.pBAL =  {}", pm.pBAL);
-
     if( !pm.pBAL )
-         newInterval = true;    // to rebuild lookup arrays
+        newInterval = true;    // to rebuild lookup arrays
 
     if( pm.pBAL < 2  || pm.pTPD < 2 )
     {
         SystemToLookup();
     }
-
     if( pm.pBAL < 2  )
     {
         // Allocating list of phases currently present in non-zero quantities
@@ -385,14 +432,12 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
     /// TProfil::pm->CheckMtparam(); //load tpp structure
 
     ipm_logger->trace("newInterval = {}   pm.pTPD =  {}", newInterval, pm.pTPD);
-
     // New: TKinMet stuff
     if( pm.pKMM <= 0 )
     {
         KinMetModLoad();  // Call point to loading parameters for kinetic models
         pm.pKMM = 1;
     }
-
 }
 
 void TMulti::multiConstInit_PN()
@@ -424,205 +469,200 @@ void TMulti::GEM_IPM_Init_gui2()
     }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
-// Load Thermodynamic Data from MTPARM to MULTI
-void TMulti::DC_LoadThermodynamicData()
+/// Load Thermodynamic Data from DATACH to MULTI using Lagrangian Interpolator
+//
+void TMulti::DC_LoadThermodynamicData(TNode* aNa ) // formerly CompG0Load()
 {
-    long int j, jj, k, jb, je=0;
-    double Go, Gg=0., Ge=0., Vv = 0.;
-    SYSTEM *syp = TSyst::sm->GetSY();
-    MTPARM* tpp = TMTparm::sm->GetTP();
-    pmp->PunE = tpp->PunE;
-    pmp->PunV = tpp->PunV;
-    pmp->PunP = tpp->PunP;
-    pmp->PunT = tpp->PunT;
+    double TK, PPa;
 
-// ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
-//    if( pmp->pTPD < 1 )
-//    {
-        pmp->T = pmp->Tc = tpp->T + C_to_K;
-        pmp->TC = pmp->TCc = tpp->T;
-        if( tpp->P > 1e-9 )
-            pmp->P = pmp->Pc = tpp->P;
+    TNode* na;
+    if( aNa )
+    {
+        na = aNa;// for reading GEMIPM files task
+        TK =  na->cTK();
+        PPa = na->cP();
+    }
+    else
+    {
+        na = node;
+        TK =  pm.TC+C_to_K;
+        PPa = pm.P*bar_to_Pa;
+    }
+
+    if( !aNa )
+    {
+        double T = TK-C_to_K;
+        TMTparm::sm->GetTP()->curT=T;
+        TMTparm::sm->GetTP()->curP=PPa/bar_to_Pa;
+    }
+
+#ifdef USE_THERMOFUN
+    // try generate thermodynamic data from ThermoEngine
+    if( !na->load_all_thermodynamic_from_thermo( TK, PPa ))
+#endif
+    {
+        load_all_thermodynamic_from_grid(na, TK, PPa );
+    }
+    pm.pTPD = 2;
+}
+
+
+/// Load Thermodynamic Data from DATACH to MULTI using Lagrangian Interpolator
+void TMulti::load_all_thermodynamic_from_grid(TNode* aNa, double TK, double PPa )
+{
+    long int j, jj, k, xTP, jb, je=0;
+    double Go, Gg=0., Ge=0., Vv, h0=0., S0 = 0., Cp0= 0., a0 = 0., u0 = 0.;
+    double P = PPa/bar_to_Pa;
+    DATACH  *dCH = aNa->pCSD();
+
+    ipm_logger->info("Calc Lookup T: {}  P: {}", TK, PPa);
+    if( dCH->nTp <1 || dCH->nPp <1 || aNa->check_TP( TK, PPa ) == false )
+    {
+        Error("load_all_thermodynamic_from_grid: ",
+               std::string(" Temperature ")+std::to_string(TK)+" or pressure "+
+               std::to_string(PPa)+" out of range, or no T/D data are provided" );
+        return;
+    }
+
+    pm.T = pm.Tc = TK;
+    pm.TC = pm.TCc = TK-C_to_K;
+    pm.Pc = P;
+    if( P < 1e-5 )
+    { // Pressure at saturated H2O vapour at given temperature
+        long int xT = aNa->check_grid_T(TK);
+        if(xT>= 0)
+            P = dCH->Psat[xT]/bar_to_Pa;
         else
-            pmp->P = pmp->Pc = 1e-9;
-        pmp->RT =  R_CONSTANT * pmp->Tc; // tpp->RT; // test 07/12/2007
-        pmp->FRT = F_CONSTANT/pmp->RT;
-        pmp->lnP = log( pmp->P );
+            P =  LagranInterp( &PPa, dCH->TKval, dCH->Psat, PPa, TK, dCH->nTp, 1,6 )/bar_to_Pa;
+    }
+    pm.P = P;
+    pm.RT = R_CONSTANT * pm.Tc;
+    pm.FRT = F_CONSTANT/pm.RT;
+    pm.lnP = log( P );
 
-        pmp->denW[0] = tpp->RoW;
-        pmp->denW[1] = tpp->dRdTW;
-        pmp->denW[2] = tpp->d2RdT2W;
-        pmp->denW[3] = tpp->dRdPW;
-        pmp->denW[4] = tpp->d2RdP2W;
-        pmp->denWg[0] = tpp->RoV;
-        pmp->denWg[1] = tpp->dRdTV;
-        pmp->denWg[2] = tpp->d2RdT2V;
-        pmp->denWg[3] = tpp->dRdPV;
-        pmp->denWg[4] = tpp->d2RdP2V;
-        pmp->epsW[0] = tpp->EpsW;
-        pmp->epsW[1] = tpp->dEdTW;
-        pmp->epsW[2] = tpp->d2EdT2W;
-        pmp->epsW[3] = tpp->dEdPW;
-        pmp->epsW[4] = tpp->d2EdP2W;
-        pmp->epsWg[0] = tpp->EpsV;
-        pmp->epsWg[1] = tpp->dEdTV;
-        pmp->epsWg[2] = tpp->d2EdT2V;
-        pmp->epsWg[3] = tpp->dEdPV;
-        pmp->epsWg[4] = tpp->d2EdP2V;
+    xTP = aNa->check_grid_TP( TK, PPa );
 
-  //  }
-  //  if( pmp->pTPD <= 1 )
-  //  {
-        int xVol=0.;
-        if( tpp->PtvVm == S_ON && pmp->PV == VOL_CONSTR )
-            xVol = getXvolume();
-
-        for( k=0; k<pmp->FI; k++ )
+    for( k=0; k<5; k++ )
+    {
+        jj =  k * aNa->gridTP();
+        if( xTP >= 0 )
         {
-            jb = je;
-            je += pmp->L1[k];
-
-            for( j=jb; j<je; j++ )
-            {
-                jj = pmp->muj[j];
-
-                Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
-                if( syp->Guns )  // This is used mainly in UnSpace calculations
-                    Gg = syp->Guns[jj];    // User-set increment to G0 from project system
-                if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
-                    Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
-                // !!!!!!! Insert here a case that checks units of measurement for the G0 increment
-                pmp->G0[j] = ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
-                Vv = 0.;
-                //  loading Vol
-                if( tpp->PtvVm == S_ON )
-                    switch( pmp->PV )
-                    { // loading molar volumes of components into the A matrix
-                    case VOL_CONSTR:
-                        if( syp->Vuns )
-                            Vv = syp->Vuns[jj];
-                        if( xVol >= 0 )
-                            pmp->A[j*pmp->N+xVol] = tpp->Vm[jj]+Vv;
-                         [[fallthrough]];
-                    case VOL_CALC:
-                    case VOL_UNDEF:
-                        if( syp->Vuns )
-                            Vv = syp->Vuns[jj];
-                        pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;
-                        break;
-                    }
-                else pmp->Vol[j] = 0.0;
-                // added 05/08/2009 SD
-                if( pmp->S0 && tpp->S ) pmp->S0[j] = tpp->S[jj];
-                if( pmp->H0 && tpp->H) pmp->H0[j] = tpp->H[jj];
-                if( pmp->Cp0 && tpp->Cp ) pmp->Cp0[j] = tpp->Cp[jj];
-                if( pmp->A0 && tpp->F ) pmp->A0[j] = tpp->F[jj];
-                if( pmp->U0 && tpp->U ) pmp->U0[j] = tpp->U[jj];
-            }
+            pm.denW[k] = dCH->denW[jj+xTP]/1e3;
+            pm.epsW[k] = dCH->epsW[jj+xTP];
+            pm.denWg[k] = dCH->denWg[jj+xTP]/1e3;
+            pm.epsWg[k] = dCH->epsWg[jj+xTP];
         }
-   // }
+        else
+        {
+            pm.denW[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->denW+jj,
+                                       PPa, TK, dCH->nTp, dCH->nPp,6 )/1e3;// from test denW enough
+            pm.epsW[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->epsW+jj,
+                                       PPa, TK, dCH->nTp, dCH->nPp,5 );// from test epsW enough
+            pm.denWg[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->denWg+jj,
+                                        PPa, TK, dCH->nTp, dCH->nPp,5 )/1e3;
+            pm.epsWg[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->epsWg+jj,
+                                        PPa, TK, dCH->nTp, dCH->nPp,5 );
+        }
+    }
 
-  //Alloc_internal(); // performance optimization 08/02/2007
-  pmp->pTPD = 2;
-}
+#ifdef  USE_THERMO_LOG
+    fstream f_log("thermodynamic-log-lookup.csv", ios::out/*|ios::app*/ );
+    f_log << "\nCalc ThermoEngine;T;" << TK << ";P;" << PPa << "\n";
+    f_log << "denW";
+    for( jj=0; jj<5; jj++)
+       f_log << ";" << floating_point_to_string(pm.denW[jj]);
+    f_log << "\nepsW";
+    for( jj=0; jj<5; jj++)
+       f_log << ";" << floating_point_to_string(pm.epsW[jj]);
+    f_log << "\ndenWg";
+    for( jj=0; jj<5; jj++)
+       f_log << ";" << floating_point_to_string(pm.denWg[jj]);
+    f_log << "\nepsWg";
+    for( jj=0; jj<5; jj++)
+       f_log << ";" << floating_point_to_string(pm.epsWg[jj]);
+#endif
+    long int xVol =  getXvolume();
 
+    for( k=0; k<pm.FI; k++ )
+    {
+        jb = je;
+        je += pm.L1[k];
+        // load t/d data from DC - to be extended for DCH->H0, DCH->S0, DCH->Cp0, DCH->DD
+        // depending on the presence of these arrays in DATACH and Multi structures
+        for( j=jb; j<je; j++ )
+        {
+            jj =  j * aNa->gridTP();
+            if( xTP >= 0 )
+            {
+                Go = dCH->G0[ jj+xTP];
+                Vv = dCH->V0[ jj+xTP]*1e5;
+                if( dCH->S0 ) S0 = dCH->S0[ jj+xTP];
+                if( dCH->H0 ) h0 = dCH->H0[ jj+xTP];
+                if( dCH->Cp0 ) Cp0 = dCH->Cp0[ jj+xTP];
+                if( dCH->A0 ) a0 = dCH->A0[ jj+xTP];
+                if( dCH->U0 ) h0 = dCH->U0[ jj+xTP];
+            }
+            else
+            {
+                Go = LagranInterp( dCH->Pval, dCH->TKval, dCH->G0+jj,
+                                   PPa, TK, dCH->nTp, dCH->nPp, 6 ); // from test G0[Ca+2] enough
+                Vv = LagranInterp( dCH->Pval, dCH->TKval, dCH->V0+jj,
+                                   PPa, TK, dCH->nTp, dCH->nPp, 5 )*1e5;
+                if( dCH->S0 ) S0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->S0+jj,
+                                                  PPa, TK, dCH->nTp, dCH->nPp, 4 ); // from test S0[Ca+2] enough
+                if( dCH->H0 ) h0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->H0+jj,
+                                                  PPa, TK, dCH->nTp, dCH->nPp,5 );
+                if( dCH->Cp0 ) Cp0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->Cp0+jj,
+                                                    PPa, TK, dCH->nTp, dCH->nPp, 3 ); // from test Cp0[Ca+2] not more
+                if( dCH->A0 ) a0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->A0+jj,
+                                                  PPa, TK, dCH->nTp, dCH->nPp,5 );
+                if( dCH->U0 ) u0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->U0+jj,
+                                                  PPa, TK, dCH->nTp, dCH->nPp,5 );
+            }
+            if( TSyst::sm->GetSY()->Guns )  // This is used mainly in UnSpace calculations
+                Gg = TSyst::sm->GetSY()->Guns[pm.muj[j]];    // User-set increment to G0 from project system
+            // SDGEX     if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
+            //            Ge = syp->GEX[pm.muj[j]];     //now Ge is integrated into pm.G0 (since 07.03.2008) DK
+            pm.G0[j] = ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k ); // formerly Cj_init_calc()
+            // Inside this function, pm.YOF[k] can be added!
 
-void TMulti::get_PAalp_PSigm( char& PAalp, char& PSigm)
-{
-  PAalp =  TSyst::sm->GetSY()->PAalp;
-  PSigm =  TSyst::sm->GetSY()->PSigm;
-}
+            if( TMTparm::sm->GetTP()->PtvVm != S_ON )
+                pm.Vol[j] = 0.;
+            else
+                switch( pm.PV )
+                { // put molar volumes of components into A matrix or into the vector of molar volumes
+                // to be checked!
+                case VOL_CONSTR:
+                    if( TSyst::sm->GetSY()->Vuns )
+                        Vv += TSyst::sm->GetSY()->Vuns[j];
+                    if( xVol >= 0 )
+                        pm.A[j*pm.N+xVol] = Vv;
+                    // [[fallthrough]];
+                case VOL_CALC:
+                case VOL_UNDEF:
+                    if( TSyst::sm->GetSY()->Vuns )
+                        Vv += TSyst::sm->GetSY()->Vuns[j];
+                    pm.Vol[j] = Vv  * 10.;
+                    break;
+                }
+            if( pm.S0 ) pm.S0[j] = S0;
+            if( pm.H0 ) pm.H0[j] = h0;
+            if( pm.Cp0 ) pm.Cp0[j] = Cp0;
+            if( pm.A0 ) pm.A0[j] = a0;
+            if( pm.U0 ) pm.U0[j] = u0;
 
-void TMulti::alloc_IPx( long int LsIPxSum )
-{
-    pm.IPx = (long int *)aObj[ o_wi_ipxpm ]->Alloc(LsIPxSum, 1, L_);
-}
-void TMulti::alloc_PMc( long int LsModSum )
-{
-    pm.PMc = (double *)aObj[ o_wi_pmc]->Alloc( LsModSum, 1, D_);
-}
-void TMulti::alloc_DMc( long int LsMdcSum )
-{
-    pm.DMc = (double *)aObj[ o_wi_dmc]->Alloc( LsMdcSum, 1, D_ );
-}
-void TMulti::alloc_MoiSN( long int LsMsnSum )
-{
-    pm.MoiSN = (double *)aObj[ o_wi_moisn]->Alloc( LsMsnSum, 1, D_ );
-}
-void TMulti::alloc_SitFr( long int LsSitSum )
-{
-    pm.SitFr  = (double *)aObj[ o_wo_sitfr ]->Alloc( LsSitSum, 1, D_ );
-}
-void TMulti::alloc_DQFc( long int DQFcSum )
-{
-   pm.DQFc = (double *)aObj[ o_wi_dqfc]->Alloc( DQFcSum, 1, D_ );
-}
-void TMulti::alloc_PhLin( long int PhLinSum )
-{
-    pm.PhLin = (long int (*)[2])aObj[ o_wi_phlin]->Alloc( PhLinSum, 2, L_ );
-}
-void TMulti::alloc_lPhc( long int lPhcSum )
-{
-    pm.lPhc  = (double *)aObj[ o_wi_lphc ]->Alloc( lPhcSum, 1, D_ );
-}
-
-void TMulti::alloc_xSMd( long int xSMdSum )
-{
-    pm.xSMd = (long int*)aObj[ o_wi_xsmd]->Alloc( xSMdSum, 1, L_ );
-}
-void TMulti::alloc_IsoPc( long int IsoPcSum )
-{
-    pm.IsoPc = (double*)aObj[ o_wi_isopc]->Alloc( IsoPcSum, 1, D_ );
-}
-void TMulti::alloc_IsoSc( long int IsoScSum )
-{
-    pm.IsoSc = (double*)aObj[ o_wi_isosc]->Alloc( IsoScSum, 1, D_ );
-}
-void TMulti::alloc_IsoCt( long int IsoCtSum )
-{
-   pm.IsoCt = (char*)aObj[ o_wi_isoct]->Alloc( IsoCtSum, 1, A_ );
-}
-void TMulti::alloc_EImc( long int EImcSum )
-{
-    pm.EImc = (double*)aObj[ o_wi_eimc]->Alloc( EImcSum, 1, D_ );
-}
-void TMulti::alloc_mCDc( long int mCDcSum )
-{
-    pm.mCDc = (double*)aObj[ o_wi_mcdc]->Alloc( mCDcSum, 1, D_ );
-}
-
-void TMulti::alloc_xSKrC( long int xSKrCSum )
-{
-    pm.xSKrC = (long int*)aObj[ o_wi_jcrdc]->Alloc( xSKrCSum, 1, L_ );
-}
-void TMulti::alloc_ocPRkC( long int ocPRkC_feSArC_Sum )
-{
-    pm.ocPRkC = (long int(*)[2])aObj[ o_wi_ocprkc]->Alloc( ocPRkC_feSArC_Sum, 2, L_ );
-}
-void TMulti::alloc_feSArC( long int ocPRkC_feSArC_Sum )
-{
-    pm.feSArC = (double*)aObj[ o_wi_fsac]->Alloc( ocPRkC_feSArC_Sum, 1, D_ );
-}
-void TMulti::alloc_rpConC( long int rpConCSum )
-{
-   pm.rpConC = (double*)aObj[ o_wi_krpc]->Alloc( rpConCSum, 1, D_ );
-}
-void TMulti::alloc_apConC( long int apConCSum )
-{
-    pm.apConC = (double*)aObj[ o_wi_apconc]->Alloc( apConCSum, 1, D_ );
-}
-void TMulti::alloc_AscpC( long int AscpCSum )
-{
-    pm.AscpC = (double*)aObj[ o_wi_ascpc]->Alloc( AscpCSum, 1, D_ );
-}
-void TMulti::alloc_UMpcC( long int UMpcSum )
-{
-    pm.UMpcC = (double*)aObj[ o_wi_umpc]->Alloc( UMpcSum, 1, D_ );
-}
-void TMulti::alloc_xICuC( long int xICuCSum )
-{
-    pm.xICuC = (long int *)aObj[o_wi_xicuc ]->Alloc( xICuCSum, 1, L_ );
+#ifdef  USE_THERMO_LOG
+            f_log << "\n" << std::string(dCH->DCNL[j], 0, MaxDCN) << ";" << floating_point_to_string(Go)
+                   << ";" << floating_point_to_string(pm.G0[j])
+                   << ";" << floating_point_to_string(pm.Vol[j]);
+            if( dCH->S0 ) f_log << ";" << floating_point_to_string(pm.S0[j]);
+            if( dCH->H0 ) f_log << ";" << floating_point_to_string(pm.H0[j]);
+            if( dCH->Cp0 ) f_log << ";" << floating_point_to_string(pm.Cp0[j]);
+            if( dCH->A0 ) f_log << ";" << floating_point_to_string(pm.A0[j]);
+            if( dCH->U0 ) f_log << ";" << floating_point_to_string(pm.U0[j]);
+#endif
+        }  // j
+    } // k
 }
 
 
