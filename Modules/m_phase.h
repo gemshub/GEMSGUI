@@ -339,7 +339,6 @@ protected:
     void CheckNameCatAn(std::string &name, short &nCat, short &nAn, short &nNs);
 };
 
-
 enum ph_affin_term_op_codes { /// TKinMet: codes to control affinity terms
     ATOP_CLASSIC = 0,       /// classic TST affinity term (see .../Doc/Descriptions/KinetParams.pdf)
     ATOP_CLASSIC_REV = 1,   /// classic TST affinity term, reversed
@@ -350,7 +349,6 @@ enum ph_affin_term_op_codes { /// TKinMet: codes to control affinity terms
     ATOP_FRITZ = 6          /// Fritz et al. 2009, eq 6 nucleation and growth
 
 };
-
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
