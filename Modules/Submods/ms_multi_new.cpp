@@ -29,6 +29,12 @@
 #include "GEMS3K/node.h"
 #include "GEMS3K/num_methods.h"
 
+/// Output to "ipmlog.txt" file Warnings
+BASE_PARAM *TMulti::base_param() const
+{
+    return &TProfil::pm->pa.p;
+}
+
 bool TMulti::testTSyst() const
 {
     return ( TSyst::sm->GetSY()->PYOF != S_OFF);
@@ -44,7 +50,6 @@ void TMulti::STEP_POINT( const char* str)
 {
     STEP_POINT1(str);
 }
-
 
 void TMulti::alloc_IPx( long int LsIPxSum )
 {
@@ -250,15 +255,13 @@ void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb
     aObj[o_nute]->SetPtr( &pm.UPh[k][0] );
 }
 
-
-/// Output to "ipmlog.txt" file Warnings
 long int TMulti::testMulti()
 {
     if( pm.MK || pm.PZ )
     {
         if( base_param()->PSM >= 2 )
         {
-            node->ipmlog_file->warn(" {} : {}:{}", pm.stkey, pm.errorCode, pm.errorBuf);
+            TNode::ipmlog_file->warn(" {} : {}:{}", pm.stkey, pm.errorCode, pm.errorBuf);
         }
         if( showMss )
         {
@@ -469,200 +472,107 @@ void TMulti::GEM_IPM_Init_gui2()
     }
 }
 
-/// Load Thermodynamic Data from DATACH to MULTI using Lagrangian Interpolator
-//
-void TMulti::DC_LoadThermodynamicData(TNode* aNa ) // formerly CompG0Load()
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
+// Load Thermodynamic Data from MTPARM to MULTI
+void TMulti::DC_LoadThermodynamicData()
 {
-    double TK, PPa;
+    long int j, jj, k, jb, je=0;
+    double Go, Gg=0., Ge=0., Vv = 0.;
+    SYSTEM *syp = TSyst::sm->GetSY();
+    MTPARM* tpp = TMTparm::sm->GetTP();
+    pmp->PunE = tpp->PunE;
+    pmp->PunV = tpp->PunV;
+    pmp->PunP = tpp->PunP;
+    pmp->PunT = tpp->PunT;
 
-    TNode* na;
-    if( aNa )
-    {
-        na = aNa;// for reading GEMIPM files task
-        TK =  na->cTK();
-        PPa = na->cP();
-    }
-    else
-    {
-        na = node;
-        TK =  pm.TC+C_to_K;
-        PPa = pm.P*bar_to_Pa;
-    }
-
-    if( !aNa )
-    {
-        double T = TK-C_to_K;
-        TMTparm::sm->GetTP()->curT=T;
-        TMTparm::sm->GetTP()->curP=PPa/bar_to_Pa;
-    }
-
-#ifdef USE_THERMOFUN
-    // try generate thermodynamic data from ThermoEngine
-    if( !na->load_all_thermodynamic_from_thermo( TK, PPa ))
-#endif
-    {
-        load_all_thermodynamic_from_grid(na, TK, PPa );
-    }
-    pm.pTPD = 2;
-}
-
-
-/// Load Thermodynamic Data from DATACH to MULTI using Lagrangian Interpolator
-void TMulti::load_all_thermodynamic_from_grid(TNode* aNa, double TK, double PPa )
-{
-    long int j, jj, k, xTP, jb, je=0;
-    double Go, Gg=0., Ge=0., Vv, h0=0., S0 = 0., Cp0= 0., a0 = 0., u0 = 0.;
-    double P = PPa/bar_to_Pa;
-    DATACH  *dCH = aNa->pCSD();
-
-    ipm_logger->info("Calc Lookup T: {}  P: {}", TK, PPa);
-    if( dCH->nTp <1 || dCH->nPp <1 || aNa->check_TP( TK, PPa ) == false )
-    {
-        Error("load_all_thermodynamic_from_grid: ",
-               std::string(" Temperature ")+std::to_string(TK)+" or pressure "+
-               std::to_string(PPa)+" out of range, or no T/D data are provided" );
-        return;
-    }
-
-    pm.T = pm.Tc = TK;
-    pm.TC = pm.TCc = TK-C_to_K;
-    pm.Pc = P;
-    if( P < 1e-5 )
-    { // Pressure at saturated H2O vapour at given temperature
-        long int xT = aNa->check_grid_T(TK);
-        if(xT>= 0)
-            P = dCH->Psat[xT]/bar_to_Pa;
+// ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
+//    if( pmp->pTPD < 1 )
+//    {
+        pmp->T = pmp->Tc = tpp->T + C_to_K;
+        pmp->TC = pmp->TCc = tpp->T;
+        if( tpp->P > 1e-9 )
+            pmp->P = pmp->Pc = tpp->P;
         else
-            P =  LagranInterp( &PPa, dCH->TKval, dCH->Psat, PPa, TK, dCH->nTp, 1,6 )/bar_to_Pa;
-    }
-    pm.P = P;
-    pm.RT = R_CONSTANT * pm.Tc;
-    pm.FRT = F_CONSTANT/pm.RT;
-    pm.lnP = log( P );
+            pmp->P = pmp->Pc = 1e-9;
+        pmp->RT =  R_CONSTANT * pmp->Tc; // tpp->RT; // test 07/12/2007
+        pmp->FRT = F_CONSTANT/pmp->RT;
+        pmp->lnP = log( pmp->P );
 
-    xTP = aNa->check_grid_TP( TK, PPa );
+        pmp->denW[0] = tpp->RoW;
+        pmp->denW[1] = tpp->dRdTW;
+        pmp->denW[2] = tpp->d2RdT2W;
+        pmp->denW[3] = tpp->dRdPW;
+        pmp->denW[4] = tpp->d2RdP2W;
+        pmp->denWg[0] = tpp->RoV;
+        pmp->denWg[1] = tpp->dRdTV;
+        pmp->denWg[2] = tpp->d2RdT2V;
+        pmp->denWg[3] = tpp->dRdPV;
+        pmp->denWg[4] = tpp->d2RdP2V;
+        pmp->epsW[0] = tpp->EpsW;
+        pmp->epsW[1] = tpp->dEdTW;
+        pmp->epsW[2] = tpp->d2EdT2W;
+        pmp->epsW[3] = tpp->dEdPW;
+        pmp->epsW[4] = tpp->d2EdP2W;
+        pmp->epsWg[0] = tpp->EpsV;
+        pmp->epsWg[1] = tpp->dEdTV;
+        pmp->epsWg[2] = tpp->d2EdT2V;
+        pmp->epsWg[3] = tpp->dEdPV;
+        pmp->epsWg[4] = tpp->d2EdP2V;
 
-    for( k=0; k<5; k++ )
-    {
-        jj =  k * aNa->gridTP();
-        if( xTP >= 0 )
+  //  }
+  //  if( pmp->pTPD <= 1 )
+  //  {
+        int xVol=0.;
+        if( tpp->PtvVm == S_ON && pmp->PV == VOL_CONSTR )
+            xVol = getXvolume();
+
+        for( k=0; k<pmp->FI; k++ )
         {
-            pm.denW[k] = dCH->denW[jj+xTP]/1e3;
-            pm.epsW[k] = dCH->epsW[jj+xTP];
-            pm.denWg[k] = dCH->denWg[jj+xTP]/1e3;
-            pm.epsWg[k] = dCH->epsWg[jj+xTP];
-        }
-        else
-        {
-            pm.denW[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->denW+jj,
-                                       PPa, TK, dCH->nTp, dCH->nPp,6 )/1e3;// from test denW enough
-            pm.epsW[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->epsW+jj,
-                                       PPa, TK, dCH->nTp, dCH->nPp,5 );// from test epsW enough
-            pm.denWg[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->denWg+jj,
-                                        PPa, TK, dCH->nTp, dCH->nPp,5 )/1e3;
-            pm.epsWg[k] = LagranInterp( dCH->Pval, dCH->TKval, dCH->epsWg+jj,
-                                        PPa, TK, dCH->nTp, dCH->nPp,5 );
-        }
-    }
+            jb = je;
+            je += pmp->L1[k];
 
-#ifdef  USE_THERMO_LOG
-    fstream f_log("thermodynamic-log-lookup.csv", ios::out/*|ios::app*/ );
-    f_log << "\nCalc ThermoEngine;T;" << TK << ";P;" << PPa << "\n";
-    f_log << "denW";
-    for( jj=0; jj<5; jj++)
-       f_log << ";" << floating_point_to_string(pm.denW[jj]);
-    f_log << "\nepsW";
-    for( jj=0; jj<5; jj++)
-       f_log << ";" << floating_point_to_string(pm.epsW[jj]);
-    f_log << "\ndenWg";
-    for( jj=0; jj<5; jj++)
-       f_log << ";" << floating_point_to_string(pm.denWg[jj]);
-    f_log << "\nepsWg";
-    for( jj=0; jj<5; jj++)
-       f_log << ";" << floating_point_to_string(pm.epsWg[jj]);
-#endif
-    long int xVol =  getXvolume();
-
-    for( k=0; k<pm.FI; k++ )
-    {
-        jb = je;
-        je += pm.L1[k];
-        // load t/d data from DC - to be extended for DCH->H0, DCH->S0, DCH->Cp0, DCH->DD
-        // depending on the presence of these arrays in DATACH and Multi structures
-        for( j=jb; j<je; j++ )
-        {
-            jj =  j * aNa->gridTP();
-            if( xTP >= 0 )
+            for( j=jb; j<je; j++ )
             {
-                Go = dCH->G0[ jj+xTP];
-                Vv = dCH->V0[ jj+xTP]*1e5;
-                if( dCH->S0 ) S0 = dCH->S0[ jj+xTP];
-                if( dCH->H0 ) h0 = dCH->H0[ jj+xTP];
-                if( dCH->Cp0 ) Cp0 = dCH->Cp0[ jj+xTP];
-                if( dCH->A0 ) a0 = dCH->A0[ jj+xTP];
-                if( dCH->U0 ) h0 = dCH->U0[ jj+xTP];
-            }
-            else
-            {
-                Go = LagranInterp( dCH->Pval, dCH->TKval, dCH->G0+jj,
-                                   PPa, TK, dCH->nTp, dCH->nPp, 6 ); // from test G0[Ca+2] enough
-                Vv = LagranInterp( dCH->Pval, dCH->TKval, dCH->V0+jj,
-                                   PPa, TK, dCH->nTp, dCH->nPp, 5 )*1e5;
-                if( dCH->S0 ) S0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->S0+jj,
-                                                  PPa, TK, dCH->nTp, dCH->nPp, 4 ); // from test S0[Ca+2] enough
-                if( dCH->H0 ) h0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->H0+jj,
-                                                  PPa, TK, dCH->nTp, dCH->nPp,5 );
-                if( dCH->Cp0 ) Cp0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->Cp0+jj,
-                                                    PPa, TK, dCH->nTp, dCH->nPp, 3 ); // from test Cp0[Ca+2] not more
-                if( dCH->A0 ) a0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->A0+jj,
-                                                  PPa, TK, dCH->nTp, dCH->nPp,5 );
-                if( dCH->U0 ) u0 =  LagranInterp( dCH->Pval, dCH->TKval, dCH->U0+jj,
-                                                  PPa, TK, dCH->nTp, dCH->nPp,5 );
-            }
-            if( TSyst::sm->GetSY()->Guns )  // This is used mainly in UnSpace calculations
-                Gg = TSyst::sm->GetSY()->Guns[pm.muj[j]];    // User-set increment to G0 from project system
-            // SDGEX     if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
-            //            Ge = syp->GEX[pm.muj[j]];     //now Ge is integrated into pm.G0 (since 07.03.2008) DK
-            pm.G0[j] = ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k ); // formerly Cj_init_calc()
-            // Inside this function, pm.YOF[k] can be added!
+                jj = pmp->muj[j];
 
-            if( TMTparm::sm->GetTP()->PtvVm != S_ON )
-                pm.Vol[j] = 0.;
-            else
-                switch( pm.PV )
-                { // put molar volumes of components into A matrix or into the vector of molar volumes
-                // to be checked!
-                case VOL_CONSTR:
-                    if( TSyst::sm->GetSY()->Vuns )
-                        Vv += TSyst::sm->GetSY()->Vuns[j];
-                    if( xVol >= 0 )
-                        pm.A[j*pm.N+xVol] = Vv;
-                    // [[fallthrough]];
-                case VOL_CALC:
-                case VOL_UNDEF:
-                    if( TSyst::sm->GetSY()->Vuns )
-                        Vv += TSyst::sm->GetSY()->Vuns[j];
-                    pm.Vol[j] = Vv  * 10.;
-                    break;
-                }
-            if( pm.S0 ) pm.S0[j] = S0;
-            if( pm.H0 ) pm.H0[j] = h0;
-            if( pm.Cp0 ) pm.Cp0[j] = Cp0;
-            if( pm.A0 ) pm.A0[j] = a0;
-            if( pm.U0 ) pm.U0[j] = u0;
+                Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
+                if( syp->Guns )  // This is used mainly in UnSpace calculations
+                    Gg = syp->Guns[jj];    // User-set increment to G0 from project system
+                if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
+                    Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
+                // !!!!!!! Insert here a case that checks units of measurement for the G0 increment
+                pmp->G0[j] = ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
+                Vv = 0.;
+                //  loading Vol
+                if( tpp->PtvVm == S_ON )
+                    switch( pmp->PV )
+                    { // loading molar volumes of components into the A matrix
+                    case VOL_CONSTR:
+                        if( syp->Vuns )
+                            Vv = syp->Vuns[jj];
+                        if( xVol >= 0 )
+                            pmp->A[j*pmp->N+xVol] = tpp->Vm[jj]+Vv;
+                         [[fallthrough]];
+                    case VOL_CALC:
+                    case VOL_UNDEF:
+                        if( syp->Vuns )
+                            Vv = syp->Vuns[jj];
+                        pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;
+                        break;
+                    }
+                else pmp->Vol[j] = 0.0;
+                // added 05/08/2009 SD
+                if( pmp->S0 && tpp->S ) pmp->S0[j] = tpp->S[jj];
+                if( pmp->H0 && tpp->H) pmp->H0[j] = tpp->H[jj];
+                if( pmp->Cp0 && tpp->Cp ) pmp->Cp0[j] = tpp->Cp[jj];
+                if( pmp->A0 && tpp->F ) pmp->A0[j] = tpp->F[jj];
+                if( pmp->U0 && tpp->U ) pmp->U0[j] = tpp->U[jj];
+            }
+        }
+   // }
 
-#ifdef  USE_THERMO_LOG
-            f_log << "\n" << std::string(dCH->DCNL[j], 0, MaxDCN) << ";" << floating_point_to_string(Go)
-                   << ";" << floating_point_to_string(pm.G0[j])
-                   << ";" << floating_point_to_string(pm.Vol[j]);
-            if( dCH->S0 ) f_log << ";" << floating_point_to_string(pm.S0[j]);
-            if( dCH->H0 ) f_log << ";" << floating_point_to_string(pm.H0[j]);
-            if( dCH->Cp0 ) f_log << ";" << floating_point_to_string(pm.Cp0[j]);
-            if( dCH->A0 ) f_log << ";" << floating_point_to_string(pm.A0[j]);
-            if( dCH->U0 ) f_log << ";" << floating_point_to_string(pm.U0[j]);
-#endif
-        }  // j
-    } // k
+  //Alloc_internal(); // performance optimization 08/02/2007
+  pmp->pTPD = 2;
 }
 
 

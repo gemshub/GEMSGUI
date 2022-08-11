@@ -16,8 +16,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cmath>
-
 #include "ui_RTparmWizard4.h"
 #include "RTparmWizard.h"
 #include "GemsMainWindow.h"

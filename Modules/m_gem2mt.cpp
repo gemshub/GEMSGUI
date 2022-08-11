@@ -781,7 +781,7 @@ void TGEM2MT::MakeQuery()
     Tai[3] = Pai[3] = 0.1;
 
     FreeNa();
-    na = new TNodeArrayGUI( 1, TMulti::sm );
+    na = TNodeArrayGUI::create(1, TMulti::sm);
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
@@ -956,15 +956,16 @@ void TGEM2MT::AllocNa()
 {
   FreeNa();
 
-  na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
-  //na = new TNodeArray( mtp->nC, TMulti::sm );
+  // ??? TMulti::sm->rebuild_lookup(  mtp->Tai, mtp->Pai );
+  na = TNodeArrayGUI::create(mtp->nC, TMulti::sm);
+
 
   // use particles
   if( mtp->PsMode == RMT_MODE_W  )
   {
      na->SetGrid( mtp->sizeLc, mtp->grid );   // set up grid structure
      pa_mt = new TParticleArray( mtp->nPTypes, mtp->nProps,
-           mtp->NPmean, mtp->ParTD, mtp->nPmin, mtp->nPmax, na );
+           mtp->NPmean, mtp->ParTD, mtp->nPmin, mtp->nPmax, na.get() );
    }
 }
 
@@ -974,11 +975,6 @@ void TGEM2MT::FreeNa()
   {
     delete pa_mt;
     pa_mt = nullptr;
-  }
-  if(na)
-  {
-     delete na;
-     na = nullptr;
   }
 //   freeNodeWork();
    LinkNode0(-1);
@@ -1234,7 +1230,7 @@ void TGEM2MT::RecordPrint( const char* key )
                 break;
             }
         }
-        na = new TNodeArrayGUI( mtp->nC, TMulti::sm );
+        na = TNodeArrayGUI::create(mtp->nC, TMulti::sm);
         mtp->gStat = GS_GOING;
         mt_reset();
         Bn_Calc();
@@ -1242,8 +1238,6 @@ void TGEM2MT::RecordPrint( const char* key )
         mtp->iStat = AS_READY;
         outMulti();
         mtp->iStat = AS_DONE;
-        delete na;
-        na = nullptr;
     }
     else
         TCModule::RecordPrint( key );

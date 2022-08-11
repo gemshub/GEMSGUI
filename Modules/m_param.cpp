@@ -445,7 +445,6 @@ const char* TProfil::GetHtml()
 
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
-    TNodeArrayGUI* na = nullptr;
     MULTI *pmp = multi->GetPM();
 
     try
@@ -469,7 +468,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval]->GetN();
 
 
-      na = new TNodeArrayGUI( 1, multi );
+      auto na = TNodeArrayGUI::create(1, multi);
 
       // realloc and setup data for dataCH and DataBr structures
       na->MakeNodeStructuresOne( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
@@ -486,14 +485,8 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
     }
     catch( TError& xcpt )
     {
-      if( na )
-       delete na;
-      na = nullptr;
       throw;
     }
-    if( na )
-     delete na;
-    na = nullptr;
 
 }
 
@@ -592,28 +585,26 @@ void TProfil::SetSysSwitchesFromMulti( )
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::CmReadMulti( const char* path, bool new_ipm )
+void TProfil::CmReadMulti(const char* path)
 {
-    TNodeGUI* na = new TNodeGUI( multi );
+    TNodeGUI na(multi);
     MULTI* pmp = multi->GetPM();
     SYSTEM* syp = syst->GetSY();
-    //std::string key = pmp->stkey;
 
-    if( na->GEM_init( path ) )
+    if( na.GEM_init( path ) )
     {
-      Error( path, "GEMS3K Init() error: \n" + na->ipmLogError() );
+      Error( path, "GEMS3K Init() error: \n" + na.ipmLogError() );
     }
     multi->dyn_set();
 
     // Here to compare the modelling project name; error when from a different project.
     if( CompareProjectName( pmp->stkey ) )
     {
-        delete na;
         Error( pmp->stkey, "E15IPM: Wrong project name by reading GEMS3K I/O files ");
     }
 
      // Unpacking the actual contents of DBR file including speciation
-    na->unpackDataBr( true );
+    na.unpackDataBr( true );
     for( int j=0; j < pmp->L; j++ )
         pmp->X[j] = pmp->Y[j];
     pmp->TC = pmp->TCc;
@@ -621,11 +612,8 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
     pmp->P =  pmp->Pc;
     //pmp->VX_ = pmp->VXc; // from cm3 to m3
 
-    if( !new_ipm )
-    {
-        // Set T and P  for key from DataBr
-        ChangeTPinKey( pmp->TC, pmp->P );
-    }
+    // Set T and P  for key from DataBr
+    ChangeTPinKey( pmp->TC, pmp->P );
 
     pmp->pESU = 2;  // SysEq unpack flag set
 
@@ -639,7 +627,7 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
            pmp->pIPN = 0;
            if( pmp->pTPD > 1)
                pmp->pTPD = 1; // reload Go, Vol
-pmp->pKMM = 0;
+           pmp->pKMM = 0;
            // sets the system/SysEq switches for
            // components and phases according to mui, muj, mup that were read in.
            SetSysSwitchesFromMulti( );
@@ -657,7 +645,7 @@ pmp->pKMM = 0;
 
     // for loading GEX to System
     CheckMtparam();
-    multi->TMultiBase::DC_LoadThermodynamicData( na );
+    multi->TMultiBase::DC_LoadThermodynamicData(&na);
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
     for( long i=0; i < pmp->N; i++ )
@@ -668,7 +656,7 @@ pmp->pKMM = 0;
        jj = pmp->muj[j];
        syp->DLL[jj] = pmp->DLL[j];
        syp->DUL[jj] = pmp->DUL[j];
-       syp->GEX[jj] = na->DC_G0(j, pmp->P*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
+       syp->GEX[jj] = na.DC_G0(j, pmp->P*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
     }
 
 // !!! We cannot restore to System  for adsorbtion must be done
@@ -685,10 +673,9 @@ pmp->pKMM = 0;
     pmp->pIPN =0;
     multi->Alloc_internal();
     multi->EqstatExpand( /*pmp->stkey,*/ false );
-//    outMultiTxt( "IPM_EqstatExpand.txt"  );
-    //    multi->Free_internal();
-    //    na->unpackDataBr( true );
-    delete na;
+    // outMultiTxt( "IPM_EqstatExpand.txt"  );
+    // multi->Free_internal();
+    // na.unpackDataBr( true );
     // We can get different results in GEMS than in GEMS3K
     // because of slightly different values into G, V ...
     // (interpolation of thermodynamic data or precision )
@@ -1033,7 +1020,7 @@ moved to TMulti*/
 // Run process of calculate equilibria into the GEMSGUI shell
 void  TProfil::CalculateEquilibriumGUI()
 {
-    TNodeGUI na( multi);
+    TNodeGUI na(multi);
 
 #ifdef NO_ASYNC_SERVER
     zmq_req_client_t<TNodeGUI> zmqclient(na);

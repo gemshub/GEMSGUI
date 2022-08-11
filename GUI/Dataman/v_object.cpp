@@ -100,7 +100,9 @@ TObject::TObject(istream& f):
 TObject::~TObject()
 {
     Keywd[ MAXKEYWD-1 ] = 0;
-    if(pV)
+    gui_logger->debug("~TObject {}", Keywd);
+    std::string keywd(Keywd);
+    if(pV && keywd != "muj" && keywd != "dul" && keywd != "dll")
       delete pV;
 }
 
@@ -351,7 +353,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     // Testing data type for debugging purposes
     gui_logger->trace("Alloc Object: {} newType= {} newN={} newM={}", Keywd, newType, newN, newM);
     if( newType != Type ) {
-       gui_logger->debug("Different type! Object: {} Type= {} newType= {}", Keywd, Type, newType);
+       gui_logger->trace("Different type! Object: {} Type= {} newType= {}", Keywd, Type, newType);
     }
 
     /* Saving old values */

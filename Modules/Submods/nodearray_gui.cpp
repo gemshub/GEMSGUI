@@ -27,6 +27,10 @@ TNodeArrayGUI::TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK,
 }
 
 
+
+
+
+
 //   Here we call a loop on GEM calculations over nodes
 //   parallelization should affect this loop only
 //   return code   true   Ok

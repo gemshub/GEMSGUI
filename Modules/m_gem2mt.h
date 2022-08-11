@@ -20,6 +20,7 @@
 #define _m_gem2mt_h_
 
 
+#include "m_param.h"
 #ifndef NOPARTICLEARRAY
 #include "particlearray.h"
 #endif
@@ -29,12 +30,9 @@ class TRWArrays;
 }
 
 #ifndef IPMGEMPLUGIN
-
-#include "m_param.h"
 #include "nodearray_gui.h"
 #include "v_ipnc.h"
 #include "graph_window.h"
-
 #else
 // internal
 enum grr_constants { // std::string len for graph
@@ -367,7 +365,7 @@ class TGEM2MT
     std::string error_lst_path;
 #endif
 
-  TNodeArrayGUI* na = nullptr;       // pointer to nodearray class instance
+  std::shared_ptr<TNodeArrayGUI> na = nullptr;       // pointer to nodearray class instance
   TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
 
     std::string pathVTK;
@@ -468,6 +466,7 @@ public:
     
     GEM2MT *mtp;
 
+    
     explicit TGEM2MT( uint nrt );
 
 #ifndef IPMGEMPLUGIN

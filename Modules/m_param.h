@@ -28,15 +28,6 @@
 #ifndef _m_param_h_
 #define _m_param_h_
 
-#include <cmath>
-
-// Physical constants - see m_param.cpp or ms_param.cpp
-extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
-e_CONSTANT,k_CONSTANT, cal_to_J, C_to_K, lg_to_ln, ln_to_lg, H2O_mol_to_kg, Min_phys_amount;
-
-#include "GEMS3K/ms_multi.h"
-#include "node_gui.h"
-#include "v_mod.h"
 #include "ms_rmults.h"
 #include "ms_mtparm.h"
 #include "ms_system.h"
@@ -316,14 +307,11 @@ public:
     {
         multi->to_text_file( path, append );
     }
-
-    void CmReadMulti( const char* path, bool new_ipm = false );
+    void CmReadMulti(const char* path);
     bool CompareProjectName( const char* SysKey );
     void ChangeTPinKey( double T, double P );
     void SetSysSwitchesFromMulti( );
 };
-
-
 
 #endif  // _m_param_h
 

@@ -38,10 +38,8 @@
 class QWidget;
 
 
-class TNodeArrayGUI : public TNodeArray, std::enable_shared_from_this<TNodeArrayGUI>
+class TNodeArrayGUI : public TNodeArray
 {
-
-    std::shared_ptr<TNodeGUI> internal_NodeGUI;
     TNodeGUI* calcNodeGUI;
 
     TestModeGEMParam mode_param;
@@ -49,7 +47,6 @@ class TNodeArrayGUI : public TNodeArray, std::enable_shared_from_this<TNodeArray
     size_t requests_number=0;
     size_t sended_requests = 0;
     size_t resv_responce = 0;
-
 
     ///  Here we do a GEM calculation in box ii (implementation thread-safe)
     bool CalcIPM_Node(  const TestModeGEMParam& modeParam, TNode* wrkNode,
@@ -59,14 +56,24 @@ class TNodeArrayGUI : public TNodeArray, std::enable_shared_from_this<TNodeArray
     //long int CalcNodeServer(TNode* wrkNode, long int  iNode, long int Mode) override;
     void pVisor_Message( bool toclose, long int ndx = 0, long int size = 0 ) override;
 
-public:
-
     // These calls are used only inside of GEMS-PSI GEM2MT module
     /// Constructor for integration in GEM2MT module of GEMS-PSI
-    TNodeArrayGUI( long int nNodes, TMultiBase *apm );
+    TNodeArrayGUI(long int nNodes, TMultiBase *apm);
 
     /// Constructor that uses 3D node arrangement
-    TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm );
+    TNodeArrayGUI(long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm);
+
+public:
+
+    // Used in GEMIPM2 standalone module only
+    /// Constructors for 1D arrangement of nodes
+    [[nodiscard]] static std::shared_ptr<TNodeArrayGUI> create(long int nNodes, TMultiBase *apm) {
+        return (std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(nNodes, apm)));
+    }
+    /// Constructor that uses 3D node arrangement
+    [[nodiscard]] static std::shared_ptr<TNodeArrayGUI> create(long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm) {
+        return ( std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(asizeN, asizeM, asizeK, apm)));
+    }
 
     ///  Here we do a GEM calculation in boxes from  start_node to end_node
     bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
@@ -186,9 +193,6 @@ public:
         sended_requests = start_node;
         resv_responce = start_node;
     }
-
-protected:
-
 
 
 };

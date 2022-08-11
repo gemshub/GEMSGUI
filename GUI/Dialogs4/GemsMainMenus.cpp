@@ -352,14 +352,14 @@ void TVisorImp::setActions()
     connect(ui->menuWindow, SIGNAL(aboutToShow()), this, SLOT(updateWindowMenu()));
 
     //NewSystemDialog
-    connect( ui->sactionOpenMTPARAM, SIGNAL( triggered()), this, SLOT(CmOpen_MTPARAM()));
-    connect( ui->sactionOpen_SYSTEM_ICOMP, SIGNAL( triggered()), this, SLOT(CmOpen_SYSTEM_ICOMP()));
-    connect( ui->sactionINSERT_SYSTEM, SIGNAL( triggered()), this, SLOT(CmInsert_SYSTEM()));
-    connect( ui->sactionOutMulti, SIGNAL( triggered()), this, SLOT(CmOutMulti()));
-    connect( ui->sactionReadMulti, SIGNAL( triggered()), this, SLOT(CmReadMulti()));
+    connect( ui->sactionOpenMTPARAM, SIGNAL(triggered()), this, SLOT(CmOpen_MTPARAM()));
+    connect( ui->sactionOpen_SYSTEM_ICOMP, SIGNAL(triggered()), this, SLOT(CmOpen_SYSTEM_ICOMP()));
+    connect( ui->sactionINSERT_SYSTEM, SIGNAL(triggered()), this, SLOT(CmInsert_SYSTEM()));
+    connect( ui->sactionOutMulti, SIGNAL(triggered()), this, SLOT(CmOutMulti()));
+    connect( ui->sactionReadMulti, SIGNAL(triggered()), this, SLOT(CmReadMulti()));
 
-    connect( ui->saction_BCC, SIGNAL( triggered()), this, SLOT(CmRunBCC()));
-    connect( ui->saction_IPM, SIGNAL( triggered()), this, SLOT(CmRunIPM()));
+    connect( ui->saction_BCC, SIGNAL(triggered()), this, SLOT(CmRunBCC()));
+    connect( ui->saction_IPM, SIGNAL(triggered()), this, SLOT(CmRunIPM()));
     //connect( actionSimplex, SIGNAL( triggered()), this, SLOT(CmSimplex()));
     //connect( actionPrecise, SIGNAL( triggered()), this, SLOT(CmPrecise()));
     //connect( actionStepwise, SIGNAL( triggered()), this, SLOT(CmStepwise()));

@@ -16,7 +16,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <iostream>
 #include "visor.h"
 #include "GemsMainWindow.h"
 #include "ui_GemsMainWindow4.h"
@@ -57,13 +56,13 @@ void TVisorImp::CmRunIPM()
 
 void TVisorImp::finish_IPN()
 {
-    cout << "finish_IPN" << endl;
+    gui_logger->debug("finish_IPN");
     Update(true);
 }
 
 void TVisorImp::error_IPN( std::string err_mess )
 {
-    cout << "error_IPN" << endl;
+    gui_logger->error("error_IPN");
     //Update(true);
     vfMessage(this, "error_IPN", err_mess );
     ProgressDialog::pDia->close();
@@ -74,7 +73,7 @@ void TVisorImp::setCalcClient()
     qRegisterMetaType<std::string>("std::string");
     try{
 
-        cout << "setCalcClient" << endl;
+        gui_logger->debug("setCalcClient");
 
         calc_model = new IPNCalcObject();
 
@@ -92,7 +91,7 @@ void TVisorImp::setCalcClient()
     }
     catch(std::exception& e)
     {
-        std::cout << "Internal comment: " << e.what() << std::endl;
+        gui_logger->error("setCalcClient internal comment: {}", e.what());
         throw;
     }
 }
@@ -136,7 +135,7 @@ void TVisorImp::startGEMServer()
             QStringList argumentos;
             //argumentos << "-P" << filehex  << "-Q" << "-V" <<  "after_programming";
             GEMS3_proc->start(app,argumentos);
-            cout << app.toStdString() << endl;
+            gui_logger->info("Start gems3 server: {}", app.toStdString());
 
             if(!GEMS3_proc->waitForStarted(-1))
             {
@@ -146,11 +145,12 @@ void TVisorImp::startGEMServer()
     }
     catch(TError& e)
     {
+        gui_logger->error("Start gems3 server error: {}", e.mess.c_str());
         vfMessage(this, e.title.c_str(), e.mess.c_str() );
     }
     catch(...)
     {
-        cout << "Start GEMS3 server error occurred"  << endl;
+        gui_logger->error("Start GEMS3 server error occurred");
     }
 }
 
@@ -159,9 +159,10 @@ void TVisorImp::readOutput()
     while( GEMS3_proc->canReadLine() )
     {
         QByteArray linea = GEMS3_proc->readLine();
-        const std::string green("\033[1;32m");
-        const std::string reset("\033[0m");
-        cout << green << "GEMS3 server: " << reset << linea.toStdString()  << endl;
+        // const std::string green("\033[1;32m");
+        // const std::string reset("\033[0m");
+        // c out << green << "GEMS3 server: " << reset << linea.toStdString()  << endl;
+        gui_logger->info("GEMS3 server: {}", linea.toStdString());
     }
 }
 
@@ -181,8 +182,7 @@ void TVisorImp::killGEMServer()
 
 void TVisorImp::GEMServerErrorOccurred(QProcess::ProcessError error)
 {
-    cout << "GEMS3 server error occurred: " << error << endl;
-
+    gui_logger->error("GEMS3 server error occurred:  {}", error);
     // try restart server
     if( error >0 )
         startGEMServer();

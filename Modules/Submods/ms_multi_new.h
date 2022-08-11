@@ -32,17 +32,10 @@
 #define ms_multi_new_h
 
 #include "GEMS3K/ms_multi.h"
-#include "m_param.h"
+#include "v_module.h"
 #include "v_ipnc.h"
-
 // Internal subroutine for ET_translate() to process Phase scripts
 typedef int (tget_ndx)( int nI, int nO, int Xplace );
-// TSolMod header
-#include "GEMS3K/s_solmod.h"
-// new: TsorpMod and TKinMet
-#include "GEMS3K/s_sorpmod.h"
-#include "GEMS3K/s_kinmet.h"
-
 
 // Data of MULTI
 class TMulti: public TMultiBase, public TSubModule
@@ -57,7 +50,8 @@ public:
     std::vector<std::shared_ptr<IPNCalc>> qEd;
 
     TMulti( int nrt ):
-        TMultiBase(nullptr),TSubModule( nrt )
+        TMultiBase(nullptr),
+        TSubModule( nrt )
     {}
 
     ~TMulti()
@@ -67,11 +61,7 @@ public:
         Free_uDD();
     }
 
-//    BASE_PARAM *TMulti::pa_p_ptr() const
-//    {
-//        //return paTProfil1->p;
-//        return &TProfil::pm->pa.p;
-//    }
+    BASE_PARAM* base_param() const override;
 
     const char* GetName() const override
     {  return "Multi";  }
@@ -81,13 +71,13 @@ public:
     void dyn_new( int i=0) override;
     void set_def( int i=0) override
     {
-       TMultiBase::set_def(i);
+        TMultiBase::set_def(i);
     }
-   void multi_realloc( char /*PAalp*/, char /*PSigm*/ ) override
-   {
-     dyn_new();
-   }
-   void multi_kill() override {}
+    void multi_realloc( char /*PAalp*/, char /*PSigm*/ ) override
+    {
+        dyn_new();
+    }
+    void multi_kill() override {}
 
     // ms_muleq.cpp
     void packData();
@@ -111,7 +101,15 @@ public:
 
 
     // EXTERNAL FUNCTIONS
-  void DC_LoadThermodynamicData( TNode* aNa  ) override;
+    void DC_LoadThermodynamicData();
+    void DC_LoadThermodynamicData( TNode* aNa  ) override
+    {
+        if( aNa == nullptr)
+          DC_LoadThermodynamicData();
+        else
+          TMultiBase::DC_LoadThermodynamicData( aNa );
+     }
+
 
 
     long get_sizeFIs () { return sizeFIs; }
@@ -154,7 +152,7 @@ protected:
     void pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb, long int ipb );
 
     // bool GEM_IPM_InitialApproximation() override;
-    void load_all_thermodynamic_from_grid(TNode *aNa, double TK, double P) override;
+    //void load_all_thermodynamic_from_grid(TNode *aNa, double TK, double P) override;
 
 private:
 

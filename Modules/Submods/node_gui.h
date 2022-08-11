@@ -46,9 +46,8 @@ class TNodeGUI: public TNode
 
 public:
 
-
     /// Constructor of the class instance in memory in GEMS environment
-    explicit TNodeGUI( TMultiBase* apm );
+    explicit TNodeGUI(TMultiBase* apm);
 
     void packDataBr() override   ///<  Packs GEMIPM calculation results into work node structure
     {
@@ -93,7 +92,6 @@ public:
     /// Set up data from response strings from ZMQ server
     /// \return true if success
     bool set_resv_msg( std::vector<std::string>&& msg_return );
-
 
 protected:
 

@@ -1682,7 +1682,6 @@ const char* TProcess::GetHtml()
 void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystems, bool brief_mode, bool add_mui)
 {
     // set up Node Array
-    std::unique_ptr<TNodeArrayGUI> na;
     double Tai[4], Pai[4];
 
     Tai[0] = pep->Ti[0];
@@ -1693,7 +1692,7 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
     Pai[2] = pep->Pi[2];
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNodeArrayGUI( 1, TMulti::sm )) ;
+    auto na = TNodeArrayGUI::create(1, TMulti::sm);
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 

@@ -16,10 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cmath>
-#include <iostream>
 #include <QMutex>
-
 #include "ProgressDialog.h"
 #include "ui_ProgressDialog4.h"
 #include "NewSystemDialog.h"
@@ -27,9 +24,9 @@
 
 void IPNCalcObject::IPM_run()
 {
-    std::cout << "IPM_run" << endl;
     try
     {
+        gui_logger->debug("IPM_run");
         QMutexLocker  loker(&pVisorImp->getMutexCalc());
         // cout << pVisorImp->getMutexCalc().tryLock()<< endl;
         showMss = 1L;

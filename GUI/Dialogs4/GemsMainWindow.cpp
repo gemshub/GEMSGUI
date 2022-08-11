@@ -26,7 +26,6 @@
 
 
 #include "visor.h"
-#include "m_param.h"
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "NewSystemDialog.h"
@@ -269,7 +268,6 @@ TVisorImp::TVisorImp(int c, char** v):
             //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
         }
     }
-
 
     //startGEMServer();
     updateMenus();
