@@ -77,7 +77,6 @@ public:
     {
         dyn_new();
     }
-    void multi_kill() override {}
 
     // ms_muleq.cpp
     void packData();

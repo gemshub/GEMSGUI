@@ -205,8 +205,6 @@ protected:
 
     // multi load
     short BAL_compare();
-    // Load Thermodynamic data from Database
-    void CheckMtparam();
 
 public:
 
@@ -240,6 +238,9 @@ public:
     void DeleteRecord( const char *key, bool errinNo=true );
     void MakeQuery();
     const char* GetHtml();
+
+    // Load Thermodynamic data from Database
+    void CheckMtparam();
 
     // Setup one of 5 default IPM numerical settings
     void ChangeSettings(int nSettings);

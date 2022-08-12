@@ -432,7 +432,7 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
     if( pm.pESU == 0 )
         pm.pNP = 0;
 
-    /// TProfil::pm->CheckMtparam(); //load tpp structure
+    TProfil::pm->CheckMtparam(); //load tpp structure
 
     ipm_logger->trace("newInterval = {}   pm.pTPD =  {}", newInterval, pm.pTPD);
     // New: TKinMet stuff
@@ -561,12 +561,12 @@ void TMulti::DC_LoadThermodynamicData()
                         break;
                     }
                 else pmp->Vol[j] = 0.0;
-                // added 05/08/2009 SD
-                if( pmp->S0 && tpp->S ) pmp->S0[j] = tpp->S[jj];
-                if( pmp->H0 && tpp->H) pmp->H0[j] = tpp->H[jj];
-                if( pmp->Cp0 && tpp->Cp ) pmp->Cp0[j] = tpp->Cp[jj];
-                if( pmp->A0 && tpp->F ) pmp->A0[j] = tpp->F[jj];
-                if( pmp->U0 && tpp->U ) pmp->U0[j] = tpp->U[jj];
+
+                if( pmp->S0 ) pmp->S0[j] = ( tpp->S ? tpp->S[jj] : 0.0 );
+                if( pmp->H0 ) pmp->H0[j] = ( tpp->H ? tpp->H[jj] : 0.0 );
+                if( pmp->Cp0) pmp->Cp0[j] = ( tpp->Cp ? tpp->Cp[jj] : 0.0 );
+                if( pmp->A0 ) pmp->A0[j] = ( tpp->F ? tpp->F[jj] : 0.0 );
+                if( pmp->U0 ) pmp->U0[j] = ( tpp->U ? tpp->U[jj] : 0.0 );
             }
         }
    // }

@@ -541,6 +541,7 @@ void TProfil::loadSystat( const char *key )
     }
 
     pVisor->Update();
+    outMultiTxt( "GEMHUB_loadSystat.txt");
 }
 
 // rebuild loading before Systat

@@ -100,9 +100,7 @@ TObject::TObject(istream& f):
 TObject::~TObject()
 {
     Keywd[ MAXKEYWD-1 ] = 0;
-    gui_logger->debug("~TObject {}", Keywd);
-    std::string keywd(Keywd);
-    if(pV && keywd != "muj" && keywd != "dul" && keywd != "dll")
+    if(pV)
       delete pV;
 }
 

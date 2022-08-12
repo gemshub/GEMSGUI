@@ -798,8 +798,8 @@ NEW_PHASE_AGAIN:
     file =rt[RT_PHASE]->GetOpenFileNum( prfName.c_str() );
 
     // Creating automatic aq and/or gas phases (automatic phase only one )
-    TPhase::pm->newAqGasPhase( ( AqKey.size()>0 ? AqKey[0].c_str(): nullptr),
-                               ( GasKey.size()>0 ? GasKey[0].c_str(): nullptr),
+    TPhase::pm->newAqGasPhase( ( AqKey.size()>0 ? AqKey[0]: ""),
+                               ( GasKey.size()>0 ? GasKey[0]: ""),
                                file, amod, gmod, aparam );
 
     MakeRecordLists( AqKey, GasKey ); // build records lists and calc size of arrays

@@ -939,7 +939,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
 //-------------------------------------------------------------------------
 // called from Project - extended by KD on 16.06.03 to add CG EoS
 // Re-written (for AutoPhaseWizard) by KD on 31.07.03
-void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
+void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, int file,
    const char amod, const char gmod, float apar[8], /*float gpar[4],*/
    bool useLst, TCStringArray lst )
 {
@@ -1133,11 +1133,11 @@ MAKE_GAS_PHASE:
               goto DONE;
     }
     part = "g:*:*:*:";
-    if( gkey && gkey[0] == 'f' )
+    if( !gkey.empty() && gkey[0] == 'f' )
         part = "f:*:*:*:";
 
     // Assembling gas phase
-    if(gkey )
+    if(!gkey.empty())
      AssemblePhase( gkey, part, nullptr, file, useLst, lst, 0 );
 
     // Do sometning else here?
@@ -1149,7 +1149,7 @@ MAKE_GAS_PHASE:
 // Assembling the phase (automatically generated aq or gas/fluid)
 // Separated by KD on 31.07.03
 void
-TPhase::AssemblePhase( const char* key, const char* part, float* param,
+TPhase::AssemblePhase( const std::string& key, const char* part, float* param,
     int file, bool useLst, TCStringArray lst, int Npar )
 {
 
@@ -1318,10 +1318,10 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
 // Calculating the phase record and saving it to database
     CalcPhaseRecord( /*true*/ );
 
-    int  Rnum = db->Find( key );
+    int  Rnum = db->Find(key.c_str());
 
     if( Rnum<0 )
-        db->AddRecordToFile( key, file );
+        db->AddRecordToFile(key.c_str(), file);
     else
       {
         std::string mess = key;
