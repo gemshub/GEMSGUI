@@ -17,8 +17,6 @@
 //-------------------------------------------------------------------
 //
 
-#include <cmath>
-#include <cstdio>
 #include "m_gem2mt.h"
 #include "m_syseq.h"
 #include "visor.h"

@@ -18,23 +18,16 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cmath>
-#include <cstdio>
-#include <iomanip>
 
 #ifndef IPMGEMPLUGIN
-
 #include "m_gem2mt.h"
 #include "m_compos.h"
 #include "visor.h"
 #include "stepwise.h"
-
 #else
-
-#include <ctime>
 #include "m_gem2mt.h"
 #include "GEMS3K/nodearray.h"
-
+#include "v_service.h"
 #endif
 
 #define dMB( q, i) ( dm[ (q)*mtp->Nf + (i)] )
@@ -330,8 +323,7 @@ void TGEM2MT::BoxComposUpdate( long int q )
 void TGEM2MT::BoxesBCupdate()
 {
   // Debug trace output
-  fstream f_log("ipmlog.txt", ios::out|ios::app );
-  f_log << endl << "Time t= " << mtp->cTau/mtp->tf << " dt= " << mtp->dTau/mtp->tf << endl;
+  TNode::ipmlog_file->trace("Time t= {}   dt= {}", mtp->cTau/mtp->tf, mtp->dTau/mtp->tf);
 
   for( long int q=0; q <mtp->nC; q++ )
   {
@@ -339,20 +331,13 @@ void TGEM2MT::BoxesBCupdate()
 
     // Debug trace output
     double dMsq = 0.0;
-    f_log << "  box qc= " << q << " mass= " << node1_Ms( q ) << " el.mass:  mb(q,i): ";
-
+    TNode::ipmlog_file->trace("box qc=  {}   mass= {}", q, node1_Ms( q ));
     for(long int i =0; i< mtp->Nf; i++ )
     {
-       f_log << " " << Mb(q,i) << " ";
        dMsq += dMb(q,i);
     }  // i
     mtp->BdM[q] = dMsq; // Alternatively calculated mass differential of the box
-    f_log << endl << "  box qc= " << q << " dmass= " << dMsq << " el.dmass: dmb(q,i): ";
-    for(long int i =0; i< mtp->Nf; i++ )
-    {
-       f_log << " " << dMb(q,i) << " ";
-    }  // i
-    f_log << endl;
+    TNode::ipmlog_file->trace("box qc=  {}   mass= {}", q, dMsq);
   }  // q
 }
 

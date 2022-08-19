@@ -36,10 +36,14 @@
 TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
 {
     internal_multi.reset();
-    multi = apm;
-    pmm = multi->GetPM();
+    multi_base = apm;
+    pmm = multi_base->GetPM();
 }
 
+void TNodeGUI::write_ThermoFun_format_stream(iostream &stream, bool compact)
+{
+    TProfil::pm->generate_ThermoFun_input_file_stream(stream, compact);
+}
 
 // Makes start DATACH and DATABR data from GEMS internal data (MULTI and other)
 void TNodeGUI::MakeNodeStructures(
@@ -370,7 +374,13 @@ std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
     msg_data.push_back( datach_to_string( false, brief_mode ) );
     msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
     msg_data.push_back( databr_to_string( false, brief_mode ));
-    //std::cout << "Send NodeHandle... " << current_task->pCNode()->NodeHandle << std::endl;
+    if( GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun ) {
+    std::stringstream fun_json;
+    write_ThermoFun_format_stream(fun_json, true);
+    msg_data.push_back(fun_json.str());
+    node_logger->info("Thermo {}", fun_json.str());
+    }
+    node_logger->info("Send NodeHandle... {} {}", pCNode()->NodeHandle, GEMS3KGenerator::default_type_f);
     return msg_data;
 }
 
@@ -404,6 +414,7 @@ bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
     return false;
 }
 
+
 // Reading structure MULTI (GEM IPM work structure)
 double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::string>& recv_msg )
 {
@@ -435,7 +446,7 @@ double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::
 
         pmm->pESU = 2;  // SysEq unpack flag set
 
-        TMulti* amulti = dynamic_cast<TMulti*>(multi);
+        TMulti* amulti = dynamic_cast<TMulti*>(multi_base);
         if( amulti)
             amulti->EqstatExpand( /*pmp->stkey,*/ true );
         pmm->FI1 = 0;  // Recomputing the number of non-zeroed-off phases
@@ -453,7 +464,6 @@ double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::
             pmm->G[i] = pmm->G0[i];
 
     }
-    //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
     ///   !!! G[] and F[] different after IPM and EqstatExpand
     return ret;
 }

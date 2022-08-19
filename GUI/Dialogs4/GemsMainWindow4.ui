@@ -109,6 +109,7 @@
     <addaction name="separator"/>
     <addaction name="sactionSimplex"/>
     <addaction name="sactionPrecise"/>
+    <addaction name="action_Use_ThermoFUN"/>
    </widget>
    <widget class="QMenu" name="smenu_View">
     <property name="title">
@@ -1256,6 +1257,17 @@
   <action name="actionImport_Json">
    <property name="text">
     <string>Restore &amp;from JSON...</string>
+   </property>
+  </action>
+  <action name="action_Use_ThermoFUN">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string> Use&amp;ThermoFUN</string>
+   </property>
+   <property name="toolTip">
+    <string>ThermoFun as option in GEMS3K</string>
    </property>
   </action>
  </widget>

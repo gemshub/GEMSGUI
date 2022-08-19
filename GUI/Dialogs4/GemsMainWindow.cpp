@@ -86,6 +86,8 @@ TVisorImp::TVisorImp(int c, char** v):
     settedCureentKeyIntotbKeys(false)
 {
     ui->setupUi(this);
+    ui->action_Use_ThermoFUN->setChecked(GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun);
+
     (void)statusBar();
     //setMinimumSize( 300, 200 );
 
@@ -217,7 +219,14 @@ TVisorImp::TVisorImp(int c, char** v):
     splH->setStretchFactor(1, 1);
 
     // define signal/slots
-
+    connect( ui->action_Use_ThermoFUN, &QAction::toggled, [&](bool checked){
+        if(checked) {
+            GEMS3KGenerator::default_type_f  = GEMS3KGenerator::f_thermofun;
+        }
+        else {
+            GEMS3KGenerator::default_type_f  = GEMS3KGenerator::f_json;
+        }
+    });
     connect( ui->action_calcMode, SIGNAL( triggered()), this, SLOT(CmCalcMode()));
     connect( ui->actionDataBaseMode, SIGNAL( triggered()), this, SLOT(CmDataBaseMode()));
 

@@ -520,7 +520,7 @@ AGAIN:
     }
 
     pVisor->CloseMessage();
-    MULTI *pmp = multi->GetPM();
+    MULTI *pmp = multi_internal->GetPM();
     TSysEq* aSE= dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     aSE->ods_link(0);
     for(nbad =0,  i=0; i< aList.size(); i++)
@@ -566,7 +566,7 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
 {
     std::string s;
     RMULTS* mup = rmults->GetMU();
-     MULTI *pmp = multi->GetPM();
+     MULTI *pmp = multi_internal->GetPM();
     time_t tr;
     const char* title = "Demonstrate in calculate Mode.";
 
@@ -1013,7 +1013,7 @@ int TProfil::PhIndexforDC( int xdc, bool system )
 {
   int k, DCx = 0;
   RMULTS* mup = rmults->GetMU();
-  MULTI*  pmp = multi->GetPM();
+  MULTI*  pmp = multi_internal->GetPM();
 
   if( system )
   { for( k=0; k<mup->Fi; k++ )
@@ -1041,7 +1041,7 @@ std::string TProfil::PhNameforDC( int xdc, bool system )
   if( system )
    return char_array_to_string( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, MAXPHNAME);
   else
-   return char_array_to_string( multi->GetPM()->SF[k]+MAXSYMB, MAXPHNAME);
+   return char_array_to_string( multi_internal->GetPM()->SF[k]+MAXSYMB, MAXPHNAME);
 }
 
 
@@ -1052,7 +1052,7 @@ std::string TProfil::PhNameforDC( int xdc, int& xph, bool system )
   if( system )
    return char_array_to_string( rmults->GetMU()->SF[xph], PH_RKLEN);
   else
-   return char_array_to_string( multi->GetPM()->SF[xph], MAXPHNAME+MAXSYMB);
+   return char_array_to_string( multi_internal->GetPM()->SF[xph], MAXPHNAME+MAXSYMB);
 }
 
 TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
@@ -1060,7 +1060,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   int k, j, DCx = 0;
   auto len = strlen( PhName );
   RMULTS* mup = rmults->GetMU();
-  MULTI*  pmp = multi->GetPM();
+  MULTI*  pmp = multi_internal->GetPM();
   TCStringArray DCnames;
   std::string dcstr;
 
@@ -1098,7 +1098,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::
 {
     int k, j, DCx = 0;
     RMULTS* mup = rmults->GetMU();
-    MULTI*  pmp = multi->GetPM();
+    MULTI*  pmp = multi_internal->GetPM();
 
     if( system )
     { for( k=0; k<xph; k++ )
@@ -1157,7 +1157,7 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
                   strncmp(objName, aObj[o_wd_sf2]->GetKeywd(), MAXKEYWD)==0 )
              {
                 system = false;
-                phname = char_array_to_string( multi->GetPM()->SF[xph], MAXSYMB+MAXPHNAME);
+                phname = char_array_to_string( multi_internal->GetPM()->SF[xph], MAXSYMB+MAXPHNAME);
              }
             else
                 return;
@@ -1198,7 +1198,7 @@ void TProfil::System2GEMS3K( const std::string key, int calcMode, const std::str
     /*  Do we need recalculate system before? */
     if( calcMode )
     {
-        MULTI *pmp = multi->GetPM();
+        MULTI *pmp = multi_internal->GetPM();
         double dTime=0.; int kTimeStep =0; double kTime=0.;
 
         if( calcMode == 2 ) //NEED_GEM_SIA
@@ -1340,7 +1340,7 @@ void TProfil::GEMS3KallSystems( int makeCalc, bool brief_mode, bool add_mui )
     }
 }
 
-void TProfil::generate_ThermoFun_input_file_stream(iostream &stream)
+void TProfil::generate_ThermoFun_input_file_stream(iostream &stream, bool compact)
 {
     QJsonObject thermo_data;
     QJsonArray datasources;
@@ -1355,7 +1355,8 @@ void TProfil::generate_ThermoFun_input_file_stream(iostream &stream)
     thermo_data["reactions"] = TReacDC::pm->all_to_thermofun(subst_arr);
     thermo_data["substances"] = subst_arr;
     QJsonDocument saveDoc(thermo_data);
-    stream << saveDoc.toJson().data() << std::endl;
+    auto json_str = saveDoc.toJson((compact ? QJsonDocument::Compact :QJsonDocument::Indented)).toStdString();
+    stream << json_str << std::endl;
 }
 
 //------------------ End of m_prfget2.cpp --------------------------

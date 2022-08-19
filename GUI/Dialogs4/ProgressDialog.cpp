@@ -28,7 +28,6 @@ void IPNCalcObject::IPM_run()
     {
         gui_logger->debug("IPM_run");
         QMutexLocker  loker(&pVisorImp->getMutexCalc());
-        // cout << pVisorImp->getMutexCalc().tryLock()<< endl;
         showMss = 1L;
         double dummy = -1.;
         TProfil::pm->CalcEqstat( dummy, -1, 0. );

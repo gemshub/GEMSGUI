@@ -17,26 +17,19 @@
 //-------------------------------------------------------------------
 //
 
-#include <cmath>
-#include <cstdio>
+#include <fstream>
 #ifdef useOMP
 #include <omp.h>
 #endif
 
-#ifndef IPMGEMPLUGIN
-
 #include "m_gem2mt.h"
+#include "GEMS3K/v_service.h"
+#ifndef IPMGEMPLUGIN
 #include "visor.h"
 #include "stepwise.h"
-
 #else
-
-#include <ctime>
-#include "m_gem2mt.h"
 #include "GEMS3K/nodearray.h"
-
 #endif
-#include "v_service.h"
 
 // ===========================================================
 
@@ -994,7 +987,7 @@ double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE*
 
        name = pathVTK + nameVTK + "/" + prefixVTK + name;
 
-       std::fstream out_br(name.c_str(), std::ios::out );
+       std::fstream out_br(name, std::ios::out );
        ErrorIf( !out_br.good() , name, "VTK text make error");
        na->databr_to_vtk(out_br, nameVTK.c_str(), mtp->cTau, mtp->ct, mtp->nVTKfld, mtp->xVTKfld );
    }

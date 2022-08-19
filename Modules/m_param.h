@@ -39,58 +39,6 @@ class QWidget;
 
 extern long int showMss;
 
-struct SPP_SETTING
-{   // Base Parametres of SP
-    char ver[TDBVERSION]; // Version & Copyright 64
-    BASE_PARAM p; // Flags and thresholds for numeric modules
-    char           // default codes of values
-    DCpct[7],      // Default DCOMP flags and codes
-    DCpdc[10],     // Default DCOMP class and units
-    BCpc[7],       // Default COMPOS configuration
-    REpct[7],      // Default REACDC flags and codes
-
-    REpdc[7],      // Default REACDC class and units
-    REpvc[9],      // Default REACDC configuration
-    RPpdc[11],      // Default RTPARM flags and codes
-    RPpvc[33],     // Default RTPARM configuration  reserved
-    PHsol_t[7],    // Default PHASE model codes
-    PHpvc[7],      // Default PHASE configuration
-    MUpmv[11],     // Default RMULTS configuration
-    TPpdc[9],      // Default class and units for MTPARM
-    TPpvc[21],     // Default MTPARM configuration
-    SYppc[11],     // Default class and flags for SYSTEM
-    SYpvc[29],     // Default SYSTEM confifuration
-    UTppc[11],     // Default DUTERM class and flags
-    PEpsc[13],     // Default PROCES class and flags
-    PEpvc[13],     // Default PROCES configuration
-    GDcode[2][20], // Default names of screen and graphs in GTDEMO ????
-    GDpsc[7],      // Default names of lines on GTDEMO graphs
-    GDpcc[2][9],   // Default axis names for GTDEMO
-    GDptc[7],      // Default GTDEMO configuration
-    GDpgw[7],      // Default setup of graphs in GTDEMO
-    SDrefKey[32],  // sdref key
-    Reserv[50-32]    // (reserved) objects later
-    ;
-    // for RTPARM
-    short NP,NT,  // Default N of points (RTPARM): P, T
-    NV,       // reserved
-    Mode,     // Default indexation mode RTPARM
-    ResShort[5];
-    float        // RTPARM
-    Pi[3],    // Default interval for pressure
-    Ti[3],    // Default interval for temperature, C
-    Vi[3],    // Default interval for volume, cm3
-    DRpst, DRtcst,   // Default Pr, Tr for DCOMP & REACDC
-    lowPosNum, // MULTI Cutoff moles of DC (Ls set) { 1e-19 };
-    logXw,     // log(1e-16)
-    logYFk,    // log(1e-9)
-    aqPar[5];  // b_gamma, a0, NeutPolicy, GamH2O, b_gam_T_dep for auto aq phase model
-    //    ResFloat;   // one parameter for auto gas/fluid phase
-
-    void write(GemDataStream& oss);
-    void read(GemDataStream& oss);
-};
-
 extern SPP_SETTING pa_;
 
 struct CompItem
@@ -109,7 +57,7 @@ class TProfil : public TCModule
     TRMults* rmults;
     TMTparm* mtparm;
     TSyst* syst;
-    TMulti* multi;
+    TMulti* multi_internal;
 
     bool newRecord;
     // new 12.12.12 data to Project record
@@ -279,9 +227,9 @@ public:
     // Proces make functions
     void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                        tget_ndx *get_ndx = nullptr )
-    { multi->ET_translate( nOet, nOpex, JB, JE, jb, je, get_ndx); }
+    { multi_internal->ET_translate( nOet, nOpex, JB, JE, jb, je, get_ndx); }
     void getNamesList( int nO, TCStringArray& lst )
-    { multi->getNamesList(nO, lst); }
+    { multi_internal->getNamesList(nO, lst); }
     double MolWeight( int N, double *ICaw, double *Smline )
     { 	return syst->MolWeight( N, ICaw, Smline ); }
     void SyTestSizes()
@@ -289,11 +237,11 @@ public:
 
     inline double HelmholtzEnergy( double x )
     {
-        return multi->HelmholtzEnergy(x);
+        return multi_internal->HelmholtzEnergy(x);
     }
     inline double InternalEnergy( double TC, double P )
     {
-        return multi->InternalEnergy( TC, P );
+        return multi_internal->InternalEnergy( TC, P );
     }
 
     //test
@@ -301,12 +249,12 @@ public:
     /// from the project database, not just the records needed for a particular system
     /// (where some elements, DComps or ReacDCs can be switched off) as done in preparation of DCH lookup arrays.
     ///  \param stream     stream to output json file
-    void  generate_ThermoFun_input_file_stream( std::iostream& stream );
+    void  generate_ThermoFun_input_file_stream( std::iostream& stream, bool compact);
 
     void makeGEM2MTFiles(QWidget* par);
     void outMultiTxt( const char *path, bool append=false  )
     {
-        multi->to_text_file( path, append );
+        multi_internal->to_text_file( path, append );
     }
     void CmReadMulti(const char* path);
     bool CompareProjectName( const char* SysKey );

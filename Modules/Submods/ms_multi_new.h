@@ -37,6 +37,59 @@
 // Internal subroutine for ET_translate() to process Phase scripts
 typedef int (tget_ndx)( int nI, int nO, int Xplace );
 
+struct SPP_SETTING
+{   // Base Parametres of SP
+    char ver[TDBVERSION]; // Version & Copyright 64
+    BASE_PARAM p; // Flags and thresholds for numeric modules
+    char           // default codes of values
+    DCpct[7],      // Default DCOMP flags and codes
+    DCpdc[10],     // Default DCOMP class and units
+    BCpc[7],       // Default COMPOS configuration
+    REpct[7],      // Default REACDC flags and codes
+
+    REpdc[7],      // Default REACDC class and units
+    REpvc[9],      // Default REACDC configuration
+    RPpdc[11],      // Default RTPARM flags and codes
+    RPpvc[33],     // Default RTPARM configuration  reserved
+    PHsol_t[7],    // Default PHASE model codes
+    PHpvc[7],      // Default PHASE configuration
+    MUpmv[11],     // Default RMULTS configuration
+    TPpdc[9],      // Default class and units for MTPARM
+    TPpvc[21],     // Default MTPARM configuration
+    SYppc[11],     // Default class and flags for SYSTEM
+    SYpvc[29],     // Default SYSTEM confifuration
+    UTppc[11],     // Default DUTERM class and flags
+    PEpsc[13],     // Default PROCES class and flags
+    PEpvc[13],     // Default PROCES configuration
+    GDcode[2][20], // Default names of screen and graphs in GTDEMO ????
+    GDpsc[7],      // Default names of lines on GTDEMO graphs
+    GDpcc[2][9],   // Default axis names for GTDEMO
+    GDptc[7],      // Default GTDEMO configuration
+    GDpgw[7],      // Default setup of graphs in GTDEMO
+    SDrefKey[32],  // sdref key
+    Reserv[50-32]    // (reserved) objects later
+    ;
+    // for RTPARM
+    short NP,NT,  // Default N of points (RTPARM): P, T
+    NV,       // reserved
+    Mode,     // Default indexation mode RTPARM
+    ResShort[5];
+    float        // RTPARM
+    Pi[3],    // Default interval for pressure
+    Ti[3],    // Default interval for temperature, C
+    Vi[3],    // Default interval for volume, cm3
+    DRpst, DRtcst,   // Default Pr, Tr for DCOMP & REACDC
+    lowPosNum, // MULTI Cutoff moles of DC (Ls set) { 1e-19 };
+    logXw,     // log(1e-16)
+    logYFk,    // log(1e-9)
+    aqPar[5];  // b_gamma, a0, NeutPolicy, GamH2O, b_gam_T_dep for auto aq phase model
+    //    ResFloat;   // one parameter for auto gas/fluid phase
+
+    void write(GemDataStream& oss);
+    void read(GemDataStream& oss);
+};
+
+
 // Data of MULTI
 class TMulti: public TMultiBase, public TSubModule
 {

@@ -48,6 +48,7 @@ public:
 
     /// Constructor of the class instance in memory in GEMS environment
     explicit TNodeGUI(TMultiBase* apm);
+    TNodeGUI( const TNodeGUI& otherNode ) = delete;
 
     void packDataBr() override   ///<  Packs GEMIPM calculation results into work node structure
     {
@@ -92,6 +93,12 @@ public:
     /// Set up data from response strings from ZMQ server
     /// \return true if success
     bool set_resv_msg( std::vector<std::string>&& msg_return );
+
+    /// The export to ThermoFun JSON format file should include all IComp, DComp and ReacDC records
+    /// from the project database, not just the records needed for a particular system
+    /// (where some elements, DComps or ReacDCs can be switched off) as done in preparation of DCH lookup arrays.
+    ///  \param stream     stream to output json file
+    virtual void  write_ThermoFun_format_stream(std::iostream& stream, bool compact) override;
 
 protected:
 

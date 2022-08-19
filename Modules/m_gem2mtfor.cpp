@@ -11,11 +11,7 @@
 //
 //-------------------------------------------------------------------
 
-#include <time.h>
-#include <math.h>
-#include <iomanip>
 #include "m_gem2mt.h"
-
 #include "GEMS3K/io_template.h"
 #include "GEMS3K/io_nlohmann.h"
 #include "GEMS3K/io_simdjson.h"

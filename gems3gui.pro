@@ -11,6 +11,8 @@ DEFINES  += NO_JSONIO
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
 !win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
+DEFINES += USE_THERMOFUN
+DEFINES += USE_THERMO_LOG
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++17
@@ -92,6 +94,10 @@ UI_DIR  = $$MOC_DIR
 UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
+
+contains(DEFINES, USE_THERMOFUN) {
+LIBS += -lThermoFun -lChemicalFun
+} ## end USE_THERMOFUN
 
 # link lib
 #INCLUDEPATH   += "/usr/local/include/GEMS3K"

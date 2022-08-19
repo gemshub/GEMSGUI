@@ -883,7 +883,6 @@ void TVisorImp::setActionPrecise()
     ui->sactionPrecise->setChecked( TProfil::pm->pa.p.PRD );
 }
 
-
 // Show resalts (view) actions
 // Access to MULTI data
 void                                  // Dual Solution (u), pH, pe, I
