@@ -2,7 +2,7 @@
 
 #include "string"
 #include "vector"
-#include "v_detail.h"
+#include "GEMS3K/v_detail.h"
 #include <QJsonObject>
 #include <QJsonArray>
 
