@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------
 //
 #include "m_param.h"
-#include "node.h"
+#include "GEMS3K/node.h"
 
 TMulti* TMulti::sm;
 
