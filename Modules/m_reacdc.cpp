@@ -294,7 +294,7 @@ void TReacDC::set_def( int q)
 // return true if nessasary recalc
 bool TReacDC::check_input( const char *key, int Level )
 {
-    time_t tre, tc;
+    time_t tre, tc=0L;
     int q, i;
     bool iRet = false;
     if( Level != 1 )
@@ -322,8 +322,7 @@ bool TReacDC::check_input( const char *key, int Level )
                 //RecInput( rc[q].DCk[i] );
                 //tc = rt[nRT].Rtime();
             }
-
-            else tc = 0L;
+//            else tc = 0L;
             if( tre <= tc )
                 iRet = true;
         }
@@ -377,7 +376,7 @@ TReacDC::MakeQuery()
 
 }
 
-//Rebild record structure before calculation
+//Rebuild record structure before calculation
 
 int TReacDC::RecBuild( const char *key, int mode  )
 {
@@ -428,7 +427,7 @@ int TReacDC::RecBuild( const char *key, int mode  )
           {
               key_dr  = std::string(1, rcp->rDC[i]);
               key_dr += ' ';
-              key_dr += std::string( rcp->DCk[i], 0, DC_RKLEN/*-MAXSYMB*/ );
+              key_dr += char_array_to_string( rcp->DCk[i], DC_RKLEN/*-MAXSYMB*/ );
               aDclist.push_back( key_dr.c_str() );
           }
       }
@@ -1702,7 +1701,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += std::string( key_, 0, db->KeyLen() );
+            msg += char_array_to_string( key_, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked to chain.\n";
             if( pVisor->ProfileMode )
                 Error( GetName(), msg );
@@ -1734,7 +1733,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "data record key '";
-        msg += std::string( key_, 0, db->KeyLen() );
+        msg += char_array_to_string( key_, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg );
     }
@@ -1849,14 +1848,16 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
         strip( str1 );
         str = str1 + ":" + str;
      //Point SaveRecord
-     if( AddRecordTest( str.c_str(), fnum_ ))
-     {   aICkey_new.push_back( stt );  // 30/11/2006
-         for(int isd=0; isd<rcp->Nsd; isd++)
-         { std::string sdkey = std::string( rcp->sdref[isd], 0,V_SD_RKLEN);
-          strip( sdkey );
-          SDlist.insert( sdkey );
+        if( AddRecordTest( str.c_str(), fnum_ ))
+        {
+            aICkey_new.push_back( stt );  // 30/11/2006
+            for(int isd=0; isd<rcp->Nsd; isd++)
+            {
+                std::string sdkey = char_array_to_string( rcp->sdref[isd],V_SD_RKLEN);
+                strip( sdkey );
+                SDlist.insert( sdkey );
+            }
         }
-     }
     }
 
     // close all no project files

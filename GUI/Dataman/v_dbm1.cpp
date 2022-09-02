@@ -477,7 +477,7 @@ TDBFile::SetDh( int fLen, int nRec, int nRT, char isDel )
 #if __GNUC__ != 3
     int handle = f.rdbuf()->fd();
 #else
-cerr << "trunc dummy" << endl;
+c err << "trunc dummy" << endl;
 //  WE HAVE TO GET HANDLE SOMEHOW!!!
     int handle = 0;
 #endif // __GCC__ != 3
@@ -606,7 +606,7 @@ TDBKey::SetKey( const char *key )
         sp = std::string( st, 0, fullLen);
     }
     else
-        sp = std::string( key, 0, fullLen);
+        sp = char_array_to_string( key, fullLen);
 
     if( strchr( sp.c_str(), ':' ))  // key in packed form
         unpack( sp.c_str() );
@@ -834,8 +834,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
                 strcat( pkey, S_ANY );
             else
             {
-                string str=  string( rt[rts]->FldKey( nkf ), 0,
-                                       min( rt[rts]->FldLen(nkf), rkflen ));
+                string str=  char_array_to_string( rt[rts]->FldKey( nkf ), min( rt[rts]->FldLen(nkf), rkflen ));
                 StripLine( str );
                 strncat( pkey, str.c_str(), rkflen );
             }
@@ -1054,7 +1053,7 @@ TDBKeyList::RecKey(uint i, string& kbuf )
     check_i(i);
     kbuf = "";
     for( j=0; j<KeyNumFlds(); j++)
-        kbuf += string( RecKeyFld(i,j), 0, FldLen(j) );
+        kbuf += char_array_to_string( RecKeyFld(i,j), FldLen(j) );
 }
 
 // write the keys of records to ndx file

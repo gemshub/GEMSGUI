@@ -247,7 +247,7 @@ public:
     //void CmHelp();
     const char* GetHtml() override;
     bool NoSave() const
-    { return ( pep->PsSY == S_OFF ); }
+    { return ( pep->PsSY == S_OFF  && pep->PsUX == S_OFF ); }
 
    class UserCancelException {};
     void internalCalc();

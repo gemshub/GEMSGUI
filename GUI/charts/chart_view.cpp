@@ -729,7 +729,6 @@ void PlotChartView::dropEvent( QDropEvent* event )
         auto posF =  event->position();
 #endif
         pdata->addLabel( posF, text_ );
-        //std::cout << "pos " << pos.x() <<  " " << pos.y() << "Test drop" << text_.toStdString() << std::endl;
     }
 }
 
@@ -797,12 +796,6 @@ void PlotChartView::copyPlotBitmap()
 
 void PlotChartView::copyPlotPdf()
 {
-
-//    auto formats = QApplication::clipboard()->mimeData()->formats();
-//    std::cout << "Formats " << std::endl;
-//    for( auto format: formats)
-//        std::cout << format.toStdString() << std::endl;
-
     // https://uk.wikipedia.org/wiki/MIME_%D1%82%D0%B8%D0%BF
     // https://developer.mozilla.org/ru/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 #ifndef QT_NO_PRINTER
@@ -837,7 +830,7 @@ void PlotChartView::copyPlotPdf()
     //    painter.end();
     //    QMimeData * d = new QMimeData();
     //    d->setData("image/svg+xml", b.data());
-    //    std::cout <<  d->data("image/svg+xml").data()  << std::endl;
+    //    std::c out <<  d->data("image/svg+xml").data()  << std::endl;
     //    QApplication::clipboard()->setMimeData( d );
     //#endif
 }
@@ -881,7 +874,6 @@ void PlotChartView::renderDocument( const QString &title, const QString &fileNam
     }
     else if ( fmt == "svg" )
     {
-#ifndef QWT_NO_SVG
         QSvgGenerator generator;
         generator.setTitle( title );
         generator.setFileName( fileName );
@@ -889,7 +881,6 @@ void PlotChartView::renderDocument( const QString &title, const QString &fileNam
         generator.setViewBox( rect() );
         QPainter p(&generator);
         render(&p);
-#endif
     }
     else
     {

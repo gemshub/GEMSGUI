@@ -16,7 +16,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <iostream>
 #include <QCloseEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -177,21 +176,7 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
     connect( calcThread, SIGNAL(finished()), this, SLOT(close()) );
     calcThread->start();
 }
-/*
-void ProcessProgressDialog::slUpdate(bool force)
-{
-   // cout << "Update " <<QThread::currentThreadId() << "  " << pThread  << "  " <<  force << endl;
-    pVisorImp->Update(force);
-}
 
-void ProcessProgressDialog::slQuestion( void *result, QWidget* par, QString title, QString mess)
-{
-  cout << "Question " <<QThread::currentThreadId() << "  " << pThread   << endl;
-  *((int *)result) = vfQuestion( par,
-          (const char*)title.toStdString(), (const char*)mess.toStdString());
-  ThreadControl::wakeOne();	// let's calc
-}
-*/
 ProcessProgressDialog::~ProcessProgressDialog()
 {
 

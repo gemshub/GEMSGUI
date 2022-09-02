@@ -131,6 +131,40 @@ NEXT2:
      pm.pBAL = 2;
 }
 
+// Load System data to define lookup arrays
+void TMulti::SystemToLookup( )
+{
+   SYSTEM *syp = TSyst::sm->GetSY();
+
+   // copy intervals for minimizatiom
+   pm.Pai[0] = syp->Pmin;
+   pm.Pai[1] = syp->Pmax;
+   pm.Pai[2] = syp->Pinc;
+   pm.Pai[3] = 0.1;
+   pm.Tai[0] = syp->Tmin;
+   pm.Tai[1] = syp->Tmax;
+   pm.Tai[2] = syp->Tinc;
+   pm.Tai[3] = 0.1;
+   pm.Fdev1[0] = 0.;
+   pm.Fdev1[1] = syp->Tdev1;
+   pm.Fdev2[0] = 0.;
+   pm.Fdev2[1] = syp->Tdev2;
+
+   if( pm.tMin == G_TP_ ) // set default intervals
+   {
+     if( pm.Pai[0] > pm.Pc || pm.Pai[1] < pm.Pc )
+     {
+       pm.Pai[0] = pm.Pai[1] = pm.Pc;
+       pm.Pai[2] = 0.;
+     }
+     if( pm.Tai[0] > pm.TC || pm.Tai[1] < pm.TC )
+     {
+       pm.Tai[0] = pm.Tai[1] = pm.TC;
+       pm.Tai[2] = 0.;
+     }
+   }
+
+}
 
 //Load data for DC from Modelling Project definition to MULTI structure
 //
@@ -242,7 +276,7 @@ CH_FOUND:
         pm.DCC[j] = mup->DCC[jj];
         if( pm.E )
             pm.EZ[j] = pm.A[pm.N*j+iZ];
-        pm.Pparc[j] = pm.Pc;
+        pm.Pparc[j] = pm.P; // SD  15/05/22 pm.Pc
         pm.F0[j] = 0.0;
         pm.XY[j] = 0.0;
 

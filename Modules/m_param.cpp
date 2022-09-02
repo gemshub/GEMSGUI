@@ -37,25 +37,13 @@
 #include "gemsreaktoro/zmq_client.hpp"
 #endif
 
-
 TProfil* TProfil::pm;
 
-//const double R_CONSTANT = 8.31451,
-//              NA_CONSTANT = 6.0221367e23,
-//                F_CONSTANT = 96485.309,
-//                  e_CONSTANT = 1.60217733e-19,
-//                    k_CONSTANT = 1.380658e-23,
-//// Conversion factors
-//                      cal_to_J = 4.184,
-//                        C_to_K = 273.15,
-//                          lg_to_ln = 2.302585093,
-//                            ln_to_lg = 0.434294481,
-//                              H2O_mol_to_kg = 55.50837344,
-//                                Min_phys_amount = 1.66e-24;
-extern char *_GEMS_version_stamp;
-extern char *_GEMIPM_version_stamp;
+extern const char *_GEMS_version_stamp;
+extern const char *_GEMIPM_version_stamp;
+
 SPP_SETTING pa_ = {
-    " Tolerances and controls: GEMSGUI v.3.9.0  and " " GEMS3K v.3.9.0 ",
+    " Tolerances and controls: GEMSGUI v.3.9.1  and " " GEMS3K v.3.9.1 ",
     {   // Typical default set (24.03.2020) new PSSC( logSI ) & uDD()
         2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */
@@ -200,16 +188,14 @@ void TProfil::ChangeSettings(int nSettings)
     pa.ver[TDBVERSION-1]='\0';
 }
 
-void
-BASE_PARAM::write(GemDataStream& oss)
+void BASE_PARAM::write(GemDataStream& oss)
 {
     oss.writeArray( &PC, 10 );
     oss.writeArray( &DG, 28 );
     oss.writeArray( "0000", 4 );
 }
 
-void
-BASE_PARAM::read(GemDataStream& iss)
+void BASE_PARAM::read(GemDataStream& iss)
 {
     char tmp[4];
     iss.readArray( &PC, 10 );
@@ -218,8 +204,7 @@ BASE_PARAM::read(GemDataStream& iss)
 }
 
 
-void
-SPP_SETTING::write(GemDataStream& oss)
+void SPP_SETTING::write(GemDataStream& oss)
 {
     oss.writeArray( ver, TDBVERSION );
     p.write( oss );
@@ -228,8 +213,7 @@ SPP_SETTING::write(GemDataStream& oss)
     oss.writeArray( Pi, 19 );
 }
 
-void
-SPP_SETTING::read(GemDataStream& iss)
+void SPP_SETTING::read(GemDataStream& iss)
 {
     iss.readArray( ver, TDBVERSION );
     p.read( iss );
@@ -252,7 +236,7 @@ TProfil::TProfil( uint nrt ):
     rmults = nullptr;
     mtparm =  nullptr;
     syst = nullptr;
-    multi =nullptr;
+    multi_internal =nullptr;
 
     //mup = 0;
     //tpp = 0;
@@ -291,11 +275,11 @@ void TProfil::InitSubModules()
         TSyst::sm = syst;
         syst->ods_link();
         //syp = syst->GetSY();
-        aMod.push_back( std::shared_ptr<TMulti>(multi = new TMulti( MD_MULTI )) );
-        TMulti::sm = multi;
-        ///multi->setPa(this);
+        aMod.push_back( std::shared_ptr<TMulti>(multi_internal = new TMulti( MD_MULTI )) );
+        TMulti::sm = multi_internal;
+        //multi_internal->setPa(this);
         //pmulti = multi;
-        multi->ods_link();
+        multi_internal->ods_link();
         //pmp = multi->GetPM();
         aMod.push_back( std::shared_ptr<TEQCalc>( new TEQCalc( MD_EQCALC )) );
         aMod.push_back( std::shared_ptr<TEQDemo>(new TEQDemo( MD_EQDEMO )) );
@@ -381,11 +365,12 @@ aObj[ o_sptext]->SetPtr(  internalBufer );
 void TProfil::dyn_set(int )
 {
     pa.p.tprn= static_cast<char *>(aObj[o_patprn]->GetPtr());
-internalBufer = static_cast<char *>(aObj[ o_sptext]->GetPtr());
+    internalBufer = static_cast<char *>(aObj[ o_sptext]->GetPtr());
+    charge_mismatch_quest_reply = VF_UNDEF;
     if( rmults ) rmults->dyn_set();
     if( mtparm ) mtparm->dyn_set();
     if( syst ) syst->dyn_set();
-    if( multi ) multi->dyn_set();
+    if( multi_internal ) multi_internal->dyn_set();
 }
 
 // free dynamic memory in objects and values
@@ -396,7 +381,7 @@ internalBufer = static_cast<char *>(aObj[ o_sptext]->Free());
     if( rmults ) rmults->dyn_kill();
     if( mtparm ) mtparm->dyn_kill();
     if( syst ) syst->dyn_kill();
-    if( multi ) multi->dyn_kill();
+    if( multi_internal ) multi_internal->dyn_kill();
 }
 
 // realloc dynamic memory
@@ -418,10 +403,11 @@ void TProfil::set_def( int )
 {
     pa = pa_;
     internalBufer = nullptr;
+    charge_mismatch_quest_reply = VF_UNDEF;
     if( rmults ) rmults->set_def();
     if( mtparm ) mtparm->set_def();
     if( syst ) syst->set_def();
-    if( multi ) multi->set_def();
+    if( multi_internal ) multi_internal->set_def();
 }
 
 /* opens window with 'Remake record' parameters
@@ -459,8 +445,7 @@ const char* TProfil::GetHtml()
 
 void TProfil::makeGEM2MTFiles(QWidget* par )
 {
-    TNodeArrayGUI* na = nullptr;
-    MULTI *pmp = multi->GetPM();
+    MULTI *pmp = multi_internal->GetPM();
 
     try
 	 {
@@ -483,7 +468,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval]->GetN();
 
 
-      na = new TNodeArrayGUI( 1, multi );
+      auto na = TNodeArrayGUI::create(1, multi_internal);
 
       // realloc and setup data for dataCH and DataBr structures
       na->MakeNodeStructuresOne( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
@@ -500,14 +485,8 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
     }
     catch( TError& xcpt )
     {
-      if( na )
-       delete na;
-      na = nullptr;
       throw;
     }
-    if( na )
-     delete na;
-    na = nullptr;
 
 }
 
@@ -515,12 +494,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 bool TProfil::CompareProjectName( const char* SysKey )
 {
     auto len = rt[RT_PARAM]->FldLen(0);
-//    const char* proj_name = rt[RT_PARAM].UnpackKey();
     const char* proj_key = db->UnpackKey();
-//char project_name[64];
-//memcpy( project_name, proj_key, len );
-//project_name[len] = '\0';
-//cout << len << " proj: " << project_name << " read: " << SysKey << endl;
     if( memcmp( SysKey, proj_key, len ) )
         return true;
     else
@@ -531,7 +505,7 @@ bool TProfil::CompareProjectName( const char* SysKey )
 // Copy T and P from DATABR
 void TProfil::ChangeTPinKey( double T, double P )
 {
-    MULTI* pmp = multi->GetPM();
+    MULTI* pmp = multi_internal->GetPM();
     char bT[40];
     char bP[40];
 
@@ -563,7 +537,7 @@ AGAIN:
 //       according to mui, muj, mup index lists in MULTI that were read in.
 void TProfil::SetSysSwitchesFromMulti( )
 {
-     MULTI* pmp = multi->GetPM();
+     MULTI* pmp = multi_internal->GetPM();
      RMULTS* mup = rmults->GetMU();
      SYSTEM* syp = syst->GetSY();
      long i, ii, j, jj, k, kk;
@@ -611,28 +585,26 @@ void TProfil::SetSysSwitchesFromMulti( )
 }
 
 // Reading structure MULTI (GEM IPM work structure)
-void TProfil::CmReadMulti( const char* path, bool new_ipm )
+void TProfil::CmReadMulti(const char* path)
 {
-    TNodeGUI* na = new TNodeGUI( multi );
-    MULTI* pmp = multi->GetPM();
+    MULTI* pmp = multi_internal->GetPM();
     SYSTEM* syp = syst->GetSY();
-    //std::string key = pmp->stkey;
+    TNodeGUI na(multi_internal);
 
-    if( na->GEM_init( path ) )
+    if( na.GEM_init( path ) )
     {
-      Error( path, "GEMS3K Init() error: \n" + na->ipmLogError() );
+      Error( path, "GEMS3K Init() error: \n" + na.ipmLogError() );
     }
-    multi->dyn_set();
+    multi_internal->dyn_set();
 
     // Here to compare the modelling project name; error when from a different project.
     if( CompareProjectName( pmp->stkey ) )
     {
-        delete na;
         Error( pmp->stkey, "E15IPM: Wrong project name by reading GEMS3K I/O files ");
     }
 
      // Unpacking the actual contents of DBR file including speciation
-    na->unpackDataBr( true );
+    na.unpackDataBr( true );
     for( int j=0; j < pmp->L; j++ )
         pmp->X[j] = pmp->Y[j];
     pmp->TC = pmp->TCc;
@@ -640,11 +612,8 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
     pmp->P =  pmp->Pc;
     //pmp->VX_ = pmp->VXc; // from cm3 to m3
 
-    if( !new_ipm )
-    {
-        // Set T and P  for key from DataBr
-        ChangeTPinKey( pmp->TC, pmp->P );
-    }
+    // Set T and P  for key from DataBr
+    ChangeTPinKey( pmp->TC, pmp->P );
 
     pmp->pESU = 2;  // SysEq unpack flag set
 
@@ -658,7 +627,7 @@ void TProfil::CmReadMulti( const char* path, bool new_ipm )
            pmp->pIPN = 0;
            if( pmp->pTPD > 1)
                pmp->pTPD = 1; // reload Go, Vol
-pmp->pKMM = 0;
+           pmp->pKMM = 0;
            // sets the system/SysEq switches for
            // components and phases according to mui, muj, mup that were read in.
            SetSysSwitchesFromMulti( );
@@ -676,7 +645,7 @@ pmp->pKMM = 0;
 
     // for loading GEX to System
     CheckMtparam();
-    multi->TMultiBase::DC_LoadThermodynamicData( na );
+    multi_internal->TMultiBase::DC_LoadThermodynamicData(&na);
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
     for( long i=0; i < pmp->N; i++ )
@@ -687,7 +656,7 @@ pmp->pKMM = 0;
        jj = pmp->muj[j];
        syp->DLL[jj] = pmp->DLL[j];
        syp->DUL[jj] = pmp->DUL[j];
-       syp->GEX[jj] = na->DC_G0(j, pmp->Pc*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
+       syp->GEX[jj] = na.DC_G0(j, pmp->P*bar_to_Pa, pmp->Tc, false) - mtparm->GetTP()->G[jj];
     }
 
 // !!! We cannot restore to System  for adsorbtion must be done
@@ -702,12 +671,11 @@ pmp->pKMM = 0;
 
     // Restoring the rest of MULTI contents from primal and dual solution
     pmp->pIPN =0;
-    multi->Alloc_internal();
-    multi->EqstatExpand( /*pmp->stkey,*/ false );
-//    outMultiTxt( "IPM_EqstatExpand.txt"  );
-    //    multi->Free_internal();
-    //    na->unpackDataBr( true );
-    delete na;
+    multi_internal->Alloc_internal();
+    multi_internal->EqstatExpand( /*pmp->stkey,*/ false );
+    // outMultiTxt( "IPM_EqstatExpand.txt"  );
+    // multi->Free_internal();
+    // na.unpackDataBr( true );
     // We can get different results in GEMS than in GEMS3K
     // because of slightly different values into G, V ...
     // (interpolation of thermodynamic data or precision )
@@ -780,11 +748,11 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 void TProfil::CheckMtparam()
 {
 
-  if( fabs( mtparm->GetTP()->T - multi->GetPM()->TCc ) > 1.e-10 ||
-         fabs( mtparm->GetTP()->P - multi->GetPM()->Pc ) > 1.e-9 )
+  if( fabs( mtparm->GetTP()->T - multi_internal->GetPM()->TCc ) > 1.e-10 ||
+         fabs( mtparm->GetTP()->P - multi_internal->GetPM()->Pc ) > 1.e-9 )
    { // load new MTPARM on T or P
-      mtparm->LoadMtparm( multi->GetPM()->TCc, multi->GetPM()->Pc );
-      multi->GetPM()->pTPD = 0;
+      mtparm->LoadMtparm( multi_internal->GetPM()->TCc, multi_internal->GetPM()->Pc );
+      multi_internal->GetPM()->pTPD = 0;
    }
  }
 
@@ -799,7 +767,7 @@ void TProfil::PMtest( const char *key )
     //double V, T, P;
     TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     TProcess* Proc = dynamic_cast<TProcess *>(aMod[RT_PROCES].get());
-    MULTI *pmp = multi->GetPM();
+    MULTI *pmp = multi_internal->GetPM();
 
     // test for available old solution
     if( STat->ifCalcFlag() )
@@ -815,7 +783,7 @@ void TProfil::PMtest( const char *key )
 
    // test changes in the modified system relative to MULTI
    pmp->pBAL =  BAL_compare();
-//   cout << "pmp->pBAL " << pmp->pBAL << "  pmp->pTPD " << pmp->pTPD<< endl;
+   gui_logger->debug("BAL_compare: pmp->pBAL {} pmp->pTPD {}", pmp->pBAL, pmp->pTPD);
 
    if( !pmp->pBAL ) // if some vectors were allocated or some dimensions changed
    {
@@ -834,7 +802,7 @@ void TProfil::PMtest( const char *key )
             pmp->pNP = 1;
     }
 
-    multi->MultiKeyInit( key );
+    multi_internal->MultiKeyInit( key );
 
 }
 
@@ -849,7 +817,7 @@ short TProfil::BAL_compare()
     long i,j,k, jj, jb, je=0;
     double Go, Gg, Ge, pGo;
     SYSTEM *syp = TSyst::sm->GetSY();
-    MULTI *pmp = multi->GetPM();
+    MULTI *pmp = multi_internal->GetPM();
 
     // Changes in thermdynamic (Saved DComp, ReacDC or Phase records )
     if( pmp->pTPD == -1 )  // 16/11/2011 SD
@@ -895,7 +863,7 @@ short TProfil::BAL_compare()
            Gg = syp->Guns[jj];    // User-set increment to G0 from project system
        if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
            Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
-       pGo = multi->ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
+       pGo = multi_internal->ConvertGj_toUniformStandardState( Go+Gg+Ge, j, k );
 
        if( fabs( pGo - pmp->G0[j] )* pmp->RT >= 0.001 )
        {
@@ -996,8 +964,9 @@ void TProfil::Clear_XeA_XeD_Phm_BIun()
                syp->XeA[i] = 0.;
     if( syp->PbPH != S_OFF )
         for( i=0; i < mup->Fi; i++)
-               syp->Phm[i] = 0.;
+            syp->Phm[i] = 0.;
 }
+
 
 void TProfil::LoadFromMtparm( QWidget* par, DATACH *CSD , bool no_interpolat)
 {
@@ -1051,7 +1020,7 @@ moved to TMulti*/
 // Run process of calculate equilibria into the GEMSGUI shell
 void  TProfil::CalculateEquilibriumGUI()
 {
-    TNodeGUI na( multi);
+    TNodeGUI na(multi_internal);
 
 #ifdef NO_ASYNC_SERVER
     zmq_req_client_t<TNodeGUI> zmqclient(na);
@@ -1066,7 +1035,7 @@ void  TProfil::CalculateEquilibriumGUI()
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
-double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /*NumIterFIA*/, long int& /*NumIterIPM*/ )
+double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM )
 {
   TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
   calcFinished = false;
@@ -1080,16 +1049,8 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& /
   calcFinished = true;
   STat->setCalcFlag( true );
   // STat->CellChanged(); // SD 28/11/2011 to protect MessageToSave()
-
-  return multi->GetPM()->t_elap_sec;
+  return multi_internal->GetPM()->t_elap_sec;
 }
-
-void TProfil::outMultiTxt( const char *path, bool append  )
-{
-    multi->to_text_file( path, append );
-}
-
-
 
 
 // ------------------ End of m_param.cpp -----------------------

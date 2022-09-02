@@ -317,11 +317,11 @@ public:
     // added by KD on 21.11.04 for SIT
     void MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut );
     // make new aq and/or gas phases (re-written by KD 30.07.03)
-    void newAqGasPhase( const char *akey, const char *gkey, int file,
+    void newAqGasPhase( const std::string& akey, const std::string& gkey, int file,
         const char amod, const char gmod, float apar[4], /*float gpar[4],*/
     bool useLst = false, TCStringArray lst = {} );
     // Added by KD on 31.07.03
-    void AssemblePhase( const char* key, const char* part, float *param,
+    void AssemblePhase( const std::string& key, const char* part, float *param,
                         int file, bool useLst = false, TCStringArray lst = {}, int Npar = 4 );
 
     void CopyRecords( const char * prfName, TCStringArray& aPHnoused,
@@ -336,190 +336,8 @@ protected:
     int CompressSublattice( const TCStringArray& form_array );
     TCStringArray getSavedLsMoi() const;
     TCStringArray readFormulaes( const TCIntArray&  DCused) const;
+    void CheckNameCatAn(std::string &name, short &nCat, short &nAn, short &nNs);
 };
-
-//-//
-//enum solmod_switches { // indexes of keys of phase (solution, sorption, kinetic) models
-//    SPHAS_TYP,
-//    DCOMP_DEP,
-//    SPHAS_DEP,
-//    SGM_MODE,
-//    DCE_LINK,
-//    MIX_TYP,
-
-//    // Link state of CalculateActivityCoefficients()
-//    LINK_UX_MODE,
-//    LINK_TP_MODE,
-//    LINK_PP_MODE,  // LINK_PHP_MODE,
-//LINK_IN_MODE, // Initialization mode for kinetics and other time-dependent processes
-//SORP_MOD,  // new, see also enum sorption_control
-//KINR_MOD,  /// see also enum kinmet_controls
-//    // Posible modes of calculation of activity coefficients (private, public)
-//    SM_UNDEF = 'N',
-//    SM_TPDEP = 'T',
-//    SM_UXDEP = 'X',
-//    SM_PRIVATE_ = 'P',
-//    SM_PUBLIC = 'U',
-
-//    // Posible modes of calculation of activity coefficients (built-in or scripted models)
-//    SM_STNGAM = 'S',        // Built-in function for activity coefficients
-//    SM_NOSTGAM = 'N',
-
-//    // Codes to identify the mixing models used (during IPM iterations)
-//    SM_IDEAL =  'I',	// ideal solution or single-component phase
-//    SM_BERMAN = 'B',    // built-in multicomponent multisite (a)symmetric solid-solution model
-//    SM_CEF = '$',    //     built-in multicomponent multisite solid-solution model (CALPHAD)
-//    SM_MBW = '#',    //     built-in Modified Bragg-Williams model, [Vinograd et al. 2018]
-//    SM_REDKIS = 'G', 	// built-in binary Guggenheim (Redlich-Kister) solid-solution model
-//    SM_MARGB = 'M',	// built-in binary Margules solid-solutions (subregular)
-//    SM_MARGT = 'T',	// built-in ternary Margules solid-solution (regular)
-//    SM_VANLAAR = 'V',	// built-in multi-component Van Laar solid-solution model
-//    SM_GUGGENM = 'K',	// built-in multi-component Guggenheim solid-solution model
-//    SM_REGULAR = 'R',	// built-in multi-component Regular solid-solution model
-//    SM_NRTLLIQ = 'L',	// built-in multi-component NRTL model for liquid solutions
-//    SM_WILSLIQ = 'W',	// built-in multi-component Wilson model for liquid solutions
-//    SM_CGFLUID = 'F',	// built-in multi-component Churakov-Gottschalk (CG) fluid EoS model
-//    SM_PRFLUID = 'P',	// built-in Peng-Robinson-Stryjek-Vera (PRSV) fluid EoS model
-//    SM_PCFLUID = '5',   // built-in perturbed-chain statistical-association (PCSAFT) fluid EoS model (reserved)
-//    SM_STFLUID = '6',   // built-in Sterner-Pitzer (STP) fluid EoS model
-//    SM_PR78FL = '7',	// built-in Peng-Robinson (PR78) fluid EoS model
-//    SM_CORKFL = '8',    // built-in compensated Redlich-Kwong (CORK) fluid EoS model
-//    SM_REFLUID = '9',   // built-in reference EoS fluid model (reserved)
-//    SM_SRFLUID = 'E',	// built-in Soave-Redlich-Kwong (SRK) fluid EoS model
-//    SM_AQDAV = 'D',	// built-in Davies model (with 0.3) for aqueous electrolytes
-//    SM_AQDH1 = '1',	// built-in Debye-Hueckel limiting law for aqueous electrolytes
-//    SM_AQDH2 = '2',	// built-in 2-term Debye-Hueckel model for aqueous electrolytes
-//    SM_AQDH3 = '3',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Karpov version)
-//    SM_AQDHH = 'H',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Helgeson version)
-//    SM_AQDHS = 'Y',	// built-in 3-term Debye-Hueckel model for aqueous electrolytes (Shvarov version)
-//    SM_AQSIT = 'S',	// built-in SIT model for aqueous electrolytes
-//    SM_AQEXUQ = 'Q',    // built-in extended UNIQUAC model for aqueous electrolytes
-//    SM_AQPITZ = 'Z',    // built-in Pitzer HMW model for aqueous electrolytes
-//    SM_AQMIX = 'C',     // built-in mixed-solvent aqueous Debye-Hueckel model (reserved)
-//    SM_AQELVIS = 'J',   // built-in modified extended UNIQUAC model (ELVIS) for aqueous electrolyte
-//    SM_DONNAN = 'X',    // ion exchange (Donnan volume model) (reserved)
-//    SM_SURCOM = 'A',	// models of surface complexation at solid-aqueous interface
-//    SM_USERDEF = 'U',	// user-defined mixing model (scripts in Phase record)
-//    SM_OTHER = 'O',	// other built-in phase-specific models of non-ideal solutions (selected by phase name)
-
-//    // Codes to identify specific mixing rules and temperature functions in EoS and activity models
-//    MR_UNDEF = 'N', // Default mixing rule or form of interaction parameter coefficients; NEM for adsorption 'A'
-//    MR_WAAL = 'W',	// Basic Van der Waals mixing rules in cubic EoS models
-//    MR_CONST = 'C',	// Constant one-term interaction parameter kij; CCM for sorption 'A'
-//    MR_TEMP = 'T',	// Temperature-dependent one-term interaction parameter kij (Jaubert et al. 2005); TLM for adsorption 'A'
-//    MR_LJ = 'J',        // Lemmon-Jacobsen mixing rule (Lemmon and Jacobsen, 1999)
-//    MR_KW1 = 'K',       // Kunz-Wagner mixing rule (Kunz and Wagner, 2007)
-//    MR_PITZ5 = '5',     // 5-term Pitzer model temperature dependence (TOUGHREACT variant)
-//    MR_PITZ6 = '6',     // 6-term Pitzer model temperature dependence (FREZCHEM variant)
-//    MR_PITZ8 = '8',     // 8-term Pitzer model temperature dependence
-//    MR_B_RCPT = 'R',    // Use CEF reciprocal non-ideality terms in Berman multi-site ss model
-//    MR_A_DLM  = 'D',    // Diffuse-layer electrostatic model (DLM) for adsorption 'A'
-//    MR_A_BSM  = 'B',    // Basic Stern electrostatic model (BSM) for adsorption 'A'
-//    MR_A_CDLM  = 'M',    // CD-MUSIC (3-layer) electrostatic model (DLM) for adsorption 'A'
-//    MR_A_ETLM  = 'E'     // Extended TLM electrostatic model (ETLM) for adsorption 'A'
-//};
-
-//-//
-//// This code defines standard state and reference scale of concentrations
-//// for components of this phase. It is used by many subroutines
-//// during calculations of equilibrium states
-//enum PH_CLASSES {  // Possible values
-//    PH_AQUEL = 'a',  	// aqueous electrolyte
-//    PH_GASMIX = 'g',  	// mixture of gases
-//    PH_FLUID = 'f',  	// fluid phase
-//    PH_PLASMA = 'p',  	// plasma
-//    PH_LIQUID = 'l',  	// non-electrolyte liquid (melt)
-//    PH_SIMELT = 'm',  	// silicate (magmatic) melt or non-aqueous electrolyte
-//    PH_SORPTION = 'x',  // Sorption phase (sorbent+sorbates) in aqueous electrolyte
-//    PH_POLYEL = 'y',  	// colloidal poly- (oligo)electrolyte e.g. Donnan volume phase
-// PH_IONEX = 'i',     // ion exchange on permanent charge ligand e.g. B&B Clay
-// PH_ADSORPT = 'z',   // surface complexation (adsorption) on hydrated amphoteric surface
-//    PH_SINCOND = 's',  	// condenced solid phase, also multicomponent (solid solution)
-//    PH_SINDIS = 'd',  	// dispersed solid phase, also multicomponent
-//    PH_HCARBL = 'h'   	// mixture of condensed hydrocarbons
-//};
-
-//-//
-//enum sorption_control {
-//    // EDL interface models - separate for site types in v. 3.1
-//    SC_DDLM = 'D',  SC_CCM = 'C',     SC_TLM = 'T',   SC_MTL = 'M',
-//    SC_MXC = 'E',   SC_NNE = 'X',     SC_IEV  = 'I',  SC_BSM = 'S',
-//    SC_3LM = '3', SC_NOT_USED = 'N',
-
-//    // Methods of Surface Activity Terms calculation
-//    SAT_COMP = 'C', SAT_NCOMP = 'N', SAT_SOLV = 'S', SAT_INDEF = 'I',
-
-//    // New methods for surface activity coefficient terms (2004)
-//    SAT_L_COMP = 'L', SAT_QCA_NCOMP = 'Q', SAT_QCA1_NCOMP = '1',
-//    SAT_QCA2_NCOMP = '2', SAT_QCA3_NCOMP = '3', SAT_FREU_NCOMP = 'f',
-//    SAT_QCA4_NCOMP = '4', SAT_BET_NCOMP = 'B', SAT_VIR_NCOMP = 'W',
-//    SAT_FRUM_NCOMP = 'F', SAT_FRUM_COMP = 'R', SAT_PIVO_NCOMP = 'P',
-
-//    // Assignment of surtype to carrier (end-member) */
-//    CCA_VOL = 'V',
-//    CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
-//    CCA_6, CCA_7, CCA_8, CCA_9, SPL_0='0', SPL_1, SPL_2, SPL_3,
-//    SPL_B = 'b', SPL_D = 'd', SPL_C = 'c',
-//    SDU_N = 'n', SDU_m = 'm', SDU_M = 'M', SDU_g = 'g',
-//    CST_0 = '0', CST_1, CST_2, CST_3, CST_4, CST_5, // surface type index
-//    CSI_0 = '0', CSI_1, CSI_2, CSI_3, CSI_4, CSI_5, // surface site index
-
-//    // Number of parameters per surface species in the MaSdj array
-//    // MCAS = 6 = DFCN ; position index    added by KD 25.10.2004
-//    // Column indices of surface species allocation table MCAS
-//    SA_MCA=0, SA_EMX, SA_STX, SA_PLAX, SA_SITX, SA_UNIT,
-
-//    // Column indices of MaSdj table of adsorption parameters
-//    PI_DEN=0, PI_CD0, PI_CDB, PI_P1, PI_P2, PI_P3
-//};
-
-//-//
-//enum ph_kinmet_controls { /// TKinMet: codes to control kinetic rate models
-
-//    KM_UNDEF = 'N',       /// not defined, no account for
-//KinProCode = 2,
-//    KM_PRO_MWR = 'M',     /// Kinetics of generic dissolution/precipitation (no uptake, ionex, adsorption)
-//    KM_PRO_UPT = 'U',     /// Kinetics of uptake/entrapment (of minor/trace element) into solid solution
-//    KM_PRO_IEX = 'X',     /// Kinetics of ion exchange (clays, C-S-H, zeolites, ...)
-//    KM_PRO_ADS = 'A',     /// Kinetics of adsorption (on MWI), redox
-//    KM_PRO_NUPR = 'P',    /// Kinetics of nucleation and precipitation
-//KinModCode = 3,
-//    KM_MOD_TST = 'T',     /// Generic TST dissolution/precipitation model following Shott ea 2012
-//    KM_MOD_PAL = 'P',     /// Dissolution/precipitation model of the form (Palandri 2004)
-//    KM_MOD_WOL = 'W',     /// Carbonate growth model following (Wolthers 2012)
-//    KM_MOD_NUGR = 'U',    /// Mineral nucleation and growth model with nuclei/particle size distr. (TBD)
-//KinSorpCode = 4,
-//    KM_UPT_ENTRAP = 'E',  ///	Unified entrapment model (Thien,Kulik,Curti 2012)
-//    KM_UPT_UPDP = 'M',    ///	DePaolo (2011) uptake kinetics model
-//    KM_UPT_SEMO = 'G',    ///  Growth (surface) entrapment model (Watson 2004)
-//    KM_IEX_FAST = 'F',    ///  Fast ion exchange kinetics (e.g. montmorillonite, CSH)
-//    KM_IEX_SLOW = 'L',    ///  Slow ion exchange kinetics (e.g. illite, zeolites)
-//    KM_ADS_INHIB = 'I',   ///  Adsorption inhibition
-//    KM_NUCL_SSMP  = 'P',  ///  Solid solution nucleation model (Prieto 2013)
-//KinLinkCode = 5,
-//    KM_LNK_SURF = 'S',    ///   Link to (fraction of) solid substrate surface
-//    KM_LNK_PVOL = 'P',    ///    Link to (fraction of) solid substrate (pore) volume
-//    KM_LNK_MASS = 'M',    ///	Link to (fraction of) solid substrate mass
-//KinSizedCode = 6,
-//    KM_SIZED_ETM = 'T',   ///  Empirical f(time) cubic polynomial f = a + bt +ct^2 + dt^3 (default)
-//    KM_SIZED_ESI = 'S',   ///  Empirical f(lgSI) cubic polynomial f = a + bt +ct^2 + dt^3
-//    KM_SIZED_ESA = 'A',   ///  Empirical f(sarea-change) cubic polynomial f = a + bt +ct^2 + dt^3
-//    KM_SIZED_EVOL = 'V',  ///  Empirical f(volume-change) cubic polynomial f = a + bt +ct^2 + dt^3
-//    KM_SIZED_MASS = 'M',  ///  Empirical f(mass-change) cubic polynomial f = a + bt +ct^2 + dt^3
-//    KM_SIZED_MOL = 'X',   ///  Empirical f(amount-change) cubic polynomial f = a + bt +ct^2 + dt^3
-//    KM_SIZED_UNI = 'U',   /// 	Uniform particle/pore size distribution
-//    KM_SIZED_BIN = 'B',   /// 	Binodal particle/pore size distribution
-//    KM_SIZED_FUN = 'F',   ///    Empirical distribution function
-//KinResCode = 7,
-//    KM_RES_SURF_N = 'A',   /// surface-scaled rate constant (k in mol/m2/s), default
-//    KM_RES_SURF_M = 'M',   /// surface-scaled rate constant (k in kg/m2/s)
-//    KM_RES_PVS_N  = 'V',   /// pore-volume-scaled rate constant (k in mol/m3/s)
-//    KM_RES_PVS_M  = 'W',   /// pore-volume-scaled rate constant (k in kg/m3/s)
-//    KM_RES_ABS_N  = 'F',   /// absolute (unscaled) rate constant (k in mol/s)
-//    KM_RES_ABS_M  = 'G',   /// absolute (unscaled) rate constant (k in kg/s)
-//    KM_LIN_RATE   = 'L'   /// linear growth/dissolution rate constant (v in m/s)
-
-//};
 
 enum ph_affin_term_op_codes { /// TKinMet: codes to control affinity terms
     ATOP_CLASSIC = 0,       /// classic TST affinity term (see .../Doc/Descriptions/KinetParams.pdf)
@@ -531,10 +349,6 @@ enum ph_affin_term_op_codes { /// TKinMet: codes to control affinity terms
     ATOP_FRITZ = 6          /// Fritz et al. 2009, eq 6 nucleation and growth
 
 };
-
-//enum volume_code {  /* Codes of volume parameter ??? */
-//    VOL_UNDEF, VOL_CALC, VOL_CONSTR
-//};
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

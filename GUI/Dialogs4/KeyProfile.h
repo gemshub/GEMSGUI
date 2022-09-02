@@ -48,11 +48,11 @@ public:
     bool   getAqGasState() const;
     bool   getFilesState() const;
     bool   getRemakeState() const;
-    int   getMakeDump() const;
+    int   getCalcMode() const;
     std::string getTemplateKey() const;
 
-    bool   getGEMSExport() const;
-    bool   getGEMSExportMode() const;
+    int   getDumpMode() const;
+    int   getGEMSExportMode() const;
 
 };
 

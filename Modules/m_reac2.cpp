@@ -335,9 +335,10 @@ void TReacDC::Recalc( int q, const char *key  )
     case CP_SOLID:
     case CP_EXION:
     case CP_GAS:
+    case CP_FLUID:
     case CP_UNIV:
     case CP_HCARB:
-    case CP_LIQID: /* no charge  */
+    case CP_LIQID: // no charge
         if( fabs( Z ) < ZBALANCE_PREC &&
                 memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
         {
@@ -350,11 +351,12 @@ void TReacDC::Recalc( int q, const char *key  )
     case CP_SSPC:
     case CP_SORB:
 //    case CP_EXION:
-    case CP_MELT: /* must be charge */
+    case CP_MACR:
+    case CP_MELT: // need charge
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
-    Error( GetName(), "W26RErun: Please, check stoichiometry, charge or valences in the formula.");
+    Error( GetName(), "W26RErun: Please, check stoichiometry, valences or charge in the formula (depending on DC phase class)");
 NEXT:
     /* test value of st.mol.volume */
     if( ( rc[q].pstate[0] == CP_GAS || rc[q].pstate[0] == CP_GASI )
@@ -513,16 +515,21 @@ NEXT:
 
 		// if( rc[q].pct[0]==CTP_CP && rc[q].pct[1]==CEV_ST && rc[q].pct[2]==CVV_NO )
     if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWDC )
-        Recalc_rDCN( foS  );
+        Recalc_rDCN( foS  ); // calculating properties of a new component from that of reaction
     else if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWISO )
     {
-        Recalc_ISO1( foS);
+        Recalc_ISO1( foS);  // calculating isotopic reactions and forms
         Recalc_ISO2( foS );
     }
-    else // calc delta reactions
+    else if ( rc[q].rDC[rc[q].nDC-1] == SRC_FICT ) // calc deltas of the reaction only from existing DComp or ReacDCs
         Recalc_rDCD();
+    else if ( rc[q].rDC[rc[q].nDC-1] == SRC_DCOMP || rc[q].rDC[rc[q].nDC-1] == SRC_REACDC )
+        Recalc_rDCD(); // calc deltas of the reaction only from existing DComp or ReacDCs
+    else               // back-compatibility with old ReacDC records (no new or fictive component)
+        Recalc_rDCD();
+
     // if( CM == CTPM_CPT && CE == CTM_LGX )
-    	if ( CE == CTM_LGX)
+    if ( CE == CTM_LGX)
         Convert_Cp_to_KT( CE );
     if( CM == CTPM_REA )
     {
@@ -1104,8 +1111,8 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
 		// DH = dGr + T*dSr;
 		// if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
 		// {
-		// cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;
-		// cout << " rKey:" /* << aW.WW(p).DRkey */ << rc[q].name ;
+        // c out << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;
+        // c out << " rKey:" /* << aW.WW(p).DRkey */ << rc[q].name ;
 		// To add an error message ?
 		// }
 
@@ -1679,7 +1686,7 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
 				// rc[q].Comp = (float)aW.twp->Alp;
                 // rc[q].Expa = (float)aW.twp->Bet;
     }
-    if( CV == CPM_CON || CV == CPM_NUL )
+    if( (CV == CPM_CON || CV == CPM_NUL) && !approximatelyZero(Vst))
     {
             P_Pst = aW.twp->P - Pst;
             VP = Vst * P_Pst;
@@ -1689,7 +1696,8 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
     }
 
     // Calculating pressure correction to logK
-    aW.twp->lgK -= aW.twp->dV * (aW.twp->P - aW.twp->Pst) / aW.twp->RT / lg_to_ln;
+    if (!approximatelyZero(Vst))
+        aW.twp->lgK -= aW.twp->dV * (aW.twp->P - aW.twp->Pst) / aW.twp->RT / lg_to_ln;
 }
 
 

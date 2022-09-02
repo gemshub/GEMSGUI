@@ -31,7 +31,7 @@
 #include <QMessageBox>
 #include <QWindowsStyle>
 #endif
-
+#include <iostream>
 #include "visor.h"
 #include "GemsMainWindow.h"
 
@@ -61,6 +61,7 @@ TIntegApp::TIntegApp(int& c, char** v):
     //cout << "QSqlDatabase: available drivers:" <<
     //      QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString() << endl;
 
+    gui_logger->set_level(spdlog::level::debug);
     shMemory.setKey("gems3");
     if( shMemory.attach())
     {

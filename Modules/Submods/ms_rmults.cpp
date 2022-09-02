@@ -687,7 +687,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         amod = mu.PmvAq;
         if( mu.nAq >= 0)
         {
-            //AqKey.Add( string( mu.SF[mu.nAq], 0, PH_RKLEN ));
+            //AqKey.Add( char_array_to_string( mu.SF[mu.nAq], PH_RKLEN ));
             if( amod == SM_AQDH3 && aparam[0] < 1e-9 )
             {  // To use aq models from old versions
                 aparam[0] = 0.064f;
@@ -700,7 +700,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         gmod = mu.PmvGas;
         /*if( mu.nGas >= 0 )
         {
-            GasKey.Add( string( mu.SF[mu.nGas], 0, PH_RKLEN ) );
+            GasKey.Add( char_array_to_string( mu.SF[mu.nGas], PH_RKLEN ) );
         }
         else {
              GasKey.Clear();// ="";
@@ -717,7 +717,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         }
 
     }
-    string prfName = string( rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0) );
+    string prfName = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
     StripLine( prfName );
 
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
@@ -798,8 +798,8 @@ NEW_PHASE_AGAIN:
     file =rt[RT_PHASE]->GetOpenFileNum( prfName.c_str() );
 
     // Creating automatic aq and/or gas phases (automatic phase only one )
-    TPhase::pm->newAqGasPhase( ( AqKey.size()>0 ? AqKey[0].c_str(): nullptr),
-                               ( GasKey.size()>0 ? GasKey[0].c_str(): nullptr),
+    TPhase::pm->newAqGasPhase( ( AqKey.size()>0 ? AqKey[0]: ""),
+                               ( GasKey.size()>0 ? GasKey[0]: ""),
                                file, amod, gmod, aparam );
 
     MakeRecordLists( AqKey, GasKey ); // build records lists and calc size of arrays

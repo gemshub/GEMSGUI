@@ -18,6 +18,7 @@
 //-------------------------------------------------------------------
 //
 #include "m_param.h"
+#include "GEMS3K/node.h"
 
 TMulti* TMulti::sm;
 
@@ -142,7 +143,7 @@ void TMulti::ods_link( int )
 
     // part 2
     aObj[o_wi_satndx]->SetPtr( pm.SATX );  // changed 27.10.2004 for CD MUSIC
-    if( pm.FIat > 0 ) aObj[ o_wi_satndx ]->SetDim( pm.Lads, 4 );
+    aObj[ o_wi_satndx ]->SetDim( pm.Lads, 4 );
 //
     aObj[ o_wd_ym]->SetPtr( pm.Y_m );
     aObj[ o_wd_ym ]->SetDim( pm.L, 1 );

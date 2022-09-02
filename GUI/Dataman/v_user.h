@@ -29,9 +29,6 @@
 #include <set>
 #include <vector>
 #include <algorithm>
-
-#include <iostream>
-#include <cstring>
 using namespace std;
 #include "GEMS3K/v_detail.h"
 #include "GEMS3K/v_service.h"
@@ -74,6 +71,7 @@ typedef unsigned int uint;
 
 void Gcvt(double number, size_t ndigit, char *buf);
 double NormDoubleRound(double aVal, int digits);
+float NormFloatRound(float aVal, int digits);
 void NormDoubleRound(double *aArr, int size, int digits);
 void NormFloatRound(float *aArr, int size, int digits);
 

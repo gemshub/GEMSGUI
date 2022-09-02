@@ -3,14 +3,13 @@
 //
 // Implementation of HelpWindow class
 //
-// Copyright (C) 2010,2012 S.Dmytriyeva
+// Copyright (C) 2010,2021 S.Dmytriyeva
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.5 cross-platform App & UI framework (http://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
-
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -51,7 +50,7 @@
 static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.9.0 c.83dc389 ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.9.5 c.9f3dc56 ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = nullptr;
@@ -113,10 +112,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     tab_->setTabText(tab_->indexOf(tabSearch), QApplication::translate("HelpWindowData", "Search", 0, QApplication::UnicodeUTF8));
 #endif
 
-
-
     //End Ui form
-
 
     QString collectionFile = QString( pVisor->docDir().c_str() )+ QLatin1String("gems3help.qhc");
     // "/home/gems/gemworks/gems3/shared/doc/html/gems3help.qhc";
@@ -146,7 +142,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     }
     else
     {
-        //cout << collectionFile.toStdString() << endl;
+        gui_logger->debug("HelpWindow collectionFile= {}", collectionFile.toStdString());
 
         // Contents part
         wContents = hEngine->contentWidget();
@@ -252,24 +248,22 @@ void HelpWindow::helpVersion()
                          #ifdef __APPLE__
                              "Title", "GEMS3.9 (MacOS 10.13-10.15, clang x64)\n\n"+
                          #else
-                             "GEMS3.9 (Linux x64 C++ gcc7.3 up, Qt5.12 up)",
+                             "GEMS3.9 (Linux x64 C++ gcc7.3 up, Qt5.12 up, Qt6)",
                          #endif
                          #else
-                             "GEMS3.9 (Windows 10 C++ MSVC17 x64 Qt5.15)",
+                             "GEMS3.9 (Windows 10 C++ MSVC17 x64 Qt5.15 up, Qt6)",
                          #endif
                              QString("\nThis is GEM-Selektor code package\n\n") +
                              _GEMS_version_stamp   +  "\n\nusing "  +
-                             _GEMIPM_version_stamp   +
-                             "\n\n\nFor GEMS R&D community, GPL v.3\n\n"
-                  "(c) 2021, GEMS Development Team\n\n"
+                             _GEMIPM_version_stamp   + "\n\n      and  Qt6 framework " +
+                             "\n\nFor GEMS R&D community, GPL v.3\n\n"
+                  "(c) 2022, GEMS Development Team\n\n"
                   "          Paul Scherrer Institut" );
 }
 
 void HelpWindow::helpAbout()
 {
     showDocumentation( GEMS_ABOUT_HTML, nullptr );
-    //AboutDialog dlg;
-    //dlg.exec();
 }
 
 void HelpWindow::helpOnHelp()
@@ -423,7 +417,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
         path_str = QUrl(path.c_str());
     }
 
-    cout << "showDocumentation " << path_str.toString().toStdString() << endl;
+    gui_logger->debug("HelpWindow showDocumentation= {}", path_str.toString().toStdString());
     loadResource(  QUrl(path_str) );
 }
 
@@ -580,42 +574,6 @@ void SearchWidget::searchingFinished(int hits)
     qApp->restoreOverrideCursor();
 }
 
-/*---------------------------------------------------------------
-
-AboutDialog::AboutDialog( QWidget* parent):
-        QDialog( parent )
-{
-   setupUi(this);
-   string titl = pVisorImp->getGEMTitle();
-           titl+= " : About the program package ";
-   setWindowTitle( trUtf8(titl.c_str()) );
-}
-
-AboutDialog::~AboutDialog()
-{}
-
-void AboutDialog::languageChange()
-{
-    retranslateUi(this);
-}
-
-HowToStartDialog::HowToStartDialog( QWidget* parent):
-        QDialog( parent )
-{
-   setupUi(this);
-   string titl = pVisorImp->getGEMTitle();
-           titl+= " : Start the program package ";
-   setWindowTitle( trUtf8(titl.c_str()) );
-}
-
-HowToStartDialog::~HowToStartDialog()
-{}
-
-void HowToStartDialog::languageChange()
-{
-    retranslateUi(this);
-}
-*/
 //----------------------------------------------------------------
 // Help file entry point constants
 

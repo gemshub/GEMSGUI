@@ -125,7 +125,7 @@ public:
     IPNCalc();
     ~IPNCalc();
     void GetEquat( char *txt );
-    void CalcEquat();
+    void CalcEquat( bool use_empty = false);
     void PrintEquat( char *s, fstream& f);
     size_t nEquat() const
     {

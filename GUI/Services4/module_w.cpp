@@ -110,8 +110,8 @@ void TCModuleImp::closeEvent(QCloseEvent* e)
     {
 	  pWin->close();
 	  rMod.pImp = NULL;
-          e->accept();
-          pVisorImp->closeMdiChild( this );
+      e->accept();
+      pVisorImp->closeMdiChild( this );
     }
     else
         e->ignore();
@@ -174,7 +174,7 @@ void TCModuleImp::MakeQuery()
 void TCModuleImp::saveGraphData(jsonui::ChartData *data1)
 {
     rMod.SaveChartData(data1);
-    cout<< "saveGraphData" << endl;
+    gui_logger->info("saveGraphData");
 }
 
 // -------------- End of file module_w.cpp ----------------------

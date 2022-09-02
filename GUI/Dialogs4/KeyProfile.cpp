@@ -53,6 +53,9 @@ KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
     ui->pList->setCurrentRow(0);
     ui->pList->item(0)->setSelected(true);
 
+    ui->checkBrief->setEnabled(ui->checkGEMS3k->isChecked());
+    ui->pDumpFile->setEnabled(ui->pRecalcAll->isChecked());
+
     // signals and slots connections
     QObject::connect( ui->pNewProfBtn, SIGNAL(clicked()), this, SLOT(CmNew()));
     QObject::connect( ui->pGO_OKButton, SIGNAL(clicked()), this, SLOT(accept()));
@@ -62,6 +65,8 @@ KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
     QObject::connect( ui->pRe_runSmart, SIGNAL( clicked() ), this, SLOT( CmReturnSmart() ) );
     QObject::connect( ui->pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(accept()));
     //     QObject::connect(ui->pList, SIGNAL(returnPressed(QListWidgetItem *)), this, SLOT(accept()));
+    QObject::connect( ui->checkGEMS3k, &QCheckBox::toggled, ui->checkBrief, &QCheckBox::setEnabled);
+    QObject::connect( ui->pRecalcAll, &QCheckBox::toggled, ui->pDumpFile, &QCheckBox::setEnabled);
 }
 
 KeyProfile::~KeyProfile()
@@ -114,7 +119,7 @@ bool KeyProfile::getAqGasState() const
     else return true; // new selection aqueous and gas phases
 }
 
-int KeyProfile::getMakeDump() const
+int KeyProfile::getCalcMode() const
 {
     if( newKey == true )
         return 0;    // new record => no dump
@@ -159,14 +164,20 @@ string KeyProfile::getTemplateKey() const
     return string();
 }
 
-bool KeyProfile::getGEMSExport() const
+int KeyProfile::getGEMSExportMode() const
 {
-    return ui->checkGEMS3k->isChecked();
+    if( ui->checkGEMS3k->isChecked()) {
+        return  (ui->checkBrief->isChecked() ? 2 :1 );
+    }
+    return 0;
 }
 
-bool KeyProfile::getGEMSExportMode() const
+int KeyProfile::getDumpMode() const
 {
-    return ui->checkBrief->isChecked();
+    if( ui->pRecalcAll->isChecked()) {
+        return  (ui->pDumpFile->isChecked() ? 2 :1 );
+    }
+    return 0;
 }
 
 // --------------------- End KeyProfile.cpp -------------------------

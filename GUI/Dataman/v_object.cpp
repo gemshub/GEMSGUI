@@ -25,7 +25,7 @@
 #include "v_object.h"
 #include "m_param.h"
 #include "graph.h"
-#include "config.h"
+#include "jsonconfig.h"
 
 // Workaround for ilink unresolved external errors in BCBuilderX
 #ifdef __win32_borland
@@ -100,8 +100,8 @@ TObject::TObject(istream& f):
 TObject::~TObject()
 {
     Keywd[ MAXKEYWD-1 ] = 0;
-    if(Dynamic)
-        delete pV;
+    if(pV)
+      delete pV;
 }
 
 // Writes configuration to file f
@@ -343,10 +343,15 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     else if( newType > 0  )  // Added by Sveta 16/09/99
     {
         string str( newType, ' ' );
-        // cout << (int)newType << ' ' << Keywd << " T" << str.c_str() << "T" << endl;
         for( int ii=0; ii<newN; ii++ )
             for( int jj=0; jj<newM; jj++ )
                 pV1->SetString( str.c_str(), ii*newM+jj );
+    }
+
+    // Testing data type for debugging purposes
+    gui_logger->trace("Alloc Object: {} newType= {} newN={} newM={}", Keywd, newType, newN, newM);
+    if( newType != Type ) {
+       gui_logger->trace("Different type! Object: {} Type= {} newType= {}", Keywd, Type, newType);
     }
 
     /* Saving old values */
@@ -441,18 +446,15 @@ double TObject::Get(int n, int m) const
 }
 
 // get cell of data object as double
-double
-TObject::GetEmpty(int n, int m)
+double TObject::GetEmpty(int n, int m)
 {
-    check_dim(n,m);
-    if( pV->IsEmpty( ndx(n, m) ) )
+    if( !GetPtr() || n >= N || m >= M || pV->IsEmpty( ndx(n, m) ) )
         return DOUBLE_EMPTY;
     return pV->Get(ndx(n,m));
 }
 
 // put value to cell of data object as double
-void
-TObject::Put(double Value, int n, int m)
+void TObject::Put(double Value, int n, int m)
 {                    // truncated if overflowed !!!
     check_dim(n,m);
     pV->Put(Value, ndx(n,m));
@@ -626,6 +628,7 @@ int  TObject::toDB( GemDataStream& f )
         // temp workaround of alingment
         if( strcmp(Keywd, "SPPpar") == 0 )
         {
+            gui_logger->debug("writing SPP_SETTING, size = {}", size);
             static_cast<SPP_SETTING*>(GetPtr())->write(f);
             //padding
             for( int ii=0; ii<size-758; ii++)
@@ -667,10 +670,7 @@ int  TObject::ofDB( GemDataStream& f )
     f >> Odim_N;
     f >> Odim_M;
 
-//cerr << "ofDB: begin for " << GetKeywd() << endl;
-//cerr << "Type " << (int)Type << endl;
-//cerr << "Otype " << (int)Otype << " csize " << (int)csize << " Odim_N " << Odim_N << " Odim_M " << Odim_M << endl;
-
+    gui_logger->trace("ofDB: begin for {} Type={} Otype={} csize={} Odim_N={} Odim_M={}", GetKeywd(), Type, Otype, csize, Odim_N, Odim_M);
     //  f.read( (char *)&OlbufRead, sizeof( OLABEL )-2 );
     //  cmp = olab_comp( OlbufRead, OlenRead );
 
@@ -788,8 +788,6 @@ int  TObject::ofDB( GemDataStream& f )
 
        }  else
            pV->read( f, ssize );
-
-//cerr << "ofDB: end" << endl;
 
     return szOLABEL + ssize;
 }
@@ -1199,70 +1197,50 @@ TObjList::fromDAT(istream& f)
 }
 
 
-const int nTypes = 12;
-static char OBtype[nTypes][3] =
+//const int nTypes = 12;
+static std::vector<std::string> OBtype =
     { "S_", "I_", "U_", "L_", "X_", "F_",
       "D_", "C_", "N_", "A_", "B_", "H_" };
 
 // Loads default configurations from a text .ini file
-void
-TObjList::load(const char* f_obj, int /* maxN */ )
+void TObjList::load(const char* f_obj, int /* maxN */ )
 {
-    TConfig cnf(f_obj,' ');
+    int objectType = 0;
+    std::string objectKeywd;
+    TJsonConfig cnf1( std::string(f_obj) + ".json");
+    auto obj_array = cnf1.to_vector();
 
-    string par;
-    int N;
-    int M;
-    ObjType objectType = 0;
-    char indexationCode;
-    string astr[6];
-
-    par = cnf.getFirst();
-
-    while( !par.empty() )
+    for(const auto& obj_ini: obj_array)
     {
-        //cout << par << endl;
-        cnf.getcStrings(6, astr);
-
-        sscanf( astr[2].c_str(),"%d", &N);
-        sscanf( astr[3].c_str(),"%d", &M);
-        indexationCode = astr[4][0];
-
-        if( isdigit(astr[1][0]) )
-        {
-            short i;
-            sscanf(astr[1].c_str(), "%hd", &i);
-            objectType = i;
+        objectKeywd = obj_ini.value_must_exist<std::string>("label");
+        if( Find(objectKeywd.c_str())>0 )  {
+            throw TFatalError(objectKeywd, "TObject:E18 This data object is already defined");
         }
-        else
-        {
-            int ii;
-            for( ii=0; ii<nTypes; ii++ )
-                if( strcmp(astr[1].c_str(),OBtype[ii])==0 )
-                {
-                    objectType = ObjType(-ii);
-                    break;
+
+        auto dotipe_section = obj_ini.section("type");
+        if( !dotipe_section || !dotipe_section->is_string()) {
+            objectType = dotipe_section->get_as<int>();
+        }
+        else {
+            auto type_str =  dotipe_section->get_as<std::string>();
+            auto it = find(OBtype.begin(), OBtype.end(), type_str);
+            if (it != OBtype.end()) {
+                objectType = ObjType(-(it-OBtype.begin()));
+            }
+            else {
+                if( !string2value(objectType, type_str)) {
+                    throw TFatalError(type_str, "TObject:E17 Unknown object type in ini-file");
                 }
-            if( ii == nTypes )
-              {
-                 throw TFatalError(astr[0].c_str(),
-                                  "TObject:E17 Unknown object type in ini-file");
-
-               }
+            }
         }
-
-        if( Find(astr[0].c_str()) >0 )
-        {
-           const char* label = astr[0].c_str();
-           throw TFatalError(label,
-                       "TObject:E18 This data object is already defined");
-        }
-        // cout <<  astr[0].c_str() <<  "  " << objectType<< endl;
-        push_back( std::make_shared<TObject>(astr[0].c_str(), objectType, abs(N), M, N<0,
-		     indexationCode, astr[5]) );
-        par = cnf.getNext();
+        push_back( std::make_shared<TObject>(objectKeywd.c_str(),
+                                             objectType,
+                                             abs(obj_ini.value_must_exist<int>("dimN")),
+                                             obj_ini.value_must_exist<int>("dimM"),
+                                             obj_ini.value_must_exist<bool>("dyna"),
+                                             obj_ini.value_or_default<std::string>("ndxs", std::string("N"))[0],
+                                             obj_ini.value_or_default<std::string>("hint", "")) );
     }
-
 }
 
 //--------------------- End of v_object.cpp ---------------------------

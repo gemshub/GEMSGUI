@@ -151,6 +151,9 @@ public:
 
     void LoadMtparm( double cT, double cP );
     double b_gamma_TP( double tk, double pb, double eps, double gsf, int mode );
+    //Relative dielectric constant of pure water, eps as a function of (P, T)
+    //       Bradley and Pitzer, 1979, JPC 83, 1599.
+    double wat_dielectric (double cT, double cP);
     void MTparmAlloc( );
     void LoadDataToLookup( QWidget* par, DATACH* CSD );
     void LoadDataToPair( QWidget* par, DATACH* CSD );

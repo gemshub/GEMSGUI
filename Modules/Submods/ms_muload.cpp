@@ -26,7 +26,8 @@
 #include "m_syseq.h"
 #include "s_formula.h"
 
-enum translat_codes { // codes for translations of math script equations
+enum translat_codes
+{ // codes for translations of math script equations
     N_BEGIN = '{',  N_END = '}',    A_reset = '#',
     N_ARBG =  '[',  N_AREND = ']',  A_arcnt = '@',  EQSET_DELIM = '@',
     A_delim_IPM = '\\',
@@ -38,9 +39,10 @@ enum translat_codes { // codes for translations of math script equations
     A_NOx = 'N',
     // Tables [I][J], [i][j], [J][I], ...
     A_ICxDCx = 'B', A_icxdcx = 'b', A_DCxICx = 'C', A_dcxicx = 'c',
-    A_PHxICx = 'D', A_phxicx = 'd', A_ICxPHx = 'E', A_icxphx = 'e'
+    A_PHxICx = 'D', A_phxicx = 'd', A_ICxPHx = 'E', A_icxphx = 'e',
+    // Indexes in GEM2MT
+    A_MGPx = 'G', A_FLx = 'F', A_phxMGPx = 'P'
 };
-
 
 // New: Loading parameters for kinetics-metastability models of all
 // phases into structure for calculations of equlibria (added by DK on 13.03.2013)
@@ -90,14 +92,7 @@ void TMulti::KinMetModLoad( )
         pmp->PfFact[k] = 1.;   // temporary
 if( noZero(aPH->php->h0p) && noZero(aPH->php->R0p) )
     pmp->PfFact[k] = aPH->php->h0p/aPH->php->R0p;
-/*
-if(kMod[0] != KM_UNDEF )
-{
-    cout << "k:" << k << " kMod:" << kMod[0] << kMod[1] << kMod[2] << kMod[3] << kMod[4] << kMod[5];
-    cout << " nPRk:" << pm.LsKin[k*6] << " nSkr:" << pm.LsKin[k*6+1] << " nrpC:" << pm.LsKin[k*6+2] <<
-    " naptC:" << pm.LsKin[k*6+3] << " nAscC:" << pm.LsKin[k*6+4] << " nFaces:" << pm.LsKin[k*6+5] << endl;
-}
-*/
+
         // load coefficients of KinMet models into MULTI transfer arrays
 //LOAD_KKMCOEF:
         if( pmp->LsKin[k*6] )
@@ -183,7 +178,7 @@ if(kMod[0] != KM_UNDEF )
                     strncpy( DCname, aPH->php->lDCr[jj]+(MAXSYMB+MAXDRGROUP), MAXDCNAME );
                     DCname[MAXDCNAME] = '\0';
                     dcInd = find_dcnum_multi( DCname );
-// cout << dcph << ": " << DCname << " dcInd:" << dcInd << endl;
+                    gui_logger->debug("{} : {} : dcInd:{}", dcph, DCname, dcInd);
                     if( dcInd >= 0 )
                     {   // here, parameters of DCs not present in MULTI are skipped
                         pmp->xSKrC[kd+dcph] = dcInd;
@@ -230,7 +225,7 @@ if(kMod[0] != KM_UNDEF )
                 strncpy( Pname+MAXSYMB, aPH->php->lPh[jj]+(MAXSYMB+MAXPHSYMB), MAXPHNAME );
                 Pname[MAXSYMB+MAXPHNAME] = '\0';
                 phInd = find_phnum_multi( Pname );
-// cout << dphl << ": " << Pname << " phInd: " << phInd << endl;
+                gui_logger->debug("{} : {} : phInd:{}", dphl, Pname, phInd);
                 if( phInd >= 0 )
                 {   // here, parameters for phases not present in MULTI are skipped
                     pmp->PhLin[jphl+dphl][0] = phInd;
@@ -268,7 +263,7 @@ if(kMod[0] != KM_UNDEF )
                 strncpy( ICname, aPH->php->lICu[jj], MAXICNAME );
                 ICname[MAXICNAME] = '\0';
                 icInd = find_icnum_multi( ICname );
-    // cout << icph << ": " << ICname << " icInd:" << icInd << endl;
+                gui_logger->debug("{} : {} : icInd:{}", icph, ICname, icInd);
                 if( icInd >= 0 )
                 {
                     pmp->xICuC[ki+icph] = icInd;
@@ -783,7 +778,7 @@ string TMulti::PressSolMod( int nP )
          "E12MSPrep:", "SolModLoad(): Missing operators group for a phase endmember." );
         if( EGlen )
         {  // set text to buffer
-            etext += string( EGb, 0, EGlen );
+            etext += char_array_to_string( EGb, EGlen );
             etext +=  "\n" ;
         }
     }
@@ -1088,6 +1083,83 @@ int TMulti::find_acnum( char *name, int LNmode )
     return( jf[0] );
 }
 
+#include "m_gem2mt.h"
+// Search of MGP index by name ( *name )
+//  Return index >=0 or exception if no match
+//
+int TMulti::find_mgpnum( const char *name1 )
+{
+    int j, jf[8], ii=0;
+    GEM2MT* mtp = TGEM2MT::pm->mtp;
+
+    std::string strname = name1;
+    trim(strname);
+    const char *name = strname.c_str();
+    if( mtp->nPG <= 0 )
+        Error( name, "E11MSPrep: This GEM2MT instance has no MGP name lists." );
+    auto len = strlen( name );
+    for( j=0; j<mtp->nPG && ii< 8; j++ )
+        if( !memcmp(name, mtp->MGPid[j], min<size_t>(len,MAXSYMB)))
+            jf[ii++]=j;
+    if( !ii )
+        Error( name, "E08MSPrep: MGP name cannot be found in this GEM2MT instance..." );
+    if( ii == 1 )
+        return( jf[0] );
+    /* more then one matching index */
+    //sprintf( pbuf, "%d of MGP indices found for the MGP name %s (->%d) \n"
+    //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
+    char pbuf_[164];
+    string pbuf;
+    sprintf( pbuf_, "%d", ii);
+    pbuf = pbuf_;
+    pbuf += " of MGP indices found for the MGP name ";
+    pbuf += name;
+    pbuf +="Take the first one and continue (Y) or cancel (N)?";
+
+    if( !vfQuestion(window(), "W08MSPrep: ", pbuf.c_str() ))
+        Error( "E08MSPrep: ", "Preprocessing cancelled by the user..." );
+
+    return( jf[0] );
+}
+
+// Search of a flux index by name ( *name )
+//  Return index >=0 or exception if no match
+//
+int TMulti::find_flnum( const char *name1 )
+{
+    int j, jf[8], ii=0;
+    GEM2MT* mtp = TGEM2MT::pm->mtp;
+
+    std::string strname = name1;
+    trim(strname);
+    const char *name = strname.c_str();
+    if( mtp->nFD <= 0 )
+        Error( name, "E12MSPrep: This GEM2MT instance has no flux ID lists." );
+    auto len = strlen( name );
+    for( j=0; j<mtp->nFD && ii< 8; j++ )
+        if( !memcmp(name, mtp->FDLid[j], min<size_t>(len,MAXSYMB)))
+            jf[ii++]=j;
+    if( !ii )
+        Error( name, "E08MSPrep: Flux ID cannot be found in this GEM2MT instance..." );
+    if( ii == 1 )
+        return( jf[0] );
+    /* more then one matching index */
+    //sprintf( pbuf, "%d of flux indices found for the flux ID %s (->%d) \n"
+    //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
+    char pbuf_[164];
+    string pbuf;
+    sprintf( pbuf_, "%d", ii);
+    pbuf = pbuf_;
+    pbuf += " of flux indices found for the flux ID ";
+    pbuf += name;
+    pbuf +="Take the first one and continue (Y) or cancel (N)?";
+
+    if( !vfQuestion(window(), "W08MSPrep: ", pbuf.c_str() ))
+        Error( "E08MSPrep: ", "Preprocessing cancelled by the user..." );
+
+    return( jf[0] );
+}
+
 //-----------------------------------------------------------------------
 // Preprocessor of species, phases and component names in math scripts.
 // Changes fragments like \J ... <objName>{CaSO4@} to <objName>[45]
@@ -1244,8 +1316,12 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                case A_dcxicx:
                case A_phxicx:
                case A_icxphx:
+               case A_phxMGPx:  // GEM2MT
                     LNplace = 1;   // search index in MULTI
 //                  cstate = iCode;
+                    break;
+               case A_MGPx:   // GEM2MT
+               case A_FLx:
                     break;
             }
             cstate = iCode;
@@ -1338,6 +1414,19 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                 else
                   i = find_icnum( name, LNplace );
                 break;
+             case A_phxMGPx:   // GEM2MT only, LNplace = 1 (MULTI)
+                if( Xplace )
+                   i = find_mgpnum( name );
+                else
+                   i = find_phnum( name, LNplace );
+                break;
+             case A_MGPx:
+                if( Xplace )
+                    i = find_mgpnum( name );
+                break;
+             case A_FLx:
+                   i = find_flnum( name );
+                break;
             }
             if( !get_ndx )
               pj=i;
@@ -1345,23 +1434,26 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
               pj = get_ndx( i, nO, Xplace );
             switch( cstate )
             { // change name in the text
-            case A_icx:
-            case A_ICx: // index
-            case A_dcx:
-            case A_dcsx:
-            case A_DCx:
-            case A_DCSx:
-            case A_PHx:
-            case A_ACx:
-            case A_phx:
-            case A_ICxDCx:
-            case A_icxdcx:
-            case A_DCxICx:
-            case A_dcxicx:
-            case A_PHxICx:
-            case A_phxicx:
-            case A_ICxPHx:
-            case A_icxphx:
+                case A_icx:
+                case A_ICx: // index
+                case A_dcx:
+                case A_dcsx:
+                case A_DCx:
+                case A_DCSx:
+                case A_PHx:
+                case A_ACx:
+                case A_phx:
+                case A_ICxDCx:
+                case A_icxdcx:
+                case A_DCxICx:
+                case A_dcxicx:
+                case A_PHxICx:
+                case A_phxicx:
+                case A_ICxPHx:
+                case A_icxphx:
+                case A_phxMGPx:
+                case A_MGPx:
+                case A_FLx:
                 break;
             default:
                 Error( "E02MSPrep: Cannot substitute index for ", cur );
@@ -1395,6 +1487,7 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
 
    int i, iCode = aObj[nO]->GetIndexationCode();
    RMULTS* mup = TRMults::sm->GetMU();
+   GEM2MT* mtp = TGEM2MT::pm->mtp;
 
    long int nOsz = aObj[nO]->GetN();
 
@@ -1406,48 +1499,60 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
           break;
        case A_icx:
                   for( i=0; i<pmp->N; i++ )
-                     lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
+                     lst.push_back( char_array_to_string( pmp->SB[i], MAXICNAME ));
                   break;
        case A_dcx:
        case A_dcxicx:
                    for( i=0; i<min(pmp->L,nOsz); i++ )
-                       lst.push_back( string( pmp->SM[i],0, MAXDCNAME) );
+                       lst.push_back( char_array_to_string( pmp->SM[i], MAXDCNAME) );
                    break;
        case A_dcsx:
                    for( i=pmp->Ls + pmp->Lads; i<pmp->L; i++ )
-                       lst.push_back( string( pmp->SM[i],0, MAXDCNAME) );
+                       lst.push_back( char_array_to_string( pmp->SM[i], MAXDCNAME) );
                    break;
        case A_phx:
                    for( i=0; i<min(pmp->FI,nOsz); i++ )
-                     lst.push_back( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                     lst.push_back( char_array_to_string( pmp->SF[i]+MAXSYMB, MAXPHNAME));
                    break;
        case A_phxicx:
                    for( i=0; i<pmp->N; i++ )
-                      lst.push_back( string( pmp->SB[i], 0, MAXICNAME ));
+                      lst.push_back( char_array_to_string( pmp->SB[i], MAXICNAME ));
                    break;
                    //for( i=0; i<pmp->FIs; i++ )
-                   //  lst.Add( string( pmp->SF[i]+MAXSYMB, 0, MAXPHNAME));
+                   //  lst.Add( char_array_to_string( pmp->SF[i]+MAXSYMB, MAXPHNAME));
                    //break;
        case A_ICx:
-                  for( i=0; i<mup->N; i++ )
-                       lst.push_back( string( mup->SB[i], 0, MAXICNAME ));
+                   for( i=0; i<mup->N; i++ )
+                       lst.push_back( char_array_to_string( mup->SB[i], MAXICNAME ));
                    break;
        case A_ACx:
-                  for( i=0; i<mup->La; i++ )
-                      lst.push_back( string( mup->SA[i], 0, MAXCMPNAME ));
+                   for( i=0; i<mup->La; i++ )
+                      lst.push_back( char_array_to_string( mup->SA[i], MAXCMPNAME ));
                    break;
        case A_DCx:
                    for( i=0; i<mup->L; i++ )
-                      lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
+                      lst.push_back( char_array_to_string( mup->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME ));
                    break;
        case A_DCSx:
-                  for( i=mup->Ls+mup->Lads; i<mup->L; i++ )
-                    lst.push_back( string( mup->SM[i]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME ));
-                  break;
+                   for( i=mup->Ls+mup->Lads; i<mup->L; i++ )
+                      lst.push_back( char_array_to_string( mup->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME ));
+                   break;
        case A_PHx:
                    for( i=0; i<mup->Fi; i++ )
-                       lst.push_back( string( mup->SF[i]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME));
+                       lst.push_back( char_array_to_string( mup->SF[i]+MAXSYMB+MAXPHSYMB, MAXPHNAME));
                    break;
+       case A_phxMGPx:   // GEM2MT only, LNplace = 1 (MULTI)
+                   for( i=0; i<mtp->nPG; i++ )
+                      lst.push_back( char_array_to_string( mtp->MGPid[i], MAXSYMB ));
+                   break;
+       case A_MGPx:
+                   for( i=0; i<mtp->nPG; i++ )
+                      lst.push_back( char_array_to_string( mtp->MGPid[i], MAXSYMB ));
+                   break;
+       case A_FLx:
+                  for( i=0; i<mtp->nFD; i++ )
+                     lst.push_back( char_array_to_string( mtp->FDLid[i], MAXSYMB ));
+                  break;
    }
 }
 

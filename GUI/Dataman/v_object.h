@@ -51,7 +51,7 @@ class TObject
     bool Dynamic;
     int N;
     int M;
-    string Descr;
+    string Descr = "";
     TValBase* pV;		//  void* ptr;
     ObjType Type;
     char IndexationCode;
@@ -75,8 +75,8 @@ protected:
     void check_dim(int n, int m) const
     {
         check();
-        ErrorIf(n >= N
-                || m >= M, GetKeywd(), "Cell index beyond object dimension");
+        if( n >= N || m >= M )
+            Error(GetKeywd(), "Cell index beyond object dimension");
     }
     void check_type(ObjType typ) const
     {

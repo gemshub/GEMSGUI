@@ -30,6 +30,8 @@ struct tableSetupData;
 /// remove numbers!
 const int VF_YES =6;
 const int VF_NO = 7;
+const int VF_YES_ALL =8;
+const int VF_NO_ALL = 9;
 const int VF_CANCEL = 2;
 
 int vfQuestYesNoCancel(QWidget* par, const std::string& title, const std::string& mess);
@@ -46,18 +48,17 @@ int vfQuestion3(QWidget* par, const std::string& title, const std::string& mess,
                 const std::string& s1, const std::string& s2,  const std::string& s3="&Cancel",
                 bool i_mov = false);
 
+int vfQuestionYesNoAll(QWidget* par, const std::string& title, const std::string& mess, const std::string& s1="Yes");
+
 enum WarnType { vfInfo=0, vfWarn, vfErr };
 
 void
 vfMessage(QWidget* par, const std::string& title, const std::string& mess, WarnType type=vfWarn);
 
-int
-vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel=0);
-int
-vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
+int vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel=0);
+int vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
                          int sel, bool& all_);
-int
-vfChoice(QWidget* par, const char* title, const char* prompt,
+int vfChoice(QWidget* par, const char* title, const char* prompt,
          int nVal, int *arr, int sel=0);
 
 TCIntArray
@@ -84,9 +85,10 @@ std::string
 vfKeyEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0);
 
 std::string
-vfKeyProfile(QWidget* par, const char* title, int iRt,
-    bool& chAqGas, bool& addFiles, bool& remake, int& makeDump,
-    std::string& key_templ, bool& genGEMS3k, bool& brief_mode  );
+vfKeyProfile( QWidget* par, const char* caption, int iRt,
+              bool& chAqGas, bool& addFiles, bool& remake,
+              string& key_templ,
+              int& recalc_all, int& genGEMS3k, int& makeCalc  );
 
 std::string
 vfKeyTemplEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0,
@@ -162,9 +164,9 @@ bool
 vfUnSpaceSet(QWidget* par, const char * p_key,
               char flds[38], int size[10] );
 bool
-vfGtDemoSet(QWidget* par, const char * p_key, int size[8],
+vfGtDemoSet(QWidget* par, const char * p_key, char flgs[16], int size[8],
             std::string& prkey, std::string& script, TCStringArray& names,
-            std::string& xName, std::string& yName  );
+            std::string& xName, std::string& yName, TCStringArray& keys );
 
 bool
 vfComposSet(QWidget* par, const char * p_key,

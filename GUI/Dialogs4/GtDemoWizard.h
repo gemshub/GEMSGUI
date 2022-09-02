@@ -3,7 +3,7 @@
 //
 // Declaration of GtDemoWizard class
 //
-// Copyright (C) 2005-2008  S.Dmytriyeva
+// Copyright (C) 2005-2021  S.Dmytriyeva
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -20,6 +20,7 @@
 #define GtDemoWizard_included
 
 #include <QDialog>
+#include "table_model.h"
 #include "EquatSetupWidget.h"
 
 namespace Ui {
@@ -32,38 +33,56 @@ class GtDemoWizard : public QDialog
     Q_OBJECT
 
     Ui::GtDemoWizardData *ui;
-    int nRT;
+    QButtonGroup *allButtons;
+    int curentRT;
+
+    int equatRT = -1;
     string script;
     EquatSetup *pageScript;
-    QButtonGroup *allButtons;
 
-    void  resetNextButton();
-    void  resetBackButton();
-    int   getnRT();
+    KeyModel* process_keys_model = nullptr;
+    KeysTableProxy* process_keys_table = nullptr;
+    std::string process_old_selection;
+
+    int keysRT = -1;
+    KeyModel* sel_keys_model = nullptr;
+    KeysTableProxy* sel_keys_table = nullptr;
+    TCStringArray sel_old_selection;
+
+protected slots:
+    void help();
+    void CmNext();
+    void CmBack();
+    void selChangeFilter();
+    void selSelectionChanged(int state);
+    void processChangeFilter();
+    void processSelectionChanged(int state);
 
 public:
 
-    GtDemoWizard( const char* pkey, int sizes[8], const char *ascript,
-    const char *proc_key, const char* aXname, const char* aYname,
-    QWidget* parent = nullptr);
+    GtDemoWizard( const string& pkey, char flgs[16], int sizes[8], const string& ascript,
+                  const string& proc_key, const string& aXname, const string& aYname,
+                  TCStringArray& keys, QWidget* parent = nullptr );
     virtual ~GtDemoWizard();
 
-
-    void   getSizes( int size[8] );
-    string getPrKey();
+    void   getFlags( char flgs[16] );
+    void   getSizes( int size[8], std::string& prKey, TCStringArray& keys );
     string getScript() const
     { return pageScript->getScript(); }
     TCStringArray getNames( string& xName, string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
+protected:
 
-public slots:
-    void resetPageList( int, const char* aXname=nullptr, const char* aYname=nullptr );
-    void help();
-    void CmNext();
-    void CmBack();
-    void CmChangePage2(int);
-    
+    void  resetNextButton();
+    void  resetBackButton();
+    int   get_nRT();
+    void reset_page_list( int newRT, const char* aXname=nullptr, const char* aYname=nullptr );
+    void reset_process_list( int newRT );
+    void reset_keys_list(int newRT);
+    void alloc_keys_model(int cRT);
+
+    std::string get_process_key();
 };
 
 #endif // GtDemoWizard_included

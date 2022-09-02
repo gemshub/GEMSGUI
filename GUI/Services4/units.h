@@ -29,15 +29,14 @@
 struct sunits
 {
     std::string name;
-    std::string vals;
+    std::vector<std::string> vals_list;
 
     sunits()
     {}
 
-    sunits(const std::string & n, const std::string & v):
-            name(n), vals(v)
+    sunits(const std::string& n, const std::vector<std::string>& v):
+            name(n), vals_list(v)
     {}
-
 
     std::string getVals(int m) const;
 };
@@ -47,15 +46,10 @@ class TUnitsList : public std::vector<sunits>
 
 public:
     TUnitsList();
-    int Find(const char* s)
-    {
-        return Find( std::string(s));
-    }
-    int Find(const std::string & s);
-
-    void toDAT(std::ostream & visor_dat);
-    void fromDAT(std::istream & visor_dat);
-    void load(const char* units_ini);
+    int Find(const std::string& s);
+    void toDAT(std::ostream& visor_dat);
+    void fromDAT(std::istream& visor_dat);
+    void load(const std::string& units_ini);
 };
 
 extern TUnitsList aUnits;

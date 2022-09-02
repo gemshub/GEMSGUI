@@ -200,7 +200,6 @@ void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
 // Test record with key
 void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
 {
-
     TCStringArray aSDlist;
     TCIntArray anRDc;
 
@@ -212,7 +211,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
     std::string fld2 = std::string(dbKey.FldKey(2), 0, dbKey.FldLen(2));
     strip( fld2 );
     fld2 += "*";
-    cout << fld2.c_str() << endl;
+    gui_logger->debug("TSData {} ", fld2);
     dbKey.SetFldKey(2,fld2.c_str());
     std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
     RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
@@ -236,7 +235,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
-            msg += std::string( key_, 0, db->KeyLen() );
+            msg += char_array_to_string( key_, db->KeyLen() );
             msg += "'.\n Maybe, a database file is not linked.\n";
             Error( GetName(), msg );
         }
@@ -246,7 +245,7 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
-        msg += std::string( key_, 0, db->KeyLen() );
+        msg += char_array_to_string( key_, db->KeyLen() );
         msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg );
     }

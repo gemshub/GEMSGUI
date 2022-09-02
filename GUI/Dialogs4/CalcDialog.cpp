@@ -19,11 +19,11 @@
 #include <cmath>
 #include "ui_CalcDialog4.h"
 #include "CalcDialog.h"
-#include "v_user.h"
+#include "v_vals.h"
 #include "v_ipnc.h"
+#include "v_mod.h"
+#include "model_w.h"
 #include "service.h"
-#include "GemsMainWindow.h"
-
 
 CalcDialog::CalcDialog(QWidget* parent, int obj):
     QDialog( parent ),
@@ -184,14 +184,14 @@ int CalcDialog::funName(double& val)
     val=0.;
     if( ii <= 5 )
     {
-      QString str = ui->pValue->currentText();
-      pos = str.indexOf('(');
-      if( pos >= 0 )
-       str.truncate(pos);
-      if( (str.indexOf("---") != -1) || str[0] == '`' )
-         val = DOUBLE_EMPTY;
-      else
-         val = str.toDouble();  /// check for error
+        QString str = ui->pValue->currentText();
+        pos = str.indexOf('(');
+        if( pos >= 0 )
+            str.truncate(pos);
+        if( (str.indexOf("---") != -1) || str[0] == '`' )
+            val = DOUBLE_EMPTY;
+        else
+            val = str.toDouble();  /// check for error
     }
     return ii;
 }

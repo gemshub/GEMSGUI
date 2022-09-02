@@ -451,7 +451,7 @@ TCompos::RecBuild( const char *key, int mode  )
     aIclist_old.clear();
     for( i=0; i<oldIC; i++ )
     {
-      str = std::string( bcp->SB[i], 0, MAXICNAME+MAXSYMB );
+      str = char_array_to_string( bcp->SB[i], MAXICNAME+MAXSYMB );
       str += "*                     ";
       aIclist_old.push_back( str );
     }
@@ -498,7 +498,7 @@ LOOP_MARKIC:
     for( i=0; i<oldDC; i++ )
       if( bcp->DCS[i]  == SRC_DCOMP )
       {
-        str = std::string( bcp->SM[i], 0, DC_RKLEN );
+        str = char_array_to_string( bcp->SM[i], DC_RKLEN );
         aDclist_old.Add( str );
       }
 LOOP_MARKDC:
@@ -511,7 +511,7 @@ LOOP_MARKDC:
     for( i=0; i<oldDC; i++ )
       if( bcp->DCS[i]  == SRC_REACDC )
       {
-        str = std::string( bcp->SM[i], 0, DC_RKLEN );
+        str = char_array_to_string( bcp->SM[i], DC_RKLEN );
         aRclist_old.Add( str );
       }
     aRclist = vfMultiKeysSet( window(),
@@ -538,7 +538,7 @@ LOOP_MARKDC:
      for( i=0; i<oldDC; i++ )
      {  str  = std::string(1, bcp->DCS[i]);
         str += ' ';
-        str += std::string( bcp->SM[i], 0, DC_RKLEN );
+        str += char_array_to_string( bcp->SM[i], DC_RKLEN );
         aDclist_old.push_back( str );
      }
 LOOP_MARKDC:
@@ -633,7 +633,21 @@ COMP_COUNT:
     return ret;
 }
 
-// Conversion of concentration units to moles
+// Conversion of value Xe in concentration units UNITP to amount in moles
+// Parameters:
+//  UNITP   Unit code (see v_mod.h, typedef SPPA_UNITS) starting on QUAN_ or CONC_
+//  Xe      Input value (in UNITP units) for the object
+//  DCmw    molar mass (g/mol) of the object
+//  Vm      molar volume (cm3/mol) of the object
+//  R1      total amount (number of moles) of the system or phase, for mole fractions
+//  Msys    mass of the system or phase (kg), for mass fractions
+//  Mwat    Mass of water-solvent (kg), for molalities
+//  Vaq     Volume of aqueous phase (L), for molarities
+//  Maq     Mass of aqueous phase (kg), for salinities (g/kgw or mol/kgw)
+//  Vsys    Volume of the system or phase (L), for volume fractions
+//
+// Returns: Number of moles after conversion (Xincr local variable)
+//  or 0 if wrong UNITP code or a parameter needed for scaling is 0
 //
 double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
     double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys )
@@ -802,7 +816,7 @@ SPECIFY_C:
         else bcp->ICw[i] = (double)aIC->icp->awt;
         /* icp->val; */
     }
-//   NormDoubleRound(bcp->ICw, bcp->Nmax, 7 );
+//   NormDoubleRound(bcp->ICw, bcp->Nmax, 8 );
 
     if( !C )
         C = new double[bcp->Nmax];
@@ -1008,7 +1022,7 @@ IC_FOUND:
             bcp->CIcl[i1] = CIcl[i];
         }
     }
-//NormDoubleRound(bcp->C, bcp->N, 15 ); // SD 22/07/2009
+//NormDoubleRound(bcp->C, bcp->N, 16 ); // SD 22/07/2009
     bc_work_dyn_kill();
     TCModule::RecCalc(key);
 }
@@ -1101,7 +1115,8 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
         if( AddRecordTest( str.c_str(), fnum_ ))
         {   aICkey_new.push_back( stt );  // 30/11/2006
             for(int isd=0; isd<bcp->Nsd; isd++)
-            { std::string sdkey = std::string( bcp->sdref[isd], 0,V_SD_RKLEN);
+            {
+              std::string sdkey = char_array_to_string( bcp->sdref[isd],V_SD_RKLEN);
               strip( sdkey );
               SDlist.insert( sdkey );
            }

@@ -20,6 +20,7 @@
 #include "m_dcomp.h"
 #include "m_param.h"
 #include "s_supcrt.h"
+#include "v_thermofun.h"
 
 const double
 ZPrTr = -0.1278034682e-1,
@@ -914,7 +915,12 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
     ErrorIf(!dc[q].HKFc, GetName(),
        "E26DCrun: This DComp record does not have HKF EoS coefficients!");
     arf.Gfaqs  = dc[q].Gs[0] * JtoCal;
-    arf.Hfaqs  = dc[q].Hs[0] * JtoCal;
+    if (IsDoubleEmpty(dc[q].Hs[0])) {
+        arf.Hfaqs  = 0;
+    }
+    else {
+        arf.Hfaqs  = dc[q].Hs[0] * JtoCal;
+    }
     arf.SPrTra = dc[q].Ss[0] * JtoCal;
     /* Adjust magnitude for e-o-s coef. & omega */
     arf.A[0] = dc[q].HKFc[0];
@@ -936,6 +942,5 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
                aWp.ZBorn[i], aWp.QBorn[i], aWp.YBorn[i],
                aWp.XBorn[i], 3);
 }
-
 
 // ------------------ End of m_dcomp2.cpp ----------------------------

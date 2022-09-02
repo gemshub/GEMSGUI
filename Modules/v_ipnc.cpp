@@ -82,7 +82,6 @@ IPNCalc::IPNCalc():
     input = 0;
     con_add( 0.0 );
     con_add( 1.0 );
-// cout << DBL_MIN_EXP << endl;
 }
 
 IPNCalc::~IPNCalc()
@@ -286,7 +285,7 @@ void IPNCalc::Variab( const string& str)
         err+= " is not known.";
         Error( "E06MSTran: ", err );
     }
-    if( aObj[j]->IsDynamic() || aObj[j]->GetN() > 1  )
+    if( aObj[j]->IsDynamic() || aObj[j]->GetN()> 1  )
     {
       bool isLine = false;
       if( aObj[j]->GetN() <= 1 )
@@ -298,7 +297,7 @@ void IPNCalc::Variab( const string& str)
             if( ( crnt=strchr(crnt, ']' ) )==0 ) goto OSH;
             crnt++;
             if( ( crnt=xblanc( crnt ) )==0 ) goto OSH;
-            if( *crnt != '[' )
+            if( *crnt != '[' && aObj[j]->GetM()>1 )
                isLine = true;
         }
 
@@ -843,7 +842,7 @@ void IPNCalc::GetEquat( char *txt )
 #define StackDel() aStack.erase(aStack.end()-1)
 
 // calc IPN notation
-void IPNCalc::CalcEquat()
+void IPNCalc::CalcEquat( bool use_empty )
 {
     int o_k_,i, k1,k2,k3,k4,j1,j2;
     double z;
@@ -998,7 +997,10 @@ void IPNCalc::CalcEquat()
                 }
                 else  //set variable to stack
                 {
-                    aStack.push_back( aObj[ni]->Get( k1, k2 ) );
+                    if( use_empty )
+                        aStack.push_back( aObj[ni]->GetEmpty( k1, k2 ) );
+                    else
+                        aStack.push_back( aObj[ni]->Get( k1, k2 ) );
                 }
                 break;
             case IT_C :  // constant
@@ -1030,7 +1032,6 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) = sqrt( StackEnd(0) );
                     break;
                 case ln_f:
-// if( StackEnd(0) < IPNC_DBL_MIN ) cout << StackEnd(0) << " ! " << IPNC_DBL_MIN << endl;
                     ErrorIf( StackEnd(0) < IPNC_DBL_MIN, // <=1e-33,
                              "E08MSExec", "Attempt of ln() argument <= 0");
                     StackEnd(0) = log( StackEnd(0) );

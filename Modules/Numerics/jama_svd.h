@@ -3,8 +3,8 @@
 
 #include "GEMS3K/v_detail.h"
 #include "GEMS3K/tnt_array1d.h"
-#include "tnt_array1d_utils.h"
 #include "GEMS3K/tnt_array2d.h"
+#include "tnt_array1d_utils.h"
 #include "tnt_array2d_utils.h"
 #include "tnt_math_utils.h"
 

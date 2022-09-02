@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>794</width>
-    <height>623</height>
+    <width>894</width>
+    <height>645</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -32,32 +32,6 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="2">
-    <widget class="QListWidget" name="pList">
-     <property name="selectionRectVisible">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QCheckBox" name="pTemplate">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="acceptDrops">
-      <bool>false</bool>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="text">
-      <string>Create a new project &amp;using the selected one as a template</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -90,6 +64,13 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QListWidget" name="pList">
+     <property name="selectionRectVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
    <item row="7" column="0" colspan="2">
     <layout class="QHBoxLayout">
      <item>
@@ -103,7 +84,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -142,7 +122,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -178,7 +157,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -217,7 +195,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -244,10 +221,35 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QCheckBox" name="CheckBox4">
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="pAqGas">
+     <property name="toolTip">
+      <string>Uncheck to use different models of aqueous and/or gas phases</string>
+     </property>
      <property name="text">
-      <string>Activate Project &amp;Remake wizard</string>
+      <string>Re&amp;tain setup of aqueous (and gas/fluid) phases</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QCheckBox" name="pTemplate">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Create a new project &amp;using the selected one as a template</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -270,16 +272,10 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="pAqGas">
-     <property name="toolTip">
-      <string>Uncheck to use different models of aqueous and/or gas phases</string>
-     </property>
+   <item row="4" column="0">
+    <widget class="QCheckBox" name="CheckBox4">
      <property name="text">
-      <string>Re&amp;tain setup of aqueous (and gas/fluid) phases</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Activate Project &amp;Remake wizard</string>
      </property>
     </widget>
    </item>
@@ -307,24 +303,51 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QCheckBox" name="pRe_runIA">
+       <widget class="QCheckBox" name="pRecalcAll">
         <property name="text">
-         <string>Automatic (simplex) IA</string>
+         <string>Recalculate all equilibria</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
+       <widget class="QCheckBox" name="pDumpFile">
+        <property name="text">
+         <string>Dump results into a text file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="pRe_runIA">
+        <property name="text">
+         <string>Automatic cold-start (simplex LP)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
        <widget class="QCheckBox" name="pRe_runSmart">
         <property name="text">
-         <string>Smart (previous) IA</string>
+         <string>Smart warm-start (previous speciation)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Use a mode of GEM initial approximation (guess):</string>
         </property>
        </widget>
       </item>
      </layout>
-     <zorder>pRe_runSmart</zorder>
-     <zorder>pRe_runIA</zorder>
+     <zorder>pDumpFile</zorder>
+     <zorder>pRecalcAll</zorder>
      <zorder>checkGEMS3k</zorder>
      <zorder>checkBrief</zorder>
+     <zorder>pRe_runIA</zorder>
+     <zorder>pRe_runSmart</zorder>
+     <zorder>label</zorder>
     </widget>
    </item>
   </layout>
@@ -335,8 +358,8 @@
   <tabstop>pAqGas</tabstop>
   <tabstop>pFiles</tabstop>
   <tabstop>pTemplate</tabstop>
-  <tabstop>pRe_runIA</tabstop>
-  <tabstop>pRe_runSmart</tabstop>
+  <tabstop>pRecalcAll</tabstop>
+  <tabstop>pDumpFile</tabstop>
   <tabstop>pGO_OKButton</tabstop>
   <tabstop>pHelpButton</tabstop>
   <tabstop>pCancelButton</tabstop>

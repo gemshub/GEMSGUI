@@ -8,7 +8,7 @@
                     $$DATAMAN_H/t_print.h \
                     $$DATAMAN_H/t_read.h \
                     $$DATAMAN_H/v_module.h \
-                    $$DATAMAN_H/config.h
+                    $$DATAMAN_H/jsonconfig.h
 
          SOURCES += $$DATAMAN_CPP/v_user.cpp \
                     $$DATAMAN_CPP/v_vals.cpp \
@@ -19,6 +19,6 @@
                     $$DATAMAN_CPP/t_print.cpp \
                     $$DATAMAN_CPP/t_read.cpp \
                     $$DATAMAN_CPP/v_module.cpp\
-                    $$DATAMAN_CPP/config.cpp
+                    $$DATAMAN_CPP/jsonconfig.cpp
 
 

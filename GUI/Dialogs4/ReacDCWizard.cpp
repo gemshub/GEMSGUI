@@ -101,7 +101,8 @@ const TCStringArray& sel, QWidget* parent):
     //Page 2
     ui->checkFull->setChecked( old_selection.empty() );
     ui->lineFilter->setText("*");
-    keys_model = new RDKeyModel( this, old_selection  );
+    keys_model = new RDKeyModel( this );
+    keys_model->setSelection(old_selection);
     QStringList headers_list;
     headers_list <<  "Source" <<  "Aggr.State" <<  "Group" <<
                      "Name" <<   "Comment";

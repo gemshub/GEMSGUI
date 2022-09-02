@@ -57,12 +57,12 @@ struct Selection {
     int M2;
 
     Selection(int n1, int n2, int m1, int m2 ):
-     N1(n1), N2(n2), M1(m1), M2(m2)
-     {}
+        N1(n1), N2(n2), M1(m1), M2(m2)
+    {}
 
     Selection(const Selection& sel):
-     N1(sel.N1), N2(sel.N2), M1(sel.M1), M2(sel.M2)
-     {}
+        N1(sel.N1), N2(sel.N2), M1(sel.M1), M2(sel.M2)
+    {}
 
 };
 
@@ -83,49 +83,50 @@ struct Selection {
 
 class TObjectModel: public QAbstractTableModel
 {
-	Q_OBJECT
-	
-  QList<FieldInfo>	flds;
-	
-  // get index flds and object coordinates from current item coordinate
-  int getObjFromModel( int row, int col, int& nO, int& iN, int& iM, 
-                  Selection* sel=0 ) const;
-  
-  QString getDescription( TObject* pObj, int N, int M) const;
-  int rCount() const;
-  int cCount() const;
+    Q_OBJECT
 
-  public:
-	  
-	 TObjectModel( const QList<FieldInfo> aFlds, 
-	               QObject * parent = 0 );
-	 
-	 int rowCount ( const QModelIndex & parent ) const;	
-	 int columnCount ( const QModelIndex & parent  ) const;
-	 QVariant data ( const QModelIndex & index, int role ) const;
-	 bool setData ( const QModelIndex & index, const QVariant & value, int role );
-	 QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;  
-	 Qt::ItemFlags flags ( const QModelIndex & index ) const;
-	
-     const FieldInfo& getInfo( int row, int col, int& iN, int& iM,
-                         Selection* sel=0 ) const
-	 {
-		int nO, ii;
-                ii = getObjFromModel( row, col, nO, iN, iM, sel );
-                if( ii>=0 )
-		   return flds[ii];
-                iN = iM = -1;
-                return flds[0];
-	 }
-	 
-	 // return plase object defined by Model
-	 ePlaceMode getObjectPlace();
+    QList<FieldInfo>	flds;
 
-     void resetData()
-     {
-         beginResetModel();
-         endResetModel();
-     }
+    // get index flds and object coordinates from current item coordinate
+    int getObjFromModel( int row, int col, int& nO, int& iN, int& iM,
+                         Selection* sel=0 ) const;
+
+    QString getDescription( TObject* pObj, int N, int M) const;
+    QString getHorizontalLabel( TObject* pObj, int M) const;
+    int rCount() const;
+    int cCount() const;
+
+public:
+
+    TObjectModel( const QList<FieldInfo> aFlds,
+                  QObject * parent = 0 );
+
+    int rowCount ( const QModelIndex & parent ) const;
+    int columnCount ( const QModelIndex & parent  ) const;
+    QVariant data ( const QModelIndex & index, int role ) const;
+    bool setData ( const QModelIndex & index, const QVariant & value, int role );
+    QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
+    Qt::ItemFlags flags ( const QModelIndex & index ) const;
+
+    const FieldInfo& getInfo( int row, int col, int& iN, int& iM,
+                              Selection* sel=0 ) const
+    {
+        int nO, ii;
+        ii = getObjFromModel( row, col, nO, iN, iM, sel );
+        if( ii>=0 )
+            return flds[ii];
+        iN = iM = -1;
+        return flds[0];
+    }
+
+    // return plase object defined by Model
+    ePlaceMode getObjectPlace();
+
+    void resetData()
+    {
+        beginResetModel();
+        endResetModel();
+    }
 };
 
 /*!
@@ -138,33 +139,33 @@ class TObjectModel: public QAbstractTableModel
 
 class TObjectTable: public QTableView
 {
-        Q_OBJECT
+    Q_OBJECT
 
-        QList<FieldInfo>	flds;
-        bool vScroll;
-        bool hScroll;
+    QList<FieldInfo>	flds;
+    bool vScroll;
+    bool hScroll;
 
-        void focusOutEvent( QFocusEvent * event );
-        void focusInEvent( QFocusEvent * event );
-        void keyPressEvent(QKeyEvent* e);
+    void focusOutEvent( QFocusEvent * event );
+    void focusInEvent( QFocusEvent * event );
+    void keyPressEvent(QKeyEvent* e);
     //    bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
 
-        void updateStatus( const QModelIndex & current);
-        QList<QAction*> itemActions( const QModelIndex & current);
+    void updateStatus( const QModelIndex & current);
+    QList<QAction*> itemActions( const QModelIndex & current);
 
-        Selection getSelectionRange( bool paste_ = false );
-        QString createString( Selection& sel );
-        QString createHeader();
-        void pasteIntoArea( Selection& sel, bool transpose);
-        void  setFromString(char splitrow, const QString& str,
-                Selection sel, bool transpose);// throw(TError);
+    Selection getSelectionRange( bool paste_ = false );
+    QString createString( Selection& sel );
+    QString createHeader();
+    void pasteIntoArea( Selection& sel, bool transpose);
+    void  setFromString(char splitrow, const QString& str,
+                        Selection sel, bool transpose);// throw(TError);
 
- protected slots:
+protected slots:
     void currentChanged( const QModelIndex& current, const QModelIndex& previous );
     void slotPopupContextMenu(const QPoint& pos);
-  //  void closeEditor( QWidget * editor, QAbstractItemDelegate::EndEditHint hint );
+    //  void closeEditor( QWidget * editor, QAbstractItemDelegate::EndEditHint hint );
 
- public slots:
+public slots:
     void CmHelp();
     void CmSDRef();
     void CmDComp();
@@ -182,13 +183,13 @@ class TObjectTable: public QTableView
     void PasteTransposedData();
 
 
- public:
-         TObjectTable( const QList<FieldInfo> aFlds,
-                               QWidget * parent = 0 );
+public:
+    TObjectTable( const QList<FieldInfo>& aFlds,
+                  QWidget * parent = 0 );
 
-         // return current size of object defined by Model
-     void getObjectSize( int& rowSize, int& colSize );
-     bool isText() { return( flds[0].fType == ftText );}
+    // return current size of object defined by Model
+    void getObjectSize( int& rowSize, int& colSize );
+    bool isText() { return( flds[0].fType == ftText );}
 };
 
 
@@ -202,28 +203,28 @@ class TObjectTable: public QTableView
 
 class TObjectDelegate: public QItemDelegate
 {
-	Q_OBJECT
-	
-   TObjectTable *tabl;
+    Q_OBJECT
 
-   bool eventFilter(QObject *object, QEvent *event);
+    TObjectTable *tabl;
 
- public:
-	
-   TObjectDelegate( TObjectTable *tabl, QObject * parent = 0 );
-   QWidget *createEditor(QWidget *parent,
-                         const QStyleOptionViewItem &option,
-                         const QModelIndex &index) const;
+    bool eventFilter(QObject *object, QEvent *event);
+
+public:
+
+    TObjectDelegate( TObjectTable *tabl, QObject * parent = 0 );
+    QWidget *createEditor(QWidget *parent,
+                          const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
     void setEditorData(QWidget *editor, const QModelIndex &index) const;
     void setModelData(QWidget *editor, QAbstractItemModel *model,
-	                      const QModelIndex &index) const;
-   // QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   // void updateEditorGeometry( QWidget * editor,
-   //         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-// private slots:
-//	void commitAndCloseLineEditor();
-//	void commitAndCloseCheckEditor();
-//	void commitAndCloseTextEditor();
+                      const QModelIndex &index) const;
+    // QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    // void updateEditorGeometry( QWidget * editor,
+    //         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    // private slots:
+    //	void commitAndCloseLineEditor();
+    //	void commitAndCloseCheckEditor();
+    //	void commitAndCloseTextEditor();
 
 };
 
@@ -244,7 +245,7 @@ protected:
     
     FieldInfo fld;               // description
     int iN, iM;                  // indexes in object  0 <= iN < rObj.getN() ; 0 <= iM < rObj.getM()
-    QWidget* th; 
+    QWidget* th;
     bool edited;
 
 public:
@@ -253,10 +254,10 @@ public:
     virtual ~TCell() {}
 
     void CmHelp();
- 
+
     virtual QString getData()
     {
-    	return QString("");
+        return QString("");
     }
     
     virtual void setData( QString )
@@ -269,11 +270,11 @@ public:
 
 /*!
   \class TCellInput
-  \brief elemetary cell - Line Input 
+  \brief elemetary cell - Line Input
 */
 class TCellInput:
-            public QLineEdit,
-            public TCell
+        public QLineEdit,
+        public TCell
 {
     Q_OBJECT
 
@@ -291,11 +292,11 @@ public:
 
     virtual QString getData()
     {
-    	return text();
+        return text();
     }
     
     virtual void setData( QString data1 )
-    { 
+    {
         setText( data1 );
     }
 
@@ -306,8 +307,8 @@ public:
   \brief elemetary cell - n-state CheckBox
 */
 class TCellCheck:
-            public QComboBox,
-            public TCell
+        public QComboBox,
+        public TCell
 {
     Q_OBJECT
 
@@ -316,7 +317,7 @@ class TCellCheck:
 
 protected:
     void keyPressEvent(QKeyEvent*);
- 
+
 protected slots:
     void CmHelp() { TCell::CmHelp(); }
 
@@ -327,7 +328,7 @@ public:
 
     virtual QString getData()
     {
-    	return currentText();
+        return currentText();
     }
 
     virtual void setData( QString data1 )
@@ -348,8 +349,8 @@ public:
   \brief elemetary cell - Multiline input
 */
 class TCellText:
-            public QTextEdit,
-            public TCell
+        public QTextEdit,
+        public TCell
 {
     Q_OBJECT
 
@@ -369,19 +370,18 @@ public:
 
     virtual QString getData()
     {
-    	return toPlainText();
+        return toPlainText();
     }
 
     virtual void setData( QString data1 )
-     { 
+    {
         setPlainText(data1);
         edited = false;
-     }
+    }
 
 };
 
-inline
-string visualizeEmpty(const string& text)
+inline string visualizeEmpty(const string& text)
 {
     return (text==S_EMPTY) ? emptiness : text;
 }
@@ -390,14 +390,14 @@ string visualizeEmpty(const string& text)
 inline int wdF(eFieldType ft, int npos, eEdit edit )
 {
     if( ft == ftCheckBox ) {	// we'd like to get square 'checkbox cell'
-//    	return 2 * pVisorImp->getCharWidth();
-      int size = max( pVisorImp->getCharWidth(), pVisorImp->getCharHeight());
-      if( edit == eYes )
-              size *= 2;
-      return size;
+        //    	return 2 * pVisorImp->getCharWidth();
+        int size = max( pVisorImp->getCharWidth(), pVisorImp->getCharHeight());
+        if( edit == eYes )
+            size *= 2;
+        return size;
     }
     else {
-    return npos * pVisorImp->getCharWidth();
+        return npos * pVisorImp->getCharWidth();
     }
 }
 
@@ -406,13 +406,13 @@ inline int htF(eFieldType ft, int ht)
     if( ft==ftText ) {
         return pVisorImp->getCharHeight()*ht/2+1;
     }
-/*    else if( ft == ftCheckBox ) {
+    /*    else if( ft == ftCheckBox ) {
     int width = pVisorImp->getCharWidth();
     int height = pVisorImp->getCharHeight();
     return max(width, height);
     }
 */    else {
-    return pVisorImp->getCharHeight();
+        return pVisorImp->getCharHeight();
     }
 }
 

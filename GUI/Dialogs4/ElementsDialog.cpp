@@ -214,19 +214,31 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     bgOther = new QButtonGroup( ui->bgOtherBox);
     bgOther->setExclusive(false);
-    bgOther->addButton( ui->pbA_1, 1);
-    bgOther->addButton( ui->pbA_2, 2);
-    bgOther->addButton( ui->pbA_3, 3);
-    bgOther->addButton( ui->pbA_4, 4);
-    bgOther->addButton( ui->pbA_5, 5);
-    bgOther->addButton( ui->pbA_6, 6);
-    bgOther->addButton( ui->pbA_7, 7);
-    bgOther->addButton( ui->pbA_8, 8);
-    bgOther->addButton( ui->pbA_9, 9);
+    bgOther->addButton( ui->pbA_01, 1);
+    bgOther->addButton( ui->pbA_02, 2);
+    bgOther->addButton( ui->pbA_03, 3);
+    bgOther->addButton( ui->pbA_04, 4);
+    bgOther->addButton( ui->pbA_05, 5);
+    bgOther->addButton( ui->pbA_06, 6);
+    bgOther->addButton( ui->pbA_07, 7);
+    bgOther->addButton( ui->pbA_08, 8);
+    bgOther->addButton( ui->pbA_09, 9);
     bgOther->addButton( ui->pbA_10, 10);
     bgOther->addButton( ui->pbA_11, 11);
+    bgOther->addButton( ui->pbA_12, 12);
+    bgOther->addButton( ui->pbA_13, 13);
+    bgOther->addButton( ui->pbA_14, 14);
+    bgOther->addButton( ui->pbA_15, 15);
+    bgOther->addButton( ui->pbA_16, 16);
+    bgOther->addButton( ui->pbA_17, 17);
+    bgOther->addButton( ui->pbA_18, 18);
+    bgOther->addButton( ui->pbA_19, 19);
+    bgOther->addButton( ui->pbA_20, 20);
+    bgOther->addButton( ui->pbA_21, 21);
+    bgOther->addButton( ui->pbA_22, 22);
+    bgOther->addButton( ui->pbA_23, 23);
     //     bgOther->addButton( ui->pbA_12, 12);
-    bgOther->addButton( ui->pbA_0, 0);
+    bgOther->addButton( ui->pbA_00, 0);
 
     EmptyData();
 
@@ -487,12 +499,12 @@ void ElementsDialog::SetICompList()
     for( size_t ii=0; ii<aIC.size(); ii++ )
         if( aIndMT[ii] == -1) // additional
         {
-            string name= string( aIC[ii], 0, rt[RT_ICOMP]->FldLen(0) );
+            string name= std::string( aIC[ii], 0, rt[RT_ICOMP]->FldLen(0) );
             strip( name );
             if( name != "Vol" )
             {
-                ErrorIf( nmbOther>12, aIC[ii].c_str(),
-                         "More than 11 additional Independent Components!");
+                ErrorIf( nmbOther>23, aIC[ii].c_str(),
+                         "More than 23 additional Independent Components!");
                 bb = bgOther->button(nmbOther);
                 bb->setText( tr( name.c_str() ) );
                 bb->setEnabled( true );
@@ -597,7 +609,6 @@ ElementsDialog::getData()
 
 void ElementsDialog::SetData()
 {
-
     el_data.flags[cbAqueous_] = ui->cbAqueous->isChecked();
     el_data.flags[cbGaseous_] =ui->cbGaseous->isChecked();
     el_data.flags[cbFluid_] = ui->cbFluid->isChecked();
@@ -613,9 +624,12 @@ void ElementsDialog::SetData()
     el_data.flags[cbIsotopes_] = ui->cbIsotopes->isChecked();
     el_data.flags[cbRes_] = false;
 
-    //for(int ii=0; ii<14; ii++)
-    //     cout <<  " " <<  el_data.flags[ii];
-    //cout << endl;
+    if(gui_logger->should_log(spdlog::level::debug)) {
+        stringstream buf;
+        for(int ii=0; ii<14; ii++)
+            buf <<  " " <<  el_data.flags[ii];
+        gui_logger->debug("el_data.flags: {}", buf.str());
+    }
 
     el_data.aSelNames = el_data.getFlags();
     el_data.aSelNames += "<TDBfilters> = ";
@@ -870,8 +884,12 @@ void ElementsDialog::getSelectionTreeWidget()
     for(int jj=0; jj<pkern->rowCount(); jj++ )
         getTag( tag, pkern->child(jj));
 
-    for(size_t ii=0; ii<selNames.size(); ii++ )
-        cout << selNames[ii].c_str() << endl;
+    if(gui_logger->should_log(spdlog::level::debug)) {
+        stringstream buf;
+        for(size_t ii=0; ii<selNames.size(); ii++ )
+            buf << " " << selNames[ii] << endl;
+        gui_logger->debug("names from FTreeWidget: {}", buf.str());
+    }
 }
 
 void ElementsDialog::getTag( string tag, QStandardItem* pdb)
@@ -934,9 +952,8 @@ void ElementsDialog::setTag( string fname, QStandardItem* pdb)
 
 /// Returns; boolean true if a keyword was found in the file name, false otherwise
 ///    for each of open file keywords;
-int ElementsDialog::isOpenFile( string& name  )
+int ElementsDialog::isOpenFile(string& name)
 {
-
     string fname = name;
 
     //scip extension
@@ -951,8 +968,7 @@ int ElementsDialog::isOpenFile( string& name  )
     pos1 = fname.find(".");
     fname = fname.substr( pos1+1 );
 
-    // cout << "Test name" << fname.c_str() << endl;
-
+    gui_logger->debug("ElementsDialog::isOpenFile({})", fname);
     for(size_t ii=0; ii < selNames.size(); ii++ )
     {
         if(  name.find( selNames[ii] ) != string::npos )
@@ -963,212 +979,6 @@ int ElementsDialog::isOpenFile( string& name  )
     }
     return 0;
 }
-
-/*
-TreeFileLine::TreeFileLine(int aRow, string aTag, string aVer, TreeFileLine* aParent)
-{
-    row = aRow;
-    tag = aTag;
-    ver = aVer;
-    parent = aParent;
-}
-
-TreeFileLine::~TreeFileLine()
-{
-    qDeleteAll(children);
-}
-
-
-void TreeFileLine::printTest()
-{
-    cout << tag.c_str() << endl;
-    for(int ii=0; ii<children.count(); ii++)
-        children[ii]->printTest();
-
-}
-
-
-
-//--------------------------------------------------------------------------------------
-//  class TTreeModel
-//  class for represents the data set and is responsible for fetchin
-//  the data is neaded for viewing and for writing back any changes.
-//  Reading/writing data from/to TObject and TObjList classes
-//---------------------------------------------------------------------------------------
-FileNamesTreeModel::FileNamesTreeModel( TCStringArray aFilesData,
-                        QObject * parent ):
-        QStandardItemModel(parent)
-{
-  rootNode = 0;
-  setupModelData(aFilesData);
-}
-
-FileNamesTreeModel::~FileNamesTreeModel()
-{
-  if(rootNode )
-     delete rootNode;
-}
-
-TreeFileLine *FileNamesTreeModel::lineFromIndex(const QModelIndex &index) const
-{
-    if (index.isValid()) {
-        return static_cast<TreeFileLine *>(index.internalPointer());
-    } else {
-        return rootNode;
-    }
-}
-
-
-void FileNamesTreeModel::setupModelData(TCStringArray aFilesData)
-{
-    if(rootNode )
-      delete rootNode;
-
-    rootNode = new TreeFileLine(0, "default", "", 0);
-
-    int ii, jj;
-    TreeFileLine* pdb;
-    TreeFileLine* pdb_child;
-    string fname, tag, vers="";
-    size_t pos1, pos2;
-
-    for( ii=0; ii<aFilesData.GetCount(); ii++ )
-    {
-        fnamesData.Add( aFilesData[ii]);
-        pdb = rootNode;
-        fname = aFilesData[ii];
-
-        //scip extension
-        pos1 = fname.rfind(".");
-        fname = fname.substr( 0, pos1+1 );
-
-        // get version
-        pos1 = fname.find(".Ver");
-        if( pos1 != string::npos )
-        {
-            vers = fname.substr(pos1+1);
-            fname = fname.substr(0, pos1+1 );
-            pos2 = vers.find(".");
-            vers = vers.substr(0, pos2);
-        }
-        else
-            vers = "";
-
-        // first tag name of chain
-        pos1 = fname.find(".");
-        pos2 = fname.find(".", pos1+1);
-        while( pos2 != string::npos )
-        {
-          tag = fname.substr(pos1+1, pos2-pos1-1);
-          pdb_child = 0;
-
-          // test used tag before
-          for( jj=0; jj<pdb->children.count(); jj++ )
-          {
-              if( tag == pdb->children[jj]->tag )
-              {
-                  pdb_child = pdb->children[jj];
-                  break;
-              }
-          }
-          if( !pdb_child )
-          {
-            pdb_child = new TreeFileLine( pdb->children.count(), tag, vers, pdb );
-            pdb->children.append(pdb_child);
-
-          }
-          pos1=pos2;
-          pos2 = fname.find(".", pos1+1);
-          pdb = pdb_child;
-        }
-
-    }
-   reset();
-}
-
-
-
-void FileNamesTreeModel::printTest()
-{
-    if (!rootNode)
-        return;
-    rootNode->printTest();
-}
-
-QModelIndex FileNamesTreeModel::index(int row, int column, const QModelIndex &parent) const
-{
-    if (!rootNode)
-        return QModelIndex();
-    TreeFileLine *parentItem = lineFromIndex( parent );
-    return createIndex(row, column, parentItem->children[row]);
-}
-
-
-QModelIndex FileNamesTreeModel::parent(const QModelIndex& child) const
-{
-    if (!child.isValid())
-        return QModelIndex();
-
-    TreeFileLine *childItem = lineFromIndex(child);
-    TreeFileLine *parentItem = childItem->parent;
-    if (parentItem == rootNode )
-        return QModelIndex();
-    return createIndex(parentItem->row, 0, parentItem);
-}
-
-int FileNamesTreeModel::rowCount( const QModelIndex& parent ) const
-{
-   if (!rootNode)
-       return 0;
-  if (parent.column() > 0)
-      return 10;
-  TreeFileLine *parentItem = lineFromIndex( parent );
-  return parentItem->children.count();
-}
-
-int FileNamesTreeModel::columnCount( const QModelIndex& parent ) const
-{
-  return 2;
-}
-
-QVariant FileNamesTreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
- if( role == Qt::DisplayRole  && orientation == Qt::Horizontal )
-     if( section == 0 )
-         return "Database Names";
-     else
-         return "Version";
-
-  return QVariant();
-}
-
-
-QVariant FileNamesTreeModel::data( const QModelIndex& index, int role ) const
-{
-   if(!index.isValid())
-     return QVariant();
-
-   switch( role )
-   { case Qt::DisplayRole:
-     case Qt::EditRole:
-             {   QString res;
-                 if( index.column() == 0 )
-                     res = QString( lineFromIndex(index)->tag.c_str() );
-                  else
-                     res = QString( lineFromIndex(index)->tag.c_str() );
-                 cout << index.row() << res.toStdString()<< endl;
-                 return  res;
-             }
-      case Qt::ToolTipRole:
-      case Qt::StatusTipRole:
-      default: break;
-   }
-
-  return QVariant();
-}
-
-*/
-
 
 // --------------------- End ElementsDialog.cpp -------------------------
 

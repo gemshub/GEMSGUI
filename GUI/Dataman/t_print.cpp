@@ -82,7 +82,7 @@ TPrintData::TPrintData(const char *sd_key,
                str_err += input;
                Error( key_format, str_err );
             }
-            cond = string( input, 0, pose-input );
+            cond = char_array_to_string( input, pose-input );
             input = pose+2;
             ifcond = true;
             try{
@@ -201,7 +201,7 @@ TPrintData::getFormat( const char * fmt )
  if( fmt[i] == 's' || fmt[i] == 'c' || fmt[i] == 'f' ||
      fmt[i] == 'e' || fmt[i] == 'g' )
  {
-    aFmts.push_back( PFormat( fmt[i], string( fmt, 0, i) ) );
+    aFmts.push_back( PFormat( fmt[i], char_array_to_string( fmt, i) ) );
     input += i+1;
     return true;
  }
@@ -248,7 +248,7 @@ TPrintData::getToken( int& ii, int& jj )
        else
           i++;
     ii = i;
-/*    str = string( input, 0, i );
+/*    str = char_array_to_string( input, i );
     if( *input == '\'')
       input++;
 */
@@ -265,7 +265,7 @@ TPrintData::getToken( int& ii, int& jj )
    && input[i] != '\t' && input[i] != '$' && input[i] != '\0')
           i++;
 */
-    str = string( input, 0, i );
+    str = char_array_to_string( input, i );
 
     if( str == "substr" )
     {  data = substr_d;
@@ -328,7 +328,7 @@ TPrintData::getToken( int& ii, int& jj )
            && input[i] != '\t'&&
            input[i] != '[' && input[i] != '\0'&& input[i] != '\n')
        i++;
-    str = string( input, 0, i );
+    str = char_array_to_string( input, i );
     data = aObj.Find( str.c_str() );
     if( data < 0 )
     {  string str_err = "Invalid object name: \n";
@@ -408,7 +408,7 @@ TPrintData::getData( )
 
  if( _data == text_d )
  {
-   aDts.push_back( PData( _data, string( input, 0, i ).c_str() ) );
+   aDts.push_back( PData( _data, char_array_to_string( input, i ).c_str() ) );
    input += i;
    if( *input == '"')
       input++;

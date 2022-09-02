@@ -23,21 +23,21 @@
 
 class GemDataStream;
 
-typedef ios::openmode FileStatus;
+typedef std::ios::openmode FileStatus;
 
 const int 	MAX_FILENAME_LEN = 20;
 
 static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
-    RDONLY_T = ios::in/*|ios::nocreate*/,               //0x01, !
-    RDONLY_B = ios::in/*|ios::nocreate*/|ios::binary,   //0x81,
-    WRITE_T =  ios::out,                            //0x02,
-    WRITE_B =  ios::out|ios::binary,                //0x82,
-    UPDATE_T = ios::in|ios::out,                    //0x03,
-    UPDATE_B = ios::in|ios::out|ios::binary,        //0x83,
-    APPEND_T = /*ios::in|*/ios::out|ios::app,           //0x09, !
-    APPEND_B = /*ios::in|*/ios::out|ios::app|ios::binary, //0x84,
-    RDONLY_DBV = ios::in/*|ios::nocreate*/|ios::binary, //0x05, !
-    UPDATE_DBV = ios::in|ios::out|ios::binary;       // 0x83 !
+    RDONLY_T = std::ios::in/*|std::ios::nocreate*/,               //0x01, !
+    RDONLY_B = std::ios::in/*|std::ios::nocreate*/|std::ios::binary,   //0x81,
+    WRITE_T =  std::ios::out,                            //0x02,
+    WRITE_B =  std::ios::out|std::ios::binary,                //0x82,
+    UPDATE_T = std::ios::in|std::ios::out,                    //0x03,
+    UPDATE_B = std::ios::in|std::ios::out|std::ios::binary,        //0x83,
+    APPEND_T = /*std::ios::in|*/std::ios::out|std::ios::app,           //0x09, !
+    APPEND_B = /*std::ios::in|*/std::ios::out|std::ios::app|std::ios::binary, //0x84,
+    RDONLY_DBV = std::ios::in/*|std::ios::nocreate*/|std::ios::binary, //0x05, !
+    UPDATE_DBV = std::ios::in|std::ios::out|std::ios::binary;       // 0x83 !
 
 
 class TFile
@@ -55,9 +55,8 @@ class TFile
     void makeKeyword();
 
 protected:
-    virtual void write( fstream& );
-    virtual void *read( fstream& );
-//    void check();
+    virtual void write( std::fstream& );
+    virtual void *read( std::fstream& );
 
 public:
     GemDataStream& f;
@@ -66,9 +65,9 @@ public:
     TFile(const std::string& fName,
           const std::string& fExt, const std::string& fDir );
     TFile(const std::string& path);
-    TFile(fstream& fcfg);
+    TFile(std::fstream& fcfg);
     virtual ~TFile();
-    void toCFG(fstream& fcfg);
+    void toCFG(std::fstream& fcfg);
 
     //--- Selectors
     const char* GetKeywd() const

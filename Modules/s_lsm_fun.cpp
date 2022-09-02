@@ -153,7 +153,8 @@ double TLMDataType::function( int i, double* t, double* p )
      case TEST_FIT_SVD: r = p[0] + p[1]*t[0] + p[2]*t[0]*t[0];
                     break;
      case FUN_IPF_R:   // Redlich-Kister
-                       r = cnst_y[i]; [[fallthrough]];
+                       r = cnst_y[i];
+                       [[fallthrough]];
      case FUN_IPF_G:   // Guggenheim
                        r *= Guggenheim( t, p );
                        break;

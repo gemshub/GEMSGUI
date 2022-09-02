@@ -196,6 +196,7 @@ public:
     void CopyRecords( const char * prfName, TCIntArray& cnt,
     elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist );
 
+    QJsonArray all_to_thermofun(QJsonArray &subsArray);
 };
 
 enum pardc_ndx {  /* indexes of work arrays?*/

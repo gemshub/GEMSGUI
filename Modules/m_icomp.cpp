@@ -21,6 +21,7 @@
 #include "m_icomp.h"
 #include "service.h"
 #include "filters_data.h"
+#include "v_thermofun.h"
 
 TIComp* TIComp::pm;
 
@@ -151,8 +152,7 @@ const char* TIComp::GetHtml()
    return GM_ICOMP_HTML;
 }
 
-void
-TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
+void TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
 {
 
  TCIntArray anR;
@@ -178,8 +178,7 @@ TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
  }
 }
 
-void
-TIComp::CopyElements( const char * prfName,
+void TIComp::CopyElements( const char * prfName,
          elmWindowData el_data, icSetupData st_data )
 {
     // open selected kernel files
@@ -235,9 +234,6 @@ TIComp::CopyElements( const char * prfName,
     db->OpenOnlyFromList(names1);
 
 }
-
-
-
 
 // ------------- End of file  m_icomp.cpp -------------------
 

@@ -1,3 +1,34 @@
+//-------------------------------------------------------------------
+// $Id$
+/// \file node.h
+/// Declaration of TNode class that implements a simple C/C++ interface
+/// between GEMS3K and another code.
+//
+/// \class TNode node.h
+/// Implements a simple C/C++ interface between GEM IPM and FMT codes.
+/// Works with DATACH and work DATABR structures without using
+/// the TNodearray class.
+//
+// Copyright (c) 2006-2021 S.Dmytriyeva, D.Kulik, G.Kosakowski, G.D.Miron, A.Leal
+// <GEMS Development Team, mailto:gems2.support@psi.ch>
+//
+// This file is part of the GEMS3K code for thermodynamic modelling
+// by Gibbs energy minimization <http://gems.web.psi.ch/GEMS3K/>
+//
+// GEMS3K is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// GEMS3K is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with GEMS3K code. If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------
+
 #ifndef NODE_GUI_H
 #define NODE_GUI_H
 
@@ -5,15 +36,19 @@
 #include "v_user.h"
 class QWidget;
 
+
+/// \class TNode (GEMS3K kernel)
+/// Implements a simple C/C++ interface between GEM IPM and FMT codes.
+/// Works with DATACH and work DATABR structures without using
+/// the TNodearray class.
 class TNodeGUI: public TNode
 {
 
 public:
 
-    //static TNode* na;   // static pointer to this TNode class instance
-
     /// Constructor of the class instance in memory in GEMS environment
-    explicit TNodeGUI( TMultiBase* apm );
+    explicit TNodeGUI(TMultiBase* apm);
+    TNodeGUI( const TNodeGUI& otherNode ) = delete;
 
     void packDataBr() override   ///<  Packs GEMIPM calculation results into work node structure
     {
@@ -59,6 +94,11 @@ public:
     /// \return true if success
     bool set_resv_msg( std::vector<std::string>&& msg_return );
 
+    /// The export to ThermoFun JSON format file should include all IComp, DComp and ReacDC records
+    /// from the project database, not just the records needed for a particular system
+    /// (where some elements, DComps or ReacDCs can be switched off) as done in preparation of DCH lookup arrays.
+    ///  \param stream     stream to output json file
+    virtual void  write_ThermoFun_format_stream(std::iostream& stream, bool compact) override;
 
 protected:
 

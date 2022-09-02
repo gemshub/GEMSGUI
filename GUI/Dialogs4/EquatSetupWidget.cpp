@@ -133,7 +133,7 @@ void EquatSetup::resetPageList( int newRT,
                 continue;
 
             pgData.push_back( pagesSetupData(wnData[ii]));
-            //cout << pgData[pgData.size()-1].pageName.c_str() << " " << pgData[pgData.size()-1].ndxName.c_str() << endl;
+            gui_logger->trace("EquatSetup::resetPageList {}  {}", pgData[pgData.size()-1].pageName, pgData[pgData.size()-1].ndxName);
             // insert to list
             //str = QString("%1 (%2)").arg(
             //    wnData[ii].pageName.c_str(), aObj[nO]->GetKeywd());
@@ -477,4 +477,4 @@ void EquatSetup::CmAbscissaAdd()
     scriptUpdate();
 }
 
-//--------------------- End of InputSystemDialog.cpp ---------------------------
+//--------------------- End of EquatSetupWidget.cpp ---------------------------

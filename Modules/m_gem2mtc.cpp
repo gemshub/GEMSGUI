@@ -17,8 +17,6 @@
 //-------------------------------------------------------------------
 //
 
-#include <cmath>
-#include <cstdio>
 #include "m_gem2mt.h"
 #include "m_syseq.h"
 #include "visor.h"
@@ -139,7 +137,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     {  if( select_all )
          aSelIC.push_back( ii );
        else
-         aList.push_back( std::string( mult->SB[ii], 0, MAXICNAME+MAXSYMB));
+         aList.push_back( char_array_to_string( mult->SB[ii], MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
       aSelIC = vfMultiChoiceSet(window(), aList,
@@ -151,7 +149,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     {  if( select_all )
          aSelDC.push_back( ii );
        else
-       aList.push_back( std::string( mult->SM[ii], 0, MAXDCNAME));
+       aList.push_back( char_array_to_string( mult->SM[ii], MAXDCNAME));
     }
     if( !select_all  )
        aSelDC = vfMultiChoiceSet(window(), aList,
@@ -163,7 +161,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
     {  if( select_all )
          aSelPH.push_back( ii );
        else
-       aList.push_back( std::string( mult->SF[ii], 0, MAXPHNAME+MAXSYMB));
+       aList.push_back( char_array_to_string( mult->SF[ii], MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
        aSelPH = vfMultiChoiceSet(window(), aList,
@@ -233,16 +231,16 @@ void TGEM2MT::init_arrays( bool mode )
      strncpy( mtp->nam_i[ii], tbuf, MAXIDNAME );
      mtp->PTVm[ii][0] = cP;
      mtp->PTVm[ii][1] = cT;
-     mtp->PTVm[ii][2] = 0.;
+     mtp->PTVm[ii][2] = 0.001; // 1 dm3
      mtp->PTVm[ii][3] = 1.;
     }
 
     for( ii=0; ii<mtp->nC; ii++)
     {
-     mtp->StaP[ii][0] = cP;
-     mtp->StaP[ii][1] = cT;
-     mtp->StaP[ii][2] = 0.;  // initial node volumes
-     mtp->StaP[ii][3] = 1.;  // initial node masses
+     mtp->StaP[ii][0] = cP;     // bar
+     mtp->StaP[ii][1] = cT;     // deg C
+     mtp->StaP[ii][2] = 0.001;  // initial node volumes 1 dm3
+     mtp->StaP[ii][3] = 1.;  // initial node masses 1 kg
     }
 
     for( ii=0; ii<mtp->Lbi; ii++)
@@ -297,13 +295,13 @@ void TGEM2MT::init_arrays( bool mode )
      phName = "Pg1";
      switch( mtp->PsMPh )
      {
-      case MGP_TT_AQGF: phName = "flu"; xgas = 1.; xaq = 1.;  // '3'
+      case MGP_TT_AQGF: phName = "flu"; xgas = 1.; xaq = 1.;    // '3'
          break;
-      case MGP_TT_AQS: phName = "aq"; xaq = 1.;  // '1'
+      case MGP_TT_AQS: phName = "aq"; xaq = 1.;                 // '1'
          break;
-      case MGP_TT_GASF: phName = "gas"; xgas = 1.;  // '2'
+      case MGP_TT_GASF: phName = "gas"; xgas = 1.;              // '2'
          break;
-      case MGP_TT_SOLID: phName = "sld"; xsld = 1.; // '4'
+      case MGP_TT_SOLID: phName = "sld"; xsld = 1.;             // '4'
          break;
       default: break;
      }
@@ -316,7 +314,7 @@ void TGEM2MT::init_arrays( bool mode )
      for( ii=0; ii<mtp->nPG; ii++)
      {
         if( !*mtp->MGPid[ii] || *mtp->MGPid[ii] == ' ' || *mtp->MGPid[ii] == '`' )
-            strcpy( mtp->MGPid[ii], phName.c_str() );
+            strncpy( mtp->MGPid[ii], phName.c_str(), MAXSYMB );
         for(long int k=0; k<mtp->FIf; k++ )
         {
              char  PHC_ = TMulti::sm->GetPM()->PHC[mtp->xPH[k]];
@@ -341,9 +339,9 @@ void TGEM2MT::init_arrays( bool mode )
        for( ii=0; ii<mtp->nFD; ii++)
        {
          if( !*mtp->FDLmp[ii] || *mtp->FDLmp[ii] == ' ' || *mtp->FDLmp[ii] == '`' )
-            strcpy( mtp->FDLmp[ii], phName.c_str() );
+            strncpy( mtp->FDLmp[ii], phName.c_str(), MAXSYMB );
          if( !*mtp->FDLid[ii] || *mtp->FDLid[ii] == ' ' )
-             strcpy( mtp->FDLid[ii], "qj" );
+             strncpy( mtp->FDLid[ii], "qj", MAXSYMB );
        }
     }
   }
@@ -386,7 +384,8 @@ void TGEM2MT::calc_eqstat( bool startSys )
     char buf[40];
 
     if( startSys )
-    {  mtp->cT = mtp->PTVm[mtp->kv][1];
+    {
+       mtp->cT = mtp->PTVm[mtp->kv][1];
        mtp->cP = mtp->PTVm[mtp->kv][0];
         // bugfix: current TC&P changed in MakeNodeStructures
        TMulti::sm->GetPM()->TC = mtp->cT;
@@ -472,7 +471,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
   for( ii=0; ii<siz_; ii++ )
   {
      aFo.push_back( TFormula() );
-     form = std::string( for_[ii], 0, MAXFORMUNITDT );
+     form = char_array_to_string( for_[ii], MAXFORMUNITDT );
      strip( form );
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }
@@ -698,7 +697,7 @@ void TGEM2MT::outMulti()
 
     pVisor->CloseMessage();
 
-    allocNodeWork();  //????
+    allocNodeWork();  //????  Where is this calculated?
     LinkCSD(0);
 
     na->PutGEM2MTFiles( window(),   mtp->nIV, mtp->PsSdat,
@@ -710,7 +709,7 @@ void TGEM2MT::outMulti()
 // ===========================================================
 
 
-// Show plots for all nodes
+// Show plots for all nodes at time mtp->cTau (time step mtp->ct)
 void TGEM2MT::CalcGraph()
 {
   if( mtp->PvMSg  == S_OFF )
@@ -735,17 +734,40 @@ void TGEM2MT::CalcGraph()
     return;
  // show graphic
  // use refresh if needed
- char buf[300];
- sprintf(buf, "  ( time %lg; step %ld )", mtp->cTau, mtp->ct );
-  if( gd_gr )
-    gd_gr->ShowGraph( buf);
+ if( gd_gr ) {
+    auto buf = std::string(" ( time ")+std::to_string(mtp->cTau)+"; step "+std::to_string(mtp->ct)+" )";
+    gd_gr->ShowGraph(buf.c_str());
+ }
 }
 
-// Calculation of initialization script
+// Calculation of control script at time mtp->cTau (step mtp->ct) of RT simulation
+void TGEM2MT::CalcControlScript()
+{
+    gui_logger->trace("PvMSc:  {}", mtp->PvMSc);
+    if( mtp->PvMSc  == S_OFF  )  // This switch is S_ON when mtp->PvMSt is S_ON, but this may be optimized
+      return;
+    // DATABR* BR0; DATABR* BR1;
+    gui_logger->info("Control Script runs @ ct= {}   cTau= {}", mtp->ct, mtp->cTau);
+    // roll through the nodes (boxes)
+    for( long int ii=0; ii< mtp->nC; ii++)
+    {
+        // BR0 = na->pNodT0()[ii];
+        // BR1 = na->pNodT1()[ii];
+        mtp->jt = min( ii, (mtp->nC-1));
+        mtp->qc = ii;
+        LinkNode0(ii); // linking node DODs to current node with index qc
+        LinkNode1(ii);
+        mtp->qf = 0;  // index of flux should be set explicitly, explicit index of mgp taken from the flux
+        rpn[0].CalcEquat();
+    }
+
+}
+
+// Calculation of control script at RT problem initialization stage
 void TGEM2MT::CalcStartScript()
 {
-  if( mtp->PvMSt  == S_OFF  )
-    return;
+    if( mtp->PvMSt  == S_OFF  )
+      return;
 
   // generate Ti, Pi, Vi, DiCp, HydP, ... and fluxes arrays
     for( long int ii=0; ii< max( mtp->nC, mtp->nFD ); ii++)
@@ -946,9 +968,9 @@ TGEM2MT::RecordPlot( const char* /*key*/ )
       TCStringArray lnames;
       int ii;
       for( ii=0; ii<mtp->nYS; ii++ )
-          lnames.push_back( std::string(mtp->lNam[ii], 0, MAXGRNAME ));
+          lnames.push_back( char_array_to_string(mtp->lNam[ii], MAXGRNAME ));
       for( ii=0; ii<mtp->nYE; ii++ )
-          lnames.push_back( std::string( mtp->lNamE[ii], 0, MAXGRNAME ));
+          lnames.push_back( char_array_to_string( mtp->lNamE[ii], MAXGRNAME ));
       gd_gr = updateGraphWindow( gd_gr, this, plt, mtp->name,
           mtp->xNames, mtp->yNames, lnames, def_plt_lines );
     }
@@ -998,115 +1020,117 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
 // nNode < 0 set up NULL pointers  gfor objects
 void  TGEM2MT::LinkNode0( long int nNode )
 {
-  long int ii;
-  DATABR* BR;
+    long int ii;
+    DATABR* BR;
 
-  if( nNode >= 0   )
-  {  BR = na->pNodT0()[nNode];
-     DATACH* CH = na->pCSD();
-     // static
-     aObj[o_n0_ct]->SetPtr( &BR->NodeHandle );   /* s6 */
-     aObj[o_n0_cs]->SetPtr( &BR->TK );            /* d17 */
-     aObj[o_n0_ts]->SetPtr( &BR->Tm );            /* d2 or d19 */
+    if( nNode >= 0   )
+    {  BR = na->pNodT0()[nNode];
+        DATACH* CH = na->pCSD();
+        // static
+        aObj[o_n0_ct]->SetPtr( &BR->NodeHandle );   /* s6 */
+        aObj[o_n0_cs]->SetPtr( &BR->TK );            /* d17 */
+        aObj[o_n0_ts]->SetPtr( &BR->Tm );            /* d2 or d19 */
 #ifndef NODEARRAYLEVEL
-aObj[o_n0_ts]->SetM( 2 );
+        aObj[o_n0_ts]->SetM( 2 );
 #endif
-     //dynamic
-     aObj[o_n0_xdc]->SetPtr( BR->xDC );
-     aObj[o_n0_xdc]->SetDim( CH->nDCb, 1 );
-     aObj[o_n0_gam]->SetPtr( BR->gam );
-     aObj[o_n0_gam]->SetDim( CH->nDCb, 1 );
-     aObj[o_n0_xph]->SetPtr( BR->xPH );
-     aObj[o_n0_xph]->SetDim( CH->nPHb, 1 );
-     aObj[o_n0_vps]->SetPtr( BR->vPS );
-     aObj[o_n0_vps]->SetDim( CH->nPSb, 1 );
-     aObj[o_n0_mps]->SetPtr( BR->mPS );
-     aObj[o_n0_mps]->SetDim( CH->nPSb, 1 );
-     aObj[o_n0_bps]->SetPtr( BR->bPS );
-     aObj[o_n0_bps]->SetDim( CH->nPSb, CH->nICb );
-     aObj[o_n0_xpa]->SetPtr( BR->xPA );
-     aObj[o_n0_xpa]->SetDim( CH->nPSb, 1 );
-     aObj[o_n0_dul]->SetPtr( BR->dul );
-     aObj[o_n0_dul]->SetDim( CH->nDCb, 1 );
-     aObj[o_n0_dll]->SetPtr( BR->dll );
-     aObj[o_n0_dll]->SetDim( CH->nDCb, 1 );
-     aObj[o_n0_bic]->SetPtr( BR->bIC );
-     aObj[o_n0_bic]->SetDim( CH->nICb, 1 );
-     aObj[o_n0_rmb]->SetPtr( BR->rMB );
-     aObj[o_n0_rmb]->SetDim( CH->nICb, 1 );
-     aObj[o_n0_uic]->SetPtr( BR->uIC );
-     aObj[o_n0_uic]->SetDim( CH->nICb, 1 );
-     aObj[o_n0_bsp]->SetPtr( BR->bSP );
-     aObj[o_n0_bsp]->SetDim( CH->nICb, 1 );
-     aObj[o_n0_aph]->SetPtr( BR->aPH );
-     aObj[o_n0_aph]->SetDim( CH->nPHb, 1 );
-     aObj[o_n0_amru]->SetPtr( BR->amru );
-     aObj[o_n0_amru]->SetDim( CH->nPSb, 1 );
-     aObj[o_n0_amrl]->SetPtr( BR->amrl );
-     aObj[o_n0_amrl]->SetDim( CH->nPSb, 1 );
-     // set data to work arrays
-     const TNode* node = na->LinkToNode( nNode, mtp->nC,  na->pNodT0() );
-         double *mps = static_cast<double *>(aObj[o_n0w_mps]->GetPtr() );
-         double *vps = static_cast<double *>(aObj[o_n0w_vps]->GetPtr() );
-         double *m_t = static_cast<double *>(aObj[o_n0w_m_t]->GetPtr() );
-         double *con = static_cast<double *>(aObj[o_n0w_con]->GetPtr() );
-         double *mju = static_cast<double *>(aObj[o_n0w_mju]->GetPtr() );
-         double *lga = static_cast<double *>(aObj[o_n0w_lga]->GetPtr() );
+        //dynamic
+        aObj[o_n0_xdc]->SetPtr( BR->xDC );
+        aObj[o_n0_xdc]->SetDim( CH->nDCb, 1 );
+        aObj[o_n0_gam]->SetPtr( BR->gam );
+        aObj[o_n0_gam]->SetDim( CH->nDCb, 1 );
+        aObj[o_n0_xph]->SetPtr( BR->xPH );
+        aObj[o_n0_xph]->SetDim( CH->nPHb, 1 );
+        aObj[o_n0_vps]->SetPtr( BR->vPS );
+        aObj[o_n0_vps]->SetDim( CH->nPSb, 1 );
+        aObj[o_n0_mps]->SetPtr( BR->mPS );
+        aObj[o_n0_mps]->SetDim( CH->nPSb, 1 );
+        aObj[o_n0_bps]->SetPtr( BR->bPS );
+        aObj[o_n0_bps]->SetDim( CH->nPSb, CH->nICb );
+        aObj[o_n0_xpa]->SetPtr( BR->xPA );
+        aObj[o_n0_xpa]->SetDim( CH->nPSb, 1 );
+        aObj[o_n0_dul]->SetPtr( BR->dul );
+        aObj[o_n0_dul]->SetDim( CH->nDCb, 1 );
+        aObj[o_n0_dll]->SetPtr( BR->dll );
+        aObj[o_n0_dll]->SetDim( CH->nDCb, 1 );
+        aObj[o_n0_bic]->SetPtr( BR->bIC );
+        aObj[o_n0_bic]->SetDim( CH->nICb, 1 );
+        aObj[o_n0_rmb]->SetPtr( BR->rMB );
+        aObj[o_n0_rmb]->SetDim( CH->nICb, 1 );
+        aObj[o_n0_uic]->SetPtr( BR->uIC );
+        aObj[o_n0_uic]->SetDim( CH->nICb, 1 );
+        aObj[o_n0_bsp]->SetPtr( BR->bSP );
+        aObj[o_n0_bsp]->SetDim( CH->nICb, 1 );
+        aObj[o_n0_aph]->SetPtr( BR->aPH );
+        aObj[o_n0_aph]->SetDim( CH->nPHb, 1 );
+        aObj[o_n0_amru]->SetPtr( BR->amru );
+        aObj[o_n0_amru]->SetDim( CH->nPSb, 1 );
+        aObj[o_n0_amrl]->SetPtr( BR->amrl );
+        aObj[o_n0_amrl]->SetDim( CH->nPSb, 1 );
+        // set data to work arrays
+        auto* link_node = na->LinkToNode( nNode, mtp->nC,  na->pNodT0() );
+        if(link_node) {
+            double *mps = static_cast<double *>(aObj[o_n0w_mps]->GetPtr() );
+            double *vps = static_cast<double *>(aObj[o_n0w_vps]->GetPtr() );
+            double *m_t = static_cast<double *>(aObj[o_n0w_m_t]->GetPtr() );
+            double *con = static_cast<double *>(aObj[o_n0w_con]->GetPtr() );
+            double *mju = static_cast<double *>(aObj[o_n0w_mju]->GetPtr() );
+            double *lga = static_cast<double *>(aObj[o_n0w_lga]->GetPtr() );
 
-         for( ii=0; ii<CH->nPHb; ii++)
-         {
-             mps[ii] = node->Ph_Mass(ii);
-             vps[ii] = node->Ph_Volume(ii);
-         }
-         for( ii=0; ii<CH->nDCb; ii++)
-         {
-             con[ii] = node->Get_cDC(ii);
-             mju[ii] = node->Get_muDC(ii, false );
-             lga[ii] = node->Get_aDC(ii, false );
-         }
-         for( ii=0; ii<CH->nICb; ii++)
-             m_t[ii] = node->Get_mIC( ii );
-  }
-  else
-  {
-     // static
-     aObj[o_n0_ct]->SetPtr( nullptr );   /* s6 */
-     aObj[o_n0_cs]->SetPtr( nullptr );            /* d17 */
-     aObj[o_n0_ts]->SetPtr( nullptr );            /* d19 */
-     //dynamic
-     aObj[o_n0_xdc]->SetPtr( nullptr );
-     aObj[o_n0_xdc]->SetDim( 0, 1 );
-     aObj[o_n0_gam]->SetPtr( nullptr );
-     aObj[o_n0_gam]->SetDim( 0, 1 );
-     aObj[o_n0_xph]->SetPtr( nullptr );
-     aObj[o_n0_xph]->SetDim( 0, 1 );
-     aObj[o_n0_vps]->SetPtr( nullptr );
-     aObj[o_n0_vps]->SetDim( 0, 1 );
-     aObj[o_n0_mps]->SetPtr( nullptr );
-     aObj[o_n0_mps]->SetDim( 0, 1 );
-     aObj[o_n0_bps]->SetPtr( nullptr );
-     aObj[o_n0_bps]->SetDim( 0,1 );
-     aObj[o_n0_xpa]->SetPtr( nullptr );
-     aObj[o_n0_xpa]->SetDim( 0, 1 );
-     aObj[o_n0_dul]->SetPtr( nullptr );
-     aObj[o_n0_dul]->SetDim( 0, 1 );
-     aObj[o_n0_dll]->SetPtr( nullptr );
-     aObj[o_n0_dll]->SetDim( 0, 1 );
-     aObj[o_n0_bic]->SetPtr( nullptr );
-     aObj[o_n0_bic]->SetDim( 0, 1 );
-     aObj[o_n0_rmb]->SetPtr( nullptr );
-     aObj[o_n0_rmb]->SetDim( 0, 1 );
-     aObj[o_n0_uic]->SetPtr( nullptr );
-     aObj[o_n0_uic]->SetDim( 0, 1 );
-     aObj[o_n0_bsp]->SetPtr( nullptr );
-     aObj[o_n0_bsp]->SetDim( 0, 1 );
-     aObj[o_n0_aph]->SetPtr( nullptr);
-     aObj[o_n0_aph]->SetDim( 0, 1 );
-     aObj[o_n0_amru]->SetPtr( nullptr );
-     aObj[o_n0_amru]->SetDim( 0, 1 );
-     aObj[o_n0_amrl]->SetPtr( nullptr );
-     aObj[o_n0_amrl]->SetDim( 0, 1 );
-   }
+            for( ii=0; ii<CH->nPHb; ii++)
+            {
+                mps[ii] = link_node->Ph_Mass(ii);
+                vps[ii] = link_node->Ph_Volume(ii);
+            }
+            for( ii=0; ii<CH->nDCb; ii++)
+            {
+                con[ii] = link_node->Get_cDC(ii);
+                mju[ii] = link_node->Get_muDC(ii, false );
+                lga[ii] = link_node->Get_aDC(ii, false );
+            }
+            for( ii=0; ii<CH->nICb; ii++)
+                m_t[ii] = link_node->Get_mIC( ii );
+        }
+    }
+    else
+    {
+        // static
+        aObj[o_n0_ct]->SetPtr( nullptr );   /* s6 */
+        aObj[o_n0_cs]->SetPtr( nullptr );            /* d17 */
+        aObj[o_n0_ts]->SetPtr( nullptr );            /* d19 */
+        //dynamic
+        aObj[o_n0_xdc]->SetPtr( nullptr );
+        aObj[o_n0_xdc]->SetDim( 0, 1 );
+        aObj[o_n0_gam]->SetPtr( nullptr );
+        aObj[o_n0_gam]->SetDim( 0, 1 );
+        aObj[o_n0_xph]->SetPtr( nullptr );
+        aObj[o_n0_xph]->SetDim( 0, 1 );
+        aObj[o_n0_vps]->SetPtr( nullptr );
+        aObj[o_n0_vps]->SetDim( 0, 1 );
+        aObj[o_n0_mps]->SetPtr( nullptr );
+        aObj[o_n0_mps]->SetDim( 0, 1 );
+        aObj[o_n0_bps]->SetPtr( nullptr );
+        aObj[o_n0_bps]->SetDim( 0,1 );
+        aObj[o_n0_xpa]->SetPtr( nullptr );
+        aObj[o_n0_xpa]->SetDim( 0, 1 );
+        aObj[o_n0_dul]->SetPtr( nullptr );
+        aObj[o_n0_dul]->SetDim( 0, 1 );
+        aObj[o_n0_dll]->SetPtr( nullptr );
+        aObj[o_n0_dll]->SetDim( 0, 1 );
+        aObj[o_n0_bic]->SetPtr( nullptr );
+        aObj[o_n0_bic]->SetDim( 0, 1 );
+        aObj[o_n0_rmb]->SetPtr( nullptr );
+        aObj[o_n0_rmb]->SetDim( 0, 1 );
+        aObj[o_n0_uic]->SetPtr( nullptr );
+        aObj[o_n0_uic]->SetDim( 0, 1 );
+        aObj[o_n0_bsp]->SetPtr( nullptr );
+        aObj[o_n0_bsp]->SetDim( 0, 1 );
+        aObj[o_n0_aph]->SetPtr( nullptr);
+        aObj[o_n0_aph]->SetDim( 0, 1 );
+        aObj[o_n0_amru]->SetPtr( nullptr );
+        aObj[o_n0_amru]->SetDim( 0, 1 );
+        aObj[o_n0_amrl]->SetPtr( nullptr );
+        aObj[o_n0_amrl]->SetDim( 0, 1 );
+    }
 }
 
 
@@ -1114,117 +1138,119 @@ aObj[o_n0_ts]->SetM( 2 );
 // nNode < 0 set up NULL pointers  for objects
 void  TGEM2MT::LinkNode1(  long int nNode )
 {
-  DATABR* BR;
-  long int ii;
+    DATABR* BR;
+    long int ii;
 
-  if( nNode >= 0   )
-  {  BR = na->pNodT1()[nNode];
-     DATACH* CH = na->pCSD();
-     // static
-     aObj[o_n1_ct]->SetPtr( &BR->NodeHandle );   /* s6 */
-     aObj[o_n1_cs]->SetPtr( &BR->TK );            /* d17 */
-     aObj[o_n1_ts]->SetPtr( &BR->Tm );       // d2 or d19
+    if( nNode >= 0   )
+    {  BR = na->pNodT1()[nNode];
+        DATACH* CH = na->pCSD();
+        // static
+        aObj[o_n1_ct]->SetPtr( &BR->NodeHandle );   /* s6 */
+        aObj[o_n1_cs]->SetPtr( &BR->TK );            /* d17 */
+        aObj[o_n1_ts]->SetPtr( &BR->Tm );       // d2 or d19
 #ifndef NODEARRAYLEVEL
-aObj[o_n1_ts]->SetM( 2 );
+        aObj[o_n1_ts]->SetM( 2 );
 #endif
-     //dynamic
-     aObj[o_n1_xdc]->SetPtr( BR->xDC );
-     aObj[o_n1_xdc]->SetDim( CH->nDCb, 1 );
-     aObj[o_n1_gam]->SetPtr( BR->gam );
-     aObj[o_n1_gam]->SetDim( CH->nDCb, 1 );
-     aObj[o_n1_xph]->SetPtr( BR->xPH );
-     aObj[o_n1_xph]->SetDim( CH->nPHb, 1 );
-     aObj[o_n1_vps]->SetPtr( BR->vPS );
-     aObj[o_n1_vps]->SetDim( CH->nPSb, 1 );
-     aObj[o_n1_mps]->SetPtr( BR->mPS );
-     aObj[o_n1_mps]->SetDim( CH->nPSb, 1 );
-     aObj[o_n1_bps]->SetPtr( BR->bPS );
-     aObj[o_n1_bps]->SetDim( CH->nPSb, CH->nICb );
-     aObj[o_n1_xpa]->SetPtr( BR->xPA );
-     aObj[o_n1_xpa]->SetDim( CH->nPSb, 1 );
-     aObj[o_n1_dul]->SetPtr( BR->dul );
-     aObj[o_n1_dul]->SetDim( CH->nDCb, 1 );
-     aObj[o_n1_dll]->SetPtr( BR->dll );
-     aObj[o_n1_dll]->SetDim( CH->nDCb, 1 );
-     aObj[o_n1_bic]->SetPtr( BR->bIC );
-     aObj[o_n1_bic]->SetDim( CH->nICb, 1 );
-     aObj[o_n1_rmb]->SetPtr( BR->rMB );
-     aObj[o_n1_rmb]->SetDim( CH->nICb, 1 );
-     aObj[o_n1_uic]->SetPtr( BR->uIC );
-     aObj[o_n1_uic]->SetDim( CH->nICb, 1 );
-     aObj[o_n1_bsp]->SetPtr( BR->bSP );
-     aObj[o_n1_bsp]->SetDim( CH->nICb, 1 );
-     aObj[o_n1_aph]->SetPtr( BR->aPH );
-     aObj[o_n1_aph]->SetDim( CH->nPHb, 1 );
-     aObj[o_n1_amru]->SetPtr( BR->amru );
-     aObj[o_n1_amru]->SetDim( CH->nPSb, 1 );
-     aObj[o_n1_amrl]->SetPtr( BR->amrl );
-     aObj[o_n1_amrl]->SetDim( CH->nPSb, 1 );
+        //dynamic
+        aObj[o_n1_xdc]->SetPtr( BR->xDC );
+        aObj[o_n1_xdc]->SetDim( CH->nDCb, 1 );
+        aObj[o_n1_gam]->SetPtr( BR->gam );
+        aObj[o_n1_gam]->SetDim( CH->nDCb, 1 );
+        aObj[o_n1_xph]->SetPtr( BR->xPH );
+        aObj[o_n1_xph]->SetDim( CH->nPHb, 1 );
+        aObj[o_n1_vps]->SetPtr( BR->vPS );
+        aObj[o_n1_vps]->SetDim( CH->nPSb, 1 );
+        aObj[o_n1_mps]->SetPtr( BR->mPS );
+        aObj[o_n1_mps]->SetDim( CH->nPSb, 1 );
+        aObj[o_n1_bps]->SetPtr( BR->bPS );
+        aObj[o_n1_bps]->SetDim( CH->nPSb, CH->nICb );
+        aObj[o_n1_xpa]->SetPtr( BR->xPA );
+        aObj[o_n1_xpa]->SetDim( CH->nPSb, 1 );
+        aObj[o_n1_dul]->SetPtr( BR->dul );
+        aObj[o_n1_dul]->SetDim( CH->nDCb, 1 );
+        aObj[o_n1_dll]->SetPtr( BR->dll );
+        aObj[o_n1_dll]->SetDim( CH->nDCb, 1 );
+        aObj[o_n1_bic]->SetPtr( BR->bIC );
+        aObj[o_n1_bic]->SetDim( CH->nICb, 1 );
+        aObj[o_n1_rmb]->SetPtr( BR->rMB );
+        aObj[o_n1_rmb]->SetDim( CH->nICb, 1 );
+        aObj[o_n1_uic]->SetPtr( BR->uIC );
+        aObj[o_n1_uic]->SetDim( CH->nICb, 1 );
+        aObj[o_n1_bsp]->SetPtr( BR->bSP );
+        aObj[o_n1_bsp]->SetDim( CH->nICb, 1 );
+        aObj[o_n1_aph]->SetPtr( BR->aPH );
+        aObj[o_n1_aph]->SetDim( CH->nPHb, 1 );
+        aObj[o_n1_amru]->SetPtr( BR->amru );
+        aObj[o_n1_amru]->SetDim( CH->nPSb, 1 );
+        aObj[o_n1_amrl]->SetPtr( BR->amrl );
+        aObj[o_n1_amrl]->SetDim( CH->nPSb, 1 );
 
- // set data to work arrays
-     const TNode* node = na->LinkToNode( nNode, mtp->nC,  na->pNodT1() );
-     double *mps = static_cast<double *>(aObj[o_n1w_mps]->GetPtr());
-     double *vps = static_cast<double *>(aObj[o_n1w_vps]->GetPtr());
-     double *m_t = static_cast<double *>(aObj[o_n1w_m_t]->GetPtr());
-     double *con = static_cast<double *>(aObj[o_n1w_con]->GetPtr());
-     double *mju = static_cast<double *>(aObj[o_n1w_mju]->GetPtr());
-     double *lga = static_cast<double *>(aObj[o_n1w_lga]->GetPtr());
+        // set data to work arrays
+        auto* link_node = na->LinkToNode( nNode, mtp->nC,  na->pNodT1() );
+        if(link_node) {
+            double *mps = static_cast<double *>(aObj[o_n1w_mps]->GetPtr());
+            double *vps = static_cast<double *>(aObj[o_n1w_vps]->GetPtr());
+            double *m_t = static_cast<double *>(aObj[o_n1w_m_t]->GetPtr());
+            double *con = static_cast<double *>(aObj[o_n1w_con]->GetPtr());
+            double *mju = static_cast<double *>(aObj[o_n1w_mju]->GetPtr());
+            double *lga = static_cast<double *>(aObj[o_n1w_lga]->GetPtr());
 
-     for( ii=0; ii<CH->nPHb; ii++)
-     {
-         mps[ii] = node->Ph_Mass(ii);
-         vps[ii] = node->Ph_Volume(ii);
-     }
-     for( ii=0; ii<CH->nDCb; ii++)
-     {
-         con[ii] = node->Get_cDC(ii);
-         mju[ii] = node->Get_muDC(ii, false );
-         lga[ii] = node->Get_aDC(ii, false );
-     }
-     for( ii=0; ii<CH->nICb; ii++)
-         m_t[ii] = node->Get_mIC( ii );
-  }
-  else
-  {
-     // static
-     aObj[o_n1_ct]->SetPtr( nullptr );   /* s6 */
-     aObj[o_n1_cs]->SetPtr( nullptr );            /* d17 */
-     aObj[o_n1_ts]->SetPtr( nullptr );            /* d19 */
-     //dynamic
-     aObj[o_n1_xdc]->SetPtr( nullptr );
-     aObj[o_n1_xdc]->SetDim( 0, 1 );
-     aObj[o_n1_gam]->SetPtr( nullptr );
-     aObj[o_n1_gam]->SetDim( 0, 1 );
-     aObj[o_n1_xph]->SetPtr( nullptr );
-     aObj[o_n1_xph]->SetDim( 0, 1 );
-     aObj[o_n1_vps]->SetPtr( nullptr );
-     aObj[o_n1_vps]->SetDim( 0, 1 );
-     aObj[o_n1_mps]->SetPtr( nullptr );
-     aObj[o_n1_mps]->SetDim( 0, 1 );
-     aObj[o_n1_bps]->SetPtr( nullptr );
-     aObj[o_n1_bps]->SetDim( 0,1 );
-     aObj[o_n1_xpa]->SetPtr( nullptr );
-     aObj[o_n1_xpa]->SetDim( 0, 1 );
-     aObj[o_n1_dul]->SetPtr( nullptr );
-     aObj[o_n1_dul]->SetDim( 0, 1 );
-     aObj[o_n1_dll]->SetPtr( nullptr );
-     aObj[o_n1_dll]->SetDim( 0, 1 );
-     aObj[o_n1_bic]->SetPtr( nullptr );
-     aObj[o_n1_bic]->SetDim( 0, 1 );
-     aObj[o_n1_rmb]->SetPtr( nullptr );
-     aObj[o_n1_rmb]->SetDim( 0, 1 );
-     aObj[o_n1_uic]->SetPtr( nullptr );
-     aObj[o_n1_uic]->SetDim( 0, 1 );
-     aObj[o_n1_bsp]->SetPtr( nullptr );
-     aObj[o_n1_bsp]->SetDim( 0, 1 );
-     aObj[o_n1_aph]->SetPtr( nullptr);
-     aObj[o_n1_aph]->SetDim( 0, 1 );
-     aObj[o_n1_amru]->SetPtr( nullptr );
-     aObj[o_n1_amru]->SetDim( 0, 1 );
-     aObj[o_n1_amrl]->SetPtr( nullptr );
-     aObj[o_n1_amrl]->SetDim( 0, 1 );
+            for( ii=0; ii<CH->nPHb; ii++)
+            {
+                mps[ii] = link_node->Ph_Mass(ii);
+                vps[ii] = link_node->Ph_Volume(ii);
+            }
+            for( ii=0; ii<CH->nDCb; ii++)
+            {
+                con[ii] = link_node->Get_cDC(ii);
+                mju[ii] = link_node->Get_muDC(ii, false );
+                lga[ii] = link_node->Get_aDC(ii, false );
+            }
+            for( ii=0; ii<CH->nICb; ii++)
+                m_t[ii] = link_node->Get_mIC( ii );
+        }
+    }
+    else
+    {
+        // static
+        aObj[o_n1_ct]->SetPtr( nullptr );   /* s6 */
+        aObj[o_n1_cs]->SetPtr( nullptr );            /* d17 */
+        aObj[o_n1_ts]->SetPtr( nullptr );            /* d19 */
+        //dynamic
+        aObj[o_n1_xdc]->SetPtr( nullptr );
+        aObj[o_n1_xdc]->SetDim( 0, 1 );
+        aObj[o_n1_gam]->SetPtr( nullptr );
+        aObj[o_n1_gam]->SetDim( 0, 1 );
+        aObj[o_n1_xph]->SetPtr( nullptr );
+        aObj[o_n1_xph]->SetDim( 0, 1 );
+        aObj[o_n1_vps]->SetPtr( nullptr );
+        aObj[o_n1_vps]->SetDim( 0, 1 );
+        aObj[o_n1_mps]->SetPtr( nullptr );
+        aObj[o_n1_mps]->SetDim( 0, 1 );
+        aObj[o_n1_bps]->SetPtr( nullptr );
+        aObj[o_n1_bps]->SetDim( 0,1 );
+        aObj[o_n1_xpa]->SetPtr( nullptr );
+        aObj[o_n1_xpa]->SetDim( 0, 1 );
+        aObj[o_n1_dul]->SetPtr( nullptr );
+        aObj[o_n1_dul]->SetDim( 0, 1 );
+        aObj[o_n1_dll]->SetPtr( nullptr );
+        aObj[o_n1_dll]->SetDim( 0, 1 );
+        aObj[o_n1_bic]->SetPtr( nullptr );
+        aObj[o_n1_bic]->SetDim( 0, 1 );
+        aObj[o_n1_rmb]->SetPtr( nullptr );
+        aObj[o_n1_rmb]->SetDim( 0, 1 );
+        aObj[o_n1_uic]->SetPtr( nullptr );
+        aObj[o_n1_uic]->SetDim( 0, 1 );
+        aObj[o_n1_bsp]->SetPtr( nullptr );
+        aObj[o_n1_bsp]->SetDim( 0, 1 );
+        aObj[o_n1_aph]->SetPtr( nullptr);
+        aObj[o_n1_aph]->SetDim( 0, 1 );
+        aObj[o_n1_amru]->SetPtr( nullptr );
+        aObj[o_n1_amru]->SetDim( 0, 1 );
+        aObj[o_n1_amrl]->SetPtr( nullptr );
+        aObj[o_n1_amrl]->SetDim( 0, 1 );
 
-   }
+    }
 }
 
 // Link na->pCSD() structure for internal object list

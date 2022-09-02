@@ -23,6 +23,9 @@
 #include <io.h>
 #endif
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "m_unspace.h"
 #include "m_dualth.h"
 #include "m_gem2mt.h"
@@ -86,7 +89,7 @@ void TProfil::Push( std::vector<CompItem>& aList, int aLine,
           stt += " record to be deleted from the project system. Action?";
        else stt += " record to be inserted into project system. Action?";
 
-       switch( vfQuestion3(window(), dbKeywd, stt.c_str(),
+       switch( vfQuestion3(window(), dbKeywd, stt,
               "&Do it", "Do it for &All", "&Cancel" ))
        {
        case VF3_3:   // Skip: now skipping, as the user wants
@@ -468,15 +471,14 @@ int TProfil::indDC( int i )
     return -1;
 }
 
-void TProfil::CalcAllSystems( int makeDump )
+void TProfil::CalcAllSystems( int SIA_or_AIA, bool make_dump_file )
 {
-    double ccTime = 0.;
     char pkey[81];
     char tbuf[150];
     std::string str_file;
-	TCStringArray aList;
+    TCStringArray aList;
     TCIntArray anR;
-    bool outFile = true;
+    bool outFile = make_dump_file;
     uint i=0, nbad=0;
     int iRet;
     double dTime=0.; int kTimeStep =0; double kTime=0.;
@@ -484,77 +486,77 @@ void TProfil::CalcAllSystems( int makeDump )
     rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
-
-    //get file name
     std::string ProfName(pkey);
-    size_t pos = ProfName.find(':');
-    ProfName = ProfName.substr(0,pos);
-    str_file = ProfName;
-    str_file += "_" + curDateSmol('_')+".Dump.out";
-    // open file to output
+
+    if( outFile )
+    {
+        //get file name
+        size_t pos = ProfName.find(':');
+        ProfName = ProfName.substr(0,pos);
+        str_file = ProfName;
+        str_file += "_" + curDateSmol('_')+"_dump_out.txt";
+        // open file to output
 AGAIN:
-    if( vfChooseFileSave(nullptr/*window()*/, str_file,
-        "Please, enter output file name", "*.out" ) == false )
-             return;
-     if( !access(str_file.c_str(), 0 ) ) //file exists
-      switch( vfQuestion3( nullptr/*window()*/, str_file.c_str(),
-      "This set of files exists!",
-           "&Overwrite", "&Rename", "&Cancel") )
-          {
-          case VF3_2:
-              goto AGAIN;
-          case VF3_1:
-              {
-        	  fstream ff(str_file.c_str(), ios::out );
-              }
-              break;
-          case VF3_3: // only calc and save to db
-        	  outFile = false;
-              break;
-        	  // return;
-          }
+        if( vfChooseFileSave(nullptr/*window()*/, str_file,
+                             "Please, enter output file name", "*.out" ) == false )
+            return;
+        if( !access(str_file.c_str(), 0 ) ) //file exists
+            switch( vfQuestion3( nullptr/*window()*/, str_file,
+                                 "This set of files exists!",
+                                 "&Overwrite", "&Rename", "&Cancel") )
+            {
+            case VF3_2:
+                goto AGAIN;
+            case VF3_1:
+            {
+                fstream ff(str_file.c_str(), ios::out );
+            }
+                break;
+            case VF3_3: // only calc and save to db
+                outFile = false;
+                break;
+                // return;
+            }
+    }
 
     pVisor->CloseMessage();
-    MULTI *pmp = multi->GetPM();
+    MULTI *pmp = multi_internal->GetPM();
     TSysEq* aSE= dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     aSE->ods_link(0);
     for(nbad =0,  i=0; i< aList.size(); i++)
     {
-
-      //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
-      //
         sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
         iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf, i, aList.size() );
-      if( iRet )
-        break;
+        if( iRet )
+            break;
 
-      loadSystat( aList[i].c_str() );
- 	   if( makeDump == 2 ) //NEED_GEM_SIA
- 		  pmp->pNP = 1;
-      else
-    	  pmp->pNP = 0; //  NEED_GEM_AIA;
+        loadSystat( aList[i].c_str() );
+        if( SIA_or_AIA == 2 ) // NEED_GEM_SIA
+            pmp->pNP = 1;
+        else
+            pmp->pNP = 0;     // NEED_GEM_AIA;
 
-       bool goodCalc = true;
-      try
-       {
- 	   	showMss = 0L;
-        ccTime += CalcEqstat( dTime, kTimeStep, kTime );
+        bool goodCalc = true;
+        try
+        {
+            showMss = 0L;
+            CalcEqstat( dTime, kTimeStep, kTime );
         }
         catch( TError& /*xcpt*/ )
         {
             nbad++;
             goodCalc = false;
         }
-       if( outFile )
- 	      outMultiTxt( str_file.c_str(), true );
-       if( goodCalc )  // Comment out for testing saving bad results (BugIssue0018)
-           aSE->RecSave( aList[i].c_str(), true );
+        if( outFile )
+            outMultiTxt( str_file.c_str(), true );
+        if( goodCalc )  // Comment out for testing saving bad results (BugIssue0018)
+            aSE->RecSave( aList[i].c_str(), true );
     }
     if( outFile )
     {
-      fstream ff1(str_file.c_str(), ios::out|ios::app);
-      sprintf( tbuf, "\n\nProject: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-      ff1 << tbuf << endl;
+        fstream ff1(str_file.c_str(), ios::out|ios::app);
+        sprintf( tbuf, "\n\nProject: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
+        ff1 << tbuf << endl;
     }
 
 }
@@ -564,7 +566,7 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
 {
     std::string s;
     RMULTS* mup = rmults->GetMU();
-     MULTI *pmp = multi->GetPM();
+     MULTI *pmp = multi_internal->GetPM();
     time_t tr;
     const char* title = "Demonstrate in calculate Mode.";
 
@@ -572,17 +574,17 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     {
     case 'I': // Icomp : IC_v__ or ICnam
         if( strncmp(objName, aObj[o_musb]->GetKeywd(), MAXKEYWD)==0)
-            s = std::string( mup->SB[nLine], 0, IC_RKLEN );
+            s = char_array_to_string( mup->SB[nLine], IC_RKLEN );
         else  if( strncmp(objName, aObj[o_wd_sb]->GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_w_sbh]->GetKeywd(), MAXKEYWD)==0 )
-            s = std::string( mup->SB[pmp->mui[nLine]], 0, IC_RKLEN );
+            s = char_array_to_string( mup->SB[pmp->mui[nLine]], IC_RKLEN );
         else break;
         TIComp::pm->RecInput( s.c_str() );
         TIComp::pm->Show(window(), title, false/*true*/);
         break;
     case 'C': // Compod : CC_v__
         if( strncmp(objName, aObj[o_musa]->GetKeywd(), MAXKEYWD)==0)
-            s = std::string( mup->SA[nLine], 0, BC_RKLEN );
+            s = char_array_to_string( mup->SA[nLine], BC_RKLEN );
         else break;
         TCompos::pm->RecInput( s.c_str() );
         TCompos::pm->Show(window(), title, false/*true*/);
@@ -590,10 +592,10 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     case 'P': // Phase : Ph_v__ or Ph_v2 or Phnam or Phnam2
         if( strncmp(objName, aObj[o_musf]->GetKeywd(), MAXKEYWD)==0 ||
                 strncmp(objName, aObj[o_musf2]->GetKeywd(), MAXKEYWD)==0 )
-            s = std::string( mup->SF[nLine], 0, PH_RKLEN );
+            s = char_array_to_string( mup->SF[nLine], PH_RKLEN );
         else  if( strncmp(objName, aObj[o_wd_sf]->GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_wd_sf2]->GetKeywd(), MAXKEYWD)==0 )
-            s = std::string( mup->SF[pmp->muk[nLine]], 0, PH_RKLEN );
+            s = char_array_to_string( mup->SF[pmp->muk[nLine]], PH_RKLEN );
         else break;
         TPhase::pm->RecInput( s.c_str() );
         TPhase::pm->Show(window(), title, false/*true*/);
@@ -601,12 +603,12 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     case 'D': // Phase : DC_v__ or DC_v2 or DCnam or DCnam2
         if( strncmp(objName, aObj[o_musm]->GetKeywd(), MAXKEYWD)==0 ||
                 strncmp(objName, aObj[o_musm2]->GetKeywd(), MAXKEYWD)==0 )
-            s = std::string( mup->SM[nLine], 0, DC_RKLEN );
+            s = char_array_to_string( mup->SM[nLine], DC_RKLEN );
         else  if( strncmp(objName, aObj[o_wd_sm]->GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_wd_sm2]->GetKeywd(), MAXKEYWD)==0 )
         {
             nLine = pmp->muj[nLine];
-            s = std::string( mup->SM[nLine], 0, DC_RKLEN );
+            s = char_array_to_string( mup->SM[nLine], DC_RKLEN );
         }
         else break;
         if( mup->DCS[nLine] == SRC_DCOMP )
@@ -1011,7 +1013,7 @@ int TProfil::PhIndexforDC( int xdc, bool system )
 {
   int k, DCx = 0;
   RMULTS* mup = rmults->GetMU();
-  MULTI*  pmp = multi->GetPM();
+  MULTI*  pmp = multi_internal->GetPM();
 
   if( system )
   { for( k=0; k<mup->Fi; k++ )
@@ -1037,9 +1039,9 @@ std::string TProfil::PhNameforDC( int xdc, bool system )
   int k = PhIndexforDC( xdc, system );
 
   if( system )
-   return std::string( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
+   return char_array_to_string( rmults->GetMU()->SF[k]+MAXSYMB+MAXPHSYMB, MAXPHNAME);
   else
-   return std::string( multi->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+   return char_array_to_string( multi_internal->GetPM()->SF[k]+MAXSYMB, MAXPHNAME);
 }
 
 
@@ -1048,9 +1050,9 @@ std::string TProfil::PhNameforDC( int xdc, int& xph, bool system )
   xph = PhIndexforDC( xdc, system );
 
   if( system )
-   return std::string( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+   return char_array_to_string( rmults->GetMU()->SF[xph], PH_RKLEN);
   else
-   return std::string( multi->GetPM()->SF[xph], 0, MAXPHNAME+MAXSYMB);
+   return char_array_to_string( multi_internal->GetPM()->SF[xph], MAXPHNAME+MAXSYMB);
 }
 
 TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
@@ -1058,7 +1060,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   int k, j, DCx = 0;
   auto len = strlen( PhName );
   RMULTS* mup = rmults->GetMU();
-  MULTI*  pmp = multi->GetPM();
+  MULTI*  pmp = multi_internal->GetPM();
   TCStringArray DCnames;
   std::string dcstr;
 
@@ -1071,7 +1073,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
     }
     for( j= DCx; j<DCx+mup->Ll[k];j++ )
       {
-        dcstr = std::string( mup->SM[j]+MAXSYMB+MAXDRGROUP ,0, MAXDCNAME );
+        dcstr = char_array_to_string( mup->SM[j]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
         strip( dcstr );
         DCnames.push_back(dcstr);
       }
@@ -1084,7 +1086,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
        DCx += pmp->L1[k];
     }
     for( j= DCx; j<DCx+pmp->L1[k];j++ )
-    {   dcstr =  std::string( pmp->SM[j],0, MAXDCNAME );
+    {   dcstr =  char_array_to_string( pmp->SM[j], MAXDCNAME );
         strip( dcstr );
         DCnames.push_back(dcstr);
     }
@@ -1096,7 +1098,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::
 {
     int k, j, DCx = 0;
     RMULTS* mup = rmults->GetMU();
-    MULTI*  pmp = multi->GetPM();
+    MULTI*  pmp = multi_internal->GetPM();
 
     if( system )
     { for( k=0; k<xph; k++ )
@@ -1104,7 +1106,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::
       for( j= DCx; j<DCx+mup->Ll[xph];j++ )
         {
           xdc.push_back(j);
-          dcnames.push_back( std::string( mup->SM[j], 0, DC_RKLEN ));
+          dcnames.push_back( char_array_to_string( mup->SM[j], DC_RKLEN ));
         }
     }
     else
@@ -1114,7 +1116,7 @@ void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::
       for( j= DCx; j<DCx+pmp->L1[k];j++ )
       {
           xdc.push_back(j);
-          dcnames.push_back( std::string( pmp->SM[j],0, MAXDCNAME ));
+          dcnames.push_back( char_array_to_string( pmp->SM[j], MAXDCNAME ));
       }
     }
 
@@ -1149,13 +1151,13 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
         if( strncmp(objName, aObj[o_musf]->GetKeywd(), MAXKEYWD)==0 ||
                 strncmp(objName, aObj[o_musf2]->GetKeywd(), MAXKEYWD)==0 )
         {    system = true;
-             phname = std::string( rmults->GetMU()->SF[xph], 0, PH_RKLEN);
+             phname = char_array_to_string( rmults->GetMU()->SF[xph], PH_RKLEN);
         }
         else  if( strncmp(objName, aObj[o_wd_sf]->GetKeywd(), MAXKEYWD)==0 ||
                   strncmp(objName, aObj[o_wd_sf2]->GetKeywd(), MAXKEYWD)==0 )
              {
                 system = false;
-                phname = std::string( multi->GetPM()->SF[xph], 0, MAXSYMB+MAXPHNAME);
+                phname = char_array_to_string( multi_internal->GetPM()->SF[xph], MAXSYMB+MAXPHNAME);
              }
             else
                 return;
@@ -1171,7 +1173,6 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
 void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode, bool add_mui )
 {
     double Tai[4], Pai[4];
-    std::unique_ptr<TNodeArrayGUI> na;
     MULTI *pmp = TMulti::sm->GetPM();
 
     Tai[0] = Tai[1] = pmp->TCc;
@@ -1179,12 +1180,12 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
     Tai[2] = Pai[2] = 0.;
     Tai[3] = Pai[3] = 0.1;
 
-    na.reset( new TNodeArrayGUI( 1, TMulti::sm )) ;
+    auto na = TNodeArrayGUI::create(1, TMulti::sm);
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
-    ProcessProgressFunction messageF = [filepath](const std::string& /*message*/, long /*point*/){
-        //std::cout << "GEM3k output: " <<  filepath.c_str() << " " << message.c_str() << point << std::endl;
+    ProcessProgressFunction messageF = [filepath](const std::string& message, long point){
+        gui_logger->info("GEM3k output: {} {} point {}", filepath, message, point);
         return false;
     };
     na->genGEMS3KInputFiles(  filepath, messageF, 1, GEMS3KGenerator::default_type_f, brief_mode, false, false, add_mui );
@@ -1197,7 +1198,7 @@ void TProfil::System2GEMS3K( const std::string key, int calcMode, const std::str
     /*  Do we need recalculate system before? */
     if( calcMode )
     {
-        MULTI *pmp = multi->GetPM();
+        MULTI *pmp = multi_internal->GetPM();
         double dTime=0.; int kTimeStep =0; double kTime=0.;
 
         if( calcMode == 2 ) //NEED_GEM_SIA
@@ -1254,10 +1255,10 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
 
         recordPath += systemname+ "-dat.lst";
         try {
-                    std::cout << "generate name: " << packkey.c_str() << std::endl;
+            gui_logger->info("generate name: {}", packkey);
             System2GEMS3K( packkey, calc_mode, recordPath, brief_mode, add_mui );
         } catch (TError& xcpt) {
-            cout << "Record out error: " << packkey.c_str() << " :" << xcpt.mess.c_str() << "\n";
+            gui_logger->error("Record out error: {}  :{}", packkey, xcpt.mess);
         }
 
         // stop point
@@ -1304,7 +1305,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
         try {
             TProcess::pm->genGEM3K( recordPath, savedSystems, brief_mode, add_mui );
         } catch (TError& xcpt) {
-            cout << "Process record out error: " << aList[ii].c_str() << " :" << xcpt.mess.c_str() << "\n";
+            gui_logger->error("Process record out error: {}  :{}", aList[ii], xcpt.mess);
         }
 
         // stop point
@@ -1335,11 +1336,28 @@ void TProfil::GEMS3KallSystems( int makeCalc, bool brief_mode, bool add_mui )
     }
     catch( TError& xcpt )
     {
-       cout << "Records out error: " << xcpt.mess.c_str() << "\n";
+       gui_logger->error("Record out error: {}", xcpt.mess);
     }
 }
 
-
+void TProfil::generate_ThermoFun_input_file_stream(iostream &stream, bool compact)
+{
+    QJsonObject thermo_data;
+    QJsonArray datasources;
+    datasources.append("gems.web.psi.ch");
+    thermo_data["datasources"] = datasources;
+    QJsonArray thermodataset;
+    thermodataset.append("GEMS3gui");
+    thermo_data["thermodataset"] = thermodataset;
+    thermo_data["date"] = (curDate()+" "+curTime()).c_str();
+    thermo_data["elements"] =  TIComp::pm->all_to_thermofun();
+    auto subst_arr = TDComp::pm->all_to_thermofun();
+    thermo_data["reactions"] = TReacDC::pm->all_to_thermofun(subst_arr);
+    thermo_data["substances"] = subst_arr;
+    QJsonDocument saveDoc(thermo_data);
+    auto json_str = saveDoc.toJson((compact ? QJsonDocument::Compact :QJsonDocument::Indented)).toStdString();
+    stream << json_str << std::endl;
+}
 
 //------------------ End of m_prfget2.cpp --------------------------
 

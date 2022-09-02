@@ -71,7 +71,7 @@ struct ModuleListItem
 enum { MDD_DATABASE=0, MDD_SYSTEM=1 };
 
 enum myThreadEvents { thMessage = 0, thQuestion, thQuestion3,
-                      thChoice, thChoice2, thExcludeFillEdit  };
+                      thChoice, thChoice2, thExcludeFillEdit, thQuestionYesNoAll  };
 // data for thread
 struct DThread
 {
@@ -88,7 +88,7 @@ struct DThread
     TCStringArray list;
     int seli;
     //vfChoise3
-    bool all; // only return
+    bool all_no; // only return
     //vfExcludeFillEdit
     std::vector<bool> sel;
     double fill_data;
@@ -96,7 +96,8 @@ struct DThread
     //Message&Quastion&Question3
     void setDThread( const std::string& title_, const std::string& mess_,
                      const std::string& s1_="", const std::string& s2_="", const std::string& s3_="")
-    {  res =0;
+    {
+        res =0;
         wait = true;
         title = title_;
         mess =mess_;
@@ -106,11 +107,12 @@ struct DThread
     }
     //vfChoice&vfChoice2
     void setDThread( TCStringArray& arr, const char* prompt, int sel_, bool all_=false )
-    {  res =0;
+    {
+        res =0;
         wait = true;
         title = prompt;
         mess ="";
-        all = all_;
+        all_no = all_;
         seli = sel_;
         list.clear();
         for( size_t ii=0; ii<arr.size(); ii++ )
@@ -119,7 +121,8 @@ struct DThread
     //vfExcludeFillEdit
     void setDThread( const char* caption, TCStringArray& aICkeys,
                      double fill_data_ )
-    {  res = 0;
+    {
+        res = 0;
         wait = true;
         title = caption;
         fill_data = fill_data_;
@@ -380,7 +383,7 @@ private slots:
     void CmDataBaseMode();
     void moveToolBar( int pos=10, int index=1 );
     void setActiveSubWindow(QWidget *window);
-    void setActiveSubWindowIdex(int ndx);
+    void setActiveSubWindowName(const QString& name);
     void changeKeyList();
 
     /// Run extern GEMS3 server
@@ -416,7 +419,6 @@ private:
     QMdiSubWindow *findMdiGraph(const QString &moduleName);
     QMdiSubWindow *findNewSystem();
     string nameMdiChild( QWidget *p );
-    int indexMdiChild( QWidget *p );
     int nRTofActiveSubWindow();
     QIcon iconMdiChild( QWidget *p );
 
@@ -447,8 +449,6 @@ private:
     QAction *separatorAct;
     QLineEdit *pLine;
     QComboBox *pModuleName;
-    //QLabel *pModeName;
-
 };
 
 extern TVisorImp* pVisorImp;

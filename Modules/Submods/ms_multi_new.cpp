@@ -1,88 +1,145 @@
 //-------------------------------------------------------------------
-// $Id: ms_multi.cpp 1353 2009-07-14 14:13:35Z gems $
+// $Id$
 //
-// Implementation of TMulti class, configuration functions
+/// \file ms_multi_new.cpp
+/// Implementation of coping IPM internal structure
 //
-// Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2007 S.Dmytriyeva, D.Kulik
+// Copyright (c) 2017-2020 S.Dmytriyeva, D.Kulik
+// <GEMS Development Team, mailto:gems2.support@psi.ch>
 //
+// This file is part of the GEMS3K code for thermodynamic modelling
+// by Gibbs energy minimization <http://gems.web.psi.ch/GEMS3K/>
 //
-// This file may be distributed under the GPL v.3 license
+// GEMS3K is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
 
-//
-// See http://gems.web.psi.ch/ for more information
-// E-mail: gems2.support@psi.ch
+// GEMS3K is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with GEMS3K code. If not, see <http://www.gnu.org/licenses/>.
 //-------------------------------------------------------------------
-//
+
 #include "m_param.h"
+#include "stepwise.h"
 #include "GEMS3K/node.h"
+#include "GEMS3K/num_methods.h"
 
-bool TMulti::testTSyst( int ii ) const
+/// Output to "ipmlog.txt" file Warnings
+BASE_PARAM *TMulti::base_param() const
 {
-    switch (ii)
-    {
-      case 0: return ( TSyst::sm->GetSY()->PYOF != S_OFF);
-    }
-    return false;
-}
-
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Variant of GX() function for use in the UnSpace module (non-optimized)
-// Should not be called from within GEMIPM!
-//
-BASE_PARAM *TMulti::pa_p_ptr() const
-{
-    //return paTProfil1->p;
     return &TProfil::pm->pa.p;
 }
 
-double TMulti::pb_GX( double *Gxx  )
+bool TMulti::testTSyst() const
 {
-    long int i, j, k;
-    double Gi, x, XF, XFw, FX;
-    const BASE_PARAM *pa_p = pa_p_ptr();
+    return ( TSyst::sm->GetSY()->PYOF != S_OFF);
+}
 
-    // calculating G(X)
-    FX=0.;
-    j=0;
-    for( k=0; k<pm.FI; k++ )
-    { // phase loop
-        i=j+pm.L1[k];
-        pm.logXw = -101.;
-        XFw = 0.0;  // calculating mole amount of the solvent/sorbent
-        if( pm.FIs && k<pm.FIs )
-            XFw = pm.XFA[k];
-        //       if( XFw > const1 )
-        if( ( pm.PHC[k] == PH_AQUEL && XFw >= pa_p->XwMin )
-                || ( pm.PHC[k] == PH_SORPTION && XFw >= pa_p->ScMin )
-                || ( pm.PHC[k] == PH_POLYEL && XFw >= pa_p->ScMin ) )
-            pm.logXw = log( XFw );
-        /*   */
-        XF = pm.XF[k];
-        if( !(pm.FIs && k < pm.FIs) )
-        {
-            if( XF < pa_p->PhMin )
-                goto NEXT_PHASE;
-        }
-        else if( XF < pa_p->DS && pm.logXw < 100. )
-            goto NEXT_PHASE;
-        pm.logYFk = log( XF );
+void TMulti::get_PAalp_PSigm( char& PAalp, char& PSigm)
+{
+    PAalp =  TSyst::sm->GetSY()->PAalp;
+    PSigm =  TSyst::sm->GetSY()->PSigm;
+}
 
-        for( ; j<i; j++ )
-        { // DC loop
-            x = pm.X[j];
-            if( x < pa_p->DcMin )
-                continue;
-            // calculating DC increment to G(x)
-            Gi = DC_GibbsEnergyContribution( Gxx[j], x, pm.logYFk, pm.logXw,
-                                             pm.DCCW[j] );
-            FX += Gi;
-        }   // j
-NEXT_PHASE:
-        j = i;
-    }  // k
-    return(FX);
+void TMulti::STEP_POINT( const char* str)
+{
+    STEP_POINT1(str);
+}
+
+void TMulti::alloc_IPx( long int LsIPxSum )
+{
+    pm.IPx = (long int *)aObj[ o_wi_ipxpm ]->Alloc(LsIPxSum, 1, L_);
+}
+void TMulti::alloc_PMc( long int LsModSum )
+{
+    pm.PMc = (double *)aObj[ o_wi_pmc]->Alloc( LsModSum, 1, D_);
+}
+void TMulti::alloc_DMc( long int LsMdcSum )
+{
+    pm.DMc = (double *)aObj[ o_wi_dmc]->Alloc( LsMdcSum, 1, D_ );
+}
+void TMulti::alloc_MoiSN( long int LsMsnSum )
+{
+    pm.MoiSN = (double *)aObj[ o_wi_moisn]->Alloc( LsMsnSum, 1, D_ );
+}
+void TMulti::alloc_SitFr( long int LsSitSum )
+{
+    pm.SitFr  = (double *)aObj[ o_wo_sitfr ]->Alloc( LsSitSum, 1, D_ );
+}
+void TMulti::alloc_DQFc( long int DQFcSum )
+{
+    pm.DQFc = (double *)aObj[o_wi_dqfc]->Alloc( DQFcSum, 1, D_ );
+}
+void TMulti::alloc_PhLin( long int PhLinSum )
+{
+    pm.PhLin = (long int (*)[2])aObj[ o_wi_phlin]->Alloc( PhLinSum, 2, L_ );
+}
+void TMulti::alloc_lPhc( long int lPhcSum )
+{
+    pm.lPhc = (double*)aObj[o_wi_lphc]->Alloc( lPhcSum, 1, D_ );
+}
+
+void TMulti::alloc_xSMd( long int xSMdSum )
+{
+    pm.xSMd = (long int*)aObj[ o_wi_xsmd]->Alloc( xSMdSum, 1, L_ );
+}
+void TMulti::alloc_IsoPc( long int IsoPcSum )
+{
+    pm.IsoPc = (double*)aObj[ o_wi_isopc]->Alloc( IsoPcSum, 1, D_ );
+}
+void TMulti::alloc_IsoSc( long int IsoScSum )
+{
+    pm.IsoSc = (double*)aObj[ o_wi_isosc]->Alloc( IsoScSum, 1, D_ );
+}
+void TMulti::alloc_IsoCt( long int IsoCtSum )
+{
+    pm.IsoCt = (char*)aObj[ o_wi_isoct]->Alloc( IsoCtSum, 1, A_ );
+}
+void TMulti::alloc_EImc( long int EImcSum )
+{
+    pm.EImc = (double*)aObj[ o_wi_eimc]->Alloc( EImcSum, 1, D_ );
+}
+void TMulti::alloc_mCDc( long int mCDcSum )
+{
+    pm.mCDc = (double*)aObj[ o_wi_mcdc]->Alloc( mCDcSum, 1, D_ );
+}
+
+void TMulti::alloc_xSKrC( long int xSKrCSum )
+{
+    pm.xSKrC = (long int*)aObj[ o_wi_jcrdc]->Alloc( xSKrCSum, 1, L_ );
+}
+void TMulti::alloc_ocPRkC( long int ocPRkC_feSArC_Sum )
+{
+    pm.ocPRkC = (long int(*)[2])aObj[ o_wi_ocprkc]->Alloc( ocPRkC_feSArC_Sum, 2, L_ );
+}
+void TMulti::alloc_feSArC( long int ocPRkC_feSArC_Sum )
+{
+    pm.feSArC = (double*)aObj[ o_wi_fsac]->Alloc( ocPRkC_feSArC_Sum, 1, D_ );
+}
+void TMulti::alloc_rpConC( long int rpConCSum )
+{
+    pm.rpConC = (double*)aObj[ o_wi_krpc]->Alloc( rpConCSum, 1, D_ );
+}
+void TMulti::alloc_apConC( long int apConCSum )
+{
+    pm.apConC = (double*)aObj[ o_wi_apconc]->Alloc( apConCSum, 1, D_ );
+}
+void TMulti::alloc_AscpC( long int AscpCSum )
+{
+    pm.AscpC = (double*)aObj[ o_wi_ascpc]->Alloc( AscpCSum, 1, D_ );
+}
+void TMulti::alloc_UMpcC( long int UMpcSum )
+{
+    pm.UMpcC = (double*)aObj[ o_wi_umpc]->Alloc( UMpcSum, 1, D_ );
+}
+void TMulti::alloc_xICuC( long int xICuCSum )
+{
+    pm.xICuC = (long int *)aObj[o_wi_xicuc ]->Alloc( xICuCSum, 1, L_ );
 }
 
 
@@ -115,8 +172,8 @@ void TMulti::GasParcP()
 
                 copyValues(SMbuf[jj], pm.SM[j], MAXDCNAME );
                 pm.Fug_l[jj] = -(pm.G0[j] + pm.fDQF[j]);
-                if( pm.Pc > 1e-9 )
-                    pm.Fug_l[jj] += log(pm.Pc);
+                if( pm.P > 1e-9 )
+                    pm.Fug_l[jj] += log(pm.P);
                 for( i=0; i<pm.N; i++ )
                     pm.Fug_l[jj] += *(pm.A+j*pm.N+i) * pm.U[i];
                 if( pm.Fug_l[jj] > -37. && pm.Fug_l[jj] < 16. )
@@ -136,7 +193,6 @@ void TMulti::GasParcP()
 /// Linking DOD for executing Phase mixing model scripts
 void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb, long int ipb )
 {
-
     ErrorIf( k < 0 || k >= pm.FIs , "CalculateActivityCoefficients():", "Invalid link: k=0||>FIs" );
     aObj[ o_nsmod]->SetPtr( pm.sMod[k] );
     aObj[ o_nncp]->SetPtr( pm.LsMod+k*3 );
@@ -198,17 +254,13 @@ void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb
     aObj[o_nute]->SetPtr( &pm.UPh[k][0] );
 }
 
-
 long int TMulti::testMulti()
 {
-    //MULTI *pmp = multi->GetPM();
     if( pm.MK || pm.PZ )
     {
-        if( pa_p_ptr()->PSM >= 2 )
+        if( base_param()->PSM >= 2 )
         {
-            fstream f_log(  node1->ipmLogFile(), ios::out|ios::app );
-            f_log << "Warning " << pm.stkey << ": " <<  pm.errorCode << ":" << endl;
-            f_log << pm.errorBuf << endl;
+            TNode::ipmlog_file->warn(" {} : {}:{}", pm.stkey, pm.errorCode, pm.errorBuf);
         }
         if( showMss )
         {
@@ -224,11 +276,9 @@ long int TMulti::testMulti()
                 Error(pmp->errorCode, pmp->errorBuf);
             }
         }
-
         return 1L;
     }
-
-    return 0L	;
+    return 0L;
 }
 
 bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int k, long int jb,
@@ -241,7 +291,7 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
     pm.js=0;
     pm.next=1;
     char* sMod = pm.sMod[k];
-    const BASE_PARAM *pa_p = pa_p_ptr();
+    const BASE_PARAM *pa_p = base_param();
 
     switch( LinkMode )
     { // check the calculation mode
@@ -290,7 +340,6 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
         break;
 
     case LINK_UX_MODE:  // the model is dependent on current concentrations on IPM iteration
-
         switch( pm.PHC[k] )
         {  //
         case PH_AQUEL:
@@ -340,8 +389,6 @@ bool TMulti::calculateActivityCoefficients_scripts( long int LinkMode, long int 
                 break;
             }
         }
-        ///if( pm.PHC[k] == PH_AQUEL )  //? 07/05/2020 not used
-        ///    ICold = pm.IC;
         break;
     default:
         Error("CalculateActivityCoefficients()","Invalid LinkMode for a scripted solution model");
@@ -357,15 +404,18 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
     // for GEMIPM unpackDataBr( bool uPrimalSol );
     // to define quantities
 
-    ///   bool newInterval = false;
+    bool newInterval = false;
 
     //   MultiKeyInit( key ); //into PMtest
 
-    //  cout << " pm.pBAL = " << pm.pBAL;
+    ipm_logger->trace(" pm.pBAL =  {}", pm.pBAL);
+    if( !pm.pBAL )
+        newInterval = true;    // to rebuild lookup arrays
 
-    /// if( !pm.pBAL )
-    ///     newInterval = true;    // to rebuild lookup arrays
-
+    if( pm.pBAL < 2  || pm.pTPD < 2 )
+    {
+        SystemToLookup();
+    }
     if( pm.pBAL < 2  )
     {
         // Allocating list of phases currently present in non-zero quantities
@@ -383,30 +433,13 @@ void TMulti::initalizeGEM_IPM_Data_GUI()
 
     TProfil::pm->CheckMtparam(); //load tpp structure
 
-
-    // build new TNode
-    ///  if( !node1 )
-    ///  {
-    ///    node1 = new TNode( pmp );
-    ///    newInterval = true;
-    ///  }
-    ///  else if( !node1->TestTPGrid(pm.Tai, pm.Pai ))
-    ///               newInterval = true;
-
-    /// if( newInterval )
-    /// {   // build/rebuild internal lookup arrays
-    ///    node1->MakeNodeStructures(window(), true, pm.Tai, pm.Pai );
-    /// }
-
-    //cout << "newInterval = " << newInterval << " pm.pTPD = " << pm.pTPD << endl;
-
+    ipm_logger->trace("newInterval = {}   pm.pTPD =  {}", newInterval, pm.pTPD);
     // New: TKinMet stuff
     if( pm.pKMM <= 0 )
     {
         KinMetModLoad();  // Call point to loading parameters for kinetic models
         pm.pKMM = 1;
     }
-
 }
 
 void TMulti::multiConstInit_PN()
@@ -527,116 +560,18 @@ void TMulti::DC_LoadThermodynamicData()
                         break;
                     }
                 else pmp->Vol[j] = 0.0;
-                // added 05/08/2009 SD
-                if( pmp->S0 && tpp->S ) pmp->S0[j] = tpp->S[jj];
-                if( pmp->H0 && tpp->H) pmp->H0[j] = tpp->H[jj];
-                if( pmp->Cp0 && tpp->Cp ) pmp->Cp0[j] = tpp->Cp[jj];
-                if( pmp->A0 && tpp->F ) pmp->A0[j] = tpp->F[jj];
-                if( pmp->U0 && tpp->U ) pmp->U0[j] = tpp->U[jj];
+
+                if( pmp->S0 ) pmp->S0[j] = ( tpp->S ? tpp->S[jj] : 0.0 );
+                if( pmp->H0 ) pmp->H0[j] = ( tpp->H ? tpp->H[jj] : 0.0 );
+                if( pmp->Cp0) pmp->Cp0[j] = ( tpp->Cp ? tpp->Cp[jj] : 0.0 );
+                if( pmp->A0 ) pmp->A0[j] = ( tpp->F ? tpp->F[jj] : 0.0 );
+                if( pmp->U0 ) pmp->U0[j] = ( tpp->U ? tpp->U[jj] : 0.0 );
             }
         }
    // }
 
   //Alloc_internal(); // performance optimization 08/02/2007
   pmp->pTPD = 2;
-}
-
-
-void TMulti::get_PAalp_PSigm( char& PAalp, char& PSigm)
-{
-  PAalp =  TSyst::sm->GetSY()->PAalp;
-  PSigm =  TSyst::sm->GetSY()->PSigm;
-}
-
-void TMulti::alloc_IPx( long int LsIPxSum )
-{
-    pm.IPx = (long int *)aObj[ o_wi_ipxpm ]->Alloc(LsIPxSum, 1, L_);
-}
-void TMulti::alloc_PMc( long int LsModSum )
-{
-    pm.PMc = (double *)aObj[ o_wi_pmc]->Alloc( LsModSum, 1, D_);
-}
-void TMulti::alloc_DMc( long int LsMdcSum )
-{
-    pm.DMc = (double *)aObj[ o_wi_dmc]->Alloc( LsMdcSum, 1, D_ );
-}
-void TMulti::alloc_MoiSN( long int LsMsnSum )
-{
-    pm.MoiSN = (double *)aObj[ o_wi_moisn]->Alloc( LsMsnSum, 1, D_ );
-}
-void TMulti::alloc_SitFr( long int LsSitSum )
-{
-    pm.SitFr  = (double *)aObj[ o_wo_sitfr ]->Alloc( LsSitSum, 1, D_ );
-}
-void TMulti::alloc_DQFc( long int DQFcSum )
-{
-   pm.DQFc = (double *)aObj[ o_wi_dqfc]->Alloc( DQFcSum, 1, D_ );
-}
-void TMulti::alloc_PhLin( long int PhLinSum )
-{
-    pm.PhLin = (long int (*)[2])aObj[ o_wi_phlin]->Alloc( PhLinSum, 2, L_ );
-}
-void TMulti::alloc_lPhc( long int lPhcSum )
-{
-    pm.lPhc  = (double *)aObj[ o_wi_lphc ]->Alloc( lPhcSum, 1, D_ );
-}
-
-void TMulti::alloc_xSMd( long int xSMdSum )
-{
-    pm.xSMd = (long int*)aObj[ o_wi_xsmd]->Alloc( xSMdSum, 1, L_ );
-}
-void TMulti::alloc_IsoPc( long int IsoPcSum )
-{
-    pm.IsoPc = (double*)aObj[ o_wi_isopc]->Alloc( IsoPcSum, 1, D_ );
-}
-void TMulti::alloc_IsoSc( long int IsoScSum )
-{
-    pm.IsoSc = (double*)aObj[ o_wi_isosc]->Alloc( IsoScSum, 1, D_ );
-}
-void TMulti::alloc_IsoCt( long int IsoCtSum )
-{
-   pm.IsoCt = (char*)aObj[ o_wi_isoct]->Alloc( IsoCtSum, 1, A_ );
-}
-void TMulti::alloc_EImc( long int EImcSum )
-{
-    pm.EImc = (double*)aObj[ o_wi_eimc]->Alloc( EImcSum, 1, D_ );
-}
-void TMulti::alloc_mCDc( long int mCDcSum )
-{
-    pm.mCDc = (double*)aObj[ o_wi_mcdc]->Alloc( mCDcSum, 1, D_ );
-}
-
-void TMulti::alloc_xSKrC( long int xSKrCSum )
-{
-    pm.xSKrC = (long int*)aObj[ o_wi_jcrdc]->Alloc( xSKrCSum, 1, L_ );
-}
-void TMulti::alloc_ocPRkC( long int ocPRkC_feSArC_Sum )
-{
-    pm.ocPRkC = (long int(*)[2])aObj[ o_wi_ocprkc]->Alloc( ocPRkC_feSArC_Sum, 2, L_ );
-}
-void TMulti::alloc_feSArC( long int ocPRkC_feSArC_Sum )
-{
-    pm.feSArC = (double*)aObj[ o_wi_fsac]->Alloc( ocPRkC_feSArC_Sum, 1, D_ );
-}
-void TMulti::alloc_rpConC( long int rpConCSum )
-{
-   pm.rpConC = (double*)aObj[ o_wi_krpc]->Alloc( rpConCSum, 1, D_ );
-}
-void TMulti::alloc_apConC( long int apConCSum )
-{
-    pm.apConC = (double*)aObj[ o_wi_apconc]->Alloc( apConCSum, 1, D_ );
-}
-void TMulti::alloc_AscpC( long int AscpCSum )
-{
-    pm.AscpC = (double*)aObj[ o_wi_ascpc]->Alloc( AscpCSum, 1, D_ );
-}
-void TMulti::alloc_UMpcC( long int UMpcSum )
-{
-    pm.UMpcC = (double*)aObj[ o_wi_umpc]->Alloc( UMpcSum, 1, D_ );
-}
-void TMulti::alloc_xICuC( long int xICuCSum )
-{
-    pm.xICuC = (long int *)aObj[o_wi_xicuc ]->Alloc( xICuCSum, 1, L_ );
 }
 
 

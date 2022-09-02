@@ -92,15 +92,15 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
     }
 
     if( graph_dlg )
-        graph_dlg->close();
+        graph_dlg->parentWidget()->close();
     //if( !graph_dlg )
     {
         graph_dlg = new GraphDialog( pmodule, m_chartData, plotModels  );
         TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
         if( topw )
         {
-            QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
-                              topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
+            QObject::connect( graph_dlg, SIGNAL(dataChanged(jsonui::ChartData*) ),
+                              topw,  SLOT(saveGraphData(jsonui::ChartData*)) );
             //connect( _page, SIGNAL( updateGraphWindow() ),
             //         graph_dlg,  SLOT( UpdateAll() ) );
         }

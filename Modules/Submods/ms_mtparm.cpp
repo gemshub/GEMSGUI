@@ -257,7 +257,7 @@ void TMTparm::set_def( int /*q*/)
       tp.La = mup->Laq;
      */
     tp.L = tp.Ls =  tp.Lg =  tp.La = 0;
-    memset( &tp.T, 0, 10*sizeof(double));
+    memset( &tp.T, 0, 28*sizeof(double));
     tp.mark = 0;
     tp.G =    0;
     tp.devG = 0;
@@ -309,11 +309,39 @@ void TMTparm::MTparmAlloc()
 
 #define  Fill_zero( type, val )   ( ((type) == 'T') ? (0) : (val) )
 
+double TMTparm::wat_dielectric(double cT, double cP)
+{
+    /* Relative dielectric constant of pure water, eps as a function of (P, T)
+       Bradley and Pitzer, 1979, JPC 83, 1599.
+       Used in phreeqc and the Pitzer model if H2O is not set to use the HGK TP correction method
+     */
+    if (cT > 350.)
+    {
+        cT = 350.;
+    }
+    double TK = cT + 273.15;
+    double u1 = 3.4279e2, u2 = -5.0866e-3, u3 = 9.469e-7, u4 = -2.0525,
+        u5 = 3.1159e3, u6 = -1.8289e2, u7 = -8.0325e3, u8 = 4.2142e6,
+        u9 = 2.1417;
+    double d1000 = u1 * exp(TK * (u2 + TK * u3)); // relative dielectric constant at 1000 bar
+    double c = u4 + u5 / (u6 + TK);
+    double b = u7 + u8 / TK + u9 * TK;
+    //double pb = pa * 1.01325; // pa in bar
+    double eps_r = d1000 + c * log((b + cP) / (b + 1e3)); // relative dielectric constant
+
+//    if (eps_r <= 0)
+//    {
+//        eps_r = 10.;
+//        Error( "MTparm", "Relative dielectric constant is negative. Temperature out of range.");
+//    }
+    return eps_r;
+}
+
 // realoc memory to MTPARM structure and load data to arrays
 void TMTparm::LoadMtparm( double cT, double cP )
 {
     int j, jf;
-    double P_old, TC, TK, P;
+    double P_old, TC, TK, P, test_eps;
     time_t tim;
     TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
     aDC->ods_link(0);
@@ -326,27 +354,30 @@ void TMTparm::LoadMtparm( double cT, double cP )
             tp.Lg != mup->Pg ||  tp.La != mup->Laq )
         Error( "MTparm", "Modelling project dimension error!");
 
+    // Clear old results SD 15/06/22
+    memset( &tp.RoW, 0, 22*sizeof(double));
+
     tp.curT=cT;
     tp.curP=cP;
     TC = cT;
     TK = TC + C_to_K;
     P_old = P = cP;
     tp.T = TC; tp.TK = TK; /* scales !!! */
-if( P < 1e-5 )  // trial check  5.12.2006
-  P = 1e-5;
+    if( P < 1e-5 ) { // trial check  5.12.2006
+       P = 1e-5;
+    }
     tp.P = P;
     tp.RT = R_CONSTANT * TK;
 
-    if( tp.La && TC < 120. && TC >= 0.0 )
+    if( tp.La && TC <= 350. && TC >= 0.0 )
     { /* calc approximation of water properties Nordstrom ea, 1990 */
-        if( TC < 1.75 )
-        {
-            TC = 1.75;
-            TK = 273.16;
-        }
-        tp.RoW = 1.-pow(TC-3.9863,2)*(TC+288.9414)/508929.2/(TC+68.12963)+
-                 0.011445*exp(-374.3/TC);
-        tp.EpsW = 2727.428+0.6224107*TK -466.9151*log(TK) -52000.87/TK;
+        if(TC >= 0.6)
+            tp.RoW = 1.-pow(TC-3.9863,2)*(TC+288.9414)/508929.2/(TC+68.12963)+
+                    0.011445*exp(-374.3/TC);
+        else
+            tp.RoW = 0.999899; // DM 13.02.2022, value at 0.5, seven digits
+        tp.EpsW = wat_dielectric(TC, P); // DM 07.06.2022// 2727.428+0.6224107*TK -466.9151*log(TK) -52000.87/TK;
+
         /* These approximations are used only if SUPCRT92 submodule*/
         /* is not activated, e.g., no HKF data for aqueous species */
     }
@@ -622,10 +653,14 @@ if( P < 1e-5 )  // trial check  5.12.2006
     if( tp.mark && tp.G )
           polmod_test();
     
-	NormDoubleRound(tp.G, tp.L, 13 ); // SD 22/07/2009
-	NormDoubleRound(tp.RoW, 13 ); 
-	NormDoubleRound(tp.EpsW, 13 ); 
-//cout << "T = " << tp.T << " P= " << tp.P << " G[0] " << setprecision(18) << scientific << tp.G[0]<< endl;
+    for(int ii=0; ii<tp.L; ++ii )
+    {
+      if( IsDoubleEmpty(tp.G[ii]))
+        Error( "MTparm", char_array_to_string( TRMults::sm->GetMU()->SM[ii], MAXDCNAME) + " has undefined G value");
+    }
+    NormDoubleRound(tp.G, tp.L, 14 ); // SD 22/07/2009
+    NormDoubleRound(tp.RoW, 14 );
+    NormDoubleRound(tp.EpsW, 14 );
 }
 
 // test polimorf modifications
@@ -727,8 +762,6 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
     int kk, ip, it, ll, jj;
     double cT, cP;
     int *tp_mark;
-    tp_mark = new int[tp.L];
-    fillValue( tp_mark, 0, tp.L);
 
     if( tp.L != TRMults::sm->GetMU()->L  )
         Error( "MTparm", "Modelling project dimension error!");
@@ -765,8 +798,6 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
           if (cT+273.15 < 647.067e0)
             CSD->Psat[it] = supCrt.getPsatHGK(cT + 273.15)*10.0*100000; // in Pa
       }
-
-//      cout << "tp.RoW = " << tp.RoW << " tp.EpsW = " << tp.EpsW << endl;
 
       CSD->denW[( 0 * CSD->nPp + ip) * CSD->nTp + it] = tp.RoW    *1e3;
       CSD->denW[( 1 * CSD->nPp + ip) * CSD->nTp + it] = tp.dRdTW  *1e3;
@@ -835,9 +866,9 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
           if(!((++jj)%5)) err += "\n";
      }
   }
-  //if( !err.empty() )
-  //           vfMessage(par,"Not quality for TP dependencies of DC", err.c_str());
-  //cout <<  "Not quality for TP dependencies of DC" << err.c_str() << endl;
+  if( !err.empty() )
+      gui_logger->warn("Not quality for TP dependencies of DC {}", err);
+      //           vfMessage(par,"Not quality for TP dependencies of DC", err.c_str());
   // free memory
   delete[] tp_mark;
 }

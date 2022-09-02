@@ -19,39 +19,44 @@
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
-#include <iomanip>
-#include <iostream>
 #include <cmath>
 #include "v_user.h"
 
 char chLowUp(char ch);
+
 double NormDoubleRound(double aVal, int digits)
 {
     double val;
-    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
-    sprintf(vbuf, "%.*le" , digits , aVal);
-    sscanf(vbuf, "%le", &val );
-	return val;
+    std::stringstream sbuf;
+    sbuf << std::setprecision(digits) << aVal;
+    sbuf >> val;
+    return val;
 }
+
+float NormFloatRound(float aVal, int digits)
+{
+    float val;
+    std::stringstream sbuf;
+    sbuf << std::setprecision(digits) << aVal;
+    sbuf >> val;
+    return val;
+}
+
 
 void NormDoubleRound(double *aArr, int size, int digits)
 {
-    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
-    
 	for(int ii=0; ii<size; ii++ )
-    { sprintf(vbuf, "%.*le" , digits, aArr[ii]);
-      sscanf(vbuf, "%le", &aArr[ii] );
+    {
+       aArr[ii] = NormDoubleRound(aArr[ii], digits);
     }  
 }
 
 void NormFloatRound(float *aArr, int size, int digits)
 {
-    char vbuf[30];	// double is ~15 digit   PATTERN_GET()
-    
-	for(int ii=0; ii<size; ii++ )
-    { sprintf(vbuf, "%.*e" , digits, aArr[ii]);
-      sscanf(vbuf, "%e", &aArr[ii] );
-    }  
+    for(int ii=0; ii<size; ii++ )
+    {
+       aArr[ii] = NormFloatRound(aArr[ii], digits);
+    }
 }
 
 

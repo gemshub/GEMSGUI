@@ -374,7 +374,9 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
 }
 
 TCWindow::~TCWindow()
-{}
+{
+    delete pTab;
+}
 
 void TCWindow::closeEvent(QCloseEvent* evt)
 {
@@ -386,7 +388,7 @@ void TCWindow::closeEvent(QCloseEvent* evt)
 void TCWindow::showEvent( QShowEvent * event )
 {
     QWidget::showEvent(event);
-    //cout << "rInfo.init_width " << rInfo.init_width << " rInfo.init_height " <<rInfo.init_height << endl;
+    gui_logger->debug("rInfo.init_width {} rInfo.init_height {}", rInfo.init_width, rInfo.init_height);
 }
 
 //    Changes the page tab for module and calls TCModule::EvPageChanged()

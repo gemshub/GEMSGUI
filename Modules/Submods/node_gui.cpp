@@ -1,3 +1,32 @@
+//-------------------------------------------------------------------
+// $Id$
+//
+/// \file node.cpp
+/// Implementation of TNode class functionality including initialization
+/// and execution of the GEM IPM 3 kernel
+/// Works with DATACH and DATABR structures
+//
+// Copyright (c) 2005-2012 S.Dmytriyeva, D.Kulik, G.Kosakowski, F.Hingerl
+// <GEMS Development Team, mailto:gems2.support@psi.ch>
+//
+// This file is part of the GEMS3K code for thermodynamic modelling
+// by Gibbs energy minimization <http://gems.web.psi.ch/GEMS3K/>
+//
+// GEMS3K is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// GEMS3K is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with GEMS3K code. If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------
+
+
 #include "node_gui.h"
 #include "GEMS3K/num_methods.h"
 #include "visor.h"
@@ -7,13 +36,14 @@
 TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
 {
     internal_multi.reset();
-    multi = apm;
-    pmm = multi->GetPM();
-    std::string ipmlog_f = pVisor->userGEMDir().c_str();
-    ipmlog_f += "ipmlog.txt";
-    setipmLogFile(ipmlog_f);
+    multi_base = apm;
+    pmm = multi_base->GetPM();
 }
 
+void TNodeGUI::write_ThermoFun_format_stream(iostream &stream, bool compact)
+{
+    TProfil::pm->generate_ThermoFun_input_file_stream(stream, compact);
+}
 
 // Makes start DATACH and DATABR data from GEMS internal data (MULTI and other)
 void TNodeGUI::MakeNodeStructures(
@@ -48,8 +78,8 @@ void TNodeGUI::MakeNodeStructures(
 // Make start DATACH and DATABR data from GEMS internal data (MULTI and other)
 // Lookup arrays from arrays
 void TNodeGUI::MakeNodeStructures( QWidget* par, bool select_all,bool no_interpolat,
-                                   double *Tai, double *Pai,
-                                   long int nTp_, long int nPp_, double Ttol_, double Ptol_  )
+                                double *Tai, double *Pai,
+                                long int nTp_, long int nPp_, double Ttol_, double Ptol_  )
 {
     TCIntArray aSelIC;
     TCIntArray aSelDC;
@@ -66,7 +96,7 @@ void TNodeGUI::MakeNodeStructures( QWidget* par, bool select_all,bool no_interpo
 // Make start DATACH and DATABR data from GEMS internal data (MULTI and other)
 // Lookup arays from iterators
 void TNodeGUI::MakeNodeStructures( QWidget* par, bool select_all,
-                                   double Tai[4], double Pai[4]  )
+                                double Tai[4], double Pai[4]  )
 {
     TCIntArray aSelIC;
     TCIntArray aSelDC;
@@ -82,9 +112,8 @@ void TNodeGUI::MakeNodeStructures( QWidget* par, bool select_all,
 
 // Build lists names of components for selection into DataBridge
 void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
-                                   TCIntArray& aSelIC, TCIntArray& aSelDC, TCIntArray& aSelPH  )
+                                TCIntArray& aSelIC, TCIntArray& aSelDC, TCIntArray& aSelPH  )
 {
-
     TCStringArray aList;
 
     // select lists
@@ -93,7 +122,7 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     {  if( select_all )
             aSelIC.push_back( ii );
         else
-            aList.push_back( std::string( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
+            aList.push_back( char_array_to_string( pmm->SB[ii], MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelIC = vfMultiChoice(par, aList,
@@ -104,7 +133,7 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     {  if( select_all )
             aSelDC.push_back( ii );
         else
-            aList.push_back( std::string( pmm->SM[ii], 0, MAXDCNAME));
+            aList.push_back( char_array_to_string( pmm->SM[ii], MAXDCNAME));
     }
     if( !select_all  )
         aSelDC = vfMultiChoice(par, aList,
@@ -115,17 +144,16 @@ void TNodeGUI::getDataBridgeNames( QWidget* par, bool select_all,
     {  if( select_all )
             aSelPH.push_back( ii );
         else
-            aList.push_back( std::string( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
+            aList.push_back( char_array_to_string( pmm->SF[ii], MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
         aSelPH = vfMultiChoice(par, aList,
                                "Please, mark phases for selection into DataBridge");
-
 }
 
 // Building internal dataCH and DataBR structures from Multi
 void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
-                              long int nTp_, long int nPp_, bool no_interpolation )
+                           long int nTp_, long int nPp_, bool no_interpolation )
 {
     // set sizes for DataCh
     uint ii;
@@ -151,9 +179,9 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
 
     // These dimensionalities define sizes of dynamic data in DATABR structure!!!
 
-    CSD->nICb = selIC.size();
-    CSD->nDCb = selDC.size();
-    CSD->nPHb = selPH.size();
+    CSD->nICb = static_cast<int>(selIC.size());
+    CSD->nDCb = static_cast<int>(selDC.size());
+    CSD->nPHb = static_cast<int>(selPH.size());
     CSD->nPSb = 0;
     for( ii=0; ii< selPH.size(); ii++, CSD->nPSb++ )
         if( selPH[ii] >= pmm->FIs )
@@ -169,6 +197,7 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
     // realloc structures DataCh&DataBr
 
     datach_realloc();
+    databr_free_internal(CNode);
     databr_realloc();
 
     // set dynamic data to DataCH
@@ -246,9 +275,9 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
 
 /// Prepares and writes DCH and DBR files for reading into the coupled code
 void TNodeGUI::makeStartDataChBR( QWidget* par, bool no_interpolat,
-                                  TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
-                                  long int  nTp_, long int  nPp_, double Ttol_, double Ptol_,
-                                  double *Tai, double *Pai )
+                               TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+                               long int  nTp_, long int  nPp_, double Ttol_, double Ptol_,
+                               double *Tai, double *Pai )
 {
     long int  i1;
 
@@ -273,8 +302,8 @@ void TNodeGUI::makeStartDataChBR( QWidget* par, bool no_interpolat,
 
 /// Prepares and writes DCH and DBR files for reading into the coupled code
 void TNodeGUI::makeStartDataChBR( QWidget* par,
-                                  TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
-                                  double Tai[4], double Pai[4] )
+                               TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+                               double Tai[4], double Pai[4] )
 {
     long int nT, nP, i1;
     double cT, cP;
@@ -345,7 +374,13 @@ std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
     msg_data.push_back( datach_to_string( false, brief_mode ) );
     msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
     msg_data.push_back( databr_to_string( false, brief_mode ));
-    //std::cout << "Send NodeHandle... " << current_task->pCNode()->NodeHandle << std::endl;
+    if( GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun ) {
+    std::stringstream fun_json;
+    write_ThermoFun_format_stream(fun_json, true);
+    msg_data.push_back(fun_json.str());
+    node_logger->info("Thermo {}", fun_json.str());
+    }
+    node_logger->info("Send NodeHandle... {} {}", pCNode()->NodeHandle, GEMS3KGenerator::default_type_f);
     return msg_data;
 }
 
@@ -379,6 +414,7 @@ bool TNodeGUI::set_resv_msg(std::vector<string> &&msg_return)
     return false;
 }
 
+
 // Reading structure MULTI (GEM IPM work structure)
 double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::string>& recv_msg )
 {
@@ -410,7 +446,7 @@ double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::
 
         pmm->pESU = 2;  // SysEq unpack flag set
 
-        TMulti* amulti = dynamic_cast<TMulti*>(multi);
+        TMulti* amulti = dynamic_cast<TMulti*>(multi_base);
         if( amulti)
             amulti->EqstatExpand( /*pmp->stkey,*/ true );
         pmm->FI1 = 0;  // Recomputing the number of non-zeroed-off phases
@@ -428,7 +464,6 @@ double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::
             pmm->G[i] = pmm->G0[i];
 
     }
-    //cout << setprecision(15) <<" pmp->Y_la[4] " << pmp->Y_la[4] << " pmp->lnGam[4] " << pmp->lnGam[4] << endl;
     ///   !!! G[] and F[] different after IPM and EqstatExpand
     return ret;
 }

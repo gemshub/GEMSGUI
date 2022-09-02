@@ -27,6 +27,10 @@ TNodeArrayGUI::TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK,
 }
 
 
+
+
+
+
 //   Here we call a loop on GEM calculations over nodes
 //   parallelization should affect this loop only
 //   return code   true   Ok
@@ -182,7 +186,12 @@ std::vector<string> TNodeArrayGUI::generate_send_msg( bool add_head )
     send_msg.push_back( calcNode->datach_to_string( false, false ) );
     send_msg.push_back( calcNode->gemipm_to_string( true, false, false ));
     send_msg.push_back( calcNode->databr_to_string( false, false ));
-    //std::cout << "Send NodeHandle... " << current_task->pCNode()->NodeHandle << std::endl;
+    if( GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun ) {
+    std::stringstream fun_json;
+    calcNode->write_ThermoFun_format_stream(fun_json, true);
+    send_msg.push_back(fun_json.str());
+    }
+    TNode::node_logger->debug("Send NodeHandle... {}", calcNode->pCNode()->NodeHandle);
     return send_msg;
 }
 

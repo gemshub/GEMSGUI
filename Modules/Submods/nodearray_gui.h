@@ -1,3 +1,35 @@
+//-------------------------------------------------------------------
+// $Id$
+/// \file nodearray.h
+/// Contains declaration of TNodeArray class implementing an advanced
+/// interface for development of coupled codes involving GEMS3K.
+//
+/// \class TNodeArray nodearray.h
+/// Implements an advanced (level 2) C/C++ interface with GEMS3K for the
+/// development of coupled reactive transport codes.
+/// Works with DATACH and an array of DATABR structures; uses TNode class
+//
+// Copyright (C) 2006-2020 S.Dmytriyeva, D.Kulik
+// <GEMS Development Team, mailto:gems2.support@psi.ch>
+//
+// This file is part of the GEMS3K code for thermodynamic modelling
+// by Gibbs energy minimization <http://gems.web.psi.ch/GEMS3K/>
+//
+// GEMS3K is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+//
+// GEMS3K is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with GEMS3K code. If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------
+//
+
 #ifndef NODEARRAY_GUI_H
 #define NODEARRAY_GUI_H
 
@@ -5,23 +37,46 @@
 #include "node_gui.h"
 class QWidget;
 
+
 class TNodeArrayGUI : public TNodeArray
 {
-public:
+    TNodeGUI* calcNodeGUI;
 
-    // These calls are used only inside of GEMS-PSI GEM2MT module
+    TestModeGEMParam mode_param;
+    FILE* diffile = nullptr;
+    size_t requests_number=0;
+    size_t sended_requests = 0;
+    size_t resv_responce = 0;
 
-    /// Constructor for integration in GEM2MT module of GEMS-PSI
-    TNodeArrayGUI( long int nNodes, TMultiBase *apm );
-
-    /// Constructor that uses 3D node arrangement
-    TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm );
-
-    ///  Here we do a GEM calculation in boxes from  start_node to end_node
-    bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
+    ///  Here we do a GEM calculation in box ii (implementation thread-safe)
+    bool CalcIPM_Node(  const TestModeGEMParam& modeParam, TNode* wrkNode,
+                        long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* iaN, FILE* diffile  ) override;
 
     //  Here we run command a GEM calculation in box iNode on to GEMS3_server
     //long int CalcNodeServer(TNode* wrkNode, long int  iNode, long int Mode) override;
+    void pVisor_Message( bool toclose, long int ndx = 0, long int size = 0 ) override;
+
+    // These calls are used only inside of GEMS-PSI GEM2MT module
+    /// Constructor for integration in GEM2MT module of GEMS-PSI
+    TNodeArrayGUI(long int nNodes, TMultiBase *apm);
+
+    /// Constructor that uses 3D node arrangement
+    TNodeArrayGUI(long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm);
+
+public:
+
+    // Used in GEMIPM2 standalone module only
+    /// Constructors for 1D arrangement of nodes
+    [[nodiscard]] static std::shared_ptr<TNodeArrayGUI> create(long int nNodes, TMultiBase *apm) {
+        return (std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(nNodes, apm)));
+    }
+    /// Constructor that uses 3D node arrangement
+    [[nodiscard]] static std::shared_ptr<TNodeArrayGUI> create(long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm) {
+        return ( std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(asizeN, asizeM, asizeK, apm)));
+    }
+
+    ///  Here we do a GEM calculation in boxes from  start_node to end_node
+    bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
 
     /// Prints MULTI, DATACH and DATABR files structure prepared from GEMS.
     /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
@@ -138,23 +193,6 @@ public:
         sended_requests = start_node;
         resv_responce = start_node;
     }
-
-protected:
-
-    TNodeGUI* calcNodeGUI;
-
-    TestModeGEMParam mode_param;
-    FILE* diffile = nullptr;
-    size_t requests_number=0;
-    size_t sended_requests = 0;
-    size_t resv_responce = 0;
-
-
-    ///  Here we do a GEM calculation in box ii (implementation thread-safe)
-    bool CalcIPM_Node(  const TestModeGEMParam& modeParam, TNode* wrkNode,
-                        long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* iaN, FILE* diffile  ) override;
-
-    void pVisor_Message( bool toclose, long int ndx = 0, long int size = 0 ) override;
 
 
 };

@@ -20,7 +20,6 @@
 #ifndef _v_mod_h_
 #define _v_mod_h_
 
-//#include "v_vals.h"
 #include "GEMS3K/m_const_base.h"
 
 const unsigned int
@@ -37,22 +36,9 @@ const unsigned int
                       V_SD_RKLEN = 32,
                          V_SD_VALEN = 24;
 
-//-//
-//const char S_OFF = '-',
-//                   S_ON = '+',
-//                          S_REM = '*',
-//                                  A_NUL ='?';
 
 enum { RT_SDATA=0, RT_CONST=1 };
-/*
-enum { RT_GEM2MT=2, RT_PARAM=3, RT_ICOMP=4, RT_DCOMP=5, RT_COMPOS=6,
-       RT_REACDC=7, RT_RTPARM=8, RT_PHASE=9, RT_SYSEQ=10, RT_PROCES=11,
-       RT_UNSPACE=12, RT_GTDEMO=13, RT_DUALTH=14,
 
-       MD_RMULTS=15, MD_MTPARM=16, MD_SYSTEM=17,
-       MD_MULTI=18, MD_EQCALC=19, MD_EQDEMO=20
-     };
-*/
 enum { RT_PARAM=2, RT_ICOMP=3, RT_DCOMP=4, RT_COMPOS=5,
        RT_REACDC=6, RT_RTPARM=7, RT_PHASE=8, RT_SYSEQ=9, RT_PROCES=10,
        RT_UNSPACE=11, RT_GTDEMO=12, RT_DUALTH=13, RT_GEM2MT=14,
@@ -78,19 +64,9 @@ enum std_object{
 //---------------------------------
 
 const int
-MAXPARAMKEY =    24,
+       MAXPARAMKEY =    24,
        MNST =   6,
-              //-//MST =   6, // number of surface types
-                     MCAS  = 6;  // number of columns in SATC table
-                            //-//DFCN = 6; // number of columns in MASDJ table
-
-const int
-//-//	MPP_TOT = 0,       // index of column with total mixed phase property
-//-//	MPP_STD = 1,       // index of column with standard property sum for mixed phases
-    MPP_RCP = 2,       // index of column with reciprocal (Darken) property sum for mixed phases
-    MPP_IDL = 3,       // index of column with ideal mixing property for the phases
-    MPP_EXS = 4;       // index of column with excess mixing property for the phases
-//-//  MIXPHPROPS = 5;    // Number of columns in the property table for mixed phases
+       MCAS  =  6;  // number of columns in SATC table
 
 enum param_objects {                  // work objects
     o_paver = o_lms_paf+1, //o_rttime+1,
@@ -229,26 +205,6 @@ enum icomp_objects {                  // work objects
     // record
     o_icsst, o_icname, o_icform,  o_icdc,  o_icfloat, o_icint, o_ictprn
 };
-
-//-//
-//typedef enum {  /* classes of IC*/
-//    IC_ELEMENT  =  'e',  // chemical element (except oxygen and hydrogen)
-//    IC_OXYGEN   =  'o',  // oxygen
-//    IC_HYDROGEN =  'h',  // hydrogen (natural mixture of isotopes) H
-//    IC_PROTIUM   = 'p',  // protium (reserved) Hp
-//    IC_DEYTERIUM = 'd',  // deuterium (reserved) D
-//    IC_TRITIUM  =  't',  // tritium (reserved) T
-//    IC_FORMULA  =  'f',  // formula unit (eg. for Sio - a symbol of SiO2)
-//    IC_METALION =  'm',  // metal ion (cation), reserved
-//    IC_LIGAND   =  'l',  // ligand (anion), reserved
-//    IC_ADDIT    =  'a',  // IC with unknown stoichiometry (eg: Hum, humic acid)
-//    IC_ISOTOPE  =  'i',  // isotope of chemical element from 1 to 250
-//    IC_OXYGEN16 =  'q',  // q: oxygen 16O (reserved)
-//    IC_OXYGEN18 =  'r',  // r: oxygen 18O (reserved)
-//    IC_CHARGE   =  'z',  // z: electrical charge
-//    IC_VOLUME   =  'v'   // volume
-//} IC_CLASSES;
-
 
 //---------------------------------
 // DComp
@@ -400,110 +356,6 @@ enum compos_objects {   // COMPOS
     /* Work var & arrays */
     o_bcsb1, /*s dyn */  o_bcicw, /*f dyn */ o_bctprn, /*txt*/
 };
-
-//-//
-//typedef enum { // Units of measurement of quontities and concentrations
-//    /* number of components and phases */
-//    QUAN_MKMOL = 'Y',  QUAN_MMOL = 'h',  QUAN_MOL = 'M',  // NUMBER OF MOLES
-//    QUAN_MGRAM = 'y',  QUAN_GRAM = 'g',  QUAN_KILO = 'G', // MASS
-//    /* concentrations of components and phases*/
-//    CON_MOLFR = 'n', CON_MOLPROC = 'N', CON_pMOLFR = 'f', // MOLE FRACTION
-//    CON_VOLFR = 'v', CON_VOLPROC = 'V', CON_pVOLFR = 'u', // VOLUME FRACTION
-//    CON_MOLAL = 'm', CON_MMOLAL =  'i', CON_pMOLAL = 'p', // MOLALITY
-//    CON_MOLAR = 'L', CON_MMOLAR =  'j', CON_pMOLAR = 'q', // MOLARITY
-//    CON_WTFR  = 'w', CON_WTPROC =  '%', CON_PPM =    'P', // MASS FRACTION
-//    CON_AQWFR = 'C', CON_AQWPROC = 'c', CON_AQPPM =  'a', // CONCENTRATION
-//    // aqueous species
-//    CON_AQGPL = 'd', CON_AQMGPL = 'e', CON_AQMKGPL = 'b',//VOLUME CONCENTRATION
-
-//    //Units of measurement of pressure Pr, P  { b B p P A }'
-//    PVT_BAR =  'b', // bar - default, 1 bar = 1e5 Pa
-//    PVT_KBAR = 'B', // kbar, 1 kbar = 1000 bar
-//    PVT_PASC = 'p', // Pascal (Pa)
-//    PVT_KPASC = 'P',// MPa, 1 MPa = 10 bar = 1e6 Pa
-//    PVT_ATM =  'A', // atm, 1 atm = 1.013 bar
-//    //Attention: Only b code can be used in this version!
-
-//    //Units of measurement of molar volume  { c j a L m }'
-//    PVT_CM3 =  'c', /*cm3, cm3/mole*/
-//    PVT_LITR =  'L', // liters (L) - volume of the system only, 1 L = 1000 cm3
-//    PVT_JBAR =  'j', // J/bar, 10 cm3/mole = 1 J/bar
-//    PVT_CBAR = 'a',  // (cal/bar), 41.84 cm3/mole = 1 cal/bar
-//    // m  - reserved.
-//    //Attention: only j code can be used in this version!
-
-//    //Units of measurement of reference temperature Tr { C K F }'
-//    PVT_CELS = 'C', /*degrees Celsius (C)*/
-//    PVT_KELVIN = 'K', /*Kelvins (K), 0 C = 273.15 K*/
-//    PVT_FAREN = 'F',  /*degrees Fahrenheit (F)*/
-//    //Attention: Only C code can be used in this version.
-
-//    // Units of measurement of energy values { j c J C n N }
-//    TDAT_JOUL = 'j',/* Joules (J/mole)*/ TDAT_KJOUL = 'J', /*kilojoules (kJ/mole)*/
-//    TDAT_CAL = 'c', /* calories (cal/mole); 1 cal = 4.184 J; */
-//    TDAT_KCAL = 'C', /*kilocalories (kcal/mole)*/
-//    TDAT_NORM = 'N' /*normalized (mole/mole, J/mole/RT, cal/mole/RT)*/
-//                // Attention: Only j code can be used in this version!
-//} SPPA_UNITS;
-
-//-//
-//typedef enum {  // Classifications of DC
-//    // Type of input data for
-//    SRC_DCOMP = 'd',        // the key points to existing PDB record in DCOMP chain
-//    SRC_REACDC = 'r',       // the key points to existing PDB record in REACDC chain
-//    SRC_NEWDC = 'n',        // the key new reaction-defined component
-//    SRC_NEWISO = 'i',       // the same as n, but this component is an isotopic form
-//    SRC_FICT = 'f',         // fictive species
-//    // Aqueous electrolyte phase
-//    DC_AQ_PROTON = 'T',     // hydrogen ion H+
-//    DC_AQ_ELECTRON = 'E',   // electron (as a DC)
-//    DC_AQ_SPECIES  = 'S',   // other aqueous species (ions, complexes and ion pairs)
-//    DC_AQ_SURCOMP = 'K',    // Surface complex represented as aqueous species
-//    DC_AQ_SOLVENT  = 'W',   // water H2O (major solvent)
-//    DC_AQ_SOLVCOM  = 'L',   // other components of a solvent (eg. alcohol)
-//    // Gas phase ( G code can be used for all gases; V,C,H,N codes are reserved)
-//    DC_GAS_COMP  = 'G',     // other gases
-//    DC_GAS_H2O = 'V',       // H2O steam
-//    DC_GAS_CO2 = 'C',       // CO2 (carbon dioxide)
-//    DC_GAS_H2 = 'H',        // H2 hydrogen
-//    DC_GAS_N2 = 'N',        // N2 nitrogen
-//    // Solid/liquid non-electrolyte multicomponent phases
-//    DC_SOL_IDEAL = 'I',     // end-member of ideal solution
-//    DC_SOL_MINOR = 'J',     // junior independent end member (for initial approximation)
-//    DC_SOL_MAJOR = 'M',     // major independent end member (for initial approximation)
-//    DC_SOL_MINDEP = 'F',    // junior dependent end member (for initial approximation)
-//    DC_SOL_MAJDEP = 'D',    // major dependent end member (for initial approximation)
-//    // Sorption phases and poly(oligo)electrolytes
-//    DC_SUR_CARRIER = 'Q',   // Principal end-member of solid carrier
-//    DC_SUR_MINAL = 'P',     // Minor end-member of solid carrier
-//    DC_PEL_CARRIER = 'R',   // Carrier of poly(oligo)electrolyte
-//    DC_SSC_A0 = '0',        // Strong surface complex on site type 0 (A plane)
-//    DC_SSC_A1 = '2',        // Strong surface complex on site type 2 (A plane)
-//    DC_SSC_A2 = '4',        // Strong surface complex on site type 4 (A plane)
-//    DC_SSC_A3 = '6',        // Strong surface complex on site type 6 (A plane)
-//    DC_SSC_A4 = '8',        // Strong surface complex on site type 8 (A plane)
-//    DC_WSC_A0 = '1',        // Weak surface complex on site type 1 (B plane)
-//    DC_WSC_A1 = '3',        // Weak surface complex on site type 3 (B plane)
-//    DC_WSC_A2 = '5',        // Weak surface complex on site type 5 (B plane)
-//    DC_WSC_A3 = '7',        // Weak surface complex on site type 7 (B plane)
-//    DC_WSC_A4 = '9',        // Weak surface complex on site type 9 (B plane)
-//    DC_IESC_A  = 'A',       // Strong exchange ion const-charge plane
-//    DC_IEWC_B  = 'B',       // Weak exchange ion const-charge plane
-
-//    // Aliaces for 1-site model
-//    DC_SUR_GROUP = 'X',      // Surface site A plane -> '0'
-//    DC_SUR_COMPLEX = 'Y',    // Strong sur. complex A plane -> '0'
-//    DC_SUR_IPAIR = 'Z',      // Weak sur complex B plane -> '1'
-
-//    // Single-component phases
-//    DC_SCP_CONDEN = 'O',     // DC forming a single-component phase
-
-//    // New surface complexation models (added 16.11.2017 by DK)
-//    DC_SCM_SPECIES = 'U'
-
-//} DC_CLASSES;
-
-#define SORPTION_DC "0246813579ABXYZPQ"
 
 //---------------------------------
 // REACDC

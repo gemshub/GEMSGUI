@@ -708,7 +708,7 @@ o_dtwa_ap   Wa_ap D_  -3 1  N "Input: a priori interaction parameter values (cal
         for(int  k=0; k<TMulti::sm->GetPM()->FIs; k++ )
         {
             string name;
-            name =string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+            name =char_array_to_string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, MAXPHNAME);
             strip( name );
             wnData.push_back(  pagesSetupData("n1bPS", o_n1_bps, k, name.c_str() ));
         }
@@ -987,7 +987,7 @@ o_dtwa_ap   Wa_ap D_  -3 1  N "Input: a priori interaction parameter values (cal
         for(int  k=0; k<TMulti::sm->GetPM()->FIs; k++ )
         {
             string name;
-            name =string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, 0, MAXPHNAME);
+            name =char_array_to_string( TMulti::sm->GetPM()->SF[k]+MAXSYMB, MAXPHNAME);
             strip( name );
             wnData.push_back(  pagesSetupData("bXa", o_wo_bf, k, name.c_str() ));
             //d "Output bulk compositions of multicomponent phases (in moles of Independent Components) "

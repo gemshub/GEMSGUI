@@ -11,6 +11,8 @@ DEFINES  += NO_JSONIO
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
 !win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
+DEFINES += USE_THERMOFUN
+DEFINES += USE_THERMO_LOG
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++17
@@ -93,17 +95,21 @@ UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
+contains(DEFINES, USE_THERMOFUN) {
+LIBS += -lThermoFun -lChemicalFun
+} ## end USE_THERMOFUN
+
 # link lib
-INCLUDEPATH   += "/usr/local/include/GEMS3K"
-DEPENDPATH   += "/usr/local/include/GEMS3K"
-LIBS += -lzmq -lGEMS3K
+#INCLUDEPATH   += "/usr/local/include/GEMS3K"
+#DEPENDPATH   += "/usr/local/include/GEMS3K"
+#LIBS += -lzmq -lGEMS3K
 #link sources
-#GEMS3K_CPP     =  ../standalone/GEMS3K
-#GEMS3K_H     =  $$GEMS3K_CPP
-#DEPENDPATH   += $$GEMS3K_H
-#INCLUDEPATH   += $$GEMS3K_H
-#LIBS += -lzmq
-#include($$GEMS3K_CPP/gems3k.pri)
+GEMS3K_CPP     =  ../GEMS3K/GEMS3K
+GEMS3K_H     =  $$GEMS3K_CPP
+DEPENDPATH   += $$GEMS3K_H
+INCLUDEPATH   += $$GEMS3K_H
+LIBS += -lzmq
+include($$GEMS3K_CPP/gems3k.pri)
 #end link
 
 include($$DATAMAN_CPP/Dataman.pri)

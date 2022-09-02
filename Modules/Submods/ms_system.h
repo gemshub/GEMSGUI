@@ -270,12 +270,4 @@ public:
 
 };
 
-//-//
-//typedef enum {  /* Limits on DC and phases */
-//    /* type of lmits */
-//    NO_LIM = 'O', LOWER_LIM ='L', UPPER_LIM = 'U', BOTH_LIM ='B',
-//    /* mode recalc of limits Set_DC_Limits() */
-//    DC_LIM_INIT = 0L, DC_LIM_CURRENT = 1L
-//} DC_LIMITS;
-
 #endif  //_ms_system_h_
