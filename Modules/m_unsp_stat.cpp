@@ -389,11 +389,8 @@ void  TUnSpace::NexT(int J )
         usp->OVN[k3] = x;
         k3++;
      }
-//#ifndef IPMGEMPLUGIN // test for compare
    usp->ncp[J*usp->nG+(i-1)]=R;
-//#else
-//   R = usp->ncp[J*usp->nG+(i-1)];
-//#endif
+
    if( usp->PsGen[0]== S_ON || usp->PsGen[1]== S_ON || usp->PsGen[5]== S_ON )
     for( j=0; j<usp->L; j++)
      if( ( usp->PsGen[0]== S_ON && usp->NgLg[j]==i) ||

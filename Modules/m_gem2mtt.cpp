@@ -18,17 +18,13 @@
 //
 
 #include <fstream>
-#ifdef useOMP
-#include <omp.h>
-#endif
-
 #include "m_gem2mt.h"
 #include "GEMS3K/v_service.h"
-#ifndef IPMGEMPLUGIN
 #include "visor.h"
 #include "stepwise.h"
-#else
-#include "GEMS3K/nodearray.h"
+
+#ifdef useOMP
+#include <omp.h>
 #endif
 
 // ===========================================================
@@ -77,9 +73,6 @@ void  TGEM2MT::putHydP( DATABRPTR* C0 )
 #endif
     }
 }
-
-#ifndef IPMGEMPLUGIN
-
 
 //-------------------------------------------------------------------
 // NewNodeArray()  makes work DATACH structure
@@ -174,8 +167,6 @@ void  TGEM2MT::NewNodeArray()
                           GEMS3KGenerator::default_type_f, false, false, false, false );
     */
 }
-
-#endif
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // This function (for 1D-case only) analyses the node array
@@ -724,9 +715,7 @@ FILE* logfile = nullptr;
 FILE* ph_file = nullptr;
 FILE* diffile = nullptr;
 
-#ifndef IPMGEMPLUGIN
-   showMss = 0L;
-#endif
+  showMss = 0L;
 
 if( mtp->PvDDc == S_ON && mtp->PvDIc == S_OFF )  // Set of DC transport using record switches
 	CompMode = true; 
@@ -736,9 +725,8 @@ if( mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON )  // Set of IC transport using re
 if( mtp->PsMO != S_OFF )
 {
     std::string fname;
-#ifndef IPMGEMPLUGIN
     fname = pVisor->userGEMDir();
-#endif
+
     // Preparations: opening output files for monitoring 1D profiles
 logfile = fopen( ( fname + "ICaq-log.dat").c_str(), "w+" );    // Total dissolved element molarities
 if( !logfile)
@@ -801,9 +789,6 @@ if( mtp->PsMO != S_OFF )
 if( mtp->PsVTK != S_OFF )
    otime += PrintPoint( 0 );
 
-
-#ifndef IPMGEMPLUGIN
-
    bool UseGraphMonitoring = false;
    if( mtp->PsSmode == S_OFF )
     if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
@@ -812,12 +797,10 @@ if( mtp->PsVTK != S_OFF )
             RecordPlot( nullptr );
             UseGraphMonitoring = true;
         }
-#endif
 
 //  This loop contains the mass transport iteration time step
      do {   // time iteration step
 
-#ifndef IPMGEMPLUGIN
       // Calculating the control script at the beginning of a new time step
       // if( mtp->ct > 0)
       //      CalcControlScript();   // should run over all nodes i.e. nC times
@@ -833,8 +816,6 @@ if( mtp->PsVTK != S_OFF )
        else
            iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                            mtp->ct, mtp->ntM, UseGraphMonitoring );
-
-#endif
       if( iRet )
            break;
 
@@ -869,23 +850,20 @@ if( mtp->PsMO != S_OFF )
           // should be decreased. If so then the nodes from C0 should be
           // copied to C1 (to be implemented)
 
-#ifndef IPMGEMPLUGIN
           // time step accepted - Copying nodes from C1 to C0 row
           pVisor->Update();
           CalcGraph();
-#endif
+
           // copy node array T1 into node array T0
           copyNodeArrays();
 
           if( mtp->PsMode == RMT_MODE_W ) // copy particle array ?
             pa_mt->CopyfromT1toT0();
 
-#ifndef IPMGEMPLUGIN
       // Calculating the control script at the end of a new time step
        if( mtp->ct > 0)
             CalcControlScript();   // should run over all nodes i.e. nC times
        gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
-#endif
 
           if( mtp->PsMode == RMT_MODE_F ) // in F mode
              CalcMGPdata(); // Recalculation of MGP compositions and masses
@@ -919,13 +897,7 @@ fclose( ph_file );
 fclose( diffile );
 }
 
-#ifndef IPMGEMPLUGIN
-
-   pVisor->CloseMessage();
-
-
-#endif
-
+  pVisor->CloseMessage();
   return iRet;
 }
 
@@ -960,7 +932,8 @@ double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE*
    {
      na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, 1 );
      na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, 1 );
-     na->logProfilePhMol( ph_file, pa_mt, mtp->ct, mtp->cTau, mtp->nC, 1 );
+     na->logProfilePhMol( ph_file, std::bind(&TGEM2MT::logProfilePhMol, this,std::placeholders::_1, std::placeholders::_2),
+                          mtp->ct, mtp->cTau, mtp->nC, 1 );
    }
 
    if( nPoint == 3 )
@@ -971,7 +944,8 @@ double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE*
    if( nPoint == 4 )
    {
        na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, evrt );
-       na->logProfilePhMol( ph_file, pa_mt, mtp->ct, mtp->cTau, mtp->nC, evrt );
+       na->logProfilePhMol( ph_file, std::bind(&TGEM2MT::logProfilePhMol, this,std::placeholders::_1, std::placeholders::_2),
+                            mtp->ct, mtp->cTau, mtp->nC, evrt );
    }
 
    // write to VTK
