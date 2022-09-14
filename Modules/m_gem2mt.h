@@ -316,7 +316,7 @@ GEM2MT;
 class TGEM2MT
         : public TCModule
 {
-  GEM2MT mt[1];
+    GEM2MT mt[1];
 
     IPNCalc rpn[2];      // IPN
     jsonui::GraphDialog *gd_gr = nullptr;
