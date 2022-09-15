@@ -3,7 +3,7 @@
 //
 // Implementation and Declaration of TIntegApp class, function main()
 //
-// Copyright (C) 1996-2001  S.Dmytriyeva, A.Rysin
+// Copyright (C) 1996-2022  S.Dmytriyeva, A.Rysin
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -16,13 +16,20 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#ifdef OVERFLOW_EXCEPT
+#ifdef __linux__
+#include <cfenv>
+#elif _MSC_VER
+#include <float.h>
+#else
+#include <cfenv>
+#endif
+#endif
 
 #include <QApplication>
-//#include <QSqlDatabase>
 
 #if QT_VERSION >= 0x050000
 #include <QtWidgets>
-// !!!! qt5 install in ubuntu libglu1-mega-dev
 #else
 #include <QApplication>
 #include <QSqlDatabase>
@@ -31,7 +38,6 @@
 #include <QMessageBox>
 #include <QWindowsStyle>
 #endif
-#include <iostream>
 #include "visor.h"
 #include "GemsMainWindow.h"
 
@@ -58,9 +64,7 @@ TIntegApp::TIntegApp(int& c, char** v):
       argc(c),
       argv(v)
 {
-    //cout << "QSqlDatabase: available drivers:" <<
-    //      QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString() << endl;
-
+    //gui_logger->info("QSqlDatabase: available drivers: {}", QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString());
     gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
     gui_logger->set_level(spdlog::level::debug);
     shMemory.setKey("gems3");
@@ -103,15 +107,25 @@ main(int argc, char* argv[])
 {
     TIntegApp IntegApp(argc, argv);
 
+#if  defined(OVERFLOW_EXCEPT)
+#ifdef __linux__
+feenableexcept (FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW);
+#elif _MSC_VER
+    _clearfp();
+    _controlfp(_controlfp(0, 0) & ~(_EM_INVALID | _EM_ZERODIVIDE | _EM_OVERFLOW),
+               _MCW_EM);
+#else
+
+#endif
+#endif
+
     if(IntegApp.isRunning())
     {
-       cerr << "gems3: Unable to create second instance." << endl;
+       gui_logger->critical("gems3: Unable to create second instance.");
        return -2;
     }
     try
     {
-//        cout << "QSqlDatabase: available drivers: %s" <<
-//              QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString() << endl;
         IntegApp.InitMainWindow();
         int res = IntegApp.exec();
         // clear static arrays in our order because they're interdependent
@@ -121,20 +135,19 @@ main(int argc, char* argv[])
         aObj.clear();
 
         delete pVisorImp;
-
         return res;
     }
     catch(TError& err)
     {
-        cerr << "gems3: " << err.mess.c_str() << endl;
         auto s = err.title;
         s += ": ";
         s += err.mess;
+        gui_logger->critical("GEMS fatal error: {}", s);
         QMessageBox::critical(0, "GEMS fatal error", s.c_str());
     }
     catch(...)
     {
-        cerr << "gems3: Unknown exception: program aborted" << endl;
+        gui_logger->critical("gems3: Unknown exception: program aborted");
         return -1;
     }
     return 0;
