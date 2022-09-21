@@ -2,16 +2,16 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.7.1
+#VERSION         = 3.9.2
 
 DEFINES         += NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
-!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 DEFINES += USE_THERMOFUN
-DEFINES += USE_THERMO_LOG
+#DEFINES += USE_THERMO_LOG
+#!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++17

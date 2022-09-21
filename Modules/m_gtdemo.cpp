@@ -514,91 +514,6 @@ void TGtDemo::RecInput( const char *key )
     TCModule::RecInput( key );
 }
 
-// Get list of records to make GTDemo
-void TGtDemo::bld_rec_list( )
-{
-    //TProfil *aProf=(TProfil *)aMod[RT_PARAM];
-    TCStringArray aRklist;
-    TCIntArray anRk;
-    TCStringArray aMrk;
-    TCIntArray aMrk2;
-    std::string str;
-    char *key_p;
-    int i;
-    short rtlen = rt[gdp->nRT]->KeyLen();
-
-AGAIN:
-    key_p=nullptr;
-    if( !strchr( gdp->prKey, '*') )
-        key_p = gdp->prKey;
-    if( gdp->PsPE != S_OFF )   // GTdemo by Process
-    {
-        TProcess::pm->RecordLoadinProfile(key_p);
-        strncpy( gdp->prKey, rt[RT_PROCES]->PackKey(), MAXRKEYLEN );
-        for( i=0; i<aObj[o_pestl]->GetN(); i++ )
-            aRklist.push_back( aObj[o_pestl]->GetString( i, 0 ));
-    }
-    else  if( gdp->PsPB != S_OFF ) // GTdemo by TUnSpace
-    {
-        TUnSpace::pm->RecordLoadinProfile(key_p);
-        strncpy( gdp->prKey, rt[RT_UNSPACE]->PackKey(), MAXRKEYLEN );
-        for( i=0; i<aObj[o_unstl]->GetN(); i++ )
-            aRklist.push_back( aObj[o_unstl]->GetString( i, 0 ));
-    }
-    else // other type of records
-    {
-AGAINRC:    //get  keypart
-        //str = vfKeyTemplEdit(window(), "Please, set a record key filter ", gdp->nRT, gdp->wcrk );
-        //      if(  str== "" )   Bugfix 19.12.00  DAK
-        //          goto AGAINRC;
-        auto Nr = rt[gdp->nRT]->GetKeyList( gdp->wcrk/*str.c_str()*/, aRklist, anRk );
-        if( Nr<1 )
-        {
-            if( vfQuestion(window(), GetName(),
-                           "W09GDrem: No record keys matching a template! Repeat selection?"))
-                goto AGAINRC;
-            else Error( GetName(), "E00GDrem: No record keys matching a template..." );
-        }
-    }
-    if( gdp->rkey )  // old selections
-    {
-        aMrk.clear();
-        for(uint j=0; j<aRklist.size() ; j++ )
-            for( i=0; i<gdp->Nlrk; i++ )
-            {
-                if( strncmp( gdp->rkey+i*rtlen, aRklist[j].c_str(), rtlen ))
-                    continue;
-                aMrk.push_back(aRklist[j]/*j*/);
-                aMrk2.push_back(j);
-                break;
-            }
-    }
-    // Select records list
-    if( gdp->PsPE != S_OFF || gdp->PsPB != S_OFF ) // GTdemo by TUnSpace or by Process
-    {
-       aMrk.clear();
-       aMrk2 = vfMultiChoiceSet(window(), aRklist,
-                       "Please, select/mark some record keys for data sampling", aMrk2 );
-      for(size_t j=0; j<aMrk2.size(); j++ )
-          aMrk.push_back(aRklist[aMrk2[j]]);
-    }
-    else
-    {
-        aMrk =  vfMultiKeysSet(window(), "Please, select/mark some record keys for data sampling",
-                        gdp->nRT, gdp->wcrk, aMrk );
-    }
-    if( aMrk.size() < 1 )
-    {    if( vfQuestion(window(), GetName(), "No record keys selected to sample! Repeat selection?" ))
-            goto AGAIN;
-        else Error( GetName(), "E01GDrem: No record keys selected...");
-    }
-    gdp->Nlrk = aMrk.size();
-    gdp->rkey = static_cast<char *>(aObj[ o_gdrkey ]->Alloc( gdp->Nlrk, 1, rtlen ));
-    // make list of record
-    for( i=0; i<gdp->Nlrk; i++ )
-        memcpy( gdp->rkey+i*rtlen, aMrk[i].c_str(), rtlen );
-}
-
 //Rebild record structure before calc
 int TGtDemo::RecBuild( const char *key, int mode  )
 {
@@ -611,20 +526,11 @@ int TGtDemo::RecBuild( const char *key, int mode  )
     gst.iopt = nullptr;
 
     int ret = TCModule::RecBuild( key, mode );
-    if( gdp->nRT == RT_PROCES  ||  gdp->nRT == RT_UNSPACE )
-        gdp->nRT = RT_SYSEQ;
-
     if( !pVisor->ProfileMode  && gdp->nRT >= RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Equilibria Calculation mode" );
 
     if( ret == VF_CANCEL )
         return ret;
-
-    gdp->rtLen =  rt[ gdp->nRT ]->KeyLen();
-    bld_rec_list();
-    gdp->dimXY[0] = gdp->Nlrk;
-    if(  gdp->dimXY[1] <= 0 )  gdp->dimXY[1] = 2;
-
     dyn_new();
 
     if( gdp->PtAEF != S_OFF && gdp->exprE && !*gdp->exprE )
