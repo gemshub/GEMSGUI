@@ -1,0 +1,210 @@
+## Standalone
+
+
+### GEMS3k
+
+Important difference:
+
+$$GEMS3K_H/ms_multi.h \
+$$GEMS3K_CPP/ms_multi_diff.cpp \
+
+$$GEMS3K_H/node.h \
+$$GEMS3K_CPP/node.cpp \
+$$GEMS3K_CPP/node_copy.cpp \
+
+$$GEMS3K_H/nodearray.h \
+$$GEMS3K_CPP/nodearray.cpp \
+
+Minimal difference:
+
+  ipm_chemical.cpp (1,2,3)
+  ipm_chemical2.cpp (1,2,3)
+  ipm_chemical3.cpp (1,3)
+  ipm_chemical4.cpp (1,3)
+  ipm_simplex.cpp (1,4)
+  ipm_main.cpp (1,4)
+  ms_multi_copy.cpp (1,3,4)
+  ms_multi_file.cpp (1, multi_realloc)
+  ms_multi_format.cpp (1, multi_realloc)
+
+The same:
+         m_const_base.h
+         v_detail.h v_detail.cpp
+         v_service.h v_service.cpp
+         io_template.h io_template.cpp
+         io_nlohmann.h io_nlohmann.cpp
+         io_keyvalue.h io_keyvalue.cpp
+         io_simdjson.h io_simdjson.cpp
+         gems3k_impex.h gems3k_impex.cpp
+         verror.h
+         gdatastream.h gdatastream.cpp
+         tnt_i_refvec.h 
+         tnt_array1d.h 
+         tnt_array2d.h 
+         tnt.h 
+         jama_cholesky.h
+         jama_lu.h
+         num_methods.h num_methods.cpp
+         s_solmod.h  s_solmod.cpp s_solmod2.cpp s_solmod3.cpp s_solmod4.cpp s_solmod5.cpp s_solmod6.cpp
+         s_sorpmod.h  s_sorpmod.cpp
+         s_kinmet.h s_kinmet.cpp
+         databr.h
+         datach.h
+         kinetics.h node_kinetics.cpp
+         activities.h s_activity.cpp (2,4) s_activity2.cpp (2,4) s_activity3.cpp (4)
+
+         node2.cpp (4)
+         node_format.cpp
+         node_activities.cpp (4)
+         nodearray2.cpp
+
+Not important difference:
+
+1. ```void TMulti::``` <--> ```void TMultiBase::```
+2. ```// [[fallthrough]];``` <-->  ```[[fallthrough]];```
+3. different headers
+4. Present ```#ifdef IPMGEMPLUGIN```
+5. ```#include "verror.h"```  <--> ``` #include "GEMS3K/verror.h"```
+
+
+
+//--------------------------------------------------------------------------------------
+
+## GEMS3GUI
+
+* charts
+   from_json.h (5)
+
+* Dataman
+   v_user.h (5)
+   v_vals_impl.h (5)
+   v_dbm1.cpp (2,5)
+   v_dbm2.cpp (5)
+   v_file.cpp (5)
+   v_module.cpp (2)
+   v_object.cpp (2)
+
+* Service4
+   !!! visor.h visor.cpp  Difference work with server
+   graph.cpp (5)
+
+* Dialogs4
+   $$DIALOGS4_H/GemsMainWindow.h
+   $$DIALOGS4_CPP/GemsMainWindow.cpp \
+   $$DIALOGS4_CPP/NewSystemDialog.cpp \
+   $$DIALOGS4_H/ProgressDialog.h \
+   $$DIALOGS4_CPP/ProgressDialog.cpp \
+   $$DIALOGS4_CPP/ProgressDialog4.ui \
+
+   GEM2MTWizard.cpp (5)
+   GemsMainWindow4.ui (6)
+   LoadMessage.cpp (6)
+   LookupDialog.cpp (5)
+   RTparmWizard.cpp (5)
+
+* Numerics
+   jama_svd.h (5)
+
+* Submods
+   $$PWD/ms_multi_new.h \
+   $$PWD/ms_multi_new.cpp \
+   $$PWD/node_gui.h \
+   $$PWD/node_gui.cpp \
+   $$PWD/nodearray_gui.h \
+   $$PWD/nodearray_gui.cpp \
+
+  ms_multi.cpp (+constructor, rebuild_lookup, setPa)
+  stepwise.h (no stepwise IPM)
+  ms_mtparm.h (5)
+  ms_mupmph.cpp (2)
+
+* Modules
+
+   $$MODULES_H/m_param.h  \
+   $$MODULES_CPP/m_param.cpp \
+   $$MODULES_CPP/m_proces.cpp \
+   $$MODULES_H/m_gem2mt.h \
+   $$MODULES_H/m_gtdemo.h \
+   $$MODULES_CPP/m_gtdemo.cpp
+
+  v_mod.h (5)
+  m_sdata.cpp (2)
+  m_icomp.cpp (2)
+  m_dcomp.cpp (2)
+  m_reacdc.cpp (2)
+  m_reac2.cpp (5)
+  m_prfget.cpp (InitalizeGEM_IPM_Data)
+  m_prfget2.cpp (2,TNodeArrayGUI::create)
+  m_dualthc.cpp (2)
+  m_gem2mt.cpp (5,TNodeArrayGUI::create)
+  m_gem2mtbox.cpp (2,5)
+  m_gem2mtc.cpp
+  m_gem2mtfor.cpp (5)
+  m_gem2mtt.cpp (5)
+  m_unsp_out.cpp (5)
+  m_unsp_stat.cpp (4)
+  s_formula.cpp (2)
+  s_lsm_fun.cpp (2)
+  s_lsm_lm.cpp (2,5)
+  s_supcrt.cpp (5)
+  s_supcrt2.cpp (5)
+
+Not important difference:
+
+1. ```void TMulti::``` <--> ```void TMultiBase::```
+2. ```// [[fallthrough]];``` <-->  ```[[fallthrough]];```
+3. different headers
+4. Present ```#ifdef IPMGEMPLUGIN```
+5. ```#include "verror.h"```  <--> ``` #include "GEMS3K/verror.h"```
+6 remove stepwise
+
+//--------------------------------------------------------------------------------------
+
+
+//=======================================================================================
+
+### GEMS3k
+
+  $$GEMS3K_H/ms_multi.h \
+  $$GEMS3K_CPP/ms_multi_diff.cpp \
+
+  $$GEMS3K_H/node.h \
+  $$GEMS3K_CPP/node.cpp \
+  $$GEMS3K_CPP/node_copy.cpp \
+
+   $$GEMS3K_H/nodearray.h \
+   $$GEMS3K_CPP/nodearray.cpp \
+
+* Submods
+   $$PWD/ms_multi_new.h \
+   $$PWD/ms_multi_new.cpp \
+
+   $$PWD/node_gui.h \
+   $$PWD/node_gui.cpp \
+
+   $$PWD/nodearray_gui.h \
+   $$PWD/nodearray_gui.cpp \
+
+* Modules
+   $$MODULES_H/m_gem2mt.h \
+   $$MODULES_CPP/m_gem2mt.cpp \
+   $$MODULES_H/m_gtdemo.h \
+   $$MODULES_CPP/m_gtdemo.cpp
+   $$MODULES_H/m_param.h  \
+   $$MODULES_CPP/m_param.cpp \
+   $$MODULES_CPP/m_prfget.cpp \
+   $$MODULES_CPP/m_prfget2.cpp \
+   $$MODULES_CPP/m_proces.cpp \
+
+* Service4
+   $$SERVICES4_H/visor.h \
+   $$SERVICES4_CPP/visor.cpp \
+
+* Dialogs4
+   $$DIALOGS4_H/GemsMainWindow.h
+   $$DIALOGS4_CPP/GemsMainWindow.cpp \
+   $$DIALOGS4_CPP/GemsMainMenus.cpp \
+   $$DIALOGS4_CPP/NewSystemDialog.cpp \
+   $$DIALOGS4_H/ProgressDialog.h \
+   $$DIALOGS4_CPP/ProgressDialog.cpp \
+   $$DIALOGS4_CPP/ProgressDialog4.ui \

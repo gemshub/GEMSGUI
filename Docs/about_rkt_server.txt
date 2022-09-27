@@ -1,0 +1,117 @@
+
+
+Revival of GEMS-Reaktoro project, merge bitbucket with GitHub/gemshub
+
+
+1. Since now we have fully synchronized bitbucket with GitHub/gemshub versions of gems3k and gems3kGUI. We can easily compare both codes in a meld or another tool for compare folders (some notes about into diff_gems_github.txt).
+
+
+Some important differences are only into :
+
+* GEMS3k
+
+     $$GEMS3K_H/ms_multi.h \
+     $$GEMS3K_CPP/ms_multi_diff.cpp \
+     $$GEMS3K_H/node.h \
+     $$GEMS3K_CPP/node.cpp \
+     $$GEMS3K_CPP/node_copy.cpp \
+     $$GEMS3K_H/nodearray.h \
+     $$GEMS3K_CPP/nodearray.cpp \
+
+
+*   GEMS3kGUI/Submods
+
+   $$PWD/ms_multi_new.h \
+   $$PWD/ms_multi_new.cpp \
+   $$PWD/node_gui.h \
+   $$PWD/node_gui.cpp \
+   $$PWD/nodearray_gui.h \
+   $$PWD/nodearray_gui.cpp \
+   
+   
+   
+2.  I did some testing and made pull requests for the trunk version in bitbucket.  Please, do more tests before merging.
+
+
+3.  All changes into github/gemshub/GEMS3K merged to master and send to conda. To install do:
+
+```
+git clone https://github.com/gemshub/GEMS3K.git
+cd GEMS3k
+./install.sh
+
+```
+   
+4.   To run gems3k server (branch rkt-server):
+
+
+```
+
+git clone https://github.com/gemshub/gemsreaktoro.git -b rkt-server
+cd gemsreaktoro
+mkdir -p build
+cd build
+cmake .. 
+make  
+cd bin
+./gems3k-server
+
+```  
+   
+   
+5. To run gems3k standalone test client in other environment:
+
+```
+
+cd gemsreaktoro/build/bin
+./gems3k-client example1/example1-dat.lst example1/example1-dbr.lst
+
+
+```   
+   
+ > *We can run the gems3k-server and gems3k-client using Qt projects.*
+   
+   
+6. Run gems3GUI (server must be run in other environment)  (branch rkt-server)  
+
+```
+git clone https://github.com/gemshub/GEMSGUI.git -b rkt-server 
+cd GEMSGUI
+mkdir -p build
+cd build
+cmake .. -DCMAKE_PREFIX_PATH=/home/sveta/Qt/5.15.2/gcc_64
+make
+cd App
+./gems3kgui-app -d -s /path-to-resouse
+```
+   
+ Or as usual use gems3gui.pro file. 
+    
+
+7. Work with rkt4gems server (branch rkt-server) 
+
+```
+git clone https://github.com/gemshub/rkt4gems.git -b rkt-server 
+```
+
+> *For installation using Conda see instructions into readme.md*
+> *All upper applications can be installed  using Conda too* 
+
+To test rkt-server you can use ```./gems3k-client example1/example1-dat.lst example1/example1-dbr.lst```
+Client send to server the same files as into  ```rkt4gems/resources/``` and get back the result dbr json string.
+
+
+
+
+
+
+
+
+
+
+   
+
+   
+   
+
+ 
