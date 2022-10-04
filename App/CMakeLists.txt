@@ -6,9 +6,9 @@ add_definitions(-DNODEARRAYLEVEL)
 add_definitions(-DNO_JSONIO)
 
 # Create an executable named app with source code main.cpp
-add_executable(gems3kgui-app main.cpp)
+add_executable(gemsgui-app main.cpp)
 
 # Link your application against ThermoFun C++ library.
-target_link_libraries (gems3kgui-app GEMSGUI gems3kmodules ${GEMS_QT_TARGETS} zmq GEMS3K )
+target_link_libraries (gemsgui-app GEMSGUI gems3kmodules ${GEMS_QT_TARGETS} zmq GEMS3K )
 
 
