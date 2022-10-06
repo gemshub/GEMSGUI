@@ -283,8 +283,8 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
     char *pack_key = const_cast<char*>(ind.PackKey());
 
     // header of the record
-    strncpy( rh.bgm, MARKRECHEAD, 2 );
-    strncpy( rh.endm, MARKRECHEAD, 2 );
+    strncpy( rh.bgm, MARKRECHEAD, 2*sizeof(char));
+    strncpy( rh.endm, MARKRECHEAD, 2*sizeof(char) );
     rh.nRT = nRT;               //warning: compatibility
     rh.Nobj = nOD;
     rh.rlen =  rep.len;

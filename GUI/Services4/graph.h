@@ -82,8 +82,10 @@ public:
     {
         ndxX = 0;
         setChanges( aPointType, aPointSize, aPutLine, QColor(aRed, aGreen, aBlue) );
-        memcpy( name, aName, 15);
-        name[15] = '\0';
+        memset( name, '\0', 16*sizeof(char));
+        if(aName) {
+           strncpy( name, aName, sizeof(name));
+        }
     }
 
     TPlotLine( int ii, int maxII, const char *aName = nullptr,
@@ -94,15 +96,18 @@ public:
         QColor aColor;
         aColor.setHsv( 360/maxII*ii, 200, 200);
         setChanges( aPointType, aPointSize, aPutLine, aColor );
-        memcpy( name, aName, 15);
-        name[15] = '\0';
+        memset( name, '\0', 16*sizeof(char));
+        if(aName) {
+          strncpy( name, aName, sizeof(char)*15);
+        }
     }
 
     TPlotLine(const TPlotLine& plt ):
         type(plt.type), sizes(plt.sizes), ndxX(plt.ndxX),
         red(plt.red),   green(plt.green), blue(plt.blue)
     {
-        memcpy( name, plt.name, 15);
+        memset( name, '\0', 16*sizeof(char));
+        memcpy( name, plt.name, 15*sizeof(char));
     }
 
     const TPlotLine& operator=( const TPlotLine& p)

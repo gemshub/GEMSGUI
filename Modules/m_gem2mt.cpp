@@ -879,8 +879,8 @@ void TGEM2MT::MakeQuery()
        {
            strncpy(  mtp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
-       strncpy(mtp->xNames, xName.c_str(), MAXAXISNAME );
-       strncpy(mtp->yNames, yName.c_str(), MAXAXISNAME );
+       strncpy(mtp->xNames, xName.c_str(), MAXAXISNAME-1 );
+       strncpy(mtp->yNames, yName.c_str(), MAXAXISNAME-1 );
     }
 
   if( !calcScript.empty() )

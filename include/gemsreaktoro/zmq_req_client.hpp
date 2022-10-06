@@ -16,7 +16,7 @@ public:
 
     explicit zmq_req_client_t( T& task, const std::string& address= "tcp://localhost:5555" ):
         task_data( task ),
-        ctx(1), client_socket( ctx, ZMQ_REQ )
+        ctx(1), client_socket( ctx, zmq::socket_type::req )
     {
         client_socket.connect( address );
     }

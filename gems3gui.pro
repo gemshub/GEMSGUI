@@ -36,7 +36,7 @@ win32:RC_ICONS += Gems3.ico
   QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
 
 
-  QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
+  QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith -Warray-bounds -Wstringop-truncation \
    -Wmissing-declarations -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral -Winline
    -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
    -Wfloat-equal -pedantic -ansi #-fsignaling-nans -ffinite-math-only
