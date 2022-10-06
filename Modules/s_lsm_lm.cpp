@@ -114,12 +114,8 @@ TLMmin::~TLMmin()
 void TLMmin::Calc( double *sdpar, double *apar_ap,
                    double*ad_par, short *ad_type )
 {
-  if( !data )
-    return;
-//#ifdef IPMGEMPLUGIN
-//    if( data->getInfo() == -1 ) //test_sizes
-//      return;
-//#endif
+    if( !data )
+        return;
     par_ap = apar_ap;
     d_par = ad_par;
     d_type = ad_type;
@@ -490,12 +486,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
     if ( (n <= 0) || (m < n) || (ftol < 0.)
 	|| (xtol < 0.) || (gtol < 0.) || (maxfev <= 0) || (factor <= 0.) )
     {
-//#ifndef IPMGEMPLUGIN
         Error( lm_shortmsg[0], lm_infmsg[0]);
-//#else
-//        *info = 0; // invalid parameter
-//        return;
-//#endif
     }
     if ( mode == 2 )  /* scaling by diag1[] */
     {
@@ -503,12 +494,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec1, double ftol, doub
         {
             if ( diag1[j] <= 0.0 )
             {
-//#ifndef IPMGEMPLUGIN
               Error( lm_shortmsg[0], lm_infmsg[0]);
-//#else
-//                *info = 0; // invalid parameter
-//                return;
-//#endif
             }
         }
     }

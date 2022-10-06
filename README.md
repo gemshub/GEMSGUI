@@ -1,8 +1,30 @@
-# GEM-Selektor v.3 #
+## GEM-Selektor v.3 for GEMS-Reaktoro project #
 
-This GEMS3GUI repository contains the source code and default resources for GEM-Selektor v.3 - the interactive package for thermodynamic modelling of aquatic (geo)chemical systems by Gibbs Energy Minimization using a built-in GEMS3K chemical solver.
+This GEMSGUI repository contains the source code and default resources for GEM-Selektor v.3 client in GEMS-Reaktoro benchmarking project
+GEMSGUI is an interactive package for thermodynamic modelling of aquatic (geo)chemical systems by Gibbs Energy Minimization using a standalone server - either GEMS3K chemical solver or alternatively the rkt4gems chemical solver based on Reaktoro 2 framework.
 
-## Briefly about GEM-Selektor v.3 ##
+### Briefly about GEM-Selektor v.3 ##
+
+Distributed "as is" by the Laboratory for Waste Management (LES) of the Paul Scherrer Institute (PSI) with two purposes:
+
+* to promote the GEM method and software into research community;
+* to gather the users feedback - vital for making the software more functional and reliable.
+
+Permission to use the GEM-Selektor software is hereby granted free of charge for educational and research purposes, subject to acceptance of Terms and Conditions of Use. In particular, in any publication of your results obtained using the GEM-Selektor code, please, cite the web page (http://gems.web.psi.ch) and the following papers:
+
+* Kulik D.A., Wagner T., Dmytrieva S.V., Kosakowski G., Hingerl F.F., Chudnenko K.V., Berner U. (2013): GEM-Selektor geochemical modeling package: revised algorithm and GEMS3K numerical kernel for coupled simulation codes. Computational Geosciences 17, 1-24.
+* Wagner T., Kulik D.A., Hingerl F.F., Dmytrieva S.V. (2012): GEM-Selektor geochemical modeling package: TSolMod library and data interface for multicomponent phase models. Canadian Mineralogist 50, 1173-1195.
+
+Version: currently 3.9.5.
+
+Learn more about GEM-Selektor from http://gems.web.psi.ch
+
+## GEM-Selektor v.3 for GEMS-Reaktoro project #
+
+This GEMSGUI repository contains the source code and default resources for GEM-Selektor v.3 client in GEMS-Reaktoro benchmarking project
+GEMSGUI is an interactive package for thermodynamic modelling of aquatic (geo)chemical systems by Gibbs Energy Minimization using a standalone server - either GEMS3K chemical solver or alternatively the rkt4gems chemical solver based on Reaktoro 2 framework.
+
+### Briefly about GEM-Selektor v.3 ##
 
 Distributed "as is" by the Laboratory for Waste Management (LES) of the Paul Scherrer Institute (PSI) with two purposes:
 
@@ -14,70 +36,197 @@ Permission to use the GEM-Selektor software is hereby granted free of charge for
 * Kulik D.A., Wagner T., Dmytrieva S.V., Kosakowski G., Hingerl F.F., Chudnenko K.V., Berner U. (2013): GEM-Selektor geochemical modeling package: revised algorithm and GEMS3K numerical kernel for coupled simulation codes. Computational Geosciences 17, 1-24.
 * Wagner T., Kulik D.A., Hingerl F.F., Dmytrieva S.V. (2012): GEM-Selektor geochemical modeling package: TSolMod library and data interface for multicomponent phase models. Canadian Mineralogist 50, 1173-1195.
 
-Version: currently 3.7.0.
+Version: currently 3.9.5.
 
 Learn more about GEM-Selektor from http://gems.web.psi.ch 
 
-## How to clone (download) the GEMS3GUI source code and build it on linux ##
+## Instructions on how to build and set up GEMS-Reaktoro benchmarking tools on linux (e.g. ubuntu 20.04) ##
 
-* In your home directory, make a folder named e.g. ~/gitGEMS3 with a subfolder ~/gitGEMS3/gems3gui.
-* Change into ~/gitGEMS3/gems3gui and clone this repository from https://<you>@bitbucket.org/gems4/gems3gui.git using a preinstalled free git client SourceTree or SmartGit (the best way on Windows). 
-* Alternatively on Mac OS X or linux, open a terminal, cd ~/gitGEMS3/gems3gui and type in the command line (do not forget a period):
-~~~
-git clone https://<you>@bitbucket.org/gems4/gems3gui.git . 
-~~~
-* To switch to another branch (e.g. devEJDB), use a git client or open a terminal, cd to ~/gitGEMS3/gems3gui, and type in the command line
-~~~
-git checkout -b branches/devEJDB --track origin/branches/devEJDB
-git pull origin branches/devEJDB
-~~~
-To switch back to trunk, type
-~~~
-git checkout trunk
+1. Install Python and miniconda (if not done already), e.g. performing steps described in
+
+https://www.how2shout.com/linux/how-to-install-miniconda-on-ubuntu-20-04-lts-focal/
+
+Briefly: check in terminal whether conda and python are already present (if yes then just versions of both will be reported in response):
+
+```
+conda --v
+python --version
+```
+
+If the latter command returns something like
+```
+Command 'python' not found, did you mean:
+  command 'python3' from deb python3
+  command 'python' from deb python-is-python3
+```
+then python3 is already installed; just link the command 'python' to 'python3' as follows:
+```
+sudo ln -s /usr/bin/python3 /usr/bin/python
+```
+
+To install python and miniconda, perform the following steps in (bash) terminal:
+
+```
+cd ~
+sudo apt install python3
+sudo apt update && sudo apt upgrade
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+# Press 'q', then type "Yes" Enter to accept the license, then "Yes" to activate conda on staring the terminal
+# To deactivate the latest option, execute 'conda config --set auto_activate_base false'
+conda --v
+python --version
+conda install conda-devenv -c conda-forge
+```
+
+Hint: if 'conda --v' still returns 'conda: command not found' then add the line below to ~/.bashrc and ~/.profile file, and then re-login (replace <your_username> with your real linux user name): 
+```
+export PATH="/home/<your_username>/miniconda/bin:$PATH"
+```
+
+2. To build and start the rkt4gems server (branch rkt-server)
+
+Create a folder to keep repositories and builds, e.g. 
+
+```
+#!bash
+mkdir /home/<your_user>/git/GEMS-Reaktoro
+cd /home/<your_user>/git/GEMS-Reaktoro
+```
+
+Clone the rkt4gems repository:
+
+```
+git clone https://<your_github_token>@github.com/gemshub/rkt4gems.git
+```
+
+Then build rkt4gems as described in README.md in the rkt4gems folder. Briefly, to build rkt4gems:
+
+```
+cd ~/git/GEMS-Reaktoro/rkt4gems/
+conda devenv
+conda activate rkt4gems
+cmake -S . -B build
+cmake --build build --parallel
+```
+
+To build tests and examples:
+
+~~~bash
+cmake --build build --target tests
+cmake --build build --target examples
 ~~~
 
-* Now cd back to ~/gitGEMS3 and make a subfolder ~/gitGEMS3/standalone then clone the GEMS3K repository by running
-~~~
-cd standalone
-git clone https://<you>@bitbucket.org/gems4/gems3k.git . 
-~~~ 
+To execute c++ example: 
 
-* This will download the trunk branch of the GEMS3K code. To switch (if necessary) to a different branch, do:
-~~~
-git checkout -b branches/devEJDB --track origin/branches/devEJDB
-git pull origin branches/devEJDB
-~~~ 
+```
+cd build/examples/cpp  
+./example1
+```
 
-* Finally, cd back to ~/gitGEMS3 and create there empty build directories /build-release and /build-debug.
-* We assume that both subfolders /gems3gui and /standalone are under git control and are checked out to "trunk" branch.
+To launch the rkt4gems server, open a separate terminal and run:
 
-### Building and deploying GEM-Selektor v.3 ###
+```
+cd ~/git/GEMS-Reaktoro/rkt4gems/build/rkt-server
+./rkt-server
 
-This deployment process is based on the "gemsdeployqtapp.sh" script, which is an augmented and extended "deployqtapp.sh" script from
-https://github.com/goblincoding/qtscripts by goblincoding, see also http://goblincoding.com/2013/11/07/deploying-qt-5-applications-on-ubuntu-12-04/  
+```
 
-1. Make sure that Qt5 SDK is installed in the system or locally as ~/Qt in your home directory (download open-source edition from https://qt.io/download).
+The rkt-server runs in the background, by default binds to tcp socket 5570, and listens to the client that can even run on another computer or in a different process on this machine.
+To stop the server (in terminal where it was started): enter Ctrl-C.
 
-On latest versions of Linux, the complete Qt5 is available in the system. On Ubuntu 16.04 or later, it can be installed using a command:
-~~~
-sudo apt-get install qt5-default qttools5-dev qtcreator
-~~~
-It may be necessary to install in addition:
-~~~
-sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5help5
-~~~
+To test the server, first build gemsreaktoro (see Section 4).
 
-Now we assume that the Qt toolkit is installed in the system with the commands above, or Qt is installed locally as "~/Qt/5.9.8/gcc_64".
+3. To build and install the GEMS3K library (version working with ThermoFun):
 
-If not yet done, copy recursively the "/Docs/build-release" directory from the  folder where this file is located to the folder in which the "/gems-gui" folder is located. Typically, you should have the folders at the same level, as shown below.
-~~~
-~/gitGEMS3
-    /gems3gui
-    /standalone
-    /build-release
-    /build-debug
-~~~
-We assume that both subfolders /gems3gui and /standalone are under git control and are checked out to "trunk" branch.
+Check the conda environment (activate if needed), and install chemicalfun and gems3k from conda forge
+
+```
+# conda activate rkt4gems
+conda install spdlog chemicalfun gems3k -c conda-forge
+```
+
+4. To build and start the gems3k-server and test client:
+
+```
+cd /home/<your_user>/git/GEMS-Reaktoro
+git clone https://<your_github_token>@github.com/gemshub/gemsreaktoro.git && cd gemsreaktoro
+mkdir -p build && cd build && cmake .. && make
+```
+
+To start the server, open a separate terminal window or tab, and execute:
+
+```
+cd ~/git/GEMS-Reaktoro/gemsreaktoro/build/bin
+./gems3k-server
+
+```
+
+The gems3k-server runs in the background, by default binds to tcp socket 5570 and listens to the client that can run in a different process on this machine or on another computer.
+To stop the server (in terminal where it was started): enter Ctrl-C.
+
+To run the standalone batch test gems3k-client with the data from example1:
+
+Open a separate terminal window or tab, and execute:
+
+```
+cd ~/git/GEMS-Reaktoro/gemsreaktoro/build/bin
+./gems3k-client example1/example1-dat.lst example1/example1-dbr.lst
+
+```
+
+The gems3k-client connects to the gems3k-server running on another computer or in a different process on this machine. It sends the input data for GEMS3K in ZeroMQ messages, the server calculates the GEM task and sends the results back to the client in a ZeroMQ message, then the standalone client prints the results and stops.
+   
+
+#### *Alternatively, one can build and run the gems3k-server and gems3k-client using Qt projects.*
+ 
+##### How exactly? What Qt vestion and platform should be installed? 
+   
+5. To build and run the gemsgui-app graphical client (branch rkt-server)
+
+Install Qt5.15.4 from conda forge. Also install packages providing libGL (to prevent linking errors like "fatal error: GL/gl.h: No such file or directory" when building Qt GUI applications):
+
+```
+conda install freeglut gsl glew glfw mesalib mesa-libgl-devel-cos7-x86_64 qt -c conda-forge
+```
+
+Now, clone the GEMSGUI Git repository. 
+
+```
+git clone https://<your_github_token>@github.com/gemshub/GEMSGUI.git && cd GEMSGUI
+mkdir -p build && cd build && cmake .. && make
+```
+To start the gemsgui-app client, check the path to folder containing Resources (after the -s key of gemsgui-app), and then execute it:
+
+```
+cd App
+./gemsgui-app -d -s /home/<your_user>/git/GEMS-Reaktoro/GEMSGUI
+```
+
+Note that the resources folder, e.g. /resources/projects/, should contain GEMS projects folders similar to those in Library/Gems3/projects for GEM-Selektor installation. 
+
+gems3k-server and rkt-server must be run in different processes or on different computers. So far, they listen to the same tcp socket 5570. This means that either can be used, but not both for choice from GEMSGUI; to implement this, rkt-server must listen to a different socket, e.g. 5580.
+   
+
+< To Svitlana: Please, finalise the gemsreaktoro launcher so that it starts gems3k-server, rkt4gems-server and gemsgui-app, and kills them when a shutdown of gemsreaktoro is performed>
+
+< Clearly, more diagnostics on the server side is needed>
+< Ample output of JSON data for ThermoFun need to be made optional>
+
+< Seems that JSON file for ThermoFun is not exported even if this option (Fun-Json or Fun-KeyValue) is chosen in  the "Data" "Export Gems3k files" widget>
+
+
+
+
+
+
+
+
+
+
+
+
+TBD
 
 2. Start the QtCreator (if Qt5 is in the system, type "qtcreator" in terminal and press Enter) and build a release variant of GEM-Selektor v.3 in "/home/you/DevGEMS/devPhase/build-release", where an executable script "gemsdeployqtapp.sh" and several other files are located; if the script is not executable, open a terminal, cd to that directory, and run 
 ~~~
@@ -103,90 +252,6 @@ $ sudo ./fixdep.sh
 
 This script needs superuser because it can automatically download the necessary libraries for your platform.       
 
-### Mac OSX ###
-
-This deployment process is based on the "macdeployqt" utility, located in ~/Qt/5.9.8/clang_64/bin/ folder.
-
-1. Make sure that the Qt5 SDK is installed as ~/Qt or in similar folder. We assume that the Qt library is located in ~/Qt/5.9.8/clang_64/bin/ and Qt Tools (QtCreator etc.) are located in ~/Qt/.
-
-2. If not yet done, find ~/DevGEMS/trunk/gems-gui/Docs/mac-build-release directory and copy it recursively into ~/Applications, then rename it to ~/Applications/devPhase. Dive into the ~/Applications/trunk/gems3.app/Contents and refresh recursively the /Resources subfolder contents by copying it from ~/DevGEMS/trunk/gems-gui/Resources.
-
-3. In the ~/Applications/trunk folder, find the "runmacdeployqt.bat" file and edit it to make sure that it contains the correct full path to the "macdeployqt" utility, e.g. Users/<you>/Qt/5.3/clang_64/bin/macdeployqt. From the latter folder, copy the actual files "qcollectiongenerator", "qhelpconverter" and "qhelpgenerator" (needed to refresh the help database) to ~/Applications/devPhase/gems3.app/Contents/MacOS.
-
-4. Using QtCreator, build the actual release variant of gems3 executable. Typically, you should have something like "~/DevGEMS/trunk/gems-gui"; "~/DevGEMS/trunk/standalone"; and "~/DevGEMS/trunk/build-release" folders at the same level. Find gems3 in /gems3.app in the latter folder and copy it into ~/Applications/devPhase/gems3.app/Contents/MacOS.
-
-5. Open terminal, cd to ~/Applications/trunk and run the command:
-~~~
-$ ./runmacdeployqt.sh
-~~~
-This will find and copy all dependence files (Qt libraries, plugins, etc.) into ~/Applications/trunk/gems3.app, and also will create a gems3.dmg image file of the GEM-Selektor installer.
-
-6. To make sure that the GEM-Selektor runs correctly: in terminal, cd to ~ (your user home directory) and start the program with the command:
-~~~
-$ exec /Users/<you>/Applications/trunk/gems3.app/Contents/MacOS/gems3 -d
-~~~
-Upon the first start, the gems3 program will create a ~/Library/Gems3/projects folder, in which the test projects are located (automatically copying from the .../gems3.app/Contents/Resources/projects).
- 
-7. To complete creating a new GEM-Selektor installer file for Mac OS X: cd to ~/Applications/devPhase/ folder and delete the gems3.dmg file. Then, to create the installer, run again the command
-~~~
-$ ./runmacdeployqt.sh
-~~~
-This will create the file ~/Applications/devPhase/gems3.dmg. Rename it according to the following pattern:
-~~~
-Gems3.2-<rev1>.<rev2>-OSX-x86-64.dmg
-~~~
-where put the same actual revision numbers for GEMS GUI (rev1) and GEMS3K (rev2) parts, as used in the built code. The dmg file can now
-be distributed.
-
-8. For installation steps, see INSTALL-macosx.txt. Install and test if it works.
-
-
-### Windows 7,8,10 ###
-
-This deployment process is based on the "windeployqt.exe" utility, which is an augmented "windeployqt.exe" binary by lkc, taken from
-https://github.com/lkc/windeployqt.
-
-1. Make sure that the Qt5 SDK is installed as C:\Qt or in similar folder. We assume that the Qt library is located in C:\Qt5\5.9.8\mingw482_32\bin and Qt Tools are located in C:\Qt5\Tools\mingw482_32\bin (or similar, depending on the current Qt version, MinGW version and their locations).  
-
-2. If not yet done, go into the .\Docs\win-build-release directory and copy recursively the folder \GEMS3DEPLOY to C:\ drive. Dive into the  C:\GEMS3DEPLOY\Gems3-app folder. Refresh recursively the \Resources subfolder (from .gems-gui\Resources in GEM-Selektor source code tree). 
-
-3. In the C:\GEMS3DEPLOY\Gems3-app folder, edit the "runwindeployqt.bat" file to make sure that it contains the correct paths to 
-C:\Qt5\5.9.8\mingw482_32\bin and C:\Qt5\Tools\mingw482_32\bin directories (modify to actual ones, if necessary). Copy (or refresh) the files 
-qcollectiongenerator.exe, qhelpconverter.exe and qhelpgenerator.exe from C:\Qt5\5.9.8\mingw482_32\bin to C:\GEMS3DEPLOY\Gems3-app folder.   
-
-4. Using QtCreator, build the actual release variant of gems3.exe. Typically, you should have something like "C:\DevGEMS\trunk\gems-gui";
-"C:\DevGEMS\trunk\standalone"; and "C:\DevGEMS\trunk\build-release" folders at the same level. Find gems3.exe in the latter folder and copy it into the C:\GEMS3DEPLOY\Gems3-app folder.  
-
-5. In command-line prompt window (terminal), cd to C:\GEMS3DEPLOY\Gems3-app and run the command:
-~~~
-runwindeployqt.bat gems3.exe
-~~~
-This will find and copy all dependence files (Qt libraries, plugins, runtime MinGW libraries, locale files, etc.) into C:\GEMS3DEPLOY\Gems3-app folder. 
-
-6. To test that GEM-Selektor runs correctly: cd to C:\GEMS3DEPLOY and check that the batch file "rungems3.bat" contains correct path to the folder where the gems3.exe file is located (e.g. C:\GEMS3DEPLOY\Gems3-app). Edit, if necessary (see also Readme3.txt). Then start GEM-Selektor by executing the rungems3.bat file. Upon the first start, the program will create a C:\GEMS3DEPLOY\Library\Gems3\projects folder, in which the test projects are located (by copying them from C:\GEMS3DEPLOY\Gems3-app\Resources\projects).  
- 
-7. To create a new GEM-Selektor installer file for Windows 7 or Windows 8:
-
-If not yet done, download and install 7-zip v.9.20 (http://www.7-zip.org/). Start it and select the C:\GEMS3DEPLOY folder. Add it contents (i.e. Gems3-app folder and a few files) recursively to the archive (to be created e.g. in C:\TEMP folder) "C:\TEMP\GEMS3DEPLOY.7z". 
-
-If not yet done, download and install 7zip-sfx-maker v.3.3 utility from http://sourceforge.net/projects/sfx-maker/ . Also download ResourceHacker v.3.6 from http://www.angusj.com/resourcehacker/; install it into "C:\Program Files (x86)\7-Zip SFX Maker\Resource Hacker" folder. 
-
-Start the 7zip-sfx-maker as an administrator and click on "Load Settings..." button. Select the file ".\Docs\win-build-release\Self-extractor-GEMS3-settings.xml" (the path is shown relative to the folder in which this file DeployOnWindows.txt is located). Then, using "+" button or "Files" "Add 7z file...", select the file "C:\TEMP\GEMS3DEPLOY.7z" prepared previously. Click through tabs "Dialogs", "Tasks", "Metadata" and edit what is necessary, e.g. revisionand version numbers, date of production, etc. When done, click on "Save 
-settings..." button to save settings to the file ".\Docs\win-build-release\Self-extractor-GEMS3-settings.xml", which is under version control. Then click on the "Make SFX" button to create the self-installer file. This will create a file C:\TEMP\GEMS3DEPLOY.sfx.exe. Rename it according to the following pattern:
-~~~
-C:\TEMP\gems3.2-<rev1>.<rev2>-win32-install.sfx.exe 
-~~~
-where put the same actual revision numbers for GEMS GUI (rev1) and GEMS3K (rev2) parts, as used in "Self-extractor-GEMS3-settings.xml" 
-file. The self-extracting installer can now be distributed. 
-
-8. For installation steps, see INSTALL-windows.txt. Install and test if it works.
-
-
-### For details on how to install the GEM-Selektor v3 code package: ### 
-
-Please, consult this web page:
-
-http://gems.web.psi.ch/GEMS3/techinfo.html
 
 TBD
 * Summary of set up

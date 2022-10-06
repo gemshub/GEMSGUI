@@ -221,10 +221,10 @@ TVisorImp::TVisorImp(int c, char** v):
     // define signal/slots
     connect( ui->action_Use_ThermoFUN, &QAction::toggled, [&](bool checked){
         if(checked) {
-            GEMS3KGenerator::default_type_f  = GEMS3KGenerator::f_thermofun;
+            GEMS3KGenerator::default_type_f = GEMS3KGenerator::f_thermofun;
         }
         else {
-            GEMS3KGenerator::default_type_f  = GEMS3KGenerator::f_json;
+            GEMS3KGenerator::default_type_f = GEMS3KGenerator::f_json;
         }
     });
     connect( ui->action_calcMode, SIGNAL( triggered()), this, SLOT(CmCalcMode()));

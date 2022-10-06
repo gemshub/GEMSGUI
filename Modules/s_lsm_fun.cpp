@@ -110,9 +110,6 @@ void TLMDataType::test_sizes()
            }
             break;
      case MATHSCRIPT_FIT:   // using mathscript
-//#ifdef IPMGEMPLUGIN
-//           info = -1;
-//#endif
                     break;
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar

@@ -28,12 +28,12 @@ public:
     zmq_client_t( T& task, const std::string& address= "tcp://localhost:5570" )
         : task_data( task ),
           ctx(1),
-          client_socket(ctx, ZMQ_DEALER)
+          client_socket(ctx, zmq::socket_type::dealer)
     {
         // generate random identity
-        char identity[10] = { "CC66-C879" };
+        ///char identity[10] = { "CC66-C879" };
         //sprintf(identity, "%04X-%04X", within(0x10000), within(0x10000));
-        client_socket.setsockopt(ZMQ_IDENTITY, identity, strlen(identity));
+        ///client_socket.setsockopt(ZMQ_IDENTITY, identity, strlen(identity));
         client_socket.connect(address);
     }
 
@@ -50,7 +50,7 @@ public:
 
             while ( true )
             {
-                zmq::poll(items, 1, 10);
+                zmq::poll(items, 1, poll_timeout);
                 if (items[0].revents & ZMQ_POLLIN)
                 {
                     return resv_task(client_socket);
@@ -74,7 +74,7 @@ public:
             while ( task_data.wait_next() )
             {
                 {
-                    zmq::poll(items, 1, 10);
+                    zmq::poll(items, 1, poll_timeout);
                     if (items[0].revents & ZMQ_POLLIN)
                     {
                         resv_task(client_socket);
@@ -104,7 +104,7 @@ public:
 
             while ( task_data.wait_next() )
             {
-                zmq::poll(items, 1, 10);
+                zmq::poll(items, 1, poll_timeout);
                 if (items[0].revents & ZMQ_POLLIN)
                 {
                     resv_task(client_socket);
@@ -148,6 +148,7 @@ protected:
 
 private:
 
+    const std::chrono::milliseconds poll_timeout = std::chrono::milliseconds{10};
     T& task_data;
     zmq::context_t ctx;
     zmq::socket_t client_socket;

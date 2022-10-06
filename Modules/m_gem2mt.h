@@ -19,54 +19,17 @@
 #ifndef _m_gem2mt_h_
 #define _m_gem2mt_h_
 
-
-#ifndef NOPARTICLEARRAY
 #include "particlearray.h"
-#endif
 
 namespace  io_formats {
 class TRWArrays;
 }
 
-#ifndef IPMGEMPLUGIN
+
 #include "m_param.h"
 #include "nodearray_gui.h"
 #include "v_ipnc.h"
 #include "graph_window.h"
-#else
-// internal
-enum grr_constants { // std::string len for graph
-    MAXAXISNAME = 9,
-    MAXGSNAME = 70,
-    MAXGRNAME = 16
-};
-
-const unsigned int  MAXFORMULA =     81,
-                    V_SD_RKLEN = 32,
-                    V_SD_VALEN = 24;
-const int  MAXIDNAME = 12;
-const   int MAXFORMUNITDT=     40;
-
-enum pe_valind { /* index control */
-    START_, STOP_, STEP_
-};
-
-typedef enum {
-
-    GS_INDEF   = '0',
-    GS_GOING    = '1',
-    GS_DONE    = '2',
-    GS_ERR     = '3',
-
-    AS_INDEF   = '0',
-    AS_READY   = '1',
-    AS_RUN     = '2',
-    AS_DONE    = '3'
-
-
-} GS_AS_CLASSES;
-
-#endif
 
 const long int MT_RKLEN = 80,
                SIZE_HYDP = 7;
@@ -351,19 +314,15 @@ GEM2MT;
 
 // Current GEM2MT
 class TGEM2MT
-#ifndef IPMGEMPLUGIN
         : public TCModule
-#endif
 {
     GEM2MT mt[1];
 
-#ifndef IPMGEMPLUGIN
     IPNCalc rpn[2];      // IPN
     jsonui::GraphDialog *gd_gr = nullptr;
     TPlotLine* plot;
     std::string title;           // changed titler to title
     std::string error_lst_path;
-#endif
 
   std::shared_ptr<TNodeArrayGUI> na = nullptr;       // pointer to nodearray class instance
   TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
@@ -371,6 +330,12 @@ class TGEM2MT
     std::string pathVTK;
     std::string nameVTK;
     std::string prefixVTK;
+
+    void logProfilePhMol( FILE* logfile, int inode )
+    {
+        if( pa_mt )
+            pa_mt->logProfilePhMol( logfile, inode );
+    }
 
 protected:
 
@@ -469,19 +434,15 @@ public:
  
     explicit TGEM2MT( uint nrt );
 
-#ifndef IPMGEMPLUGIN
     ~TGEM2MT()
     {
         delete gd_gr;
     }
-#endif
 
     const char* GetName() const
     {
         return "GEM2MT";
     }
-
-#ifndef IPMGEMPLUGIN
 
     void ods_link( int i=0);
     void dyn_set( int i=0);
@@ -509,29 +470,6 @@ public:
    void InsertChanges( std::vector<CompItem>& aIComp,
           std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
    void FreeNa();
-
-#else
-    ~TGEM2MT();
-
-    void set_def(int q);
-    void mem_kill(int q);
-    void mem_new(int q);
-
-    double Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
-        double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys );
-
-
-    // write/read gem2mt structure
-    int ReadTask( const char *gem2mt_in1, const char *vtk_dir );
-    int ReadTaskString( const std::string json_string );
-    int WriteTask( const char *unsp_in1 );
-
-    int MassTransInit( const char *lst_f_name, const char *dbr_lst_f_name );
-    int MassTransStringInit(const std::string& dch_json, const std::string& ipm_json,
-                            const std::vector<std::string>& dbr_json);
-    void RecCalc();
-
-#endif
 
     // for separate
     void checkAlws(io_formats::TRWArrays&  prar1, io_formats::TRWArrays&  prar) const;

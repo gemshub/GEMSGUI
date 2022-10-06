@@ -1,8 +1,4 @@
-# Recursively collect all header files from the current directory
-file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.hpp *.h)
 
-# Recursively collect all source files from the current directory
-file(GLOB_RECURSE SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 # Set some necessary definitions
 add_definitions(-DNODEARRAYLEVEL)
@@ -15,8 +11,13 @@ add_definitions(-DNO_JSONIO)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# Recursively collect all header files from the current directory
+file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.hpp *.h)
+
+# Recursively collect all source files from the current directory
+file(GLOB_RECURSE SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 # Enable automatic creation of a module definition (.def) file for a SHARED library on Windows.
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
@@ -25,7 +26,7 @@ file(GLOB QRC_FILES *.qrc)
 set(RESOURCE ${QRC_FILES})
 if(Qt6_FOUND)
   qt6_add_resources(GEMSGUI_SRCS ${RESOURCE})
-elseif()
+else()
   qt5_add_resources(GEMSGUI_SRCS ${RESOURCE})
 endif()
 
@@ -34,7 +35,7 @@ add_library( GEMSGUI_OBJECT OBJECT ${HEADER_FILES} ${SOURCE_FILES} ${GEMSGUI_SRC
 
 # Check if a shared library is to be built
 if(BUILD_SHARED_LIBS)
-    add_library(GEMSGUI_SHARED SHARED $<TARGET_OBJECTS:GEMSGUI_OBJECT>)
+   add_library(GEMSGUI_SHARED SHARED $<TARGET_OBJECTS:GEMSGUI_OBJECT>)
 #if( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     target_link_libraries(GEMSGUI_SHARED zmq GEMS3K )
 #endif()

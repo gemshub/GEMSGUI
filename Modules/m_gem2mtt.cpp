@@ -18,17 +18,14 @@
 //
 
 #include <fstream>
-#ifdef useOMP
-#include <omp.h>
-#endif
-
 #include "m_gem2mt.h"
 #include "GEMS3K/v_service.h"
-#ifndef IPMGEMPLUGIN
+
 #include "visor.h"
 #include "stepwise.h"
-#else
-#include "GEMS3K/nodearray.h"
+
+#ifdef useOMP
+#include <omp.h>
 #endif
 
 // ===========================================================
@@ -77,9 +74,6 @@ void  TGEM2MT::putHydP( DATABRPTR* C0 )
 #endif
     }
 }
-
-#ifndef IPMGEMPLUGIN
-
 
 //-------------------------------------------------------------------
 // NewNodeArray()  makes work DATACH structure
@@ -174,8 +168,6 @@ void  TGEM2MT::NewNodeArray()
                           GEMS3KGenerator::default_type_f, false, false, false, false );
     */
 }
-
-#endif
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // This function (for 1D-case only) analyses the node array
@@ -714,219 +706,200 @@ double TMyTransport::OneTimeStepRun_CN( long int *ICndx, long int nICndx )
 // returns true, if cancelled/interrupted by the user; false if finished Ok
 bool TGEM2MT::Trans1D( char mode )
 {
-  bool iRet = false;
-  bool CompMode = false;   // Component transport mode: true: DC; false: IC
-  long int nStart = 0, nEnd = mtp->nC;
-  // long int NodesSetToAIA;
-// std::string Vmessage;
+    bool iRet = false;
+    bool CompMode = false;   // Component transport mode: true: DC; false: IC
+    long int nStart = 0, nEnd = mtp->nC;
+    // long int NodesSetToAIA;
+    // std::string Vmessage;
 
-FILE* logfile = nullptr;
-FILE* ph_file = nullptr;
-FILE* diffile = nullptr;
+    FILE* logfile = nullptr;
+    FILE* ph_file = nullptr;
+    FILE* diffile = nullptr;
 
-#ifndef IPMGEMPLUGIN
-   showMss = 0L;
-#endif
+    showMss = 0L;
 
-if( mtp->PvDDc == S_ON && mtp->PvDIc == S_OFF )  // Set of DC transport using record switches
-	CompMode = true; 
-if( mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON )  // Set of IC transport using record switches
-	CompMode = false; 
+    if( mtp->PvDDc == S_ON && mtp->PvDIc == S_OFF )  // Set of DC transport using record switches
+        CompMode = true;
+    if( mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON )  // Set of IC transport using record switches
+        CompMode = false;
 
-if( mtp->PsMO != S_OFF )
-{
-    std::string fname;
-#ifndef IPMGEMPLUGIN
-    fname = pVisor->userGEMDir();
-#endif
-    // Preparations: opening output files for monitoring 1D profiles
-logfile = fopen( ( fname + "ICaq-log.dat").c_str(), "w+" );    // Total dissolved element molarities
-if( !logfile)
-  return iRet;
-ph_file = fopen( ( fname + "Ph-log.dat" ).c_str(), "w+" );   // Mole amounts of phases
-if( !ph_file)
-  return iRet;
-diffile = fopen( ( fname + "ICdif-log.dat").c_str(), "w+" );   //  Element amount diffs for t and t-1
-if( !diffile)
-  return iRet;
-}
+    if( mtp->PsMO != S_OFF )
+    {
+        std::string fname;
+        fname = pVisor->userGEMDir();
 
-// time scales testing
+        // Preparations: opening output files for monitoring 1D profiles
+        logfile = fopen( ( fname + "ICaq-log.dat").c_str(), "w+" );    // Total dissolved element molarities
+        if( !logfile)
+            return iRet;
+        ph_file = fopen( ( fname + "Ph-log.dat" ).c_str(), "w+" );   // Mole amounts of phases
+        if( !ph_file)
+            return iRet;
+        diffile = fopen( ( fname + "ICdif-log.dat").c_str(), "w+" );   //  Element amount diffs for t and t-1
+        if( !diffile)
+            return iRet;
+    }
+
+    // time scales testing
 #ifdef useOMP
-double  t0 = omp_get_wtime();
+    double  t0 = omp_get_wtime();
 #else
-clock_t t_start, t_end;
-t_start = clock();
+    clock_t t_start, t_end;
+    t_start = clock();
 #endif
-double otime = 0.;
-mtp->TimeGEM = 0.0;
+    double otime = 0.;
+    mtp->TimeGEM = 0.0;
 
-   if( mtp->iStat!= AS_RUN  )
-   {  switch( mtp->PsMode )
-     {
-       case RMT_MODE_A:   // A: 1D advection (numerical) coupled FMT finite-differences model
-                         MassTransAdvecStart();
-                           nStart = 1; nEnd = mtp->nC-1;
-                 break;
-       case RMT_MODE_C:   // C: 1D advection (numerical) coupled FMT Crank-Nicolson scheme model
-                         MassTransCraNicStart();
-                           nStart = 1; nEnd = mtp->nC-1;
-                 break;
-       case RMT_MODE_W:   // W: random-walk advection-diffusion coupled FMT scoping model
-                         MassTransParticleStart();
-                 break;
-       case RMT_MODE_F:   // F Flow-throught model ( with reactors MGP fluxes )
-                         BoxFluxTransportStart();
-                break;
-      default: // more mass transport models here
-               break;
-     }
-//
-       // Calculation of chemical equilibria in all nodes at the beginning
-       // with the LPP AIA
-       if( mtp->PsSIA != S_ON )
-           CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
-       else
-           CalcIPM( NEED_GEM_SIA,nStart, nEnd, diffile );
-       ///       CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
-   }
-   mtp->iStat = AS_READY;
+    if( mtp->iStat!= AS_RUN  )
+    {  switch( mtp->PsMode )
+        {
+        case RMT_MODE_A:   // A: 1D advection (numerical) coupled FMT finite-differences model
+            MassTransAdvecStart();
+            nStart = 1; nEnd = mtp->nC-1;
+            break;
+        case RMT_MODE_C:   // C: 1D advection (numerical) coupled FMT Crank-Nicolson scheme model
+            MassTransCraNicStart();
+            nStart = 1; nEnd = mtp->nC-1;
+            break;
+        case RMT_MODE_W:   // W: random-walk advection-diffusion coupled FMT scoping model
+            MassTransParticleStart();
+            break;
+        case RMT_MODE_F:   // F Flow-throught model ( with reactors MGP fluxes )
+            BoxFluxTransportStart();
+            break;
+        default: // more mass transport models here
+            break;
+        }
+        //
+        // Calculation of chemical equilibria in all nodes at the beginning
+        // with the LPP AIA
+        if( mtp->PsSIA != S_ON )
+            CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
+        else
+            CalcIPM( NEED_GEM_SIA,nStart, nEnd, diffile );
+        ///       CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
+    }
+    mtp->iStat = AS_READY;
 
-   if( mtp->PsMode == RMT_MODE_F )
-      CalcMGPdata();
+    if( mtp->PsMode == RMT_MODE_F )
+        CalcMGPdata();
 
-if( mtp->PsMO != S_OFF )
-  otime += PrintPoint( 2, diffile, logfile, ph_file );
+    if( mtp->PsMO != S_OFF )
+        otime += PrintPoint( 2, diffile, logfile, ph_file );
 
-if( mtp->PsVTK != S_OFF )
-   otime += PrintPoint( 0 );
+    if( mtp->PsVTK != S_OFF )
+        otime += PrintPoint( 0 );
 
-
-#ifndef IPMGEMPLUGIN
-
-   bool UseGraphMonitoring = false;
-   if( mtp->PsSmode == S_OFF )
-    if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
-             GetName(), "Use graphic monitoring?") )
+    bool UseGraphMonitoring = false;
+    if( mtp->PsSmode == S_OFF )
+        if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
+                                               GetName(), "Use graphic monitoring?") )
         {
             RecordPlot( nullptr );
             UseGraphMonitoring = true;
         }
-#endif
 
-//  This loop contains the mass transport iteration time step
-     do {   // time iteration step
+    //  This loop contains the mass transport iteration time step
+    do {   // time iteration step
 
-#ifndef IPMGEMPLUGIN
-      // Calculating the control script at the beginning of a new time step
-      // if( mtp->ct > 0)
-      //      CalcControlScript();   // should run over all nodes i.e. nC times
-       gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
-       Vmessage = "Simulating Reactive Transport: ";
-       Vmessage += "   time "+std::to_string(mtp->cTau)+"; step "+std::to_string(mtp->ct);
-       Vmessage += ". Please, wait (may take time)...";
+        // Calculating the control script at the beginning of a new time step
+        // if( mtp->ct > 0)
+        //      CalcControlScript();   // should run over all nodes i.e. nC times
+        gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
+        Vmessage = "Simulating Reactive Transport: ";
+        Vmessage += "   time "+std::to_string(mtp->cTau)+"; step "+std::to_string(mtp->ct);
+        Vmessage += ". Please, wait (may take time)...";
 
-       if( mtp->PsSmode != S_OFF  )
-       {
-         STEP_POINT2();
-       }
-       else
-           iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                           mtp->ct, mtp->ntM, UseGraphMonitoring );
+        if( mtp->PsSmode != S_OFF  )
+        {
+            STEP_POINT2();
+        }
+        else
+            iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
+                                    mtp->ct, mtp->ntM, UseGraphMonitoring );
+        if( iRet )
+            break;
 
-#endif
-      if( iRet )
-           break;
-
-      //  the mass transport iteration time step
-      switch( mtp->PsMode )
-      {
-          case RMT_MODE_A: MassTransAdvecStep( CompMode );
-                           break;
-          case RMT_MODE_C: MassTransCraNicStep( CompMode );
-                       break;
-          case RMT_MODE_W: MassTransParticleStep( CompMode );
-                           break;
-          case RMT_MODE_F: FlowThroughBoxFluxStep();
-                           break;
-//          case RMT_MODE_D:
-          default: // more mass transport models here
-                  break;
-      }
+        //  the mass transport iteration time step
+        switch( mtp->PsMode )
+        {
+        case RMT_MODE_A: MassTransAdvecStep( CompMode );
+            break;
+        case RMT_MODE_C: MassTransCraNicStep( CompMode );
+            break;
+        case RMT_MODE_W: MassTransParticleStep( CompMode );
+            break;
+        case RMT_MODE_F: FlowThroughBoxFluxStep();
+            break;
+            //          case RMT_MODE_D:
+        default: // more mass transport models here
+            break;
+        }
 
         // The analysis of GEM IA modes in nodes - optional
-//        NodesSetToAIA = CheckPIAinNodes1D( mode, nStart, nEnd );
-         
+        //        NodesSetToAIA = CheckPIAinNodes1D( mode, nStart, nEnd );
+
         //   Here we call a loop on GEM calculations over nodes
         //   parallelization should affect this loop only
         CalcIPM( mode, nStart, nEnd, diffile );
 
-if( mtp->PsMO != S_OFF )
-  otime += PrintPoint( 3, diffile, logfile, ph_file );
+        if( mtp->PsMO != S_OFF )
+            otime += PrintPoint( 3, diffile, logfile, ph_file );
 
-          // Here one has to compare old and new equilibrium phase assemblage
-          // and pH/pe in all nodes and decide if the time step was Ok or it
-          // should be decreased. If so then the nodes from C0 should be
-          // copied to C1 (to be implemented)
+        // Here one has to compare old and new equilibrium phase assemblage
+        // and pH/pe in all nodes and decide if the time step was Ok or it
+        // should be decreased. If so then the nodes from C0 should be
+        // copied to C1 (to be implemented)
 
-#ifndef IPMGEMPLUGIN
-          // time step accepted - Copying nodes from C1 to C0 row
-          pVisor->Update();
-          CalcGraph();
-#endif
-          // copy node array T1 into node array T0
-          copyNodeArrays();
+        // time step accepted - Copying nodes from C1 to C0 row
+        pVisor->Update();
+        CalcGraph();
 
-          if( mtp->PsMode == RMT_MODE_W ) // copy particle array ?
+        // copy node array T1 into node array T0
+        copyNodeArrays();
+
+        if( mtp->PsMode == RMT_MODE_W ) // copy particle array ?
             pa_mt->CopyfromT1toT0();
 
-#ifndef IPMGEMPLUGIN
-      // Calculating the control script at the end of a new time step
-       if( mtp->ct > 0)
+        // Calculating the control script at the end of a new time step
+        if( mtp->ct > 0)
             CalcControlScript();   // should run over all nodes i.e. nC times
-       gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
-#endif
+        gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
 
-          if( mtp->PsMode == RMT_MODE_F ) // in F mode
-             CalcMGPdata(); // Recalculation of MGP compositions and masses
+        if( mtp->PsMode == RMT_MODE_F ) // in F mode
+            CalcMGPdata(); // Recalculation of MGP compositions and masses
 
-if( mtp->PsMO != S_OFF )
-   otime += PrintPoint( 4, diffile, logfile, ph_file );
+        if( mtp->PsMO != S_OFF )
+            otime += PrintPoint( 4, diffile, logfile, ph_file );
 
-if( mtp->PsVTK != S_OFF )
-   otime += PrintPoint( 0 );
+        if( mtp->PsVTK != S_OFF )
+            otime += PrintPoint( 0 );
 
- } while ( mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM );
+    } while ( mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM );
 
 
 #ifdef useOMP
-double  t1 = omp_get_wtime();
-double dtime = ( t1- t0 );
+    double  t1 = omp_get_wtime();
+    double dtime = ( t1- t0 );
 #else
-double clc_sec = CLOCKS_PER_SEC;
-t_end = clock();
-double dtime = ( t_end- t_start )/clc_sec;
+    double clc_sec = CLOCKS_PER_SEC;
+    t_end = clock();
+    double dtime = ( t_end- t_start )/clc_sec;
 #endif
 
 
-if( mtp->PsMO != S_OFF )
-{
-fprintf( diffile,
-  "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s;  Pure GEM run time %lg s\n",
-    (dtime-otime),  otime, dtime, mtp->TimeGEM );
-fclose( logfile );
-fclose( ph_file );
-fclose( diffile );
-}
+    if( mtp->PsMO != S_OFF )
+    {
+        fprintf( diffile,
+                 "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s;  Pure GEM run time %lg s\n",
+                 (dtime-otime),  otime, dtime, mtp->TimeGEM );
+        fclose( logfile );
+        fclose( ph_file );
+        fclose( diffile );
+    }
 
-#ifndef IPMGEMPLUGIN
-
-   pVisor->CloseMessage();
-
-
-#endif
-
-  return iRet;
+    pVisor->CloseMessage();
+    return iRet;
 }
 
 
@@ -960,7 +933,8 @@ double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE*
    {
      na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, 1 );
      na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, 1 );
-     na->logProfilePhMol( ph_file, pa_mt, mtp->ct, mtp->cTau, mtp->nC, 1 );
+     na->logProfilePhMol( ph_file, std::bind(&TGEM2MT::logProfilePhMol, this,std::placeholders::_1, std::placeholders::_2),
+                          mtp->ct, mtp->cTau, mtp->nC, 1 );
    }
 
    if( nPoint == 3 )
@@ -971,7 +945,8 @@ double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE*
    if( nPoint == 4 )
    {
        na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, evrt );
-       na->logProfilePhMol( ph_file, pa_mt, mtp->ct, mtp->cTau, mtp->nC, evrt );
+       na->logProfilePhMol( ph_file, std::bind(&TGEM2MT::logProfilePhMol, this,std::placeholders::_1, std::placeholders::_2),
+                            mtp->ct, mtp->cTau, mtp->nC, evrt );
    }
 
    // write to VTK

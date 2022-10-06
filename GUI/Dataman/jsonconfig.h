@@ -48,6 +48,7 @@ protected:
 #else
 
 #include <QJsonObject>
+#include <optional>
 
 class JsonConfigSection
 {

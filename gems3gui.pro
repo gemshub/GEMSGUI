@@ -2,17 +2,16 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.7.1
+#VERSION         = 3.9.2
 
 DEFINES         += NODEARRAYLEVEL
-#DEFINES += NOPARTICLEARRAY
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
-!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 DEFINES += USE_THERMOFUN
-DEFINES += USE_THERMO_LOG
+#DEFINES += USE_THERMO_LOG
+#!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++17
@@ -37,7 +36,7 @@ win32:RC_ICONS += Gems3.ico
   QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
 
 
-  QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
+  QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith -Warray-bounds -Wstringop-truncation \
    -Wmissing-declarations -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral -Winline
    -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
    -Wfloat-equal -pedantic -ansi #-fsignaling-nans -ffinite-math-only
@@ -102,14 +101,14 @@ LIBS += -lThermoFun -lChemicalFun
 # link lib
 #INCLUDEPATH   += "/usr/local/include/GEMS3K"
 #DEPENDPATH   += "/usr/local/include/GEMS3K"
-#LIBS += -lzmq -lGEMS3K
+LIBS += -lzmq -lGEMS3K
 #link sources
-GEMS3K_CPP     =  ../GEMS3K/GEMS3K
-GEMS3K_H     =  $$GEMS3K_CPP
-DEPENDPATH   += $$GEMS3K_H
-INCLUDEPATH   += $$GEMS3K_H
-LIBS += -lzmq
-include($$GEMS3K_CPP/gems3k.pri)
+#GEMS3K_CPP     =  ../GEMS3K/GEMS3K
+#GEMS3K_H     =  $$GEMS3K_CPP
+#DEPENDPATH   += $$GEMS3K_H
+#INCLUDEPATH   += $$GEMS3K_H
+#LIBS += -lzmq
+#include($$GEMS3K_CPP/gems3k.pri)
 #end link
 
 include($$DATAMAN_CPP/Dataman.pri)

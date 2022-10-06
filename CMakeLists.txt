@@ -26,6 +26,8 @@ include(CondaAware)
 option(BUILD_SHARED_LIBS "Build shared libraries." ON)
 option(BUILD_STATIC_LIBS "Build static libraries." ON)
 option(BUILD_APP "Build application." ON)
+option(USE_THERMOFUN "Use ThermoFun" ON)
+option(BUILD_NLOHMANNJSON "Use nlohmann json." OFF)
 option(USE_QT6 "Prefer Qt6 over Qt5 if available" OFF)
 
 # Set the default build type to Release
@@ -97,6 +99,20 @@ endif()
 
 # Find all GEMSGUI dependencies
 include(GEMSGUIFindDeps)
+
+# Set some necessary definitions
+add_definitions(-DNODEARRAYLEVEL)
+add_definitions(-DNO_JSONIO)
+
+if(USE_THERMOFUN MATCHES ON)
+  add_definitions(-DUSE_THERMOFUN)
+  add_definitions(-DUSE_THERMO_LOG)
+endif()
+
+if(BUILD_NLOHMANNJSON MATCHES ON)
+  add_definitions(-DUSE_NLOHMANNJSON)
+endif()
+
 
 
 # Build libraries
