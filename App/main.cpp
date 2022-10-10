@@ -66,7 +66,7 @@ TIntegApp::TIntegApp(int& c, char** v):
 {
     //gui_logger->info("QSqlDatabase: available drivers: {}", QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString());
     gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
-    gui_logger->set_level(spdlog::level::debug);
+    gui_logger->set_level(spdlog::level::info);
     shMemory.setKey("gems3");
     if( shMemory.attach())
     {

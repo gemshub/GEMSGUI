@@ -116,7 +116,7 @@ TVisor::TVisor(int c, char *v[]):
 #ifdef NDEBUG
     UserGEMDir = getenv("HOME");
     UserGEMDir += DEFAULT_USER_DIR;
-    gui_logger->info("UserGEMDir: {}", UserGEMDir);
+    gui_logger->debug("UserGEMDir: {}", UserGEMDir);
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
@@ -142,7 +142,7 @@ TVisor::TVisor(int c, char *v[]):
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
-    gui_logger->info("SysGEMDir {} UserGEMDir {}", SysGEMDir, UserGEMDir);
+    gui_logger->debug("SysGEMDir {} UserGEMDir {}", SysGEMDir, UserGEMDir);
 #endif // win
 
     DefDBDir = DEFAULT_DB_DIR;
@@ -201,9 +201,9 @@ TVisor::TVisor(int c, char *v[]):
 //    DefaultBuiltinTDB = "kernel";   temporary for using old Nagra-PSI (2003) dataset
 //    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
 // For debugging the directories
-    gui_logger->debug("Local    : {}", LocalDir);
-    gui_logger->debug("SysGEM   : {}", SysGEMDir);
-    gui_logger->debug("UserGEM  : {}", UserGEMDir);
+    gui_logger->info("Local    : {}", LocalDir);
+    gui_logger->info("SysGEM   : {}", SysGEMDir);
+    gui_logger->info("UserGEM  : {}", UserGEMDir);
     gui_logger->debug("UserProj : {}", UserProfDir);
     gui_logger->debug("LocalDoc : {}", LocalDocDir);
     gui_logger->debug("LocalHTML: {}", RemoteHTML);
@@ -942,7 +942,7 @@ TVisor::deleteDBDir(const char *dir)
         f = it.next();;
         if (f.isSymLink() || f.isFile())
         {
-            gui_logger->debug("Adding file: {}", f.fileName().toStdString());
+            gui_logger->trace("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
@@ -1049,7 +1049,7 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
         f = it.next();;
         if (f.isSymLink() || f.isFile())
         {
-            gui_logger->debug("Adding file: {}", f.fileName().toStdString());
+            gui_logger->trace("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'

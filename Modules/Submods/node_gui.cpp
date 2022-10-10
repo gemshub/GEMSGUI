@@ -368,9 +368,10 @@ std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
     Tai[3] = Pai[3] = 0.1;
     MakeNodeStructures( nullptr, true , Tai, Pai  );
 
+    auto system_name = string(pmm->stkey, 0, EQ_RKLEN);
     std::vector<std::string> msg_data;
     if( add_head )
-        msg_data.push_back( "system" );
+        msg_data.push_back("system");
     msg_data.push_back( datach_to_string( false, brief_mode ) );
     msg_data.push_back( gemipm_to_string( add_mui, false, brief_mode ));
     msg_data.push_back( databr_to_string( false, brief_mode ));
@@ -378,9 +379,9 @@ std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
     std::stringstream fun_json;
     write_ThermoFun_format_stream(fun_json, true);
     msg_data.push_back(fun_json.str());
-    node_logger->info("Thermo {}", fun_json.str());
+    node_logger->trace("Thermo {}", fun_json.str());
     }
-    node_logger->info("Send NodeHandle... {} {}", pCNode()->NodeHandle, GEMS3KGenerator::default_type_f);
+    node_logger->info("Send system... {} type {}", system_name, GEMS3KGenerator::default_type_f);
     return msg_data;
 }
 
