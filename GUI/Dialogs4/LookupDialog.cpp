@@ -24,6 +24,7 @@
 #include "service.h"
 #include "v_mod.h"
 #include "GEMS3K/num_methods.h"
+#include "GEMS3K/gems3k_impex.h"
 
 #define Inherited LookupDialogData
 
@@ -32,6 +33,20 @@ LookupDialog::LookupDialog(QWidget* parent):
     ui(new Ui::LookupDialogData)
 {
     ui->setupUi(this);
+    switch(GEMS3KGenerator::default_type_f)
+    {
+    case GEMS3KGenerator::f_binary:
+        ui->rbBinary->setChecked( true ); break;
+    case GEMS3KGenerator::f_json:
+        ui->rbJson->setChecked( true ); break;
+    case GEMS3KGenerator::f_thermofun:
+        ui->rbFunJson->setChecked( true ); break;
+    case GEMS3KGenerator::f_kv_thermofun:
+        ui->rbFunKeyValue->setChecked( true ); break;
+    default:
+    case GEMS3KGenerator::f_key_value:
+        ui->rbKeyVal->setChecked( true ); break;
+    }
 
     PTable = nullptr;
     TTable = nullptr;

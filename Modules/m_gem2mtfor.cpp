@@ -171,7 +171,7 @@ void TGEM2MT::set_def(int q)
 
 //    TProfil *aPa= TProfil::pm;
     memcpy( &mtp->PunE, "jjbC", 4 );
-    memcpy( &mtp->PvICi, "++-----------+S00--+--+-----", 28 );
+    memcpy( &mtp->PvICi, "++-----------+S00--f--+-----", 28 );
     strcpy( mtp->name,  "`" );
     strcpy( mtp->notes, "`" );
     //strcpy( mtp->xNames, "X" );
