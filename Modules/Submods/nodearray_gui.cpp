@@ -111,11 +111,11 @@ bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* ,
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files
 std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
-                                            char  type_b, bool brief_mode, bool with_comments,
-                                            bool putNodT1, bool addMui )
+                                         char  type_b, bool brief_mode, bool with_comments,
+                                         bool putNodT1, bool addMui )
 {
     // Get name of filenames structure
-    std::string path = std::string( rt[RT_SYSEQ]->FldKey(2), 0, rt[RT_SYSEQ]->FldLen(2));;
+    std::string path = char_array_to_string( rt[RT_SYSEQ]->FldKey(2), rt[RT_SYSEQ]->FldLen(2));;
     strip(path);
     GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
     switch( type_b)
@@ -123,6 +123,8 @@ std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
     case '-':
     case 'b': type_f = GEMS3KGenerator::f_binary; break;
     case 'j': type_f = GEMS3KGenerator::f_json; break;
+    case 'f': type_f = GEMS3KGenerator::f_thermofun; break;
+    case 'o': type_f = GEMS3KGenerator::f_kv_thermofun; break;
     }
 
     if( type_f==GEMS3KGenerator::f_binary )
