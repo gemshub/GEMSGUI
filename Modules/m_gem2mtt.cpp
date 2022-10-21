@@ -817,6 +817,7 @@ bool TGEM2MT::Trans1D( char mode )
         else
             iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                                     mtp->ct, mtp->ntM, UseGraphMonitoring );
+
         if( iRet )
             break;
 
