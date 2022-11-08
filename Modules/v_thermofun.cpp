@@ -344,6 +344,7 @@ QJsonArray TDComp::all_to_thermofun()
         // special case for water solvent
         if ( dcp->PdcC == 'W')
             method = thf_convert_dcomp_TPMethods0('J');
+        auto method0 = method;
         if( !method.empty() )
         {
             if( method.contains("0")  && dcp->Cp && dcp->TCint ) // cp_ft_equation
@@ -401,7 +402,10 @@ QJsonArray TDComp::all_to_thermofun()
         }
 
         method = thf_convert_dcomp_TPMethods1(dcp->pct[1]);
-        if( !method.empty() )
+        QJsonObject cpft, sintr;
+        cpft["0"] ="cp_ft_equation";
+        sintr["43"] ="standard_entropy_cp_integration";
+        if( !method.empty() && !(method0 == cpft && method == sintr)) // not writting method standard_entropy_cp_integration if cp_ft_equation is already present
         {
             QJsonObject oTPMethods1;
             oTPMethods1["method"] = method;
