@@ -333,7 +333,7 @@ void TReacDC::Recalc( int q, const char *key  )
     switch( rc[q].pstate[0] )
     { /* check phase state */
     case CP_SOLID:
-    case CP_EXION:
+//    case CP_EXION:  // fixed 04.11.2022 by DK (Csor2dif project)
     case CP_GAS:
     case CP_FLUID:
     case CP_UNIV:
@@ -355,6 +355,9 @@ void TReacDC::Recalc( int q, const char *key  )
     case CP_MELT: // need charge
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
+    case CP_EXION:
+    // default: // Species that may or may not have charge  // fixed 04.11.2022 by DK (Csor2dif project)
+        goto NEXT;
     }
     Error( GetName(), "W26RErun: Please, check stoichiometry, valences or charge in the formula (depending on DC phase class)");
 NEXT:

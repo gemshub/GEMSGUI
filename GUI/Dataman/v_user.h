@@ -82,7 +82,6 @@ inline bool IsSpace(char ch)
 
 void StripLine(string& line);
 void KeyToName(std::string& line);
-TCStringArray split(const string& str, const string& delimiters);
 
 // Added by SD on 22/12/2001
 // Change string on templates

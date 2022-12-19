@@ -21,7 +21,7 @@
 #define __page_s_h
 
 #include "v_object.h"
-#include "jsonconfig.h"
+#include "GEMS3K/jsonconfig.h"
 
 class TCPage;
 class TField;

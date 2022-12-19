@@ -31,7 +31,7 @@
 #include <QJsonDocument>
 #include <cstdlib>
 
-#include "jsonconfig.h"
+#include "GEMS3K/jsonconfig.h"
 #include "service.h"
 #include "visor.h"
 #include "units.h"

@@ -25,7 +25,7 @@
 #include "v_object.h"
 #include "m_param.h"
 #include "graph.h"
-#include "jsonconfig.h"
+#include "GEMS3K/jsonconfig.h"
 
 // Workaround for ilink unresolved external errors in BCBuilderX
 #ifdef __win32_borland

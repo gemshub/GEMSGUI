@@ -23,7 +23,11 @@ include(CCache)
 include(CondaAware)
 
 # Define which types of libraries to build
-option(BUILD_SHARED_LIBS "Build shared libraries." ON)
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+  option(BUILD_SHARED_LIBS "Build shared libraries." OFF)
+else()
+  option(BUILD_SHARED_LIBS "Build shared libraries." ON)
+endif()
 option(BUILD_STATIC_LIBS "Build static libraries." ON)
 option(BUILD_APP "Build application." ON)
 option(USE_THERMOFUN "Use ThermoFun" ON)
@@ -96,6 +100,10 @@ if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     include_directories("/usr/local/include")
     link_directories("/usr/local/lib")
 endif()
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+    include_directories("c:/usr/local/include")
+    link_directories("c:/usr/local/lib")
+endif()
 
 # Find all GEMSGUI dependencies
 include(GEMSGUIFindDeps)
@@ -112,8 +120,6 @@ endif()
 if(BUILD_NLOHMANNJSON MATCHES ON)
   add_definitions(-DUSE_NLOHMANNJSON)
 endif()
-
-
 
 # Build libraries
 add_subdirectory(Modules)

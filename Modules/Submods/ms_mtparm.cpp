@@ -341,7 +341,7 @@ double TMTparm::wat_dielectric(double cT, double cP)
 void TMTparm::LoadMtparm( double cT, double cP )
 {
     int j, jf;
-    double P_old, TC, TK, P, test_eps;
+    double P_old, TC, TK, P;//, test_eps;
     time_t tim;
     TDComp* aDC=dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
     aDC->ods_link(0);

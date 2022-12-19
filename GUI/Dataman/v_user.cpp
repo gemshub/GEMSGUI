@@ -340,32 +340,6 @@ void
     }
 }
 
-// "a;b;c" to array { "a", "b", "c" }
-TCStringArray split(const string& str, const string& delimiters)
-{
-    TCStringArray v;
-    string vv;
-
-    if( str.empty() )
-        return v;
-
-    string::size_type start = 0;
-    auto pos = str.find_first_of(delimiters.c_str(), start);
-    while(pos != string::npos)
-    {
-        vv = string(str, start, pos - start);
-        strip( vv );
-        v.push_back( vv );
-        start = pos + 1;
-        pos = str.find_first_of(delimiters.c_str(), start);
-    }
-
-    vv = string (str, start, str.length() - start);
-    strip( vv );
-    if( !vv.empty() )
-        v.push_back( vv );
-    return v;
-}
 
 //--------------------- End of v_user.cpp ---------------------------
 

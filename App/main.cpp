@@ -40,6 +40,7 @@
 #endif
 #include "visor.h"
 #include "GemsMainWindow.h"
+#include "GEMS3K/jsonconfig.h"
 
 class TIntegApp:  public QApplication
 {
@@ -64,12 +65,14 @@ TIntegApp::TIntegApp(int& c, char** v):
       argc(c),
       argv(v)
 {
-    //gui_logger->info("QSqlDatabase: available drivers: {}", QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString());
-
+    GemsSettings::settings_file_name = "gemsgui-config.json";
+    gemsSettings();
     // spdlog levels :  trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6
-    gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
-    gui_logger->set_level(spdlog::level::info);
-    shMemory.setKey("gems3");
+    //gemsSettings().gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
+    //gui_logger->set_level(spdlog::level::info);
+    //gui_logger->info("QSqlDatabase: available drivers: {}", QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString());
+ 
+   shMemory.setKey("gems3");
     if( shMemory.attach())
     {
         _isRunning = true;

@@ -17,7 +17,8 @@
 
 
 #include <QtCore>
-#if QT_VERSION >= 0x050000
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+#include <QtHelp/QHelpLink>
 #include <QtWidgets>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrinter>
@@ -26,11 +27,7 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #endif
-
 #include <QtHelp/QHelpEngine>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-#include <QtHelp/QHelpLink>
-#endif
 #include <QtHelp/QHelpContentWidget>
 #include <QtHelp/QHelpIndexWidget>
 #include <QFileInfo>
