@@ -2,7 +2,7 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.9.2
+#VERSION         = 3.9.6
 
 DEFINES         += NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM
@@ -31,13 +31,19 @@ greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
 #RESOURCES += img.qrc
 win32:RC_ICONS += Gems3.ico
 
+
+win32 {
+  INCLUDEPATH   += "C:\usr\local\include"
+  DEPENDPATH   += "C:\usr\local\include"
+  LIBPATH += "C:\usr\local\lib"
+}
+
 !win32 {
   DEFINES += __unix
   QMAKE_CFLAGS += pedantic -Wall -Wextra -Wwrite-strings -Werror
 
-
-  QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith -Warray-bounds -Wstringop-truncation \
-   -Wmissing-declarations -Wundef \ #-Weffc++ -Wshadow -Wformat-nonliteral -Winline
+  QMAKE_CXXFLAGS += -Wall -Wextra -Wcast-align -Wpointer-arith \
+   -Wmissing-declarations \ #-Wundef -Weffc++ -Wshadow -Wformat-nonliteral -Winline
    -Wcast-qual -Wwrite-strings -Wno-unused-parameter \
    -Wfloat-equal -pedantic -ansi #-fsignaling-nans -ffinite-math-only
 
@@ -84,9 +90,13 @@ INCLUDEPATH   += $$MODULES_H
 INCLUDEPATH   += $$SUBMODS_H   
 INCLUDEPATH   += $$NUMERICS_H 
 
-GEMSREAKTORO_H  =  ./include
-DEPENDPATH   += $$GEMSREAKTORO_H
-INCLUDEPATH  += $$GEMSREAKTORO_H
+contains(DEFINES, USE_THERMOFUN) {
+
+  TFUN_CFUN_H  =  /usr/local/include
+  INCLUDEPATH  += $$TFUN_CFUN_H
+!win32:LIBS += -L/usr/local/lib -lThermoFun -lChemicalFun
+win32:LIBS += -LC:\usr\local\bin -lThermoFun -lChemicalFun
+} ## end USE_THERMOFUN
 
 MOC_DIR = tmp
 UI_DIR  = $$MOC_DIR
@@ -94,9 +104,6 @@ UI_SOURSEDIR  = $$MOC_DIR
 UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
-contains(DEFINES, USE_THERMOFUN) {
-LIBS += -lThermoFun -lChemicalFun
-} ## end USE_THERMOFUN
 
 # link lib
 #INCLUDEPATH   += "/usr/local/include/GEMS3K"

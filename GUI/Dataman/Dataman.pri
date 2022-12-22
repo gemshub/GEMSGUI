@@ -7,8 +7,8 @@
                     $$DATAMAN_H/v_dbm.h \
                     $$DATAMAN_H/t_print.h \
                     $$DATAMAN_H/t_read.h \
-                    $$DATAMAN_H/v_module.h \
-                    $$DATAMAN_H/jsonconfig.h
+                    $$DATAMAN_H/v_module.h
+
 
          SOURCES += $$DATAMAN_CPP/v_user.cpp \
                     $$DATAMAN_CPP/v_vals.cpp \
@@ -18,7 +18,7 @@
                     $$DATAMAN_CPP/v_dbm2.cpp \
                     $$DATAMAN_CPP/t_print.cpp \
                     $$DATAMAN_CPP/t_read.cpp \
-                    $$DATAMAN_CPP/v_module.cpp\
-                    $$DATAMAN_CPP/jsonconfig.cpp
+                    $$DATAMAN_CPP/v_module.cpp
+
 
 

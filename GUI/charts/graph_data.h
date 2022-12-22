@@ -258,7 +258,6 @@ public:
         {
             if( nLines >= defined_lines )
                 linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(jj)  ) );
-            // linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(nLinN)  ) );
         }
         connect( modelsdata.back().get(), SIGNAL( changedXSelections() ),
                  this,  SLOT( updateXSelections() ) );

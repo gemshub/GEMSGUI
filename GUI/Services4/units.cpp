@@ -18,7 +18,7 @@
 
 #include "v_user.h"
 #include "units.h"
-#include "jsonconfig.h"
+#include "GEMS3K/jsonconfig.h"
 
 
 //=============================================

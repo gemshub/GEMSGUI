@@ -140,7 +140,10 @@ public:
 
     int getYColumn( size_t line ) const
     {
-        return ycolumns[line];
+        if( line < ycolumns.size() )
+           return ycolumns[line];
+        else
+           return 0;
     }
 
     void setXColumns( const std::vector<int>& axcolumns )
