@@ -646,8 +646,8 @@ NEXT:
                  "Calculate standard values of Cp, Vm, (Alpha, Beta)?" ))
         goto RESULT;
     // load TPWORK to calc Cp Vm
-    aW.ods_link( 0 );
-    memset( aW.twp, 0, sizeof( TPWORK ));
+    aW.ods_link(0);
+    aW.set_zero(0);
     aW.twp->P = dcp->Pst;
     aW.twp->TC = dcp->TCst;
     aW.twp->Pst = dcp->Pst;

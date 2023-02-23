@@ -1365,7 +1365,8 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
     on_sat_curve = aSpc.on_sat_curve;
     //
 
-    memset( &aSpc, '\0', sizeof(SPECS));
+    //memset( &aSpc, '\0', sizeof(SPECS));
+    aSpc = SPECS{};
     // in SUPCRT92 set type calculation of parametres
     // 01.06.2016
     aSpc.CV = CV;

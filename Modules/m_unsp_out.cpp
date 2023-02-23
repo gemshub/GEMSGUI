@@ -496,7 +496,7 @@ void TUnSpace::to_text_file( fstream& ff1, bool with_comments )
     bool _comment = with_comments;
 
     io_formats::KeyValueWrite out_format( ff1 );
-    io_formats::TPrintArrays<io_formats::KeyValueWrite>  prar( 0, nullptr, out_format);
+    io_formats::TPrintArrays<io_formats::KeyValueWrite>  prar( 0, {}, out_format);
 
     if( _comment )
     {
@@ -765,7 +765,7 @@ void TUnSpace::result_to_text_file( fstream& ff1, bool with_comments )
     bool _comment = with_comments;
 
     io_formats::KeyValueWrite out_format( ff1 );
-    io_formats::TPrintArrays<io_formats::KeyValueWrite>  prar( 0, nullptr, out_format);
+    io_formats::TPrintArrays<io_formats::KeyValueWrite>  prar( 0, {}, out_format);
 
 
     if( _comment )

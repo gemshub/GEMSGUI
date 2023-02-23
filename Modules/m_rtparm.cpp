@@ -612,9 +612,9 @@ TRTParm::RecCalc( const char *key )
            "Sampling the xT, xP, yF data. "
                  "Please, wait...", j, rpp->NV );
         // rpp->RT[j] = R_CONSTANT * ( rpp->T[j] + C_to_K );
-         aW.ods_link( 0 );
+        aW.ods_link(0);
         /* clear new work structure */
-        aW.set_zero( 0 );
+        aW.set_zero(0);
         switch( rpp->Ppun)
         {
         case 'b':

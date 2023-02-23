@@ -10,7 +10,7 @@ DEFINES  += NO_JSONIO
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
 DEFINES += USE_THERMOFUN
-#DEFINES += USE_THERMO_LOG
+DEFINES += USE_THERMO_LOG
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check
