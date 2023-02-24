@@ -83,7 +83,7 @@ bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
     titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
     int rest = (QMessageBox::question(par,
-                                  #ifdef __unix
+                                  #ifndef _WIN32
                                   #ifdef __APPLE__
                                       "Title", titl.append(spac+=messag),
                                   #else

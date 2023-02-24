@@ -17,9 +17,9 @@
 
 
 #include <QtCore>
+#include <QtWidgets>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 #include <QtHelp/QHelpLink>
-#include <QtWidgets>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrinter>
 #else
@@ -37,8 +37,6 @@
 #include <QtHelp/QHelpSearchResultWidget>
 
 #include "ui_HelpWindow4.h"
-//#include "ui_AboutDialog4.h"
-//#include "ui_HowToStartDialog4.h"
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "visor.h"

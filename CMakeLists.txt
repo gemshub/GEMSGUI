@@ -61,17 +61,17 @@ endif()
 
 # Set the list of compiler flags for GNU compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
-    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds)
+    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds -Wno-stringop-overflow)
 endif()
 
 # Set the list of compiler flags for Clang compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds)
+    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds -Wno-stringop-overflow)
 endif()
 
 # Set the list of compiler flags for Intel compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
-    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds)
+    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds -Wno-stringop-overflow)
 endif()
 
 # Set the list of compiler flags for MSVC compiler
