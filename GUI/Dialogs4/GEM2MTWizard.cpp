@@ -330,7 +330,7 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
     switch( flgs[30] )
     {
     case '3': ui->moveGas->setChecked( true );
-        //[[fallthrough]];
+        [[fallthrough]];
     case '1': ui->moveAq->setChecked( true );
         break;
     case '2': ui->moveGas->setChecked( true );

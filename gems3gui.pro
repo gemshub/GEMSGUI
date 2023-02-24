@@ -16,21 +16,14 @@ DEFINES += USE_THERMO_LOG
 CONFIG+=sdk_no_version_check
 CONFIG += c++17
 CONFIG += warn_on
-#CONFIG += warn_off
-#CONFIG += help
 CONFIG += thread
 QT += network
-QT += sql
-QT += xml
-QT += svg
+QT += sql xml svg
 QT += charts
-#Qt += printsupport
-lessThan( QT_MAJOR_VERSION, 5 ): CONFIG += help
-greaterThan( QT_MAJOR_VERSION, 4 ): QT += widgets printsupport help concurrent
+QT += widgets printsupport help concurrent
 
 #RESOURCES += img.qrc
 win32:RC_ICONS += Gems3.ico
-
 
 win32 {
   INCLUDEPATH   += "C:\usr\local\include"

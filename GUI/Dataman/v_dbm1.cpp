@@ -620,8 +620,8 @@ TDBKey::SetFldKey( uint i, const char *key )
 {
     ErrorIf( i>= rkFlds, key, "Invalid key field number");
 
-    memset( uKey+rkInd[i], ' ' , rkLen[i] );
-    strncpy( uKey+rkInd[i], key, min<int>(rkLen[i], strlen(key) ) );
+    memset(uKey+rkInd[i], ' ' , rkLen[i]);
+    strncpy(uKey+rkInd[i], key, rkLen[i]);
 }
 
 /*
@@ -823,7 +823,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
             break;
         case K_IMM:  // field in string
             imf = va_arg( Marker, char * );
-            strncat( pkey, imf, min( strlen(imf), static_cast<size_t>(rkflen) ));
+            strncat(pkey, imf, rkflen);
             break;
         case K_ACT:  // get field from  PRIE request
             rts = nRTwrk;

@@ -1,13 +1,3 @@
-
-
-# Set some necessary definitions
-add_definitions(-DNODEARRAYLEVEL)
-add_definitions(-DNO_JSONIO)
-
-# The name of the shared and static libraries
-#set(GEMSGUI_SHARED_LIB ${PROJECT_NAME}${SUFFIX_SHARED_LIBS})
-#set(GEMSGUI_STATIC_LIB ${PROJECT_NAME}${SUFFIX_STATIC_LIBS})
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -36,18 +26,17 @@ add_library( GEMSGUI_OBJECT OBJECT ${HEADER_FILES} ${SOURCE_FILES} ${GEMSGUI_SRC
 # Check if a shared library is to be built
 if(BUILD_SHARED_LIBS)
    add_library(GEMSGUI_SHARED SHARED $<TARGET_OBJECTS:GEMSGUI_OBJECT>)
-#if( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-    target_link_libraries(GEMSGUI_SHARED zmq GEMS3K )
-#endif()
-    set_target_properties(GEMSGUI_SHARED PROPERTIES OUTPUT_NAME GEMSGUI )
-    install(TARGETS GEMSGUI_SHARED 
-    EXPORT GEMSGUIKTargets DESTINATION "lib" COMPONENT libraries)
+   target_link_libraries(GEMSGUI_SHARED PUBLIC zmq GEMS3K::GEMS3K)
+   set_target_properties(GEMSGUI_SHARED PROPERTIES OUTPUT_NAME GEMSGUI )
+   install(TARGETS GEMSGUI_SHARED
+   EXPORT GEMSGUIKTargets DESTINATION "lib" COMPONENT libraries)
 endif()
 
 
 # Check if a static library is to be built
 if(BUILD_STATIC_LIBS)
    add_library(GEMSGUI_STATIC STATIC $<TARGET_OBJECTS:GEMSGUI_OBJECT>)
+   target_link_libraries(GEMSGUI_STATIC PUBLIC zmq GEMS3K::GEMS3K-static )
    set_target_properties(GEMSGUI_STATIC PROPERTIES OUTPUT_NAME GEMSGUI-static)
    install(TARGETS GEMSGUI_STATIC 
    EXPORT GEMSGUITargets DESTINATION "lib" COMPONENT libraries)

@@ -9,8 +9,8 @@ static QJsonObject thf_convert_dcomp_TPMethods1(char type);
 static QJsonObject thf_convert_dcomp_TPMethods2(char type);
 static QJsonObject thf_convert_dcomp_class(char type);
 static QJsonObject thf_convert_reacdc_TPMethods0(char type);
-static QJsonObject thf_convert_reacdc_TPMethods0(char type);
-static QJsonObject thf_convert_reacdc_TPMethods0(char type);
+static QJsonObject thf_convert_reacdc_TPMethods1(char type);
+static QJsonObject thf_convert_reacdc_TPMethods2(char type);
 
 std::string thf_string(const char *value, size_t size)
 {

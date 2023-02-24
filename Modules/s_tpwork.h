@@ -172,10 +172,10 @@ struct SPECS
     char PdcC;
     bool on_sat_curve;
     SPECS():
-        it(1),metastable(false), PdcC('\0'), on_sat_curve(false)
-    {
-        memset( &id, '\0', sizeof(int) * 9);
-    }
+        it(1), id(0), ip(0), ih(0), itripl(0), isat(0),
+        iopt(0), useLVS(0), epseqn(0), icrit(0), CV(0),
+        metastable(false), PdcC('\0'), on_sat_curve(false)
+    {}
 };
 
 extern struct SPECS aSpc;

@@ -541,7 +541,7 @@ void TProfil::loadSystat( const char *key )
     }
 
     pVisor->Update();
-    outMultiTxt("GEMHUB_loadSystat.txt");
+//    outMultiTxt("GEMHUB_loadSystat.txt");
 }
 
 // rebuild loading before Systat
@@ -732,38 +732,38 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
     // make directory Path (find system function)
     pVisor->makeDBDir(Path.c_str());
 
-   if( prfTemplate == nullptr )
+    if( prfTemplate == nullptr )
     { // creating empty files
-      for(size_t i=0; i<aMod.size(); i++)
-      {
-        if( aMod[i]->IsSubModule() )
-            continue;
-        rt[aMod[i]->rtNum()]->MakeInNewProfile( Path.c_str(), prfName );
-      }
-     }
+        for(size_t i=0; i<aMod.size(); i++)
+        {
+            if( aMod[i]->IsSubModule() )
+                continue;
+            rt[aMod[i]->rtNum()]->MakeInNewProfile( Path.c_str(), prfName );
+        }
+    }
     else // copy records from template project
     {
-       std::string tmpDirPath = pVisor->userProfDir();
-       tmpDirPath += prfTemplate;
+        std::string tmpDirPath = pVisor->userProfDir();
+        tmpDirPath += prfTemplate;
 
-       TCStringArray aFiles =
-          pVisor->readPDBDir(tmpDirPath.c_str(), "*" );
+        TCStringArray aFiles =
+                pVisor->readPDBDir(tmpDirPath.c_str(), "*" );
 
-       // copy files to new Prifile
-     for (uint ii = 0; ii < aFiles.size(); ii++)
-     {
-        std::string f_tmp = tmpDirPath;
-                f_tmp += "/";
-                f_tmp += aFiles[ii];
-        std::string f_new = Path;
-                f_new += "/";
-        replace( aFiles[ii], prfTemplate, prfName);
-        f_new += aFiles[ii];
+        // copy files to new Prifile
+        for (uint ii = 0; ii < aFiles.size(); ii++)
+        {
+            std::string f_tmp = tmpDirPath;
+            f_tmp += "/";
+            f_tmp += aFiles[ii];
+            std::string f_new = Path;
+            f_new += "/";
+            replace( aFiles[ii], prfTemplate, prfName);
+            f_new += aFiles[ii];
 
-       if ( !(std::string( aFiles[ii], 0, aFiles[ii].find("."))
-                        ==  db->GetKeywd()))
-          pVisor->CopyF( f_new.c_str(), f_tmp.c_str() );
-    }
+            if ( !(std::string( aFiles[ii], 0, aFiles[ii].find("."))
+                   ==  db->GetKeywd()))
+                pVisor->CopyF( f_new.c_str(), f_tmp.c_str() );
+        }
 
 /*   // copy template project
 
@@ -787,36 +787,36 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
             throw TFatalError( prfName, "Cannot copy template project");
 */
 
-    // add files to module list
-    for (size_t ii = 0; ii < aFiles.size(); ii++)
-    {
-       if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
+        // add files to module list
+        for (size_t ii = 0; ii < aFiles.size(); ii++)
         {
-            for (size_t jj = 0; jj < rt.size(); jj++)
-                if (std::string(aFiles[ii], 0, aFiles[ii].find("."))
-                        == rt[jj]->GetKeywd())
-                {
-                  std::string f_new = aFiles[ii];//.replace(
-                  //   prfTemplate, prfName);
-                  rt[jj]->MakeInNewProfile( Path.c_str(), prfName, f_new.c_str() );
-                }
+            if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
+            {
+                for (size_t jj = 0; jj < rt.size(); jj++)
+                    if (std::string(aFiles[ii], 0, aFiles[ii].find("."))
+                            == rt[jj]->GetKeywd())
+                    {
+                        std::string f_new = aFiles[ii];//.replace(
+                        //   prfTemplate, prfName);
+                        rt[jj]->MakeInNewProfile( Path.c_str(), prfName, f_new.c_str() );
+                    }
+            }
         }
     }
-  }
 }
 
 // Rename records SysEq and >
 void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
 {
     // Rename records SysEq in New Project
-       TSysEq::pm->RenameList(prfName, prfTemplate);
+    TSysEq::pm->RenameList(prfName, prfTemplate);
     // Rename records in New Project > SysEq
-      for(size_t i=RT_SYSEQ+1; i<aMod.size(); i++)
-      {
+    for(size_t i=RT_SYSEQ+1; i<aMod.size(); i++)
+    {
         if( aMod[i]->IsSubModule() )
             continue;
         rt[i]->RenameList(prfName, prfTemplate);
-      }
+    }
 }
 // Save file configuration to Project structure
 bool TProfil::GetFN( const char * prfName, bool show_dlg )
@@ -825,7 +825,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
     TCStringArray aFls;
     TCIntArray aCnt;
     if( ! vfListFiles(pVisor->window()/*window()*/, show_dlg, prfName, aFls, aCnt ))
-      return false;
+        return false;
 
     RMULTS* mup = rmults->GetMU();
     memset(mup->Nfl, 0, MAXNUMCHAINS*sizeof(short));
@@ -836,7 +836,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
         mup->NfT += mup->Nfl[i];
     }
     mup->FN = static_cast<char (*)[MAX_FILENAME_LEN]>(aObj[ o_mufn]->Alloc(
-                  aFls.size(), 1, MAX_FILENAME_LEN ));
+                                                          aFls.size(), 1, MAX_FILENAME_LEN ));
     // insert files name to FN
     for(size_t j=0; j<aFls.size(); j++)
         strncpy( mup->FN[j], aFls[j].c_str(), MAX_FILENAME_LEN);

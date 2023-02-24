@@ -83,7 +83,7 @@ bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
     titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
     int rest = (QMessageBox::question(par,
-                                  #ifndef _WIN32
+                                  #ifdef __unix
                                   #ifdef __APPLE__
                                       "Title", titl.append(spac+=messag),
                                   #else
@@ -92,8 +92,8 @@ bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
                                   #else
                                       titl, messag,
                                   #endif
-                                      "&Yes", "&No") == 0);
-    return rest;
+                                      QMessageBox::Yes | QMessageBox::No));
+    return rest==QMessageBox::Yes;
 }
 
 int vfQuestYesNoCancel(QWidget* par, const string& title, const string& mess)
@@ -102,42 +102,40 @@ int vfQuestYesNoCancel(QWidget* par, const string& title, const string& mess)
     titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
     int result = QMessageBox::question(par,
-#ifndef _WIN32
-#ifdef __APPLE__
-          "Title", titl.append(spac+=messag),
-#else
-       titl, messag,
-#endif
-#else
-       titl, messag,
-#endif
-       "&Yes", "&No", "&Cancel", 0, 2);
+                                   #ifndef _WIN32
+                                   #ifdef __APPLE__
+                                       "Title", titl.append(spac+=messag),
+                                   #else
+                                       titl, messag,
+                                   #endif
+                                   #else
+                                       titl, messag,
+                                   #endif
+                                       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                                       QMessageBox::Yes); // default button
 
     switch( result )
     {
-    case 0:
-        return VF_YES;
-    case 1:
-        return VF_NO;
-        //   case 2:
-        //     return VF_YES;
+    default:
+    case QMessageBox::Yes:      return VF_YES;
+    case QMessageBox::No:       return VF_NO;
+    case QMessageBox::Cancel:   return VF_CANCEL;
     }
-
-    return VF_CANCEL;
+    return VF_YES;
 }
 
 void vfMessage(QWidget* par, const std::string& title, const std::string& mess, WarnType type)
 {
-	  if( pThread != QThread::currentThreadId() )
-	  {
-             QMutexLocker  loker(&qmutex);
-	     // (2)	
-             pVisorImp->thdata.setDThread( title, mess );
-	       	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
-	       	        Q_ARG( int, thMessage ),  Q_ARG( QWidget*, par ) );
-	         ThreadControl::wait();
-	         return;
-	     }
+    if( pThread != QThread::currentThreadId() )
+    {
+        QMutexLocker  loker(&qmutex);
+        // (2)
+        pVisorImp->thdata.setDThread( title, mess );
+        QMetaObject::invokeMethod( pVisorImp, "theadService",
+                                   Q_ARG( int, thMessage ),  Q_ARG( QWidget*, par ) );
+        ThreadControl::wait();
+        return;
+    }
     QString titl, spac, messag;
     titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
@@ -145,98 +143,95 @@ void vfMessage(QWidget* par, const std::string& title, const std::string& mess, 
     {
     case vfWarn:
         QMessageBox::warning(par,
-#ifndef _WIN32
-#ifdef __APPLE__
-         "Title", titl.append(spac+=messag)
-#else
-          titl, messag
-#endif
-#else
-          titl, messag
-#endif
+                     #ifndef _WIN32
+                     #ifdef __APPLE__
+                             "Title", titl.append(spac+=messag)
+                     #else
+                             titl, messag
+                     #endif
+                     #else
+                             titl, messag
+                     #endif
                              );
         break;
     case vfErr:
         QMessageBox::critical(par,
-#ifndef _WIN32
-#ifdef __APPLE__
-        "Title", titl.append(spac+=messag)
-#else
-        titl, messag
-#endif
-#else
-        titl, messag
-#endif
-                             );
+                      #ifndef _WIN32
+                      #ifdef __APPLE__
+                              "Title", titl.append(spac+=messag)
+                      #else
+                              titl, messag
+                      #endif
+                      #else
+                              titl, messag
+                      #endif
+                              );
         break;
     default:
         QMessageBox::information(par,
- #ifndef _WIN32
- #ifdef __APPLE__
-         "Title", titl.append(spac+=messag)
- #else
-         titl, messag
- #endif
- #else
-         titl, messag
- #endif
-                             );
+                         #ifndef _WIN32
+                         #ifdef __APPLE__
+                                 "Title", titl.append(spac+=messag)
+                         #else
+                                 titl, messag
+                         #endif
+                         #else
+                                 titl, messag
+                         #endif
+                                 );
     }
 }
 
 static int posx=0, posy=0;
 // returns VF3_1, VF3_2 or VF3_3
 int vfQuestion3(QWidget* par, const std::string& title, const std::string& mess, const std::string& s1,
-            const std::string& s2,  const std::string& s3, bool i_mov )
+                const std::string& s2,  const std::string& s3, bool i_mov )
 {
-  if( pThread != QThread::currentThreadId() )
-  {
-     QMutexLocker  loker(&qmutex);
-     // (2)	
-     pVisorImp->thdata.setDThread( title, mess, s1, s2, s3 );
-   	 QMetaObject::invokeMethod( pVisorImp, "theadService", 
-  	        Q_ARG( int, thQuestion3 ),  Q_ARG( QWidget*, par ) );
-    ThreadControl::wait();
-    return pVisorImp->thdata.res;
-  }
-  QString titl, spac, messag;
-  titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
+    if( pThread != QThread::currentThreadId() )
+    {
+        QMutexLocker  loker(&qmutex);
+        // (2)
+        pVisorImp->thdata.setDThread( title, mess, s1, s2, s3 );
+        QMetaObject::invokeMethod( pVisorImp, "theadService",
+                                   Q_ARG( int, thQuestion3 ),  Q_ARG( QWidget*, par ) );
+        ThreadControl::wait();
+        return pVisorImp->thdata.res;
+    }
+    QString titl, spac, messag;
+    titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
 
-         QMessageBox qm(
-#ifndef _WIN32
-#ifdef __APPLE__
-         "Title", titl.append(spac+=messag),
-#else
-          titl, messag,
-#endif
-#else
-          titl, messag,
-#endif
-                    QMessageBox::Question,
-                    QMessageBox::Yes | QMessageBox::Default,
-                    (s3.empty()) ? (QMessageBox::No | QMessageBox::Escape) : QMessageBox::No,
-                    (s3.empty()) ? QMessageBox::NoButton : (QMessageBox::Cancel | QMessageBox::Escape),
-                    par);
+    QMessageBox qm( QMessageBox::Question,
+                #ifdef __unix
+                #ifdef __APPLE__
+                    "Title", titl.append(spac+=messag),
+                #else
+                    titl, messag,
+                #endif
+                #else
+                    titl, messag,
+                #endif
+                    QMessageBox::NoButton, par);
 
-    qm.setButtonText(QMessageBox::Yes, s1.c_str());
-    qm.setButtonText(QMessageBox::No, s2.c_str());
+    QAbstractButton *yesButton = qm.addButton(s1.c_str(), QMessageBox::YesRole);
+    QAbstractButton *noButton = qm.addButton(s2.c_str(), QMessageBox::NoRole);
+    QAbstractButton *cancelButton = nullptr;
     if( !s3.empty() )
-	qm.setButtonText(QMessageBox::Cancel, s3.c_str());
+        cancelButton = qm.addButton(s3.c_str(), QMessageBox::RejectRole);
     if( i_mov )
         qm.move(posx, posy);
-    int res = qm.exec();
+    qm.exec();
     if( i_mov )
     {
         posx = qm.x();
         posy = qm.y();
     }
-    switch( res )
-    {
-    case QMessageBox::Yes :
+    if (qm.clickedButton() == yesButton) {
         return VF3_1;
-    case QMessageBox::No :
+    }
+    else if (qm.clickedButton() == noButton) {
         return VF3_2;
-    case QMessageBox::Cancel :
+    }
+    else if (qm.clickedButton() == cancelButton) {
         return VF3_3;
     }
     return VF3_3;

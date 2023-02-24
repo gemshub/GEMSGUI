@@ -96,8 +96,6 @@ TVisor::TVisor(int c, char *v[]):
         // non-standard executable path, search for resources starting with current dir
         SysGEMDir = dirExe.toStdString() + "/gems3.app/Contents/Resources/";
     }
-    gui_logger->info("SysGEMDir {}", SysGEMDir);
-
     UserGEMDir = getenv("HOME");
     UserGEMDir += DEFAULT_USER_DIR; // "/Library/gems3/";
 
@@ -116,7 +114,6 @@ TVisor::TVisor(int c, char *v[]):
 #ifdef NDEBUG
     UserGEMDir = getenv("HOME");
     UserGEMDir += DEFAULT_USER_DIR;
-    gui_logger->debug("UserGEMDir: {}", UserGEMDir);
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
@@ -142,7 +139,6 @@ TVisor::TVisor(int c, char *v[]):
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
-    gui_logger->debug("SysGEMDir {} UserGEMDir {}", SysGEMDir, UserGEMDir);
 #endif // win
 
     DefDBDir = DEFAULT_DB_DIR;
@@ -200,6 +196,14 @@ TVisor::TVisor(int c, char *v[]):
     DefaultBuiltinTDB = "psi-nagra";  // PSI-Nagra TDB update TT 03.04.2013
 //    DefaultBuiltinTDB = "kernel";   temporary for using old Nagra-PSI (2003) dataset
 //    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
+
+    GemsSettings::settings_file_name = SysGEMDir+"gemsgui-config.json";
+    gemsSettings();
+    // spdlog levels :  trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6
+    //gemsSettings().gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
+    //gui_logger->set_level(spdlog::level::info);
+
+
 // For debugging the directories
     gui_logger->info("Local    : {}", LocalDir);
     gui_logger->info("SysGEM   : {}", SysGEMDir);
@@ -900,13 +904,13 @@ TCStringArray readDirs(const char *dir)
     thisDir.setFilter(QDir::Dirs);
     //    thisDir.setNameFilter("*.pdb");
 
-    QFileInfoList files = thisDir.entryInfoList(); //Qt3to4 
-    if (files.empty()) //Qt3to4
+    QFileInfoList files = thisDir.entryInfoList();
+    if (files.empty())
         return aFiles;
 
     QListIterator<QFileInfo> it(files);
     QFileInfo f;
-    while ( it.hasNext() ) //qt3to4
+    while (it.hasNext())
     {
         f = it.next();;
         if (f.isDir() && f.fileName() != "." && f.fileName() != "..")

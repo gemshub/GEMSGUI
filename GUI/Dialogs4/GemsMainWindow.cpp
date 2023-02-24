@@ -102,7 +102,7 @@ TVisorImp::TVisorImp(int c, char** v):
 
     defaultFont = QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE);
     setCellFont( defaultFont );
-    axisLabelFont.setPointSize( 14); //11
+    axisLabelFont.setPointSize(14); //11
 
     pVisor = new TVisor(argc, argv);
     pVisor->Setup();
@@ -150,7 +150,6 @@ TVisorImp::TVisorImp(int c, char** v):
 
 
     // Define internal area
-
     splH = new QSplitter(Qt::Horizontal );
     splH->setChildrenCollapsible(false);
     //spl->setMidLineWidth(-3);

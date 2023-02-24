@@ -13,7 +13,7 @@
         ],
         "module_level": {
             "chemicalfun": "trace",
-            "gems3gui": "debug",
+            "gems3gui": "info",
             "ipm": "info",
             "thermofun": "trace"
         },
