@@ -198,7 +198,7 @@ TVisor::TVisor(int c, char *v[]):
 //    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
 
     GemsSettings::settings_file_name = SysGEMDir+"gemsgui-config.json";
-    //gemsSettings();
+    gemsSettings();
     // spdlog levels :  trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6
     //gemsSettings().gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
     //gui_logger->set_level(spdlog::level::info);

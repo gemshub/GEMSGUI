@@ -7,10 +7,7 @@ dependencies:
   - make  # [win]
   - git
   - ccache  # [unix]
-  - gems3k>=4.3.1
-  - thermofun=0.4.0
-  - nlohmann_json
-  - spdlog=1.10.0
+  - gems3k>=4.3.5
   - cppzmq
   - qt>=5.12.5
   - mesalib

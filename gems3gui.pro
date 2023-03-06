@@ -2,7 +2,6 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
-#VERSION         = 3.9.6
 
 DEFINES         += NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM

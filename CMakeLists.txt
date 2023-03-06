@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.7.0 )
 
 # Set the name of the project
-project(GEMSGUI VERSION 4.0.0 LANGUAGES CXX)
+project(GEMSGUI VERSION 4.3.5 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)

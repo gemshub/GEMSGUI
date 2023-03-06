@@ -24,7 +24,7 @@ cd build
 cmake -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_LIBDIR=lib \
-    -DBUILD_APP=OFF \
+    -DBUILD_APP=ON \
     ..
 if [ $? -eq 0 ]
 then
