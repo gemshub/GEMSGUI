@@ -34,7 +34,7 @@
 
 TGEM2MT* TGEM2MT::pm;
 
-TGEM2MT::TGEM2MT( uint nrt ):
+TGEM2MT::TGEM2MT(size_t nrt):
         TCModule( nrt )
 {
     nQ = 1;
@@ -782,6 +782,8 @@ void TGEM2MT::MakeQuery()
 
     FreeNa();
     na = TNodeArrayGUI::create(1, TMulti::sm);
+    TNodeArray::na = na.get();
+
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
@@ -958,7 +960,7 @@ void TGEM2MT::AllocNa()
 
   // ??? TMulti::sm->rebuild_lookup(  mtp->Tai, mtp->Pai );
   na = TNodeArrayGUI::create(mtp->nC, TMulti::sm);
-
+  TNodeArray::na = na.get();
 
   // use particles
   if( mtp->PsMode == RMT_MODE_W  )
@@ -1231,6 +1233,7 @@ void TGEM2MT::RecordPrint( const char* key )
             }
         }
         na = TNodeArrayGUI::create(mtp->nC, TMulti::sm);
+        TNodeArray::na = na.get();
         mtp->gStat = GS_GOING;
         mt_reset();
         Bn_Calc();
@@ -1269,7 +1272,6 @@ void TGEM2MT::InsertChanges( std::vector<CompItem>& aIComp,
       p_CIb = new double[mtp->nIV*mtp->Nb];
       memcpy( p_CIb, mtp->CIb, mtp->nIV*mtp->Nb*sizeof(double));
     }
-
 
     // Before calculation better rebuild record
     // We not insert changes to xDC, xIC, xPH and set flag to sellect all records to DBR

@@ -23,7 +23,7 @@
 #include "GEMS3K/io_template.h"
 #include "m_gem2mt.h"
 
-extern io_formats::outField DataBR_fields[58];
+extern std::vector<io_formats::outField> DataBR_fields;
 
 void GEM2MTWizard::CmBack()
 {
