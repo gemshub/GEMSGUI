@@ -1272,8 +1272,8 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     aPHnoused.clear();
 
     // open selected kernel files
-    // db->OpenOnlyFromList(el_data.flNames);
-    int fnum_ = db->GetOpenFileNum( prfName );
+    //db->OpenOnlyFromList(el_data.flNames);
+    int fnum_ = db->GetOpenFileNum(prfName);
 
     // delete the equvalent keys
     TCStringArray aICkey_new;         // 30/11/2006
@@ -1295,6 +1295,9 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
         // compare keys for template project
         uint jj;
         compressible_record = false;
+        if(!memcmp(key_from_template.c_str(), aPHkey[ii].c_str(),
+                    PH_RKLEN-MAXPHGROUP ))
+            continue;
         key_from_template.clear();
         for( jj=0; jj<aPHtmp.size(); jj++ )
             if( !memcmp( aPHtmp[jj].c_str(), aPHkey[ii].c_str(),

@@ -23,7 +23,7 @@
 #include "GEMS3K/io_template.h"
 #include "m_gem2mt.h"
 
-extern io_formats::outField DataBR_fields[58];
+extern std::vector<io_formats::outField> DataBR_fields;
 
 void GEM2MTWizard::CmBack()
 {
@@ -330,7 +330,7 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
     switch( flgs[30] )
     {
     case '3': ui->moveGas->setChecked( true );
-        //[[fallthrough]];
+        [[fallthrough]];
     case '1': ui->moveAq->setChecked( true );
         break;
     case '2': ui->moveGas->setChecked( true );

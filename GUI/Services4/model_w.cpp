@@ -334,7 +334,7 @@ QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int
             if( flds[ii].label && aObj[nO]->GetNS() > 1 )
             {
                 auto label = getHorizontalLabel(aObj[nO].get(), iM);
-                int label_size = (label.count()+1)*pVisorImp->getCharWidth();
+                int label_size = (label.size()+1)*pVisorImp->getCharWidth();
                 label_size = max(label_size, wdF(flds[ii].fType, flds[ii].npos+1, flds[ii].edit));
                 return QSize(label_size, htF(flds[ii].fType, 1)+4);
             }

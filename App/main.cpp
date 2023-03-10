@@ -3,7 +3,7 @@
 //
 // Implementation and Declaration of TIntegApp class, function main()
 //
-// Copyright (C) 1996-2022  S.Dmytriyeva, A.Rysin
+// Copyright (C) 1996-2023  S.Dmytriyeva, A.Rysin
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -27,31 +27,20 @@
 #endif
 
 #include <QApplication>
-
-#if QT_VERSION >= 0x050000
 #include <QtWidgets>
-#else
-#include <QApplication>
-#include <QSqlDatabase>
-#include <QSharedMemory>
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QWindowsStyle>
-#endif
 #include "visor.h"
 #include "GemsMainWindow.h"
 #include "GEMS3K/jsonconfig.h"
 
 class TIntegApp:  public QApplication
 {
- 
- // Q_OBJECT
-  
-  int argc;
-  char** argv;
+    // Q_OBJECT
 
-  bool _isRunning;
-  QSharedMemory shMemory;
+    int argc;
+    char** argv;
+
+    bool _isRunning;
+    QSharedMemory shMemory;
 
 public:
     TIntegApp(int& c, char** v);
@@ -61,60 +50,44 @@ public:
 };
 
 TIntegApp::TIntegApp(int& c, char** v):
-        QApplication( c, v),
-      argc(c),
-      argv(v)
+    QApplication(c, v),
+    argc(c),
+    argv(v)
 {
-    GemsSettings::settings_file_name = "gemsgui-config.json";
-    gemsSettings();
-    // spdlog levels :  trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6
-    //gemsSettings().gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
-    //gui_logger->set_level(spdlog::level::info);
-    //gui_logger->info("QSqlDatabase: available drivers: {}", QSqlDatabase::drivers().join(QLatin1String(" ")).toStdString());
- 
-   shMemory.setKey("gems3");
+    shMemory.setKey("gems3");
     if( shMemory.attach())
     {
         _isRunning = true;
     }
     else
-    {  _isRunning = false;
-       if( !shMemory.create(10))
+    {
+        _isRunning = false;
+        if( !shMemory.create(10))
         {
-           return;
-         }
-
-#if QT_VERSION >= 0x050000
-#include <QtWidgets>
-       setStyle(QStyleFactory::create("windows"));
-#else
-       setStyle( new QWindowsStyle() );
-#endif
-
-       QIcon icon;
-       icon.addFile(QString::fromUtf8(":/Icons/gems50.png"), QSize(), QIcon::Normal, QIcon::Off);
-       setWindowIcon(icon);
-   }
+            return;
+        }
+        setStyle(QStyleFactory::create("windows"));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/Icons/gems50.png"), QSize(), QIcon::Normal, QIcon::Off);
+        setWindowIcon(icon);
+    }
 }
 
-void
-TIntegApp::InitMainWindow()
+void TIntegApp::InitMainWindow()
 {
     pVisorImp = new TVisorImp(argc, argv);
     pVisorImp->show();
- //   pVisorImp->moveToolBar();
-// init Help Window
+    // init Help Window
     pVisorImp->GetHelp();
 }
 
-int
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     TIntegApp IntegApp(argc, argv);
 
 #if  defined(OVERFLOW_EXCEPT)
 #ifdef __linux__
-feenableexcept (FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW);
+    feenableexcept (FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW);
 #elif _MSC_VER
     _clearfp();
     _controlfp(_controlfp(0, 0) & ~(_EM_INVALID | _EM_ZERODIVIDE | _EM_OVERFLOW),
@@ -126,8 +99,8 @@ feenableexcept (FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW);
 
     if(IntegApp.isRunning())
     {
-       gui_logger->critical("gems3: Unable to create second instance.");
-       return -2;
+        gui_logger->critical("gems3: Unable to create second instance.");
+        return -2;
     }
     try
     {

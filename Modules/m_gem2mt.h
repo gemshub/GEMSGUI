@@ -324,7 +324,7 @@ class TGEM2MT
     std::string title;           // changed titler to title
     std::string error_lst_path;
 
-  std::shared_ptr<TNodeArrayGUI> na = nullptr;       // pointer to nodearray class instance
+  std::shared_ptr<TNodeArrayGUI> na;       // pointer to nodearray class instance
   TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
 
     std::string pathVTK;
@@ -432,7 +432,7 @@ public:
     GEM2MT *mtp;
 
  
-    explicit TGEM2MT( uint nrt );
+    explicit TGEM2MT( size_t nrt );
 
     ~TGEM2MT()
     {

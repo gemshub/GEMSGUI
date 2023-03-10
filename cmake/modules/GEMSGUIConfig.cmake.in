@@ -6,7 +6,7 @@ list(APPEND CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})
 
 # Include the cmake targets of the project if they have not been yet.
 if(NOT TARGET GEMSGUI::GEMSGUI)
-    include("@PACKAGE_GEMSGUI_INSTALL_CONFIGDIR@/GEMSGUI.cmake")
+    include("@PACKAGE_GEMSGUI_INSTALL_CONFIGDIR@/GEMSGUITargets.cmake")
 endif()
 
 # Recommended check at the end of a cmake config file.

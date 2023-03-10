@@ -367,10 +367,8 @@ uint TDataBase::AddRecordToFile( const char *pkey, int file )
     nF = fls[file];
     check_file( nF );
 
-    ErrorIf( !dbChangeAllowed( nF ),
-    aFile[nF]->Name(), "Cannot add record: changes to system database are not allowed!" );
-
-
+    ErrorIf( !dbChangeAllowed( nF ), aFile[nF]->Name(), 
+              "Cannot add record: changes to system database are not allowed!" );
     aFile[nF]->Open( UPDATE_DBV );
 
     auto i = ind.addndx( nF, 0, pkey );     // add record
@@ -1125,9 +1123,9 @@ void TDataBase::RebildFile(const TCIntArray& nff)
         uint nF = nff[j];
         // test and open file
         check_file( nF );
-        if( ! dbChangeAllowed( nF ) )
+        if( !dbChangeAllowed( nF ) )
         {
-            ///vfMessage( aFile[nF]->Name(), "Cannot rebuild PDB file!");
+            vfMessage( nullptr, aFile[nF]->Name(), "Cannot rebuild PDB file!");
             continue;
         }
         aFile[nF]->Open( UPDATE_DBV );

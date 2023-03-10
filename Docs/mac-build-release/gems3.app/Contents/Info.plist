@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<key>NSPrincipalClass</key>
-<string>NSApplication</string>
-<key>NSHighResolutionCapable</key>
-<string>True</string>
 <dict>
 	<key>CFBundleDisplayName</key>
 	<string>gems3</string>
 	<key>CFBundleExecutable</key>
 	<string>gems3</string>
 	<key>CFBundleGetInfoString</key>
-	<string>GEM-Selektor v3.7.0 package for geochemical modeling</string>
+	<string>GEM-Selektor v3.9.2 package for geochemical modeling</string>
 	<key>CFBundleIconFile</key>
 	<string>gems3.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -21,12 +17,16 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>3.7</string>
+	<string>3.9</string>
 	<key>CFBundleSignature</key>
-	<string>GEM-Selektor-9e7668c.dfabadd</string>
+	<string>GEM-Selektor-96323c0.8986188</string>
 	<key>CFBundleVersion</key>
-	<string>3.7.0</string>
+	<string>3.9.2</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (c) 2004-2020 GEMS Development Team</string>
+	<string>Copyright (c) 2004-2021 GEMS Development Team</string>
+	<key>NSHighResolutionCapable</key>
+	<string>True</string>
 </dict>
 </plist>

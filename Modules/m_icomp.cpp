@@ -183,7 +183,7 @@ void TIComp::CopyElements( const char * prfName,
 {
     // open selected kernel files
    //db->OpenOnlyFromList(el_data.flNames);
-    int fnum_ = db->GetOpenFileNum( prfName );
+    int fnum_ = db->GetOpenFileNum(prfName);
 
   // delete the equvalent keys
    TCStringArray aICkey_new;         // 30/11/2006

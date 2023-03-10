@@ -62,7 +62,8 @@ struct TPWORK
     TClow;        // Lowest TC for CG or PRSV EoS
     char PdcC,    // DC code
     cre1, cre2, cre3;
-    TPWORK()
+    TPWORK():
+    CPg(nullptr),Cemp(nullptr)
     {}
 
 };
@@ -78,7 +79,7 @@ public:
     ~TpworkList();
 
     struct TPWORK* twp;
-    struct TPWORK& WW( int q)
+    struct TPWORK& WW(int q)
     {
         return *at(q);
     }
@@ -170,10 +171,11 @@ struct SPECS
     bool metastable;
     char PdcC;
     bool on_sat_curve;
-    SPECS(): it(1)
-    {
-        memset( &id, '\0', sizeof(int) * 9);
-    }
+    SPECS():
+        it(1), id(0), ip(0), ih(0), itripl(0), isat(0),
+        iopt(0), useLVS(0), epseqn(0), icrit(0), CV(0),
+        metastable(false), PdcC('\0'), on_sat_curve(false)
+    {}
 };
 
 extern struct SPECS aSpc;

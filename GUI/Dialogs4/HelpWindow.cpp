@@ -17,9 +17,9 @@
 
 
 #include <QtCore>
+#include <QtWidgets>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 #include <QtHelp/QHelpLink>
-#include <QtWidgets>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrinter>
 #else
@@ -37,8 +37,6 @@
 #include <QtHelp/QHelpSearchResultWidget>
 
 #include "ui_HelpWindow4.h"
-//#include "ui_AboutDialog4.h"
-//#include "ui_HowToStartDialog4.h"
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "visor.h"
@@ -47,7 +45,7 @@
 static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.9.5 c.9f3dc56 ";
+const char *_GEMS_version_stamp = " GEMS-GUI v.3.9.6 c.005a95e ";
 extern const char *_GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = nullptr;

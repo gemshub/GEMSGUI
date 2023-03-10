@@ -2,13 +2,18 @@
 cmake_minimum_required(VERSION 3.7.0 )
 
 # Set the name of the project
-project(GEMSGUI VERSION 4.0.0 LANGUAGES CXX)
+project(GEMSGUI VERSION 4.3.5 LANGUAGES CXX)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_MACOSX_RPATH ON)
+
+# Set libraries to be compiled with position independent code mode (i.e., fPIC option in GNU compilers)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Set the cmake module path of the project
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-
-# Use ccache to speed up repeated compilations
-#include(CCache)
 
 # Define variables with the GNU standard installation directories
 include(GNUInstallDirs)
@@ -34,6 +39,18 @@ option(USE_THERMOFUN "Use ThermoFun" ON)
 option(BUILD_NLOHMANNJSON "Use nlohmann json." OFF)
 option(USE_QT6 "Prefer Qt6 over Qt5 if available" OFF)
 
+# Cannot currently produce a dynamic library using MSVC, only a static library
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+    set(BUILD_SHARED_LIBS OFF)
+endif()
+
+# Used into conda only
+if(DEFINED ENV{CONDA_PREFIX})
+   option(USE_SPDLOG_PRECOMPILED "Use spdlog in compiled version" ON)
+else()
+   option(USE_SPDLOG_PRECOMPILED "Use spdlog in compiled version" OFF)
+endif()
+
 # Set the default build type to Release
 if(NOT CMAKE_BUILD_TYPE)
     # The build type selection for the project
@@ -42,29 +59,19 @@ if(NOT CMAKE_BUILD_TYPE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
 endif()
 
-# Define if shared library should be build instead of static.
-#option(BUILD_SHARED_LIBS "Build shared libraries." ON)
-
-# Set libraries to be compiled with position independent code mode (i.e., fPIC option in GNU compilers)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Set the C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # Set the list of compiler flags for GNU compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
-    add_compile_options(-std=c++17 -Wall -Wno-pedantic -Wno-variadic-macros -Wno-deprecated)
+    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds -Wno-stringop-overflow)
 endif()
 
 # Set the list of compiler flags for Clang compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-    add_compile_options(-std=c++17 -Wall -Wno-ignored-attributes -Wno-pedantic -Wno-variadic-macros -Wno-deprecated)
+    add_compile_options(-Wall -Wno-ignored-attributes -Wno-pedantic -Wno-variadic-macros -Wno-deprecated)
 endif()
 
 # Set the list of compiler flags for Intel compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
-    add_compile_options(-std=c++17 -Wall -Wno-variadic-macros -Wno-deprecated)
+    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds -Wno-stringop-overflow)
 endif()
 
 # Set the list of compiler flags for MSVC compiler
@@ -132,8 +139,8 @@ endif()
 
 
 # Copy Resources folder
-#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
-#        DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
+        DESTINATION ${CMAKE_BINARY_DIR}/App)
 
 
 # Install the cmake config files that permit users to use find_package(ThermoFunGui)

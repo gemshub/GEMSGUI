@@ -467,7 +467,6 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       arP = static_cast<double *>(aObj[ o_w_pval]->GetPtr());
       nPp_ = aObj[ o_w_pval]->GetN();
 
-
       auto na = TNodeArrayGUI::create(1, multi_internal);
 
       // realloc and setup data for dataCH and DataBr structures

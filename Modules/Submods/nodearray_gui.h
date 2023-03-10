@@ -68,11 +68,15 @@ public:
     // Used in GEMIPM2 standalone module only
     /// Constructors for 1D arrangement of nodes
     [[nodiscard]] static std::shared_ptr<TNodeArrayGUI> create(long int nNodes, TMultiBase *apm) {
-        return (std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(nNodes, apm)));
+        auto ret = std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(nNodes, apm));
+        na = ret.get();
+        return ret;
     }
     /// Constructor that uses 3D node arrangement
     [[nodiscard]] static std::shared_ptr<TNodeArrayGUI> create(long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm) {
-        return ( std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(asizeN, asizeM, asizeK, apm)));
+        auto ret = std::shared_ptr<TNodeArrayGUI>(new TNodeArrayGUI(asizeN, asizeM, asizeK, apm));
+        na = ret.get();
+        return ret;
     }
 
     ///  Here we do a GEM calculation in boxes from  start_node to end_node
