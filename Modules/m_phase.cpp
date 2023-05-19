@@ -27,6 +27,7 @@
 #include "m_phase.h"
 #include "m_param.h"
 #include "filters_data.h"
+#include "GEMS3K/jsonconfig.h"
 
 int rkeycmp(const void *e1, const void *e2);
 int rkeycmp(const void *e1, const void *e2)
@@ -1243,7 +1244,7 @@ void TPhase::RecordPrint(const char* /*key_*/)
                           "Yes", "No", "Cancel");
     if( res == VF3_1 )
     {
-        fstream f("noMg-test.txt", ios::out);
+        fstream f(GemsSettings::with_directory("noMg-test.txt"), ios::out);
         ErrorIf( !f.good() , GetName(), "File write error");
 
         aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>("test")));

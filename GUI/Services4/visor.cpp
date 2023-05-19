@@ -96,8 +96,7 @@ TVisor::TVisor(int c, char *v[]):
         // non-standard executable path, search for resources starting with current dir
         SysGEMDir = dirExe.toStdString() + "/gems3.app/Contents/Resources/";
     }
-    UserGEMDir = getenv("HOME");
-    UserGEMDir += DEFAULT_USER_DIR; // "/Library/gems3/";
+    UserGEMDir = home_dir() + DEFAULT_USER_DIR; // "/Library/gems3/";
 
 #else  // Linux - in user's home directory
        // By default: /Resources in the same dir as the exe file;
@@ -112,8 +111,7 @@ TVisor::TVisor(int c, char *v[]):
     LocalDir = dirExe.toStdString();
 
 #ifdef NDEBUG
-    UserGEMDir = getenv("HOME");
-    UserGEMDir += DEFAULT_USER_DIR;
+    UserGEMDir = home_dir() + DEFAULT_USER_DIR;
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
@@ -132,10 +130,7 @@ TVisor::TVisor(int c, char *v[]):
          dirExe = dirUp.path();
     LocalDir = dirExe.toStdString();
 #ifdef NDEBUG
-    char homedir[1000];
-    snprintf(homedir, 1000, "%s%s", getenv("HOMEDRIVE"), getenv("HOMEPATH"));
-    gui_logger->info("HOMEDRIVE: {}", homedir);
-    UserGEMDir =  std::string(homedir)/*localDir()*/ + DEFAULT_USER_DIR;
+    UserGEMDir =  home_dir() + DEFAULT_USER_DIR;
 #else
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
 #endif
@@ -197,6 +192,7 @@ TVisor::TVisor(int c, char *v[]):
 //    DefaultBuiltinTDB = "kernel";   temporary for using old Nagra-PSI (2003) dataset
 //    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
 
+    GemsSettings::data_logger_directory = UserGEMDir+"logs/";
     GemsSettings::settings_file_name = SysGEMDir+"gemsgui-config.json";
     gemsSettings();
     // spdlog levels :  trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6

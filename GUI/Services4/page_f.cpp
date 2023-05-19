@@ -18,7 +18,6 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
-#include <fstream>
 
 #include "page_f.h"
 #include "units.h"

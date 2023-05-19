@@ -291,8 +291,6 @@ Qt::ItemFlags TObjectModel::flags( const QModelIndex & index ) const
 QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int role ) const 
 {
     int nO, iN, iM, ii=-1;
-    //  fstream f_log("ipmlog.txt", ios::out|ios::app );
-
     if( orientation == Qt::Horizontal )
     {
         for(int i=0; i<rCount(); i++)

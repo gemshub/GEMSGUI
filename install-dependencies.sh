@@ -5,8 +5,8 @@
 if [ "$(uname)" == "Darwin" ]; then
 
     # Do under Mac OS X platform
-    brew upgrade
-    brew install cmake
+    #brew upgrade
+    #brew install cmake
     EXTN=dylib
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
@@ -140,7 +140,8 @@ test -f /usr/local/lib/libThermoFun.$EXTN || {
         # Building thermofun library
         mkdir -p ~/code && \
         cd ~/code && \
-        git clone https://bitbucket.org/gems4/thermofun.git -b $BRANCH_TFUN && \
+        # git clone https://bitbucket.org/gems4/thermofun.git -b $BRANCH_TFUN && \
+        git clone https://github.com/thermohub/thermofun.git -b $BRANCH_TFUN && \
         cd thermofun && \
         mkdir -p build && \
         cd build && \
