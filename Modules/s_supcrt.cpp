@@ -744,7 +744,7 @@ double TSupcrt::thcond(double Tk, double Pbars, double Dkgm3, double alph,
     dPdT = Tstar / Pstar * alph/betaPa;
 
     L2   = C / (u0 * u1) * pow((T / D),2.) * pow(dPdT,2.) *
-           pow( abs(xt),0.4678e0) * pow(D,0.5) * exp(-18.66e0 *
+           pow( std::abs(xt),0.4678e0) * pow(D,0.5) * exp(-18.66e0 *
                                                pow((T - 1),2.) - pow((D - 1),4.));
     thCOND = L0 * L1 + L2;
     return(thCOND);

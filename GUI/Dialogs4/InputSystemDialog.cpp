@@ -292,8 +292,8 @@ void InputSystemDialog::CmPrint()
         if( vfChooseFileSave(this, filename,
                              "Put file name for printing" ) == false )
             return;
-        fstream f(filename.c_str(), ios::out);
-        ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+        fstream f(filename, ios::out);
+        ErrorIf( !f.good() , filename, "Fileopen error");
 
         /*recTable->selectAll();
       QString clipText = createHeader();

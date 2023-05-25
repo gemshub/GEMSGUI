@@ -1,6 +1,8 @@
 {
     "log": {
-        "level": "info",
+        "level": "err",
+        "thermodynamic-log": false,
+        "logs-directory": "~/Library/Gems3/log",
         "modules": [
             "gems3k",
             "ipm",
@@ -12,10 +14,10 @@
             "chemicalfun"
         ],
         "module_level": {
-            "chemicalfun": "trace",
-            "gems3gui": "info",
-            "ipm": "info",
-            "thermofun": "trace"
+            "chemicalfun": "err",
+            "gems3gui": "err",
+            "ipm": "warn",
+            "thermofun": "err"
         },
         "file": {
             "count": 10,

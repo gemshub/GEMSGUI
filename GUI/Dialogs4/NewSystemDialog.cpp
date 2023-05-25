@@ -485,8 +485,8 @@ void NewSystemDialog::CmPrResults()
         if( vfChooseFileSave(this, filename,
                              "Put file name for printing" ) == false )
             return;
-        fstream f(filename.c_str(), ios::out);
-        ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+        fstream f(filename, ios::out);
+        ErrorIf( !f.good() , filename, "Fileopen error");
 
         printResultList(f);
     }
@@ -508,8 +508,8 @@ void NewSystemDialog::CmPrInput()
         if( vfChooseFileSave(this, filename,
                              "Put file name for printing" ) == false )
             return;
-        fstream f(filename.c_str(), ios::out);
-        ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+        fstream f(filename, ios::out);
+        ErrorIf( !f.good() , filename, "Fileopen error");
 
         printInputList(f);
     }

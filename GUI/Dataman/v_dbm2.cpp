@@ -331,11 +331,15 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     StillLen -= f.gcount();  //???+1
     // test
     bool flag_spppar = false;
-    for( j=0; j<nOD; j++ )   // get objects from file
+    for( j=0; j<rh.Nobj/*nOD*/; j++ )   // get objects from file
     {
-        if ( j+frstOD == o_phstr2  )
-            if( StillLen < static_cast<int>(16*sizeof(short)) )     // old record of phase
-               break;
+//     now loop according actual record size
+//                if ( j+frstOD == o_phstr2  )
+//                    if( ( StillLen < static_cast<int>(16*sizeof(short)) && rep.len!=0 ) )
+//                    {
+//                        gui_logger->info("old record of phase: {}", key);
+//                        break;
+//                    }
 
        if ( j+frstOD == o_tpstr  )
           if( StillLen < 28 )
@@ -1063,13 +1067,14 @@ int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
         {
             len = getrec(recordEntry, inStream, recordHead);
         }
-        catch( TError& /*xcpt*/ )
-        {	/*
-                   if( !vfQuestion( Keywd,
+        catch( TError& xcpt )
+        {
+            gui_logger->warn("scan error : {}", xcpt.mess);
+            /*    if( !vfQuestion( Keywd,
                         " Continue with possible loss of data in \n"
                         "the record or cancel PDB file compression?"))
                      break;
-            	*/
+                */
             fPos += 2;
             continue;
         }
@@ -1097,7 +1102,7 @@ int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
         putrec( *ind.RecPosit(ni), outStream, recordHead );
 
         nRec++;
-
+        gui_logger->debug("restore record: {}", ind.PackKey());
         pVisor->Message( nullptr, nullptr, "Compressing database file. "
                 "Please, wait...", fPos, fLen);
     }

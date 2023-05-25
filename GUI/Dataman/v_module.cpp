@@ -1210,8 +1210,8 @@ TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
             case VF3_3:
                 return;
             }
-       fstream f( filename.c_str(), mod );
-       ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+       fstream f( filename, mod );
+       ErrorIf( !f.good() , filename, "Fileopen error");
       // scan and print format
       TPrintData dat( sd_key, nRT, f, text_fmt );
     }
@@ -1783,7 +1783,7 @@ void TCModule::KeysToTXT( const char *pattern )
     s += " : Please, select file to write record keys";
     if( !vfChooseFileSave(window(), filename, s.c_str()) )
         return;
-    fstream f(filename.c_str(), ios::out);
+    fstream f(filename, ios::out);
     ErrorIf( !f.good() , GetName(), "Fileopen error");
 
     // check for errors

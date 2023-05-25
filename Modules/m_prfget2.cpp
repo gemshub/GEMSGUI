@@ -509,7 +509,7 @@ AGAIN:
                 goto AGAIN;
             case VF3_1:
             {
-                fstream ff(str_file.c_str(), ios::out );
+                fstream ff(str_file, ios::out );
             }
                 break;
             case VF3_3: // only calc and save to db
@@ -554,7 +554,7 @@ AGAIN:
     }
     if( outFile )
     {
-        fstream ff1(str_file.c_str(), ios::out|ios::app);
+        fstream ff1(str_file, ios::out|ios::app);
         sprintf( tbuf, "\n\nProject: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
         ff1 << tbuf << endl;
     }
@@ -735,8 +735,8 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
                 return true;LoadMtparm
             }
 */
-        fstream f( filename.c_str(), mod );
-        ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+        fstream f( filename, mod );
+        ErrorIf( !f.good() , filename, "Fileopen error");
         f <<   "Discarded Phase records\n";
         for( ii=0; ii<aPHnoused.size(); ii++ )
              f << aPHnoused[ii].c_str() <<  "\n";

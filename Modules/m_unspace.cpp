@@ -1211,13 +1211,13 @@ TUnSpace::RecordPrint( const char* key )
 		        if( !vfQuestion( window(), filename.c_str(),
 		        		"This file exists! Overwrite?") )
                    return;
-            fstream ff( filename.c_str(), ios::out );
-	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
+            fstream ff( filename, ios::out );
+            ErrorIf( !ff.good() , filename, "Fileopen error");
 	        to_text_file( ff, true );
 
 	        filename +=".res";
-	        fstream ff1( filename.c_str(), ios::out );
-	        ErrorIf( !ff1.good() , filename.c_str(), "Fileopen error");
+            fstream ff1( filename, ios::out );
+            ErrorIf( !ff1.good() , filename, "Fileopen error");
 	        result_to_text_file( ff1, true );
 		}
 		TProfil::pm->makeGEM2MTFiles( window() );

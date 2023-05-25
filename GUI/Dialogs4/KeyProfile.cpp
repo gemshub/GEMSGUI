@@ -50,8 +50,10 @@ KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
     auto n = rt[irt]->GetKeyList( "*", keyList, temp);
     for( size_t ii=0; ii<n; ii++ )
         ui->pList->addItem(keyList[ii].c_str());
-    ui->pList->setCurrentRow(0);
-    ui->pList->item(0)->setSelected(true);
+    if( ui->pList->count()>0) {
+      ui->pList->setCurrentRow(0);
+      ui->pList->item(0)->setSelected(true);
+    }
 
     ui->checkBrief->setEnabled(ui->checkGEMS3k->isChecked());
     ui->pDumpFile->setEnabled(ui->pRecalcAll->isChecked());
