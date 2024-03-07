@@ -117,11 +117,11 @@ int HelpConfigurator::readDir(const char *dir)
 {
     path = dir;
     QDir thisDir(dir);
-    if (!thisDir.isReadable())
-    {
-        Error( "HelpConfigurator", "GEMS DB directory is not readable");
-        return 0;
-    }
+//    if (!thisDir.isReadable())
+//    {
+//        Error( "HelpConfigurator", "GEMS DB directory is not readable");
+//        return 0;
+//    }
 
     thisDir.setFilter(QDir::Files);
     QStringList filters;

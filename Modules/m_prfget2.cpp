@@ -361,27 +361,29 @@ void TProfil::TestChangeProfile()
     // Insert changes to GEM2MT ( do it before Insert changes to SYSEQ  30/06/2011 )
     if( aIComp.size()>=1 || aPhase.size()>=1 || aDComp.size()>=1 )
     {
-      aList.clear();
-      anR.clear();
+        aList.clear();
+        anR.clear();
 
-       rt[RT_GEM2MT]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-       rt[RT_GEM2MT]->GetKeyList( pkey, aList, anR );
+        rt[RT_GEM2MT]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                                K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+        rt[RT_GEM2MT]->GetKeyList( pkey, aList, anR );
 
-       TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(aMod[RT_GEM2MT].get());
-       aMT->ods_link(0);
-       for(uint i=0; i< aList.size(); i++)
-       {
-         aMT->RecInput( aList[i].c_str() );
-         //Get base SysEq key from TGEM2MT key
-         rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
-                                RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
-                                RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
-         // read SysEq record
-         aSE->RecInput( pkey );
-         aMT->InsertChanges( aIComp, aPhase, aDComp  );
-         aMT->RecSave( aList[i].c_str(), true );
-       }
+        TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(aMod[RT_GEM2MT].get());
+        aMT->ods_link(0);
+        for(uint i=0; i< aList.size(); i++)
+        {
+            pVisor->Message( nullptr, "Loading Modelling Project",
+                             "Detecting changes in TGEM2MT", 40+(5*i/aList.size()) );
+            aMT->RecInput( aList[i].c_str() );
+            //Get base SysEq key from TGEM2MT key
+            rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+                                   RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
+                                   RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
+            // read SysEq record
+            aSE->RecInput( pkey );
+            aMT->InsertChanges( aIComp, aPhase, aDComp  );
+            aMT->RecSave( aList[i].c_str(), true );
+        }
     }
 
     aList.clear();
@@ -394,6 +396,8 @@ void TProfil::TestChangeProfile()
 
     for(uint i=0; i< aList.size(); i++)
     {
+        pVisor->Message( nullptr, "Loading Modelling Project",
+                         "Detecting changes in SYSEQ", 45+(45*i/aList.size()) );
         //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
         aSE->RecInput( aList[i].c_str() );
         aSE->InsertChanges( aIComp, aCompos, aPhase, aDComp );
@@ -406,21 +410,23 @@ void TProfil::TestChangeProfile()
     // Insert changes to DUALTH
     if( aIComp.size()>=1  )
     {
-      aList.clear();
-      anR.clear();
+        aList.clear();
+        anR.clear();
 
-       rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-       rt[RT_DUALTH]->GetKeyList( pkey, aList, anR );
+        rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                                K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+        rt[RT_DUALTH]->GetKeyList( pkey, aList, anR );
 
-       TDualTh* aDU= dynamic_cast<TDualTh *>(aMod[RT_DUALTH].get());
-       aDU->ods_link(0);
-       for(size_t i=0; i< aList.size(); i++)
-       {
-         aDU->RecInput( aList[i].c_str() );
-         aDU->InsertChanges( aIComp  );
-         aDU->RecSave( aList[i].c_str(), true );
-       }
+        TDualTh* aDU= dynamic_cast<TDualTh *>(aMod[RT_DUALTH].get());
+        aDU->ods_link(0);
+        for(size_t i=0; i< aList.size(); i++)
+        {
+            pVisor->Message( nullptr, "Loading Modelling Project",
+                             "Detecting changes in DUALTH", 90+(5*i/aList.size()) );
+            aDU->RecInput( aList[i].c_str() );
+            aDU->InsertChanges( aIComp  );
+            aDU->RecSave( aList[i].c_str(), true );
+        }
 
     }
 
@@ -430,22 +436,25 @@ void TProfil::TestChangeProfile()
     aList.clear();
     anR.clear();
     rt[RT_UNSPACE]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-      K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_UNSPACE]->GetKeyList( pkey, aList, anR );
 
     TUnSpace* aPB=dynamic_cast<TUnSpace *>(aMod[RT_UNSPACE].get());
     aPB->ods_link(-1); //0
     if( aList.size() > 0 )
     {  for(size_t i=0; i< aList.size(); i++)
-       {
-    //    aPB->ods_link(0);
-        aPB->RecInput( aList[i].c_str() );
-        aPB->InsertChanges( aIComp, aPhase, aDComp );
-        aPB->RecSave( aList[i].c_str(), true );
-       }
-//        aPB->ods_link(1);
-//        aPB->din_kill(1);
-//        aPB->ods_link(0);
+        {
+            pVisor->Message( nullptr, "Loading Modelling Project",
+                             "Detecting changes in SYSEQ", 95+(5*i/aList.size()) );
+
+            //    aPB->ods_link(0);
+            aPB->RecInput( aList[i].c_str() );
+            aPB->InsertChanges( aIComp, aPhase, aDComp );
+            aPB->RecSave( aList[i].c_str(), true );
+        }
+        //        aPB->ods_link(1);
+        //        aPB->din_kill(1);
+        //        aPB->ods_link(0);
     }
 }
 

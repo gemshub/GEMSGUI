@@ -229,266 +229,264 @@ void TProfil::OpenProfileMode( const char* key,
 }
 
 //Making new Modelling Project
-bool TProfil::NewProfileMode(
-   bool remakeRec, std::string& key_templ__ )
+bool TProfil::NewProfileMode( bool remakeRec, std::string& key_templ__ )
 {
- std::string new_project_dir_name = "";
- try
- {
-    bool templ_key = false;
+    std::string new_project_dir_name = "";
+    try
+    {
+        bool templ_key = false;
 
-    std::string  templ_str;
+        std::string  templ_str;
 AGAIN:
-    std::string  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
-            "Enter a new record key, please!", KEY_NEW );
-    if( key_str.empty() )
-      return false; // cancel command
+        std::string  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
+                                               "Enter a new record key, please!", KEY_NEW );
+        if( key_str.empty() )
+            return false; // cancel command
 
-    rt[RT_PARAM]->SetKey( key_str.c_str() );
-    std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-    StripLine(fstKeyFld);
-    new_project_dir_name = fstKeyFld;
+        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        StripLine(fstKeyFld);
+        new_project_dir_name = fstKeyFld;
 
-    //Test equal project names
-    templ_str = fstKeyFld;
-    templ_str += ":*:";
-    TCStringArray aKey__;
-    TCIntArray anR__;
+        //Test equal project names
+        templ_str = fstKeyFld;
+        templ_str += ":*:";
+        TCStringArray aKey__;
+        TCIntArray anR__;
 
-    if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
-    {
-      vfMessage(window(), fstKeyFld.c_str(),
-        "Project cannot be created - such directory already exists."
-        "\nPlease, enter another name.");
-      goto AGAIN;
-    }
+        if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
+        {
+            vfMessage(window(), fstKeyFld.c_str(),
+                      "Project cannot be created - such directory already exists."
+                      "\nPlease, enter another name.");
+            goto AGAIN;
+        }
 
-   // select project record key to template
-    templ_str = key_templ__;
-    if( !templ_str.empty() )
-    {
-      templ_key = true;
+        // select project record key to template
+        templ_str = key_templ__;
+        if( !templ_str.empty() )
+        {
+            templ_key = true;
 
-      int  Rnum = rt[RT_PARAM]->Find( templ_str.c_str() );
-      ErrorIf( Rnum < 0, templ_str.c_str() ,
-          "Project record does not exist!");
-      rt[RT_PARAM]->Get( Rnum ); // read record
-      dyn_set();
-      SetFN();                  // reopen files of data base
-    }
-    else
-    {
-       rt[RT_PARAM]->SetKey( key_str.c_str() );
-       dyn_kill();
-       set_def(); // set default data or zero if necessary
-    }
- 
-    if( remakeRec )
-     RecBuild( key_str.c_str(), VF_REMAKE );  // Edit flags
-   else
-     RecBuild( key_str.c_str(), VF_BYPASS );
+            int  Rnum = rt[RT_PARAM]->Find( templ_str.c_str() );
+            ErrorIf( Rnum < 0, templ_str.c_str() ,
+                     "Project record does not exist!");
+            rt[RT_PARAM]->Get( Rnum ); // read record
+            dyn_set();
+            SetFN();                  // reopen files of data base
+        }
+        else
+        {
+            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            dyn_kill();
+            set_def(); // set default data or zero if necessary
+        }
+
+        if( remakeRec )
+            RecBuild( key_str.c_str(), VF_REMAKE );  // Edit flags
+        else
+            RecBuild( key_str.c_str(), VF_BYPASS );
 
 
-    pVisor->Message( window(), "Loading Modelling Project",
-      "Opening database files to Project", 5  );
+        pVisor->Message( window(), "Loading Modelling Project",
+                         "Opening database files to Project", 5  );
 
-     rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str.c_str() );
 
-     if( templ_key == false  )
-        InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
-     else  // using existing Project
-     {
-        rt[RT_PARAM]->SetKey( templ_str.c_str() );
-        std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-        StripLine(fstKeyFld_t);
+        if( templ_key == false  )
+            InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
+        else  // using existing Project
+        {
+            rt[RT_PARAM]->SetKey( templ_str.c_str() );
+            std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+            StripLine(fstKeyFld_t);
 
-        InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
-        RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
-      }
+            InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
+            RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
+        }
 
-     rt[RT_PARAM]->SetKey( key_str.c_str() );
-       // get opens files list
-       if( !GetFN( fstKeyFld.c_str() ) )
-        Error( key_str,  "Project configuration aborted by the user!" );
-       SetFN();
+        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        // get opens files list
+        if( !GetFN( fstKeyFld.c_str() ) )
+            Error( key_str,  "Project configuration aborted by the user!" );
+        SetFN();
 
-       if( templ_key == true  )
-       {
-         rt[RT_PARAM]->SetKey( key_str.c_str() );
-         SaveOldList();
+        if( templ_key == true  )
+        {
+            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            SaveOldList();
 
-        // delete auto-generated aq and gas phases if already created
-         deleteAutoGenerated();
-       }   
-   pVisor->Message( nullptr, "Loading Modelling Project",
-      "Loading lists of IComp, Compos, Phase\n"
-                "  and DComp/ReacDC record keys", 10);
+            // delete auto-generated aq and gas phases if already created
+            deleteAutoGenerated();
+        }
+        pVisor->Message( nullptr, "Loading Modelling Project",
+                         "Loading lists of IComp, Compos, Phase\n"
+                         "  and DComp/ReacDC record keys", 10);
 
         // load lists of ICOMP, COMPOS, PHASE and DCOMP&REACT recordc keys
         rt[RT_PARAM]->SetKey( key_str.c_str() );
         rmults->LoadRmults( !templ_key /*true*/, true );
 
-   pVisor->Message( nullptr, "Loading Modelling Project",
-         "Detecting changes in thermodynamic database", 40 );
+        pVisor->Message( nullptr, "Loading Modelling Project",
+                         "Detecting changes in thermodynamic database", 40 );
 
-   if( templ_key == true )
-   {
+        if( templ_key == true )
+        {
             TestChangeProfile();  // test and insert changes to data base file
             DeleteOldList();
-   }
+        }
 
-  // save results   RecSave(str.c_str());
-   AddRecord( key_str.c_str() );
+        // save results   RecSave(str.c_str());
+        AddRecord( key_str.c_str() );
 
- }
- catch( TError& /*xcpt*/ )
+    }
+    catch( TError& /*xcpt*/ )
     {
-     pVisor->CloseMessage();
-      contentsChanged = false;
-      //delete projct directory, if Project record create error
-// SD oct 2005
-//      std::string fstKeyFld =
-//                std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-//      StripLine(fstKeyFld);
+        pVisor->CloseMessage();
+        contentsChanged = false;
+        //delete projct directory, if Project record create error
+        // SD oct 2005
+        //      std::string fstKeyFld =
+        //                std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        //      StripLine(fstKeyFld);
 
-      std::string Path = pVisor->userProfDir();
-      Path += new_project_dir_name; // fstKeyFld;
-      pVisor->deleteDBDir(Path.c_str());
-      throw;
+        std::string Path = pVisor->userProfDir();
+        Path += new_project_dir_name; // fstKeyFld;
+        pVisor->deleteDBDir(Path.c_str());
+        throw;
     }
     return true;
 }
 
 //Making new Project  (new elements mode)
-bool TProfil::NewProfileModeElements(
-   bool remakeRec, std::string& key_templ )
+bool TProfil::NewProfileModeElements( bool remakeRec, std::string& key_templ )
 {
- std::string new_project_dir_name = "";
- try
- {
-    bool templ_key = false;
+    std::string new_project_dir_name = "";
+    try
+    {
+        bool templ_key = false;
 
-    std::string  templ_str;
+        std::string  templ_str;
 AGAIN:
-    std::string  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
-            "Enter a new record key, please", KEY_NEW );
-    if( key_str.empty() )
-      return false; // cancel command
+        std::string  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
+                                               "Enter a new record key, please", KEY_NEW );
+        if( key_str.empty() )
+            return false; // cancel command
 
-    rt[RT_PARAM]->SetKey( key_str.c_str() );
-    std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-    StripLine(fstKeyFld);
-    new_project_dir_name = fstKeyFld;
+        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        StripLine(fstKeyFld);
+        new_project_dir_name = fstKeyFld;
 
-    //Test equal project names
-    templ_str = fstKeyFld;
-    templ_str += ":*:";
-    TCStringArray aKey__;
-    TCIntArray anR__;
+        //Test equal project names
+        templ_str = fstKeyFld;
+        templ_str += ":*:";
+        TCStringArray aKey__;
+        TCIntArray anR__;
 
-    if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
-    {
-      vfMessage(window(), fstKeyFld.c_str(),
-        "Project cannot be created - such directory already exists."
-        "\nPlease, enter another name.");
-      goto AGAIN;
-    }
-    templ_str = key_templ;
-    if( !templ_str.empty() )
-    {
-      templ_key = true;
+        if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
+        {
+            vfMessage(window(), fstKeyFld.c_str(),
+                      "Project cannot be created - such directory already exists."
+                      "\nPlease, enter another name.");
+            goto AGAIN;
+        }
+        templ_str = key_templ;
+        if( !templ_str.empty() )
+        {
+            templ_key = true;
 
-      int  Rnum = rt[RT_PARAM]->Find( templ_str.c_str() );
-      ErrorIf( Rnum < 0, templ_str.c_str() ,
-          "Project record does not exist!");
-      rt[RT_PARAM]->Get( Rnum ); // read record
-      dyn_set();
-      SetFN();                  // reopen files of data base
-      // if no elements profile as template
-      if( rt[RT_ICOMP]->ifDefaultOpen() )
-       Error( templ_str, "This project cannot be extended using Elements Dialog.");
-    }
-    else
-    {
-       rt[RT_PARAM]->SetKey( key_str.c_str() );
-       dyn_kill();
-       set_def(); // set default data or zero if necessary
-    }
+            int  Rnum = rt[RT_PARAM]->Find( templ_str.c_str() );
+            ErrorIf( Rnum < 0, templ_str.c_str() ,
+                     "Project record does not exist!");
+            rt[RT_PARAM]->Get( Rnum ); // read record
+            dyn_set();
+            SetFN();                  // reopen files of data base
+            // if no elements profile as template
+            if( rt[RT_ICOMP]->ifDefaultOpen() )
+                Error( templ_str, "This project cannot be extended using Elements Dialog.");
+        }
+        else
+        {
+            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            dyn_kill();
+            set_def(); // set default data or zero if necessary
+        }
 
-   if( remakeRec )
-     RecBuild( key_str.c_str(), VF_REMAKE );  // Edit flags
-   else
-     RecBuild( key_str.c_str(), VF_BYPASS );
+        if( remakeRec )
+            RecBuild( key_str.c_str(), VF_REMAKE );  // Edit flags
+        else
+            RecBuild( key_str.c_str(), VF_BYPASS );
 
-   pVisor->Message( window(), "Loading Modelling Project",
-      "Opening database files to Project", 5  );
+        pVisor->Message( window(), "Loading Modelling Project",
+                         "Opening database files to Project", 5  );
 
-   rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str.c_str() );
 
-     if( templ_key == false  )
-        InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
-     else  // using existing Project
-     {
-        rt[RT_PARAM]->SetKey( templ_str.c_str() );
-        std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-        StripLine(fstKeyFld_t);
+        if( templ_key == false  )
+            InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
+        else  // using existing Project
+        {
+            rt[RT_PARAM]->SetKey( templ_str.c_str() );
+            std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+            StripLine(fstKeyFld_t);
 
-        InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
-        RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
-      }
-   rt[RT_PARAM]->SetKey( key_str.c_str() );
+            InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
+            RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
+        }
+        rt[RT_PARAM]->SetKey( key_str.c_str() );
 
-   if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
-       Error( key_str, "Project configuration aborted by the user!" );//goto BACK;
+        if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
+            Error( key_str, "Project configuration aborted by the user!" );//goto BACK;
 
-   // get opens files list
-      if( !GetFN( fstKeyFld.c_str(), false ) )
-        Error( key_str, "Project configuration aborted by the user!" );
-       SetFN();
+        // get opens files list
+        if( !GetFN( fstKeyFld.c_str(), false ) )
+            Error( key_str, "Project configuration aborted by the user!" );
+        SetFN();
 
-       if( templ_key == true  )
-       {
-         rt[RT_PARAM]->SetKey( key_str.c_str() );
-         SaveOldList();
+        if( templ_key == true  )
+        {
+            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            SaveOldList();
 
-         // delete auto-generated aq and gas phases if already created
-         deleteAutoGenerated();
-       } 
-   pVisor->Message( nullptr, "Loading Modelling Project",
-      "Loading lists of IComp, Compos, Phase\n"
-                "  and DComp/ReacDC record keys", 10);
+            // delete auto-generated aq and gas phases if already created
+            deleteAutoGenerated();
+        }
+        pVisor->Message( nullptr, "Loading Modelling Project",
+                         "Loading lists of IComp, Compos, Phase\n"
+                         "  and DComp/ReacDC record keys", 10);
 
         // load lists of ICOMP, COMPOS, PHASE and DCOMP&REACT recordc keys
         rt[RT_PARAM]->SetKey( key_str.c_str() );
         rmults->LoadRmults( !templ_key /*true*/, true );
 
-   pVisor->Message( nullptr, "Loading Modelling Project",
-         "Detecting changes in thermodynamic database", 40 );
+        pVisor->Message( nullptr, "Loading Modelling Project",
+                         "Detecting changes in thermodynamic database", 40 );
 
-   if( templ_key == true )
-   {
+        if( templ_key == true )
+        {
             TestChangeProfile();  // test and insert changes to data base file
             DeleteOldList();
-   }
+        }
 
-  // save results   RecSave(str.c_str());
-   AddRecord( key_str.c_str() );
+        // save results   RecSave(str.c_str());
+        AddRecord( key_str.c_str() );
 
- }
- catch( TError& /*xcpt*/ )
+    }
+    catch( TError& /*xcpt*/ )
     {
-     pVisor->CloseMessage();
-      contentsChanged = false;
-      //delete project directory, if Project record create error
-//SD oct 2005
-//      std::string fstKeyFld =
-//                std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-//      StripLine(fstKeyFld);
+        pVisor->CloseMessage();
+        contentsChanged = false;
+        //delete project directory, if Project record create error
+        //SD oct 2005
+        //      std::string fstKeyFld =
+        //                std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+        //      StripLine(fstKeyFld);
 
-      std::string Path = pVisor->userProfDir();
-      Path +=   new_project_dir_name; // fstKeyFld;
-      pVisor->deleteDBDir(Path.c_str());
-      throw;
+        std::string Path = pVisor->userProfDir();
+        Path +=   new_project_dir_name; // fstKeyFld;
+        pVisor->deleteDBDir(Path.c_str());
+        throw;
     }
     return true;
 }
@@ -745,9 +743,37 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
     {
         std::string tmpDirPath = pVisor->userProfDir();
         tmpDirPath += prfTemplate;
+        TCStringArray all_files = pVisor->readPDBDir(tmpDirPath.c_str(), "*" );
 
-        TCStringArray aFiles =
-                pVisor->readPDBDir(tmpDirPath.c_str(), "*" );
+        // make list of opened files
+        std::set<std::string> open_files_keywds;
+        for( int ii=0; ii< rmults->GetMU()->NfT; ii++) {
+            auto s_keywd = char_array_to_string( rmults->GetMU()->FN[ii], MAX_FILENAME_LEN);
+            open_files_keywds.insert( s_keywd );
+            //std::cout << s_keywd << " ";
+        }
+        //std::cout << std::endl;
+
+        TCStringArray aFiles;
+        for (uint ii = 0; ii < all_files.size(); ii++)
+        {
+            size_t pose = all_files[ii].rfind(".");
+            if( pose != std::string::npos )
+            {
+                // do not copy not connected files database
+                auto ext = all_files[ii].substr( pose+1 );
+                if (ext == "pdb" || ext == "ndx") {
+                    TDBFile db_link(all_files[ii]);
+                    //std::cout << db_link.GetKeywd() << "  ";
+                    if( open_files_keywds.find(db_link.GetKeywd()) == open_files_keywds.end() ) {
+                        //std::cout << " " << std::endl;
+                        continue;
+                    }
+                }
+            }
+            //std::cout << all_files[ii] << std::endl;
+            aFiles.push_back(all_files[ii]);
+        }
 
         // copy files to new Prifile
         for (uint ii = 0; ii < aFiles.size(); ii++)
@@ -760,46 +786,22 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
             replace( aFiles[ii], prfTemplate, prfName);
             f_new += aFiles[ii];
 
-            if ( !(std::string( aFiles[ii], 0, aFiles[ii].find("."))
-                   ==  db->GetKeywd()))
+            if ( !(std::string( aFiles[ii], 0, aFiles[ii].find(".")) ==  db->GetKeywd() ))
                 pVisor->CopyF( f_new.c_str(), f_tmp.c_str() );
         }
-
-/*   // copy template project
-
-        std::string cmd;
-
-#ifndef _WIN32
-        cmd = "cp -r ";
-        cmd += tmpDirPath;
-        cmd += "/ * ";
-        cmd += Path;
-
-#else
-        cmd = "xcopy -r ";
-        cmd += tmpDirPath;
-        cmd += "/ *.* ";
-        cmd += Path;
-
-#endif
-
-        if (system(cmd.c_str()) != 0)
-            throw TFatalError( prfName, "Cannot copy template project");
-*/
 
         // add files to module list
         for (size_t ii = 0; ii < aFiles.size(); ii++)
         {
-            if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
-            {
-                for (size_t jj = 0; jj < rt.size(); jj++)
-                    if (std::string(aFiles[ii], 0, aFiles[ii].find("."))
-                            == rt[jj]->GetKeywd())
+            if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb") {
+                for (size_t jj = 0; jj < rt.size(); jj++) {
+                    if (std::string(aFiles[ii], 0, aFiles[ii].find(".")) == rt[jj]->GetKeywd())
                     {
-                        std::string f_new = aFiles[ii];//.replace(
-                        //   prfTemplate, prfName);
+                        std::string f_new = aFiles[ii];
                         rt[jj]->MakeInNewProfile( Path.c_str(), prfName, f_new.c_str() );
                     }
+
+                }
             }
         }
     }

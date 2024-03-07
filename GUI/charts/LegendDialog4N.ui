@@ -85,7 +85,7 @@
          <string>Set the maximum number of major scale intervals for  bottom axis</string>
         </property>
         <property name="maximum">
-         <number>10</number>
+         <number>20</number>
         </property>
        </widget>
       </item>
@@ -115,7 +115,7 @@
          <string>Set the maximum number of major scale intervals for  left axis</string>
         </property>
         <property name="maximum">
-         <number>10</number>
+         <number>20</number>
         </property>
        </widget>
       </item>
