@@ -195,9 +195,8 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
     CSD->dRes2 = 0.;
 
     // realloc structures DataCh&DataBr
-
-    datach_realloc();
-    databr_free_internal(CNode);
+    dbr_dch_api::datach_realloc(CSD);
+    dbr_dch_api::databr_free_internal(CNode);
     databr_realloc();
 
     // set dynamic data to DataCH
@@ -240,7 +239,7 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
     // CNode->NodeStatusFMT = Initial_RUN;
     //   CNode->NodeStatusCH = NEED_GEM_AIA;
     // CNode->IterDone = 0;
-    databr_reset( CNode, 1 );
+    dbr_dch_api::databr_reset( CNode, 1 );
 
     if( pmm->pNP == 0 )
         CNode->NodeStatusCH = NEED_GEM_AIA;

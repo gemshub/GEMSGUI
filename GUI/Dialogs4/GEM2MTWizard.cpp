@@ -23,7 +23,9 @@
 #include "GEMS3K/io_template.h"
 #include "m_gem2mt.h"
 
+namespace  dbr_dch_api {
 extern std::vector<io_formats::outField> DataBR_fields;
+}
 
 void GEM2MTWizard::CmBack()
 {
@@ -915,7 +917,7 @@ void GEM2MTWizard::resetVTKList()
     std::vector<pagesSetupData> wnData;
 
     for(int ii=0; ii<38; ii++ )
-        scalarsList.push_back( pagesSetupData(DataBR_fields[ii].name.c_str(), ii));
+        scalarsList.push_back( pagesSetupData(dbr_dch_api::DataBR_fields[ii].name.c_str(), ii));
     GetListsnRT( -2, wnData,  scalarsList2 );
 
     pNdx.push_back(f_bIC);
@@ -959,7 +961,7 @@ void GEM2MTWizard::resetVTKList()
     {
         stData.push_back( pagesSetupData(scalarsList[ii]));
         item1 = new QListWidgetItem( scalarsList[ii].pageName.c_str(),  ui->listStatic);
-        item1->setToolTip( DataBR_fields[ii].comment.c_str() );
+        item1->setToolTip( dbr_dch_api::DataBR_fields[ii].comment.c_str() );
     }
 
 

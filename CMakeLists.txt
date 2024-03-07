@@ -37,7 +37,7 @@ option(BUILD_STATIC_LIBS "Build static libraries." ON)
 option(BUILD_APP "Build application." ON)
 option(USE_THERMOFUN "Use ThermoFun" ON)
 option(BUILD_NLOHMANNJSON "Use nlohmann json." OFF)
-option(USE_QT6 "Prefer Qt6 over Qt5 if available" OFF)
+option(USE_QT6 "Prefer Qt6 over Qt5 if available" ON)
 
 # Cannot currently produce a dynamic library using MSVC, only a static library
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
