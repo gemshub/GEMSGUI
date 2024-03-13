@@ -985,7 +985,7 @@ void ElementsDialog::setTag( string fname, QStandardItem* pdb)
 ///    for each of open file keywords;
 int ElementsDialog::isOpenFile(string& name)
 {
-    string fname = name;
+    std::string fname = name;
 
     //scip extension
     size_t pos1 = fname.rfind(".");
