@@ -182,7 +182,7 @@ void TVisorImp::killGEMServer()
 
 void TVisorImp::GEMServerErrorOccurred(QProcess::ProcessError error)
 {
-    gui_logger->error("GEMS3 server error occurred:  {}", error);
+    gui_logger->error("GEMS3 server error occurred:  {}", static_cast<int>(error));
     // try restart server
     if( error >0 )
         startGEMServer();
