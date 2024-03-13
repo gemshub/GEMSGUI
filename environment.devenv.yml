@@ -7,7 +7,7 @@ dependencies:
   - make  # [win]
   - git
   - ccache  # [unix]
-  - gems3k>=4.3.6
+  - gems3k>=4.4.0
   - thermofun>=0.4.3
   - cppzmq
   - qt6-main=6.6.0

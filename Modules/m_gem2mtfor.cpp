@@ -476,7 +476,7 @@ void TGEM2MT::to_text_file( TIO& out_format, bool with_comments, bool brief_mode
 
     if( _comment )
     {
-        prar1.writeComment( _comment, std::string( "# ") + _GEMIPM_version_stamp);;
+        prar1.writeComment( _comment, std::string( "# ") + _GEMIPM_version_stamp);
         //        << "# File: " << path << endl;
         prar1.writeComment( _comment, "# Comments can be marked with # $ ; as the first character in the line\n");
     }
