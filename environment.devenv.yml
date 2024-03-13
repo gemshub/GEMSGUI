@@ -7,17 +7,13 @@ dependencies:
   - make  # [win]
   - git
   - ccache  # [unix]
-  - gems3k>=4.3.6
+  - gems3k>=4.4.0
   - thermofun>=0.4.3
   - cppzmq
-  - qt>=5.12.5
-  - mesalib
-  - mesa-libgl-cos6-x86_64 # [linux]
-  - libselinux-cos6-x86_64 # [linux]
-  - libxxf86vm-cos6-x86_64 # [linux]
-  - xorg-libxext # [linux]
-  - xorg-libxau # [linux]
-  - xorg-libxdamage # [linux]
+  - qt6-main=6.6.0
+  - qt6-charts=6.6.0
+  #- qt-main=5.15.8
+  - mesa-libgl-devel-cos7-x86_64 # [unix]
 
 environment:
 

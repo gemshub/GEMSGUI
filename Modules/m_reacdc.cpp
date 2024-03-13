@@ -389,50 +389,51 @@ int TReacDC::RecBuild( const char *key, int mode  )
     //REACDC&DCOMP  keypart
     rt[RT_REACDC]->MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
 
-    if( rcp->rDC )
-    { // calc count DC and RC
-        for(int i=0; i<rcp->nDC; i++ )
-        {
-            switch( rcp->rDC[i] )
+    if( mode != VF3_3 ) { // not clear all mode
+        if( rcp->rDC )
+        { // calc count DC and RC
+            for(int i=0; i<rcp->nDC; i++ )
             {
-            case SRC_DCOMP:
-                Nc1++;
-                continue;
-            case SRC_REACDC:
-                Nr1++;
-                continue;
-            case SRC_NEWISO:
-            case SRC_NEWDC:
-                Nn1++;
-                continue;
-            case SRC_FICT:
-                Nf1++;
-                continue;
-            default:
-                Error( GetName(), "E08RErem: Invalid reaction species code!");
+                switch( rcp->rDC[i] )
+                {
+                case SRC_DCOMP:
+                    Nc1++;
+                    continue;
+                case SRC_REACDC:
+                    Nr1++;
+                    continue;
+                case SRC_NEWISO:
+                case SRC_NEWDC:
+                    Nn1++;
+                    continue;
+                case SRC_FICT:
+                    Nf1++;
+                    continue;
+                default:
+                    Error( GetName(), "E08RErem: Invalid reaction species code!");
+                }
             }
         }
-     }
 
-    // made vectors selections DCOMP and REACDC
-    if( Nc1>0 || Nr1>0 )
-    {
-        /* Build old selections DCOMP and REACDC */
-        aDclist.clear();
-        std::string key_dr;
-
-        for( int i=0; i<rcp->nDC; i++ )
+        // made vectors selections DCOMP and REACDC
+        if( Nc1>0 || Nr1>0 )
         {
-          if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
-          {
-              key_dr  = std::string(1, rcp->rDC[i]);
-              key_dr += ' ';
-              key_dr += char_array_to_string( rcp->DCk[i], DC_RKLEN/*-MAXSYMB*/ );
-              aDclist.push_back( key_dr.c_str() );
-          }
-      }
-    }
+            /* Build old selections DCOMP and REACDC */
+            aDclist.clear();
+            std::string key_dr;
 
+            for( int i=0; i<rcp->nDC; i++ )
+            {
+                if( rcp->rDC[i] == SRC_DCOMP || rcp->rDC[i] == SRC_REACDC )
+                {
+                    key_dr  = std::string(1, rcp->rDC[i]);
+                    key_dr += ' ';
+                    key_dr += char_array_to_string( rcp->DCk[i], DC_RKLEN/*-MAXSYMB*/ );
+                    aDclist.push_back( key_dr.c_str() );
+                }
+            }
+        }
+    }
 AGAIN_MOD:
     int ret = TCModule::RecBuild( key, mode );
     memcpy( rcp->pstate, key/*rt[nRT].UnpackKey()*/, RE_RKLEN );

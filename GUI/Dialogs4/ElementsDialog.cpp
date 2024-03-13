@@ -274,6 +274,8 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     QObject::connect(ui->pCancelButton, SIGNAL(clicked()), this, SLOT(reject()));
     connect( ui->bHelp, SIGNAL(clicked()), this, SLOT( CmHelp() ) );
     connect( ui->bReset, SIGNAL(clicked()), this, SLOT( CmSetFilters() ) );
+    connect( ui->bSelectAll, SIGNAL(clicked()), this, SLOT( CmSelectAll() ) );
+    connect( ui->bClearSelection, SIGNAL(clicked()), this, SLOT( CmClearSelection() ) );
 
     connect( ui->cbAqueous, SIGNAL(clicked()), this, SLOT( SetAqueous() ) );
     connect( ui->cbSorption, SIGNAL(clicked()),this, SLOT( SetSorption() ) );
@@ -322,6 +324,35 @@ void ElementsDialog::setOpenFilesAsDefault()
     }
 }
 
+void ElementsDialog::CmSelectAll()
+{
+    int ii;
+    for( ii=0; ii<bgOther->buttons().count(); ii++ )
+    {
+       if(bgOther->button(ii)->isEnabled())
+           bgOther->button(ii)->setChecked (true);
+    }
+    for( ii=1; ii<99/*bgElem->buttons()->count()-1*/; ii++ ) // 0 always
+    {
+       if(bgElem->button(ii)->isEnabled())
+           bgElem->button(ii)->setChecked (true);
+    }
+}
+
+void ElementsDialog::CmClearSelection()
+{
+    int ii;
+    for( ii=0; ii<bgOther->buttons().count(); ii++ )
+    {
+       if(bgOther->button(ii)->isEnabled())
+           bgOther->button(ii)->setChecked (false);
+    }
+    for( ii=1; ii<99/*bgElem->buttons()->count()-1*/; ii++ ) // 0 always
+    {
+       if(bgElem->button(ii)->isEnabled())
+           bgElem->button(ii)->setChecked(false);
+    }
+}
 
 void ElementsDialog::CmHelp()
 {
@@ -954,7 +985,7 @@ void ElementsDialog::setTag( string fname, QStandardItem* pdb)
 ///    for each of open file keywords;
 int ElementsDialog::isOpenFile(string& name)
 {
-    string fname = name;
+    std::string fname = name;
 
     //scip extension
     size_t pos1 = fname.rfind(".");

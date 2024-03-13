@@ -88,6 +88,8 @@ protected slots:
     void CmSetFilters();
     void CmNext();
     void CmBack();
+    void CmSelectAll();
+    void CmClearSelection();
     void changeCheck( QStandardItem *item );
     void SetAqueous();
     void SetSorption();

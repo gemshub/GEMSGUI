@@ -527,7 +527,6 @@
          <property name="font">
           <font>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -771,7 +770,6 @@
          <property name="font">
           <font>
            <pointsize>10</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -3147,7 +3145,6 @@
           <property name="font">
            <font>
             <pointsize>10</pointsize>
-            <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
@@ -3485,7 +3482,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -3502,7 +3498,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -3517,6 +3512,45 @@
        </property>
        <property name="autoDefault">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bSelectAll">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Select All</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bClearSelection">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Clear selection</string>
        </property>
       </widget>
      </item>
@@ -3538,7 +3572,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -3552,7 +3585,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -3566,7 +3598,6 @@
        <property name="font">
         <font>
          <pointsize>10</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>

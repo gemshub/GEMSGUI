@@ -980,7 +980,9 @@ TDBKeyList::addndx( uint nF, int len, const char *key )
         if(!i) break;
         l = keycom( i-1 );
     }
-    ErrorIf( l==0, key, "Two records with the same key (AddNewKey).");
+    if(l==0) {
+       Error( key, "Two records with the same key (AddNewKey).");
+    }
     uint ii=i;
     for( j=0; j<KeyNumFlds(); j++)
         memmove( RecKeyFld(ii+1,j), RecKeyFld(ii,j),
