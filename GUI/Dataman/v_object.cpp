@@ -1133,7 +1133,131 @@ void TObject::fromJsonObject(const QJsonObject &obj)
     }
 }
 
+QJsonValue TObject::toJsonValue() const
+{
+    if( IsNull() ) {
+        return QJsonValue(QJsonValue::Null);
+    }
+    if( strcmp(Keywd, "SPPpar") == 0 )  {
+        //obj.insert( "val", ((SPP_SETTING*)GetPtr())->toJsonObject());
+        return QJsonValue();
+    }
+    if( strcmp(Keywd+2, "plt") == 0 ) {
+        QJsonArray pltArray;
+        for(int ii=0; ii<GetN(); ii++) {
+            QJsonObject pltObject;
+            ((TPlotLine*)GetPtr() + ii)->toJsonObject( pltObject );
+            pltArray.append(pltObject);
+        }
+        return pltArray;
+    }
 
+    if( Type == S_ ) { // text
+        return QJsonValue((const char*)GetPtr());
+    }
+    else {
+        QJsonArray fullArray;
+        for(int i=0; i < N; i++ ) {
+            QJsonArray valArray;
+            for(int j=0; j < M; j++ )  {
+                if( IsEmpty(i,j)) {
+                    valArray.append( QJsonValue(QJsonValue::Null) );
+                }
+                else {
+                    if( Type>= D_ && Type<= I_) {
+                        valArray.append(Get(i,j));
+                    }
+                    else {
+                        auto str_val = GetString(i,j);
+                        //strip(str_val);
+                        valArray.append( str_val.c_str() );
+                    }
+                }
+            }
+            fullArray.push_back(valArray);
+        }
+        return fullArray;
+    }
+}
+
+void TObject::fromJsonValue(const QJsonValue &obj)
+{
+    std::string valStr;
+    if( obj.isNull() && !IsNull() ) {
+        if( IsDynamic() ) {
+            Free();
+        }
+        else { // clear
+            SetString(S_EMPTY, 0, 0);
+        }
+        return;
+    }
+
+    if( strcmp(Keywd, "SPPpar") == 0 )  {
+        //((SPP_SETTING*)GetPtr())->fromJsonObject( obj.value("val").toObject() );
+        return;
+    }
+
+    if( strcmp(Keywd+2, "plt") == 0 )  {
+        QJsonArray pltArray = obj.toArray();
+        for(int ii=0; ii< min<int>( N, pltArray.size()); ii++) {
+            QJsonObject pltObject = pltArray[ii].toObject();
+            ((TPlotLine*)GetPtr() + ii)->fromJsonObject( pltObject );
+        }
+        return;
+    }
+
+    if( Type == S_ ) { // text
+        valStr = obj.toString("`").toStdString();
+        SetString( valStr.c_str(), 0, 0 );
+    }
+    else if( obj.isArray() )  {
+        int Odim_M = 0;
+        QJsonArray fullArray = obj.toArray();
+        int Odim_N = fullArray.size();
+        if(!fullArray.isEmpty()) {
+            Odim_M = fullArray[0].toArray().size();
+        }
+
+        if( IsDynamic() ) {
+            if( Odim_M==0 || Odim_N==0 )  {
+                Free();
+                return;
+            }
+            if( Odim_N != N || Odim_M != M || IsNull() ) {
+                Alloc( Odim_N, Odim_M, Type );
+                check();
+            }
+        }
+        else {
+            if( Odim_N != N || Odim_M != M )
+                Error( GetKeywd(), "TObject:E07 Invalid size on getting static data object");
+        }
+
+        for(int i=0; i < N; i++ ) {
+            auto valArray = fullArray[i].toArray();
+            for(int j=0; j < M; j++ ) {
+                if( valArray.size() <= j ) {
+                    SetString( S_EMPTY, i, j );
+                    continue;
+                }
+                if( Type>= D_ && Type<= I_ ) {
+                    double valDouble =  valArray[j].toDouble(DOUBLE_EMPTY);
+                    if(IsDoubleEmpty(valDouble)) {
+                        SetString( S_EMPTY, i, j );
+                    }
+                    else {
+                        Put( valDouble, i, j );
+                    }
+                }
+                else   {
+                    valStr = valArray[j].toString("").toStdString();
+                    SetString( valStr.c_str(), i, j );
+                }
+            }
+        }
+    }
+}
 
 // Implementation of TObjList class
 

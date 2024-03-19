@@ -393,6 +393,8 @@ public:
 
     void toJsonObject( QJsonObject& obj ) const;
     std::string fromJsonObject( const QJsonObject& obj );
+    void toJsonObjectNew( QJsonObject& obj ) const;
+    std::string fromJsonObjectNew( const QJsonObject& obj );
 };
 
 // Data Base container : rt

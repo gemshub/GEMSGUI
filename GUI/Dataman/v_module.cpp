@@ -2039,7 +2039,7 @@ void TCModule::RecListToJSON(const char *pattern)
         db->Get( Rnum );
         db->SetKey( aKey[i].c_str() );
         QJsonObject recObject;
-        db->toJsonObject( recObject );
+        db->toJsonObjectNew( recObject );
         allArray.append(recObject);
     }
     QJsonDocument saveDoc(allArray);
@@ -2068,7 +2068,7 @@ void TCModule::RecListFromJSON()
     int quest_reply = VF_UNDEF;
     for( const auto& val : allArray)
     {
-        std::string keyp = db->fromJsonObject( val.toObject() );
+        std::string keyp = db->fromJsonObjectNew( val.toObject() );
         auto Rnum = db->Find( keyp.c_str() );
         if( Rnum >= 0 )
         {

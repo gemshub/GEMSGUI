@@ -26,6 +26,7 @@
 
 class GemDataStream;
 class QJsonObject;
+class QJsonValue;
 
 const char TOKENOLABEL = '^';
 const char TOKENOBJBEGIN = '~';
@@ -240,6 +241,8 @@ public:
     {
         return pV == o.pV;
     }
+    QJsonValue toJsonValue() const;
+    void fromJsonValue(const QJsonValue &obj);
 };
 
 

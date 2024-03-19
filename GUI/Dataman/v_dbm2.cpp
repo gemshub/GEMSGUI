@@ -591,6 +591,45 @@ std::string TDataBase::fromJsonObject(const QJsonObject &obj)
 }
 
 
+void TDataBase::toJsonObjectNew( QJsonObject &obj ) const
+{
+    QJsonArray keyArray;
+    for( int ii=0; ii < KeyNumFlds(); ii++) {
+        auto fld_key = char_array_to_string( FldKey(ii), FldLen(ii) );
+        strip(fld_key);
+        keyArray.append(fld_key.c_str());
+    }
+    obj[ "key" ] = keyArray;
+
+    QJsonObject dodAll;
+    for( int ii=0, no=frstOD; ii<nOD;  ii++, no++)  {
+        if( aObj[no]->GetDescription(0,0) == "ejdbignore" )
+            continue;
+        dodAll[aObj[no]->GetKeywd()] = aObj[no]->toJsonValue();
+    }
+    obj[ "dod" ] = dodAll;
+}
+
+std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)
+{
+    QJsonArray keyArray = obj["key"].toArray();
+    string keyStr = "", kbuf;
+    for(int ii=0; ii< std::min<int>(KeyNumFlds(), keyArray.size()); ii++ ) {
+        kbuf =  keyArray[ii].toString("*").toStdString();
+        strip( kbuf );
+        keyStr += kbuf.substr(0, FldLen( ii ));
+        keyStr += ":";
+    }
+    auto dodAll = obj["dod"].toObject();
+    for( int ii=0, no=frstOD; ii<nOD;  ii++, no++)  {
+        if( aObj[no]->GetDescription(0,0) == "ejdbignore" )
+            continue;
+        aObj[no]->fromJsonValue(dodAll[aObj[no]->GetKeywd()]);
+    }
+    return keyStr;
+}
+
+
 //Read record update time from PDB file to memory.
 time_t TDataBase::GetTime( uint i )
 {
