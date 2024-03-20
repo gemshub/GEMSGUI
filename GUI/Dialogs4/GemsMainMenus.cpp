@@ -882,7 +882,8 @@ void TVisorImp::CmProjectImportJson()
     NewSystemDialog *wn = activeNewSystemCommand();
     if( wn ) {
         wn->CmProjectImportJson();
-        Update( true );
+        CmDataBaseMode();
+        //Update( true );
     }
 }
 
