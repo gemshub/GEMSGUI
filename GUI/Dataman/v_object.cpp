@@ -1183,10 +1183,6 @@ QJsonValue TObject::toJsonValue() const
 void TObject::fromJsonValue(const QJsonValue &obj)
 {
     std::string valStr;
-    if( strcmp(Keywd, "GDwkb") == 0 )  {
-        valStr = obj.toString("`").toStdString();
-    }
-
     if( obj.isNull() ) {
         if( IsDynamic() ) {
             Free();
