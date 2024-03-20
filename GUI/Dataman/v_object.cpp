@@ -1170,7 +1170,7 @@ QJsonValue TObject::toJsonValue() const
                     else {
                         auto str_val = GetString(i,j);
                         //strip(str_val);
-                        valArray.append( str_val.c_str() );
+                        valArray.append(str_val.c_str());
                     }
                 }
             }
@@ -1183,11 +1183,15 @@ QJsonValue TObject::toJsonValue() const
 void TObject::fromJsonValue(const QJsonValue &obj)
 {
     std::string valStr;
-    if( obj.isNull() && !IsNull() ) {
+    if( strcmp(Keywd, "GDwkb") == 0 )  {
+        valStr = obj.toString("`").toStdString();
+    }
+
+    if( obj.isNull() ) {
         if( IsDynamic() ) {
             Free();
         }
-        else { // clear
+        else if( !IsNull() ) { // clear
             SetString(S_EMPTY, 0, 0);
         }
         return;
@@ -1200,16 +1204,23 @@ void TObject::fromJsonValue(const QJsonValue &obj)
 
     if( strcmp(Keywd+2, "plt") == 0 )  {
         QJsonArray pltArray = obj.toArray();
+        auto plot = static_cast<TPlotLine * >(Alloc( pltArray.size(), sizeof(TPlotLine) ));
         for(int ii=0; ii< min<int>( N, pltArray.size()); ii++) {
             QJsonObject pltObject = pltArray[ii].toObject();
-            ((TPlotLine*)GetPtr() + ii)->fromJsonObject( pltObject );
+            plot[ii].fromJsonObject( pltObject );
         }
         return;
     }
 
     if( Type == S_ ) { // text
         valStr = obj.toString("`").toStdString();
-        SetString( valStr.c_str(), 0, 0 );
+        auto Odim_M = valStr.length() + 1;
+        if(IsDynamic()) {
+            Alloc( 1, Odim_M, Type );
+        }
+        if(!IsNull()) {
+            SetString( valStr.c_str(), 0, 0 );
+        }
     }
     else if( obj.isArray() )  {
         int Odim_M = 0;
@@ -1251,7 +1262,7 @@ void TObject::fromJsonValue(const QJsonValue &obj)
                     }
                 }
                 else   {
-                    valStr = valArray[j].toString("").toStdString();
+                    valStr = valArray[j].toString(string_empty_value.c_str()).toStdString();
                     SetString( valStr.c_str(), i, j );
                 }
             }

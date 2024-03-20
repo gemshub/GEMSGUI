@@ -1368,5 +1368,37 @@ void TProfil::generate_ThermoFun_input_file_stream(iostream &stream, bool compac
     stream << json_str << std::endl;
 }
 
+
+void  TProfil::exportJsonFiles(QWidget* par)
+{
+    // Select destination
+    string prfName = projectName();
+    std::string dir;
+    if( !vfChooseDirectory( par, dir,"Please, enter output directory location." ))
+        return;
+
+    for(size_t i=0; i<aMod.size(); i++) {
+        if( aMod[i]->IsSubModule() )
+            continue;
+        std::string filename = dir+ "/" + aMod[i]->GetName() + "-" +prfName + ".json";
+        dynamic_cast<TCModule*>(aMod[i].get())->RecListToJSON("*",filename, true);
+    }
+}
+
+void  TProfil::importJsonFiles(QWidget* par)
+{
+    string prfName = "Kaolinite"; //projectName();
+    std::string dir;
+    if( !vfChooseDirectory( par, dir,"Please, enter input directory location." ))
+        return;
+
+    for(size_t i=RT_ICOMP; i<aMod.size(); i++) {
+        if( aMod[i]->IsSubModule() )
+            continue;
+        std::string filename = dir+ "/" + aMod[i]->GetName() + "-" +prfName + ".json";
+        dynamic_cast<TCModule*>(aMod[i].get())->RecListFromJSON(filename);
+    }
+}
+
 //------------------ End of m_prfget2.cpp --------------------------
 
