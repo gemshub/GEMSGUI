@@ -1640,7 +1640,7 @@ void TCModule::CmBackuptoJson()
             return;
 
         std::string s=GetName();
-        std::string filename = s + "-backup.json";
+        std::string filename = s + ".backup.json";
         s += " : Please, give a file name for unloading records";
         if( vfChooseFileSave( window(), filename, s.c_str(), "*.json" ) == false )
             return;

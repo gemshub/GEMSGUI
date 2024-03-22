@@ -88,6 +88,8 @@ out_stream << isDelete << "  "; // endl;
 out_stream << frstOD << ' '; // endl;
 //    f.write( (char*)&nOD, sizeof(unsigned char) );
 out_stream << uint(nOD) << "  "; // endl;
+out_stream << frstODjson << "  "; // endl;
+out_stream << lastODjson << "  "; // endl;
 //    f.write( (char*)&specialFilesNum, sizeof(int) );
 out_stream << specialFilesNum <<  "  "; //  endl;
 
@@ -129,6 +131,8 @@ in_stream >> frstOD;
 //    f.read( (char*)&nOD, sizeof(unsigned char) );
 in_stream >> tmp;
 nOD = tmp;
+in_stream >> frstODjson;
+in_stream >> lastODjson;
 //    f.read( (char*)&specialFilesNum, sizeof(int) );
 in_stream >> specialFilesNum;
 
@@ -159,7 +163,7 @@ TDataBase::TDataBase( size_t nrt, const char* name,
                       bool Rclose, bool isDel, int nOf, unsigned char Nobj,
                       int filesNum, unsigned char nRkflds, const unsigned char* rkfrm ):
         nRT(nrt), status(UNDF_), rclose(Rclose), isDelete(isDel),
-        frstOD(nOf), nOD(Nobj),
+        frstOD(nOf), nOD(Nobj), frstODjson(frstOD), lastODjson(frstOD+nOD-1),
         ind( nRkflds, rkfrm ),
         aFile(), fls(), specialFilesNum(filesNum)
 {
@@ -541,9 +545,9 @@ void TDataBase::toJsonObject( QJsonObject &obj ) const
 
     // write objects
     QJsonArray dodArray;
-    for( int ii=0, no=frstOD; ii<nOD;  ii++, no++)
+    for( int no=frstODjson; no<=lastODjson; no++)
     {
-        if( aObj[no]->GetDescription(0,0) == "ejdbignore" )
+        if( frstODjson!=frstOD && aObj[no]->GetDescription(0,0) == "internaldb" )
             continue;
         QJsonObject dodObject;
         dodObject[ "id" ] = no;
@@ -602,8 +606,8 @@ void TDataBase::toJsonObjectNew( QJsonObject &obj ) const
     obj[ "key" ] = keyArray;
 
     QJsonObject dodAll;
-    for( int ii=0, no=frstOD; ii<nOD;  ii++, no++)  {
-        if( aObj[no]->GetDescription(0,0) == "ejdbignore" )
+    for( int no=frstODjson; no<=lastODjson;  no++) {
+        if( frstODjson!=frstOD && aObj[no]->GetDescription(0,0) == "internaldb" )
             continue;
         dodAll[aObj[no]->GetKeywd()] = aObj[no]->toJsonValue();
     }
@@ -621,8 +625,8 @@ std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)
         keyStr += ":";
     }
     auto dodAll = obj["dod"].toObject();
-    for( int ii=0, no=frstOD; ii<nOD;  ii++, no++)  {
-        if( aObj[no]->GetDescription(0,0) == "ejdbignore" )
+    for( int no=frstODjson; no<=lastODjson;  no++) {
+        if( frstODjson!=frstOD && aObj[no]->GetDescription(0,0) == "internaldb" )
             continue;
         aObj[no]->fromJsonValue(dodAll[aObj[no]->GetKeywd()]);
     }

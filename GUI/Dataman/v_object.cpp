@@ -1155,6 +1155,19 @@ QJsonValue TObject::toJsonValue() const
     if( Type == S_ ) { // text
         return QJsonValue((const char*)GetPtr());
     }
+    else if( !IsDynamic() && N==1 && M==1 ) {
+        if( IsEmpty(0,0)) {
+            return QJsonValue(QJsonValue::Null);
+        }
+        else {
+            if( Type>= D_ && Type<= I_) {
+                return QJsonValue(Get(0,0));
+            }
+            else {
+                return QJsonValue(GetString(0,0).c_str());
+            }
+        }
+    }
     else {
         QJsonArray fullArray;
         for(int i=0; i < N; i++ ) {
@@ -1262,6 +1275,22 @@ void TObject::fromJsonValue(const QJsonValue &obj)
                     SetString( valStr.c_str(), i, j );
                 }
             }
+        }
+    }
+
+    else if( !IsDynamic() && N==1 && M==1 ) {
+        if( Type>= D_ && Type<= I_ ) {
+            double valDouble =  obj.toDouble(DOUBLE_EMPTY);
+            if(IsDoubleEmpty(valDouble)) {
+                SetString( S_EMPTY, 0, 0 );
+            }
+            else {
+                Put( valDouble, 0, 0 );
+            }
+        }
+        else   {
+            valStr = obj.toString(string_empty_value.c_str()).toStdString();
+            SetString( valStr.c_str(), 0, 0 );
         }
     }
 }

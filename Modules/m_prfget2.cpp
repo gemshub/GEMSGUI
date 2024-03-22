@@ -1381,7 +1381,7 @@ void  TProfil::exportJsonFiles(QWidget* par)
     for(size_t i=RT_ICOMP; i<RT_SYSEQ; i++) {
         if( aMod[i]->IsSubModule() )
             continue;
-        std::string filename = dir+ "/" + aMod[i]->GetName() + "-" +prfName + ".json";
+        std::string filename = dir+ "/" + aMod[i]->GetName() + "." +prfName + ".json";
         dynamic_cast<TCModule*>(aMod[i].get())->RecListToJSON("*",filename, true);
     }
 }
@@ -1401,7 +1401,7 @@ void  TProfil::importJsonFiles(QWidget* par)
         if( aMod[i]->IsSubModule() )
             continue;
 
-         std::string file_filter = std::string(aMod[i]->GetName()) + "-*.json";
+         std::string file_filter = std::string(aMod[i]->GetName()) + ".*.json";
          auto files = thisDir.entryList( {file_filter.c_str()});
          foreach(QString filename, files) {
            //std::cout <<filename.toStdString() << std::endl;
