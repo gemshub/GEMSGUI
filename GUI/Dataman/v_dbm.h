@@ -400,7 +400,7 @@ public:
 
     void toJsonObject( QJsonObject& obj ) const;
     std::string fromJsonObject( const QJsonObject& obj );
-    void toJsonObjectNew( QJsonObject& obj ) const;
+    void toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const;
     std::string fromJsonObjectNew( const QJsonObject& obj );
 };
 

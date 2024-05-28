@@ -2021,7 +2021,7 @@ void TCModule::RecImport()
     dyn_set();
 }
 
-void TCModule::RecListToJSON(const char *pattern, const std::string&filename, bool all_records)
+void TCModule::RecListToJSON(const char *pattern, const std::string& filename, bool all_records)
 {
     TCStringArray aKey;
     if( all_records ) {
@@ -2034,13 +2034,24 @@ void TCModule::RecListToJSON(const char *pattern, const std::string&filename, bo
     if( aKey.size()<1 ) {
         return;
     }
+    // get project name from file
+    auto pos_ext = filename.find_last_of(".");
+    auto pos_name = filename.find_last_of(".", pos_ext-1);
+    if(pos_name == std::string::npos) {
+      pos_name = 0;
+    }
+    else {
+      pos_name += 1;
+    }
+    std::string project_name = filename.substr(pos_name, pos_ext-pos_name);
+
     QJsonArray allArray;
     for( size_t i=0; i<aKey.size(); i++ ) {
         int Rnum = db->Find(aKey[i].c_str());
         db->Get(Rnum);
         db->SetKey(aKey[i].c_str());
         QJsonObject recObject;
-        db->toJsonObjectNew(recObject);
+        db->toJsonObjectNew(recObject, project_name);
         allArray.append(recObject);
     }
     QJsonDocument saveDoc(allArray);

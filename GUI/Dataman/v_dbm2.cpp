@@ -595,7 +595,7 @@ std::string TDataBase::fromJsonObject(const QJsonObject &obj)
 }
 
 
-void TDataBase::toJsonObjectNew( QJsonObject &obj ) const
+void TDataBase::toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const
 {
     QJsonArray keyArray;
     for( int ii=0; ii < KeyNumFlds(); ii++) {
@@ -603,7 +603,8 @@ void TDataBase::toJsonObjectNew( QJsonObject &obj ) const
         strip(fld_key);
         keyArray.append(fld_key.c_str());
     }
-    obj[ "key" ] = keyArray;
+    obj["key"] = keyArray;
+    obj["project"] = project_name.c_str();
 
     QJsonObject dodAll;
     for( int no=frstODjson; no<=lastODjson;  no++) {
@@ -611,7 +612,7 @@ void TDataBase::toJsonObjectNew( QJsonObject &obj ) const
             continue;
         dodAll[aObj[no]->GetKeywd()] = aObj[no]->toJsonValue();
     }
-    obj[ "dod" ] = dodAll;
+    obj["dod"] = dodAll;
 }
 
 std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)

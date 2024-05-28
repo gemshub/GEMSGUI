@@ -178,7 +178,7 @@ public:
         return "Project";
     }
 
-    std::string projectName()
+    static std::string projectName()
     {
       auto strfilt = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
       StripLine(strfilt);

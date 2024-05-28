@@ -1373,7 +1373,7 @@ void TProfil::generate_ThermoFun_input_file_stream(iostream &stream, bool compac
 void  TProfil::exportJsonFiles(QWidget* par)
 {
     // Select destination
-    string prfName = projectName();
+    string project_name = projectName();
     std::string dir;
     if( !vfChooseDirectory( par, dir,"Please, enter output directory location." ))
         return;
@@ -1381,8 +1381,8 @@ void  TProfil::exportJsonFiles(QWidget* par)
     for(size_t i=RT_ICOMP; i<RT_SYSEQ; i++) {
         if( aMod[i]->IsSubModule() )
             continue;
-        std::string filename = dir+ "/" + aMod[i]->GetName() + "." +prfName + ".json";
-        dynamic_cast<TCModule*>(aMod[i].get())->RecListToJSON("*",filename, true);
+        std::string filename = dir+ "/" + aMod[i]->GetName() + "." +project_name + ".json";
+        dynamic_cast<TCModule*>(aMod[i].get())->RecListToJSON("*", filename, true);
     }
 }
 
