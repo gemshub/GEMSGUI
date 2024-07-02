@@ -2074,6 +2074,8 @@ void TCModule::RecListFromJSON(const std::string&filename)
     QJsonArray allArray = readDoc.array();
     int quest_reply = VF_UNDEF;
     for( const auto& val : allArray) {
+        dyn_kill();
+        set_def(); // set default data or zero if necessary
         std::string keyp = db->fromJsonObjectNew( val.toObject() );
         auto Rnum = db->Find( keyp.c_str() );
         if( Rnum >= 0 ) {
