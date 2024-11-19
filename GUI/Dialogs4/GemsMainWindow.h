@@ -341,6 +341,8 @@ public slots:
     void CmInsert_SYSTEM();
     void CmOutMulti();
     void CmReadMulti();
+    void CmProjectExportJson();
+    void CmProjectImportJson();
 
     void CmRunBCC();
     void CmRunIPM();

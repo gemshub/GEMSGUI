@@ -357,6 +357,8 @@ void TVisorImp::setActions()
     connect( ui->sactionINSERT_SYSTEM, SIGNAL(triggered()), this, SLOT(CmInsert_SYSTEM()));
     connect( ui->sactionOutMulti, SIGNAL(triggered()), this, SLOT(CmOutMulti()));
     connect( ui->sactionReadMulti, SIGNAL(triggered()), this, SLOT(CmReadMulti()));
+    connect( ui->actionExport_JSON_files, SIGNAL(triggered()), this, SLOT(CmProjectExportJson()));
+    connect( ui->actionImport_JSON_files, SIGNAL(triggered()), this, SLOT(CmProjectImportJson()));
 
     connect( ui->saction_BCC, SIGNAL(triggered()), this, SLOT(CmRunBCC()));
     connect( ui->saction_IPM, SIGNAL(triggered()), this, SLOT(CmRunIPM()));
@@ -865,6 +867,24 @@ void TVisorImp::CmReadMulti()
     NewSystemDialog *wn = activeNewSystemCommand();
     if( wn )
         wn->CmReadMulti();
+}
+
+void TVisorImp::CmProjectExportJson()
+{
+    NewSystemDialog *wn = activeNewSystemCommand();
+    if( wn ) {
+        wn->CmProjectExportJson();
+    }
+}
+
+void TVisorImp::CmProjectImportJson()
+{
+    NewSystemDialog *wn = activeNewSystemCommand();
+    if( wn ) {
+        wn->CmProjectImportJson();
+        CmDataBaseMode();
+        //Update( true );
+    }
 }
 
 //----------------------------------------------------------------------------------------

@@ -53,7 +53,7 @@ TGtDemo::TGtDemo( uint nrt ):
 
 const std::string& TGtDemo::GetString()
 {
-    titler = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+    titler = TProfil::pm->projectName();
     titler += " : ";
     titler += TSubModule::GetString();
     return titler;
@@ -74,10 +74,8 @@ std::string TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
     else str = oldKey;
 
     if( keyType==KEY_NEW  )
-    { // Get key of Project
-        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
-        StripLine(prfKey);
-        str = prfKey;
+    {   // Get key of Project
+        str = TProfil::pm->projectName();
         str+= ":*:*:*:*:";
     }
     str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
@@ -95,8 +93,7 @@ void TGtDemo::keyTest( const char *key )
 {
     if( pVisor->ProfileMode  )
     { // test project key
-        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
-        StripLine(prfKey);
+        std::string prfKey = TProfil::pm->projectName();
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )

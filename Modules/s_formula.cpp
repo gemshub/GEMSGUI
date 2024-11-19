@@ -725,7 +725,8 @@ void TFormula::Stm_line( int N, double *Sml, char *ICsym, short *ICval )
             sprintf( buf, "%lg != %lg", aZ, tt );
             str += buf;
  aSC[ii] = aZ;  // KD 03.01.04  - temporary workaround (adsorption)
-            vfMessage( 0,  "W34FPrun: Charge imbalance ", str.c_str() );
+            gui_logger->error("W34FPrun: Charge imbalance: {}", str.c_str());
+           // vfMessage( 0,  "W34FPrun: Charge imbalance ", str.c_str() );
          }
    }
 }

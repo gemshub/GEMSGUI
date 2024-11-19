@@ -282,24 +282,23 @@ public:
     virtual void RecordPlot( const char *key );
 
     //-- Database manipulation
-    void DelList( const char *pattern );
-    void Transfer( const char *pattern );
-    void CopyRecordsList( const char *pattern, bool if_rename );
-    void KeysToTXT( const char *pattern );
-    void RecToTXT( const char *pattern );
-    void RecOfTXT( );
-    void RecExport( const char *pattern );
-    void RecImport( );
-    void RecListToJSON( const char *pattern );
-    void RecListFromJSON();
+    void DelList(const char *pattern);
+    void Transfer(const char *pattern);
+    void CopyRecordsList(const char *pattern, bool if_rename);
+    void KeysToTXT(const char *pattern);
+    void RecToTXT(const char *pattern);
+    void RecOfTXT();
+    void RecExport(const char *pattern);
+    void RecImport();
+    void RecListToJSON(const char *pattern, const std::string&filename, bool all_records=false);
+    void RecListFromJSON(const std::string&filename);
 
     TCIntArray SelectFileList(int mode);
 
     virtual void MakeQuery();
 
     //-- Module manipulation
-    virtual string  GetKeyofRecord( const char *oldKey, const char *strTitle,
-                                     int keyType );
+    virtual string  GetKeyofRecord(const char *oldKey, const char *strTitle, int keyType);
     virtual string  makeKeyFilter();
     virtual bool  testKeyFilter();
     const char *getFilter()

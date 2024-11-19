@@ -179,9 +179,7 @@ void TProfil::OpenProfileMode( const char* key,
         if( addFile == true )
         {  // part to add files to list
            rt[RT_PARAM]->SetKey( key );
-           std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-           StripLine(fstKeyFld);
-
+           std::string fstKeyFld = projectName();
            GetFN( fstKeyFld.c_str() );
            SetFN();
         }
@@ -244,8 +242,7 @@ AGAIN:
             return false; // cancel command
 
         rt[RT_PARAM]->SetKey( key_str.c_str() );
-        std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-        StripLine(fstKeyFld);
+        std::string fstKeyFld = projectName();
         new_project_dir_name = fstKeyFld;
 
         //Test equal project names
@@ -298,9 +295,7 @@ AGAIN:
         else  // using existing Project
         {
             rt[RT_PARAM]->SetKey( templ_str.c_str() );
-            std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-            StripLine(fstKeyFld_t);
-
+            std::string fstKeyFld_t = projectName();
             InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
             RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
         }
@@ -345,13 +340,8 @@ AGAIN:
         pVisor->CloseMessage();
         contentsChanged = false;
         //delete projct directory, if Project record create error
-        // SD oct 2005
-        //      std::string fstKeyFld =
-        //                std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-        //      StripLine(fstKeyFld);
-
         std::string Path = pVisor->userProfDir();
-        Path += new_project_dir_name; // fstKeyFld;
+        Path += new_project_dir_name;
         pVisor->deleteDBDir(Path.c_str());
         throw;
     }
@@ -374,8 +364,7 @@ AGAIN:
             return false; // cancel command
 
         rt[RT_PARAM]->SetKey( key_str.c_str() );
-        std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-        StripLine(fstKeyFld);
+        std::string fstKeyFld = projectName();
         new_project_dir_name = fstKeyFld;
 
         //Test equal project names
@@ -428,9 +417,7 @@ AGAIN:
         else  // using existing Project
         {
             rt[RT_PARAM]->SetKey( templ_str.c_str() );
-            std::string fstKeyFld_t = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-            StripLine(fstKeyFld_t);
-
+            std::string fstKeyFld_t = projectName();
             InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
             RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
         }
@@ -478,13 +465,8 @@ AGAIN:
         pVisor->CloseMessage();
         contentsChanged = false;
         //delete project directory, if Project record create error
-        //SD oct 2005
-        //      std::string fstKeyFld =
-        //                std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-        //      StripLine(fstKeyFld);
-
         std::string Path = pVisor->userProfDir();
-        Path +=   new_project_dir_name; // fstKeyFld;
+        Path +=   new_project_dir_name;
         pVisor->deleteDBDir(Path.c_str());
         throw;
     }
@@ -855,9 +837,7 @@ void TProfil::SetFN()
     TCStringArray aFls;
     std::string s;
 
-    std::string fstKeyFld = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-    StripLine(fstKeyFld);
-
+    std::string fstKeyFld = projectName();
     for( i=0; i<aMod.size(); i++)
     {
         if( aMod[i]->IsSubModule() )

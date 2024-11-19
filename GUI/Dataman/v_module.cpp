@@ -299,8 +299,7 @@ string  TCModule::makeKeyFilter()
          ( RT_PARAM==nRT || RT_SYSEQ==nRT || RT_PROCES==nRT ||
            RT_GTDEMO==nRT || RT_UNSPACE==nRT || RT_DUALTH==nRT || RT_GEM2MT==nRT ) )
     {
-      strfilt = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
-      StripLine(strfilt);
+      strfilt = TProfil::pm->projectName();
       strfilt += ":";
     }
     else
@@ -322,8 +321,7 @@ bool  TCModule::testKeyFilter()
        ( RT_PARAM==nRT || RT_SYSEQ==nRT || RT_PROCES==nRT ||
          RT_GTDEMO==nRT || RT_UNSPACE==nRT || RT_DUALTH==nRT || RT_GEM2MT==nRT ) )
   {
-    string strfilt = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
-    StripLine(strfilt);
+    string strfilt = TProfil::pm->projectName();
     strfilt += ":";
     if(Filter.rfind(strfilt, 0) != 0)
      return true;
@@ -1637,16 +1635,20 @@ TCModule::CmRestore()
 
 void TCModule::CmBackuptoJson()
 {
-    try
-    {
+    try {
         if( !MessageToSave() )
             return;
 
-        RecListToJSON( Filter.c_str() );
+        std::string s=GetName();
+        std::string filename = s + ".backup.json";
+        s += " : Please, give a file name for unloading records";
+        if( vfChooseFileSave( window(), filename, s.c_str(), "*.json" ) == false )
+            return;
+
+        RecListToJSON(Filter.c_str(), filename);
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
@@ -1654,16 +1656,18 @@ void TCModule::CmBackuptoJson()
 
 void TCModule::CmRestorefromJson()
 {
-    try
-    {
+    try {
         if( !MessageToSave() )
             return;
-
-        RecListFromJSON();
+        // Choose file name
+        std::string s = std::string( GetName() )+" : Please, select file with unloaded records";
+        std::string filename;
+        if( vfChooseFileOpen( window(), filename, s.c_str(), "*.json" ) == false )
+            return;
+        RecListFromJSON(filename);
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
@@ -2017,47 +2021,50 @@ void TCModule::RecImport()
     dyn_set();
 }
 
-void TCModule::RecListToJSON(const char *pattern)
+void TCModule::RecListToJSON(const char *pattern, const std::string& filename, bool all_records)
 {
-    TCStringArray aKey = vfMultiKeys( window(),
-                                      "Please, mark records to be unloaded to JSON",
-                                      nRT, pattern );
-    if( aKey.size() <1 )
+    TCStringArray aKey;
+    if( all_records ) {
+        TCIntArray anR;
+        db->GetKeyList(pattern, aKey, anR);
+    }
+    else {
+        aKey = vfMultiKeys(window(), "Please, mark records to be unloaded to JSON", nRT, pattern);
+    }
+    if( aKey.size()<1 ) {
         return;
-
-    string s = GetName();
-    string filename = GetName();
-           filename += "_backup.json";
-    s += " : Please, give a file name for unloading records";
-    if( vfChooseFileSave( window(), filename, s.c_str(), "*.json" ) == false )
-        return;
+    }
+    // get project name from file
+    auto pos_ext = filename.find_last_of(".");
+    auto pos_name = filename.find_last_of(".", pos_ext-1);
+    if(pos_name == std::string::npos) {
+      pos_name = 0;
+    }
+    else {
+      pos_name += 1;
+    }
+    std::string project_name = filename.substr(pos_name, pos_ext-pos_name);
 
     QJsonArray allArray;
-    for( size_t i=0; i<aKey.size(); i++ )
-    {
-        int Rnum = db->Find( aKey[i].c_str() );
-        db->Get( Rnum );
-        db->SetKey( aKey[i].c_str() );
+    for( size_t i=0; i<aKey.size(); i++ ) {
+        int Rnum = db->Find(aKey[i].c_str());
+        db->Get(Rnum);
+        db->SetKey(aKey[i].c_str());
         QJsonObject recObject;
-        db->toJsonObject( recObject );
+        db->toJsonObjectNew(recObject, project_name);
         allArray.append(recObject);
     }
     QJsonDocument saveDoc(allArray);
-    fstream f_out( filename, ios::out );
-    if( f_out.good() )
+    fstream f_out(filename, ios::out);
+    if(f_out.good()) {
         f_out << saveDoc.toJson().data() << std::endl;
+    }
     dyn_set();
 }
 
-void TCModule::RecListFromJSON()
+void TCModule::RecListFromJSON(const std::string&filename)
 {
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
-
-    // Choose file name
-    string s =string( GetName() )+" : Please, select file with unloaded records";
-    string filename;
-    if( vfChooseFileOpen( window(), filename, s.c_str(), "*.json" ) == false )
-        return;
 
     QFile CurrentFile(filename.c_str());
     if(!CurrentFile.open(QIODevice::ReadOnly)) return;
@@ -2066,20 +2073,19 @@ void TCModule::RecListFromJSON()
     QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
     QJsonArray allArray = readDoc.array();
     int quest_reply = VF_UNDEF;
-    for( const auto& val : allArray)
-    {
-        std::string keyp = db->fromJsonObject( val.toObject() );
+    for( const auto& val : allArray) {
+        dyn_kill();
+        set_def(); // set default data or zero if necessary
+        std::string keyp = db->fromJsonObjectNew( val.toObject() );
         auto Rnum = db->Find( keyp.c_str() );
-        if( Rnum >= 0 )
-        {
+        if( Rnum >= 0 ) {
             ReplaceRecordwithQuestion(Rnum, keyp.c_str(), quest_reply);
             if( quest_reply == VF_CANCEL )
                 break;
         }
-        else
-        {
-            AddRecord( keyp.c_str(), fnum );
-            if( fnum == -2 )
+        else {
+            AddRecord(keyp.c_str(), fnum);
+            if(fnum == -2)
                 break;
         }
     }

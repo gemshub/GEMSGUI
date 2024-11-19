@@ -717,8 +717,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         }
 
     }
-    string prfName = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
-    StripLine( prfName );
+    string prfName = TProfil::pm->projectName();
 
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
     {

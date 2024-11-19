@@ -34,7 +34,7 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
     ui->setupUi(this);
     string titl; // = pVisorImp->getGEMTitle();
     titl = "EqStat:: Single Thermodynamic System in Project ";
-    titl+= string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+    titl+= TProfil::pm->projectName();
     setWindowTitle(  titl.c_str()  );
 
     pDia = this;
@@ -413,6 +413,29 @@ void NewSystemDialog::CmReadMulti()
     }
 }
 
+void NewSystemDialog::CmProjectExportJson()
+{
+    try {
+        if( !MessageToSave() )
+            return;
+        TProfil::pm->exportJsonFiles( this );
+    }
+    catch( TError& xcpt ) {
+        vfMessage(this, xcpt.title, xcpt.mess);
+    }
+}
+
+void NewSystemDialog::CmProjectImportJson()
+{
+    try {
+        if( !MessageToSave() )
+            return;
+        TProfil::pm->importJsonFiles( this );
+    }
+    catch( TError& xcpt ) {
+        vfMessage(this, xcpt.title, xcpt.mess);
+    }
+}
 //Calculate actions
 
 void NewSystemDialog::CmRunBCC()

@@ -77,7 +77,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     string str =
             "Basis configuration of a new Modelling Project  ";
-    str +=  string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+    str +=  TProfil::pm->projectName();
     setWindowTitle( str.c_str() );
 
     QObject::connect( ui->bBack, SIGNAL(clicked()), this, SLOT(CmBack()));
