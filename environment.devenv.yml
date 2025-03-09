@@ -1,5 +1,4 @@
 name: GEMSGUI
-name: jsonqml
 
 channels:
   - conda-forge
