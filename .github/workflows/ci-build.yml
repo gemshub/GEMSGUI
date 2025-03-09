@@ -17,6 +17,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
+          - macos-13
         include:
           - os: ubuntu-latest
             conda_platform: linux-64
@@ -24,6 +25,9 @@ jobs:
           - os: windows-latest
             conda_platform: win-64
             artifact_name: jsonqml-windows
+          - os: macos-13
+            conda_platform: osx-64
+            artifact_name: jsonqml-macos
 
     steps:
 
@@ -49,7 +53,6 @@ jobs:
         shell: bash -l {0}
         run: |
           conda activate GEMSGUI
-          #./conda-install-dependencies.sh
           mkdir .build && cd .build
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
           ninja
@@ -60,7 +63,6 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
-          #call conda-install-dependencies.bat || goto :eof
           cmake -DCMAKE_BUILD_TYPE=Release -A x64 -S . -B build  || goto :eof
           cmake --build build --target install  --config Release  || goto :eof
 
