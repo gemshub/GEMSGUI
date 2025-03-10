@@ -19,11 +19,11 @@
 
 #include <cmath>
 #include <cstdio>
-// #ifndef _WIN32
+ #ifndef _WIN32
 // #include <unistd.h>
-// #else
-// #include <io.h>
-// #endif
+ #else
+ #include <io.h>
+ #endif
 
 #include "m_gem2mt.h"
 #include "visor.h"

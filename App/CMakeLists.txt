@@ -8,8 +8,12 @@ set_target_properties(gemsgui-app PROPERTIES
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   target_link_libraries (gemsgui-app PRIVATE GEMSGUI-static gems3kmodules-static)
+  add_dependencies(gemsgui-app GEMSGUI-static)
+  add_dependencies(gemsgui-app gems3kmodules-static)
 else()
   target_link_libraries (gemsgui-app PRIVATE GEMSGUI gems3kmodules)
+  add_dependencies(gemsgui-app GEMSGUI)
+  add_dependencies(gemsgui-app gems3kmodules)
 endif()
 
 install(TARGETS gemsgui-app
@@ -21,6 +25,7 @@ install(TARGETS gemsgui-app
 qt_generate_deploy_app_script(
     TARGET gemsgui-app
     OUTPUT_SCRIPT deploy_script
+    NO_TRANSLATIONS
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})

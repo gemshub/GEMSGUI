@@ -21,11 +21,11 @@
 #include <cstdio>
 using namespace std;
 
-// #ifndef _WIN32
+ #ifndef _WIN32
 // #include <unistd.h>
-// #else
-// #include <io.h>
-// #endif
+ #else
+ #include <io.h>
+ #endif
 
 #include "v_file.h"
 #include "v_user.h"

@@ -17,11 +17,11 @@
 //-------------------------------------------------------------------
 
 
-// #ifndef _WIN32
+ #ifndef _WIN32
 // #include <unistd.h>
-// #else
-// #include <io.h>
-// #endif
+ #else
+ #include <io.h>
+ #endif
 
 #include <QFileDialog>
 #include <QDir>
