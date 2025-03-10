@@ -16,7 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
  #ifndef _WIN32
-// #include <unistd.h>
+ #include <unistd.h>
  #else
  #include <io.h>
  #endif
