@@ -1,12 +1,26 @@
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/Modules)
-LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/GUI)
 
+qt_add_executable(gemsgui-app  main.cpp)
 
-# Create an executable named app with source code main.cpp
-add_executable(gemsgui-app main.cpp)
+set_target_properties(gemsgui-app PROPERTIES
+    WIN32_EXECUTABLE TRUE
+    MACOSX_BUNDLE TRUE
+)
 
-# Link your application against ThermoFun C++ library.
-target_link_libraries (gemsgui-app GEMSGUI gems3kmodules ${GEMS_QT_TARGETS} zmq GEMS3K::GEMS3K)
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+  target_link_libraries (gemsgui-app PRIVATE GEMSGUI-static gems3kmodules-static)
+else()
+  target_link_libraries (gemsgui-app PRIVATE GEMSGUI gems3kmodules)
+endif()
 
-add_dependencies(gemsgui-app GEMS3KMODULES_SHARED)
-add_dependencies(gemsgui-app GEMSGUI_SHARED)
+install(TARGETS gemsgui-app
+    BUNDLE  DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+qt_generate_deploy_app_script(
+    TARGET gemsgui-app
+    OUTPUT_SCRIPT deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+)
+install(SCRIPT ${deploy_script})

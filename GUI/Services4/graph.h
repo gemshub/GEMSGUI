@@ -23,7 +23,7 @@
 #include <math.h>
 #include <vector>
 #include <fstream>
-#include <QtGui/QColor>
+#include <QColor>
 
 class QPointF;
 class QJsonObject;
