@@ -24,7 +24,7 @@ if(BUILD_STATIC_LIBS)
 
    qt_add_library(GEMSGUI-static STATIC
        ${HEADER_FILES} ${SOURCE_FILES} ${GEMSGUI_SRCS})
-   target_link_libraries(GEMSGUI-static PUBLIC zmq GEMS3K::GEMS3K)
+   target_link_libraries(GEMSGUI-static PUBLIC zmq GEMS3K::GEMS3K-static)
    target_link_libraries(GEMSGUI-static PUBLIC Qt6::Widgets Qt6::Core Qt6::Gui Qt6::PrintSupport Qt6::Charts Qt6::Svg Qt6::Help Qt6::Sql)
 
 endif()
