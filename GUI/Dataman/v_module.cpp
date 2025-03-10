@@ -15,11 +15,11 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
+// #ifndef _WIN32
+// #include <unistd.h>
+// #else
+// #include <io.h>
+// #endif
 
 #include <ctime>
 #include <QJsonDocument>

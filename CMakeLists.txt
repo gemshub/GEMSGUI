@@ -46,7 +46,7 @@ endif()
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     set(BUILD_SHARED_LIBS OFF)
 else()
-    #set(BUILD_STATIC_LIBS OFF)
+    set(BUILD_STATIC_LIBS OFF)
 endif()
 
 # Set libraries to be compiled with position independent code mode (i.e., fPIC option in GNU compilers)

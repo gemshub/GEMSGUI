@@ -18,11 +18,11 @@
 //-------------------------------------------------------------------
 //
 
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
+// #ifndef _WIN32
+// #include <unistd.h>
+// #else
+// #include <io.h>
+// #endif
 #include "m_proces.h"
 #include "m_syseq.h"
 #include "visor.h"
