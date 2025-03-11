@@ -10,7 +10,7 @@ if(BUILD_SHARED_LIBS)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
     qt_add_library(gems3kmodules SHARED ${HEADER_FILES} ${SOURCE_FILES})
-    #target_link_libraries(gems3kmodules PUBLIC GEMS3K::GEMS3K)
+    target_link_libraries(gems3kmodules PUBLIC zmq GEMS3K::GEMS3K)
     target_link_libraries(gems3kmodules PRIVATE Qt6::Gui Qt6::Widgets)
 
  endif()
