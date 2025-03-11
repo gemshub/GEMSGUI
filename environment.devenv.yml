@@ -11,7 +11,7 @@ dependencies:
   - make  # [unix]
   - ninja
   - 7zip  # [win]
-  - gems3k>=4.4.0
+  #- gems3k>=4.4.0
   - thermofun>=0.4.3
   - cppzmq
   - mesa-libgl-devel-cos7-x86_64 # [unix]

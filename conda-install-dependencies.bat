@@ -1,0 +1,23 @@
+
+mkdir tmp_velo
+cd tmp_velo
+
+echo
+echo ******                    ******
+echo ****** Compiling gems3k ******
+echo ******                    ******
+echo
+
+echo git clone gems3k...
+git clone https://github.com/gemshub/GEMS3K.git
+cd GEMS3K
+
+echo "Configuring..."
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build
+echo "Building..."
+cmake --build build --target install  --config Release
+
+cd ..\..
+
+REM Housekeeping
+rd /s /q tmp_velo
