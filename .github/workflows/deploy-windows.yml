@@ -65,7 +65,7 @@ jobs:
         run: |
           call conda activate GEMSGUI || goto :eof
           call conda-install-dependencies.bat || goto :eof
-          cmake -DDeployApp=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
+          cmake -DDeployApp=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_GEM2MT=OFF -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
           cmake --build build --target install --config Release || goto :eof
 
       - name: Check deploy
