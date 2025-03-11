@@ -18,3 +18,7 @@ dependencies:
   - qt6-main=6.8.2
   - qt6-charts=6.8.2
   - spdlog
+  - pybind11
+  - pip
+  - python>=3.7
+  - pytest
