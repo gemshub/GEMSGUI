@@ -97,8 +97,7 @@ if(BUILD_NLOHMANNJSON MATCHES ON)
   add_definitions(-DUSE_NLOHMANNJSON)
 endif()
 
-# Build libraries
-add_subdirectory(Modules)
+#add_subdirectory(Modules)
 add_subdirectory(GUI)
 
 # make application

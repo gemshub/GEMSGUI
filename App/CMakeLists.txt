@@ -7,13 +7,11 @@ set_target_properties(gemsgui-app PROPERTIES
 )
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-  target_link_libraries (gemsgui-app PRIVATE gems3kmodules-static GEMSGUI-static zmq GEMS3K::GEMS3K)
+  target_link_libraries (gemsgui-app PRIVATE GEMSGUI-static)
   add_dependencies(gemsgui-app GEMSGUI-static)
-  add_dependencies(gemsgui-app gems3kmodules-static)
 else()
-  target_link_libraries (gemsgui-app PRIVATE GEMSGUI gems3kmodules)
+  target_link_libraries (gemsgui-app PRIVATE GEMSGUI)
   add_dependencies(gemsgui-app GEMSGUI)
-  add_dependencies(gemsgui-app gems3kmodules)
 endif()
 
 install(TARGETS gemsgui-app
