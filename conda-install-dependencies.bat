@@ -9,7 +9,7 @@ echo ******                    ******
 echo
 
 echo git clone gems3k...
-git clone https://github.com/gemshub/GEMS3K.git
+git clone https://github.com/sdmytrievs/GEMS3K.git
 cd GEMS3K
 
 echo "Configuring..."
