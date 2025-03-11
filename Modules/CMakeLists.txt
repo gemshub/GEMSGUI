@@ -10,7 +10,7 @@ if(BUILD_SHARED_LIBS)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
     qt_add_library(gems3kmodules SHARED ${HEADER_FILES} ${SOURCE_FILES})
-    target_link_libraries(gems3kmodules PUBLIC GEMS3K::GEMS3K)
+    #target_link_libraries(gems3kmodules PUBLIC GEMS3K::GEMS3K)
     target_link_libraries(gems3kmodules PRIVATE Qt6::Gui Qt6::Widgets)
 
  endif()
@@ -18,7 +18,6 @@ if(BUILD_SHARED_LIBS)
 # Check if a static library is to be built
 if(BUILD_STATIC_LIBS)
     qt_add_library(gems3kmodules-static STATIC ${HEADER_FILES} ${SOURCE_FILES})
-    target_link_libraries(gems3kmodules-static PUBLIC GEMS3K::GEMS3K-static)
     target_link_libraries(gems3kmodules-static PRIVATE Qt6::Gui Qt6::Widgets)
 
 endif()
