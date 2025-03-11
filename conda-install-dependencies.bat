@@ -13,7 +13,7 @@ git clone https://github.com/gemshub/GEMS3K.git
 cd GEMS3K
 
 echo "Configuring..."
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_GEM2MT=OFF -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build
 echo "Building..."
 cmake --build build --target install  --config Release
 
