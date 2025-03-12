@@ -19,6 +19,6 @@ dependencies:
   - qt6-charts=6.8.2
   - eigen=3.4.0
   - nlohmann_json
-  - spdlog
+  - spdlog=1.11.0
   - python>=3.7
   - pytest
