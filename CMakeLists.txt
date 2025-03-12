@@ -84,6 +84,19 @@ include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dialogs4)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dataman)
 #include_directories("/usr/local/include/GEMS3K")
 
+# Set the list of compiler flags for MSVC compiler
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+    add_compile_options(
+        /D_SCL_SECURE_NO_WARNINGS
+        /D_CRT_SECURE_NO_WARNINGS=1
+        /MP4
+        /utf-8
+        /EHsc
+        /D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
+        /DNOMINMAX
+    )
+endif()
+
 # Set some necessary definitions
 add_definitions(-DNODEARRAYLEVEL)
 add_definitions(-DNO_JSONIO)
