@@ -21,7 +21,10 @@
 
 #include <vector>
 #include "v_user.h"
+#include "GEMS3K/v_detail.h"
 
+/// Default logger for gems3gui part
+extern std::shared_ptr<spdlog::logger> gui_logger;
 
 class QWidget;
 struct windowSetupData;

@@ -22,7 +22,7 @@
 #include "v_dbm.h"
 #include "v_user.h"
 #include "service.h"
-
+#include "GEMS3K/v_detail.h"
 
 TPrintData::TPrintData(const char *sd_key,
     unsigned int nrt, fstream& fout, const char *fmt_text ):

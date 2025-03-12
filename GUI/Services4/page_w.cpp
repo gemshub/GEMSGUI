@@ -29,6 +29,7 @@
 #include "v_mod.h"
 #include "page_w.h"
 #include "GemsMainWindow.h"
+#include "service.h"
 
 const int wdSPACE = 8;
 const int htSPACE = 2;

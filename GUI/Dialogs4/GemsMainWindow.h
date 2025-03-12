@@ -26,6 +26,10 @@
 #include <QLineEdit>
 #include <QThread>
 #include <QHBoxLayout>
+#include <QTableWidget>
+
+#include "module_w.h"
+//#include "v_vals.h"
 
 class IPNCalcObject;
 //class ZMQClient;
@@ -48,11 +52,6 @@ namespace jsonui {
 class GraphDialog;
 }
 using namespace jsonui;
-
-#include <QTableWidget>
-
-#include "module_w.h"
-#include "v_vals.h"
 using namespace std;
 
 #ifdef QT_NO_DEBUG

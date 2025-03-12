@@ -8,14 +8,8 @@ set_target_properties(gemsgui-app PROPERTIES
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   target_link_libraries (gemsgui-app PRIVATE GEMSGUI-static)
-  #add_dependencies(gemsgui-app GEMSGUI-static)
-  if(USE_SPDLOG_PRECOMPILED)
-       target_compile_definitions(gemsgui-app PUBLIC USE_SPDLOG_PRECOMPILED)
-       target_link_libraries(gemsgui-app PUBLIC spdlog::spdlog)
-  endif()
 else()
   target_link_libraries (gemsgui-app PRIVATE GEMSGUI)
-  #add_dependencies(gemsgui-app GEMSGUI)
 endif()
 
 install(TARGETS gemsgui-app

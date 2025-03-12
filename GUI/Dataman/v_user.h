@@ -26,11 +26,12 @@
 #ifndef _v_user_h_
 #define _v_user_h_
 
+#include <string>
 #include <set>
 #include <vector>
 #include <algorithm>
 using namespace std;
-#include "GEMS3K/v_detail.h"
+//#include "GEMS3K/v_detail.h"
 #include "GEMS3K/v_service.h"
 
 
@@ -47,7 +48,7 @@ typedef unsigned int uint;
 #endif
 
 // added for convenience because of frequent use
-typedef vector<string> TCStringArray;
+typedef std::vector<std::string> TCStringArray;
 // Added for convenience
 typedef vector<int> TCIntArray;
 const int MAXKEYWD = 6+1;

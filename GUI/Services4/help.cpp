@@ -20,6 +20,7 @@
 #include "help.h"
 #include "visor.h"
 #include "v_object.h"
+#include "GEMS3K/v_detail.h"
 
 
 // read string untill "end"

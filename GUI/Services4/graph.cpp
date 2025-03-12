@@ -21,6 +21,7 @@
 #include <limits>
 #include <QJsonObject>
 #include "GEMS3K/gdatastream.h"
+#include "GEMS3K/v_detail.h"
 #include "graph.h"
 #include "GemsMainWindow.h"
 

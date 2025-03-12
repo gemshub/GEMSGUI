@@ -21,6 +21,7 @@
 #include <fstream>
 #include <cmath>
 #include "v_user.h"
+#include "GEMS3K/v_detail.h"
 
 char chLowUp(char ch);
 

@@ -37,9 +37,6 @@ namespace jsonui {
 class ChartData;
 }
 
-/// Default logger for gems3gui part
-extern std::shared_ptr<spdlog::logger> gui_logger;
-
 class TSubModule
 {
     // friend TCModuleImp;

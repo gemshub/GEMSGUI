@@ -21,6 +21,7 @@
 #include <cstdio>
 #include "v_ipnc.h"
 #include "v_object.h"
+#include "GEMS3K/v_detail.h"
 
 const char* DIGIT="0123456789.";
 const char* OPER="!^*/+-<a>b=c&|()";

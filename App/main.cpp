@@ -30,7 +30,7 @@
 #include <QtWidgets>
 #include "visor.h"
 #include "GemsMainWindow.h"
-#include "GEMS3K/jsonconfig.h"
+//#include "GEMS3K/jsonconfig.h"
 
 class TIntegApp:  public QApplication
 {
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 
     if(IntegApp.isRunning())
     {
-        gui_logger->critical("gems3: Unable to create second instance.");
+        //gui_logger->critical("gems3: Unable to create second instance.");
         return -2;
     }
     try
@@ -115,17 +115,17 @@ int main(int argc, char* argv[])
         delete pVisorImp;
         return res;
     }
-    catch(TError& err)
-    {
-        auto s = err.title;
-        s += ": ";
-        s += err.mess;
-        gui_logger->critical("GEMS fatal error: {}", s);
-        QMessageBox::critical(0, "GEMS fatal error", s.c_str());
-    }
+    // catch(TError& err)
+    // {
+    //     auto s = err.title;
+    //     s += ": ";
+    //     s += err.mess;
+    //     //gui_logger->critical("GEMS fatal error: {}", s);
+    //     QMessageBox::critical(0, "GEMS fatal error", s.c_str());
+    // }
     catch(...)
     {
-        gui_logger->critical("gems3: Unknown exception: program aborted");
+        //gui_logger->critical("gems3: Unknown exception: program aborted");
         return -1;
     }
     return 0;

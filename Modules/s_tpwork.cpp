@@ -19,6 +19,7 @@
 
 #include "v_object.h"
 #include "s_tpwork.h"
+#include "GEMS3K/v_detail.h"
 
 TpworkList aW;
 struct WATERPARAM aWp;

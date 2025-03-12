@@ -25,6 +25,7 @@
 #include "v_vals.h"
 #include "v_user.h"
 #include "GEMS3K/gdatastream.h"
+#include "GEMS3K/v_detail.h"
 
 
 /* TVal template is defining implementation

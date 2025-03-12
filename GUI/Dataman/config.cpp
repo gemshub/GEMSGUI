@@ -25,6 +25,7 @@ using namespace std;
 
 #include "config.h"
 #include "v_user.h"
+#include "GEMS3K/v_detail.h"
 
 TConfig::TConfig( const string&fname, char st ):
     space(' '),

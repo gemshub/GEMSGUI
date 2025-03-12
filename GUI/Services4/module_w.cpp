@@ -26,6 +26,7 @@
 #include "module_w.h"
 #include "page_w.h"
 #include "v_mod.h"
+#include "service.h"
 
 /*!
     The constructor

@@ -273,6 +273,23 @@ TObject::BuildVal(ObjType type, int m)
     return p;
 }
 
+void TObject::check() const
+{
+    ErrorIf(IsNull(), GetKeywd(), "Access to null object");
+}
+
+void TObject::check_dim(int n, int m) const
+{
+    check();
+    if( n >= N || m >= M )
+        Error(GetKeywd(), "Cell index beyond object dimension");
+}
+
+void TObject::check_type(ObjType typ) const
+{
+    ErrorIf(typ > 126 || typ < N_TYPE_, GetKeywd(), "Invalid object type");
+}
+
 // sets the pointer to data and (maybe) constructs TVal object
 void
 TObject::SetPtr(void* newPtr)

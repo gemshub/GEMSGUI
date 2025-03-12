@@ -5,6 +5,7 @@
 #include "graph_data.h"
 #include "plot_model.h"
 #include "GraphDialogN.h"
+#include "GEMS3K/v_detail.h"
 jsonui::SeriesLineData convertor( const TPlotLine& plotData );
 TPlotLine convertor( const jsonui::SeriesLineData& serData );
 class TCModule;
