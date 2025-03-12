@@ -25,7 +25,7 @@ echo ******                    ******
 echo
 
 echo git clone thermofun...
-git git clone https://bitbucket.org/gems4/thermofun.git
+git clone https://bitbucket.org/gems4/thermofun.git
 cd thermofun
 
 echo "Configuring..."
