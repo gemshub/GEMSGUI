@@ -7,7 +7,7 @@ set_target_properties(gemsgui-app PROPERTIES
 )
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-  target_link_libraries (gemsgui-app PRIVATE GEMSGUI-static)
+  target_link_libraries (gemsgui-app PRIVATE GEMSGUI-static libzmq GEMS3K::GEMS3K-static)
 else()
   target_link_libraries (gemsgui-app PRIVATE GEMSGUI)
 endif()
