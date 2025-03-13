@@ -109,15 +109,15 @@ string curDateTime()
 istream& u_getline(istream& instream, string& dst_string, char delimit = '\n');
 
 
-#ifdef __FreeBSD
-// replacement for missing function in FreeBSD
-inline char* gcvt(double num, int digit, char* buf)
-{
-    sprintf(buf, "%*g", digit, num);
-    return buf;
-}
+// #ifdef __FreeBSD
+// // replacement for missing function in FreeBSD
+// inline char* gcvt(double num, int digit, char* buf)
+// {
+//     sprintf(buf, "%*g", digit, num);
+//     return buf;
+// }
 
-#endif  // __FreeBSD
+// #endif  // __FreeBSD
 
 
 

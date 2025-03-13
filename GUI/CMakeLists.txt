@@ -1,7 +1,8 @@
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-#set(CMAKE_INCLUDE_CURRENT_DIR ON)
+aux_source_directory(${GEMSGUI_MODULES_SOURCE_DIR} MODULES_SOURCE_FILES)
+aux_source_directory(${GEMSGUI_MODULES_SOURCE_DIR}/Submods SUBMODULES_SOURCE_FILES)
+aux_source_directory(${GEMSGUI_MODULES_SOURCE_DIR}/Numerics NUMERICS_SOURCE_FILES)
+
+#message(STATUS "Building test suite: ${MODULES_SOURCE_FILES}")
 
 # Recursively collect all header files from the current directory
 file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.hpp *.h)
@@ -9,52 +10,32 @@ file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.hpp *.h)
 # Recursively collect all source files from the current directory
 file(GLOB_RECURSE SOURCE_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
-# Enable automatic creation of a module definition (.def) file for a SHARED library on Windows.
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-
 file(GLOB QRC_FILES *.qrc)
-set(RESOURCE ${QRC_FILES})
-if(Qt6_FOUND)
-  qt6_add_resources(GEMSGUI_SRCS ${RESOURCE})
-else()
-  qt5_add_resources(GEMSGUI_SRCS ${RESOURCE})
-endif()
-
-# Create a library using the collected source files
-add_library( GEMSGUI_OBJECT OBJECT ${HEADER_FILES} ${SOURCE_FILES} ${GEMSGUI_SRCS})
+qt_add_resources(GEMSGUI_SRCS ${QRC_FILES})
 
 # Check if a shared library is to be built
 if(BUILD_SHARED_LIBS)
-   add_library(GEMSGUI_SHARED SHARED $<TARGET_OBJECTS:GEMSGUI_OBJECT>)
-   target_link_libraries(GEMSGUI_SHARED PUBLIC zmq GEMS3K::GEMS3K)
-   set_target_properties(GEMSGUI_SHARED PROPERTIES OUTPUT_NAME GEMSGUI )
-   install(TARGETS GEMSGUI_SHARED
-   EXPORT GEMSGUIKTargets DESTINATION "lib" COMPONENT libraries)
-endif()
+   # Enable automatic creation of a module definition (.def) file for a SHARED library on Windows.
+   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
+    qt_add_library(GEMSGUI SHARED
+        ${MODULES_SOURCE_FILES} ${SUBMODULES_SOURCE_FILES} ${NUMERICS_SOURCE_FILES}
+        ${HEADER_FILES} ${SOURCE_FILES}
+        ${GEMSGUI_SRCS}
+        )
+    target_link_libraries(GEMSGUI PUBLIC zmq GEMS3K::GEMS3K)
+    target_link_libraries(GEMSGUI PUBLIC Qt6::Widgets Qt6::Core Qt6::Gui Qt6::PrintSupport Qt6::Charts Qt6::Svg Qt6::Help Qt6::Sql)
+
+endif()
 
 # Check if a static library is to be built
 if(BUILD_STATIC_LIBS)
-   add_library(GEMSGUI_STATIC STATIC $<TARGET_OBJECTS:GEMSGUI_OBJECT>)
-   target_link_libraries(GEMSGUI_STATIC PUBLIC zmq GEMS3K::GEMS3K-static )
-   set_target_properties(GEMSGUI_STATIC PROPERTIES OUTPUT_NAME GEMSGUI-static)
-   install(TARGETS GEMSGUI_STATIC 
-   EXPORT GEMSGUITargets DESTINATION "lib" COMPONENT libraries)
-endif()
 
-## Install debug symbols
-#if(MSVC)
-#    install(
-#        FILES $<TARGET_PDB_FILE:GEMSGUIMODULES>
-#        DESTINATION ${CMAKE_INSTALL_BINDIR}
-#        COMPONENT libraries
-#        OPTIONAL
-#    )
-#endif()
-
-# Install GEMSGUI header files
-#install(DIRECTORY ${PROJECT_SOURCE_DIR}/GEMSGUI
-#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT headers
-#    FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h")
-
-
+   qt_add_library(GEMSGUI-static STATIC
+       ${MODULES_SOURCE_FILES} ${SUBMODULES_SOURCE_FILES} ${NUMERICS_SOURCE_FILES}
+       ${HEADER_FILES} ${SOURCE_FILES}
+       ${GEMSGUI_SRCS}
+   )
+   #target_link_libraries(GEMSGUI-static PUBLIC libzmq GEMS3K::GEMS3K-static)
+   target_link_libraries(GEMSGUI-static PUBLIC Qt6::Widgets Qt6::Core Qt6::Gui Qt6::PrintSupport Qt6::Charts Qt6::Svg Qt6::Help Qt6::Sql)
+ endif()
