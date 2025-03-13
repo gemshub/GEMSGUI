@@ -18,6 +18,55 @@ install(TARGETS gemsgui-app
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+
+find_library(ChemicalFun_PATH  NAMES ChemicalFun)
+if(ChemicalFun_PATH)
+    message(STATUS "Found: ${ChemicalFun_PATH}")
+    file(COPY ${ChemicalFun_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/tmp)
+    install(FILES ${ChemicalFun_PATH} DESTINATION tmp2)
+else()
+    message(STATUS "ChemicalFun not found")
+endif()
+
+find_library(ThermoFun_PATH  NAMES ThermoFun)
+if(ThermoFun_PATH)
+    message(STATUS "Found: ${ThermoFun_PATH}")
+    file(COPY ${ThermoFun_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/tmp)
+    install(FILES ${ThermoFun_PATH} DESTINATION tmp2)
+else()
+    message(STATUS "ThermoFun not found")
+endif()
+
+find_library(fmt_PATH  NAMES fmt)
+if(fmt_PATH)
+    message(STATUS "Found: ${fmt_PATH}")
+    file(COPY ${fmt_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/tmp)
+    install(FILES ${fmt_PATH} DESTINATION tmp2)
+else()
+    message(STATUS "fmt not found")
+endif()
+
+find_library(zlib_PATH  NAMES zlib)
+if(zlib_PATH)
+    message(STATUS "Found: ${zlib_PATH}")
+    file(COPY ${zlib_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/tmp)
+    install(FILES ${zlib_PATH} DESTINATION tmp2)
+else()
+    message(STATUS "zlib not found")
+endif()
+
+find_library(libzmq_PATH  NAMES libzmq)
+if(libzmq_PATH)
+    message(STATUS "Found: ${libzmq_PATH}")
+    file(COPY ${libzmq_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/tmp)
+    install(FILES ${libzmq_PATH} DESTINATION tmp2)
+else()
+    message(STATUS "libzmq not found")
+endif()
+
+endif()
+
 qt_generate_deploy_app_script(
     TARGET gemsgui-app
     OUTPUT_SCRIPT deploy_script
