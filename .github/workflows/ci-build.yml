@@ -2,7 +2,7 @@ name: ci-build
 on:
   push:
     branches:
-      - deploy_2
+      - deploy_1
   pull_request:
     branches:
       - main
