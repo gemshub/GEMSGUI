@@ -21,15 +21,6 @@ install(TARGETS gemsgui-app
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
 
-#find_path(CHEMICALFUN_LIB_DIR NAMES libChemicalFun.dll)
-#message(STATUS "ChemicalFun: ${CHEMICALFUN_LIB_DIR}/libChemicalFun.so")
-#install(FILES "${CHEMICALFUN_LIB_DIR}/libChemicalFun.so" DESTINATION tmp2)
-
-#find_path(ZLIB_LIB_DIR NAMES libfmt1.so PATHS "/usr")
-#message(STATUS "Zlib: ${ZLIB_LIB_DIR}/fmt.so")
-#install(FILES "${ZLIB_LIB_DIR}/fmt.so" DESTINATION tmp3)
-
-
 find_library(ChemicalFun_PATH  NAMES ChemicalFun)
 if(ChemicalFun_PATH)
     message(STATUS "Found: ${ChemicalFun_PATH}")
@@ -74,6 +65,25 @@ if(libzmq_PATH)
 else()
     message(STATUS "libzmq not found")
 endif()
+
+if(USE_SPDLOG_PRECOMPILED)
+    set(dll_path "C:/Miniconda/envs/GEMSGUI/Library/bin")
+    message(STATUS "dll path: ${dll_path}")
+    message(STATUS "conda path: $ENV{CONDA_PREFIX}")
+    install(FILES "${dll_path}/ChemicalFun.dll" DESTINATION bin)
+    install(FILES "${dll_path}/ThermoFun.dll" DESTINATION bin)
+    install(FILES "${dll_path}/fmt.dll" DESTINATION bin)
+    install(FILES "${dll_path}/libzmq-mt-4_3_5.dll" DESTINATION bin)
+    install(FILES "${dll_path}/zlib.dll" DESTINATION bin)
+endif()
+
+#find_path(CHEMICALFUN_LIB_DIR NAMES libChemicalFun.dll)
+#message(STATUS "ChemicalFun: ${CHEMICALFUN_LIB_DIR}/libChemicalFun.so")
+#install(FILES "${CHEMICALFUN_LIB_DIR}/libChemicalFun.so" DESTINATION tmp2)
+
+#find_path(ZLIB_LIB_DIR NAMES libfmt1.so PATHS "/usr")
+#message(STATUS "Zlib: ${ZLIB_LIB_DIR}/fmt.so")
+#install(FILES "${ZLIB_LIB_DIR}/fmt.so" DESTINATION tmp3)
 
 endif()
 

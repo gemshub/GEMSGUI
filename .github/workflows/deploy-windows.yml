@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - deploy1
+      - deploy
   release:
     types:
       - published
@@ -70,6 +70,8 @@ jobs:
 
       - name: Check deploy
         run: |
+          cd C:/Miniconda/envs/GEMSGUI/Library/bin
+          ls
           cd ${{ steps.strings.outputs.deploy-output-dir }}
           ls
 

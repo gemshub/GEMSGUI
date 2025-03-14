@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - deploy
+      - deploy1
   release:
     types:
       - published
