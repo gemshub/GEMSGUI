@@ -87,14 +87,3 @@ jobs:
           name: windows-app
           path: ${{ steps.strings2.outputs.deploy-output-name }}
 
-      - name: Zipping files and folders
-        shell: cmd
-        run: |
-          cd C:/Miniconda/envs/GEMSGUI/Library
-          7z a lib_bin.zip bin
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-bin
-          path: lib_bin.zip

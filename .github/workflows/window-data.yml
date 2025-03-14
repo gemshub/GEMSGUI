@@ -65,11 +65,17 @@ jobs:
         run: |
           cd C:/Miniconda/envs/GEMSGUI/Library/bin
           ls
-          cd C:/Miniconda/envs/GEMSGUI/Library/lib
+          cd C:/Miniconda/envs/GEMSGUI/Library
           ls
-          cd C:/Miniconda/envs/GEMSGUI
-          dir /s libzmq_mt_4_3_5.dll
-          dir /s fmt.dll
-          dir /s zlib.dll
 
+      - name: Zipping files and folders
+        shell: cmd
+        run: |
+              7z a "lib_bin.zip" "bin"
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-bin
+            path: lib_bin.zip
 

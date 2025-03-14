@@ -86,6 +86,10 @@ if(USE_SPDLOG_PRECOMPILED)
     install(FILES "${dll_path}/freetype.dll" DESTINATION bin)
     install(FILES "${dll_path}/zstd.dll" DESTINATION bin)
 
+    install(FILES "${dll_path}/krb5_64.dll" DESTINATION bin)
+    install(FILES "${dll_path}/comerr64.dll" DESTINATION bin)
+    install(FILES "${dll_path}/k5sprt64.dll" DESTINATION bin)
+
 endif()
 
 #find_path(CHEMICALFUN_LIB_DIR NAMES libChemicalFun.dll)
