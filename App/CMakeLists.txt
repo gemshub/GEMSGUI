@@ -81,6 +81,11 @@ if(USE_SPDLOG_PRECOMPILED)
     install(FILES "${dll_path}/spdlog.dll" DESTINATION bin)
     install(FILES "${dll_path}/libpng16.dll" DESTINATION bin)
 
+    install(FILES "${dll_path}/double-conversion.dll" DESTINATION bin)
+    install(FILES "${dll_path}/pcre2-16.dll" DESTINATION bin)
+    install(FILES "${dll_path}/freetype.dll" DESTINATION bin)
+    install(FILES "${dll_path}/zstd.dll" DESTINATION bin)
+
 endif()
 
 #find_path(CHEMICALFUN_LIB_DIR NAMES libChemicalFun.dll)
