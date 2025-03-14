@@ -63,13 +63,13 @@ jobs:
 
       - name: Check deploy
         run: |
-        cd C:/Miniconda/envs/GEMSGUI/Library/bin
-        ls
-        cd C:/Miniconda/envs/GEMSGUI/Library/lib
-        ls
-        cd C:/Miniconda/envs/GEMSGUI
-        dir /s libzmq_mt_4_3_5.dll
-        dir /s fmt.dll
-        dir /s zlib.dll
+          cd C:/Miniconda/envs/GEMSGUI/Library/bin
+          ls
+          cd C:/Miniconda/envs/GEMSGUI/Library/lib
+          ls
+          cd C:/Miniconda/envs/GEMSGUI
+          dir /s libzmq_mt_4_3_5.dll
+          dir /s fmt.dll
+          dir /s zlib.dll
 
 
