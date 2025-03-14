@@ -75,6 +75,12 @@ if(USE_SPDLOG_PRECOMPILED)
     install(FILES "${dll_path}/fmt.dll" DESTINATION bin)
     install(FILES "${dll_path}/libzmq-mt-4_3_5.dll" DESTINATION bin)
     install(FILES "${dll_path}/zlib.dll" DESTINATION bin)
+
+    install(FILES "${dll_path}/gssapi64.dll" DESTINATION bin)
+    install(FILES "${dll_path}/libsodium.dll" DESTINATION bin)
+    install(FILES "${dll_path}/spdlog.dll" DESTINATION bin)
+    install(FILES "${dll_path}/libpng16.dll" DESTINATION bin)
+
 endif()
 
 #find_path(CHEMICALFUN_LIB_DIR NAMES libChemicalFun.dll)
