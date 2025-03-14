@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - deploy1
+      - deploy
   release:
     types:
       - published
@@ -60,28 +60,16 @@ jobs:
           conda install conda-devenv
           conda devenv
 
-      - name: Building, Testing & Installing jsonqml (Windows)
-        shell: cmd
-        run: |
-          call conda activate GEMSGUI || goto :eof
-          call conda-install-dependencies.bat || goto :eof
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
-          cmake --build build --target install --config Release || goto :eof
 
       - name: Check deploy
         run: |
-          cd ${{ steps.strings.outputs.deploy-output-dir }}
-          ls
+        cd C:/Miniconda/envs/GEMSGUI/Library/bin
+        ls
+        cd C:/Miniconda/envs/GEMSGUI/Library/lib
+        ls
+        cd C:/Miniconda/envs/GEMSGUI
+        dir /s libzmq_mt_4_3_5.dll
+        dir /s fmt.dll
+        dir /s zlib.dll
 
-      - name: Zipping files and folders
-        shell: cmd
-        run: |
-          cd ${{ github.workspace }}
-          7z a ${{ steps.strings2.outputs.deploy-output-name }} deploy-windows
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-app
-          path: ${{ steps.strings2.outputs.deploy-output-name }}
 

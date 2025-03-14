@@ -18,7 +18,17 @@ install(TARGETS gemsgui-app
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
+
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+
+#find_path(CHEMICALFUN_LIB_DIR NAMES libChemicalFun.dll)
+#message(STATUS "ChemicalFun: ${CHEMICALFUN_LIB_DIR}/libChemicalFun.so")
+#install(FILES "${CHEMICALFUN_LIB_DIR}/libChemicalFun.so" DESTINATION tmp2)
+
+#find_path(ZLIB_LIB_DIR NAMES libfmt1.so PATHS "/usr")
+#message(STATUS "Zlib: ${ZLIB_LIB_DIR}/fmt.so")
+#install(FILES "${ZLIB_LIB_DIR}/fmt.so" DESTINATION tmp3)
+
 
 find_library(ChemicalFun_PATH  NAMES ChemicalFun)
 if(ChemicalFun_PATH)
