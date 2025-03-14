@@ -90,8 +90,8 @@ jobs:
       - name: Zipping files and folders
         shell: cmd
         run: |
-          cd C:/Miniconda/envs/GEMSGUI/Library/bin
-          7z a lib_bin.zip deploy-windows
+          cd C:/Miniconda/envs/GEMSGUI/Library
+          7z a lib_bin.zip bin
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
