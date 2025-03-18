@@ -16,6 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#include <iostream>
 #include <QMdiArea>
 
 #if QT_VERSION >= 0x050000
@@ -85,6 +86,7 @@ TVisorImp::TVisorImp(int c, char** v):
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)
 {
+    try{
     ui->setupUi(this);
     GEMS3KGenerator::default_type_f = GEMS3KGenerator::f_thermofun;
     ui->action_Use_ThermoFUN->setChecked(GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun);
@@ -281,6 +283,17 @@ TVisorImp::TVisorImp(int c, char** v):
     //startGEMServer();
     updateMenus();
     //moveToolBar();
+    }
+    catch(TError& err)
+    {
+         auto s = err.title;
+         s += ": ";
+         s += err.mess;
+         std::cout<< "GEMS fatal error: "  << s << std::endl;
+         gui_logger->critical("GEMS fatal error: {}", s);
+    //     QMessageBox::critical(0, "GEMS fatal error", s.c_str());
+    }
+
 }
 
 //   The desctructor
