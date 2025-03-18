@@ -16,9 +16,9 @@ jobs:
 
       matrix:
         os:
-          - windows-latest
+          - windows-2019
         include:
-          - os: windows-latest
+          - os: windows-2019
             conda_platform: win-64
             artifact_name: gemsgui-windows
 
