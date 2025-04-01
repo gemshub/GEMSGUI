@@ -2,7 +2,7 @@
 qt_add_executable(gemsgui-app  main.cpp)
 
 set_target_properties(gemsgui-app PROPERTIES
-    WIN32_EXECUTABLE TRUE
+    # WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
 )
 
@@ -89,6 +89,10 @@ if(USE_SPDLOG_PRECOMPILED)
     install(FILES "${dll_path}/krb5_64.dll" DESTINATION bin)
     install(FILES "${dll_path}/comerr64.dll" DESTINATION bin)
     install(FILES "${dll_path}/k5sprt64.dll" DESTINATION bin)
+
+    install(FILES "${dll_path}/vcruntime140.dll" DESTINATION bin)
+    install(FILES "${dll_path}/msvcp140.dll" DESTINATION bin)
+    install(FILES "${dll_path}/opengl32sw.dll" DESTINATION bin)
 
 endif()
 
