@@ -78,6 +78,8 @@ const char *WIN_CONF = "windows.conf";
 TVisor::TVisor(int c, char *v[]):
         argc(c), argv(v)
 {
+   Q_INIT_RESOURCE(GUI);
+
     ProfileMode = MDD_DATABASE;
     dbChangeMode = false;
     isElementsProfileMode = true;
@@ -110,10 +112,10 @@ TVisor::TVisor(int c, char *v[]):
          dirExe = dirUp.path(); // + QDir::separator();
     LocalDir = dirExe.toStdString();
 
-#ifdef NDEBUG
-    UserGEMDir = home_dir() + DEFAULT_USER_DIR;
-#else
+#ifdef IS_DEBUG
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
+#else
+    UserGEMDir = home_dir() + DEFAULT_USER_DIR;
 #endif
 
 #endif // __unix
@@ -129,10 +131,10 @@ TVisor::TVisor(int c, char *v[]):
     if( dirUp.cdUp() )
          dirExe = dirUp.path();
     LocalDir = dirExe.toStdString();
-#ifdef NDEBUG
-    UserGEMDir =  home_dir() + DEFAULT_USER_DIR;
-#else
+#ifdef IS_DEBUG
     UserGEMDir =  localDir() + DEFAULT_USER_DIR;
+#else
+    UserGEMDir =  home_dir() + DEFAULT_USER_DIR;
 #endif
 #endif // win
 
