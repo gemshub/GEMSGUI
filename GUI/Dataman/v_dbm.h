@@ -217,6 +217,8 @@ class TDataBase
     bool isDelete;
     int frstOD;
     unsigned char nOD;
+    int frstODjson;
+    int lastODjson;
     TDBKeyList ind;
     std::vector< std::shared_ptr<TDBFile>> aFile;  // list of add files
     TCIntArray fls;
@@ -254,6 +256,11 @@ public:
     void toCFG( fstream& f );
     void AddFile(const std::string& path);
     void DelFile(const std::string& path);
+    void updateJsonOD(int frstOD, int lastOD)
+    {
+        frstODjson =frstOD;
+        lastODjson =lastOD;
+    }
 
 
     //--- Selectors
@@ -393,6 +400,8 @@ public:
 
     void toJsonObject( QJsonObject& obj ) const;
     std::string fromJsonObject( const QJsonObject& obj );
+    void toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const;
+    std::string fromJsonObjectNew( const QJsonObject& obj );
 };
 
 // Data Base container : rt

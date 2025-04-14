@@ -26,6 +26,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDir>
 #include "m_unspace.h"
 #include "m_dualth.h"
 #include "m_gem2mt.h"
@@ -1366,6 +1367,47 @@ void TProfil::generate_ThermoFun_input_file_stream(iostream &stream, bool compac
     QJsonDocument saveDoc(thermo_data);
     auto json_str = saveDoc.toJson((compact ? QJsonDocument::Compact :QJsonDocument::Indented)).toStdString();
     stream << json_str << std::endl;
+}
+
+
+void  TProfil::exportJsonFiles(QWidget* par)
+{
+    // Select destination
+    string project_name = projectName();
+    std::string dir;
+    if( !vfChooseDirectory( par, dir,"Please, enter output directory location." ))
+        return;
+
+    for(size_t i=RT_ICOMP; i<RT_SYSEQ; i++) {
+        if( aMod[i]->IsSubModule() )
+            continue;
+        std::string filename = dir+ "/" + aMod[i]->GetName() + "." +project_name + ".json";
+        dynamic_cast<TCModule*>(aMod[i].get())->RecListToJSON("*", filename, true);
+    }
+}
+
+void  TProfil::importJsonFiles(QWidget* par)
+{
+    std::string dir;
+    if( !vfChooseDirectory( par, dir,"Please, enter input directory location." ))
+        return;
+
+    QDir thisDir(dir.c_str());
+    if (!thisDir.exists())
+        return;
+    thisDir.setFilter(QDir::Files);
+
+    for(size_t i=RT_ICOMP; i<RT_SYSEQ; i++) {
+        if( aMod[i]->IsSubModule() )
+            continue;
+
+         std::string file_filter = std::string(aMod[i]->GetName()) + ".*.json";
+         auto files = thisDir.entryList( {file_filter.c_str()});
+         foreach(QString filename, files) {
+           //std::cout <<filename.toStdString() << std::endl;
+           dynamic_cast<TCModule*>(aMod[i].get())->RecListFromJSON(dir+"/"+filename.toStdString());
+         }
+    }
 }
 
 //------------------ End of m_prfget2.cpp --------------------------

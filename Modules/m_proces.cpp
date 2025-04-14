@@ -60,16 +60,7 @@ TProcess::TProcess( uint nrt ):
     calcFinished = false;
 
 }
-/*
-const std::string&
-TProcess::GetString()
-{
-    titler = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
-    titler += " : ";
-    titler += TSubModule::GetString();
-    return titler;
-}
-*/
+
 // get key of record
 std::string
 TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
@@ -119,8 +110,7 @@ void TProcess::keyTest( const char *key )
 
     if( pVisor->ProfileMode )
     { // test project key
-        std::string prfKey = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0));
-        StripLine(prfKey);
+        std::string prfKey = TProfil::pm->projectName();
         auto k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
