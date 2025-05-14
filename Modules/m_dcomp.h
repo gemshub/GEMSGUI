@@ -194,8 +194,9 @@ public:
     void RecInput( const char *key );
     void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
-    void TryRecInp( const char *key, time_t& time_s, int q );
+    void RecCalc(const char *key);
+    void RecCalc(const char *key, double TCst=25.0, double Pst=1.0 );
+    void TryRecInp(const char *key, time_t& time_s, int q , bool save = true);
     //void CmHelp();
     const char* GetHtml();
 

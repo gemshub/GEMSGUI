@@ -503,7 +503,15 @@ AGAIN:
 
 //Recalculation of DComp record
 // 19/10/1999: variable _S was changed to S_1
-void TDComp::RecCalc( const char *key )      // dcomp_test
+// DM 29.10.2024 if TCst and Pst other than standard values 25 C 1 bar, possible to be entered by the user in ReacDC
+
+void TDComp::RecCalc(const char *key )      // dcomp_test
+{
+    RecCalc(key , dcp->TCst, dcp->Pst);
+}
+
+
+void TDComp::RecCalc(const char *key , double TCst, double Pst)      // dcomp_test
 {
     int st, st1, stG, stH, stS, stdG, stdH, stdS;
     double Z, MW, foS, T, G, H, S, S_1, dG, dH, dS, Ro, nj;
@@ -613,26 +621,29 @@ NEXT:
         Error( GetName(), "W10DCrun: One of values G0, H0, or S0 is missing!");
 
     // test pogreshnostey
-    if( !stdG && stdH && !stdS )
+    if ((25.0 == TCst) && (1.0 == Pst) ) // DM 29.10.2024 check if different std T and P are used for record calc.
     {
-        dH = sqrt( dG*dG  + dS*dS*T*T);
-        dcp->Hs[1] = dH;
-    }
-    else if( stdG && !stdH && !stdS )
-    {
-        dG=sqrt( dH*dH + dS*dS*T*T + 2*Ro*dH*dS );
-        dcp->Gs[1] = dG;
-    }
-    else if( !stdG && !stdH && stdS )
-    {
-        dS = sqrt( dG*dG - dH*dH )/T;
-        dcp->Ss[1] = dS;
-    }
-    else if( stdG || stdH || stdS )
-    {
-        if( !vfQuestion( window(), GetName(),
-     "W11DCrun: Insufficient data to recalculate uncertainties. Continue?" ))
-         Error( GetName(), "E12DCrun: Insufficient data for uncertainties - bailing out...");
+        if( !stdG && stdH && !stdS )
+        {
+            dH = sqrt( dG*dG  + dS*dS*T*T);
+            dcp->Hs[1] = dH;
+        }
+        else if( stdG && !stdH && !stdS )
+        {
+            dG=sqrt( dH*dH + dS*dS*T*T + 2*Ro*dH*dS );
+            dcp->Gs[1] = dG;
+        }
+        else if( !stdG && !stdH && stdS )
+        {
+            dS = sqrt( dG*dG - dH*dH )/T;
+            dcp->Ss[1] = dS;
+        }
+        else if( stdG || stdH || stdS )
+        {
+            if( !vfQuestion( window(), GetName(),
+         "W11DCrun: Insufficient data to recalculate uncertainties. Continue?" ))
+             Error( GetName(), "E12DCrun: Insufficient data for uncertainties - bailing out...");
+        }
     }
     // insert parcor
     if( dcp->PdcHKF != S_OFF && toupper( dcp->pct[2] ) == CPM_PCR )
@@ -642,21 +653,54 @@ NEXT:
             ParCor();
         goto RESULT;
     }
-    if( !vfQuestion( window(), GetName(),
-                 "Calculate standard values of Cp, Vm, (Alpha, Beta)?" ))
-        goto RESULT;
+    if ((25.0 == TCst) && (1.0 == Pst) ) // DM 29.10.2024 check if different std T and P are used for record calc.
+    {
+        if( !vfQuestion( window(), GetName(),
+                     "Calculate standard values of Cp, Vm, (Alpha, Beta)?" ))
+            goto RESULT;
+    }
     // load TPWORK to calc Cp Vm
     aW.ods_link(0);
     aW.set_zero(0);
-    aW.twp->P = dcp->Pst;
-    aW.twp->TC = dcp->TCst;
-    aW.twp->Pst = dcp->Pst;
-    aW.twp->TCst = dcp->TCst;
+    if ((dcp->TCst != TCst) || (dcp->Pst != Pst) ) // DM 29.10.2024 check if different std T and P are used for record calc.
+    {
+        if ((TCst != 298.15) || (Pst != 1.0) )
+        {
+            aW.twp->P = Pst;
+            aW.twp->TC = TCst;
+            aW.twp->Pst = Pst;
+            aW.twp->TCst = TCst;
+        }
+        else
+        {
+            aW.twp->P = dcp->Pst;
+            aW.twp->TC = dcp->TCst;
+            aW.twp->Pst = dcp->Pst;
+            aW.twp->TCst = dcp->TCst;
+        }
+    }
+    else
+    {
+        aW.twp->P = dcp->Pst;
+        aW.twp->TC = dcp->TCst;
+        aW.twp->Pst = dcp->Pst;
+        aW.twp->TCst = dcp->TCst;
+    }
     aW.twp->T = aW.twp->TC + C_to_K;
     memcpy( aW.twp->DRkey, dcp->pstate, DC_RKLEN );
     DCthermo( 0/*q*/, 0 ); // calc thermodynamic data
     dcp->Cps[0] = aW.twp->Cp;
     dcp->Cps[1] = aW.twp->devCp;
+    if ((dcp->TCst != TCst) || (dcp->Pst != Pst) ) // DM 29.10.2024 check if different std T and P are used for record calc.
+    {
+        dcp->Gs[0] = aW.twp->G;
+        dcp->Gs[1] = aW.twp->devG;
+        dcp->Hs[0] = aW.twp->H;
+        dcp->Hs[1] = aW.twp->devH;
+        dcp->Ss[0] = aW.twp->S;
+        dcp->Ss[1] = aW.twp->devS;
+    }
+
     dcp->mVs[0] = aW.twp->V;
     dcp->mVs[1] = aW.twp->devV;
 RESULT:
@@ -1183,12 +1227,12 @@ const char* TDComp::GetHtml()
 
 
 // Test record with key
-void TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
+void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
 {
 
     TCStringArray aDclist;
     TCIntArray anRDc;
-
+    if (save)
     if( ! MessageToSave() )
 	return;
 

@@ -331,7 +331,8 @@ public:
         return db->PackKey();
     }
 
- };
+    void CurrentToJSON(const std::string& filename);
+};
 
 
 // TSubModule and TCModule container

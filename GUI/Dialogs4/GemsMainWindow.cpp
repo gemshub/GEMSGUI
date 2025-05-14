@@ -81,7 +81,6 @@ TVisorImp::TVisorImp(int c, char** v):
     last_update( 0 ),
     configAutosave(false),
     proc(nullptr),
-   //zmq_client(nullptr),
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)
 {
@@ -278,7 +277,6 @@ TVisorImp::TVisorImp(int c, char** v):
         }
     }
 
-    //startGEMServer();
     updateMenus();
     //moveToolBar();
 }

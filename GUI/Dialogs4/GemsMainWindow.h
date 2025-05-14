@@ -28,7 +28,6 @@
 #include <QHBoxLayout>
 
 class IPNCalcObject;
-//class ZMQClient;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -264,7 +263,6 @@ public:
     QWaitCondition& getWaitCalc();
     QMutex& getMutexCalc();
 
-//    ZMQClient* getZMQclient();
 
 Q_SIGNALS:
     void run_IPM();

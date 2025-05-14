@@ -79,12 +79,14 @@ void
 TSupcrt::tpset()
 {
     double Utr, Str, Htr, Atr, Gtr;
+    // 29.10.2025 fix to CODATA/NEA slected standard water properties H -285830 J/mol and S 69.95 J/mol
+    // Using the values at 298.15 K for H 1888.803 J/mol and S 6.6102 J/(mol*K ) calculated from the HGK84 (IAPWS84) EoS
 
-    Utr = -15766.0e0;
-    Str =  3.5144e0;
-    Htr = -15971.0e0;
-    Atr = -12870.0e0;
-    Gtr = -13073.0e0;
+    Utr = -15766.55e0; //-15766.0e0;
+    Str =  3.5158e0;//3.5144e0;
+    Htr = -15970.6e0; //-15971.0e0;
+    Atr = -12870.11e0;//-12870.0e0;
+    Gtr = -13070.67e0;//-13073.0e0;
 
     tt->Utri = Utr * un.fh;
     tt->Stri = Str * un.fh;

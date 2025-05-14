@@ -2049,6 +2049,16 @@ void TCModule::RecListToJSON(const char *pattern)
     dyn_set();
 }
 
+void TCModule::CurrentToJSON(const std::string& filename)
+{
+    QJsonObject recObject;
+    db->toJsonObject( recObject );
+    QJsonDocument saveDoc(recObject);
+    fstream f_out( filename, ios::out );
+    if( f_out.good() )
+        f_out << saveDoc.toJson().data() << std::endl;
+}
+
 void TCModule::RecListFromJSON()
 {
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
