@@ -104,8 +104,8 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent, int anRT ):
     QDialog(parent), nRT(anRT)
 {
     pDia = this;
-    //TProfil::pm->userCancel = false;
-    //TProfil::pm->stepWise = false;
+    TProfil::pm->userCancel1 = false;
+    TProfil::pm->stepWise1 = false;
     TProcess::pm->stepWise = false;
     TProcess::pm->userCancel = false;
     TGEM2MT::pm->stepWise = false;

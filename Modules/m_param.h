@@ -158,8 +158,8 @@ public:
 
     static TProfil* pm;
 
-    //bool userCancel;
-    //bool stepWise;
+    bool userCancel1;
+    bool stepWise1;
     bool calcFinished;
     const char * status;
 

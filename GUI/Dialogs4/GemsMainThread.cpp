@@ -35,10 +35,10 @@ void TVisorImp::CmRunIPM()
 
     try
     {
-        //TProfil::pm->userCancel = false;
+        TProfil::pm->userCancel1 = false;
         if( !ProgressDialog::pDia )
         {
-          auto dlg = new ProgressDialog(this/*,sactionStepwise->isChecked()*/  );
+          auto dlg = new ProgressDialog(this, ui->sactionStepwise->isChecked());
           connect( calc_model, &IPNCalcObject::IPM_OK, dlg, &ProgressDialog::CalcFinished );
           //connect( calc_model, &IPNCalcObject::IPM_exception, dlg, &ProgressDialog::close );
         }

@@ -249,8 +249,8 @@ TProfil::TProfil( uint nrt ):
     SBold = nullptr;
     Llold =nullptr;
 
-    //userCancel = false;
-    //stepWise = false;
+    userCancel1 = false;
+    stepWise1 = false;
     calcFinished = false;
     comp_change_all = false;
     internalBufer = nullptr;

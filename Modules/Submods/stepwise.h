@@ -15,7 +15,22 @@ class ThreadControl {
     static void SetPoint( const char* str );
 };
 
+#ifdef NO_CLIENT_MODE
+
+#define STEP_POINT1( sp ) { \
+    if( TProfil::pm->stepWise1 ) { \
+            ThreadControl::SetPoint( sp ); \
+    	    ThreadControl::wakeOne(); \
+    	    ThreadControl::wait(); \
+	} \
+        if( TProfil::pm->userCancel1 ) \
+            throw UserCancelException(); \
+	}
+#else
+
 #define STEP_POINT1( sp ) {}
+
+#endif
 
 #define STEP_POINT2() { \
 	if( stepWise ) { \

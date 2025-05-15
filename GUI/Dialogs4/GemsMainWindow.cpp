@@ -277,6 +277,9 @@ TVisorImp::TVisorImp(int c, char** v):
         }
     }
 
+#ifdef NO_CLIENT_MODE
+    ui->sactionStepwise->setVisible(true);
+#endif
     updateMenus();
     //moveToolBar();
 }

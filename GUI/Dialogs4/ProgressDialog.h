@@ -37,7 +37,6 @@ class IPNCalcObject: public QObject
     Q_OBJECT
 
 signals:
-
     /// Finished process
     void IPM_finish();
     /// Finished with exception
@@ -46,19 +45,12 @@ signals:
     void IPM_OK();
 
 public slots:
-
     /// Start IPM calc
     void IPM_run();
 
-
 public:
-
-    explicit IPNCalcObject()
-    { }
-
-    ~IPNCalcObject()
-    { }
-
+    explicit IPNCalcObject()  {}
+    ~IPNCalcObject() {}
 };
 
 class ProgressDialog : public QDialog
@@ -70,11 +62,13 @@ class ProgressDialog : public QDialog
     int ht_a;
     int ht_s;
     int ht_l;
-    //time_t last_update;
-    //CalcThread* calcThread;
-    //QTimer* timer;
-    //bool autoclose;
-    //clock_t t_start;
+
+#ifdef NO_CLIENT_MODE
+    time_t last_update;
+    CalcThread* calcThread;
+    QTimer* timer;
+    clock_t t_start;
+#endif
 
     void switchToAccept(bool isAccept);
 
@@ -85,6 +79,12 @@ public slots:
 protected slots:
 
     virtual void CmAccept();
+#ifdef NO_CLIENT_MODE
+    virtual void CmStep();
+    virtual void CmStop();
+    virtual void CmResume();
+    virtual void Run();
+#endif
 
 protected:
     void closeEvent(QCloseEvent* ev);
@@ -93,7 +93,7 @@ protected:
 public:
     static ProgressDialog* pDia;
 
-    ProgressDialog(QWidget* parent);
+    ProgressDialog(QWidget* parent, bool step);
     virtual ~ProgressDialog();
 
     void Update(bool force=false);
