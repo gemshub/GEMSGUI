@@ -31,10 +31,12 @@
 #include "GEMS3K/gdatastream.h"
 #include "nodearray_gui.h"
 
+#ifndef NO_CLIENT_MODE
 #ifdef NO_ASYNC_SERVER
 #include "gemsreaktoro/zmq_req_client.hpp"
 #else
 #include "gemsreaktoro/zmq_client.hpp"
+#endif
 #endif
 
 TProfil* TProfil::pm;
@@ -1015,7 +1017,7 @@ long int TProfil::testMulti()
 }
 moved to TMulti*/
 
-
+#ifndef NO_CLIENT_MODE
 // Run process of calculate equilibria into the GEMSGUI shell
 void  TProfil::CalculateEquilibriumGUI()
 {
@@ -1028,6 +1030,7 @@ void  TProfil::CalculateEquilibriumGUI()
 #endif
     zmqclient.run_task();
 }
+#endif
 
 
 

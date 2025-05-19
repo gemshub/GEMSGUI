@@ -3,10 +3,12 @@
 //#include "zmqclient.h"
 #include "visor.h"
 
+#ifndef NO_CLIENT_MODE
 #ifdef NO_ASYNC_SERVER
 #include "gemsreaktoro/zmq_req_client.hpp"
 #else
 #include "gemsreaktoro/zmq_client.hpp"
+#endif
 #endif
 #include "GEMS3K/gems3k_impex.h"
 
@@ -29,7 +31,7 @@ TNodeArrayGUI::TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK,
 
 
 
-
+#ifndef NO_CLIENT_MODE
 
 //   Here we call a loop on GEM calculations over nodes
 //   parallelization should affect this loop only
@@ -107,6 +109,7 @@ bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* ,
 
 //    return retCode;
 //}
+#endif
 
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files
@@ -159,6 +162,7 @@ AGAIN:
     return path;
 }
 
+#ifndef NO_CLIENT_MODE
 std::vector<string> TNodeArrayGUI::generate_send_msg( bool add_head )
 {
     DATABRPTR* C0 = pNodT0();
@@ -254,7 +258,7 @@ bool TNodeArrayGUI::set_resv_msg( std::vector<string> &&recv_message )
     }
     return true;
 }
-
+#endif
 
 void TNodeArrayGUI::pVisor_Message(bool toclose, long int ndx, long int size1 )
 {

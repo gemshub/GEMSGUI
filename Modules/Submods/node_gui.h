@@ -86,6 +86,7 @@ public:
     /// Test temperature and pressure values for the interpolation grid
     bool TestTPGrid(  double Tai[4], double Pai[4] );
 
+#ifndef NO_CLIENT_MODE
 
     /// Generate request strings for ZMQ server
     std::vector<std::string> generate_send_msg( bool add_head );
@@ -93,7 +94,7 @@ public:
     /// Set up data from response strings from ZMQ server
     /// \return true if success
     bool set_resv_msg( std::vector<std::string>&& msg_return );
-
+#endif
     /// The export to ThermoFun JSON format file should include all IComp, DComp and ReacDC records
     /// from the project database, not just the records needed for a particular system
     /// (where some elements, DComps or ReacDCs can be switched off) as done in preparation of DCH lookup arrays.
