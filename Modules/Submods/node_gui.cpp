@@ -32,9 +32,16 @@
 #include "visor.h"
 #include "service.h"
 #include "m_param.h"
+//#include "jsonconfig.h"
+//#include <spdlog/sinks/rotating_file_sink.h>
 
 TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
 {
+    // if(!ipmlog_file) {
+    //     ipmlog_file = spdlog::rotating_logger_mt("ipmlog", GemsSettings::with_directory("ipmlog.txt"),
+    //                                              GemsSettings::log_file_size,
+    //                                              GemsSettings::log_file_count);
+    // }
     internal_multi.reset();
     multi_base = apm;
     pmm = multi_base->GetPM();

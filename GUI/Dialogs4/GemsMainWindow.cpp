@@ -279,6 +279,7 @@ TVisorImp::TVisorImp(int c, char** v):
 
 #ifdef NO_CLIENT_MODE
     ui->sactionStepwise->setVisible(true);
+    ui->sactionStepwise->setEnabled(true);
 #endif
     updateMenus();
     //moveToolBar();
@@ -290,7 +291,7 @@ TVisorImp::~TVisorImp()
     calc_thread.quit();
     calc_thread.wait();
 
-    killGEMServer();
+    // killGEMServer();
     delete pVisor;
     delete ui;
 }

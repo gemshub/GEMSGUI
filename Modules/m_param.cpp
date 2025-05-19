@@ -1041,8 +1041,11 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
 
   //multi->Access_GEM_IMP_init();
   //outMultiTxt( "Reaktoro_before.dump.txt"  );
+#ifdef NO_CLIENT_MODE
+  multi_internal->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+#else
   CalculateEquilibriumGUI( );
-  //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+#endif
   //outMultiTxt( "Reaktoro_after.dump.txt"  );
 
   calcFinished = true;

@@ -50,7 +50,7 @@ void IPNCalcObject::IPM_run()
 
 ProgressDialog* ProgressDialog::pDia = nullptr;
 
-void ProgressDialog::switchToAccept(bool isAccept)
+void ProgressDialog::switchToAccept(bool isAccept, bool stepwise)
 {
     if( isAccept ) {
         ui->pClose->setText("&Dismiss");
@@ -60,29 +60,34 @@ void ProgressDialog::switchToAccept(bool isAccept)
         connect( ui->pStepAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
         ui->pStepAccept->setText("&Accept");
         ui->pStepAccept->setToolTip(tr("Close and save results to SysEq database record"));
-#ifdef NO_CLIENT_MODE
-        ui->pResume->disconnect();
-        connect( ui->pResume, SIGNAL(clicked()), this, SLOT(CmStop()) );
-        ui->pResume->setText("&Stop");
-        ui->pResume->setToolTip(tr("Switch to Stepwise IPM calculation mode"));
-#else
         ui->pStepAccept->show();
+
         ui->pResume->hide();
-#endif
     }
     else {
         ui->pClose->setText("&Cancel");
         ui->pClose->setToolTip(tr("Cancel this GEM IPM calculation"));
         ui->pStepAccept->disconnect();
 #ifdef NO_CLIENT_MODE
-        connect( ui->pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
-        ui->pStepAccept->setText("&Step");
-        ui->pStepAccept->setToolTip(tr("Perform next IPM iteration in Stepwise mode"));
-
         ui->pResume->disconnect();
-        connect(ui->pResume, SIGNAL(clicked()), this, SLOT(CmResume()));
-        ui->pResume->setText("&Resume");
-        ui->pResume->setToolTip(tr("Resume continuous IPM iteration mode"));
+        ui->pResume->show();
+        if(stepwise) {
+            connect( ui->pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
+            ui->pStepAccept->setText("&Step");
+            ui->pStepAccept->setToolTip(tr("Perform next IPM iteration in Stepwise mode"));
+            ui->pStepAccept->show();
+
+            connect(ui->pResume, SIGNAL(clicked()), this, SLOT(CmResume()));
+            ui->pResume->setText("&Resume");
+            ui->pResume->setToolTip(tr("Resume continuous IPM iteration mode"));
+        }
+        else {
+            ui->pStepAccept->hide();
+
+            connect( ui->pResume, SIGNAL(clicked()), this, SLOT(CmStop()) );
+            ui->pResume->setText("&Stop");
+            ui->pResume->setToolTip(tr("Switch to Stepwise IPM calculation mode"));
+        }
 #else
         ui->pStepAccept->hide();
         ui->pResume->hide();
@@ -90,7 +95,7 @@ void ProgressDialog::switchToAccept(bool isAccept)
     }
 }
 
-ProgressDialog::ProgressDialog(QWidget* parent,	bool step):
+ProgressDialog::ProgressDialog(QWidget* parent):
     QDialog( parent ),
     ui(new Ui::ProgressDialogData)
 #ifdef NO_CLIENT_MODE
@@ -101,38 +106,8 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step):
     ui->setupUi(this);
     
     pDia = this;
-    TProfil::pm->userCancel1 = false;
-    TProfil::pm->stepWise1 = step;
     QObject::connect(ui->pClose, SIGNAL(clicked()), this, SLOT(CmClose()));
-
-#ifdef NO_CLIENT_MODE
-    calcThread = new CalcThread( this);
-
-    if( step ) {
-        switchToAccept(false);
-        setWindowTitle( "Ready to proceed in Stepwise mode :)" );
-        calcThread->start();
-    }
-    else {
-        setWindowTitle( "Running..." );
-        switchToAccept(true);
-        ui->pStepAccept->hide();
-
-        timer = new QTimer( this );
-        connect(timer, SIGNAL(timeout()), this, SLOT(Run()));
-        calcThread->start();
-        timer->start(pVisorImp->updateInterval()*100);
-    }
-    //    t_start = clock();
-
-#else
-    setWindowTitle( "Running..." );
-    switchToAccept(false);
-#endif
-
-    Update(true);
 }
-
 
 ProgressDialog::~ProgressDialog()
 {
@@ -143,6 +118,44 @@ ProgressDialog::~ProgressDialog()
 #endif
     delete ui;
 }
+
+void ProgressDialog::startThread(bool step)
+{
+    TProfil::pm->userCancel1 = false;
+    TProfil::pm->stepWise1 = step;
+
+#ifdef NO_CLIENT_MODE
+    if(calcThread)
+        delete calcThread;
+    if(timer)
+        delete timer;
+
+    calcThread = new CalcThread(this);
+    timer = new QTimer(this);
+
+    switchToAccept(false, step);
+    if( step ) {
+        setWindowTitle( "Ready to proceed in Stepwise mode :)" );
+        calcThread->start();
+    }
+    else {
+        setWindowTitle( "Running..." );
+        //timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(Run()));
+        calcThread->start();
+        timer->start(pVisorImp->updateInterval()*100);
+    }
+    //    t_start = clock();
+
+#else
+    setWindowTitle( "Running..." );
+    switchToAccept(false, false);
+    emit pVisorImp->run_IPM(); //!!!!
+#endif
+    show();
+    Update(true);
+}
+
 
 #ifdef NO_CLIENT_MODE
 //!
@@ -181,7 +194,6 @@ void ProgressDialog::CmStep()
         setWindowTitle( str );
 
         if( TProfil::pm->calcFinished ) {
-            switchToAccept(true);
             CalcFinished();
             return;
         }
@@ -201,8 +213,8 @@ void ProgressDialog::CmStop()
     try
     {
         timer->stop();
-        TProfil::pm->stepWise = true;
-        switchToAccept(false);
+        TProfil::pm->stepWise1 = true;
+        switchToAccept(false, true);
 
         ui->pStepAccept->show();
     }
@@ -216,11 +228,9 @@ void ProgressDialog::CmResume()
 {
     try
     {
-        TProfil::pm->stepWise = false;
-        switchToAccept(true);
+        TProfil::pm->stepWise1 = false;
+        switchToAccept(false, false);
         ui->pStepAccept->hide();
-        //ui->pResume->hide();
-        //ui->pStepAccept->disconnect();
         ThreadControl::wakeOne();	// let's calc
 
         timer = new QTimer( this );
@@ -279,7 +289,7 @@ void ProgressDialog::Run()
 */
 void ProgressDialog::CalcFinished()
 {
-    switchToAccept(true);
+    switchToAccept(true, false);
     QString str = QString("Converged at DK=%1").arg(TMulti::sm->GetPM()->PCI);
     setWindowTitle(str);
     Update(true);

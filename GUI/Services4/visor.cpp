@@ -104,7 +104,7 @@ TVisor::TVisor(int c, char *v[]):
     QString dirExe = QCoreApplication::applicationDirPath();
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
-    ServerGems3Dir = dirExe.toStdString();
+    //ServerGems3Dir = dirExe.toStdString();
     QDir dirUp(dirExe);
     if( dirUp.cdUp() )
          dirExe = dirUp.path(); // + QDir::separator();
@@ -145,7 +145,7 @@ TVisor::TVisor(int c, char *v[]):
 
     int isys = 0;		// index of sysdir option
     int iuser = 0;		// index of userdir option
-    int iserver = 0;		// index of server option
+    //int iserver = 0;		// index of server option
 
     for (int ii = 1; ii < argc; ii++)
     {
@@ -155,9 +155,9 @@ TVisor::TVisor(int c, char *v[]):
         else if (strcmp(argv[ii], "-u") == 0
                  || strcmp(argv[ii], "--user-dir") == 0 )
             iuser = ii;
-        else if (strcmp(argv[ii], "-g") == 0
-                 || strcmp(argv[ii], "--gems-server-dir") == 0 )
-            iserver = ii;
+        // else if (strcmp(argv[ii], "-g") == 0
+        //          || strcmp(argv[ii], "--gems-server-dir") == 0 )
+        //     iserver = ii;
     }
     if (isys != 0)
     {
@@ -176,12 +176,12 @@ TVisor::TVisor(int c, char *v[]):
         if (UserGEMDir[UserGEMDir.length() - 1] != '/')
             UserGEMDir += '/';
     }
-    if (iserver != 0)
-    {
-        if (argc <= iserver + 1)
-            Error("Wrong options", "Wrong argument for option -g");
-        ServerGems3Dir = argv[iserver + 1];
-    }
+    // if (iserver != 0)
+    // {
+    //     if (argc <= iserver + 1)
+    //         Error("Wrong options", "Wrong argument for option -g");
+    //     ServerGems3Dir = argv[iserver + 1];
+    // }
 
 //    LocalDir = userGEMDir();
     LocalDocDir = SysGEMDir + HELP_DB_DIR;

@@ -65,12 +65,12 @@ class ProgressDialog : public QDialog
 
 #ifdef NO_CLIENT_MODE
     time_t last_update;
-    CalcThread* calcThread;
-    QTimer* timer;
+    CalcThread* calcThread=nullptr;
+    QTimer* timer=nullptr;
     clock_t t_start;
 #endif
 
-    void switchToAccept(bool isAccept);
+    void switchToAccept(bool isAccept, bool stepwise);
 
 public slots:
     virtual void CmClose();
@@ -93,10 +93,11 @@ protected:
 public:
     static ProgressDialog* pDia;
 
-    ProgressDialog(QWidget* parent, bool step);
+    ProgressDialog(QWidget* parent);
     virtual ~ProgressDialog();
 
     void Update(bool force=false);
+    void startThread(bool step);
 };
 
 #endif // ProgressDialog_included

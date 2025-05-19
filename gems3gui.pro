@@ -10,6 +10,7 @@ DEFINES  += NO_JSONIO
 DEFINES += NDEBUG
 DEFINES += USE_THERMOFUN
 DEFINES += USE_THERMO_LOG
+DEFINES += NO_CLIENT_MODE
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check
@@ -100,14 +101,14 @@ OBJECTS_DIR       = obj
 # link lib
 #INCLUDEPATH   += "/usr/local/include/GEMS3K"
 #DEPENDPATH   += "/usr/local/include/GEMS3K"
-LIBS += -lzmq -lGEMS3K
+#LIBS += -lzmq -lGEMS3K
 #link sources
-#GEMS3K_CPP     =  ../GEMS3K/GEMS3K
-#GEMS3K_H     =  $$GEMS3K_CPP
-#DEPENDPATH   += $$GEMS3K_H
-#INCLUDEPATH   += $$GEMS3K_H
-#LIBS += -lzmq
-#include($$GEMS3K_CPP/gems3k.pri)
+GEMS3K_CPP     =  ../GEMS3K/GEMS3K
+GEMS3K_H     =  $$GEMS3K_CPP
+DEPENDPATH   += $$GEMS3K_H
+INCLUDEPATH   += $$GEMS3K_H
+LIBS += -lzmq
+include($$GEMS3K_CPP/gems3k.pri)
 #end link
 
 include($$DATAMAN_CPP/Dataman.pri)

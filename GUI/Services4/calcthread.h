@@ -29,26 +29,26 @@ class NewThread: public QThread
 {
     Q_OBJECT
 
-//  mutable QMutex mutex;
-//  mutable QWaitCondition cond;
-  bool quit;
+    //  mutable QMutex mutex;
+    //  mutable QWaitCondition cond;
+    bool quit;
 
 signals:
-  void sgUpdate(bool);
+    void sgUpdate(bool);
 
 public slots:
-	void emitUpdate(bool force)
-	{  emit sgUpdate(force); }
-        void emitWakeOne()
-        {  ThreadControl::wakeOne();; }
+    void emitUpdate(bool force)
+    {  emit sgUpdate(force); }
+    void emitWakeOne()
+    {  ThreadControl::wakeOne(); }
 
 public:
-	
-	mutable int result;
-	
+
+    mutable int result;
+
     NewThread( QObject *parent ): QThread(parent)
     {
-       // pVisorImp->getMutexCalc().lock();
+        // pVisorImp->getMutexCalc().lock();
         quit = false;
     }
     
@@ -56,7 +56,7 @@ public:
     {
         quit = true;
         ThreadControl::wakeOne();	// let's calc
-//    	cond.wakeOne();
+        //    	cond.wakeOne();
         wait();
     }
 
