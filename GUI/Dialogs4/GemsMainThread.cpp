@@ -83,7 +83,7 @@ void TVisorImp::setCalcClient()
     try{
 
         gui_logger->debug("setCalcClient");
-
+#ifdef USE_GEMS3K_SERVER
         calc_model = new IPNCalcObject();
 
         // link from GUI
@@ -97,6 +97,7 @@ void TVisorImp::setCalcClient()
         calc_model->moveToThread(&calc_thread);
         connect(&calc_thread, &QThread::finished, calc_model, &QObject::deleteLater);
         calc_thread.start();
+#endif
     }
     catch(std::exception& e)
     {
