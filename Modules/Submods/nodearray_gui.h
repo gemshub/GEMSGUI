@@ -44,17 +44,17 @@ class TNodeArrayGUI : public TNodeArray
 
     TestModeGEMParam mode_param;
     FILE* diffile = nullptr;
+
+#ifdef USE_GEMS3K_SERVER
     size_t requests_number=0;
     size_t sended_requests = 0;
     size_t resv_responce = 0;
 
-#ifndef NO_CLIENT_MODE
     ///  Here we do a GEM calculation in box ii (implementation thread-safe)
     bool CalcIPM_Node(  const TestModeGEMParam& modeParam, TNode* wrkNode,
                         long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* iaN, FILE* diffile  ) override;
 #endif
-    //  Here we run command a GEM calculation in box iNode on to GEMS3_server
-    //long int CalcNodeServer(TNode* wrkNode, long int  iNode, long int Mode) override;
+
     void pVisor_Message( bool toclose, long int ndx = 0, long int size = 0 ) override;
 
     // These calls are used only inside of GEMS-PSI GEM2MT module
@@ -65,7 +65,6 @@ class TNodeArrayGUI : public TNodeArray
     TNodeArrayGUI(long int asizeN, long int asizeM, long int asizeK, TMultiBase *apm);
 
 public:
-
     // Used in GEMIPM2 standalone module only
     /// Constructors for 1D arrangement of nodes
     [[nodiscard]] static std::shared_ptr<TNodeArrayGUI> create(long int nNodes, TMultiBase *apm) {
@@ -80,10 +79,6 @@ public:
         return ret;
     }
 
-#ifndef NO_CLIENT_MODE
-    ///  Here we do a GEM calculation in boxes from  start_node to end_node
-    bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
-#endif
     /// Prints MULTI, DATACH and DATABR files structure prepared from GEMS.
     /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
     /// or if putNodT1 == true  as a break point for the running FMT calculation
@@ -173,7 +168,9 @@ public:
         return anyNodeArray[ndx];
     }
 
-#ifndef NO_CLIENT_MODE
+#ifdef USE_GEMS3K_SERVER
+    ///  Here we do a GEM calculation in boxes from  start_node to end_node
+    bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
 
     /// False if all subtasks were calculated
     bool wait_next()  const
@@ -203,6 +200,7 @@ public:
     }
 
 #endif
+
 };
 
 #endif // NODEARRAY_GUI_H

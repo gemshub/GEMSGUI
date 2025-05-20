@@ -1,8 +1,8 @@
 # Require a certain version of cmake
-cmake_minimum_required(VERSION 3.7.0 )
+cmake_minimum_required(VERSION 3.16 )
 
 # Set the name of the project
-project(GEMSGUI VERSION 4.3.5 LANGUAGES CXX)
+project(GEMSGUI VERSION 4.4.2 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -28,16 +28,18 @@ include(CCache)
 include(CondaAware)
 
 # Define which types of libraries to build
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-  option(BUILD_SHARED_LIBS "Build shared libraries." OFF)
-else()
-  option(BUILD_SHARED_LIBS "Build shared libraries." ON)
-endif()
-option(BUILD_STATIC_LIBS "Build static libraries." ON)
 option(BUILD_APP "Build application." ON)
 option(USE_THERMOFUN "Use ThermoFun" ON)
-option(BUILD_NLOHMANNJSON "Use nlohmann json." OFF)
+option(USE_GEMS3K_SERVER "Use gems3k external server" OFF)
+option(BUILD_NLOHMANNJSON "Use nlohmann json" OFF)
 option(USE_QT6 "Prefer Qt6 over Qt5 if available" ON)
+
+option(BUILD_STATIC_LIBS "Build static libraries." ON)
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+  option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+else()
+  option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+endif()
 
 # Cannot currently produce a dynamic library using MSVC, only a static library
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
@@ -122,6 +124,10 @@ add_definitions(-DNO_JSONIO)
 if(USE_THERMOFUN MATCHES ON)
   add_definitions(-DUSE_THERMOFUN)
   add_definitions(-DUSE_THERMO_LOG)
+endif()
+
+if(USE_GEMS3K_SERVER MATCHES ON)
+  add_definitions(-DUSE_GEMS3K_SERVER)
 endif()
 
 if(BUILD_NLOHMANNJSON MATCHES ON)

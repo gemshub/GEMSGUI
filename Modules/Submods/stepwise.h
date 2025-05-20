@@ -15,20 +15,21 @@ class ThreadControl {
     static void SetPoint( const char* str );
 };
 
-#ifdef NO_CLIENT_MODE
-
-#define STEP_POINT1( sp ) { \
-    if( TProfil::pm->stepWise1 ) { \
-            ThreadControl::SetPoint( sp ); \
-    	    ThreadControl::wakeOne(); \
-    	    ThreadControl::wait(); \
-	} \
-        if( TProfil::pm->userCancel1 ) \
-            throw UserCancelException(); \
-	}
-#else
+#ifdef USE_GEMS3K_SERVER
 
 #define STEP_POINT1( sp ) {}
+
+#else
+
+#define STEP_POINT1( sp ) { \
+if( TProfil::pm->stepWise1 ) { \
+        ThreadControl::SetPoint( sp ); \
+        ThreadControl::wakeOne(); \
+        ThreadControl::wait(); \
+} \
+    if( TProfil::pm->userCancel1 ) \
+    throw UserCancelException(); \
+}
 
 #endif
 
@@ -39,6 +40,5 @@ class ThreadControl {
         if( userCancel ) \
            throw UserCancelException(); \
 	}
-
 
 #endif

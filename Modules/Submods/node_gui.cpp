@@ -361,7 +361,7 @@ bool TNodeGUI::TestTPGrid(  double Tai[4], double Pai[4] )
     return notChanged;
 }
 
-#ifndef NO_CLIENT_MODE
+#ifdef USE_GEMS3K_SERVER
 
 std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
 {
@@ -423,8 +423,6 @@ bool TNodeGUI::set_resv_msg(std::vector<std::string> &&msg_return)
     return false;
 }
 
-#endif
-
 // Reading structure MULTI (GEM IPM work structure)
 double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::string>& recv_msg )
 {
@@ -477,3 +475,5 @@ double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::
     ///   !!! G[] and F[] different after IPM and EqstatExpand
     return ret;
 }
+
+#endif

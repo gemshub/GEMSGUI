@@ -67,10 +67,7 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
     }
 }
 
-
 //--------------------------------------------------------------------------
-
-
 
 //   The constructor
 TVisorImp::TVisorImp(int c, char** v):
@@ -277,10 +274,11 @@ TVisorImp::TVisorImp(int c, char** v):
         }
     }
 
-#ifdef NO_CLIENT_MODE
-    ui->sactionStepwise->setVisible(true);
-    ui->sactionStepwise->setEnabled(true);
+#ifdef USE_GEMS3K_SERVER
+    ui->sactionStepwise->setVisible(false);
+    ui->sactionStepwise->setEnabled(false);
 #endif
+
     updateMenus();
     //moveToolBar();
 }

@@ -10,7 +10,7 @@ DEFINES  += NO_JSONIO
 DEFINES += NDEBUG
 DEFINES += USE_THERMOFUN
 DEFINES += USE_THERMO_LOG
-#DEFINES += NO_CLIENT_MODE
+#DEFINES += USE_GEMS3K_SERVER
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check

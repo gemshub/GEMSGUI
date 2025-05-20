@@ -68,7 +68,7 @@ void ProgressDialog::switchToAccept(bool isAccept, bool stepwise)
         ui->pClose->setText("&Cancel");
         ui->pClose->setToolTip(tr("Cancel this GEM IPM calculation"));
         ui->pStepAccept->disconnect();
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
         ui->pResume->disconnect();
         ui->pResume->show();
         if(stepwise) {
@@ -98,7 +98,7 @@ void ProgressDialog::switchToAccept(bool isAccept, bool stepwise)
 ProgressDialog::ProgressDialog(QWidget* parent):
     QDialog( parent ),
     ui(new Ui::ProgressDialogData)
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
     ,last_update(0),
     timer(nullptr)
 #endif
@@ -111,7 +111,7 @@ ProgressDialog::ProgressDialog(QWidget* parent):
 
 ProgressDialog::~ProgressDialog()
 {
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
     delete calcThread;
     // timer deleted with the parent
     //    delete timer;
@@ -124,7 +124,7 @@ void ProgressDialog::startThread(bool step)
     TProfil::pm->userCancel1 = false;
     TProfil::pm->stepWise1 = step;
 
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
     if(calcThread)
         delete calcThread;
     if(timer)
@@ -157,7 +157,7 @@ void ProgressDialog::startThread(bool step)
 }
 
 
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
 //!
 //    Step
 //    called after pressing button step
@@ -318,7 +318,7 @@ void ProgressDialog::CmAccept()
 //
 void ProgressDialog::CmClose()
 {
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
     // we have to cancel calculation here
     // or discard changes
     if( calcThread->isRunning() ) {

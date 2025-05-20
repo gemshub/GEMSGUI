@@ -811,7 +811,7 @@
     <bool>true</bool>
    </property>
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>S&amp;tepwise mode</string>
@@ -820,7 +820,7 @@
     <string>Stepwise GEM IPM calculation mode</string>
    </property>
    <property name="visible">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </action>
   <action name="sactionEQUSTAT_ICOMP">

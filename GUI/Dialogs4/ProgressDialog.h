@@ -63,7 +63,7 @@ class ProgressDialog : public QDialog
     int ht_s;
     int ht_l;
 
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
     time_t last_update;
     CalcThread* calcThread=nullptr;
     QTimer* timer=nullptr;
@@ -79,7 +79,7 @@ public slots:
 protected slots:
 
     virtual void CmAccept();
-#ifdef NO_CLIENT_MODE
+#ifndef USE_GEMS3K_SERVER
     virtual void CmStep();
     virtual void CmStop();
     virtual void CmResume();

@@ -4098,6 +4098,38 @@
                         "type": "F_FLOAT"
                     },
                     {
+                        "label": "lnCnft",
+                        "lenth": 16,
+                        "locus": "+t-o",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "lnRcpt",
+                        "lenth": 16,
+                        "locus": "+t-o",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "lnExet",
+                        "lenth": 16,
+                        "locus": "+t-o",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "lnDQFt",
+                        "lenth": 16,
+                        "locus": "+t-o",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
+                    },
+                    {
                         "label": "qd",
                         "lenth": 12,
                         "locus": "+b-w",
@@ -4357,6 +4389,86 @@
                         "maxM": 1,
                         "maxN": 20,
                         "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "PHnam2",
+                        "lenth": 20,
+                        "locus": "+b-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_RECORD"
+                    },
+                    {
+                        "label": "VPh",
+                        "lenth": 16,
+                        "locus": "+t-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "PHnam2",
+                        "lenth": 20,
+                        "locus": "+b-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_RECORD"
+                    },
+                    {
+                        "label": "GPh",
+                        "lenth": 16,
+                        "locus": "+t-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "PHnam2",
+                        "lenth": 20,
+                        "locus": "+b-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_RECORD"
+                    },
+                    {
+                        "label": "HPh",
+                        "lenth": 16,
+                        "locus": "+t-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "PHnam2",
+                        "lenth": 20,
+                        "locus": "+b-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_RECORD"
+                    },
+                    {
+                        "label": "SPh",
+                        "lenth": 16,
+                        "locus": "+t-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "PHnam2",
+                        "lenth": 20,
+                        "locus": "+b-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_RECORD"
+                    },
+                    {
+                        "label": "CPh",
+                        "lenth": 16,
+                        "locus": "+t-h",
+                        "maxM": 1,
+                        "maxN": 20,
+                        "type": "F_FLOAT"
                     }
                 ],
                 "page": "&Phases"
@@ -4397,6 +4509,14 @@
                     },
                     {
                         "label": "y",
+                        "lenth": 16,
+                        "locus": "+t-w",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "XU",
                         "lenth": 16,
                         "locus": "+t-w",
                         "maxM": 1,
@@ -4466,6 +4586,14 @@
                         "maxM": 1,
                         "maxN": 30,
                         "type": "F_RECORD"
+                    },
+                    {
+                        "label": "mu",
+                        "lenth": 16,
+                        "locus": "+t-w",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
                     },
                     {
                         "label": "W",
@@ -4546,6 +4674,22 @@
                     },
                     {
                         "label": "u",
+                        "lenth": 16,
+                        "locus": "+t-o",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "uc",
+                        "lenth": 16,
+                        "locus": "+t-o",
+                        "maxM": 1,
+                        "maxN": 30,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "uefd",
                         "lenth": 16,
                         "locus": "+t-o",
                         "maxM": 1,
