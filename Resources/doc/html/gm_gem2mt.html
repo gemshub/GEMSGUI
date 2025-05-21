@@ -7,7 +7,7 @@
     <meta name="description" content="Version 3.0.0-PSI">
   </head>
   <body>
-    <h1><img src="gems1.png" height="48" align="left" width="48"> <font color="#000066">
+    <h1><img src="gems1.png" width="48" align="left" height="48"> <font color="#000066">
         GEM-Selektor version 3</font> </h1>
     <h2>Reactive Mass Transport (GEM2MT) Module</h2>
     <hr width="100%" size="2">
@@ -15,11 +15,11 @@
     <p><a href="#GEM2MT_OPERATION">1. GEM2MT Module Operation</a></p>
     <blockquote>
       <p style="margin-left: 20px;"><a href="#GEM2MT_S_MODE">1.1. Sequential
-          reactor chain and waves (S mode)</a></p>
+          reactor chain and waves ('S' mode)</a></p>
       <p style="margin-left: 20px;"><a href="#GEM2MT_F_MODE">1.2. Flow-through
-          box-flux sequence (F, B modes) </a></p>
+          box-flux models ('F,' 'B' modes) </a></p>
       <p style="margin-left: 20px;"><a href="#GEM2MT_A_MODE">1.3.
-          One-dimensional reactive transport (A, C,W, D modes) </a></p>
+          One-dimensional reactive transport ('A', 'C',' W', 'D' modes) </a></p>
     </blockquote>
     <p><a href="#GEM2MT_MWIZARD">2. GEM2MT Create/Remake Wizard</a></p>
     <blockquote>
@@ -28,7 +28,8 @@
       <p style="margin-left: 20px;"><a href="#WZSTEP_2">2.2. GEM2MT Wizard Step
           2: Dimensions for the RT model and initial chemical systems </a></p>
       <p style="margin-left: 20px;"><a href="#WZSTEP_3">2.3. GEM2MT Wizard Step
-          3: Settings for mass fluxes in reactor/box models (S, F, B modes) </a></p>
+          3: Settings for mass fluxes in reactor/box models ('S', 'F', 'B'
+          modes) </a></p>
       <p style="margin-left: 20px;"><a href="#WZSTEP_4">2.4. GEM2MT Wizard Step
           4: Auto-script for nodes / boxes initialization and time change </a></p>
       <p style="margin-left: 20px;"><a href="#WZSTEP_5">2.5. GEM2MT Wizard Step
@@ -47,7 +48,7 @@
       <p style="margin-left: 20px;"><a href="#MWPAGE_2">3.2. GEM2MT Window Page
           "Nodes" (Array of Nodes) </a></p>
       <p style="margin-left: 20px;"><a href="#MWPAGE_3">3.3. GEM2MT Window Page
-          "Fluxes" (MPG Compositions, Array of Fluxes)</a> </p>
+          "Fluxes" (MGP Compositions, Array of Fluxes)</a> </p>
       <p style="margin-left: 20px;"><a href="#MWPAGE_4">3.4. GEM2MT Window Page
           "Results" (Sampling Script, Table of Results) </a></p>
       <p style="margin-left: 20px;"><a href="#MWPAGE_5">3.5. GEM2MT Window Page
@@ -83,20 +84,25 @@
       monitored at each time step (wave) or logged to files in VTK format. </p>
     <p>The GEM2MT module can simulate reactive transport in three main modes:</p>
     <ol>
-      <li><a href="#GEM2MT_S_MODE">Sequential reactor chain and waves (S);</a> </li>
-      <li><a href="#GEM2MT_F_MODE">Flow-through and box-flux sequence (F, B);</a>
+      <li><a href="#GEM2MT_S_MODE">Sequential reactor chain and waves ('S');</a>
       </li>
+      <li><a href="#GEM2MT_F_MODE">Flow-through and box-flux sequence ('F',
+          'B');</a> </li>
       <li><a href="#GEM2MT_A_MODE">One-dimensional reactive transport with
-          advection/dispersion/diffusion (A,D,W)</a> </li>
+          advection/dispersion/diffusion ('A', 'C', 'W', 'D')</a> </li>
     </ol>
     <p> </p>
     <p>A typical step by step workflow for the S and F modes is shown in the two
-      examples below. The S and F modes are normally used for simulating
+      examples below. The 'S' and 'F' modes are normally used for simulating
       fluid-rock interaction by infiltration of fluid into the rock, which leads
-      to development of alteration zones along a fluid flow path. A simulation
-      setup consists typically of one node of source fluid and about 50 to 200
-      nodes of rock that will be interacted with fluid, all to be set first
-      using the GEM2MT wizard when creating or re-making a GEM2MT object. </p>
+      to a development of alteration zones along a fluid flow path. What
+      actually moves is called an MGP (Mobile Group of Phases), which can be
+      aqueous phase, gas phase, aqueous and gas phases together, or aqueous
+      phase with some fractions of some solid phases (i.e. water with suspended
+      solid particles). A simulation setup consists typically of one node of
+      source fluid and about 50 to 200 nodes of rock that will be interacted
+      with fluid, all to be set first using the GEM2MT wizard when creating or
+      re-making a GEM2MT object. </p>
     <p style="text-align: justify;">To prepare for such simulations, two Compos
       (PCO) records are usually created in thermodynamic database mode, namely
       one for fresh fluid such as seawater (let us call it "Fluid") and another
@@ -112,14 +118,14 @@
       new GEM2MT record (object) containing all the phases and elements relevant
       to the fluid-rock system of interest.</p>
     <p style="text-align: justify;"></p>
-    <h4>Example 1: "Sequential reactor chain" S mode </h4>
+    <h4>Example 1: "Sequential reactor chain" 'S' mode </h4>
     <p>In this mode, we can simulate a "wave" of a fluid that will pass through
       each of the rock nodes once per step (i.e., a wave consists of ca. 100
       substeps). Many "waves" are possible.&nbsp; </p>
     <ol>
       <li>Under GEM2MT, create a new record and select the parent system
         containing the rock and the fluid created in SysEq (e.g. "FRgem2mt").</li>
-      <li>In Step 1 of the wizard, select the S mode.</li>
+      <li>In Step 1 of the wizard, select the 'S' mode.</li>
       <li>In Step 2 of the wizard, set the number of nodes (nC= 101) and the
         maximum number of steps (in this case, "waves", i.e. 1000). Select 2 for
         the number of initial chemical system recipes, which will allow us to
@@ -128,7 +134,7 @@
         that will be used for augmenting initial bulk elemental compositions of
         the&nbsp; fluid and the rock.</li>
       <li>In Step 3, we select "Move aqueous fluid".</li>
-      <li>In Step 4, we select P, T, V, Initial system, Node type, MPG flux, and
+      <li>In Step 4, we select P, T, V, Initial system, Node type, MGP flux, and
         Initial mass.</li>
       <li>In Step 5, we select the variables you want to plot in each node after
         each "wave" (i.e. n1vPH for volumes of minerals).</li>
@@ -145,8 +151,8 @@
       and add a mass of 0.9 kg. </p>
     <p>In the second row (index 1), enter the name of system "Rock" or similar,
       and add a mass of 0.1 kg. </p>
-    <p>In both cases, set temperature (e.g. 250 C) and pressure (e.g. 500 bar)
-      for equilibrium conditions. </p>
+    <p>In both cases, set temperature (e.g. 250 <sup>o</sup>C) and pressure
+      (e.g. 500 bar) for equilibrium conditions. </p>
     <p>Next in the mICb table below of quantity/concentration of IC in initial
       systems, enter (copy-paste) the concentration and units for each element
       to define the compositions of rock and fluid in the corresponding rows. </p>
@@ -156,20 +162,21 @@
       fluid and rock. </p>
     <p>The initialization script (visible in the lower part of the "Initial"
       page) should have been created by the wizard and normally does not need
-      editing in the S mode. Click the "Calculate" toolbar button and (at the
+      editing in the 'S' mode. Click the "Calculate" toolbar button and (at the
       very first time) do not plot the nodes. Stop calculation after a few
       "waves" and start it again with graph plotting to inspect the
       results.&nbsp; </p>
-    <h4>Example 2: Flow-through reactor chain (F) mode</h4>
+    <h4>Example 2: Flow-through reactor chain ('F') mode</h4>
     <p>In this mode, we can simulate the simultaneous transport of (reacted)
       fluid in one direction through all nodes from one node to the next. This
-      mode requires the definition of equal zero-order fluxes of fluid
-      connecting each node with the next one; equal rates of the fluid flux
-      should be specified (in mass/time (step) units). The initial setup for F
-      mode is similar to that for S mode, with an important difference that the
-      same mass of fluid (corresponding to the effective fluid/rock mass ratio)
+      mode requires the definition of equal zero-order or first-order fluxes of
+      fluid connecting each node with the next one; equal rates of the fluid
+      flux should be specified (zero-order: in mass/time (step) units;
+      first-order: in 1/time units). The initial setup for the 'F' mode is
+      similar to that for 'S' mode, with an important difference that the same
+      mass of fluid (corresponding to the effective fluid/rock mass ratio)
       should be present in all nodes containing the rock at the initial step.
-      For example, in the F mode, we may wish to transport 50 g of fluid per
+      For example, in the 'F' mode, we may wish to transport 50 g of fluid per
       step simultaneously through all nodes, which means flux of 50g/step rate,
       applied to nodes containing 50 g of rock and 500 g of fluid. In other
       words, at each (time) step, about one tenth of fluid in each box is
@@ -178,15 +185,16 @@
       very last box is declared a "constant-flux sink".&nbsp; </p>
     <ol>
       <li>Under GEM2MT, we create a new record selecting the parent system
-        containing the rock and fluid created in SysEq ("FRgem2mt").</li>
-      <li>In Step 1 of the wizard, we select the F mode.</li>
+        containing the rock and fluid created in SysEq (e.g. with a name
+        "FRgem2mt").</li>
+      <li>In Step 1 of the wizard, we select the 'F' mode.</li>
       <li>In Step 2 of the wizard, we set the number of nodes (e.g. nC= 101) and
         a maximum number of (time) steps (e.g. 1000); note that equilibria in
         all boxes in the chain are re-calculated (and can be plotted) in one
         time step. Enter 1 for the number of user-defined formula units (to add
-        at least H2O to the rock initial composition). </li>
-      <li>In Step 4, we set P, T, V, Initial system, Node type, MPG flux, and
-        Initial mass.</li>
+        at least H<sub>2</sub>O to the rock initial composition). </li>
+      <li>In Step 4, we set P, T, V, Initial system, Node type, MGP composition,
+        flux rates, and Initial mass.</li>
       <li>In Step 5, we select the output variables you want to plot in each
         nodes (i.e. n1vPH for volumes of minerals).</li>
     </ol>
@@ -211,27 +219,32 @@
       enter their units and quantities, which will be added (after unit
       conversions) to the bulk elemental compositions of initial systems for
       fluid and rock. Check that the composition of the rock also contains
-      enough H2O to have fluid after equilibration in desired fluid/rock mass
-      ratio (e.g. if normalized to 1 kg of rock, add 10 kg of H2O for a
+      enough "H2O" to have fluid after equilibration in desired fluid/rock mass
+      ratio (e.g. if normalized to 1 kg of rock, add 10 kg of "H2O" for a
       fluid/rock of 10). </p>
     <p>The initialization script (visible in the lower part of the "Initial"
       page) should have been created by the wizard. In this script, we check
-      that the Flux Rate (FDLf) is set to the desired value (e.g. 1). This
+      that the Flux Rate (FDLf) is set to the desired value (e.g. 0.1). This
       script will then assign the same flux in all the nodes/boxes.</p>
-    <p>Under tab "Fluxes", we need to set the amount of phase(s) that are
-      transported in the flux (i.e., the composition of the flux in terms of
-      mass of phase in its outgoing box). For defining unit flux as composed of
-      50 g aqueous solution phase, enter 0.05 G of aq_gen phase for quantities
-      of phases in MGP column (the wizard already suggests "aq" as the name of
-      this flux composition or "mobile phase group" MPG).</p>
+    <p>Under the tab "Fluxes", we need to set the amount of phase(s) that are
+      transported in an MGP in the flux (i.e., the composition of the flux in
+      terms of mass(es) of phase(s) in its outgoing box). As an example, for
+      defining a unit flux as composed of 50 g of aqueous solution, enter 0.05 G
+      of aq_gen phase for quantities of phases in MGP column (the wizard already
+      suggests "aq" as the name of this flux composition or "mobile phase group"
+      MGP). Alternatively, you can set for MGP the mole fraction 'n' of 1 for
+      aq_gen phase, meaning that the MGP composition will be that of the whole
+      aqueous phase in source box, and define zero-order flux rates as 0.05
+      kg/s, or first-order flux rate constants as factors that will result in
+      0.05 kg/s after multiplication with aq_gen phase mass in the source box.</p>
     <p>Click the "Calculate" toolbar button and (at the very first time) do not
       plot the nodes. Stop calculation after a few "steps", then start it again
       with plotting.&nbsp; </p>
     <p> </p>
     <hr style="width: 100%; height: 2px;">
     <p> </p>
-    <h3><a name="GEM2MT_S_MODE"></a>1.1. Sequential reactor chains and waves (S
-      mode)</h3>
+    <h3><a name="GEM2MT_S_MODE"></a>1.1. Sequential reactor chains and waves
+      ('S' mode)</h3>
     <p>Such simulations are useful for predicting the development of rock
       alteration zones upon progressive infiltration of a fluid supplied from a
       constant source (e.g. a large fracture). This model is a good
@@ -246,9 +259,9 @@
       (sampled). At step 1, the reacted fluid in the box is replaced by the
       "fresh" fluid at the same fluid-rock mass ratio, and equilibrated again.
       The loop is repeated many times, allowing the user to follow how the phase
-      composition of the altered rock changes along the way. Note that this type
-      of simulation can be done in the <a href="gm_proces.html">Process module</a>
-      of GEM-Selektor as the <a href="gm_proces.html#PROCESS_R_MODE">leaching-type
+      composition of the altered rock changes along the way. Note that for a
+      single box, this type of simulation can be done in the <a href="gm_proces.html">Process
+        module</a> of GEM-Selektor as the <a href="gm_proces.html#PROCESS_R_MODE">leaching-type
         "flow-through" reactor 'R' mode</a>.&nbsp; </p>
     <p>The GEM2MT module permits to set up and run a more natural and flexible
       sequential scheme consisting of many "reactors" (nodes, boxes) arranged in
@@ -270,12 +283,16 @@
       first "wave", and so on. After many "waves", the formation and propagation
       of rock alteration zones can be followed by plotting amounts of phases in
       all boxes after each "wave".</p>
+    <p>Note that, regardless of units in which the MGP composition is set, the
+      'S' mode simulation moves the whole mass of aqueous phase per step in each
+      box. So, setting the MGP as a mole fraction 'n' of 1.0 for the aq_gen
+      phase would be absolutely correct. </p>
     <p> </p>
     <hr style="width: 100%; height: 2px;">
     <p> </p>
-    <h3><a name="GEM2MT_F_MODE"></a>1.2. Flow-through box-flux sequences (F, B
+    <h3><a name="GEM2MT_F_MODE"></a>1.2. Flow-through box-flux models (F, B
       modes)</h3>
-    <p>In the F mode, the 1-D reactive transport column is represented by many
+    <p>In the 'F' mode, the 1-D reactive transport column is represented by many
       equal-size boxes that may have different rock compositions, temperatures
       and pressures, if desired. The first box must be coded as a constant-flux
       (Cauchy) source (3), and the last box - as a constant-flux sink (-3); all
@@ -286,61 +303,83 @@
       math script in the "Initial" page of the GEM2MT window and found in the
       "Nodes" page.</p>
     <p>In the "Fluxes" page of the GEM2MT window, the quantity of the "aq"
-      (aqueous fluid) mobile phase group (MPG) should be defined in the PGT
+      (aqueous fluid) mobile group of phases (MGP) should be defined in the PGT
       table and units in UMGP column. This corresponds to the mass or
       concentration of fluid moved at each time step. A column in the PGT table
       defines quantities of phases moved from the source box in one mole of the
-      flux. If there is another MPG defined, e.g. "gas", then two-phase
+      flux. If there is another MGP defined, e.g. "gas", then two-phase
       transport can be arranged between boxes.&nbsp; </p>
     <p>At each unit time step, a given mass of reacted aqueous fluid is moved
       into the next box replacing there the equivalent mass of fluid that moves
       simultaneously to the next box and so on (fresh fluid from the
       constant-flux source moves from box 0 into box 1, and the same mass of
-      reacted fluid moves away from the last box). In fact, this simultaneous
-      transport is consistently performed by the built-in integrator of the ODE
-      system of mass balance equations for all elements in all nodes. </p>
-    <p>The mass of fluid moved by the flux between nodes n and n-1 is defined by
-      the quantities of phases in MGP (or flux composition), the flux rate and
-      the flux order chosen. The simplest zero-order (constant) flux moves 1 mol
-      of its composition times the flux rate (set in the FDLf table on "Fluxes"
-      page). The rate 0.1 means that 0.1 mol of the flux composition moves per
-      step (unit time). For the 1st order flux, the rate 0.1 means that 0.1 mol
-      of flux composition times the mass of its source MPG (in kg) is moved per
-      step. Such a flux will automatically decrease if the mass of its source
-      phase(s) in the source box decreases, and vice versa.&nbsp; </p>
+      reacted fluid moves away from the last box). In the 'F' mode, the
+      transport is performed by direct iteration; in the 'B' mode, this
+      simultaneous transport is conducted using the built-in integrator of the
+      ODE system (the Bulirsch-Stoer algorithm) of mass balance equations for
+      all elements in all boxes. Hence, in the 'B' mode, the simulated
+      megasystem of boxes connected with first-order fluxes will first undergo a
+      transient state and then come to a dynamic stationary state.</p>
+    <p>The mass of fluid moved by the flux between boxes q-1 and q is defined by
+      the quantities of phases in MGP (or flux composition), the flux rate, and
+      the flux order. The simplest zero-order (constant) flux moves a given mass
+      of its composition times as set by the flux rate constant (set in the FDLf
+      table on "Fluxes" page). The rate 0.1 means that 0.1 kg/s of the flux
+      composition moves per unit time. For the 1st order flux, the rate constant
+      v = 0.1 means that 0.1 of flux composition times the mass of its source
+      MGP (in kg) is moved per unit time. Such a flux will automatically
+      decrease if the mass of its source phase(s) in the source box decreases,
+      and vice versa, which helps the megasystem to reach the stationary
+      state.&nbsp; </p>
     <p>After the transport step, the equilibrium speciation is computed in all
       nodes by the GEM algorithm, and the next iteration of transport occurs
       followed by the next equilibration in all boxes, and so on, until the
       maximum number of steps or the total time of simulation is reached. After
       each equilibration, the masses, volumes or concentrations of interest
       (both in aqueous and solid parts) are sampled and plotted. </p>
-    <p>The F mode simulation with equal zero-order fluxes is, in fact, analogous
-      to 1-D pure advection transport, except that the time step is set to 1,
-      the tracer dispersion is ignored, and the hydraulic consistency criteria
-      are not applied.</p>
+    <p>The 'F' mode simulation with equal zero-order fluxes is, in fact, somehow
+      analogous to 1-D pure advection transport, except that the time step is
+      set to 1, the tracer dispersion is ignored, and the hydraulic consistency
+      criteria are not applied.</p>
     <p>The B mode operates in a similar way except the combination of boxes and
       fluxes may be arbitrary (not only chain-like), the boxes can have
-      different size, and the fluxes may be of different order and rate. This
-      setup is suitable e.g. for simulating geochemical cycles or
+      different size, and the fluxes may be of different order and rate, and
+      some fluxes can be defined as elemental production or sink in a given box.
+      This setup is suitable e.g. for simulating geochemical cycles or
       redox-sedimentation dynamics in water columns. The transport step is
       performed by using the ODE integrator of the system of mass balance
-      equations for all elements in all boxes. </p>
-    <p>Theoretical background of the mass-balance integration in a reservoir
-      box-flux "megasystem"can be found e.g. in [Lerman A., Mackenzie F.T.,
-      Garrels R.M. (1975), Modeling of geochemical cycles: Phosphorus as an
-      example, Geol. Soc. Amer. Memoir 142, p. 205-218]. &nbsp; </p>
+      equations for all elements in all boxes.The time reduction factor can be
+      set by the user (default value of 1) if the desired time stepping is much
+      larger than 1 or 2 seconds. For example, if the time reduction factor is
+      set at 1000 and time step at 1000 s then each internal integration step
+      will be performed at time step duration of 1 s but the user will see it as
+      a 1000 s step. The flux rate is still defined in "real" time, e.g. in
+      kg/s.</p>
+    <p>Some theoretical background of the mass-balance integration in a
+      reservoir box-flux "megasystem"can be found e.g. in </p>
+    <p>[Lerman A., Mackenzie F.T., Garrels R.M. (1975), Modeling of geochemical
+      cycles: Phosphorus as an example, Geol. Soc. Amer. Memoir 142, p.
+      205-218]. </p>
+    <p>[Kulik D.A., Chudnenko K.V. and Karpov I.K. (1993), An algorithm for
+      simulating the evolution of a system of local-equilibrium reservoirs
+      connected by mobile phase-group flows. Geochemistry International 30 (1),
+      p. 90-102.]</p>
+    <p>[Lerman A., Wu Lingling (2008), Kinetics of Global Geochemical Systems,
+      Chapter 13 in book: Kinetics of Water-Rock Interaction. Publisher:
+      Springer. Editors: Susan Brantley, James Kubicki, Art White, p.
+      655-736].&nbsp; </p>
     <p> </p>
     <hr style="width: 100%; height: 2px;">
     <p> </p>
-    <h3><a name="GEM2MT_A_MODE"></a>1.3. One-dimensional reactive transport (A,
-      C, W, D modes)</h3>
+    <h3><a name="GEM2MT_A_MODE"></a>1.3. One-dimensional reactive transport
+      ('A', 'C', 'W', 'D' modes)</h3>
     <p>The GEM2MT module allows the user to set up and run simplified&nbsp;
       simulations of 1-D reactive transport in porous media using the
-      finite-difference advection-dispersion algorithm (classical A mode and
-      implicit Crank-Nicolson C mode TBD) for advection-dominated cases. For the
-      diffusion-dominated transport, the random-walk algorithm (W mode, also
+      finite-difference advection-dispersion algorithm (classical 'A' mode and
+      implicit Crank-Nicolson 'C' mode) for advection-dominated cases. For the
+      diffusion-dominated transport, the random-walk algorithm ('W' mode, also
       accounts for advection) can be used; the pure diffusion transport method
-      (D mode) is under construction in this version of GEM-Selektor.
+      ('D' mode TBD) is under construction in this version of GEM-Selektor.
       Theoretical background for all these transport modelling methods can be
       found in numerous textbooks. </p>
     <p>The non-iterative coupling of transport and chemistry is implemented in
@@ -352,26 +391,26 @@
       exported to VTK files). </p>
     <p>This simple implementation of 1-D reactive transport is by no means
       designed to compete with popular coupled codes such as PFLOTRAN,
-      OpenGeoSys or CRUNCH. The purpose of A, C, W modes in GEM2MT is rather in
-      the education and testing of reactive system behavior before performing
-      heavy computations of 2-D or 3-D cases using coupled RT codes on parallel
-      high-performance computer hardware. </p>
+      OpenGeoSys or CRUNCH. The purpose of 'A', 'C', 'W' modes in GEM2MT is
+      rather in the education and testing of reactive system behavior before
+      performing heavy computations of 2-D or 3-D cases using coupled RT codes
+      on parallel high-performance computer hardware. </p>
     <p>Of particular interest is the inspection of the evolution of megasystems.
-      This involves the comparison between 1-D box-flux (mode F, B) models with
+      This involves the comparison between 1-D box-flux (mode 'B') models with
       ODE integration and explicit definition of fluxes, with the more rigorous
       models that consider hydraulic advection-dispersion (diffusion). The
       latter include concentration gradients (of total dissolved elements or
-      aqueous species) solved by PDE intergration (A,C modes) or stochastic
-      simulation of Brownian movement of particles (W mode). </p>
+      aqueous species) solved by PDE intergration ('A', 'C' modes) or a
+      stochastic simulation of Brownian movement of particles ('W' mode). </p>
     <p>The main difference between the box-flux models and the hydraulic
       advection-dispersion-diffusion models is the choice of transport
       parameters (defined initial state for all boxes or nodes is required in
-      all cases). While in B or F modes, the zero- or 1st order fluxes must be
-      set by the MPG composition, flux rate or rate constant, the initial
-      transport parameters must be defined in all nodes&nbsp;in A,C,W modes.
-      These include porosity, permeability, advection velocity, dispersivity,
-      tortuosity and diffusivity (common or individual diffusion coefficients).
-    </p>
+      all cases). While in 'B' or 'F' modes, the zero- or first order fluxes
+      must be set by the MGP composition, flux rate or rate constant, the
+      initial transport parameters must be defined in all nodes&nbsp;in 'A',
+      'C', 'W' modes. These include porosity, permeability, advection velocity,
+      dispersivity, tortuosity and diffusivity (common or individual diffusion
+      coefficients). </p>
     <p>These parameters can be conveniently set upon initialization of the RT
       problem using the initialization math script in the "Initial" page of the
       GEM2MT window. If needed, some parameters in some nodes may change in the
@@ -403,19 +442,20 @@
       of simulation </h3>
     Possible GEM2MT tasks fall into three groups:
     <ul>
-      <li>Box-flux (S,F,B) simulations, where the transport is defined in terms
-        of fluxes of mobile phase groups (MPG) between boxes or reactors. </li>
+      <li>Box-flux ('S', 'F', 'B') simulations, where the transport is defined
+        in terms of fluxes of mobile phase groups (MGP) between boxes or
+        reactors. </li>
       <li>1-D reactive transport simulations using numerical
-        advection-dispersion finite-differences (A), Crank-Nicolson (C),
-        advection-diffusion finite-volumes (D) or advection-diffusion
-        random-walk (W) algorithms.</li>
-      <li>Preparation (T) of initial chemical systems and exporting them into
+        advection-dispersion finite-differences ('A'), Crank-Nicholson ('C'),
+        advection-diffusion finite-volumes ('D' TBD) or advection-diffusion
+        random-walk ('W') algorithms.</li>
+      <li>Preparation ('T') of initial chemical systems and exporting them into
         GEMS3K input files for external coupled RMT codes. <br>
       </li>
     </ul>
-    <p><span style="font-weight: bold;">S</span>&nbsp;&nbsp;&nbsp;&nbsp;
-      Sequential reactors chain with waves (moving fluids or solids between
-      reactors) </p>
+    <p><span style="font-weight: bold;">'S'</span> &nbsp;&nbsp;&nbsp; Sequential
+      reactors chain with waves (moving fluids or solids between reactors
+      one-by-one) </p>
     <p style="margin-left: 40px;">This flexible scheme consists of many
       "reactors" (boxes) arranged into a 1-D chain, where at each step, the
       whole fluid phase is moved (copied) from the previous into the next box.
@@ -428,10 +468,10 @@
       "fresh" fluid replaces the old fluid phase in the first box. After
       equilibration, the fluid is taken into the second box to react, and so on.
       From "wave" to "wave", the propagation of rock alteration zones can be
-      followed by plotting amounts of phases in all boxes. A variant of S mode
-      allows to move from box to box all solids instead of the fluid phase, like
-      in a dialysis bag (to follow the fluid evolution). </p>
-    <p><span style="font-weight: bold;">F</span>&nbsp;&nbsp;&nbsp;&nbsp;
+      followed by plotting amounts of phases in all boxes. A variant of 'S' mode
+      allows to move all solids instead of the fluid phase from box to box, like
+      in a dialysis bag (with an idea to follow the fluid evolution). </p>
+    <p><span style="font-weight: bold;">'F'</span> &nbsp;&nbsp;&nbsp;
       Flow-through reactors chain with fluxes (simultaneous transport then
       equilibration)</p>
     <p style="margin-left: 40px;">This scheme also consists of many "reactors"
@@ -447,23 +487,25 @@
       even if the boxes initially contained different masses of fluid, with time
       the masses of fluid would become equal. This scheme simulates the
       propagation of rock alteration zones, which can be followed by plotting
-      amounts of phases in all boxes. Compared with S mode, the F mode produces
-      results more similar to those of classical advection RT algorithms.</p>
-    <p><span style="font-weight: bold;">B</span> Box-flux megasystem (with
-      time-step integration of arbitrary MPG fluxes) </p>
+      amounts of phases in all boxes. The ODE integration (as in B mode) is not
+      performed. Compared with S mode, the F mode produces results more similar
+      to those of classical advection RT algorithms.</p>
+    <p><span style="font-weight: bold;">'B'</span> &nbsp;&nbsp;&nbsp; Box-flux
+      megasystem (with time-step integration of complex arbitrary MGP fluxes) </p>
     <p style="margin-left: 40px;">This scheme is similar to the F scheme, but
       allows the most general setup of the box-flux dynamic transport scheme,
       not only a unidirectionally connected chain of boxes. In the B scheme,
       shortcut fluxes and loops are allowed, as well as zero-, first- and
-      second-order fluxes, point sinks and point sources of given elemental
-      composition. The transport step is performed by the built-in integrator of
-      ODE system of time derivatives of masses of each chemical element in each
-      box (reservoir). After the transport step, chemical equilibria are
-      re-calculated in all boxes. Normally, with time (number of steps), such
-      complex dynamic systems evolve to a steady state when masses and
-      compositions of reservoirs do not change anymore. This scheme may be good
-      for simulating water-sediment columns or geochemical cycles. &nbsp; </p>
-    <p><span style="font-weight: bold;">A</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
+      second-order fluxes, box (point) sinks and box (point) sources of given
+      elemental composition. The transport step is performed by the built-in
+      integrator of a large&nbsp; ODE system of time derivatives of masses of
+      each chemical element in each box (reservoir). After the transport step,
+      chemical equilibria are re-calculated in all boxes. Normally, with time
+      (number of steps), such complex dynamic systems evolve to a steady state
+      when masses and compositions of reservoirs do not change anymore. This
+      scheme may be good for simulating water-sediment columns or geochemical
+      cycles. &nbsp; </p>
+    <p><span style="font-weight: bold;">'A'</span> &nbsp;&nbsp;&nbsp; 1-D
       (advection-dispersion) reactive transport using classical
       finite-difference method</p>
     <p></p>
@@ -476,8 +518,8 @@
       of reaction and transport).</p>
     <p style="margin-left: 40px;">The column of a given length l is thought to
       be divided into n = 100 to 1000 nodes of equal size (l/n) with implicit
-      diameter that defines the same characteristic volume (e.g. 1 cm3) of the
-      node. Each node is characterized by several transport properties
+      diameter that defines the same characteristic volume (e.g. 1 cm<sup>3</sup>)
+      of the node. Each node is characterized by several transport properties
       (porosity, permeability, dispersivity, fluid advection velocity,
       temperature, pressure). </p>
     <p style="margin-left: 40px;">The "fresh" fluid is fed from the left into
@@ -492,26 +534,27 @@
       head to simplify handling of chemical systems (that can be formally
       processed at constant pressure, even though this is not quite physically
       correct). </p>
-    <p><span style="font-weight: bold;">C</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
+    <p><span style="font-weight: bold;">'C'</span> &nbsp;&nbsp;&nbsp; 1-D
       (advection-dispersion) reactive transport using implicit Crank-Nicolson
-      scheme (TBD) </p>
+      scheme </p>
     <p></p>
     <p style="margin-left: 40px;">In this mode, the problem setup is the same as
-      in A mode, with the only difference that the simulation is performed using
-      Crank-Nicholson scheme, believed to be more robust regarding to numerical
-      dispersion and/or error accumulation. Both A and C methods are only
-      applicable to advection-dominated cases. </p>
-    <p><span style="font-weight: bold;">W</span>&nbsp;&nbsp;&nbsp; 1-D
-      (advection-diffusion) reactive transport using the random-walk method </p>
+      in 'A' mode, with the only difference that the simulation is performed
+      using the Crank-Nicholson scheme, believed to be more robust regarding to
+      numerical dispersion and/or error accumulation. Both 'A' and 'C' methods
+      are only applicable to advection-dominated cases. </p>
+    <p><span style="font-weight: bold;">'W'</span> &nbsp;&nbsp; 1-D
+      (advection-diffusion) reactive transport using the RW (random-walk)
+      algorithm </p>
     <p style="margin-left: 40px;">This method is suitable for both advection-
       and diffusion-dominated cases of reactive transport. Geometrical setup of
-      1-D column and its discretisation into nodes is, in principle, the same as
-      in the A or C modes (with the difference that only one fluid source node
-      is needed instead of two). Another difference is that solute diffusivity
-      (diffusion coefficient) Dif must be provided at input for each node. In
-      the simplest case, the same Dif value is applied to all aqueous solutes
-      and water-solvent; as solutes, total dissolved elements are treated as
-      default. </p>
+      1-D column and its discretization into nodes is, in principle, the same as
+      in the 'A' or 'C' modes (with the difference that only one fluid source
+      node is needed instead of two). Another difference is that solute
+      diffusivity (diffusion coefficient) Dif must be provided at input for each
+      node. In the simplest case, the same Dif value is applied to all aqueous
+      solutes and water-solvent; as solutes, total dissolved elements are
+      treated as default. </p>
     <p style="margin-left: 40px;">The random-walk method effectively simulates
       the Brownian movement of "particles" of different types (about 500 to 1500
       particles per node). At each time step, after the chemical equilibration
@@ -534,19 +577,19 @@
       The time stepping should be selected such that no particle can cross more
       than one node boundary in one time step. </p>
     <p> </p>
-    <p><span style="font-weight: bold;">V</span>&nbsp;&nbsp;&nbsp; 1-D reactive
+    <p><span style="font-weight: bold;">'V'</span> &nbsp;&nbsp; 1-D reactive
       transport using finite-volume particle tracking algorithm (TBD) </p>
     <p> </p>
     <p style="margin-left: 40px;">This mode runs a similar setup of the
       advection-diffusion problem as the random-walk algorithm, but with better
       account of mass balance in nodes and of volume effects on porosity related
       to dissolution/precipitation of minerals.</p>
-    <p><span style="font-weight: bold;">D</span>&nbsp;&nbsp;&nbsp;&nbsp; 1-D
+    <p><span style="font-weight: bold;">'D'</span> &nbsp;&nbsp;&nbsp; 1-D
       (diffusion) reactive transport using finite-volume method (TBD)<br>
     </p>
     <p style="margin-left: 40px;"> Description to be provided in next versions.<br>
     </p>
-    <p><span style="font-weight: bold;">T</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <p><span style="font-weight: bold;">'T'</span> &nbsp;&nbsp;&nbsp;&nbsp;
       Export of initial-state GEMS3K input files set for external coupled RT
       codes</p>
     <p> </p>
@@ -566,22 +609,22 @@
       model and initial chemical systems </h3>
     <p> <span style="font-size: 10pt;"><big>Set here the number of
           local-equilibrium nodes (boxes, volumes) for the transport model
-          (except T mode), and the number of system definitions for
-          initialization of nodes (all but T modes) or for export to GEMS3K
-          input files (T mode). You can set also some options related to usage
+          (except 'T' mode), and the number of system definitions for
+          initialization of nodes (all but 'T' modes) or for export to GEMS3K
+          input files ('T' mode). You can set also some options related to usage
           of math scripts and file output of simulation results.</big></span></p>
     <p> <span style="font-weight: bold;">nC</span> defines how many spatially
       distributed nodes (boxes, volumes) will be considered in the mass
       transport model. Typically, 10 to 1000 nodes can be used. Exception:
-      in&nbsp; T mode, nC = nIV must be set. </p>
+      in&nbsp; 'T' mode, nC = nIV must be set. </p>
     <p><span style="font-weight: bold;">Tau</span> defines the physical time
-      span for A, D, W, F, B type RT models. The start value and the step value
-      can be set. The unit of measurement is arbitrary (i.e. the user must keep
-      it in mind), although all the transport parameter values (fluxes,
-      velocities) must be consistent with the chosen time unit (e.g. second).
-      &nbsp; </p>
+      span for 'A', 'D', 'W', 'F',&nbsp; 'B' type RT models. The start value and
+      the step value can be set. The unit of measurement is arbitrary (i.e. the
+      user must keep it in mind), although all the transport parameter values
+      (fluxes, velocities) must be consistent with the chosen time unit (e.g.
+      second). &nbsp; </p>
     <p> <span style="font-weight: bold;"> ntM</span>&nbsp; is the maximum
-      number of time steps (at least one; default 1000, negative- unlimited).
+      number of (time) steps (at least one; default 1000, negative- unlimited).
       GEM2MT simulation will stop when this number is reached or upon the user's
       cancel command. The "real" time scale can be defined later in the GEM2MT
       window. </p>
@@ -613,97 +656,101 @@
       pages will not be accessible, and the text editor fields on GEM2MT window
       pages will not be visible. However, in some simulation modes, the scripts
       are mandatory and will be created irrespective of the user's selection. <span
-        style="font-family: Helvetica,Arial,sans-serif;"><span style="font-weight: bold;"></span></span></p>
+        style="font-family: Helvetica,Arial,sans-serif;"><span
+          style="font-weight: bold;"></span></span></p>
     <p style="font-family: Helvetica,Arial,sans-serif;"></p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="WZSTEP_3"></a>2.3. GEM2MT Wizard Step 3: Settings for mass
-      fluxes in reactor/box models (S, F, B modes) </h3>
-    <p> This wizard page appears in S, F and B modes only and completes the
-      setup of RT simulations based upon reactors (boxes) connected with defined
-      fluxes of aqueous fluid (S mode) or MPG (mobile phase groups in F, B
-      modes). The number of boxes <span style="font-weight: bold;">nC</span>
+      fluxes in reactor/box models ('S',&nbsp; 'F',&nbsp; 'B' modes) </h3>
+    <p> This wizard page appears in 'S', 'F' and 'B' modes only and completes
+      the setup of RT simulations based upon reactors (boxes) connected with
+      defined fluxes of aqueous fluid ('S' mode) or MGP (mobile phase groups in
+      'F', 'B' modes). The number of boxes <span style="font-weight: bold;">nC</span>
       should have already been defined at Step 2. nC tells how many
       equilibrating reactors (boxes) will be considered in the megasystem. </p>
     <p>At each time step, the transport of matter between boxes is performed by
-      fluxes of mobile phase groups (MPG). There can be MPG fluxes of three
+      fluxes of mobile groups of phases (MGP). There can be MGP fluxes of three
       types: normal, source, and sink. </p>
     <p>A normal flux is defined by the index of its source box, where the flux
       begins; the index of its destination box, where the flux ends; the index
-      of MPG definition; the flux order (0, 1, 2, 3), and the flux rate
-      constant. The flux order default is 0 (constant flux in units
-      mass/timestep). Possible flux orders: </p>
+      of MGP definition; the flux order (0, 1, 2, 3), and the flux rate
+      constant. The flux order default is 0 (flux rate constant in mass/time
+      units). Possible flux orders: </p>
     <p style="margin-left: 40px;">0 - Zero-order (absolute) flux j<sub>0</sub> =
-      v<sub>0</sub>, with rate v<sub>0</sub> in mass/time units;&nbsp; </p>
-    <p style="margin-left: 40px;">1 - First-order to the outgoing box mass flux
-      j<sub>1</sub> = m<sub>out</sub>v<sub>1</sub>, with a rate constant v<sub>1</sub>
-      in 1/time units; </p>
-    <p style="margin-left: 40px;">2 - Second-order to outgoing and incoming MPG
-      mass flux j<sub>2</sub> = m<sub>out</sub>m<sub>in</sub>v<sub>2</sub>, with
-      a rate constant v in 1/time/kg units, proportional to the product of
-      masses in both boxes; </p>
-    <p style="margin-left: 40px;">3 - First-order flux j<sub>3</sub> = m<sub>in</sub>v<sub>3</sub>,
-      to MPG mass in receiving box, with a rate constant v<sub>3</sub> in 1/time
-      units.&nbsp; <br>
+      v<sub>0</sub>, with a rate (constant) v<sub>0</sub> in mass/time (kg/s)
+      units;&nbsp; </p>
+    <p style="margin-left: 40px;">1 - First-order flux j<sub>1</sub> = v<sub>1</sub>m<sub>out,f</sub><sub>&nbsp;
+        </sub>relative to its MPG mass in outgoing box, with a rate constant v<sub>1</sub>
+      in 1/time (1/kg) units; </p>
+    <p style="margin-left: 40px;">2 - Second-order flux j<sub>2</sub> = v<sub>2</sub>(m<sub>out</sub>+m<sub>in</sub>),
+      relative to the sum of source and sink MGP masses flux: rate constant v<sub>2</sub>
+      in 1/time (1/s) units;</p>
+    <p style="margin-left: 40px;">3 - First-order flux j<sub>3</sub> = v<sub>3</sub>m<sub>in</sub>,
+      relative to the MGP mass in the receiving box, with a rate constant v<sub>3</sub>
+      in 1/time (1/s)&nbsp; units.&nbsp; <br>
     </p>
     <p> </p>
-
     <p>A point source flux is defined by its bulk composition (amounts of
       independent components), which can be entered in the GEM2MT window if nSFD
       &gt; 0 is set below on this wizard page; the index of its destination box;
-      the flux order (0, 1, 3); and the flux rate constant v<sub>q</sub>.<br>
+      the flux order (0, 1); and the positive flux rate constant v<sub>q,f</sub>
+      &gt; 0. The first order point-source flux is defined relative to the mass
+      of q-th box. <br>
       <br>
-      A sink flux is defined by the index of its source box; the index of MPG
-      definition; the flux order (0, 1, 2); and the flux rate constant v<sub>s</sub>.
-    </p>
-    <p> All nFD fluxes should be set in the list accessible on Fluxes page of
-      GEM2MT module window. nSFD bulk compositions of source fluxes should be
-      provided in the table for source fluxes at the same page. All this has to
-      be done by the user in the B mode. However, in S and F modes, nearly the
-      whole setup of fluxes will be done automatically. The user must only
-      select which phases to include in a single MPG (using check-boxes below).
-      Optionally, the user can set nSFD to 1 which will define a source flux
-      into the first reactor (and enter its bulk composition later on), and then
-      proceed to the next wizard step.</p>
+      A sink point flux is a point source flux with negative flux rate constant
+      v<sub>q,f</sub> &lt; 0. </p>
+    <p>A sink flux of MGP is an outgoing MGP flux (with negative flux rate
+      constant) from a box q declared as a Cauchy sink (code -3). </p>
+    <p> All nFD fluxes should be set in the list accessible on the Fluxes page
+      of GEM2MT module window. nSFD bulk compositions of point source fluxes (in
+      moles of IComps) should be provided in the table for source fluxes at the
+      same page. All this has to be done by the user in the 'B' mode. However,
+      in 'S' and 'F' modes, nearly the whole setup of fluxes will be done
+      automatically. The user must only select which phases to include in a
+      single MGP by assigning some amounts or mole fractions to them. </p>
+    <p>Optionally, the user can set nSFD to 1 which will define a source flux
+      into the first box defined as a normal node (and enter its bulk
+      composition later on), and then proceed to the next wizard step.</p>
     <p><span style="font-family: Helvetica,Arial,sans-serif;"></span>The
       settings are&nbsp; organized in two groups. <br>
     </p>
-
-    <h4>(1) Dimensions of MPG fluxes: <br>
+    <h4>(1) Dimensions of MGP fluxes: <br>
     </h4>
-    <p> <span style="font-weight: bold;">nMGP</span> - <span style="text-decoration: underline;">Number of mobile phase groups (MPG)</span>: set it only for the B mode (will be
-      set automatically to 1 in S and F modes)</p>
+    <p> <span style="font-weight: bold;">nMGP</span> - <span style="text-decoration: underline;">Number
+        of mobile phase groups (MGP)</span>: set it only for the 'B' mode (will
+      be set automatically to 1 in S and F modes)</p>
     <p> </p>
     <p> <span style="font-weight: bold;">nFD</span> - <span style="text-decoration: underline;">Total
-        number of MPG flux definitions:</span> set it only for the B mode (will
-      be set automatically in S and F modes). Minimum value of nFD is nC + nSFD
-      (i.e. the number of nodes/boxes + number of elemental source
+        number of MGP flux definitions:</span> set it only for the 'B' mode
+      (will be set automatically in S and F modes). The minimum value of nFD is
+      nC + nSFD (i.e. the number of nodes/boxes + number of elemental source
       compositions). </p>
     <p> </p>
     <p> <span style="font-weight: bold;">nSFD</span> - <span style="text-decoration: underline;">Number
         of elemental source composition definitions</span>: optional to set in
-      B, S and F modes. In S and F modes, can be 0 or 1; if set to 0 (default)
-      then the first reactor (index 0) will be treated as constant source of MPG
-      transported into the second reactor; otherwise, the composition of the
-      source flux at a given rate can be added to bulk composition of 0-th
-      reactor at every time step (this option requires editing the
+      'B', 'S' and 'F' modes. In 'S' and 'F' modes, can be 0 or 1; if set to 0
+      (default) then the first box (index 0) will be treated as a constant
+      source of MGP transported into the second box; otherwise, the composition
+      of the source flux at a given rate can be added to bulk composition ofbox
+      0-th&nbsp; at every time step (this option requires editing the
       initialization script).</p>
     <p> </p>
-    <h4> (2) Only S and F mode (sequential and flow-through reactors):</h4>
+    <h4> (2) Only 'S' and 'F' mode (sequential and flow-through reactors):</h4>
     <p> <span style="text-decoration: underline;">Move aqueous (aq) phase</span>:
-      this is default for F and S - mode reactor setups, the moving MPG will
-      consist of aqueous phase only. </p>
+      this is default for 'F' and 'S' - mode setups, the moving MGP will consist
+      of aqueous phase only. </p>
     <p> </p>
-    <p> <span style="text-decoration: underline;">Move gas/fluid/plasma (gas)
+    <p> <span style="text-decoration: underline;">Move gas/fluid/plasma
         phase(s):</span> Composition of gaseous phase can be moved from one
       reactor to the next, also as an addition to the aqueous phase composition
       (when the previous option is selected).</p>
     <p> </p>
     <p> <span style="text-decoration: underline;">Move all solids together</span>
-      ('dialysis bag'): Alternatively to two above options, the bulk composition
-      of all solid phases will be moved from reactor to reactor (then neither aq
-      nor gas phase can be moved). </p>
+      ('dialysis bag'): 'S' mode only. Alternatively to the two above options,
+      the bulk composition of all solid phases will be moved from reactor to
+      reactor (then neither aq nor gas phase can be moved). </p>
     <p> </p>
-    <p> In S and F modes, the outgoing flux from the last reactor is
+    <p> In 'S' and 'F' modes, the outgoing MGP flux from the last box is
       automatically defined as a sink flux.</p>
     <p style="font-family: Helvetica,Arial,sans-serif;"> </p>
     <hr style="width: 100%; height: 2px;">
@@ -730,16 +777,16 @@
       depends on the chosen RT simulation type. Options 'Pressure' and
       'Temperature' are normally selected by default in all RT cases, and set
       for all nodes a constant P and T pair taken from Step 7 of this wizard.
-      Options 'Initial system', 'Node type' and 'MPG flux' will be automatically
-      activated in S, F or B modes; the respective parts of the initialization
-      script will be set automatically to create a sequential unidirectional
-      chain transport of MPG from node to node.</p>
+      Options 'Initial system', 'Node type' and 'MGP flux' will be automatically
+      activated in 'S', 'F' or 'B' modes; the respective parts of the
+      initialization script will be set automatically to create a sequential
+      unidirectional chain transport of MGP from node to node.</p>
     <p><u>Pressure P:</u> This operator(s) define(s) what pressures (in bar)
       will be assigned to what nodes (boxes) </p>
     <p><u>Temperature T:</u>&nbsp;This operator(s) define(s) what temperatures
       (in <sup>o</sup>C) will be assigned to what nodes (boxes) </p>
-    <p><u>Volume V:</u> This operator(s) define(s) volumes (in m3) to be
-      assigned to nodes (boxes) </p>
+    <p><u>Volume V:</u> This operator(s) define(s) volumes (in m<sup>3</sup>) to
+      be assigned to nodes (boxes) </p>
     <p><u>Initial system:</u> Defines (index of) what initial system to copy
       into the respective node; </p>
     <p><u>Node type:</u> This operator defines the type of the node (box):</p>
@@ -752,13 +799,14 @@
       3:&nbsp;&nbsp; Cauchy source (constant flux source);<br>
       -3:&nbsp; Cauchy sink;<br>
       4:&nbsp;&nbsp;&nbsp; Input time-depended function.</p>
-    <p><u>MPG flux:</u> This operator(s) defines the indexes of incoming and
-      outgoing MPG fluxes to the node;<u> </u></p>
+    <p><u>MGP flux:</u> This operator(s) defines the indexes of incoming and
+      outgoing MGP fluxes to the node;<u> </u></p>
     <p><u>Initial mass:</u> Defines the initial mass (in kg) of each node (box).
     </p>
     <span style="font-family: Helvetica,Arial,sans-serif;"></span>
     <h4><span style="font-family: Helvetica,Arial,sans-serif;"> Options
-        available for 'true' 1-D mass transport models (A, C, D, W) only:</span></h4>
+        available for 'true' 1-D mass transport models (modes 'A', 'C', 'W', 'D'
+        <b>TBD</b>) only:</span></h4>
     <h4> </h4>
     <p><u>Initial node volume:</u> define(s) total volumes (in m<sup>3</sup>) to
       be assigned to nodes for use in transport model only; </p>
@@ -793,7 +841,7 @@
     <p>This monitoring script is independent of the VTK file output that can be
       configured at the next wizard step. </p>
     <p> The graphics dialog will be updated for every time step (or each "wave"
-      in S mode). The simulation can be stopped any time by closing the Graph
+      in 'S' mode). The simulation can be stopped any time by closing the Graph
       dialog and clicking "Cancel" on the appearing small dialog. In some modes,
       the simulation can be resumed later.</p>
     <p><span style="text-decoration: underline;">Number of plots (columns in the
@@ -808,13 +856,11 @@
       plot some experimental data for some step (time point) over the generated
       curves. </p>
     <p> </p>
-
     <p> <u>Number of columns (plots) in the&nbsp; yEt array for plotting
         experimental data (optional):</u> This needs to be set if you want to
       plot some experimental data for some step (time point) over the generated
       curves. The data can be entered or copy-pasted in the GEM2MT window page
       after this wizard is finished. &nbsp; </p>
-
     <p><u>Number of elements in the script work array qpg for graphical
         monitoring (optional): </u>Enter here an integer (0 to 20) to have
       access to desired number of work cells (qpg[0], qpg[1], ...) for keeping
@@ -844,10 +890,10 @@
     <hr style="width: 100%; height: 2px;">
     <h3><a name="WZSTEP_7"></a>2.7. GEM2MT Wizard Step 7: Settings for the
       GEMS3K data exchange interface </h3>
-    <p> These settings are important for the additional T mode for preparing the
-      GEMS3K .dch, .ipm and .dbr input files for external coupled codes, and may
-      also be useful for certain built-in reactive transport modes. Settings are
-      arranged in three groups.</p>
+    <p> These settings are important for the additional 'T' mode for preparing
+      the GEMS3K .dch, .ipm and .dbr input files for external coupled codes, and
+      may also be useful for certain built-in reactive transport modes. Settings
+      are arranged in three groups.</p>
     <h4> (1) GEMS3K memory and file data exchange</h4>
     <p> <span style="text-decoration: underline;">Select ICs, DCs and phases to
         be exchanged via DATABR (take all, if unchecked)</span>: Having this
@@ -914,10 +960,10 @@
     <hr style="width: 100%; height: 2px;">
     <h3><a name="WZSTEP_8"></a>2.8. GEM2MT Wizard Step 8: Other optional
       settings </h3>
-    <p>Random-walk transport model (W and V mode) only:</p>
+    <p>Random-walk transport model ('W' mode only):</p>
     <p> </p>
     <p style="margin-left: 40px;">Number of allocated particle types (default
-      1): </p>
+      1): usually 500 or so</p>
     <p> </p>
     <p style="margin-left: 40px;">Number of particle statistic properties (for
       monitoring):(default 0)</p>
@@ -928,13 +974,13 @@
     <p style="margin-left: 40px;">Diffusion (under construction)</p>
     <p> </p>
     <p style="margin-left: 40px;">Use diffusion coefficients for DC/species (set
-      them in DDc vector), D and T modes only</p>
+      them in DDc vector), 'D' TBD and 'T' modes only</p>
     <p> </p>
     <p style="margin-left: 40px;">Use diffusion coefficients for elements (set
-      them in DIc vector), D and T modes only</p>
+      them in DIc vector), 'D' and 'T' modes only</p>
     <p> </p>
     <p style="margin-left: 40px;">nEl - Number of electrolytes for setting up
-      electrolyte diffusion coefficients (D or W mode)</p>
+      electrolyte diffusion coefficients ('D' or 'W' mode)</p>
     <p> </p>
     <p style="margin-left: 40px;">Set here the number of links to SDref
       bibliography records (default 0)</p>
@@ -951,10 +997,10 @@
         systems. </p>
       <p> </p>
       <p> (3) Check the initialization script and settings (for all modes); if
-        in T mode, click 'Calculate'</p>
+        in 'T' mode, click 'Calculate'</p>
       <p> </p>
-      <p> (4) Check node properties table and (for S, F, B modes) the MPG fluxes
-        list; check monitoring scripts</p>
+      <p> (4) Check node properties table and (for 'S', 'F', 'B' modes) the MGP
+        fluxes list; check monitoring scripts</p>
       <p> </p>
       <p> (5) Click 'Calculate', and watch graphical monitoring of the node
         profiles.</p>
@@ -988,8 +1034,8 @@
     <p style="margin-left: 40px;"> </p>
     <p style="margin-left: 40px;"> (3) In the "Initial" page, check the
       initialization script with settings of temperature, pressure, ... (for all
-      modes); if in T mode, click 'Calculate' to finish the task.</p>
-    <p style="margin-left: 40px;">(4) In other than T modes, click "Calculate"
+      modes); if in 'T' mode, click 'Calculate' to finish the task.</p>
+    <p style="margin-left: 40px;">(4) In other than 'T' modes, click "Calculate"
       to check results of the execution of initialization script (fix it if
       necessary or if errors occurred).&nbsp; </p>
     <p style="margin-left: 40px;"> </p>
@@ -997,13 +1043,13 @@
     <p style="margin-left: 40px;"> </p>
     <p style="margin-left: 40px;">(5) in the "Nodes" page, check the node
       properties (temperature, pressure, node type, etc.) in the DiCp table; for
-      A, W, C modes, enter overall transport model parameters above the table,
-      then skip the "Fluxes" page. </p>
-    <p style="margin-left: 40px;">(6) in the "Fluxes" page (for S, F, B modes),
-      check the MPG composition table, then the MPG fluxes indexes, orders and
-      rates (rate constants). If needed, check the elemental compositions of
-      source fluxes and their indexes as sources in the respective nodes.&nbsp;
-    </p>
+      'A', 'W', 'C' modes, enter overall transport model parameters above the
+      table, then skip the "Fluxes" page. </p>
+    <p style="margin-left: 40px;">(6) in the "Fluxes" page (for 'S', 'F', 'B'
+      modes), check the MGP composition table, then the MGP fluxes indexes,
+      orders and rates (rate constants). If needed, check the elemental
+      compositions of source fluxes and their indexes as sources in the
+      respective nodes.&nbsp; </p>
     <p style="margin-left: 40px;">(7) in the ""Results" page, check the
       monitoring script (modify if needed), check/edit legend names (for
       plotting).&nbsp; </p>
@@ -1028,7 +1074,7 @@
       copy-pasting. </p>
     <p> Never miss typing comments about this task into two comment lines in the
       upper part of the page. The first comment line will also be visible on the
-      plots. Below the comments, an "mInput" row of cells is visible, where
+      plots. Below the comments, an "mInput" row of cells is visible, where the
       values can be added for conversion of units in which compositions of
       initial systems is given. There are three ways of doing that: </p>
     <p style="margin-left: 40px;">(i) enter/paste quantities of elements into
@@ -1039,7 +1085,7 @@
       which case they will be added up after conversion to mole amounts of
       chemical elements. </p>
     <p>In all cases, upon clicking the "Calculate" toolbar button, the resulting
-      bulk compositions of intitial systems will be placed into the "mBn" table
+      bulk compositions of initial systems will be placed into the "mBn" table
       (not editable).</p>
     <p>Below the "mInput" row, you have to enter the names of initial systems,
       followed by their overall properties entered into the "PTVi" table (each
@@ -1068,28 +1114,29 @@
     <p> </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_2"></a>3.2. GEM2MT Window Page "Nodes" (Array of Nodes)</h3>
-    <p> Here, the properties of each node have to be defined. Normally, this is
-      done automatically upon execution of the "mtExpr" initialization script
-      (visible in the "Initial" page). However, the script can be disabled or
-      assign only part of the data. Here, we describe what should be in which
-      data object or column, to also be able to set things up by editing.</p>
+    <p> Here, the properties of each node (box, reactor) have to be defined.
+      Normally, this is done automatically upon execution of the "mtExpr"
+      initialization script (visible in the "Initial" page). However, the script
+      can be disabled or assign only part of the data. Here, we describe what
+      should be in which data object or column, to also be able to set things up
+      by editing.</p>
     <p>Below the title line, a "mtSzLc" object having three cells is seen, which
       keeps spatial dimensions (m) of the RT problem along x, y, z axis. In the
       present version of the GEM-Selektor code, only the x dimension (the first
-      cell) needs to be set for 1-D RT simulations (A, C, D, W type). This value
-      is used in calculation of temperature and pressure gradients and in
-      determining the maximum possible time step duration from the Courant
-      criterion (enhanced in D and W cases by accounting for diffusion). &nbsp;
-      &nbsp; </p>
+      cell) needs to be set for 1-D RT simulations ('A', 'C', 'D', 'W' type).
+      This value is used in calculation of temperature and pressure gradients
+      and in determining the maximum possible time step duration from the
+      Courant criterion (enhanced in 'D' and 'W' cases by accounting for
+      diffusion). &nbsp; &nbsp; </p>
     <p>The next, "ADpar" row contains the time step reduction factor (default 1)
       in ADpar[0] cell, followed by the initial values of node transport
       properties that can be distributed to all nodes by the mtExpr
       initialization script.</p>
-    <p>The time step reduction factor (ADpar[0]) in A,C,D,W modes is multiplied
-      by the maximum time step dt<sub>max</sub> determined from the Courant
-      criterion to yield the time step dt actually used in calculation. The rest
-      of ADpar array contains numerical cutoffs: one (ADpar[8]) for IC amount
-      differences in the node between time steps (mol), default 1e-9 mol;
+    <p>The time step reduction factor (ADpar[0]) in 'A', 'C', 'D', 'W' modes is
+      multiplied by the maximum time step dt<sub>max</sub> determined from the
+      Courant criterion to yield the time step dt actually used in calculation.
+      The rest of ADpar array contains numerical cutoffs: one (ADpar[8]) for IC
+      amount differences in the node between time steps (mol), default 1e-9 mol;
       another (ADpar[9]) for minimal amounts of IC in node bulk compositions
       (mol), usually 1e-12 mol.</p>
     <p>Below the ADpar row, a large table describing all nodes (in their 1-D
@@ -1133,51 +1180,50 @@
         diffusivity (m2/s)<br>
         HydP[qc][6] =: ADpar[7]; &nbsp; $ nto: tortuosity factor, usually
         1&lt;=nto&lt;10&nbsp; &nbsp;&nbsp; </span></p>
-
     <p> </p>
     <p>Upon the RT simulation, transport properties, temperatures and masses of
       nodes may in principle change, if this is required by RT algorithm, and/or
       programmed in the third part of the mtExpr script. </p>
     <hr style="width: 100%; height: 2px;">
-    <h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page "Fluxes" (MPG
+    <h3><a name="MWPAGE_3"></a>3.3. GEM2MT Window Page "Fluxes" (MGP
       Compositions, Array of Fluxes)</h3>
-    <p>The data in this page is not used in A, C, D, W modes of GEM2MT, but is
-      essential for MPG box-flux transport models (modes S, F, B).</p>
+    <p>The data in this page is not used in 'A', 'C', 'D', 'W' modes of GEM2MT,
+      but is essential for MGP box-flux transport models (modes 'S', 'F', 'B').</p>
     <p>The first table (below the comment line) describes compositions of mobile
-      phase groups MPG (one per PGT column) in terms of quantities of phases
-      from the outgoing box (node). Each MPG must have an ID (short name) and
+      phase groups MGP (one per MGP column) in terms of quantities of phases
+      from the outgoing box (node). Each MGP must have an ID (short name) and
       must contain non-zero quantity of at least one phase. Usually, there is
-      one MPG "aq" that contains aqueous electrolyte phase "aq_gen". Other MPGs
-      can be defined too, e.g. one for moving the gas phase, or one for moving
-      aqueous and gas phases together, or one for moving aqueous and some minor
-      (suspended) solid phases, and so on. </p>
+      one MGP "aq" that contains aqueous electrolyte phase "aq_gen". In 'B'
+      mode, other MGPs can be defined too, e.g. one for moving the gas phase, or
+      one for moving aqueous and gas phases together, or one for moving aqueous
+      and some minor (suspended) solid phases, and so on. </p>
     <p>The next (optional) BSF table contains elemental compositions of point
-      sources/sinks used for special fluxes performing a production or a removal
-      of matter in certain boxes. Each such source, in fact, is also a MPG with
-      index of row in source composition table used as the name of this MPG
-      (i.e. "0", "1". ...). </p>
+      sources/sinks used in 'B' mode for special fluxes performing a production
+      or a removal of matter in certain boxes. Each such source, in fact, is
+      also an MGP with index of row in source composition table used as the name
+      of this MGP (i.e. "0", "1". ...). </p>
     <p>The next table defines all the fluxes between, to and from boxes (nodes).
       The first two columns must contain the indexes of outgoing (FDLi[0]) and
       incoming (FDLi[1]) boxes. The index -1 in FDLi[1][qf] means that a sink
       (or production or removal) flux with index qf is defined in the box with
       the index given in FDLi[0][qf]. </p>
-    <p>The next column FDLmp identifies as MPG moved by this flux by MPG ID
+    <p>The next column FDLmp identifies as MGP moved by this flux by MGP ID
       name. This can be either a real name such as "aq" or "aqueous" available
-      in the MPG composition table above, or "0" or "1" ... which is an index of
+      in the MGP composition table above, or "0" or "1" ... which is an index of
       production or removal bulk composition - one of defined in the BSF table
       above. </p>
     <p>The next two FDLf[0] and FDLf[1] columns define the order and the rate
       (constant) for each flux. Possible flux orders: </p>
     <div style="margin-left: 40px;">0:&nbsp; Zero-order (absolute) flux j<sub>0</sub>
-      = v<sub>0</sub>, with rate v<sub>0</sub> in mass/time units
+      = v<sub>0</sub>, with rate v<sub>0</sub> in mass/time (kg/s) units
       (default);&nbsp; <br>
       1:&nbsp; First-order to the outgoing box mass flux j<sub>1</sub> = m<sub>out</sub>v<sub>1</sub>,
-      with a rate constant v<sub>1</sub> in 1/time units; <br>
-      2:&nbsp; Second-order to outgoing and incoming MPG mass flux j<sub>2</sub>
-      = m<sub>out</sub>m<sub>in</sub>v<sub>2</sub>, with a rate constant v in
-      1/time/kg units, proportional to the product of masses in both boxes; <br>
+      with a rate constant v<sub>1</sub> in 1/time (1/s) units; <br>
+      2:&nbsp; Second-order to outgoing and incoming MGP mass flux j<sub>2</sub>
+      = (m<sub>out</sub>+m<sub>in</sub>)v<sub>2</sub>, with a rate constant v in
+      1/time units, proportional to the sum of masses in both boxes; <br>
       3:&nbsp; First-order flux j<sub>3</sub> = m<sub>in</sub>v<sub>3</sub>, to
-      MPG mass in receiving box, with a rate constant v<sub>3</sub> in 1/time
+      MGP mass in receiving box, with a rate constant v<sub>3</sub> in 1/time
       units.</div>
     <p>The columns FDLf[2] and FDLf[3] are reserved for future development. The
       following column FDLid may contain different IDs for individual fluxes, if
@@ -1186,13 +1232,13 @@
     Scrolling much below the mentioned tables, you will find work matrices MB
     (current masses of chemical elements in all boxes) and below that, a dMB
     matrix with current derivatives of masses of elements in all boxes. These
-    martices are updated at every time integration step and can be used for
+    matrices are updated at every time integration step and can be used for
     monitoring/debugging purposes.
     <p> </p>
     <hr style="width: 100%; height: 2px;">
     <h3><a name="MWPAGE_4"></a>3.4. GEM2MT Window Page "Results" (Sampling
       Script, Table of Results)</h3>
-    <p>Thispage contains the text editor with the "mgExpr" script for sampling
+    <p>This page contains the text editor with the "mgExpr" script for sampling
       and plotting the properties of nodes at a time step. The script is
       normally created in the GEM2MT wizard and can be edited/improved here. The
       node and the GEM2MT data object labels that can be used in scripts are
@@ -1325,11 +1371,11 @@
         F&nbsp;&nbsp;&nbsp;&nbsp; Flow-through reactors chain with fluxes
         (simultaneous transport then equilibration)<br>
         B&nbsp;&nbsp;&nbsp;&nbsp; Box-flux megasystem (with time-step
-        integration of arbitrary MPG fluxes)<br>
+        integration of arbitrary MGP fluxes)<br>
         A&nbsp;&nbsp;&nbsp;&nbsp; 1-D (advection-dispersion) reactive transport
         using classical finite-difference method<br>
         C&nbsp;&nbsp;&nbsp;&nbsp; 1-D (advection-dispersion) reactive transport
-        using implicit Crank-Nicolson scheme (TBD)<br>
+        using implicit Crank-Nicolson scheme<br>
         D&nbsp;&nbsp;&nbsp;&nbsp; 1-D (advection-diffusion) reactive transport
         using finite-volume method (TBD)<br>
         W&nbsp;&nbsp;&nbsp; 1-D (advection-diffusion) reactive transport using
@@ -1403,7 +1449,7 @@
       </dd>
       <br>
       <dt> <a name="mtPsfl_12"></a><big><b><big><code>mtPsfl[11]</code></big></b></big>
-        Type of MPG flux ( 0 undef, 1 - aq; 2 - gas; 3 - aq+gas, 4 - solids )</dt>
+        Type of MGP flux ( 0 undef, 1 - aq; 2 - gas; 3 - aq+gas, 4 - solids )</dt>
       <dd><br>
       </dd>
       <br>
@@ -1430,37 +1476,37 @@
       <dd>This counter defines how many different bulk system compositions are
         needed to initialize all nodes (boxes) before starting the RT
         simulation. Minimum one initial variant of rock + fluid composition at
-        chosen fluid/rock mass ratio is needed (to set all the nodes in B of F
-        mode). If this is the case then the source of additional fluid
+        chosen fluid/rock mass ratio is needed (to set all the nodes in 'B' or
+        'F' mode). If this is the case then the source of additional fluid
         composition can be defined in the BSF table having nSFD rows.&nbsp; </dd>
       <dd><br>
       </dd>
       <dd>The most common setup for 1-D simulations or box-flux chains needs nIV
         = 2: one initial system describing the (unreacted) rock (without fluid
-        in S mode, with fluid in other modes); and another one describing the
+        in 'S' mode, with fluid in other modes); and another one describing the
         (constant composition) fluid source in the first node (or first two
-        nodes in A and C mode.) These initial composition variants will be
+        nodes in 'A' and 'C' mode.) These initial composition variants will be
         distributed into all nodes by execution of the mtExpr initialization
         script.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="nFD"></a><big><b><big><code>nFD</code></big></b></big>&nbsp;
-        - number of MPG fluxes defined in the megasystem, nFD &gt;= 0</dt>
+        - number of MGP fluxes defined in the megasystem, nFD &gt;= 0</dt>
       <dd><br>
       </dd>
-      <dd>This counter is used in S, F and B modes only, where it defines the
-        total number of fluxes (including nSFD elemental source fluxes) to be
-        defined in the box-flux RT model. If a unidirectional chain of boxes
+      <dd>This counter is used in 'S', 'F' and 'B' modes only, where it defines
+        the total number of fluxes (including nSFD elemental source fluxes) to
+        be defined in the box-flux RT model. If a unidirectional chain of boxes
         with fluxes of aqueous fluid between adjacent boxes is to be constructed
-        then the number of fluxes is minimum nFD = nC. This is the case for S
-        and F modes, where the fluxes are actually defined by executing the
+        then the number of fluxes is minimum nFD = nC. This is the case for 'S'
+        and 'F' modes, where the fluxes are actually defined by executing the
         mtExpr initialization script.</dd>
       <dd><br>
       </dd>
-      <dd>In the B mode, it is possible to have more than one MPG and hence nFD
-        &gt; nC (should be set in GEM2MT wizard). For example, if gas phase
-        forms a separate MPG and is transported between boxes at higher speed
+      <dd>In the 'B' mode, it is possible to have more than one MGP and hence
+        nFD &gt; nC (should be set in GEM2MT wizard). For example, if gas phase
+        forms a separate MGP and is transported between boxes at higher speed
         then nMGP = 2 and nFD = 2*nC. If nSFD &gt; 0 i.e. elemental source
         fluxes for production or removal in some boxes should be defined, then
         nFD should be increased by the number of such source fluxes.</dd>
@@ -1471,12 +1517,12 @@
         - number of elemental constant source flux compositions, nSFD &gt;= 0</dt>
       <dd><br>
       </dd>
-      <dd>This counter (used in F and B modes) defines the number of different
-        elemental constant source compositions (rows of the BSF table) that can
-        be used by special fluxes describing independent production or removal
-        of matter in some chosen boxes. The number of those special fluxes
-        should be added to the number of normal MPG fluxes in defining the total
-        number of rows nFD in flux definition tables.&nbsp; </dd>
+      <dd>This counter (used in 'F' and 'B' modes) defines the number of
+        different elemental constant source compositions (rows of the BSF table)
+        that can be used by special fluxes describing independent production or
+        removal of matter in some chosen boxes. The number of those special
+        fluxes should be added to the number of normal MGP fluxes in defining
+        the total number of rows nFD in flux definition tables.&nbsp; </dd>
       <dd>&nbsp;<br>
       </dd>
       <br>
@@ -1484,15 +1530,15 @@
         - number of mobile groups of phases, nMGP &gt;= 0</dt>
       <dd><br>
       </dd>
-      <dd>This counter is used in S, F and B modes only, where it defines the
-        number of MPG (mobile phase groups) related to bulk composition of
+      <dd>This counter is used in 'S', 'F' and 'B' modes only, where it defines
+        the number of MGP (mobile phase groups) related to bulk composition of
         phases in outgoing box that can be moved by different fluxes. The most
-        common case is to define nFD = 1, i.e. one MPG composed from aqueous
-        electrolyte phase only. Another MPG can be composed of the gas phase. It
-        is also possible to create an MPG that transports both aqueous and gas
-        phases in a certain mass ratio; or an MPG where aqueous phase with some
+        common case is to define nFD = 1, i.e. one MGP composed from aqueous
+        electrolyte phase only. Another MGP can be composed of the gas phase. It
+        is also possible to create an MGP that transports both aqueous and gas
+        phases in a certain mass ratio; or an MGP where aqueous phase with some
         minor amount of some solid phase(s) is transported. Any regular flux
-        defined between two boxes can only transport one MPG.</dd>
+        defined between two boxes can only transport one MGP.</dd>
       <dd><br>
       </dd>
       <br>
@@ -1501,7 +1547,7 @@
       <dd><br>
       </dd>
       <dd>This counter should be set to positive value only if diffusion of
-        electrolytes is considered in D mode. Otherwise it should be 0.</dd>
+        electrolytes is considered in 'D' mode TBD. Otherwise it should be 0.</dd>
       <dd><br>
       </dd>
       <br>
@@ -1509,7 +1555,7 @@
         nPTypes - number of allocated particle types &lt; 20</dt>
       <dd>This counter is used by random walk or particle tracking algorithm. If
         transport in aqueous solution only is simulated then nPTypes = 1.
-        Usually, each MPG needs its own particle type.</dd>
+        Usually, each MGP needs its own particle type.</dd>
       <dd><br>
       </dd>
       <br>
@@ -1746,10 +1792,10 @@
         spatial dimension x of the (porous) medium (m)</dt>
       <dd><br>
       </dd>
-      <dd>This cell is used only in 1-D transport models (A, C, D, W modes).
-        This length is used in calculation of the length discretization interval
-        dx = x/nC (or node size), and in calculation of the pressure gradient
-        (hydraulic head) as (Plast-Pfirst)/x. </dd>
+      <dd>This cell is used only in 1-D transport models ('A', 'C', 'D', 'W'
+        modes). This length is used in calculation of the length discretization
+        interval dx = x/nC (or node size), and in calculation of the pressure
+        gradient (hydraulic head) as (Plast-Pfirst)/x. </dd>
       <dd><br>
       </dd>
       <dd>Note that the hydraulic head is not used directly in calculation of
@@ -1851,13 +1897,27 @@
       </dd>
       <br>
       <dt> <a name="ADpar_0"></a><big><b><big><code>ADpar[0]</code></big></b></big>
-        Advection/diffusion mass transport: time step reduction factor tf
-        (usually 1)</dt>
+        Advection, diffusion and box-flux transport: time step reduction factor
+        tf (usually 1; 0 resets to 1)</dt>
       <dd><br>
       </dd>
-      <dd>This applies to A, C, D, W modes only, in which the time step duration
-        dt is determined from the CFL (Courant-Friedrichs-Levy) condition. For
-        1-D transport case, the CFL condition has the form:</dd>
+      <dd>This applies to 'A', 'C', 'D', 'W' and 'B' modes. </dd>
+      <dd><br>
+      </dd>
+      <dd>In the 'B' mode, ODE integrator implicitly assumes time in seconds and
+        sets the maximum time step duration dt to 1.7 s. In the case of slow
+        fluxes, the factor tf can be applied; for example, if tf = 60 is set
+        then the whole time iterator mtTau should define maximum time and time
+        step in seconds multiplied by 60, i.e. effectively each time step will
+        be one minute (or maximum 1.7 min or 102 s). if tf = 3600 then the time
+        step will be effectively 1 to 1.7 h, and so on. The flux rate constants
+        in FDLf table must be scaled up accordingly (just as dt, they will be
+        internally divided by the tf factor for the ODE integrator).&nbsp; </dd>
+      <dd><br>
+      </dd>
+      <dd>In 'A', 'C', 'D', 'W' modes, the time step duration dt is determined
+        from the CFL (Courant-Friedrichs-Levy) condition. For 1-D transport
+        case, the CFL condition has the form:</dd>
       <dd><br>
       </dd>
       <dd>C = vp * dt / dx &lt;= C<sub>max</sub>, where C is the Courant number,
@@ -2153,14 +2213,14 @@
         nodes (boxes); other for the initialization of fluxes defined between
         boxes; and optional section for execution at regular time steps (if
         written/extended by the user). The first two sections will be
-        automatically executed for each node (indexed with qc) and each flux (S,
-        F, B modes, indexed with qf) once at (time) step 0, while the third one
-        (if not commented out) will be executed at every subsequent time step
-        for each node and flux. This initialization script can save the user a
-        lot of time, especially when there are many nodes / boxes to be created.
-        To save the user's time, the GEM2MT (remake) wizard can automatically
-        generate the initial version of this script that can be edited/extended
-        by the user later on. </dd>
+        automatically executed for each node (indexed with qc) and each flux
+        ('S', 'F', 'B' modes, indexed with qf) once at (time) step 0, while the
+        third one (if not commented out) will be executed at every subsequent
+        time step for each node and flux. This initialization script can save
+        the user a lot of time, especially when there are many nodes / boxes to
+        be created. To save the user's time, the GEM2MT (remake) wizard can
+        automatically generate the initial version of this script that can be
+        edited/extended by the user later on. </dd>
       <br>
       <dt> <a name="mgExpr"></a><big><b><big><code>mgExpr</code></big></b></big>
         - math script text for data sampling and plotting the properties of
@@ -2188,7 +2248,8 @@
     <dl>
       <dd>here, &nbsp;<span style="font-family: monospace;">n</span> stands for
         the last valid index of columns in the data sampling array <a href="#yp"><span
-            style="font-family: monospace;">yt</span></a>; &nbsp;<span style="font-family: monospace;">&lt;expression&gt;</span>
+            style="font-family: monospace;">yt</span></a>;
+        &nbsp;<span style="font-family: monospace;">&lt;expression&gt;</span>
         must contain some labels of data objects visible on GEM2MT window pages.
         Arbitrary expressions for intermediate calculations can also be
         specified. Lists of (visible and hidden) data objects that can be used
@@ -2219,15 +2280,15 @@
         execution.</dd>
       <dd><br>
       </dd>
-      <dd>In many cases (e.g. 1-D transport by A, W, S, F, B modes), the first
-        cell in this column (the first two cells in A, C modes) contains the
-        index of initial fluid (water) composition. These cells are acting as
-        infinite sources of constant-composition fluids, as indicated with the
-        respective code in the DiCp[1] column. The rest of cells are given the
-        initial rock (S mode) or rock+fluid (other modes) compositions and
-        declared as "normal" (code 0 in the DiCp[1] column). The very last cell
-        is declared as having the infinite sink of fluid (code -3 in the DiCp[1]
-        column).</dd>
+      <dd>In many cases (e.g. 1-D transport by 'A', 'C', 'W', 'S', 'F', 'B'
+        modes), the first cell in this column (the first two cells in 'A', 'C'
+        modes) contains the index of initial fluid (water) composition. These
+        cells are acting as infinite sources of constant-composition fluids, as
+        indicated with the respective code in the DiCp[1] column. The rest of
+        cells are given the initial rock ('S' mode) or rock+fluid (other modes)
+        compositions and declared as "normal" (code 0 in the DiCp[1] column).
+        The very last cell is declared as having the infinite sink of fluid
+        (code -3 in the DiCp[1] column).</dd>
       <dd><br>
       </dd>
       <dd>If needed, some fluid source nodes may be declared in the middle of
@@ -2283,13 +2344,13 @@
       </dd>
       <br>
       <dt> <a name="FDLi_0"></a><big><b><big><code>FDLi[0]</code></big></b></big>
-        - source (outgoing) box index in MPG flux definition</dt>
+        - source (outgoing) box index in MGP flux definition</dt>
       <dd><br>
       </dd>
-      <dd>Each normal flux (in S, F, B modes) is defined by the index of
+      <dd>Each normal flux (in 'S', 'F', 'B' modes) is defined by the index of
         outgoing box (node) where it takes the elemental composition and mass of
-        the MPG (mobile phase group) transported by this flux, and the index of
-        incoming box where the mass of MPG will be added to after proper
+        the MGP (mobile phase group) transported by this flux, and the index of
+        incoming box where the mass of MGP will be added to after proper
         re-scaling according to the flux order, rate and time step duration.
         This cell defines the index of outgoing box (initially set by the user
         or by execution of the mtExpr initialization script).</dd>
@@ -2297,13 +2358,13 @@
       </dd>
       <br>
       <dt> <a name="FDLi_1"></a><big><b><big><code>FDLi[1]</code></big></b></big>
-        - receiver (incoming) box index in MPG flux definition</dt>
+        - receiver (incoming) box index in MGP flux definition</dt>
       <dd><br>
       </dd>
-      <dd>Each normal flux (in S, F, B modes) is defined by the index of
+      <dd>Each normal flux (in 'S', 'F', 'B' modes) is defined by the index of
         outgoing box (node) where it takes the elemental composition and mass of
-        the MPG (mobile phase group) transported by this flux, and the index of
-        incoming box where the mass of MPG will be added to after proper
+        the MGP (mobile phase group) transported by this flux, and the index of
+        incoming box where the mass of MGP will be added to after proper
         re-scaling according to the flux order, rate and time step duration.
         This cell defines the index of incoming box (initially set by the user
         or by execution of the mtExpr initialization script).</dd>
@@ -2315,9 +2376,9 @@
       <dd><br>
       </dd>
       <dd>In certain cases, this cell may contain -1 indicating that the flux is
-        a sink (of MPG or of constant elemental composition) or a source of
+        a sink (of MGP or of constant elemental composition) or a source of
         constant elemental composition defined as a row in the BSF table (in
-        this case, the ID name of MPG for this flux will be the index of that
+        this case, the ID name of MGP for this flux will be the index of that
         row in BSF table; whether it is a source or a sink, depends on the sign
         of the flux rate (constant): (-) source, (+) sink.</dd>
       <dd>&nbsp; &nbsp; </dd>
@@ -2347,7 +2408,8 @@
       </dd>
       <br>
       <dt> <a name="PTVi_2"></a><big><b><big><code>PTVi[2]</code></big></b></big>
-        - volume of the system (L) [nIV], zeros for G minimization</dt>
+        - volume of the system (m<sup>3</sup>) [nIV], zero in 'T' mode (export
+        of GEMS3K files)</dt>
       <dd><br>
       </dd>
       <br>
@@ -2399,11 +2461,12 @@
       </dd>
       <br>
       <dt> <a name="StaP_2"></a><big><b><big><code>StaP[2]</code></big></b></big>
-        - volumes of nodes (L) [nIC], for now zeros</dt>
+        - volumes of nodes (m<sup>3</sup>) [nIC], zero in 'T' mode (export of
+        GEMS3K files)</dt>
       <dd><br>
       </dd>
-      <dd>This is not used yet (reserved for equilibration in nodes by Hemholtz
-        energy minimization).</dd>
+      <dd>This volume can be used (for instance) to calculate the mass of gas in
+        the nodes as function of node temperature at constant pressure.</dd>
       <dd><br>
       </dd>
       <br>
@@ -2660,6 +2723,18 @@
         mean that some fluxes are missing or set incorrectly.&nbsp; </dd>
       <dd>&nbsp;&nbsp; </dd>
       <br>
+      <dt> <a name="mt_MB"></a><big><b><big><code>mt_MB</code></big></b></big>&nbsp;
+        - Current masses of the nodes (boxes) (in kg) [nC]</dt>
+      <dd><br>
+      </dd>
+      <dd>In B and F modes, this table automatically shows current total masses of
+        all boxes after each time step during runtime. The masses
+        are updated by a built-in ODE system integration code. If the masses do
+        not change and the simulation still runs, this means that a steady state
+        is reached. If masses of some boxes approach zero or increase too much, this may
+        mean that some fluxes are missing or set incorrectly.&nbsp; </dd>
+      <dd>&nbsp;&nbsp; </dd>
+      <br>     
       <dt> <a name="dMB"></a><big><b><big><code>dMB</code></big></b></big>&nbsp;
         - table of current derivatives dM/dt for elements in boxes (reservoirs)
         [nC][Nb]</dt>
@@ -2667,7 +2742,20 @@
       </dd>
       <dd>In B and F modes, this table automatically shows current mass
         derivatives for all elements in all boxes (reservoirs), updated after
-        each time step upon runtime. If you see that some derivatives become too
+        each time step upon runtime. At or close to the steady state, all derivatives 
+        must become very small. If you see that some derivatives become too
+        large (positive or negative), this may help resolving problems with
+        incorreclty set fluxes or sources.</dd>
+      <dd>&nbsp; </dd>
+      <br>
+       <dt> <a name="mt_dMB"></a><big><b><big><code>mt_dMB</code></big></b></big>&nbsp;
+        - Current time derivatives of mass in the nodes (boxes) (in kg/s) [nC]</dt>
+      <dd><br>
+      </dd>
+      <dd>In B and F modes, this table automatically shows current total mass
+        derivatives for all boxes (reservoirs), updated after
+        each time step upon runtime. At or close to the steady state, all derivatives 
+        must become very small. If you see that some derivatives become too
         large (positive or negative), this may help resolving problems with
         incorreclty set fluxes or sources.</dd>
       <dd>&nbsp; </dd>
@@ -2745,29 +2833,30 @@ Work
       </dd>
       <br>
       <dt> <a name="FDLf_0"></a><big><b><big><code>FDLf[0]</code></big></b></big>&nbsp;
-        Flux defnition list [nFD][4]: MPG flux order {0 1 2 3 }&nbsp;</dt>
+        Flux defnition list [nFD][4]: MGP flux order {0 1 2 3 }&nbsp;</dt>
       <dd><br>
       </dd>
-      <dd>In this column (B,F,S modes), the flux order has to be defined.
-        Default is 0 (constant flux in units mass/timestep). Possible values: </dd>
+      <dd>In this column ('B', 'F', 'S' modes), the flux order has to be
+        defined. Default is 0 (constant flux in units mass/timestep). Possible
+        values: </dd>
       <dd><br>
       </dd>
       <dd>0 - Zero-order (absolute) flux, with velocity v in mass/time
         units;&nbsp; </dd>
       <dd>1 - First-order to source box mass flux, v in 1/time/kg units; </dd>
-      <dd>2 - Second-order to source and sink MPG mass flux, v in 1/time/kg<sup>2</sup>
+      <dd>2 - Second-order to source and sink MGP mass flux, v in 1/time/kg<sup>2</sup>
         units, proportional to product of masses in both boxes; </dd>
-      <dd>3 - First-order flux to MPG mass in receiving box, v in 1/time/kg
+      <dd>3 - First-order flux to MGP mass in receiving box, v in 1/time/kg
         units.&nbsp; </dd>
     </dl>
     <dl>
       <dd>At each time step, the transport of matter between boxes is performed
-        by fluxes of mobile phase groups (MPG). There can be MPG fluxes of three
+        by fluxes of mobile phase groups (MGP). There can be MGP fluxes of three
         types: normal, source, and sink.<br>
         <br>
         A normal flux is defined by the index of its source box, where the flux
         begins; the index of its destination box, where the flux ends; the index
-        of MPG definition; the flux order (0, 1, 2, 3), and the flux rate
+        of MGP definition; the flux order (0, 1, 2, 3), and the flux rate
         constant. <br>
         <br>
         A source flux is defined by its bulk composition (amounts of independent
@@ -2775,26 +2864,26 @@ Work
         set below on this wizard page; the index of its destination box; the
         flux order (0, 1, 3); and the flux rate constant.<br>
         <br>
-        A sink flux is defined by the index of its source box; the index of MPG
+        A sink flux is defined by the index of its source box; the index of MGP
         definition; the flux order (0, 1, 2); and the flux rate constant.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="FDLf_1"></a><big><b><big><code>FDLf[1]</code></big></b></big>
-        - MPG flux rate v (depending on MPG flux order)</dt>
+        - MGP flux rate v (depending on MGP flux order)</dt>
       <dd><br>
       </dd>
-      <dd>In this column (B,F,S modes), the MPG flux rate or rate constant has
-        to be provided. Its value and dimensionality depends on the flux order
-        in FDLf[0]:</dd>
+      <dd>In this column ('B', 'F', 'S' modes), the MGP flux rate or rate
+        constant has to be provided. Its value and dimensionality depends on the
+        flux order in FDLf[0]:</dd>
       <dd><br>
       </dd>
-      <dd>0 - Zero-order (absolute) flux, with velocity v in mass/time
+      <dd>0 - Zero-order (absolute) flux, with velocity v in mass/time (kg/s)
         units;&nbsp; </dd>
       <dd>1 - First-order to source box mass flux, v in 1/time/kg units; </dd>
-      <dd>2 - Second-order to source and sink MPG mass flux, v in 1/time/kg<sup>2</sup>
+      <dd>2 - Second-order to source and sink MGP mass flux, v in 1/time/kg<sup>2</sup>
         units, proportional to product of masses in both boxes; </dd>
-      <dd>3 - First-order flux to MPG mass in receiving box, v in 1/time/kg
+      <dd>3 - First-order flux to MGP mass in receiving box, v in 1/time/kg
         units.</dd>
       <dd><br>
       </dd>
@@ -2813,18 +2902,31 @@ Work
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="PGT"></a><big><b><big><code>PGT</code></big></b></big>
-        -&nbsp; quantities of phases defining MPG composition [Fi][nPG]</dt>
+      <dt> <a name="mtJMGP"></a><big><b><big><code>mtJMGP</code></big></b></big>
+        -&nbsp; Current outgoing MGP fluxes (in kg/s) [nFD]</dt>
       <dd><br>
       </dd>
-      <dd>In this table (B,F,S modes), the user has to specify some quantities
-        of phases on the outgoing box/node that define bulk elemental
-        composition of this mobile phase group MPG that can be moved between
+      <dd>In this column ('B', 'F', 'S' modes), the current total MPG fluxes
+        (in kg/s) of matter at each simulation step can be seen. Negative values 
+        are fine and consistent with the convention that the outcoming flux is
+        negative relative to the mass of MGP in the box. Weird (too small
+        or too large) fluxes can indicate problems in MPG or flux definition, 
+        flux order or rate constant. &nbsp; </dd>
+      <dd>&nbsp; &nbsp; <br>
+      </dd>
+      <br>
+      <dt> <a name="PGT"></a><big><b><big><code>PGT</code></big></b></big>
+        -&nbsp; quantities of phases defining MGP composition [Fi][nPG]</dt>
+      <dd><br>
+      </dd>
+      <dd>In this table ('B', 'F', 'S' modes), the user has to specify some
+        quantities of phases on the outgoing box/node that define bulk elemental
+        composition of this mobile phase group MGP that can be moved between
         boxes by fluxes of a given order and rate constant. The actual elemental
-        MPG composition will be computed for each flux from compositions of
+        MGP composition will be computed for each flux from compositions of
         respective phases in each outgoing box after each equilibration (time)
-        step. Typically, only aqueous phase is moved in MPG; any combination of
-        phases is, in principle, possible.&nbsp; </dd>
+        step. Typically, only aqueous or gas phase is moved in MGP; however, 
+        any combination of phases in MGP is, in principle, possible.&nbsp; </dd>
       <dd>&nbsp; &nbsp; <br>
       </dd>
       <br>
@@ -2921,8 +3023,8 @@ Work
         [nFD] ID of MGP to move in this flux</dt>
       <dd><br>
       </dd>
-      <dd>In S, F, B modes, this relevant column defines for each flux which MGP
-        is moved by this flux (usually dubbed "aq"). </dd>
+      <dd>In 'S', 'F', 'B' modes, this relevant column defines for each flux
+        which MGP is moved by this flux (usually dubbed "aq"). </dd>
       <dd><br>
       </dd>
       <dd>Two forms of MGP Id are possible: (i) the normal MGP as defined in PGT
@@ -2937,18 +3039,18 @@ Work
         [nPG] ID list of mobile phase groups</dt>
       <dd><br>
       </dd>
-      <dd>Here, an Id (short alphanumeric string) should be entered for each MPG
+      <dd>Here, an Id (short alphanumeric string) should be entered for each MGP
         of composition defined in the PGT table.</dd>
       <dd><br>
       </dd>
       <br>
       <dt> <a name="UMGP_"></a><big><b><big><code>UMGP</code></big></b></big>
-        [nFi] units for setting phase quantities in MPG (see PGT)</dt>
+        [nFi] units for setting phase quantities in MGP (see PGT)</dt>
       <dd><br>
       </dd>
       <dd>This columns contains <a href="g_useref.html#QUANCONCUNITS">codes of
           units of measurement</a> for quantities of phases given in PGT column,
-        forming the composition of one or more MPGs. The user may set up
+        forming the composition of one or more MGPs. The user may set up
         different codes for different phases, according to certain <a href="g_useref.html#QUANCONCRULES">rules</a>.
         Default code:&nbsp; M (moles).</dd>
       <dd><br>
@@ -3004,21 +3106,31 @@ Work
       </dd>
       <br>
       <dt> <a name="gfc"></a><big><b><big><code>gfc</code></big></b></big>
-        [nC][nPG][Nb] Array of element partition coefficients for MPG and its
+        [nC][nPG][Nb] Array of element partition coefficients for MGP and its
         source box</dt>
       <dd><br>
       </dd>
       <dd>This 3-D array connects bulk compositions of source boxes with
-        elemental compositions of all MPGs, to be used in ODE system
+        elemental compositions of all MGPs, to be used in ODE system
         integration.</dd>
       <dd><br>
       </dd>
       <br>
-      <dt> <a name="yfb"></a><big><b><big><code>yfb</code></big></b></big>
-        [nC][nPG][Nf] Array of MPG bulk compositions at current time point</dt>
+      <dt> <a name="mtMMGP"></a><big><b><big><code>mtMMGP</code></big></b></big>
+        Current masses of outgoing MGPs in nodes/boxes (in kg) [nC][nPG]</dt>
       <dd><br>
       </dd>
-      <dd>This 3-D array contains bulk compositions of all MPGs from all
+      <dd>This table shows (in 'B', 'F', 'S' mode) current total masses of all MGPs 
+        (columns) in all boxes (rows) in kg. These masses are used for calculation
+      of first-order fluxes by multiplying the MGP mass to the rate constant.</dd>
+      <dd><br>
+      </dd>
+      <br>
+      <dt> <a name="yfb"></a><big><b><big><code>yfb</code></big></b></big>
+        [nC][nPG][Nf] Array of MGP bulk compositions at current time point</dt>
+      <dd><br>
+      </dd>
+      <dd>This 3-D array contains bulk compositions of all MGPs from all
         outgoing boxes, to be used for computing fluxes of elements between
         boxes.</dd>
       <dd><br>
@@ -3872,7 +3984,7 @@ Work
     <hr width="100%" size="2">
     <p><tt>end of file</tt> <br>
     </p>
-    <p>Last edited: 17 May 2019</p>
+    <p>Last edited: 7 September 2021</p>
     <p>(c) GEMS Development Team DK, AG</p>
     <p>&nbsp; </p>
     <br>

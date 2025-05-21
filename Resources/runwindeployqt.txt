@@ -1,0 +1,5 @@
+echo off
+
+echo Setting up environment for Qt usage - see qtenv2.bat
+PATH=C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;%PATH%
+windeployqt --release --no-translations --no-webkit2 --json --no-opengl --no-opengl-sw %1

@@ -1532,6 +1532,8 @@
         <keyword name="mtExpr" ref="gm_gem2mt.html#mtExpr"/>
         <keyword name="mtFlt_0" ref="gm_gem2mt.html#mtFlt_0"/>
         <keyword name="mtIC" ref="gm_gem2mt.html#mtIC"/>
+        <keyword name="mtJMGP" ref="gm_gem2mt.html#mtJMGP"/>
+        <keyword name="mtMMGP" ref="gm_gem2mt.html#mtMMGP"/>
         <keyword name="mtNVi_0" ref="gm_gem2mt.html#mtNVi_0"/>
         <keyword name="mtNVi_1" ref="gm_gem2mt.html#mtNVi_1"/>
         <keyword name="mtNVi_2" ref="gm_gem2mt.html#mtNVi_2"/>
@@ -1596,6 +1598,8 @@
         <keyword name="mtTau_0" ref="gm_gem2mt.html#mtTau_0"/>
         <keyword name="mtTau_1" ref="gm_gem2mt.html#mtTau_1"/>
         <keyword name="mtTau_2" ref="gm_gem2mt.html#mtTau_2"/>
+        <keyword name="mt_MB" ref="gm_gem2mt.html#mt_MB"/>
+        <keyword name="mt_dMB" ref="gm_gem2mt.html#mt_dMB"/>
         <keyword name="mtdx" ref="gm_gem2mt.html#mtdx"/>
         <keyword name="mtnSnE_0" ref="gm_gem2mt.html#mtnSnE_0"/>
         <keyword name="mtnSnE_1" ref="gm_gem2mt.html#mtnSnE_1"/>
