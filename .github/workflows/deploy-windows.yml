@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - deploy1
+      - no_client_mode
   release:
     types:
       - published
@@ -60,7 +60,7 @@ jobs:
           conda install conda-devenv
           conda devenv
 
-      - name: Building, Testing & Installing jsonqml (Windows)
+      - name: Building, Testing & Installing GEMSGUI (Windows)
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
