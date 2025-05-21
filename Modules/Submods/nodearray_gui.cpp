@@ -4,6 +4,12 @@
 #include "service.h"
 #include "GEMS3K/gems3k_impex.h"
 
+#ifndef _WIN32
+#include <unistd.h>
+#else
+#include <io.h>
+#endif
+
 #ifdef USE_GEMS3K_SERVER
 #ifdef NO_ASYNC_SERVER
 #include "gemsreaktoro/zmq_req_client.hpp"
