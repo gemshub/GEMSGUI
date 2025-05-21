@@ -1,0 +1,3 @@
+Only for Linux:
+
+For linuxdeployqt, copy into this folder the gems3 executable from release build and qhelpgenerator executable from the currently used Qt tools binary folder.  

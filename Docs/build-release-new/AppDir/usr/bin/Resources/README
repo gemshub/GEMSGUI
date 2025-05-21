@@ -1,0 +1,4 @@
+Only for Linux:
+
+Fill this directory with DB.default and other system files before making RPM!
+RPM will contain everything from this directory as a gems2 system catalog.

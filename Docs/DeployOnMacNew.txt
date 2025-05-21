@@ -1,0 +1,86 @@
+HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5-based GEMS3 FOR MacOSX
+10.10 - 15.1
+
+(replaces Produce-mac.txt)
+
+This deployment process is based on the "macdeployqt" utility, located
+in ~/Qt/5.15.2/clang_64/bin/ folder.
+
+1. Make sure that the Qt5.15.2 commmunity framework is installed as ~/Qt
+or in similar folder. We assume that the Qt library is located in
+~/Qt/5.15.2/clang_64/lib/ and Qt Tools (QtCreator.app etc.) are located in
+~/Qt/Tools/.
+
+2. If not yet done, find ~/DevGEMS/gems3gui/Docs/mac-build-release
+directory and copy it recursively into ~/Applications, then rename it to
+~/Applications/trunk. Dive into the ~/Applications/trunk/gems3.app/Contents
+and refresh recursively the /Resources subfolder contents by copying it
+from ~/DevGEMS/gems3gui/Resources.
+
+3. In the ~/Applications/trunk folder, find the "runmacdeployqt.bat" file
+and edit it to make sure that it contains the correct full path to the
+"macdeployqt" utility, e.g. /Users/<you>/Qt/5.15.2/clang_64/bin/macdeployqt.
+From the latter Qt folder, copy the actual files "qcollectiongenerator"
+(only Qt5.x.y) and "qhelpgenerator" (needed to refresh the help database)
+to the ~/Applications/trunk/gems3.app/Contents/MacOS folder.
+
+4. Using QtCreator, build the actual release variant of gems3 executable.
+You should get something like "~/DevGEMS/gems3gui"; "~/DevGEMS/standalone";
+and "~/DevGEMS/devPhase/build-gems3gui-Qt_5_15_2-Release" folders at the same level.
+Find gems3 in /gems3.app in the latter folder, and copy it into
+~/Applications/trunk/gems3.app/Contents/MacOS.
+
+5. Edit the file ~/Applications/trunk/gems3.app/Contents/info.plist to actual
+version and release numbers and year and save this file.
+
+6. Open the terminal, cd to ~/Applications/trunk and run the command:
+
+        $ ./runmacdeployqt.sh
+
+This will find and copy all dependence files (Qt libraries, plugins, etc.)
+into ~/Applications/trunk/gems3.app, and also will create the gems3.dmg
+image file of the GEM-Selektor installer.
+
+7. To make sure that the GEM-Selektor runs correctly: in terminal, cd to ~
+(your user home directory) and start the program with the command:
+
+$ exec /Users/<you>/Applications/trunk/gems3.app/Contents/MacOS/gems3 -d
+
+Upon the first start, the gems3 program will create a
+~/Library/Gems3/projects folder, in which the test projects are located
+(automatically copying from the .../gems3.app/Contents/Resources/projects).
+
+8. To complete creating a new GEM-Selektor installer file for Mac OSX:
+cd to ~/Applications/trunk/ folder and delete the gems3.dmg file. Then,
+to create the installer, run again the command
+    $ ./runmacdeployqt.sh
+
+This will create the file ~/Applications/trunk/gems3.dmg.
+Rename it according to the following pattern:
+
+Gems3.9.2-<rev1>.<rev2>-macos-x86-64.dmg
+
+Put there the same actual git commit numbers for GEMS GUI (rev1) and
+GEMS3K (rev2) parts as those used in the built code. For example, the
+installer may have the name:
+
+Gems3.9.2-96323c0.8986188-qt5-macos-x86-64.dmg
+
+The dmg file can now be distributed. It should work on Macs with Intel or ARM processors.
+
+9. For installation steps, see INSTALL-macosx.txt. Install and test if it works.
+The GEMS modelling projects are located in ~/Library/Gems3/projects.
+In Finder, use "Go" "Go to folder" menu and type "Library/Gems3".
+
+10. If the GEM-Selektor window looks not sharp on a high-resolution display,
+try in terminal to re-register gems3.app:
+
+~: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -v -f /Users/<you>/Applications/trunk/gems3.app
+
+Or, if gems3.app is installed in the /Applications folder,
+
+~: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -v -f /Applications/gems3.app
+
+End of file
+
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>GEM-Selektor binary package (Windows 10)</Name>
+    <Version>3.9.6</Version>
+    <Title>GEM-Selektor v.3.9.6 hotfix (Windows 10,11) installer. (c) 2023, PSI GEMS Development Team</Title>
+    <Publisher>PSI LES</Publisher>
+    <InstallerApplicationIcon></InstallerApplicationIcon>
+    <!-- Directory name is used in component.xml -->
+    <StartMenuDir>GEMS396</StartMenuDir>
+    <TargetDir>@HomeDir@/GEMS396</TargetDir>
+</Installer>

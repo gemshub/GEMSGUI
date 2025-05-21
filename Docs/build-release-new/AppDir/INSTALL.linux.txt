@@ -1,0 +1,47 @@
+To install GEM-Selektor v.3.3 on linux (ubuntu >= 12.0.4; fedora >= 15; OpenSuSE >=12.0): 
+
+1. Get the installer (e.g. Gems3.3.3-2646.1036-linux-x86-64.tgz file downloaded from GEMS 
+web site http://gems.web.psi.ch/GEMS3) into your home directory ~/ ("/home/<you>/").
+
+2. Unpack the installer to your home directory. This will create a folder "~/MyGEMS/Gems3-app/" 
+that contains the program and the resource files, including help database and a "/DB.default/" 
+folder with the thermodynamic database.
+
+3. Optionally, you can now create in your home directory a folder like "~/MGEMS/" and move 
+the folder "~/Gems3-app/" in there.
+
+4. Open the terminal, cd into "/Gems3-app/" wherever it is installed, and execute a command:
+  $ ./rungems3.sh -d  
+
+The GEM-Selektor v.3 program should launch; after you exit it, a folder "/Library/Gems3/projects/"
+with several test modeling projects will be available at the same level as the "/Gems3-app/" 
+folder. If the program does not start, try the following. In terminal, cd to 
+"/Gems3-app/platforms" and run there the script "fixdep.sh" with root rights:
+   $ sudo ./fixdep.sh
+
+This script can automatically download the necessary libraries for your platform.       
+
+5. You can copy the existing third-party projects, or your old project folders into 
+   "/Library/Gems3/projects/". Backup of modeling projects is strongly recommended once a day.
+
+6. To create a desktop shortcut for starting GEMS3: 
+   
+   copy the file GEMSv3.3.desktop from ".../Gems3-App/ToDesktop/" to the "~/Desktop/" folder; 
+   
+   right-click on the GEMSv3 icon on your desktop, select "Properties", and edit the actual
+   location of the program in command line (e.g. /home/<you>/MyGEMS/Gems3-app/rungems3.sh -c) 
+   and location of the GEMS3 icon (e.g. /home/<you>/MyGEMS/Gems3-app/gems3.png), and save.
+
+7. Start GEMS3 by clicking on the desktop icon. If it does not start, check the path in the icon
+again, or edit rungems3.sh file by replacing "#!/bin/sh" with b"#!/bin/bash" (depends on the
+particular linux distribution). On Ubuntu linux 12.04 or up, you can drag the launcher icon 
+from desktop to the launch bar (on the left side) and start GEMS3 by clicking on that icon 
+in the launch bar.
+
+8. To update GEMS3, unpack the installer archive and replace with it the existing "/Gems3-app/"
+folder only (your projects will remain intact in the "/Library/Gems3/projects" folder).
+
+9. To remove GEMS3 from your PC, simply delete both "/Gems3-app/" and "/Library/Gems3/" folders 
+in your home directory.
+
+All operations described above (except running fixdep.ch) do not require root privileges. 

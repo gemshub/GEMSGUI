@@ -1,0 +1,1129 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]"><title>GEMS3 Compos Module</title>
+  
+  <meta name="description" content="Version 2.0.0-PSI"></head><body>
+<h1><img src="gems1.png" style="height: 48px; width: 48px;" title="" alt="GEMS icon" align="left"> <font color="#000066"> GEM-Selektor
+version 3</font> </h1>
+<h1>&nbsp;<b>Predefined Composition Objects (PCO) and the Compos Module<br>
+  </b></h1>
+
+<hr style="width: 100%; height: 2px;">
+<h3>Contents</h3>
+<p><a href="#COMPOS_INTRO">1. Introduction</a>
+</p>
+<p><a href="#COMPOS_CALC">1.1. Compos Module Calculations</a> 
+</p>
+<p><a href="#COMPOS_MWIZARD">2. Compos Create/Remake Wizard</a>
+</p>
+<blockquote>
+  <p><a href="#WZSTEP_1">2.1. Compos Wizard Step 1</a>- Predefined Composition Object (PCO) configuration</p>
+  <p><a href="#WZSTEP_2">2.2. Compos Wizard Step 2 </a>- Additional settings and next actions</p>
+</blockquote>
+
+
+<p><a href="#COMPOS_MWINDOW">3. Compos Module Window</a>
+</p>
+<blockquote>
+  <p><a href="#MWPAGE_1">3.1. Compos Window 'PCO' Page<br>
+</a></p>
+  <p><a href="#MWPAGE_2">3.2. Compos Window 'Settings' Page<br>
+</a></p>
+</blockquote>
+
+
+
+<p><a href="#COMPOS_DATA_ENTRIES">4. Compos Window Data Entries</a>
+</p>
+<blockquote>
+  <p><a href="#COMPOS_PROTECTED">4.1. Data entries accessible for
+editing through Create/Remake wizard only</a></p>
+</blockquote>
+
+<p><a href="#COMPOS_ERRORS">5. Warnings and Error Messages</a></p>
+
+
+<p><br>
+</p>
+<hr style="width: 100%; height: 2px;">
+<h2><a name="COMPOS_INTRO"></a>1. Introduction&nbsp;</h2>
+<p> This chain of GEMS database records contains definitions
+of&nbsp; Predefined Composition Objects (PCO) such as rocks, ores,
+waters, fluids etc. Compos records are very versatile in the choice of 
+forms in which the compositions can be entered. Upon calculation of 
+Compos record, all input data will be automatically converted into
+a single PCO vector containing number of moles of all
+involved Independent Components (<a href="gm_icomp.html">IComp</a>). </p>
+<p>PCOs are accessible through the list of&nbsp; Compos record keys in
+the "System" "Compos" window, very convenient for setting up the <a href="gems_bcc.html">bulk
+elemental composition </a>of a complex chemical system. Since each PCO is
+referred to as a single entity, the user can specify any desired number of
+grams, moles etc. of it in the system recipe, to be added to the bulk chemical composition
+vector&nbsp; <i>n<sup>(b)</sup></i>&nbsp; - the main input data in GEM calculation
+of equilibria in chemical systems. If complex ingredients are
+involved, such as rocks or sea-salt, this functionality may save users a
+lot of&nbsp; time. <br>
+</p>
+<p>The default database of GEM-Selektor contains many simple Compos 
+records that will be automatically copied into a newly-created are in 
+most cases sufficient for assembling complex recipes of geochemical 
+systems. Any missing PCO can be created by the user in project database 
+after switching to the Database mode of GEM-Selektor.<br>
+</p>
+
+<p>Addressing Compos names in the <a href="gm_proces.html">Process
+Simulator </a><a href="gmscript.html">scripts</a> will also let the user to simulate various mixing processes in batch calculations in a
+quite simple and efficient way, as well as to define the "process
+extent" reaction-path models with changing rock/water or rock/fluid ratios,
+evaporation, weathering etc. </p>
+<p>Each PCO has a unique name (identifier) in the first field of the <a href="gems_rekey.html#DBM_Compos">record key</a> and, regardless of the
+particular specification, contains numbers of moles of <a href="gm_icomp.html">Independent Components</a>. Upon creation of
+Compos records, the GEM-Selektor code offers several flexible and efficient <a href="#QUANCON">methods for specification</a> of GCO compositions via
+molar, mass, volume fractions, molality or molarity units, and absolute
+masses or number of moles of IC, DC or user-defined stoichiometries.
+Virtually any published composition can be represented close to its
+original appearance by creating a Compos record. </p>
+<p>As usual in GEM-Selektor, the easiest way to create a new PCO (in addition
+to some provided in the Default database) is to "clone" existing Compos
+records with "Record" "Create" or "Record" "Save As" menu commands,
+then remake and re-calculate the new records whenever appropriate. The
+new Compos record keys will be automatically added to the <a href="gm_project.html">modelling project system definition</a> when you open it next time.</p>
+<p><br>
+</p>
+<hr style="width: 100%; height: 2px;">
+
+<h3><a name="COMPOS_CALC"></a>1.1. Compos Module Calculations</h3>
+<p>Let us consider an example of
+stoichiometry of 1 kg of simplified haplogranite with the composition expressed through five petrogenic oxides: </p>
+<table border="1" cellpadding="2" cellspacing="2" width="50%">
+  <tbody>
+    <tr>
+      <td valign="top">
+        <p>Formula unit</p>
+      </td>
+      <td valign="top">
+        <p>mass %%</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">SiO<sub>2</sub><br>
+      </td>
+      <td valign="top">66.74<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Al<sub>2</sub>O<sub>3</sub><br>
+      </td>
+      <td valign="top">21.45<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">K<sub>2</sub>O<br>
+      </td>
+      <td valign="top">5.55<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Na<sub>2</sub>O<br>
+      </td>
+      <td valign="top">6.26<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">H<sub>2</sub>O<br>
+      </td>
+      <td valign="top">1.00<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Total<br>
+      </td>
+      <td valign="top">101.00<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<p>In Database mode of GEM-Selektor, as described in Section 2, first create a new Compos record "<tt>Ha-granite:RO:Haplogranite-simplified</tt>". in the 'Step 1..." page of the <a href="#COMPOS_MWIZARD">Compos Wizard</a>,
+ set the number of user-defined formula units to 5, skip 'Step 2...' and
+ finish the wizard. In the appearing list of Independent Components, 
+just mark one of those involved in the above table (e.g. oxygen) and 
+click 'Ok' to proceed. <br>
+</p>
+<p>This brings you into the <a href="#COMPOS_MWINDOW">Compos window</a>. In the 'PCO' page, type "Haplogranite-simplified (1 kg)" and "Test" into comment lines, then enter 1 into the <a href="#MasVol_0"><tt>MasVol[0]</tt></a> cell, to normalize the PCO mass to 1.0 kg, and check that the <a href="#MasVol_6"><tt>MasVol[6]</tt></a> cell contains 0. Switch to the 'Settings' page and enter the formula units from the above table into the <a href="#formU"><tt>formU</tt></a> column. Enter the '%' code for all formula units into the <a href="#AUcl"><tt>AUcl</tt></a> column, and the respective mass percentages into the <a href="#CA"><tt>CA</tt></a> column. This should result in a table like shown below:</p>
+<br>
+<img alt="ComposSettingsPage1.png" src="ComposSettingsPage1.png" height="243" width="383"><br>
+<br>
+<p>Now, switch to the 'PCO' page and click the 'Calculate' toolbar button. This will compute the <a href="#PCO"><tt>PCO</tt></a> stoichiometry, as shown below.</p>
+<br>
+<img alt="Compos-PCO-Page1.png" src="Compos-PCO-Page1.png" height="353" width="701"><br>
+<br>
+<p>The PCO composition is expressed in moles, and normalized to 1 kg 
+total mass (or 49.8067 total moles). Now the record can be saved to 
+project database; it will be added to the Compos list in the chemical 
+system definition when the modeling project is open next time. One mole 
+of this PCO means exactly one kilogram mass added to the system 
+composition. <br>
+</p>
+It is very easy to re-normalize the PCO to any given mass. For example, 
+to re-normalize the haplogranite composition to 2 kg, enter 2 into the <a href="#MasVol_0"><tt>MasVol[0]</tt></a> cell; 0 into the <a href="#MasVol_6"><tt>MasVol[6]</tt></a>
+ cell; and click the "Calculate" toolbar button. Note that, if at least 
+one code of mass fraction is used somewhere in the Compos record then 
+the <tt>MasVol[0]</tt> cell cannot contain 0. <br>
+<p>In general, there are two modes of Compos calculations, depending on what was entered into the <a href="#MasVol_0"><tt>MasVol[0]</tt></a> data field.<br>
+</p>
+<blockquote>
+  <p>(1) <i>Output mode</i>. If 0 or EMPTY value is entered by the user 
+before calculation of the PCO vector, then the resulting Ms value (PCO 
+total mass) will be automatically placed into this cell, calculated from
+ IC mole amounts in the PCO vector and their molar masses collected from
+ the respective IComp records. In this case, mass fraction codes cannot 
+be used in any of the columns <tt>CIcl, CDcl</tt>&nbsp; and&nbsp; <tt>AUcl</tt>.<br>
+    <br>
+(2) <i>Input mode</i>. If any positive value Ms is entered into this 
+cell then the PCO composition vector will be normalized to this Ms value
+ during the calculation of Compos record data.<br>
+  </p>
+</blockquote>
+Normalization occurs as follows: (1) PCO vector elements (moles) are 
+calculated, as specified in other data fields of the Compos window; (2) 
+the total mass Mp&nbsp; of&nbsp; the PCO is computed by multiplying each
+ of the PCO vector elements to molar mass of the respective IC; (3) Each
+ PCO vector element is multiplied by a normalization factor Ms/Mp.<br>
+<br>
+If any positive value Ms&nbsp; is entered then, in addition, some values
+ in CI, CD or&nbsp; CA vectors can be specified in mass percent ('%' in 
+classifiers&nbsp; <tt>CIcl, CDcl</tt>&nbsp; and&nbsp; <tt>AUcl</tt>) or 
+other mass fraction concentration units.&nbsp; In the process of PCO 
+calculation, these mass concentrations will be scaled into numbers of 
+moles of IC using stoichiometries (where needed) and the provided 
+Ms&nbsp; value. <br>
+<p>It is good to know that each element of the&nbsp; <tt><a href="#CI">CI</a></tt>,<tt><a href="#CD"> CD</a>&nbsp;</tt> or&nbsp; <tt><a href="#CA">CA</a></tt>&nbsp; vectors can be set up
+separately with
+its own&nbsp; <a href="g_useref.html#QUANCONCUNITS">units of
+concentration</a> code. This&nbsp; gives the user an unmatched freedom
+in creating bulk compositions or modifying them. When specifying
+different units, one should take care of their "base quantities". For
+example, when setting molality units, the mass of water-solvent must
+always be set in beforehand. </p>
+<p>Read carefully all the tooltips and help pages to the&nbsp; <tt><a href="#MasVol_0">MasVol</a></tt>&nbsp; cells for instructions how to
+set base quantities and units of concentration correctly. Examination
+of the available Compos records and some experimentation will give you
+the right feeling how to work with PCOs. Negative numbers
+can be used in the&nbsp; <tt><a href="#CI">CI</a></tt>,&nbsp; <tt><a href="#CD">CD</a>&nbsp;</tt> or&nbsp; <tt><a href="#CA">CA</a></tt>&nbsp;
+vectors, as long as they do not produce negative numbers of moles in
+the total&nbsp; <tt><a href="#PCO">PCO</a></tt>&nbsp; composition
+vector. </p>
+
+<p>Coming back to the haplogranite example, there are many alternative 
+ways to express the same PCO. For instance, the record can be 
+re-configured such that 1 kg of large formula text is entered into the <a href="#Ctext"><tt>Ctext</tt></a> field:</p>
+<blockquote>
+  <p><tt>(SiO2)10.998(Al2O3)2.0829(K2O)0.5834(Na2O)1.00002(H2O)0.54959</tt></p>
+</blockquote>
+<p>Alternatively, the PCO vector can be simply copy-pasted into the CI 
+vector (always created automatically, even if not ordered in Compos 
+Wizard). For fluid PCOs, it may be convenient to compose them using 
+formulae of aqueous ions, complexes, or dissolved minerals from 
+DComp/ReacDC records (this gives an additional opportunity to check the 
+charge balance). <br>
+</p>
+<br>
+<hr style="width: 100%; height: 2px;">
+
+<h2><a name="COMPOS_MWIZARD"></a>2. Compos Create/Remake Wizard</h2>
+<p>This wizard appears when a new Compos record is created or cloned, or a remake is executed for an existing record. </p>
+<p>When a new record is created/cloned, the "set a new record key" 
+dialog appears first. There, three fields must be specified, as shown 
+below for an example of simplified haplogranite composition:</p>
+<br>
+<img alt="Compos-Record-Key.png" src="Compos-Record-Key.png" height="205" width="510"><br>
+<br>
+Of these three fields, the first one is the most important because it 
+appears in the Project system definition list that can be used for <a href="gems_bcc.html">creating a system recipe</a>. <br>
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+<hr style="width: 100%; height: 2px;">
+
+<h3><a name="WZSTEP_1"></a>2.1. Compos Wizard Step 1 - Predefined Composition Object (PCO) configuration</h3>
+<p>Compos record contains data for a Predefined Composition Object 
+(PCO), which describes a salt, the air, a mineral, a rock, a natural 
+water, etc., treated&nbsp; as a single named entity in the chemical 
+system recipe.</p>
+<p>PCO can be configured according to the source data: as IC or DC 
+amounts/concentrations; as user-defined formula (UDF) units; or as a 
+large 
+user-defined formula entered into a text editor field. All possible 
+methods of input can be used simultaneously. Independent Components that
+ define this PCO must always be specified. <br>
+</p>
+<p>Upon re-calculation, all entered quantities will be added (after unit conversion) into a single
+ IC mole amounts <a href="#PCO"><tt>PCO</tt></a> vector, optionally scaled to a given total mass <a href="#MasVol_0"><tt>MasVol[0]</tt></a> (in
+ kg) or total number of moles <a href="#MasVol_6"><tt>MasVol[6]</tt></a>. This vector is visible on the <a href="#MWPAGE_1">PCO page</a> of <a href="#COMPOS_MWINDOW">Compos window.</a><br>
+</p>
+
+
+<p>This wizard page contains two control element groups.<br>
+</p>
+<p>Group 1: PCO input data configuration<br>
+</p>
+<blockquote>
+  <p>
+    <i>Checkbox</i>: Use amounts of Independent Components (IComp) in 
+this PCO definition (default)? Allows entering quantities of Independent
+ Components into&nbsp; the <a href="#CI"><tt>CI</tt></a> column in units as specified in the <a href="#CIcl"><tt>CIcl</tt></a> column on the <a href="#MWPAGE_1">PCO page</a> of <a href="#COMPOS_MWINDOW">Compos window</a>. The ICs must be selected from the list appearing  after completion of this wizard. <br>
+  </p>
+  <p>
+    <i>Checkbox</i>: Use formulae of Dependent Components (from 
+DComp/ReacDC records) in this PCO? If turned on, allows entering 
+quantities of Dependent Components (formulae) into&nbsp; the <a href="gm_compos.html#CD"><tt>CD</tt></a> column in units as specified in the <a href="gm_compos.html#CDcl"><tt>CDcl</tt></a> column on the <a href="gm_compos.html#MWPAGE_2">Settings page</a> of <a href="gm_compos.html#COMPOS_MWINDOW">Compos window</a>. The ICs must be selected from the list appearing  after completion of this wizard. </p>
+  <p>
+    <i>Spinbox</i>: Set number of user-defined formula units for this 
+PCO definition (0 by default). If turned on, allows entering of UDF 
+formulae into the <a href="#formU"><tt>formU</tt></a> list, the amounts of UDFs into the <tt><a href="#CA">CA</a></tt> column in units as given in the <a href="#AUcl"><tt>AUcl</tt></a> column on the <a href="#MWPAGE_2">Settings page</a> of <a href="#COMPOS_MWINDOW">Compos</a> window.
+  </p>
+</blockquote>
+
+
+
+<p>Group 2: Optional: Input user-defined formula (UDF) text</p>
+<blockquote>
+  <p><i>Checkbox</i>: Use a user-defined formula text input field for 
+this PCO definition? If turned on, allows the user entering a large 
+formula into the <a href="#Ctext"><tt>Ctext </tt></a>field on the PCO 
+page of Compos window. The amount of this complex (e.g. rock-forming 
+mineral) stoichiometry can be entered below together with units of 
+measurement. <br>
+  </p>
+  <p><i>Spinbox</i>: Select units of measurement for this UDF quantity&nbsp; (default: M)
+  </p>
+  <p><i>Editor field</i>: Enter here the UDF quantity or amount in selected units (default: 1). This amount will appear in the <a href="gm_compos.html#MasVol_7"><tt>MasVol[7]</tt></a> cell on the <a href="gm_compos.html#MWPAGE_1">PCO page</a>, where it can be edited later on. </p>
+</blockquote>
+
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+
+
+<hr style="width: 100%; height: 2px;">
+
+<h3><a name="WZSTEP_2"></a>2.2. Compos Wizard Step 2 - Additional settings and next actions</h3>
+<h3> </h3>
+<p>
+'Options' group:</p>
+
+<blockquote>
+  <p><i>Spinbox</i>: Set here the number of links to SDref bibliography records (default 0). If set to 1 or more, this will allocate <a href="#bSDref"><tt>bSDref</tt></a> and <a href="#bSDval"><tt>bSDval</tt></a>
+ lists on the Settings page, where the user can enter the key(s) of 
+SDref containing source-of-data references and what is taken from which 
+source. </p>
+  <p><i>Checkbox</i>: Use a vector of data uncertainties in this PCO 
+definition? (not used for equilibria calculations in this version of 
+GEM-Selektor).</p>
+</blockquote>
+
+
+
+
+
+<p>
+The wizard page also reminds briefly, what will happen after the user clicks "Finish".</p>
+
+<p>(1) For a PCO definition using IComp amounts, a list of available 
+IComp records will be shown, asking you to mark the desired ones.
+</p>
+<p>(2) In a PCO definition using DC formulae, a list of available 
+ReacDC/DComp records will be shown, asking you to mark the desired ones.
+ </p>
+
+
+<p>(3) Page 1 of the 'Compos' window appears. Fill out the BCname 
+comment and (optionally) BCnote line. Then enter data and formulae 
+wherever needed; check units of amount/concentration.
+
+
+</p>
+<p>(4) Click on 'Calculate' toolbar button to compute the PCO vector. 
+Check or enter the normalization values in MasVol[0] and MasVol[6] 
+fields and calculate again, if needed. Setting both fields to zero 
+disables the normalization of PCO to the total mass or total amount of 
+moles, respectively. </p>
+
+
+<p>(5) When done, save the Compos record to the project database. It 
+will be taken into chemical system definition when the project is open 
+next time. </p>
+
+
+<p style="font-family: Helvetica,Arial,sans-serif;"><br>
+</p>
+
+
+<hr style="width: 100%; height: 2px;">
+
+<h2><a name="COMPOS_MWINDOW"></a>3. Compos Module Window</h2>
+<p>This window consists of two pages: PCO and Settings. In the PCO page,
+ the final PCO composition can be seen, as well as parts of it can be 
+specified as quantities of Independent Components and of a large 
+user-defined formula. In the Settings page, parts of PCO can be 
+specified via quantities of user-defined formula units (e.g. petrogenic 
+oxides) and optionally as quantities of formulae extracted from selected
+ DComp/ReacDC records.</p>
+
+
+<br>
+
+
+
+<hr style="width: 100%; height: 2px;">
+
+<h3><a name="MWPAGE_1"></a>3.1. Compos Window 'PCO' Page</h3>
+<p>This page always shows the <a href="#BCname"><tt>BCname</tt></a> and <a href="#BCnote"><tt>BCnote</tt></a> comment lines, it is recommended to type there what this PCO is for later reference. </p>
+<p>Below, a <a href="#MasVol_0"><tt>MasVol</tt></a> row of 8 real 
+numbers is visible, where the normalization factors can be specified for
+ calculation of the PCO, and an optional amount of the user-defined 
+formula can be entered. </p>
+<p>The final PCO composition (used in calculations of bulk composition 
+of chemical system) can be found in a table consisting of three columns:
+ <a href="#symDC"><tt>symIC</tt></a>, <a href="#PCO"><tt>PCO</tt></a>, and (optional) <a href="#unPCO"><tt>unPCO</tt></a>. </p>
+<p>Other data objects appear if allocated in the Compos Wizard. They form a table made of columns <a href="#symIC"><tt>symIC</tt></a>, <a href="#CIcl"><tt>CIcl</tt></a> and <a href="#CI"><tt>CI</tt></a>, where quantities of ICs can be entered.&nbsp; </p>
+<br>
+
+
+
+<hr style="width: 100%; height: 2px;">
+
+<h3><a name="MWPAGE_2"></a>3.2. Compos Window 'Settings' Page<br>
+</h3>
+<p>This page always shows the <a href="#BC_set_0"><tt>BC_set</tt></a> object with configuration flags, and <a href="#BC_dim_0"><tt>BC_dim</tt></a>
+ row with dimensions of dynamic data arrays in this Compos record. Other
+ data objects appear only when they were allocated in the Compos Wizard.
+ </p>
+
+
+<p>The table composed of <a href="#formU"><tt>formU</tt></a>, <a href="#AUcl"><tt>AUcl</tt></a>, and <a href="#CA"><tt>CA</tt></a> columns lets the user to enter formula units and their quantities, to be added to the PCO vector upon re-calculation. </p>
+<p>The table composed of <a href="#CmDCS"><tt>CmDCS</tt></a>, <a href="#symDC"><tt>symDC</tt></a>, <tt><a href="#CDcl">CDcl</a></tt>, and <a href="#CD"><tt>CD</tt></a> columns lets the user to enter quantities of DC formulae extracted from selected DComp or ReacDC records.</p>
+
+<br>
+
+<hr style="width: 100%; height: 2px;">
+<h2><a name="COMPOS_DATA_ENTRIES"></a> 4. Compos Window Data Entries</h2>
+<dl>
+  <dd> <i>&nbsp;</i></dd>
+  <dt> <a name="BCname"></a><b><tt><font size="+2">BCname</font></tt></b>
+- Input full name of this Predefined Composition Object.</dt>
+  
+  <dd>
+<p> This comment field may contain a string up to 70 characters
+long. Please, enter this string to identify the PCO definition on the
+Compos&nbsp; screen form. Not used in any calculations. <br>
+</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="BCnote"></a><b><tt><font size="+2">BCnote</font></tt></b>
+- Input comment to <b><tt>BCname </tt></b>(optional).</dt>
+  
+  <dd>
+<p> This is an optional comment to the PCO name (max 70 characters).
+Not used in any calculations.</p>
+</dd>
+  
+</dl>
+<dl>
+  <h4><br>
+  </h4>
+  <h4><big><font face="Helvetica, Arial, sans-serif"> Mass (in kg),
+volume (in dm<sup>3</sup>) and amount (in moles) data for this PCO:</font></big></h4>
+  <dt> <a name="MasVol_0"></a><b><tt><font size="+2">MasVol[0]</font></tt></b>
+    <i>&nbsp;-
+Ms</i>&nbsp; (input normalization mass, output total PCO mass).</dt>
+  
+  <dd>
+<p> This field contains total mass of this PCO in kilograms. There
+are two modes of using this data field: the output and the input mode.</p>
+</dd>
+  
+  <dd>
+<p> (1) <b>Output mode.</b> If 0 or EMPTY value is entered by the
+user before calculation of the PCO vector, then the resulting <i>Ms</i>&nbsp;
+value (PCO total mass) will be automatically placed into this cell,
+calculated from IC mole amounts in the <tt><font size="+1"><a href="#PCO">PCO</a></font></tt>&nbsp;
+vector and their molar masses collected from the respective <a href="gm_icomp.html">IComp</a> records. In this case, mass fraction
+codes cannot be used in any of the columns <tt><a href="#CIcl">CIcl</a></tt>,<tt> <a href="#CDcl">CDcl</a></tt>&nbsp; and&nbsp; <tt><a href="#AUcl">AUcl</a></tt>.</p>
+</dd>
+  
+  <dd>
+<p> (2) <b>Input mode.</b> If any positive value <i>Ms</i>&nbsp;
+is
+entered into this cell then the <tt><a href="#PCO">PCO</a></tt>
+composition vector will be normalized to this <i>Ms</i>&nbsp; value
+during calculation of Compos record data.</p>
+</dd>
+  
+  <dd>
+<p> Normalization occurs as follows: (1) <tt><a href="#PCO">PCO</a></tt>
+vector elements (moles) are calculated as specified in other data
+fields
+of the Compos window; (2) the total mass <i>Mp</i>&nbsp; of&nbsp; the
+PCO is computed by multiplying each of the <a href="#PCO"><tt>PCO</tt>
+vector</a> elements to molar mass of the respective IC; (3) Each <tt>PCO</tt>
+vector element is multiplied by a normalization factor <i>Ms/Mp</i>.</p>
+</dd>
+  
+  
+  <dd>
+<p> If any positive value <i>Ms</i>&nbsp; is entered then, in
+addition, some values in <tt><a href="#CI">CI</a></tt>, <tt><a href="#CD">CD</a></tt> or&nbsp; <tt><a href="#CA">CA</a></tt> vectors
+can be specified in mass percent (<tt>'%' </tt>in classifiers&nbsp; <tt><a href="#CIcl">CIcl</a></tt>, <tt><a href="#CDcl">CDcl</a></tt>&nbsp;
+and&nbsp; <tt><a href="#AUcl">AUcl</a></tt>) or other mass fraction
+concentration units.&nbsp; In the process of PCO calculation, these
+mass concentrations will be scaled into numbers of moles of IC using
+stoichiometries (where needed) and the provided <i>Ms</i>&nbsp; value. </p>
+</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="MasVol_1"></a><b><tt><font size="+2">MasVol[1]</font></tt></b>
+    <i>&nbsp;-
+Vs</i>&nbsp; (input normalization volume,&nbsp; for specifying volume
+concentrations)</dt>
+  
+  <dd>
+<p> If any positive <i>Vs</i>&nbsp; value (in L) is entered then it
+will be used in PCO calculations to scale all values in <tt><a href="#CI">CI</a></tt>, <tt><a href="#CD">CD</a></tt> or&nbsp; <tt><a href="#CA">CA</a></tt> vectors that were specified as volume fractions
+(<tt>'V'</tt>
+code in classifiers <tt><a href="#CIcl">CIcl</a></tt>, <tt><a href="#CDcl">CDcl</a></tt>&nbsp; and&nbsp; <tt><a href="#AUcl">AUcl</a></tt>)
+into moles of&nbsp; independent components..</p>
+</dd>
+  
+  <dd>
+<p> The<i> Vs&nbsp;</i> value is not used if volume concentrations
+are
+not specified anywhere in this PCO definition. Default value of&nbsp; <i>Vs</i>&nbsp;
+is 0. If&nbsp; <i>Vs&nbsp;</i> = 0 or EMPTY then volume concentration codes
+must not be specified.</p>
+</dd>
+  
+  <dd> <i>&nbsp;</i></dd>
+  <dt> <a name="MasVol_2"></a><b><tt><font size="+2">MasVol[2]</font></tt></b>
+    <i>&nbsp;-
+Mw</i>&nbsp;&nbsp; (input mass of water-solvent, for specifying
+molalities)</dt>
+  
+  <dd>
+<p> Positive value of water-solvent mass <i>Mw&nbsp;&nbsp;</i> (in
+kg)&nbsp; must be entered, if at least one of the elements of&nbsp; <tt><a href="#CI">CI</a></tt>, <tt><a href="#CD">CD</a></tt> or&nbsp; <tt><a href="#CA">CA</a></tt> vectors is given in molal units (codes <tt>'m',
+'i', 'p'</tt> in classifiers&nbsp; <tt><a href="#CIcl">CIcl</a></tt>, <tt><a href="#CDcl">CDcl</a></tt>&nbsp; and&nbsp; <tt><a href="#AUcl">AUcl</a></tt>).
+Upon the <tt><a href="#PCO">PCO</a></tt> vector calculation, molal
+concentrations will be automatically converted into moles of IC using
+stoichiometries (where needed) and the provided <i>Mw</i>&nbsp; value.</p>
+</dd>
+  
+  
+  <dd>
+<p> The<i> Mw</i>&nbsp; value is not used if molality units are not
+specified anywhere in this PCO definition. Default value of&nbsp; <i>Ms</i>&nbsp;&nbsp;
+is 0. If&nbsp; <i>Ms&nbsp;</i> = 0 or EMPTY then molal concentrations
+must not be specified. </p>
+</dd>
+  <dd> &nbsp;</dd>
+  <dt> &nbsp;<a name="MasVol_3"></a><b><tt><font size="+2">MasVol[3]</font></tt></b>
+    <i>&nbsp;-
+Maq</i>&nbsp; (input mass of aqueous solution for dissolved mass
+concentrations)</dt>
+  
+  <dd>
+<p> Non-empty positive value of mass of aqueous solution <i>Maq&nbsp;&nbsp;</i>
+(in kg) must be entered, if at least one element of&nbsp; <small><tt><font size="+1"><small><a href="#CI">CI</a>, <a href="#CD">CD</a></small></font></tt></small>
+or&nbsp; <small><tt><font size="+1"><small><a href="#CA">CA</a></small></font></tt></small>&nbsp;
+vectors will be set as concentration per mass of aqueous phase (codes <tt>'C','
+c', 'a'</tt>&nbsp; in <small><tt><font size="+1"><small><a href="#CIcl">CIcl</a><b>,
+    </b><a href="#CDcl">CDcl</a></small></font></tt></small>&nbsp; and&nbsp; <small><tt><font size="+1"><small><a href="#AUcl">AUcl</a></small></font></tt></small>&nbsp; classifiers).
+During the PCO
+calculation, these&nbsp; mass concentrations will be automatically
+converted into IC moles using&nbsp; <i>Maq</i>&nbsp; value and&nbsp;
+chemical formulae where necessary.</p>
+</dd>
+  
+  <dd> 
+<p><i>Maq</i>&nbsp; is not used by the program if aqueous mass
+concentrations are not specified.</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="MasVol_4"></a><b><tt><font size="+2">MasVol[4]</font></tt></b>
+    <i>&nbsp;-
+Vaq</i>&nbsp; (input volume of aqueous solution for molarities)</dt>
+  
+  <dd>
+<p> Non-empty positive value of volume of aqueous solution <i>Vaq</i>&nbsp;
+(in L) must be entered into this field, if at least one element
+of&nbsp; <small><tt><font size="+1"><small><a href="#CI">CI</a><b>, </b><a href="#CD">CD</a></small></font></tt></small>&nbsp; or <small><tt><font size="+1"><small><a href="#CA">CA</a></small></font></tt></small>&nbsp; vectors is supposed to be given in
+molarity units (codes <tt>'L',' j', 'q'</tt>&nbsp; in either of&nbsp; <small><tt><font size="+1"><small><a href="#CIcl">CIcl</a><b>, </b><a href="#CDcl">CDcl</a></small></font></tt></small>&nbsp;
+and&nbsp;<b> </b><small><tt><font size="+1"><small><a href="#AUcl">AUcl</a></small></font></tt></small>&nbsp;
+classifiers). Molarities will be automatically converted into IC moles
+using <i>Vaq</i>&nbsp;&nbsp; and chemical formulae.</p>
+</dd>
+  
+  <dd> <i>Vaq</i>&nbsp; is not used by the program if molarity
+concentrations are not specified.</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="MasVol_5"></a><b><tt><font size="+1">MasVol[5]</font></tt></b>
+    <i>&nbsp;-
+Pg</i>&nbsp; (input pressure in gas, for partial pressures)</dt>
+  
+  <dd>
+<p> This field is reserved for future use.</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="MasVol_6"></a><b><tt><font size="+2">MasVol[6]</font></tt></b>
+    <i>&nbsp;-
+Ns</i>&nbsp;&nbsp; (input total number of IC moles in this PCO)</dt>
+  
+  <dd>
+<p> A non-zero positive <i>Ns</i>&nbsp;&nbsp; value (moles) must be
+entered, if at least one element of vectors&nbsp; <tt><a href="#CI">CI</a></tt>,<tt><a href="#CD">CD</a></tt> or&nbsp; <tt><a href="#CA">CA</a></tt>&nbsp;
+will be specified in mole-fraction units (codes <tt>'n', 'N', 'f'</tt>&nbsp;
+in classifiers&nbsp; <tt><a href="#CIcl">CIcl</a></tt>, <tt><a href="#CDcl">CDcl</a></tt>&nbsp; and&nbsp; <tt><a href="#AUcl">AUcl</a></tt>).
+These mole fractions will be automatically converted into IC moles
+using <i>Ns</i>&nbsp; value and then added to the <tt><a href="#PCO">PCO</a></tt>
+vector.</p>
+</dd>
+  
+  <dd>
+<p> If no mole fractions are specified and non-zero positive <i>Ns</i>&nbsp;&nbsp;
+value is given then upon calculation, the PCO vector will be normalized
+such that sum of all its elements equals&nbsp; <i>Ns</i>.</p>
+</dd>
+  
+  <dd>
+<p> If no mole fractions are specified and this cell contains 0 or
+EMPTY value then, after PCO calculation, it will be replaced by the sum
+of all elements of the <tt><a href="#PCO">PCO</a></tt>&nbsp; vector.</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="MasVol_7"></a><b><tt><font size="+2">MasVol[7]</font></tt></b>
+    <i>&nbsp;-
+Mf</i>&nbsp; (input mass fraction (%) of a compound specified by&nbsp; <tt><a href="#Ctext">Ctext</a></tt>&nbsp; relative to the whole PCO mass)</dt>
+  
+  <dd>
+<p> This field must contain 0 if&nbsp;&nbsp; <tt><a href="#Ctext">Ctext</a></tt>
+is not specified.</p>
+</dd>
+  <dd>
+<p>If&nbsp;&nbsp; <tt><a href="#Ctext">Ctext</a></tt> is specified
+and <i>Ms&nbsp; </i>= 0 then, during PCO calculation,&nbsp; <i>Mf&nbsp;&nbsp;</i>is
+interpreted as number of moles of the compound with stoichiometry
+defined in&nbsp;&nbsp; <tt><a href="#Ctext">Ctext</a></tt> formula. In
+this case,&nbsp; <i>Ms&nbsp; </i>= 0 is considered as <i>Ms</i>&nbsp;
+= 1 (mol).</p>
+</dd>
+  
+  <dd>
+<p> If&nbsp;&nbsp; <tt><a href="#Ctext">Ctext</a></tt> is specified
+and <i>Ms</i>&nbsp;&nbsp; &gt; 0 then <i>Mf&nbsp;&nbsp;</i> is
+interpreted as a mass fraction of <i>Ms</i>&nbsp;&nbsp; assigned
+to&nbsp;&nbsp; <tt><a href="#Ctext">Ctext</a></tt>.&nbsp; Negative <i>Mf&nbsp;&nbsp;</i>values
+are allowed as long as they do not produce negative numbers of moles in
+the&nbsp; <tt><a href="#PCO">PCO</a></tt>&nbsp; vector.</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="PCO"></a><b><tt><font size="+2">PCO</font></tt></b> -
+Output vector of bulk numbers of moles of IC in this Predefined
+Composition Object.</dt>
+  
+  <dd>
+<p> This dynamic vector is always present in the Compos record. After
+the PCO calculation, it holds a bulk composition of this predefined
+composition object, expressed in positive numbers of moles of
+Independent Components. All elements with zero- or negative numbers of
+moles will be eliminated from the PCO vector.</p>
+</dd>
+  
+  <dd>
+<p> The PCO vector is calculated by adding all quantities converted
+from numbers specified in <small><tt><font size="+1"><small><a href="#CI">CI</a>, <a href="#CD">CD</a></small></font></tt></small> and <small><tt><font size="+1"><small><a href="#CA">CA</a></small></font></tt></small>&nbsp;
+vectors and <small><b><tt><font size="+1"><small>MasVol</small></font></tt></b></small>
+numbers&nbsp;
+(scaled according to codes in <small><tt><font size="+1"><small><a href="#CIcl">CIcl</a><b>,</b><a href="#CDcl"> CDcl</a></small></font></tt></small>&nbsp; and&nbsp; <small><tt><font size="+1"><small><a href="#AUcl">AUcl</a></small></font></tt></small>&nbsp; classifiers).</p>
+</dd>
+  
+  <dd>
+<p> Elements of the PCO vector ca be regarded as stoichiometry
+coefficients of the "chemical formula" of this object.</p>
+</dd>
+  
+  <dd> <i>&nbsp;&nbsp;&nbsp;</i></dd>
+  <dt> <a name="unPCO"></a><b><tt><font size="+2">unPCO</font></tt></b>
+- Input uncertainty of&nbsp;&nbsp; <small><tt><font size="+1"><small><a href="#PCO">PCO</a></small></font></tt></small>&nbsp;
+elements in moles</dt>
+  
+  <dd>
+<p> (optional, for use in future versions). <br>
+</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="Ctext"></a><b><tt><font size="+2">Ctext</font></tt></b>
+- Text-formula for incrementing the <small><b><tt><font size="+1"><small><a href="#PCO">PCO</a></small></font></tt></b></small> vector.</dt>
+  <dd>
+  <p>In this text editor field, any <a href="g_useref.html#FORMULA">valid chemical formula</a>
+ can be entered that contains IC symbols from the symIC list.&nbsp; This
+ formula will be automatically parsed upon calculation of the Compos 
+record.</p>
+</dd>
+<dd>
+  <p>If no formula is available then the Empty value "---" must be entered. &nbsp; </p>
+</dd>
+
+  <dd> &nbsp;</dd>
+  <dt> <a name="symIC"></a><b><tt><font size="+2">symIC</font></tt></b>
+- List of IC symbols corresponding to elements of&nbsp; <small><b><tt><font size="+1"><small><a href="#PCO">PCO</a></small></font></tt></b></small>&nbsp; vector</dt>
+  
+  <dd>
+<p> This list of IC symbols is created automatically when resulting
+bulk PCO is compressed. The list actually refers to IComp record keys.</p>
+</dd>
+  <dd>
+<p>This list is used internally when System Profile lists are
+generated and bulk composition of the system is computed in SysEq
+records.</p>
+</dd>
+  
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="formU"></a><b><tt><font size="+2">formU</font></tt></b>
+- List of arbitrary formula units</dt>
+  
+  <dd>
+<p> This list of user-defined formulae permits a convenient
+specification of PCO composition using wet chemistry analyses or other
+kinds of regular geochemical data.</p>
+</dd>
+  
+  <dd>
+<p> Examples of user-defined formulae: SiO2, Al2O3, and any <a href="g_useref.html#FORMULA">valid
+chemical formulae</a> up to 20 character long, typed by the user in rows of
+the formU list. No empty rows are allowed!</p>
+</dd>
+  
+  <dd>
+<p> The list formU is created as the stage of
+creation/reorganization
+of Compos&nbsp; record, when user has typed nAU &gt; 0 in the Compos 
+Wizard. Then formulae can be entered or edited directly in the Compos 
+window page, before calculation of PCO.</p>
+</dd><dd>&nbsp;<br>
+</dd>
+<dt><b><tt><font size="+2"><a name="symDC"></a>symDC</font></tt></b>
+- List of DC record keys</dt>
+  
+  <dd>
+<p> This list of DC record keys is created automatically after the
+user has marked DComp and/or ReacDC keys at remake/create of Compos
+record.</p>
+</dd>
+  
+  <dd>&nbsp;<br>
+  </dd>
+  <dt> <a name="CIcl"></a><b><tt><font size="+2">CIcl</font></tt></b>
+-
+Units of IC quantity/concentration</dt>
+  
+  <dd>
+<p> This classifier list contains <a href="g_useref.html#QUANCONCUNITS">codes of units of measurement</a> for IC named
+in the list <a href="#symIC"><tt>symIC</tt></a> and quantities/ concentrations specified in CI
+vector. The user may set up different codes for different IC, according
+to certain <a href="g_useref.html#QUANCONCRULES">rules</a>. <br>
+</p>
+</dd>
+  
+  <dd>
+<p> Default code:&nbsp; M (moles). <br>
+</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="CDcl"></a><b><tt><font size="+2">CDcl</font></tt></b>
+-
+Units of DC quantity/concentration</dt>
+  
+  <dd>
+<p> This list contains <a href="g_useref.html#QUANCONCUNITS">codes of units of measurement</a> for DC stoichiometries
+named in the list <a href="#symDC"><tt>symDC</tt></a> and quantities/concentrations specified in CD
+vector. The user may set up different codes for different DC, according
+to certain <a href="g_useref.html#QUANCONCRULES">rules</a>.</p>
+</dd>
+  <dd> Default code:&nbsp; M (moles).</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="AUcl"></a><b><tt><font size="+2">AUcl</font></tt></b>
+-
+Units of formulae quantity/concentration</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This list contains codes of <a href="g_useref.html#QUANCONCUNITS">units of measurement</a> for user-defined formulae
+(UDF), listed in the <a href="#formU"><tt>formU</tt></a> object, with quantities/concentrations
+specified in CA vector. The user may set up different codes for
+different UDF, according to certain <a href="g_useref.html#QUANCONCRULES">rules</a>.</dd>
+  <dd> Default code:&nbsp; M (moles).</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="CmDCS"></a><b><tt><font size="+2">CmDCS</font></tt></b>&nbsp;
+- Source of DC data: d-DComp&nbsp; r-ReacDC { d r }</dt>
+  
+  <dd>
+<p> Possible values:</p>
+</dd>
+  <dl>
+    <dd> d&nbsp;&nbsp;&nbsp;&nbsp; look for DComp&nbsp; record referred
+to with the line in symDC list;</dd>
+    <dd> r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; look for ReacDC record.</dd>
+  </dl>
+  <dd>
+<p>&nbsp;This classifier is created automatically upon create/remake of the Compos record. <br>
+</p>
+</dd>
+  
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="CI"></a><b><tt><font size="+2">CI</font></tt></b> -
+Quantity/concentration of IC C(IC)</dt>
+  
+  <dd>
+<p> This optional dynamic vector contains quantities or
+concentrations of IC used for specification of the PCO. Corresponding
+IC symbols are listed in <a href="#symIC"><tt>symIC</tt></a> vector. <br>
+</p>
+</dd>
+  
+  <dd>
+<p> Each element of CI vector is scaled according to the code in
+  <a href="#CIcl"><tt>CIcl</tt></a>
+classifier and then added to respective element of <a href="#PCO"><tt>PCO</tt></a> vector. Zero and
+negative values can also be specified as long as they do not produce
+negative numbers in the PCO vector. <br>
+</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="CD"></a><b><tt><font size="+2">CD</font></tt></b> -
+Quantity/concentration of DC C(DC)</dt>
+  <dd> &nbsp;</dd>
+  <dd> This optional dynamic vector contains quantities/concentrations
+of DC formulae used in definition of PCO. The DC formulae are
+automatically extracted by the program from DComp of ReacDC records
+referred to by keys in the <a href="#symDC"><tt>symDC</tt></a> list.</dd>
+  <dd> &nbsp;</dd>
+  <dd> During calculation of the bulk <a href="#PCO"><tt>PCO</tt></a> vector, each element of CD
+vector is scaled as prescribed by the class code in <a href="#CDcl"><tt>CDcl</tt></a> classifier.
+Then the DC formula is used in conversion to numbers IC moles finally
+added to the elements of PCO vector.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="CA"></a><b><tt><font size="+2">CA</font></tt></b> -
+Quantity/concentration of user-defined formula units&nbsp; C(AC)</dt>
+  
+  <dd>
+<p> This optional dynamic vector contains quantities or
+concentrations of the formulae units (UDF) which user has defined in
+the <a href="#formU"><tt>formU</tt></a> list.</p>
+</dd>
+  
+  <dd>
+<p> The vector is created together with <tt>formU</tt> and <tt>AUcl</tt> objects at
+re-organization of the COMPOS record. The CA vector can contain zeros,
+positive and negative numbers.</p>
+</dd>
+  
+  <dd>
+<p> When composition of PCO is computed, the UDFs are scanned
+sequentially and corresponding element of the CA vector is normalized
+as prescribed by the code in <a href="#AUcl"><tt>AUcl</tt></a> classifier, then converted into
+(positive or negative) number of IC moles and added to <a href="#PCO"><tt>PCO</tt></a> vector of the
+bulk PCO composition.</p>
+</dd>
+  
+  <dd> &nbsp;</dd>
+  <dt> <a name="bSDref"></a><b><tt><font size="+2">bSDref</font></tt></b>
+- List of SDref keys to data sources</dt>
+  <dd> &nbsp;&nbsp;</dd>
+  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="bSDval"></a><b><tt><font size="+2">bSDval</font></tt></b>
+- List of comments to data sources</dt>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;<br>
+  </dd>
+</dl>
+<h3> <a name="COMPOS_PROTECTED"></a>4.1. Data entries accessible for
+editing through Create/Remake wizard only</h3>
+<h4><font face="Helvetica, Arial, sans-serif"> Setup Flags (BC_set)</font></h4>
+<dl>
+  <dt> <a name="BC_set_0"></a><b><tt><font size="+2">BC_set[0]</font></tt></b>
+- Use quantities of Independent Components in this PCO definition?</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> Possible values:</dd>
+  <dl>
+    <dd> +&nbsp;&nbsp;&nbsp; keep&nbsp; <tt><a href="#CI">CI</a></tt>
+and <tt><a href="#CIcl">CIcl</a></tt> vectors (if present) but do not
+fill with default values;</dd>
+    <dd> *&nbsp;&nbsp;&nbsp; create/keep&nbsp; <tt><a href="#CI">CI</a></tt>
+and <tt><a href="#CIcl">CIcl</a></tt> vectors and fill them out with
+the
+default values (0 and <tt>'M'</tt>, respectively);</dd>
+    <dd> -&nbsp;&nbsp;&nbsp;&nbsp; delete&nbsp; <tt><a href="#CI">CI</a></tt>
+and <tt><a href="#CIcl">CIcl</a></tt>&nbsp; vectors (previously
+contained data will be lost).</dd>
+  </dl>
+  <dd> &nbsp;</dd>
+  <dd> If&nbsp; <tt><a href="#CI">CI</a></tt> vector is present then
+the
+non-zero quantities defined in this vector will be converted to numbers
+of moles according to codes given in the <tt><a href="#CIcl">CIcl</a></tt>
+vector, and added to the bulk&nbsp; <tt><a href="#PCO">PCO</a></tt>&nbsp;
+composition vector. In this process, the <a href="gm_icomp.html#M0i">molar
+masses</a> if independent components will be taken from the<a href="gm_icomp.html"> IComp</a> records referred to in the&nbsp; <tt><a href="#symIC">symIC</a></tt>&nbsp; list of record keys selected by the
+user during remake of this Compos definition.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_set_1"></a><b><tt><font size="+2">BC_set[1]</font></tt></b>
+- Use stoichiometries of Dependent Components in this PCO definition?</dt>
+  <dd> &nbsp;</dd>
+  <dd> Possible values:</dd>
+  <dl>
+    <dd> +&nbsp;&nbsp; keep <tt><a href="#CD">CD</a></tt> , <tt><a href="#CDcl">CDcl</a></tt> and&nbsp; <tt><a href="#symDC">symDC</a></tt>
+vectors (if present) but do not fill them with default values;</dd>
+    <dd> *&nbsp;&nbsp; create/keep <tt><a href="#CD">CD</a></tt> , <tt><a href="#CDcl">CDcl</a></tt> and&nbsp; <tt><a href="#symDC">symDC</a></tt>&nbsp;
+vectors and fill them out with default values (0, <tt>'M'</tt>,
+and&nbsp; <tt>EMPTY</tt>, respectively);</dd>
+    <dd> -&nbsp;&nbsp; delete <tt><a href="#CD">CD</a></tt>, <tt><a href="#CDcl">CDcl</a></tt>&nbsp; and&nbsp; <tt><a href="#symDC">symDC</a></tt>
+vectors (previously contained data will be lost).</dd>
+  </dl>
+  <dd> &nbsp;</dd>
+  <dd> If <tt><a href="#CD">CD</a></tt> vector is present then the
+non-zero quantities defined in this vector&nbsp; will be converted to
+numbers of moles according to the codes given in the <tt><a href="#CDcl">CDcl</a></tt> vector, and added to the bulk <tt><a href="#PCO">PCO</a></tt> composition vector. In this process, the <a href="gm_dcomp.html#DCform">chemical formulae</a> of compounds will be
+taken from the respective&nbsp; <tt><a href="gm_dcomp.html">DComp</a></tt>&nbsp;
+or&nbsp; <tt><a href="gm_reacdc.html">ReacDC</a></tt>&nbsp; records,
+referred to in the <tt><a href="#symDC">symDC</a></tt>&nbsp; list
+of record keys selected by the user during remake of this Compos record.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_set_2"></a><b><tt><font size="+2">BC_set[2]</font></tt></b>
+- Create user-defined formulae (UDF)&nbsp; in this PCO definition?</dt>
+  <br>
+&nbsp;<dd> Possible values:</dd>
+  <dl>
+    <dd> +&nbsp;&nbsp; keep <tt><a href="#CA">CA</a>, <a href="#AUcl">AUcl</a></tt>
+and <tt><a href="#formU">formU</a></tt> vectors (if present) but do
+not
+fill them with default values;</dd>
+    <dd> *&nbsp;&nbsp; create/keep <tt><a href="#CA">CA</a>, <a href="#AUcl">AUcl</a></tt> and <tt><a href="#formU">formU</a></tt>
+vectors and fill them out with default values (0, <tt>'M'</tt>,
+and&nbsp; <tt>EMPTY</tt>, respectively);</dd>
+    <dd> -&nbsp;&nbsp; delete<tt> <a href="#CA">CA</a>, <a href="#AUcl">AUcl</a></tt>
+and <tt><a href="#formU">formU</a> </tt>vectors (previously contained
+data will be lost).</dd>
+  </dl>
+  <dd> If <tt><a href="#CA">CA</a></tt> vector is present then nonzero
+quantities/concentrations defined in this vector&nbsp; will be
+converted to numbers of moles according to the codes given in the <tt><a href="#AUcl">AUcl</a></tt> vector, and added to bulk <tt><a href="#PCO">PCO</a></tt>
+composition vector, by analyzing the user-defined <a href="g_useref.html#FORMULA">chemical formulae</a> from the&nbsp; <tt><a href="#formU">formU</a></tt>&nbsp; list.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_set_3"></a><b><tt><font size="+2">BC_set[3]</font></tt></b>
+- Create a large formula text for this PCO definition?</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> Possible values:</dd>
+  <dl>
+    <dd> +&nbsp;&nbsp; or&nbsp; *&nbsp;&nbsp;&nbsp;&nbsp; keep/create <a href="#Ctext">formula text field</a> ;</dd>
+    <dd> -&nbsp;&nbsp;&nbsp; delete&nbsp; the <a href="#Ctext">formula
+text field</a>.</dd>
+  </dl>
+  <dd> &nbsp;</dd>
+  <dd> PCO definition can be enhanced using a large chemical formula
+which you can type later into <tt><a href="#Ctext">Ctext</a></tt>&nbsp;
+field, created on remake of this Compos record.</dd>
+  <dd> &nbsp;</dd>
+  <dd> If the non-<tt>EMPTY</tt> formula text is present and it is
+written according to GEMS <a href="g_useref.html#FORMULA">chemical
+formula syntax</a>, then this formula is parsed, converted to the
+number of moles of IC depending on the scaling factor&nbsp; <tt><a href="#MasVol_7">MasVol[7]</a></tt>, and added to the bulk <tt><a href="#PCO">PCO</a></tt> composition vector.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_set_4"></a><b><tt><font size="+2">BC_set[4]</font></tt></b>
+- Create the&nbsp; <tt><a href="#unPCO">unPCO</a></tt> vector of
+uncertainties for this PCO definition?</dt>
+  <dd> &nbsp;</dd>
+  <dd> Possible values:</dd>
+  <dl>
+    <dd> +&nbsp;&nbsp;&nbsp; keep the <tt><a href="#unPCO">unPCO</a></tt>
+vector but do not fill it with default values;</dd>
+    <dd> *&nbsp;&nbsp;&nbsp; create/keep the <tt><a href="#unPCO">unPCO</a></tt>
+vector and fill it with default values (<tt>EMPTY</tt>);</dd>
+    <dd> -&nbsp;&nbsp;&nbsp; delete the <tt><a href="#unPCO">unPCO</a></tt>&nbsp;
+vector.</dd>
+  </dl>
+  <dd> &nbsp;</dd>
+  <dd> If this vector is present, the user can enter there the absolute
+uncertainties of the respective <tt><a href="#PCO">PCO</a></tt>&nbsp;
+vector elements in moles.</dd>
+  <dd> &nbsp;</dd>
+  <dd> For future use in the uncertainty propagation calculations in
+GEM-Selektor v.3.x-PSI.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_set_5"></a><big><b><tt>BC_set[5]</tt></b></big></dt>
+  <dd> Reserved for future use.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+</dl>
+<h4><font face="Helvetica, Arial, sans-serif"> Setup Dimensions&nbsp;
+to
+specify sizes of optional vectors and lists</font></h4>
+<dl>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_dim_0"></a><b><tt><font size="+2">BC_dim[0]</font></tt></b>
+- Number of Independent Components used in defining this PCO.</dt>
+  <dd> &nbsp;</dd>
+  <dd> Automatically changed by the program to set dimensions of<b>&nbsp;</b><tt><font size="+1"><a href="#PCO">PCO</a></font><b>, </b><font size="+1"><a href="#CIcl">CIcl</a></font></tt> and&nbsp; <tt><font size="+1"><a href="#CI">CI</a></font></tt>&nbsp; vectors when the Compos record is
+created "from scratch" (in "Clear All" mode). The user may be asked to
+set this number upon remake if only <tt><a href="#CI">CI</a></tt>
+vector will be used for defining this PCO. Do not edit this field if
+not
+asked to do it!</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_dim_1"></a><b><tt><font size="+2">BC_dim[1]</font></tt></b>
+- Total number of Dependent Component (DComp+ReacdDC) stoichiometies to
+define this PCO.</dt>
+  <dd> &nbsp;</dd>
+  <dd> Automatically calculated by the program when the user selects
+DComp or ReacDC record keys during remake stage. Defines dimensions of
+the <tt><font size="+1"><a href="#symDC">symDC</a></font><b>, </b><font size="+1"><a href="#CDcl">CDcl</a></font></tt> and <tt><font size="+1"><a href="#CD">CD</a></font></tt> vectors. For information only.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_dim_2"></a><b><tt><font size="+2">BC_dim[2]</font></tt></b>
+- Number of formula units created in this PCO definition.</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This number is entered by the user the on remake of the Compos
+record. Defines dimensionality of the <tt><font size="+1"><a href="#formU">formU</a><b>, </b><a href="#AUcl">AUcl</a></font></tt>&nbsp;
+and&nbsp; <tt><font size="+1"><a href="#CA">CA</a></font></tt>&nbsp;
+vectors. For information only.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_dim_3"></a><b><tt><font size="+2">BC_dim[3]</font></tt></b>
+- Number of references to data sources.</dt>
+  <dd> &nbsp;</dd>
+  <dd> This number is entered by the user on remake of the Compos
+record. Defines dimensionality of&nbsp;<b> </b><tt><font size="+1"><a href="#bSDref">bSDref</a></font></tt>&nbsp; and&nbsp; <tt><font size="+1"><a href="#bSDval">bSDval</a></font></tt>&nbsp; objects. For
+information only.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_dim_4"></a><b><tt><font size="+2">BC_dim[4]</font></tt></b>
+- Total number of IC records currently available in the <a href="gm_icomp.html">IComp</a> database chain.</dt>
+  <dd> &nbsp;</dd>
+  <dd> For information only.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BC_dim_5"></a><b><tt><font size="+2">BC_dim[5]</font></tt></b>
+- Final number of Independent Components used in PCO definition.</dt>
+  <dd> &nbsp;</dd>
+  <dd> Internally calculated by the program. Defines final dimensions
+of
+the <tt><font size="+1"><a href="#PCO">PCO</a><b>, </b><a href="#CIcl">CIcl</a></font></tt>
+and&nbsp; <tt><font size="+1"><a href="#CI">CI</a></font></tt>&nbsp;
+vectors. For information only.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="bsICm"></a><b><tt><font size="+2">bsICm</font></tt></b>
+- Complete work list of IC record keys currently available in the <a href="gm_icomp.html">IComp</a> chain.</dt>
+  <dd> &nbsp;</dd>
+  <dd> For information only.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="ICmm"></a><b><tt><font size="+2">ICmm</font></tt></b>
+-
+Work vector of atomic (molar) masses of independent components.</dt>
+  <dd> &nbsp;</dd>
+  <dd> For information only.</dd>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="BCtprn"></a><b><tt><font size="+1">BCtprn</font></tt></b></dt>
+  <dd> Internal object for printing script.</dd>
+  <dd> &nbsp;Reserved for debugging purposes.</dd>
+</dl>
+<br>
+<hr style="width: 100%; height: 2px;"><h2><span style="font-family: Helvetica,Arial,sans-serif;"><a name="COMPOS_ERRORS"></a></span>5. Warnings and Error Messages&nbsp;<br>
+</h2>
+<dl>
+<dt><big><span style="font-family: monospace; font-weight: bold;">E00BCrem:</span></big> Attempt to access corrupt dynamic memory.</dt><dt><big style="font-weight: bold;"><span style="font-family: monospace;">E01BCrem:</span></big> Attempt to free corrupt dynamic memory.</dt><dt><big style="font-weight: bold;"><span style="font-family: monospace;">E02BCrem:</span></big> Attempt to allocate corrupt dynamic memory.</dt><dt><big style="font-weight: bold;"><span style="font-family: monospace;">E04BCrem:</span></big> Dynamic memory corruption in Compos data structure.</dt><dd>
+    <p>One of these error messages indicates a dynamic memory corruption.
+&nbsp;&nbsp; <br>
+    </p>
+  </dd>
+  <dd>
+    <p>Action: Restart GEMS and try the same work again. If the message
+appears, send a bug report.&nbsp; <br>
+    </p>
+  </dd>
+<dd>
+&nbsp;&nbsp;</dd><dt><big style="font-weight: bold;"><span style="font-family: monospace;">E06BCrem:</span></big> Compos record configuration cancelled by the user.</dt><dd>
+  <p> &nbsp; This message appears when Compos Wizard failed or was cancelled by the user.</p>
+
+&nbsp; <br>
+</dd><dt><big style="font-weight: bold;"><span style="font-family: monospace;">W03BCrem:</span></big> No Independent Components selected (bc[q].N,Nmax &lt; 1)</dt>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">W05BCrun:</span></big> IComp data record keys are not selected<br>
+  </dt>
+  <dd>&nbsp;(maybe, some PDB files are not linked)</dd>
+  <dd>
+    <p>These warnings may appear if no IC was selected for setting the 
+PCO, or when Compos record was calculated, but some IC symbols could not
+ be found in the IComp database. </p>
+
+  </dd>
+  <dd><br>
+  </dd>
+  <dt><big style="font-weight: bold;"><span style="font-family: monospace;">W07BCrem:</span></big> &lt; 1 IComp keys marked for PCO definition</dt>
+<dd>&nbsp; Repeat marking, Proceed to defining PCO in different ways, or&nbsp; Cancel assembling PCO definition?</dd><dd>
+    <p>A reminder that no IComp keys were selected from the IComp record
+ key list. Will make no problems when PCO is defined via formulae or 
+DComp/ReacDC. <br>
+    </p>
+  </dd>
+<dd> &nbsp;</dd><dt><big><span style="font-family: monospace; font-weight: bold;">E08BCrem:</span></big>&nbsp; &lt; 1 IComp keys selected for PCO definition...</dt><dd>
+  <p>&nbsp; This message appears if 'Cancel' was answered for the W07BCrem warning. </p>
+</dd><dd> &nbsp;</dd><dt><big><span style="font-family: monospace; font-weight: bold;">E09BCrem:</span></big>&nbsp; &lt; 1 ReacDC&amp;DComp records selected for PCO definition. </dt><dd>
+  <p>&nbsp; This message appears if the DC formula mode was activated in
+ Compo Wizard, but no ReacDC and/or DComp records were marked in the 
+record key list.</p>
+</dd>
+</dl>
+
+<dl>
+<dt><big><span style="font-family: monospace; font-weight: bold;">E10BCrun:</span></big>&nbsp; Wrong index of Independent Component</dt><dd>
+  <p>Typically, occurs upon Compos calculation if one of IComp symbols 
+parsed from the formula was not found in the IComp database. Possibly, 
+not all necessary IComp files are linked to the record chain.&nbsp; </p>
+</dd>
+</dl>
+<p>
+</p>
+
+<p>&nbsp;</p>
+<dl>
+</dl>
+<hr style="width: 100%; height: 2px;">Last updated 11.09.2012 DK<br>
+<br>
+<tt>end of file</tt> <br>
+&nbsp; <br>
+<br>
+
+
+</body></html>

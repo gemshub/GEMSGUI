@@ -1,0 +1,4 @@
+Generate the installer by opening a command terminal from this directory and executing a command:
+
+C:\Qt\Tools\QtInstallerFramework\4.1\bin\binarycreator.exe --offline-only -c config/config.xml -p packages gems390installer-win10-64.exe
+

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Microsoft Visual C runtime files</DisplayName>
+    <Description>Choose this package if you do not have Microsoft Visual C installed on your Windows computer. If the GEM-Selektor fails to start with an error message that "vcruntime140.dll" is missing then run one of the files (e.g. "vc_redist.x64.exe") in "\GEMS396\MSVC_redist\" folder, then try starting the GEM-Selektor again from the Windows start menu.</Description>
+    <Version>1.4.0</Version>
+    <ReleaseDate>2023-05-07</ReleaseDate>
+    <Default>false</Default>
+</Package>
+

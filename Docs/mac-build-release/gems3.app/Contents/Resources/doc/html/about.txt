@@ -1,0 +1,37 @@
+Please, copy here the html and image files in order to generate a new help database. 
+
+How to compile Gems Help Collection database (see also file HOWTO-Build-help.txt).
+
+Source HTML and image files must be all located in the subfolder "/Resources/doc/html" (no subfolders inside!).
+
+There are two configuration files provided: "gems3helpconfig.toc"  and "gems3helpconfig.qhcp". 
+A third configuration file "gems3helpconfig.qhp" will be automatically generated when the user goes into GEMS 
+Preferences dialog and clicks there the "Generate from source" button. This operation copies the content of 
+"gems3helpconfig.toc" file into the section <toc> of the "gems3helpconfig.qhp"; then collects the list of all 
+HTML files and image files present in the source directory into the <files> section; and then scans all HTML 
+files for anchors collecting them into the <index> section of the "gems3helpconfig.qhp" file. 
+Next, the qcollectiongenerator utility program from Qt library is called with the "gems3helpconfig.qhcp" file name 
+as command line parameter in order to generate (using the "gems3helpconfig.qhp" file) the help collection database 
+file "gems3help.qch" and its header "gems3help.qhc". 
+
+To use the updated help database: exit GEMS; locate files "gems3help.qch" and "gems3help.qhc" in the subfolder
+"/Resources/doc/html"; move them to the subfolder "/Resources/help" (replacing older versions of these files); 
+and start GEMS3 again.  
+
+File gems3helpconfig.toc contains an XML code describing what the GEMS Help viewer shows in the "Contents" tab. 
+To change  "Contents", edit the file. 
+To remove a section, locate it (it begins with <section> and ands with </section> and delete it or move in another 
+place in the file. This has no effect on the actual content of the help database, only on access through the "Contents"
+tab. 
+To add an entry to a (sub)section called "Title text" pointing to "link" (file or anchor name), add a line 
+	<section title="Title text" ref="link"> </section> 
+at the appropriate level of hierarchy.
+To delete an entry, locate it and delete the whole line (from <section ... to </section>. 
+
+To test the generated collection file independently of GEMS, cd in the directory with the help database and start the 
+Qt Assistant program by a command line like:
+
+~/QtSDK/Desktop/Qt/4.8.0/bin/assistant -collectionFile gems3help.qhc
+
+Last updated by DK on 14.02.2012
+ 
