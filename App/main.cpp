@@ -54,6 +54,8 @@ TIntegApp::TIntegApp(int& c, char** v):
     argc(c),
     argv(v)
 {
+    //std::cout<< "Init TIntegApp " << std::endl;
+
     shMemory.setKey("gems3");
     if( shMemory.attach())
     {
@@ -71,6 +73,8 @@ TIntegApp::TIntegApp(int& c, char** v):
         icon.addFile(QString::fromUtf8(":/Icons/gems50.png"), QSize(), QIcon::Normal, QIcon::Off);
         setWindowIcon(icon);
     }
+
+    //std::cout<< "End TIntegApp " << std::endl;
 }
 
 void TIntegApp::InitMainWindow()
@@ -105,6 +109,8 @@ int main(int argc, char* argv[])
     try
     {
         IntegApp.InitMainWindow();
+
+        //std::cout<< "exec IntegApp " << std::endl;
         int res = IntegApp.exec();
         // clear static arrays in our order because they're interdependent
         // and static variables are destructed at random order

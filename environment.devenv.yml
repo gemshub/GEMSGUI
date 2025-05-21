@@ -1,25 +1,24 @@
 name: GEMSGUI
 
+channels:
+  - conda-forge
+  - defaults
+
 dependencies:
-  - gxx_linux-64=9.4.0  # [linux]
-  - cmake>=3.13
-  - ninja # [unix]
-  - make  # [win]
+  - cmake
   - git
-  - ccache  # [unix]
+  - gxx_linux-64  # [linux]
+  - make  # [unix]
+  - ninja
+  - 7zip  # [win]
   - gems3k>=4.4.0
   - thermofun>=0.4.3
   - cppzmq
-  - qt6-main=6.6.0
-  - qt6-charts=6.6.0
-  #- qt-main=5.15.8
   - mesa-libgl-devel-cos7-x86_64 # [unix]
-
-environment:
-
-  LD_LIBRARY_PATH:                                                   # [unix]
-    - {{ root }}/artifacts/lib                                       # [unix]
-
-  PATH:                                                              # [win]
-    - {{ root }}\artifacts\bin                                       # [win]
-
+  - qt6-main=6.8.2
+  - qt6-charts=6.8.2
+  - eigen=3.4.0
+  - nlohmann_json
+  - spdlog
+  - python>=3.7
+  - pytest
