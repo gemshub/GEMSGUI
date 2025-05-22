@@ -15,12 +15,9 @@ jobs:
       fail-fast: false
 
       matrix:
-        os:
-          - windows-lates
-        include:
-          - os: windows-latest
-            conda_platform: win-64
-            artifact_name: gemsgui-windows
+        os: [ windows-latest ]
+        conda_platform: [ win-64 ]
+        artifact_name: [ gemsgui-windows ]
 
     steps:
 

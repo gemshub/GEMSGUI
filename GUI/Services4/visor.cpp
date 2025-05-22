@@ -78,6 +78,8 @@ const char *WIN_CONF = "windows.conf";
 TVisor::TVisor(int c, char *v[]):
         argc(c), argv(v)
 {
+   Q_INIT_RESOURCE(GUI);
+
     ProfileMode = MDD_DATABASE;
     dbChangeMode = false;
     isElementsProfileMode = true;
