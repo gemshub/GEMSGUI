@@ -288,7 +288,7 @@ void TVisor::Setup()
     string dir = userGEMDir();
     QDir userGEM(dir.c_str());
 
-    bool firstTimeStart = !userGEM.exists();
+    bool firstTimeStart = !userGEM.exists(userProfDir().c_str());
 
     if (firstTimeStart)
     {

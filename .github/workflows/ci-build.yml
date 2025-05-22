@@ -63,7 +63,7 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
-          cmake -DCMAKE_BUILD_TYPE=Release -A x64 -S . -B build  || goto :eof
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build  || goto :eof
           cmake --build build --target install  --config Release  || goto :eof
 
       - name: Check conda

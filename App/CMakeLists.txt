@@ -50,6 +50,7 @@ if(USE_SPDLOG_PRECOMPILED)
     install(FILES "${dll_path}/msvcp140.dll" DESTINATION bin)
     install(FILES "${dll_path}/opengl32sw.dll" DESTINATION bin)
 
+    file(COPY "${CMAKE_SOURCE_DIR}/Resources" DESTINATION bin)
 endif()
 
 endif()
