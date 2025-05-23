@@ -102,10 +102,7 @@ public:
     std::vector<std::shared_ptr<IPNCalc>> qEp;
     std::vector<std::shared_ptr<IPNCalc>> qEd;
 
-    TMulti( int nrt ):
-        TMultiBase(nullptr),
-        TSubModule( nrt )
-    {}
+    TMulti( int nrt );
 
     ~TMulti()
     {

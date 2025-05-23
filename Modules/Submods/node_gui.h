@@ -86,13 +86,14 @@ public:
     /// Test temperature and pressure values for the interpolation grid
     bool TestTPGrid(  double Tai[4], double Pai[4] );
 
-
+#ifdef USE_GEMS3K_SERVER
     /// Generate request strings for ZMQ server
     std::vector<std::string> generate_send_msg( bool add_head );
 
     /// Set up data from response strings from ZMQ server
     /// \return true if success
     bool set_resv_msg( std::vector<std::string>&& msg_return );
+#endif
 
     /// The export to ThermoFun JSON format file should include all IComp, DComp and ReacDC records
     /// from the project database, not just the records needed for a particular system
@@ -119,10 +120,12 @@ protected:
     void getDataBridgeNames( QWidget* par, bool select_all,
                              TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH  );
 
-
     void init_into_gems3k() override {}
 
+#ifdef USE_GEMS3K_SERVER
     double readMultiServer(long NodeStatusCH, const std::vector<std::string> &recv_msg);
+#endif
+
 };
 
 #endif // NODE_GUI_H

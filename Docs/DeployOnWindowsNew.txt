@@ -1,0 +1,104 @@
+HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt6-based GEMS3 FOR Win64 MSVC17, MSVC19
+or higher (Windows 10; administrator rights for your account are needed)
+
+(replaces DeployOnWindows.txt)
+
+This deployment process is based on the "windeployqt.exe" utility provided by
+the Qt6 installation on Windows, as well as on the Qt Installer Framework v.4.1.
+
+1. Make sure that the Qt6 SDK is installed as C:\Qt or in similar folder.
+We assume that the Qt library is located in C:\Qt\6.2.0\msvc2019_64\bin;
+the Cmake tool is located in C:\Qt\Tools\CMake_64\bin (or similar, depending on 
+the currently installed Qt version and its location). We assume that the utility 
+binarycreator.exe file is located in C:\Qt\Tools\QtInstallerFramework\4.1\bin\.  
+
+2. If not yet done, go into the .\Docs directory and copy recursively the folder 
+\Gems3win10deploy to C:\TMP (or D:\TMP or another suitable) folder. Dive into the 
+Gems3win10deploy\packages\componentResources\data\Gems3-app folder. Copy or refresh 
+recursively the \Resources subfolder (from .gems-gui\Resources in the GEMS3GUI 
+source code tree). 
+
+3. In the Gems3win10deploy\packages\componentGEMS\data\Gems3-app folder, 
+edit the "runwindeployqt.bat" file to make sure that it contains correct paths  
+to the C:\Qt\6.2.0\msvc2019_64\bin and C:\Qt\Tools\CMake_64\bin directories
+(modify to actual ones, if necessary). Copy/refresh file qhelpgenerator.exe 
+from C:\Qt\6.2.0\msvc2019_64\bin into the 
+Gems3win10deploy\packages\componentGEMS\data\Gems3-app folder.   
+
+4. Using QtCreator, build the actual release variant of gems3.exe. Typically, you 
+should have something like "C:\Dev\GEMS\gems-gui"; "C:\Dev\GEMS\standalone"; and 
+"C:\Dev\GEMS\buildMSVC64bit-qt6-Release" folders at the same level. Find the 
+gems3.exe file in folder C:\Dev\GEMS\buildMSVC64bit-qt6-Release\release and 
+copy it into folder Gems3win10deploy\packages\componentGEMS\data\Gems3-app.  
+
+5. Go into Gems3win10deploy\packages\componentGEMS\data\Gems3-app folder and check 
+there the file runwindeployqt.bat so that the PATH variables there point to the 
+actual locations of the Qt libraries, binaries and tools (see paragraph 3 above). 
+In the command-line prompt window (terminal), run the following commands:
+
+>cd C:\TMP\Gems3win10deploy\packages\componentGEMS\data\Gems3-app 
+>runwindeployqt.bat gems3.exe
+
+This will find and copy all Qt dependence files (Qt libraries, plugins, locale files) 
+into Gems3win10deploy\packages\componentGEMS\data\Gems3-app\ folder. More about the 
+deployment of Qt applications on Windows can be found in the Qt6 documentation, 
+see https://doc.qt.io/qt-6/windows-deployment.html.
+
+Since version 3.9.6, GEM-Selektor uses the ThermoFun and ChemicalFun code libraries to 
+export thermodynamic data and process them in standalone GEMS3K and xGEMS applications. 
+The windeployqt utility does not find these libraries (needed to build GEM-Selektor) and 
+they must be copied manually from c:\usr\local\bin\ folder. Use a file manager to locate
+there the files "ThermoFun.dll" and "ChemicalFun.dll" and copy them into the folder 
+"Gems3win10deploy\packages\componentGEMS\data\Gems3-app".    
+
+6. Usually the windeployqt utility does not find the MSVC runtime file and issues a 
+warning "Cannot find Visual Studio Redist directory...". This means that on Windows10 or 
+11 systems of some users, GEM-Selektor will not start correctly (until the user installs 
+the runtime from the web site of Microsoft). To prevent this, use the file manager to 
+locate the MSVC runtime files, for example, in Visual Studio Pro v.19 in a location:
+
+"c:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Redist\MSVC\v142\"
+
+There are files vc_redist.arm64.exe, vc_redist.x86.exe, vc_redist.x64.exe. Copy them into 
+the folder "c:\TMP\Gems3win10deploy-396\packages\componentVCredist\data\MSVC_redist\" 
+ 
+7. To create an offline GEM-Selektor installer for Windows 10 using the Qt Deployment 
+Framework: go into C:\TEMP\Gems3win10deploy\config folder and edit there config.xml file 
+to put the actual version into <Version> and the default target installation directory 
+into <TargetDir>. The recommended setting is the <user home directory>\GEMS (for example, 
+C:\Users\myuser\GEMS). Save the file; cd to Gems3win10deploy\packages\componentGEMS\meta
+and edit there file package.xml to have the actual version and release date information 
+there. Also put the actual version and release date information by editing the file
+Gems3win10deploy\packages\componentResources\meta\package.xml.
+
+8. When done, go to C:\TEMP\Gems3win10deploy and edit the creategems3installer-win64.bat 
+file to actualize the name of the installer file (by replacing xxxxxxx with commit # of 
+gems3gui and yyyyyyy with commit # of gems3k repositories), e.g. 
+Gems3.9.2-xxxxxxx.yyyyyyy-win64-qtinstall.exe
+Then open a command-line terminal from C:\TEMP\Gems3win10deploy\ (or cd to this folder) 
+and execute the following command:
+
+   >creategems3installer-win64.bat
+
+After some time, the command results in a Gems3.9.2-xxxxxxx.yyyyyyy-win64-qtinstall.exe
+file appearing in this folder. 
+
+8. To test if everything works correctly, perform a test install by launching the 
+installer executable file and by following the prompts there. This should create an 
+entry GEMS (sub-entry GEM-Selektor) in the Windows application menu, from where 
+GEM-Selector should start normally. The actual installation should be found in your 
+Windows user folder e.g. C:\Users\myuser\GEMS3\, the GEMS modelling projects should 
+exist in the C:\Users\myuser\GEMS3\Library\projects\ folder.  
+
+9. To uninstall GEMS completely, first back-up your modelling projects folder to a 
+different location, then start maintenancetool.exe from C:\Users\youruser\GEMS3\ 
+(or use Windows Settings Apps uninstall command). 
+
+10. To create the online installer, TBD 
+
+
+ 
+ 
+
+
+

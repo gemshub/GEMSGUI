@@ -1,0 +1,1650 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I)
+      [Netscape]">
+    <title>GEMS3 Project Module</title>
+    <meta name="description" content="Version 2.0.0-PSI">
+  </head>
+  <body>
+    <h1><img style="width: 48px; height: 48px;" alt="gems1.png" src="gems1.png"
+        align="left"> <font color="#000066">&nbsp; GEM-Selektor version 3</font>
+    </h1>
+    <h2>Modelling Project Module<br>
+    </h2>
+    <hr size="2" width="100%">
+    <h4>Contents <br>
+    </h4>
+    <p><a href="#PROJECT_INTRO">1. Introduction: Project Structure and Record</a>
+    </p>
+    <p style="margin-left: 40px;"><a href="#MODES">1.1. Modes of Geochemical
+        Modelling within a Project</a></p>
+    <p style="margin-left: 40px;"><a href="gm_project.html#PROJECT_CREATE">1.2.
+        Creating a new GEMS modelling project</a></p>
+    <p style="margin-left: 40px;"><a href="gm_project.html#PROJECT_MODIFY">1.3.
+        Modifying existing GEMS modelling projects</a></p>
+    <p><a href="#PROJECT_MWIZARD">2. Project Remake Wizard</a></p>
+    <p style="margin-left: 40px;"><a href="#WZSTEP_1">2.1. Project Wizard Step 1</a></p>
+    <p style="margin-left: 40px;"><a href="#WZSTEP_2">2.2. Project Wizard Step 2</a></p>
+    <p><a href="#PROJECT_MWINDOW">3. Project Module Window</a></p>
+    <p style="margin-left: 40px;"><a href="#MWPAGE_1">3.1. Project Window PLists
+        (Project System Lists) Page</a> </p>
+    <p style="margin-left: 40px;"><a href="#MWPAGE_2">3.2. Project Window
+        Controls (GEM IPM Numerical Settings) Page</a></p>
+    <p style="margin-left: 40px;"><a href="#MWPAGE_3">3.3. Project Window
+        Settings (GEMS Default Settings) Page</a> </p>
+    <p style="margin-left: 40px;"><a href="#MWPAGE_4">3.4. Project Window Config
+        (Project Configuration) Page</a></p>
+    <p><a href="#PROJECT_DATA_ENTRIES">4. Project Module Data Entries</a></p>
+    <p style="margin-left: 40px;"><a href="#PROJECT_CONFIG_DOD">4.1. Data
+        entries for Project Configuration (accessible via Create / Remake) </a></p>
+    <p style="margin-left: 40px;"><a href="#PROJECT_LISTS_DOD">4.2. Lists of
+        phases, components and compositions</a></p>
+    <p style="margin-left: 40px;"><a href="#NUMSET">4.3. GEM IPM3 Numerical
+        Settings</a></p>
+    <p style="margin-left: 40px;"><a href="#PROJECT_DEFCONF_DATA">4.4.
+        GEM-Selektor Default Configuration Data</a></p>
+    <p><a href="#PROJECT_ERRORS">5. Warnings and error messages</a></p>
+    <h4>"HowTo" Manuals</h4>
+    <p><a href="#HOWTO">6. How to Create, Open or Expand a GEM-Selektor
+        Modelling Project</a></p>
+    <p style="margin-left: 40px;"><a href="#HOWTO_CREATE">6.1. Main Settings to
+        Create or Open a Project</a> </p>
+    <p style="margin-left: 40px;"><a href="#HOWTO_ELEMENTS">6.2. Elements Dialog
+        and Selections from the Default Database</a></p>
+    <p style="margin-left: 40px;"><a href="#HOWTO_AUTOPHASE">6.3. AutoPhaseSetup
+        Dialog and Configuration of Aqueous and Gas/Fluid models</a></p>
+    <p style="margin-left: 40px;"><a href="#HOWTO_1ST_SYSTEM">6.4. Creating a
+        First System in the New Project</a></p>
+    <p style="margin-left: 40px;"><a href="#HOWTO_REOPEN">6.5. Opening and
+        Re-configuration of an Existing Project</a></p>
+    <p style="margin-left: 40px;"><a href="#HOWTO_EXPAND">6.6. Cloning a New
+        (Expanded) Project from the Existing One</a></p>
+    <p style="margin-left: 40px;"><a href="#HOWTO_OTHER">6.7. Other Issues
+        related to GEMS Modelling Projects</a></p>
+    <h4>Configuration of Project and Default Database Files</h4>
+    <p><a href="#FILES">7. Project File Configuration Dialog</a></p>
+    <hr size="2" width="100%">
+    <h2><a name="PROJECT_INTRO"></a>1. Introduction: Project Structure and
+      Record </h2>
+    <p>Modelling Project is actually a sub-folder in GEMS "/projects" folder,
+      which contains GEMS database files that keep all settings and data
+      pertinent to a modeling application. In particular, this sub-folder
+      contains a "template" definition of the chemical system and numerical
+      settings (Project file); the input thermodynamic and composition data
+      records (IComp, DComp, ReacDC, Phase, Compos files); the records defining
+      particular systems and their calculation results (SysEq), as well as
+      Process simulator (Proces file), Graphic/tabulated data sampler (GtDemo
+      file) records, and reactive transport problems (GEM2MT file), references
+      and print/export scripts (SDref file).</p>
+    <p>Each project has one "project" record in the "project" database file with
+      "template" chemical system definition, together with links to a collection
+      of GEMS database files where the input data is kept and modelling results
+      will be collected. As a rule, these database files are located in the same
+      project subfolder. <br>
+    </p>
+    <p>There are two types of projects: (1) standalone and (2) linked. When a
+      standalone project is created, the program copies all necessary data from
+      the default database (supplied with the program) into the project database
+      files and then disconnects the project from the default database. Such
+      projects can be shared between many people or can be presented as test
+      examples, regardless of the particular version or update of the default
+      GEMS database. When a linked project is created, the program creates
+      project database files only for storing the input data extensions and the
+      modelling results, but &nbsp;just links the default database files for the
+      extraction of input thermodynamic data. Consequently, behavior of the
+      models in such a project may change if they will be run within a different
+      version of GEMS code and its default thermodynamic database. We recommend
+      creating standalone projects whenever possible, even though it requires
+      some more work for updating the copied ReacDC records.&nbsp; </p>
+    <p>The largest part of the Project record consists of several interconnected
+      lists of record keys: </p>
+    <ul>
+      <li> <a href="gm_icomp.html">IComp</a> list <a href="#ICvp"><tt>ICvp</tt></a>
+        (defines the stoichiometry basis of the system in terms of Independent
+        Components)</li>
+      <li> <a href="gm_dcomp.html">DComp</a>/<a href="gm_reacdc.html">ReacDC</a>
+        list <a href="#DCvp"><tt>DCvp</tt></a> (chemical species available in
+        this stoichiometry basis)</li>
+      <li> <a href="gm_phase.html">Phase</a> list <a href="#PHvp"><tt>PHvp</tt></a>
+        (phases that potentially may appear at equilibrium states)</li>
+      <li> <a href="gm_compos.html">Compos</a> list <a href="#CCvp"><tt>CCvp</tt></a>
+        (PCO that facilitate setting up the total bulk composition of the
+        system).</li>
+    </ul>
+    <p> In addition, the Project record contains a <a href="#MSfls"><tt>MSfls</tt></a>
+      list of 'nicknames' of all database files linked to this project, where
+      the program can seek for the records with input data or to store the
+      modelling results. All these lists are assembled automatically when the
+      user creates a new project, by picking up all records available in all
+      currently linked database files. Next time when you switch to "Calculation
+      of Equilibria" mode of GEMS and open the project, its Project record will
+      be read from the database; the program will link database files according
+      to the MSfls configuration list; and then it will read the data from the
+      database files and compare it to what has been previously stored in the
+      project record lists. This is a quite efficient way to detect what has
+      been changed, added or removed from the project database after the last
+      modeling session, and to update the project itself and already calculated
+      systems accordingly.&nbsp; If you have added/removed some species or
+      phases,&nbsp; the program will display warnings (there is a probability
+      that you did not really want it!). Just press "Ok" or "Ok to all" buttons
+      if you are sure that these changes are correct.&nbsp; </p>
+    <p>Thermodynamic data array is another important part of the project system
+      framework. It is allocated in the program memory after the project has
+      been successfully opened; but thermodynamic data arrays are never saved in
+      the Project database record. Thermodynamic properties (by default, molar
+      Gibbs energy <span style="font-family: Calibri;">gTP</span> and molar
+      volume <span style="font-family: Calibri;">vTP</span>) of all species
+      referenced in the&nbsp; DComp/ReacDC list <a href="#DCvp"><tt>DCvp</tt></a>
+      are automatically calculated every time when you specify different
+      temperature and pressure in a <a href="gems_rekey.html#dbm_SysEq">SysEq
+        record key</a>. This is done by reading all the DComp or&nbsp; ReacDC
+      records in a sequence and applying necessary calculation subroutines
+      separately to each record. Thus computed thermodynamic data for T,P of
+      interest will be retained without further re-calculation during the whole
+      modelling project session, or until different temperature of pressure will
+      be specified for a currently loaded SysEq record (usually just by reading
+      it from the database). In the Project Wizard, you can allocate some
+      additional arrays (e.g. molar absolute entropy <span style="font-family: Calibri;">sTP</span>,
+      molar heat capacity <span style="font-family: Calibri;">CpTP</span>,
+      molar enthalpy <span style="font-family: Calibri;">hTP</span>), if
+      necessary.&nbsp;&nbsp;</p>
+    <p> Location of the <tt>/projects</tt> folder (where all projects will be
+      stored as subfolders) is defined by the &nbsp;<tt>-u</tt> &nbsp;command
+      line parameter of gems3 executable file (you can see this location in the
+      <a href="gems_setup.html">Preferences Dialog</a>). For instance, <tt>"-u
+        D:\GEMS3test"</tt> in the command line tells the program to look for
+      existing projects and to store a newly-created project <tt>"MyProject"</tt>
+      in <tt>"D:\GEMS3test\projects\MyProject"</tt> folder. This new project is
+      as a collection of database files, all containing <tt>"MyProject"</tt> as
+      a file name element. If the -u parameter is not given then the program
+      will look for projects at the default location, "<span style="font-family: monospace;">/Library/gems3/projects</span>".
+
+      In Windows and Linux variants, this location is at the same level as the
+      location where the gems3 executable file resides (i.e. "<span style="font-family: monospace;">/Gems3-app</span>"
+      in an upper-level folder under Windows or in user's home directory under
+      Linux). In the Mac OS X variant, the default location of executable is "<span
+        style="font-family: monospace;">/Applications/Gems3.app/Contents/MacOS</span>"
+      and that of user's projects - "<span style="font-family: monospace;">/Users/&lt;user&gt;/Library/gems3</span>".
+      <br> </p>
+    <p>When creating a new project, the program uses the Default database files,
+      located in the <tt>"/Resources/DB.default"</tt> directory. In Windows and
+      Linux variants, the folder "<span style="font-family: monospace;">/Resources</span>"
+      (which also contains this help database) is installed inside of the "<span
+        style="font-family: monospace;">/Gems3-app</span>" folder at the same
+      level as the gems3 executable file. In Mac OS X variant of GEMS, the
+      folder "<span style="font-family: monospace;">/Resources</span>" is part
+      of the Gems3 application, i.e. "<span style="font-family: monospace;">/Applications/Gems3.app/Contents/Resources</span>".
+      A different location of the folder in which the executable file and "<span
+        style="font-family: monospace;">/Resources</span>" are found (you can
+      see this location in the <a href="gems_setup.html">Preferences Dialog</a>)
+      can be specified by the &nbsp;<tt>-s</tt> command line parameter. For
+      instance, <tt>"-s D:\GEMS3test\Gems3-app"</tt> in the command line tells
+      that the default database is located in&nbsp; <tt>"D:\GEMS3test\Gems3-app\Resources\DB.default"</tt>
+      folder.<br>
+    </p>
+    <p>There are two main types of modelling projects (and, accordingly, two
+      project setup modes) that can be selected in the<a href="gems_setup.html">
+        Preferences Dialog</a>.&nbsp; <br>
+    </p>
+    <p style="margin-left: 40px;"><a name="PROJECT_LINKED"></a>A "linked" type
+      project links selected default database files to the project during its
+      whole lifetime. When any equilibria are calculated, the input phase
+      definitions and thermodynamic data are collected directly from the default
+      database files; only records added by the user (or created by modeling
+      calculations) will be stored in the project database files. <br>
+    </p>
+    <p style="margin-left: 40px;"><a name="PROJECT_INDEPENDENT"></a>A
+      "standalone" type project (default in GEM-Selektor v.3) links default
+      database files to project only at the stage of its creation or upgrade.
+      The default database is searched for all species and phases records
+      conforming with the chosen list of Independent Components and other
+      selection criteria in the <a href="gems_elements.html">ElementsDialog</a>,
+      and such records are immediately copied into the project database files.
+      When creation of the project is finished, all default database files are
+      disconnected,&nbsp; and the project becomes standalone, i.e. <i>independent</i>
+      of the default database. During the project lifetime, the user can change,
+      delete or add any phase definition, composition, or thermodynamic data
+      records at her/his discretion. Such projects will not be affected by any
+      future changes or extensions of the Default database and can be exchanged
+      between different users. Another advantage is that the system template in
+      an independent project is relatively small and easier to observe because
+      it usually involves only a small part of the default database. </p>
+    <p> </p>
+    <hr style="width: 100%; height: 2px;">
+    <h3><span style="font-family: Helvetica,Arial,sans-serif;"><a name="MODES"></a></span>1.1.
+      Modes of Geochemical Modeling within a Project</h3>
+    <p>At present, there are three levels of calculation of equilibrium states
+      within a modeling project: <br>
+    </p>
+    <ul>
+      <li>Single System <br>
+      </li>
+      <li>Process Simulation<br>
+      </li>
+      <li>Reactive Transport Simulation <br>
+      </li>
+    </ul>
+    <p>They are described, respectively, in the <a href="gems_sys.html">gems_sys</a>
+      / <a href="gems_bcc.html">gems_bcc</a>; <a href="gm_proces.html">gm_proces</a>;
+      and <a href="gm_gem2mt.html">gm_gem2mt</a> help manuals.<br>
+    </p>
+    <br>
+    <hr size="2" width="100%">
+    <h3><a name="PROJECT_CREATE"></a>1.2. Creating a New Modelling Project<br>
+    </h3>
+    <p> To create a <a href="#HOWTO">standalone project</a>, get into the
+      "Modelling projects" dialog and click the "New Project" button. This will
+      bring you to a small "Enter a new record key" dialog. Type a short project
+      name instead of "MyWork" (or click "From List" to pick up one of existing
+      Project record keys and modify it); change the comment line (spaces are
+      not allowed), and press "Ok".&nbsp; </p>
+    <p>This will bring you to Step 1 of a wizard for checking selections of
+      source database/subdatabase, Phase/DC filters, and then to a large <a href="gems_elements.html">Elements
+        Dialog</a> that looks like the Periodic Table. Select necessary elements
+      (and other Independent Components) and press "Ok" when ready. Follow
+      warnings and messages that will appear on the screen, as described in more
+      detail in the <a href="#HOWTO">GEMS projects HOWTO manual</a>. <br>
+    </p>
+    <p>To create a new <a href="gm_project.html#HOWTO">"linked" project</a> is
+      more complicated because in this case, you cannot use the ElementsDialog
+      and you must know what is contained in various Default database files in
+      order to make a proper selection. Proceed as described in more detail in
+      the <a href="#HOWTO">GEMS projects HOWTO manual</a>.&nbsp; </p>
+    <br>
+    <hr size="2" width="100%">
+    <h3><a name="PROJECT_MODIFY"></a>1.3. Modifying Existing Modelling Projects<br>
+    </h3>
+    <p>See <a href="#HOWTO">GEMS project HOWTO manuals</a>.&nbsp;&nbsp;</p>
+    <p><span style="color: #cc0000;"><span style="font-weight: bold;">Attention!
+        </span>For introducing the GEM-Selektor v.3.3.x (and respective v.3.3.x
+        of the GEMS3K code) in April 2015, the <a href="gm_phase.html">Phase</a>
+        record and data definition structure, as well as the Phase remake
+        wizard, were substantially extended in order to accommodate more
+        flexible mixing models (TSolMod), built-in mineral-water reaction
+        kinetics (TKinMet), and a new implementation of sorption and surface
+        complexation models (TSorpMod; work in progress).&nbsp;</span></p>
+    <p><span style="color: #cc0000;">For backward compatibility, all modelling
+        projects created in GEM-Selektor v.3.2.x or earlier, will open and work
+        normally in GEM-Selektor v.3.3.x; accordingly, GEMS3K I/O files exported
+        from GEM-Selektor v.3.2.x are readable and will work in coupled codes
+        and examples using GEMS3K v.3.3.x. A prerequisite of this is that no
+        Phase record is created or remade in such a project with the "old"
+        record format.</span></p>
+    <p><span style="color: #cc0000;">Extension of old modeling project in
+        GEM-Selektor v.3.3.x with newly created Phase records, remaking existing
+        Phase records, or via Project remake/extension wizard is also possible.
+        Before doing that, the user needs only once to open the project; switch
+        to Database Mode; open the Phase window; and remake </span><span style="color: #cc0000;"><span
+          style="color: #cc0000;">one-by-one </span>all Phase records available
+        in the project (saving each record back after remake). This will ensure
+        that new or modified phases with extended structure and functionality
+        will work correctly. </span></p>
+    <p><span style="color: #cc0000;">Note that if some Phase records remain in
+        the "old" format (i.e. not remade) then this will lead to errors or
+        crashes during calculations of equilibria in systems from this project.
+        So, it is essential that ALL Phase records go once through the Phase
+        remake wizard! Opening and closing the modeling project even once in the
+        GEM-Selektor v.3.3.x will render this project unusable in earlier
+        versions of GEM-Selektor (3.2.x or less). </span>&nbsp; </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h2><a name="PROJECT_MWIZARD"></a>2. Project Remake Wizard</h2>
+    <p>Modelling project is a collection of GEMS database files for a specific
+      range of modeling applications, located in an (automatically created)
+      folder having the same name as the project. These files contain records of
+      different types (components, phases, compositions, chemical system
+      definitions (CSDs), results of equilibrium calculations, process and
+      reactive mass transport simulations, etc.); taken together, they comprise
+      a project database (<a href="#PROJECT_INTRO">more...</a>). <br>
+    </p>
+    <p>Main part of the modeling project is a generic definition of chemical
+      thermodynamic system, stored in a single Project record (having the same
+      name as the project). This record includes lists of record keys for
+      Independent Components, Dependent Components, Phases and compositions kept
+      in the project database.&nbsp; The Project record also contains links to
+      database files where the input data is kept and the modelling results will
+      be stored, as well as the numerical controls to be used in GEM
+      calculations within this project. These contents are accessible through
+      four pages of the Project module window (<a href="#PROJECT_MWINDOW">more...</a>).
+
+
+      <br> </p>
+    <p>The project system image in computer memory also includes arrays of
+      thermodynamic data of all kinds to be used in calculations of equilibria
+      or in process or reactive transport simulations. These data arrays are
+      accessible in "Equilibria Calculation" mode through "Data" "Thermodynamic
+      Data" menu command; they are updated automatically when temperature or
+      pressure has changed in the SysEq record key, or in the Process or GEM2MT
+      module calculation. <br>
+    </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><a name="WZSTEP_1"></a>2.1. Project Wizard Step 1</h3>
+    <h4>Step 1 - Project configuration (thermodynamic data and numerical
+      settings)<br>
+    </h4>
+    <p>At this step, some additional arrays of thermodynamic data for Dependent
+      Components can be allocated, and pre-configured sets of GEM IPM3 algorithm
+      numerical controls can be selected for the current project. <br>
+    </p>
+    <p>Within the group "Allocation flags for optional DC thermodynamic data
+      arrays",&nbsp; activation of one or several check-boxes will result in
+      allocation and calculation of selected thermodynamic properties of
+      Dependent Components. <span style="font-family: Calibri;">gTP</span>
+      (molar Gibbs energy function) and <span style="font-family: Calibri;">vTP</span>
+      (molar volume) are always allocated and used by default in calculations of
+      equilibria by IPM3 algorithm and, for this reason, do not appear in this
+      list. Arrays marked as 'reserved' are not yet implemented in this version
+      of GEM-Selektor; checking their boxes on will have no effect.&nbsp; </p>
+    <p>The drop-down list "Change pre-configured sets of GEM IPM3 numerical
+      controls" contains several options as listed below:<br>
+    </p>
+    <table style="text-align: left; width: 80%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Option</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>Comment</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Retain previous controls (for old projects) or take default</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>This option (default) leaves numerical settings unchanged in the
+              existing project, or takes the next option (normal standard) in
+              the newly-created project. <br>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Restore normal (standard) variant for fast convergence</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>Use it for projects where no strong non-ideal interactions are
+              expected and no special mass balance precision is required.<br>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Variant for aquatic systems with moderate non-ideality</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>The same as normal (standard) variant, but optimized for aquatic
+              systems at moderate ionic strength.<br>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Variant for aquatic systems with SCMs in sorption phases</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>This option has smoothing parameters necessary for computing
+              surface complexation models with Langmuir-type or similar surface
+              activity coefficient terms. <br>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Variant for fluid-rock systems with highly non-ideal phases</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>Select this option if in your project systems there are complex
+              non-ideal solid solutions with a chance to form miscibility gaps <br>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Variant of strict settings for highest accuracy (may be slow)</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>This set of numerical controls should be used in reactive
+              transport calculations (in GEM2MT module or exported in GEMS3K
+              input files) where mass balance residuals must be minimal.<br>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
+            <p>Variant of strict settings for reactive mass transport (with SCM)</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>The same as previous option, but with smoothing parameters set
+              for surface complexation models.<br>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>After the project is opened and GEMS goes into "Equilibria Calculation"
+      mode, the numerical controls can be checked and edited in the Project
+      module window (<a href="#MWPAGE_2">more...</a>). <br>
+    </p>
+    <p><span style="font-weight: bold;">Important note: </span>when any
+      modeling project created in older versions of GEMS (GEMS2 or GEMS3 before
+      August 2011) is opened for the first time, it is mandatory to choose in
+      this drop-down list any appropriate option except the first one ("Retain
+      previous settings"...). This is because values of some old numerical
+      controls are incompatible with the current version of GEMS3K kernel code.<br>
+    </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><a name="WZSTEP_2"></a>2.2. Project Wizard Step 2</h3>
+    <h4>Step 2 - Project configuration (units of measurement)<br>
+    </h4>
+    <p>There is no need to change settings in this wizard page.<br>
+    </p>
+    <p>After this wizard is finished:<br>
+    </p>
+    <p style="margin-left: 40px;">The modeling project will be opened, the GEMS
+      code goes into "Equilibria Calculation" mode.</p>
+    <p style="margin-left: 40px;">Upon entering the "Equilibria Calculation"
+      mode, the project configuration will be saved in a Projec record in the
+      project folder.<br>
+    </p>
+    <p>Additional changes of settings can be done in Controls, Settings, and
+      Config pages of the <a href="#PROJECT_MWINDOW">Project module window</a>.
+      This will affect newly created SysEq, Process, ... records; previously
+      created records will remain intact. Save the Project record to keep
+      changes for the next project session.</p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h2><a name="PROJECT_MWINDOW"></a>3. Project Module Window</h2>
+    <p>This window provides 'fine-grained' access to project controls and
+      settings through its four pages (screenforms) described below. <br>
+    </p>
+    <p>The Project window can be opened using "Modules" "Project" menu command
+      or clicking on the "Project" left toolbar icon. <br>
+    </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><a name="MWPAGE_1"></a>3.1. Project Window PLists (Project System Lists)
+      Page</h3>
+    <p>This (information) page displays (<a href="#PROJECT_CONFIG_DOD">more
+        details here</a>): <br>
+    </p>
+    <p>MSfls - the list of 'nicknames' of files currently linked to the project
+      (<a href="#PROJECT_INTRO">more...</a>);</p>
+    <p>ICvp - the list of record keys of Independent Components comprising the
+      stoichiometry basis of generic chemical system definition;</p>
+    <p>CCVp - the list of Compos record keys of Predefined Composition objects
+      (PCO) used in constructing the recipes of chemical systems;<br>
+    </p>
+    <p>DCvp - the list of record keys of Dependent Components used in Phases
+      included into generic chemical system definition; on the right-hand side,
+      'd' indicates DComp and 'r' indicates ReacDC record key;&nbsp; <br>
+    </p>
+    <p>PHvp - the list of Phases comprising the generic chemical system
+      definition; on the right-hand side, the number indicates how many
+      Dependent Components from the DCvp list are grouped into this phase
+      definition (in strict order, i.e. first all components of the first phase,
+      then all components of the second phase, and so on). <br>
+    </p>
+    <p>Note that some ICs, DCs, and Phases may be switched off in specific SysEq
+      records (i.e. they do not appear in equilibrium calculation results).
+      &nbsp; <br>
+    </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><a name="MWPAGE_2"></a>3.2. Project Window Controls (GEM IPM Numerical
+      Controls) Page</h3>
+    <p>This window can be important in the case of numerical problems with
+      calculation of equilibria (lack of convergence, failure in mass balance,
+      divergence of dual solution etc.). If this happens, some adjustments of
+      GEM IPM numerical controls may be necessary. <br>
+    </p>
+    <p>Typically, this page looks like shown below. The title field (Pa_SPP)
+      indicates revisions of GEMS and the kernel code under which the set of
+      controls has been reset last time. If this is outdated, it makes sense to
+      close the project and open it again in the Project Setup Wizard mode (<a href="#HOWTO_REOPEN">more...</a>),
+
+
+      then select a predefined set of controls <a href="#WZSTEP_1">as described
+        here</a>. Typically, this results in good numerical convergence. If this
+      did not help, you may need to adjust some controls individually. In the
+      Controls page, the respective fields are arranged beginning with the
+      controls that are more frequently modified (for instance, Pa_DK, Pa_LLG,
+      Pa_DHB). <br>
+    </p>
+    <p><img style="width: 719px; height: 383px;" alt="ProjectWindowControlsPage.png"
+        src="ProjectWindowControlsPage.png"><br>
+    </p>
+    <p>If you modify some controls and save the Projec record then these
+      modifications will be available in the next sessions for this project;
+      otherwise, the modifications will be lost when the project is closed or
+      another project is opened.<br>
+    </p>
+    <p>See also explanations of specific numerical controls of the GEM IPM3
+      algorithm in <a href="gems_ipm.html#GEMIPM3_CONTROLS">gems_ipm.html file</a>.<br>
+    </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3 style="font-family: Helvetica,Arial,sans-serif;"><a name="MWPAGE_3"></a><span
+        style="font-family: Times New Roman,Times,serif;">3.3. Project Window
+        Settings (GEMS Default Settings) Page</span></h3>
+    This page shows default values and flags that GEMS uses when creating
+    records of different types.&nbsp; Do not change them unless you know a very
+    specific purpose. <br>
+    <p>See more details in <a href="gems_miscel.html#DEFAULTCONFIG_DATA">gems_miscel.html
+        file</a>.</p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><span style="font-family: Helvetica,Arial,sans-serif;"><a name="MWPAGE_4"></a></span>3.4.
+      Project Window Config (Project Configuration) Page</h3>
+    <p>This page shows (for troubleshooting purposes) the flags and dimensions
+      of the modeling project definition (stored in the Projec record). <br>
+    </p>
+    <p>The data fields here are not editable and can be changed either
+      automatically during creation or extension of the project, or through
+      Project Wizard.</p>
+    <br>
+    <hr size="2" width="100%">
+    <h2><a name="PROJECT_DATA_ENTRIES"></a>4. Project data entries &nbsp; </h2>
+    <h3><a name="PROJECT_CONFIG_DOD"></a>4.1. Data entries for project
+      configuration (accessible via Create / Remake)<br>
+    </h3>
+    These allocation flags for the dynamic memory objects in the project system
+    structure (and Project records) can be modified only in "remake" mode of
+    opening the modelling project. Some of the flags must always be turned on
+    (where indicated). <br>
+    <br>
+    Flag codes: &nbsp;&nbsp;<tt> '+'</tt> &nbsp;allocate (on) &nbsp; &nbsp;<tt>'-'</tt>
+    &nbsp;remove (off) &nbsp;&nbsp; <tt>'*'</tt> &nbsp;allocate and set default
+    values.<br>
+    &nbsp; <br>
+    <dl>
+      <dt> <a name="MSpmv_0"></a><big><b><big><tt>MSpmv[0]</tt></big></b></big>
+        - Allocation flag for the list of Compos records { +&nbsp; -&nbsp; * } <br>
+      </dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This flag, if not set off, allocates a <a href="#CCvp"><tt>CCvp</tt></a>
+        list of available <a href="gm_compos.html">Compos</a> record keys.
+        Compos records contain <a href="glossary.html#DT_PCO">PCO</a>s
+        (Predefined Composition Objects) that facilitate construction of the
+        bulk composition of GEM modelling system. Default code is on.&nbsp;</dd>
+      <dd>&nbsp;&nbsp; &nbsp;</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dt> <a name="MSpmv_1"></a><big><big><b><tt>MSpmv[1]</tt></b></big></big>
+        - Allocation flag for the list of Phase records { + * }</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>This flag allocates a <a href="#PHvp"><tt>PHvp</tt></a> list of
+        available <a href="gm_phase.html">Phase</a> record keys that define <a
+          href="glossary.html#DT_Phase">thermodynamic phases</a> to be included
+        into the GEM modelling system. Default code is on. This list cannot be
+        switched off.&nbsp;</dd>
+      <dd> <br>
+      </dd>
+      <dd> &nbsp; <br>
+      </dd>
+      <dt> <a name="MSpmv_2"></a><big><big><b><tt>MSpmv[2]</tt></b></big></big>
+        -&nbsp;Allocation flag for the list of DComp/ReacDC records { + * }</dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This flag allocates a <a href="#DCvp"><tt>DCvp</tt></a> list of
+        available <a href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html">ReacDC</a>
+        record keys for all species (<a href="glossary.html#DT_Dependent_Component">dependent
+          components</a>) in all thermodynamic phases included into the GEM
+        modelling system. Default code is on. This list cannot be switched
+        off.&nbsp;</dd>
+      <dd> &nbsp; &nbsp;</dd>
+      <dd>&nbsp; &nbsp;<br>
+      </dd>
+      <dt> <a name="MSpmv_3"></a><big><big><b><tt>MSpmv[3]</tt></b></big></big>
+        -&nbsp;Allocation flag for the list of IComp records { + * }</dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This flag allocates a <a href="#ICvp"><tt>ICvp</tt></a> list of
+        available <a href="gm_icomp.html">IComp</a> record keys that define
+        stoichiometry basis of the GEM modelling system. Default code is on.
+        This list cannot be switched off.&nbsp;</dd>
+      <dd> &nbsp;&nbsp; &nbsp;&nbsp; </dd>
+      <dd>&nbsp; &nbsp;<br>
+      </dd>
+      <dt> <a name="MSpmv_4"></a><big><b><tt>MSpmv[4]</tt></b></big> - List of
+        IC-&gt;DC references { + * - }? (reserved)</dt>
+      <dd> &nbsp;&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dt> <a name="MSpmv_5"></a><big><big><b><tt>MSpmv[5]</tt></b></big></big>
+        - Allocation flag for vectors of properties of Independent Components {
+        + * }</dt>
+      <dd>&nbsp;&nbsp;&nbsp;</dd>
+      <dd>This flag allocates several internal vectors of properties of
+        Independent Components (<tt><a href="#Vale_">Vale_</a>, <a href="#M0ic">M0ic</a>,
+          <a href="#S0ic">S0ic</a>, <a href="#V0ic">V0ic</a></tt>) that are
+        used in calculations within the GEM modelling system. Default code is
+        on. This flag cannot be switched off.&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dd> &nbsp; <br>
+      </dd>
+      <dt> <a name="MSpmv_6"></a><big><b><tt>MSpmv[6]</tt></b></big> - List of
+        IC formulae { + * - }? (reserved)</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp; &nbsp; <br>
+      </dd>
+      <dt> <a name="MSpmv_7"></a><big><b><big><tt>MSpmv[7]</tt></big></b></big>
+        - Allocation flag for the list of DC formulae (for stoichiometry matrix
+        A) { + * }</dt>
+      <dd> &nbsp;</dd>
+      <dd>&nbsp;This flag allocates the <a href="#For_DC"><tt>For_DC</tt></a>
+        list used for automatic construction of the stoichiometry matrix A in
+        the GEM system definition.&nbsp;Default code is on. This flag cannot be
+        switched off.&nbsp;</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSpmv_8"></a><big><b><big><tt>MSpmv[8]</tt></big></b></big>
+        - Automatically construct default aqueous phase { + - }</dt>
+      <dd> &nbsp;</dd>
+      <dd>This flag defines whether the definition of aqueous phase in the
+        project system will be assembled automatically from the available
+        DComp/ReacDC records ( + , default), or a pre-defined Phase record for
+        aqueous phase will be used ( - ).</dd>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSpmv_9"></a><big><big><b><tt>MSpmv[9]</tt></b></big></big>
+        - Automatically construct default gaseous phase { + - }</dt>
+      <dd> &nbsp;</dd>
+      <dd>This flag defines whether the definition of gas phase in the project
+        system will be assembled automatically from the available DComp/ReacDC
+        records ( + , default), or a pre-defined Phase record for gas phase will
+        be used ( - ).</dd>
+      <dd>&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSname"></a><big><big><b><tt>MSname</tt></b></big></big> -
+        Full name of the modelling project system</dt>
+      <dd> &nbsp;&nbsp;&nbsp;</dd>
+      <dd>This string must be entered by the user for identification of the root
+        multisystem definition on the Project window pages.</dd>
+      <dd>&nbsp; &nbsp;&nbsp;</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dt> <a name="MSnote"></a><big><b><tt>MSnote</tt></b></big></dt>
+      <dd> Comments to the <tt>MSname</tt>.&nbsp;</dd>
+      <dd> &nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_0"></a><big><b><big><tt>MSdim[0]</tt></big></b></big>
+        - N: number of Independent Components, incl. Zz (charge) and Vol
+        (volume)</dt>
+      <dd><br>
+      </dd>
+      <dd>This automatic counter defines total number of Independent Components
+        in the project multisystem.</dd>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_1"></a><big><big><b><tt>MSdim[1]</tt></b></big></big>
+        - L: total number of Dependent Components (species)</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a total number of Dependent Components
+        in all phases included into the project multisystem.</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dt> <a name="MSdim_2"></a><big><big><b><tt>MSdim[2]</tt></b></big></big>
+        - LO: number of aqueous species</dt>
+      <dd> &nbsp;&nbsp;</dd>
+      <dd>This automatic counter defines a total number of aqueous species
+        (except water) in the aqueous phase. At the same time, it defines an
+        index of water-solvent. If aqueous phase is absent then LO = 0. <br>
+      </dd>
+      <dd>&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_3"></a><big><big><b><tt>MSdim[3]</tt></b></big></big>
+        - PG: number of DC in gaseous phase</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a total number of components in the gas
+        phase. If the gas phase is absent then PG = 0.&nbsp;</dd>
+      <dd>&nbsp;&nbsp;&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_4"></a><big><b><tt>MSdim[4]</tt></b></big> - LH:
+        number of DC in mixture of liquid hydrocarbons (reserved)</dt>
+      <dd> &nbsp;</dd>
+      <dd>&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_5"></a><big><b><big><tt>MSdim[5]</tt></big></b></big>
+        -FI: total number of phases in the project multisystem</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a total number of phases in the project
+        multisystem.&nbsp;</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dt> <a name="MSdim_6"></a><big><big><b><tt>MSdim[6]</tt></b></big></big>
+        - FIs: total number of multi-component phases</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a total number of multi-component
+        phases in the project multisystem. FIs &lt;= FI.</dd>
+      <dd>&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_7"></a><big><big><b><tt>MSdim[7]</tt></b></big></big>
+        - La: number of references to Compos records</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a number of references to PCO (Compos
+        records).&nbsp;</dd>
+      <dd>&nbsp;</dd>
+      <dd>&nbsp;&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_8"></a><b><big><big><tt>MSdim[8]</tt></big></big></b>
+        - Ls: total number of DC in multi-component phases</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a total number of species in all
+        multi-component phases in the project multisystem. If multi-component
+        phases are not included then Ls = 0.</dd>
+      <dd>&nbsp;</dd>
+      <dd>&nbsp;&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_9"></a><big><b><big><tt>MSdim[9]</tt></big></b></big>
+        - Lx:&nbsp; total number of surface species</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a total number of surface species in
+        the project multisystem. If sorption phases are not included then
+        Lx=0.&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_10"></a><big><big><b><tt>MSdim[10]</tt></b></big></big>
+        - FIe: number of sorption phases&nbsp;</dt>
+      <dd> &nbsp;</dd>
+      <dd>This automatic counter defines a total number of sorption phases in
+        the project multisystem.&nbsp;</dd>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp;&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_11"></a><big><b><tt>MSdim[11]</tt></b></big> - NfT:
+        Total number of database files linked to this project</dt>
+      <dd> &nbsp;&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_12"></a><big><b><tt>MSdim[12]</tt></b></big> -
+        Internal index of selected aqueous phase</dt>
+      <dd> &nbsp;&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSdim_13"></a><b><big><tt>MSdim[13]</tt></big></b> -
+        Internal index of selected gaseous phase</dt>
+      <dd> &nbsp;&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSNfT"></a><big><b><tt>MSNfT</tt></b></big> - Number of
+        open files for each database module (record type)</dt>
+      <dd> &nbsp;</dd>
+      <dd>&nbsp;</dd>
+    </dl>
+    <h3><a name="PROJECT_LISTS_DOD"></a>4.2. Lists of phases, components&nbsp;
+      and compositions<br>
+    </h3>
+    <dl>
+      <dt> <a name="L1vp"></a><big><big><b><tt>L1vp</tt></b></big></big> - L1
+        vector, shows a number of DC included to each phase</dt>
+      <dd> &nbsp;</dd>
+      <dd>This vector contains FI elements. Each element shows how many species
+        (DC) are included in the respective phase. A rule in GEMS is that
+        multi-component phases appear first in the list. <br>
+      </dd>
+      <dd>&nbsp;</dd>
+      <dd>&nbsp;</dd>
+      <dt> <a name="PHvp"></a><big><big><b><tt>PHvp</tt></b></big></big> - List
+        of Phase record keys <br>
+      </dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This list of Phase record keys links phases that can appear at
+        equilibrium states in systems constracted from this project multisystem
+        definition with the respective records in GEMS thermodynamic
+        database.&nbsp;</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>Third field of each Phase record key (phase name) is used by the <a href="gmscript.html#MS_PREPROC">Math
+          Script preprocessor</a> to convert phase names into indices in the
+        project multisystem framework.</dd>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="DCvp"></a><big><big><b><tt>DCvp</tt></b></big></big> - List
+        of DC record keys (of Dcomp or ReacDC records)</dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This list of DC record keys defines the generic list of species that
+        can appear at equilibrium states in systems constructed from this
+        project multisystem definition. Components are listed in the same order
+        as they appear in&nbsp; phases as listed in the <a href="#PHvp"><tt>PHvp</tt></a>
+        Phase list, i.e. all species for the first (usually aqueous) phase, then
+        all components for the second phase, etc., as counted in the <a href="#L1vp"><tt>L1vp</tt></a>
+        vector.&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dd>Third field of each DC record key (species name) is used by the by the
+        <a href="gmscript.html#MS_PREPROC">Math Script preprocessor</a> to
+        convert species names into indices in the project multisystem framework.
+        <br>
+        &nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="CCvp"></a><big><big><b><tt>CCvp</tt></b></big></big> - List
+        of Compos record keys</dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This list of Compos record keys defines PCO that conform to the
+        stoichiometry basis (<a href="#ICvp"><tt>ICvp</tt></a> list) of the
+        project multisystem definition. Any of these PCO can be used in
+        calculation of the bulk composition (b vector) in the CSD (see <a href="gems_bcc.html">gems_bcc.html</a>
+        manual).&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dd>First field of each Compos record key (PCO name) is used by the <a href="gmscript.html#MS_PREPROC">Math
+          Script preprocessor</a> to convert PCO names into indices in the
+        project multisystem framework.&nbsp;</dd>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="ICvp"></a><big><big><b><tt>ICvp</tt></b></big></big> - List
+        of IComp record keys (stoichiometry basis)</dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This list of IC symbols (IComp record keys) defines the stoichiometry
+        basis of all chemical systems which can be constructed using this
+        project multisystem definition.&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dd>First field of each IComp record key (IC symbol) is used by the <a href="file:///C:/gems2html/program/doc/html/gmscript.html#MS_PREPROC">Math
+Script
+
+
+
+          preprocessor</a> to convert IC symbols into indices in the project
+        multisystem framework. </dd>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="MSfls"></a><big><big><b><tt>MSfls</tt></b></big></big> -
+        List of database files currently linked to this modelling project</dt>
+      <dd>This list is made of the automatically constructed identifiers of
+        database files, e.g.&nbsp; "sdnagra-psi".&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dd>Created automatically when the project is created or
+        re-configured.&nbsp;</dd>
+      <dd>&nbsp;&nbsp;&nbsp;</dd>
+      <dt> <a name="DCSvp"></a><big><big><b><tt>DCSvp</tt></b></big></big> -
+        Code of data source for DC: d-Dcomp r-ReacDC { d r } </dt>
+      <dd>This column (created automatically) defines the database chain from
+        where the program reads the respective record pointed by the record key
+        in the <a href="#DCvp"><tt>DCvp</tt></a> list. &nbsp; <br>
+      </dd>
+      <dd>&nbsp;&nbsp;</dd>
+      <dt> <a name="mPHC"></a><big><big><b><tt>mPHC</tt></b></big></big> -
+        Class codes of phases { a g p m s l x d h }</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp;This column (created automatically) contains the <a href="g_useref.html#PHASESTATECODES">Phase
+          state codes</a>, internally used in GEM IPM procedures.&nbsp; &nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="mDCC"></a><big><big><b><tt>mDCC</tt></b></big></big> - DC
+        (species) class codes { T E S W G V C H N I J M [digit] X Y Z A B P Q R
+        O } </dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This column (created automatically) contains the <a href="g_useref.html#DCCLASSCODES">Species
+          class codes</a>, internally used in GEM IPM procedures to select
+        correct equations for chemical potentials, activity coefficients etc. .<br>
+        &nbsp;&nbsp;</dd>
+      <dd>&nbsp;&nbsp; </dd>
+      <dt> <a name="mICC"></a><big><big><b><tt>mICC</tt></b></big></big> - Type
+        codes for IC { e o h a z v i [integer]} </dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>This column (created automatically) contains the <a href="g_useref.html#ICOMP_TYPES">IC
+          type codes</a>, internally used in GEM IPM procedures.<br>
+        &nbsp;</dd>
+      <dd>&nbsp;&nbsp; <br>
+      </dd>
+      <dt> <a name="For_DC"></a><big><b><tt>For_DC</tt></b></big> - List of DC
+        chemical formulae (comma separated) </dt>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd> This automatically created list of DC (species) chemical formulae is
+        the most economical way to store the&nbsp; stoichiometry matrix A of the
+        project multisystem into a Project database record. <a href="g_useref.html#FORMULA">Formulae</a>
+        go in the same order as species names in the <a href="#DCvp"><tt>DCvp</tt></a>
+        list. Whenever necessary, the formulae are extracted and automatically
+        converted into rows of the stoichiometry matrix. Comma must follow each
+        formula, except the last one. Comments are not allowed in this list. <br>
+        &nbsp;&nbsp;&nbsp;</dd>
+      <dd>&nbsp;&nbsp;</dd>
+      <dt> <a name="For_IC"></a><big><b><tt>For_IC</tt></b></big> - List of IC
+        chemical formulae (reserved)</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp;</dd>
+      <dt> <a name="ICDCv"></a><big><b><tt>ICDCv</tt></b></big> - List of
+        IC-to-DC references (reserved)</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dt> <a name="Vale_"></a><big><b><tt>Vale_</tt></b></big> - Vector of
+        default valencies of IC</dt>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>This vector is used internally when converting formulae from the <a href="#For_DC"><tt>For_DC</tt></a>
+        list into the rows of the stoichiometry matrix, in order to avoid
+        reading of IComp records.</dd>
+      <dd>&nbsp;&nbsp;&nbsp;</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dt> <a name="M0ic"></a><big><big><b><tt>M0ic</tt></b></big></big> -
+        Vector of IC atomic (molar) masses, g/mole</dt>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>This vector is used internally to calculate molar masses of Dependent
+        Components when converting formulae from the <a href="file:///C:/gems2html/program/doc/html/gm_project.html#For_DC"><tt>For_DC</tt></a>
+        list into the rows of the stoichiometry matrix,&nbsp; in order to avoid
+        reading of DComp and IComp records.</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dt> <a name="S0ic"></a><big><big><b><tt>S0ic</tt></b></big></big> -
+        Vector of IC atomic entropies, J/mole/K (reserved)</dt>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>&nbsp;Reserved for use in future versions.</dd>
+      <dd>&nbsp; <br>
+      </dd>
+      <dd>&nbsp;&nbsp;<br>
+      </dd>
+      <dt> <a name="V0ic"></a><big><big><b><tt>V0ic</tt></b></big></big> -
+        Vector of IC molar volumes, cm3/mole (reserved)</dt>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>&nbsp;Reserved for use in future versions.</dd>
+      <dd><br>
+      </dd>
+      <dd>&nbsp;&nbsp;<br>
+      </dd>
+      <dt> <a name="Ph_v2"></a><big><b><tt>Ph_v2</tt></b></big> - List of
+        record keys for multicomponent Phases</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp; &nbsp;<br>
+      </dd>
+      <dt> <a name="DC_v2"></a><big><b><tt>DC_v2</tt></b></big> - List
+        ofDComp/ReacDC record keys for multicomponent phases</dt>
+      <dd>&nbsp; &nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="PLs"></a><b><big><tt>PLs</tt></big></b> - internal</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dt> <a name="LtpD_0"></a><big><b><tt>LtpD[0]</tt></b></big> -
+        Dimensionalities: total L of DC (species)&nbsp;</dt>
+      <dd>&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dt> <a name="LtpD_1"></a><big><b><tt>LtpD[1]</tt></b></big> - Ls of DC
+        (species) in multi-component phases&nbsp;</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd>&nbsp;<br>
+      </dd>
+      <dt> <a name="LtpD_2"></a><big><b><tt>LtpD[2]</tt></b></big> - PG of DC
+        (gases) in gas phase&nbsp;</dt>
+      <dd>&nbsp;&nbsp;&nbsp;</dd>
+      <dd><br>
+      </dd>
+      <dt> <a name="LtpD_3"></a><big><b><tt>LtpD[3]</tt></b></big> - Lx of DC -
+        surface species&nbsp;</dt>
+      <dd>&nbsp;&nbsp;</dd>
+      <dd><br>
+      </dd>
+    </dl>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="NUMSET"></a>4.3.
+        Project-Specific GEM IPM3 Numerical Controls<br>
+      </font></h3>
+    <p>See explanations of specific numerical controls of GEM IPM3 algorithm in
+      <a href="gems_ipm.html#GEMIPM3_CONTROLS">gems_ipm.html file</a>. </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="PROJECT_DEFCONF_DATA"></a>4.4.
+        GEM-Selektor Default Configuration Data</font></h3>
+    <p>See more details in <a href="gems_miscel.html#DEFAULTCONFIG_DATA">gems_miscel.html
+        file</a>.</p>
+    <br>
+    <hr size="2" width="100%">
+    <h2><a name="PROJECT_ERRORS"></a>5. Warnings and error messages<br>
+    </h2>
+    <p><tt><span style="color: rgb(153, 0, 0);">&lt;under construction&gt;</span><br>
+      </tt></p>
+    <tt><br>
+    </tt>
+    <hr size="2" width="100%">
+    <h1>"HowTo" Manuals</h1>
+    <h2><font face="Helvetica, Arial, sans-serif"><a name="HOWTO"></a>6. How to
+        Create, Open or Expand a GEM-Selektor Modeling Project</font></h2>
+    <p>GEM calculations of chemical thermodynamic equilibria can only be
+      performed in the context of a currently open modelling project (<a href="#PROJECT_INTRO">more...</a>).
+      <br> </p>
+    <p><span style="text-decoration: underline;">To access modeling projects</span>,
+      switch into "Computation of equilibria" mode by clicking the Equilibrium
+      Mode&nbsp;<img style="width: 24px; height: 24px;" alt="EquilibriumModeIcon24.png"
+        src="EquilibriumModeIcon24.png">&nbsp; button (or select the "Modules"
+      "Change Mode" menu command). This opens a "Modelling Projects" dialog,
+      which usually shows a list of accessible existing projects. Each project
+      (record) has a key that consists of two fields: Name and Comment. The Name
+      is also the name of the project folder; the Comment&nbsp; gives a hint on
+      the modeling application contained in the project.<br>
+    </p>
+    <p><span style="text-decoration: underline;">To open an existing modeling
+        project</span>, double-click on its key in the list, or click once on it
+      and then click on the "Open Project" button. Below the list, there are
+      several options, some of which affect how the project will be opened (<a href="#HOWTO_REOPEN">more...</a>).
+
+
+      After the project is loaded, GEM-Selektor turns into the "Equilibria
+      Calculation" mode with "Single Thermodynamic System" dialog visible (<a href="gems_sys.html#HOWTO">more...</a>).</p>
+    <p><span style="color: #cc0000;"><span style="font-weight: bold;">Attention!
+        </span><span style="color: black;">For using in GEM-Selektor v.3.3.x
+          introduced in April 2015 the modelling projects created in
+          GEM-Selektor v.3.2.x or earlier, please read carefully <a href="#PROJECT_MODIFY">here
+            (Section 1.3)</a> and follow advices there.&nbsp;</span></span>&nbsp;
+      </p>
+    <p> </p>
+    <p><span style="text-decoration: underline;">To create a new modeling
+        project</span>, click on a "New Project" button, enter the name and the
+      comment into the appearing record key dialog, and click "Ok" (<a href="#HOWTO_CREATE">more...</a>).
+In
+      the appearing Step 1 page of the wizard, check the selection of
+      Phase/component filters and the selection of source database/subdatabase.
+      In the appearing next Step 2 page "Elements Dialog", select elements
+      (Independent Components) to form the system (<a href="gems_elements.html">more...</a>)
+      and click "Ok". In the appearing "Setup of aqueous and gas phases" dialog,
+      optionally change settings and click "Ok" (<a href="gems_aphsetup.html">more...</a>).
+      This brings GEMS into the Equilibrium Calculations mode; the SysEq record
+      key dialog appears for the first system in the new project. Click "Ok" to
+      proceed with the default key, or edit the name, pressure, or temperature,
+      and then click "Ok". In the appearing "Input Recipe" dialog, type a
+      comment to this system definition in the 'tname' field, then make
+      selections and enter numbers for the input of bulk composition (<a href="gems_bcc.html#RECIPE">more...</a>),
+      and click "Ok". Now check, calculate, and save the first equilibrium state
+      in the project (<a href="gems_sys.html#HOWTO">more...</a>). Proceed with
+      'cloning' the next SysEq record. <br>
+    </p>
+    <p><span style="text-decoration: underline;">To expand (clone) a project
+        into a new one</span>: activate the option "Create a new project using
+      the selected one..."; select the project in the list; and click the "New
+      Project" button. In the appearing record key dialog, enter a new project
+      name and a comment, click "Ok"; in the Elements Wizard Step 1, if
+      necessary, check selection of source database/subdatabase, then at Step 2
+      select additional elements, and proceed as by creating a brand new project
+      (<a href="#HOWTO_EXPAND">more...</a>). &nbsp; <br>
+    </p>
+    <p><span style="text-decoration: underline;">To share a modeling project</span>
+      with other users of GEM-Selektor (or to back-up it): locate the user
+      modelling projects directory (use "Help" "Preferences" menu command to
+      open Settings and Preferences dialog and see this location path under
+      "User's projects folder"). Close GEMS, locate the project and zip it as a
+      whole subfolder. Place this zip file in backup folder or send it to
+      somebody else. To add a project, unzip it's folder into your projects
+      folder, then start GEMS; you should see it in the projects list. We
+      recommend to backup the project folder that you currently work with at
+      least one- or two times per day. <br>
+    </p>
+    <p><span style="text-decoration: underline;">To remove a modeling project</span>:
+      exit GEMS; use file manager or terminal to locate your projects subfolder;
+      select the project folder there; delete it or move it away
+      completely.&nbsp; </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="HOWTO_CREATE"></a>6.1.
+Main
+
+
+
+        Settings to Create or Open a Project</font></h3>
+    <p> To create a <a href="#PROJECT_INDEPENDENT">standalone project</a>, get
+      into the "Modelling projects" dialog and click the "New Project" button.
+      This will bring you to a small "Enter a new record key" dialog. Type a
+      short project name instead of "MyWork" (or click "From List" to pick up
+      one of existing Project record keys and modify it); change the comment
+      line (spaces are not allowed), and press "Ok". This will bring you to a
+      large <a href="gems_elements.html">Elements Wizard</a> that has two
+      steps, one for checking the selection of source built-in database or
+      sub-database and/or Phase/component filters, and another showing a dialog
+      that looks like the Periodic Table; see the next section (also for the
+      comments on how to create a <a href="#PROJECT_LINKED">"linked" project</a>
+      without using the Elements Dialog).&nbsp;</p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="HOWTO_ELEMENTS"></a>6.2.
+        Elements Dialog and Selections from the Default Database</font></h3>
+    <p>In this dialog (Step 2 of the Elements Wizard), you can select elements
+      (and other Independent Components) to form the stoichiometry basis of the
+      modeling project. By default, the program will look through default
+      (selected at Step 1) database/subdatabase files, find all dependent
+      components, phases and compositions that are consistent with the chosen
+      list of Independent Components, and copy these records into respective
+      files of the project database. When finished, the built-in database files
+      will be disconnected. The user can then modify and extend the project
+      database, but this will have no effect on the default database; if any
+      changes occurred in the built-in database after the program package
+      upgrade, this will also have no effect on the project database. This kind
+      of <a href="#PROJECT_INDEPENDENT">'independent' modeling projects</a> is
+      typical, and it is safe for most applications.&nbsp; &nbsp; <br>
+    </p>
+    <p> </p>
+    <p>However, it may be necessary to work with projects that are directly
+      linked to default database files, for instance, to have any changes in
+      default (kernel) database immediately affect calculations within the
+      project. It is less simple to create such a new <a href="#PROJECT_LINKED">"linked"
+        project</a> because in this case, you cannot use the Elements Dialog,
+      and you must know what is contained in various kernel database files in
+      order to make a proper selection. It is recommended to proceed in the
+      following steps creating such a new project. </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p> Define the list of independent components (IC) necessary for
+          describing stoichiometry of the system. Find out which IComp database
+          files contain records for all required independent components. Define
+          which phase types (aqueous, gas, solid (solutions), sorption) must be
+          included. Check which GEMS default thermodynamic database files are to
+          be linked to your new project.</p>
+      </li>
+      <li>
+        <p>Start GEM-Selektor&nbsp;and go into "Computation of Equilibria" mode.
+          In the Modelling Project dialog, activate the option "Make a new
+          project by linking files from the default database", then click on the
+          "New Project..." button to create a new linked project.</p>
+      </li>
+      <li>
+        <p>In the appearing project record key dialog, enter the new project
+          name and comment, and press "Ok". Now, a "Database File Configuration
+          for Modelling Project" dialog appears (<a href="#FILES">more...</a>).
+          Expand the "Database" entry and then expand the "Kernel" entry. There,
+          expand one-by-one the "sdref", "icomp", "dcomp", "compos", "reacdc"
+          and "phase" entries and in each of them, click on the files to
+          link/unlink them to/from the project. Press "Ok" when finished, and
+          confirm your file selection by clicking on the "Yes/Proceed"
+          button.&nbsp;</p>
+      </li>
+      <li>
+        <p>In the appearing "Select an aqueous activity model" dialog, select
+          the desired aqueous model; next, do so in the appearing "gas mixture
+          model" dialog. You should see now the&nbsp;"Single Equilibrium System"
+          dialog; from now on, the project is operational, and you can create
+          and model chemical systems equilibria and store them in SysEq
+          records.&nbsp; </p>
+      </li>
+    </ol>
+    <p> </p>
+    <p>Note that any "linked" project will also contain a full set of project
+      database files in the project folder, but, unlike those in an independent
+      project, they will be empty. However, any record created in the process of
+      work within the project will never be stored in the default database, but
+      only in the project database files. <br>
+    </p>
+    &nbsp; <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="HOWTO_AUTOPHASE"></a>6.3.
+        AutoPhaseSetup Dialog and Configuration of Aqueous and Gas/Fluid models</font></h3>
+    <p>This wizard appears when a new modeling project is created, or an
+      existing project is opened after deactivating the "Retain setup of aqueous
+      (and gas/fluid) phases" option. The dialog facilitates definition of the
+      aqueous electrolyte phase and/or the gas/fluid mixture phase that are
+      automatically assembled upon opening&nbsp; a GEMS modelling project.
+      Alternatively, a Phase record already available in the project database
+      can be selected, or the aqueous phase (or gas/fluid mixture) can be
+      excluded from the template chemical system definition in this modeling
+      project. More about this can be found <a href="gems_aphsetup.html">here</a>.<br>
+    </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3 style="font-family: Helvetica,Arial,sans-serif;"><a name="HOWTO_1ST_SYSTEM"></a>6.4.
+      Creating a First System in the New Project</h3>
+    <p>After a new modeling project folder is created, the program switches into
+      the Equilibrium Calculations mode; immediately, the SysEq record key
+      dialog appears for the first system to be created in the project, for
+      example <span style="font-family: Helvetica,Arial,sans-serif;"><br>
+      </span></p>
+    <p><span style="font-family: Helvetica,Arial,sans-serif;"><img style="width: 447px; height: 335px;"
+          alt="RKeyFieldsDialog-NewSysEq.png" src="RKeyFieldsDialog-NewSysEq.png">
+        <br>
+      </span></p>
+    <p>The dialog shows the default SysEq record key contents. Click "Ok" to
+      proceed with the default key, or edit the name, pressure, or temperature,
+      and then click "Ok". In the appearing "Input Recipe" dialog, type a
+      comment to this system definition in the 'tname' field, then make
+      selections and enter numbers for the input of bulk composition (<a href="gems_bcc.html#RECIPE">more...</a>),
+
+
+      and click "Ok". Now check, calculate, and save the first equilibrium state
+      in the project (<a href="gems_sys.html#HOWTO">more...</a>). Typically, the
+      modeling proceeds with 'cloning' the next SysEq record using the "Record"
+      "New(Clone)..." menu command or toolbar button. </p>
+    <p> </p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="HOWTO_REOPEN"></a>6.5.
+Opening
+
+
+
+        and Re-configuration of an Existing Project</font></h3>
+    <p>The list of existing modeling projects is visible in the upper part of
+      the "Modelling Projects" dialog. To open a project, select its key in the
+      list (click once on it); (de)activate options that appear below the list
+      (if needed); and then click on the "Open Project" button. After the
+      project is loaded, GEM-Selektor turns into the "Equilibria Calculation"
+      mode with "Single Thermodynamic System" dialog visible. In this mode, you
+      can proceed with GEM modeling in a single chemical system (SysEq), or
+      simulate irreversible chemical transfer processes as sequences of
+      local/partial equilibrium states (Process, GEM2MT).&nbsp; </p>
+    <p><span style="font-weight: bold;"></span>Options that control opening of
+      modeling projects:</p>
+    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Option<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Default
+            state<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Explanations<br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Retain
+            setup of aqueous (and gas/fluid) phases<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">On<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Set
+            this option to "Off" if you need to change the activity model of
+            aqueous electrolyte and/or gas (fluid) mixture phase in the "Setup
+            of aqueous and gas phases" dialog (<a href="#HOWTO_AUTOPHASE">more...</a>);
+this
+
+
+
+            change will affect all SysEq records (the results must be
+            recalculated). If this option is set to "On" then the same activity
+            models will be used as previously in this project. <br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Change
+            file configuration of the selected project<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Set
+            this option to "On" if you need to change file configuration in the
+            "Database File Configuration" dialog (<a href="#FILES">more...</a>),
+            otherwise the same set of project files will be used as previously.
+            <br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Activate
+            Project Remake wizard<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Set
+            this option to "On" in order to open the "Project Setup" wizard (<a
+              href="#PROJECT_MWIZARD">more...</a>), for instance, to reset GEM
+            IPM numerical settings for this project. Otherwise, the same setup
+            as previously will be used. <br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Re-calculate
+            and save all equilibria (SysEq) using:<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">This
+            option can be activated (one of its sub-options set to "On") for
+            testing the project after changes in project thermodynamic database
+            or after the GEM-Selektor installation upgrade. Sub-options are to
+            perform recalculation of all SysEq records in "automatic" (AIA) or
+            "smart" (SIA) initial approximation mode. Input data and results of
+            calculations will be written in a "Dump" text file e.g. for
+            comparison with previous test results (you will be asked to select
+            where to save the file). Opening a large project in this mode may
+            take time until all calculations are finished. <br>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Create
+            a new project using the selected one as template<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">Off<br>
+          </td>
+          <td style="vertical-align: top; font-family: Helvetica,Arial,sans-serif;">To
+            expand a modeling project, select it in the list and set this option
+            to "On". In this mode, the project will be cloned, optionally
+            expanded, and saved under a different name (<a href="#HOWTO_EXPAND">more...</a>).&nbsp;
+Typically,
+
+
+
+            this is done in order to extend the project with a few more
+            independent components and related compounds, phases, and
+            compositions. <br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="HOWTO_EXPAND"></a>6.6.
+Cloning
+
+
+
+        a New (Expanded) Project from the Existing One</font></h3>
+    <p>It is not possible to duplicate a modeling project simply by making a
+      copy of its folder under a different name. A special mode of GEM-Selektor
+      can be used for this purpose. In this mode, either an exact copy of the
+      project with a different name can be obtained, or a 'cloned' project can
+      be expanded by adding one or more Independent Components (respectively,
+      more chemical species, phases, and compositions) from the default database
+      supplied together with the program package. <br>
+    </p>
+    <p>To expand (clone) a project into a new one, go into "Equilibria Mode" and
+      in the Modeling Projects dialog, activate the option "Create a new project
+      using the selected one..."; select the project in the list; and click the
+      "New Project" button. In the appearing record key dialog, enter a new
+      project name and a comment, and click "Ok".</p>
+    <p>You are how in the Elements Dialog, the same as that appearing when a new
+      project is created (<a href="gems_elements.html">more...</a>). The
+      difference is that the Independent Components selected in the original
+      project are now visible as pressed buttons that cannot be deselected. You
+      can simply do nothing and click "Ok" to produce a copy of the original
+      project with a different name - this makes sense, for instance, to
+      "freeze" the results at certain stage e.g. for reporting, or to produce a
+      GEMS test project case (by deleting some system or process records, adding
+      comments and descriptions, and so on). <br>
+    </p>
+    <p>However, a more typical case would be to add some elements to the new
+      project while retaining setups and results that have already been done.
+      Many users tend to begin with relatively simple systems and extend them at
+      later stages, perhaps, using data from a 'specific' default database (this
+      needs first a re-configuration of database access <a href="gems_elements.html">as
+        described here</a>). Select additional elements and click "Ok" to
+      proceed. This will get you through the "Setup of aqueous and gas
+      phases..." dialog, then the program will ask you for confirming insertion
+      of new IComp, DComp, ReacDC, Phase and Compos records into the project
+      database. You can accept all insertions to be done automatically
+      (recommended option) or review each action one-by-one (option for
+      experts). The list of automatically or manually rejected records can be
+      found in the file "DiscardedRecords.txt" in the same folder where GEMS3
+      executable file is located. As the last step, the program will update
+      internal indexation in all existing SysEq records in the project in order
+      to make the newly inserted components and phases accessible in the system
+      definitions; this can take time if there are many SysEq records to
+      update.&nbsp; <br>
+    </p>
+    <p>When the cloning/expansion process is finished, the "Single System"
+      dialog appears (<a href="gems_sys.html#HOWTO">more...</a>), where you can
+      check, re-calculate, and save the existing systems (SysEq records), or
+      clone/create new ones. Note that, after the project has been expanded,
+      existing SysEq records must be re-checked and re-calculated before the
+      equilibrium speciation and dual solution can be viewed again. <br>
+    </p>
+    <p>As an alternative, it is always possible to extend an existing project
+      with more Independent Components, Dependent Components, and Phases without
+      cloning it (<a href="#PROJECT_EXTEND">more...</a>).</p>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h3><font face="Helvetica, Arial, sans-serif"><a name="HOWTO_OTHER"></a>6.7.
+        Other Issues Related to GEMS Modelling Projects<br>
+      </font></h3>
+    <h4><a name="NEW_PROJECT_SIDEBAR"></a>What the program did when it created a
+      new modeling project? </h4>
+    <p>To take a look, switch to your favorite file manager and find the
+      location where the GEM-Selektor is installed (for instance, "C:\MyGems").
+      Depending on the operation system, your projects are located typically in
+      the folder "/Library/gems3/projects" (in Windows,
+      "C:\MyGems\Library\gems3\projects"; in Linux and Mac OS,
+      "~/Library/gems3/projects"). Let us assume that the project "Carbonat"
+      just has been created. Find a <tt>subfolder /Carbonat</tt> in the
+      /projects folder, and dive into it to see the following files (among
+      others, number is file length in bytes; may be different in the actual
+      version). <br>
+    </p>
+    <blockquote> </blockquote>
+    <table style="width: 70%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td valign="top">Project Database Files (Input)<br>
+          </td>
+          <td valign="top">Project Database Files (System Structure and Output)
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><tt>&nbsp;&nbsp; 471&nbsp; icomp.Carbonat.ndx<br>
+              &nbsp;3'523&nbsp; icomp.Carbonat.pdb</tt><br>
+            <tt>&nbsp;2'439&nbsp; dcomp.Carbonat.ndx<br>
+              35'924&nbsp; dcomp.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp; 348&nbsp; reacdc.Carbonat.ndx<br>
+              &nbsp;7'517&nbsp; reacdc.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; rtparm.Carbonat.ndx<br>
+              &nbsp;1'661&nbsp; rtparm.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp; 631&nbsp; phase.Carbonat.ndx<br>
+              &nbsp;8'651&nbsp; phase.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp; 802&nbsp; compos.Carbonat.ndx<br>
+              &nbsp;7'464&nbsp; compos.Carbonat.pdb</tt><br>
+          </td>
+          <td valign="top"><tt>&nbsp;&nbsp; 118&nbsp; projec.Carbonat.ndx<br>
+              &nbsp;6'561&nbsp; projec.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; syseq.Carbonat.ndx<br>
+              &nbsp;1'661&nbsp; syseq.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; proces.Carbonat.ndx<br>
+              &nbsp;1'661&nbsp; proces.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; gtdemo.Carbonat.ndx<br>
+              &nbsp;1'661&nbsp; gtdemo.Carbonat.pdb</tt><br>
+            <tt>&nbsp;&nbsp;&nbsp; 61&nbsp; sdref.Carbonat.ndx<br>
+              &nbsp;1'661&nbsp; sdref.Carbonat.pdb</tt><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Any binary GEMS database file, as such, has a <tt>.pdb</tt> file name
+      extension; the file with the same name but a <tt>.ndx</tt> extension
+      contains indexing information (record keys with references to record
+      locations in the <tt>.pdb</tt> file) to speed up search in the database.
+      The second element of the file name is always the same as the project
+      (folder) name (<tt>"Carbonat"</tt>). The first element of the file name is
+      a GEM-Selektor module name that can process the records stored in this
+      database file. In the left column, all files keeping the project input
+      thermodynamic and composition data are shown. In the right column, the
+      file <tt>projec.Carbonat.pdb</tt> keeps the project system structure
+      lists and configuration (there is just one record <tt>"Carbonat:My1stProject"</tt>
+      ); the file <tt>syseq.Carbonat.pdb</tt>&nbsp;will collect all the records
+      with calculated equilibrium states (here still empty). <br>
+    </p>
+    <p> Files&nbsp;<tt>proces.Carbonat.pdb</tt> and <tt>gtdemo.Carbonat.pdb</tt>&nbsp;
+will
+
+
+
+      contain your Project Simulator and Graphic/table Demo Sampler records,
+      respectively, and <tt>sdref.Carbonat.pdb</tt> file will keep your SDref
+      records with bibliographic data or customized scripts. These files are
+      also empty at the beginning. <br>
+    </p>
+    <p>Note that all your work done on this modelling project will be stored
+      exclusively into <tt>.pdb</tt> files in the project directory, and
+      nowhere else. Thus, you can backup your work any time simply by zipping
+      the whole project directory; this zip file (e.g. <tt>Carbonat.zip</tt>)
+      can be sent to your colleague with whom you would like to share your
+      models. You are welcome to send it&nbsp; also to the developers of
+      GEM-Selektor in the case of bug reporting or if you wish to contribute to
+      the GEMS Kernel database, test suite, or tutorials. <br>
+    </p>
+    <p>As seen in the left column of the above table, <tt>icomp.*, dcomp.*,
+        reacdc.*, phase.*</tt> and <tt>compos.*</tt> files in the project
+      directory are not empty. During creation of the new project, GEM-Selektor
+      used the list of selected independent components (Ca, Mn, Fe, C, Na, Cl,
+      O, H, Zz)&nbsp; first to copy the respective IComp records to <tt>icomp.Carbonat.pdb</tt>
+      file. Then the program searched the whole accessible part of the default
+      database for such Dependent Components and compositions that would
+      completely fit into this stoichiometry basis; the conforming DComp,
+      ReacDC, and Compos records were also copied from the default- to the
+      project database files. Next, the program checked all the Phase
+      definitions available in the default database against the lists of copied
+      DComp and ReacDC records and discarded all phases that contain at least
+      one species not conformant with the project system stoichiometry basis.
+      The record keys of discarded multi-component phases have been written to
+      the diagnostic&nbsp;<tt>DiscardedRecords.txt</tt> file (located in the
+      same folder where the GEMS executable file resides). This file can be used
+      for checking, which phase definitions can be copied later on manually to
+      the project and rebuilt there (instead of creating them from scratch).<br>
+    </p>
+    Finally, the program has assembled the definitions of aqueous and gas phases
+    from the DComp and ReacDC records previously copied into the project
+    database, and attached all Phase record keys and all the DComp/ReacDC record
+    keys referenced from the phase definitions to the project system structure.
+    Note that those records for Dependent Components that were not referenced in
+    any Phase definition copied into the project, were not included in the
+    project system. To activate such Dependent Components (e.g., minerals), you
+    will have to create Phase records for them in the "Thermodynamic Database"
+    mode and then open the project, which will be extended automatically. &nbsp;
+    &nbsp; <br>
+    <br>
+    In your new project folder, the program has created several empty files (for
+    <tt>rtparm, sdref, proces, gtdemo</tt> and <tt>syseq</tt> modules) to store
+    the records that you are going to create when working with the modelling
+    project. Although one database file per module is present in the project
+    directory, you always can create new files (as described in the <a href="gems_tdbase.html">Database
+      Management manual</a>). In doing so, we would recommend to add another
+    part to the file name, for example, <tt>reacdc.Carbonat.MySpecies.pdb</tt>
+    or <tt>reacdc.Carbonat.MyCompos.pdb</tt>. Note that records in these
+    additional files will not be visible to the project system definition until
+    you <a href="#HOWTO_EXPAND">reconfigure the project</a>. It would be wise
+    to have some additional thermodynamic database files never linked to the
+    project system definition, just kept for some supplementary data or
+    calculations; anyway, the files reside in the project directory and will not
+    be lost during backups.&nbsp; <br>
+    <br>
+    In principle, it is possible to have any other file types in the project
+    folder, such as saved images, spreadsheets, texts and so on, where the user
+    keeps reporting or external calculations related to this project. GEMS only
+    looks there for .ndx and .pdb files; as long as they are intact, it should
+    work fine. We recommend making backups of the project folder that you
+    currently work with at least twice per work day in order to minimize
+    possible loss of time and data due to seldom cases of the project definition
+    record corruption.&nbsp; <br>
+    <br>
+    <h4><a name="PROJECT_EXTEND"></a>Manual Extension of the Project
+      Thermodynamic Database</h4>
+    <p> It is possible to extend an existing modeling project without cloning it
+      under a different name (<a href="#HOWTO_EXPAND">more...</a>). In order to
+      do it, you have to add chemical species and phases to your project
+      database extension files in the "Thermodynamic Database" mode of
+      GEM-Selektor. Please, keep in mind the following recommendations. </p>
+    <ul>
+      <li>
+        <p>It is always easier to copy existing records from the default
+          database or use them as templates for creating new records with "Save
+          As..." or "New/Clone" menu commands than create new records 'from
+          scratch'.&nbsp; </p>
+      </li>
+      <li>
+        <p>To temporarily link default database files, use "Database Files"
+          "Configure" menu command. To copy records, use "Record List" "Copy..."
+          menu command, and change at least one character in the last record key
+          field for each copied record (it is not possible to have two records
+          with the same key). </p>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <p> Add records to your project database extension in the following
+          order: <a href="gm_icomp.html">IComp</a>; <a href="gm_dcomp.html">DComp</a>;
+          <a href="gm_reacdc.html">ReacDC</a>; <a href="gm_phase.html">Phase</a>;
+          <a href="gm_compos.html">Compos</a>.</p>
+      </li>
+      <li>
+        <p> After remaking <a href="gm_dcomp.html">DComp</a>,&nbsp; <a href="gm_reacdc.html">ReacDC,</a>
+          and <a href="gm_compos.html">Compos</a> records, it's advisable to
+          re-calculate them.</p>
+      </li>
+      <li>
+        <p> Backup your newly created or modified database records by exporting
+          them into text files.</p>
+      </li>
+      <li>
+        <p> If you need to copy many records from default database to your
+          database extension file, export them first to a text file. Then edit
+          this text file for changing the last field of record keys to avoid
+          possible "duplicate record key" errors. Finally, link your project
+          extension file only and import into it the records from the edited
+          text file.</p>
+      </li>
+    </ul>
+    <br>
+    <hr style="width: 100%; height: 2px;">
+    <h1><span style="font-family: Helvetica,Arial,sans-serif;">Configuration of
+        Project and Default Database Files</span></h1>
+    <h2><span style="font-family: Helvetica,Arial,sans-serif;"><a name="FILES"></a>7.
+        Project File Configuration Dialog</span></h2>
+    <p><span style="font-weight: bold;"></span>This dialog appears if the option
+      "Change file configuration of the selected project" has been activated
+      before opening or creating a modeling project (<a style="font-family: Times New Roman,Times,serif;"
+        href="#HOWTO_REOPEN">more...</a>). In a tree-like view, it shows two
+      sets of database files linked to the project: "Kernel" and
+      &lt;ProjectName&gt;, the former corresponds to location
+      "/Resources/DB.default" that comes with the program, and the latter - to
+      the location "/Library/gems3/projects/&lt;ProjectName&gt;". Each entry
+      expands into sub-entries corresponding to database chains (e.g. IComp,
+      ReacDC, ...). Expanding an entry shows files available for this data type;
+      currently linked files are highlighted. Each file entry consists of a
+      'nickname' and a full name of the file. 'Nicknames' of linked files are
+      saved in the Project record (in this way, the program knows which files to
+      open when the project is used next time). Changing file configuration of
+      the project means that some files are un-linked, or some others are linked
+      in addition, both actions done with a mouse click.</p>
+    <p>Typically, this dialog is used in two situations. <br>
+    </p>
+    <p>One is when a new database file has been created in the project folder
+      (e.g. to keep some ReacDC records added by the user in an independent
+      project). These records become available in the Equilibria Calculation
+      mode only after the new file is linked to the project through this dialog.
+      <br>
+    </p>
+    <p>Another situation is when a new "linked" project is created; then the
+      user must select consistent parts of the default database to be accessible
+      from the project in Equilibria Calculation mode.&nbsp; <br>
+    </p>
+    <h4> </h4>
+    <hr style="width: 100%; height: 2px;">
+    <p> </p>
+    <p>Last change: 12.04.2015 DK<br>
+    </p>
+    Copyright (c) 2003-2015, GEMS Development Team<span style="font-family: monospace;"><br>
+    </span>&nbsp; <br>
+    <br>
+  </body>
+</html>

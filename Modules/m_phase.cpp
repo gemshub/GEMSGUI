@@ -1630,8 +1630,9 @@ int TPhase::CompressDecomp(int , const TCIntArray &DCused)
         DCndx = php->ipxt[ii*php->npxM+jj];
         if( DCndx  < 0  ) // for Pitzer model
           continue;
+        ErrorIf(DCndx>=DCused.size(), "CompressDecomp", char_array_to_string( php->pst_, MAXPHNAME)+" illegal index in phase");
         DCndx =  DCused[static_cast<uint>(DCndx)];
-        if( DCndx  < 0  ) // non-existent component
+        if( DCndx < 0  ) // non-existent component
           break;
         //if( !onlyIPX )
         php->ipxt[ii*php->npxM+jj] = static_cast<short>(DCndx);

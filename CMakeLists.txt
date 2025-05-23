@@ -1,19 +1,13 @@
 # Require a certain version of cmake
-cmake_minimum_required(VERSION 3.7.0 )
+cmake_minimum_required(VERSION 3.16)
 
 # Set the name of the project
-project(GEMSGUI VERSION 4.3.5 LANGUAGES CXX)
+project(GEMSGUI VERSION 4.4.2 LANGUAGES CXX)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_MACOSX_RPATH ON)
-
-# Set libraries to be compiled with position independent code mode (i.e., fPIC option in GNU compilers)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Set the cmake module path of the project
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 # Define variables with the GNU standard installation directories
 include(GNUInstallDirs)
@@ -28,21 +22,12 @@ include(CCache)
 include(CondaAware)
 
 # Define which types of libraries to build
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-  option(BUILD_SHARED_LIBS "Build shared libraries." OFF)
-else()
-  option(BUILD_SHARED_LIBS "Build shared libraries." ON)
-endif()
-option(BUILD_STATIC_LIBS "Build static libraries." ON)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(BUILD_STATIC_LIBS "Build static libraries" ON)
 option(BUILD_APP "Build application." ON)
 option(USE_THERMOFUN "Use ThermoFun" ON)
-option(BUILD_NLOHMANNJSON "Use nlohmann json." OFF)
-option(USE_QT6 "Prefer Qt6 over Qt5 if available" ON)
-
-# Cannot currently produce a dynamic library using MSVC, only a static library
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-    set(BUILD_SHARED_LIBS OFF)
-endif()
+option(USE_GEMS3K_SERVER "Use gems3k external server" OFF)
+option(BUILD_NLOHMANNJSON "Use nlohmann json" OFF)
 
 # Used into conda only
 if(DEFINED ENV{CONDA_PREFIX})
@@ -59,10 +44,22 @@ if(NOT CMAKE_BUILD_TYPE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
 endif()
 
-# Set the list of compiler flags for GNU compiler
-if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
-    add_compile_options(-Wall -Wno-stringop-truncation -Wno-array-bounds -Wno-stringop-overflow)
+# Currently is not setup to produce a dynamic library using MSVC, only static
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+    set(BUILD_SHARED_LIBS OFF)
+else()
+    set(BUILD_STATIC_LIBS OFF)
 endif()
+
+# Set libraries to be compiled with position independent code mode (i.e., fPIC option in GNU compilers)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Find Qt dependencies
+find_package(Qt6 6.2 COMPONENTS Core Gui Widgets Charts Concurrent PrintSupport Svg Help Sql REQUIRED)
+qt_standard_project_setup(REQUIRES 6.7)
+
+# Find other dependencies
+include(GEMSGUIFindDeps)
 
 # Set the list of compiler flags for Clang compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
@@ -86,6 +83,15 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     )
 endif()
 
+if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+   include_directories("/usr/local/include")
+   link_directories("/usr/local/lib")
+endif()
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+   include_directories("c:/usr/local/include")
+   link_directories("c:/usr/local/lib")
+endif()
+
 # Set the source directory path
 set(GEMSGUI_MODULES_SOURCE_DIR ${CMAKE_SOURCE_DIR}/Modules)
 set(GEMSGUI_GUI_SOURCE_DIR ${CMAKE_SOURCE_DIR}/GUI)
@@ -102,19 +108,6 @@ include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dialogs4)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dataman)
 #include_directories("/usr/local/include/GEMS3K")
 
-
-if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-    include_directories("/usr/local/include")
-    link_directories("/usr/local/lib")
-endif()
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-    include_directories("c:/usr/local/include")
-    link_directories("c:/usr/local/lib")
-endif()
-
-# Find all GEMSGUI dependencies
-include(GEMSGUIFindDeps)
-
 # Set some necessary definitions
 add_definitions(-DNODEARRAYLEVEL)
 add_definitions(-DNO_JSONIO)
@@ -124,12 +117,15 @@ if(USE_THERMOFUN MATCHES ON)
   add_definitions(-DUSE_THERMO_LOG)
 endif()
 
+if(USE_GEMS3K_SERVER MATCHES ON)
+  add_definitions(-DUSE_GEMS3K_SERVER)
+endif()
+
 if(BUILD_NLOHMANNJSON MATCHES ON)
   add_definitions(-DUSE_NLOHMANNJSON)
 endif()
 
 # Build libraries
-add_subdirectory(Modules)
 add_subdirectory(GUI)
 
 # make application

@@ -26,9 +26,9 @@
 #include <QLineEdit>
 #include <QThread>
 #include <QHBoxLayout>
-
-class IPNCalcObject;
-//class ZMQClient;
+#include <QTableWidget>
+#include "module_w.h"
+#include "v_vals.h"
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -41,6 +41,7 @@ class QMdiSubWindow;
 class QSplitter;
 QT_END_NAMESPACE
 
+class IPNCalcObject;
 class TCModule;
 class NewSystemDialog;
 
@@ -48,11 +49,6 @@ namespace jsonui {
 class GraphDialog;
 }
 using namespace jsonui;
-
-#include <QTableWidget>
-
-#include "module_w.h"
-#include "v_vals.h"
 using namespace std;
 
 #ifdef QT_NO_DEBUG
@@ -264,13 +260,10 @@ public:
     QWaitCondition& getWaitCalc();
     QMutex& getMutexCalc();
 
-//    ZMQClient* getZMQclient();
-
 Q_SIGNALS:
     void run_IPM();
 
 public slots:
-
     void finish_IPN();
     void error_IPN(std::string err_mess);
 
@@ -386,29 +379,26 @@ private slots:
     void setActiveSubWindowName(const QString& name);
     void changeKeyList();
 
-    /// Run extern GEMS3 server
-    void startGEMServer();
+    // Run extern GEMS3 server
+    //void startGEMServer();
 
-    /// Kills the GEMS3 server, causing it to exit immediately.
-    /// Kill when error occurred or program exit
-    void killGEMServer();
+    // Kills the GEMS3 server, causing it to exit immediately.
+    // Kill when error occurred or program exit
+    //void killGEMServer();
 
-    /// This slot is executed when an error occurs with the GEMS3 process.
-    /// The specified error describes the type of error that occurred.
-    void GEMServerErrorOccurred(QProcess::ProcessError error);
+    // This slot is executed when an error occurs with the GEMS3 process.
+    // The specified error describes the type of error that occurred.
+    //void GEMServerErrorOccurred(QProcess::ProcessError error);
 
-    void readOutput();
+    //void readOutput();
 
 private:
-
-    /// GEMS3 server application run
-    QProcess *GEMS3_proc = nullptr;
+    // GEMS3 server application run
+    //QProcess *GEMS3_proc = nullptr;
     /// The thread that provides GEM IPN calculation
     QThread calc_thread;
     /// GEM IPN run object
     IPNCalcObject* calc_model=nullptr;
-
-    //std::shared_ptr<ZMQClient> zmq_client;
 
     void setCalcClient();
 

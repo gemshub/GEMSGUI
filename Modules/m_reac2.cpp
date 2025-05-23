@@ -255,6 +255,7 @@ void TReacDC::Recalc( int q, const char *key  )
 
     TFormula aFo;
     TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
+    //aDC->RecCalc()
     aDC->ods_link(0);
 
     memset( dcn, 0, MAXRKEYLEN );
@@ -269,7 +270,15 @@ void TReacDC::Recalc( int q, const char *key  )
         memcpy( dcn, rc[q].DCk[i], DC_RKLEN );
         /* Read Record */
         if( rc[q].rDC[i] == SRC_DCOMP )
-            aDC->TryRecInp( dcn, crt, 0 );
+        {
+            if ((rc[q].TCst != aDC->dcp->TCst) || (aDC->dcp->Pst != rc[q].Pst) ) // DM 29.10.2024 check if different std T and P are used for record calc.
+            {
+                aDC->TryRecInp( dcn, crt, 0, false );
+                aDC->RecCalc(dcn, rc[q].TCst, rc[q].Pst);
+            }
+            else
+                aDC->TryRecInp( dcn, crt, 0 );
+        }
         else if( rc[q].rDC[i] == SRC_REACDC )
         {
             if( !rShift )
@@ -384,7 +393,7 @@ NEXT:
             double ReactProp[6];
             double rhoW, alphaW, betaW, dAldTW;
 
-            TK = 298.15;
+            TK = rc[q].TCst + C_to_K;//298.15;
             // water properties (25 deg C, 1 bar) from SUPCRT92
             rhoW = 0.99706136;
             alphaW = 2.59426542e-4;
@@ -1140,6 +1149,7 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
     double Pa, lgK, RR = R_CONSTANT, R_T; /* !!!!! */
     R_T = aW.WW(p).T * RR;
 		// R_T = aW.WW(p).RT;
+    if (rc[q].Ks[0]!=DOUBLE_EMPTY && rc[q].Gs[1]!=DOUBLE_EMPTY ) // to calcuate TP if fields in record are empty --- DM 17-02-2025
     if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
     {
         aW.WW(p).K =   rc[q].Ks[0];

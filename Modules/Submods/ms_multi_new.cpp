@@ -26,10 +26,22 @@
 
 #include "m_param.h"
 #include "stepwise.h"
+#include "GEMS3K/jsonconfig.h"
 #include "GEMS3K/node.h"
-#include "GEMS3K/num_methods.h"
+#include <spdlog/sinks/rotating_file_sink.h>
 
 /// Output to "ipmlog.txt" file Warnings
+TMulti::TMulti(int nrt):
+    TMultiBase(nullptr),
+    TSubModule( nrt )
+{
+    if(!TNode::ipmlog_file) {
+        TNode::ipmlog_file = spdlog::rotating_logger_mt("ipmlog", GemsSettings::with_directory("ipmlog.txt"),
+                                                 GemsSettings::log_file_size,
+                                                 GemsSettings::log_file_count);
+    }
+}
+
 BASE_PARAM *TMulti::base_param() const
 {
     return &TProfil::pm->pa.p;

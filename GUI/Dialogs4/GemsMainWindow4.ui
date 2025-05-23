@@ -14,10 +14,10 @@
    <string>MainWindow</string>
   </property>
   <property name="tabShape">
-   <enum>QTabWidget::Rounded</enum>
+   <enum>QTabWidget::TabShape::Rounded</enum>
   </property>
   <property name="dockOptions">
-   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
+   <set>QMainWindow::DockOption::AllowTabbedDocks|QMainWindow::DockOption::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout"/>
@@ -109,6 +109,7 @@
     <addaction name="separator"/>
     <addaction name="sactionSimplex"/>
     <addaction name="sactionPrecise"/>
+    <addaction name="sactionStepwise"/>
     <addaction name="action_Use_ThermoFUN"/>
    </widget>
    <widget class="QMenu" name="smenu_View">
@@ -226,7 +227,7 @@
     <bool>false</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::AllToolBarAreas</set>
+    <set>Qt::ToolBarArea::AllToolBarAreas</set>
    </property>
    <property name="floatable">
     <bool>true</bool>
@@ -803,6 +804,23 @@
    </property>
    <property name="toolTip">
     <string>Cleanup mode for precise GEM results</string>
+   </property>
+  </action>
+  <action name="sactionStepwise">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>S&amp;tepwise mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Stepwise GEM IPM calculation mode</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
    </property>
   </action>
   <action name="sactionEQUSTAT_ICOMP">

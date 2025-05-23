@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"><title>GEMS3 Techinfo Page</title></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48"> GEM-Selektor version 3</h1>
+
+<h2>Technical Information</h2>
+
+<hr size="2" width="100%">
+<p>GEM-Selektor v.3 (GEMS3) is written in C/C++. It has a modern
+windowed multi-document Graphical User's Interface (GUI) that uses the
+functionality of Qt v.4 (v.5) UI Toolkit for desktops in the form of
+dynamically-linked libraries and plugins.<br>
+<br>
+Qt is a cross-platform framework that allows the same source code to
+be compiled and run on all major desktop PC platforms, as well as on
+some mobile devices. Desktop variants of Qt4 or Qt5 SDK, available under LGPL v.2.1
+licence, can be downloaded from http://qt-project.org.<br>
+&nbsp;&nbsp;&nbsp;&nbsp; <br>
+The GEMS3 executable code is produced by linking together Qt dynamic
+load libraries and plugins provided in Qt4 (Qt5) with the following parts
+compiled with the GNU C++ compilers:<br>
+</p>
+
+
+
+<ul>
+
+
+  <li><b>GEMS3K</b> code for solving chemical equilibrium systems by
+Gibbs Energy Minimization (more ...); uses the Jama TNT C++ library
+(NIST) for numerical algebra, but no Qt functionality. GEMS3K code also
+includes the TSolMod class library of built-in models of mixing in
+phases-solutions.</li>
+  <li><b>GEMS-GUI</b>
+code, which contains all the specific code for
+simple thermodynamic calculations, database management modules, widgets
+and dialogs. This part requires Qt headers for compilation; is is based
+in part on the work of the Qwt project (http://qwt.sf.net). It also
+uses parts of the SUPCRT92 code (translated from Fortran to C/C++), and
+parts of the TSolMod code.</li>
+</ul>
+
+
+<p>The GEMS3 package also contains a Resources/ folder with
+configuration files, default thermodynamic database, help database, and
+some pdf documentation files. Set of icons used in GEM-Selektor GUI:
+(c) 2012, <u>Gillian Grü</u><u>n</u>. <br>
+</p>
+
+
+<hr size="2" width="100%">
+<h3>Platform-specific information</h3>
+
+
+<h4>Windows XP/7/8</h4>
+
+
+<p>GEM-Selektor is built using Qt4.8.4 (or Qt5.0.2) with the MinGW port of
+GNU C++ compiler and linker. It comes as a self-extracting installer
+file&nbsp; having the name</p>
+
+
+<p>&nbsp; <tt>Gems&lt;ver&gt;-&lt;revGUI&gt;.&lt;revG3K&gt;-win32-install.sfx.exe
+</tt></p>
+
+
+<p>where&nbsp; <tt>&lt;ver&gt;</tt>&nbsp; stands for version number
+(e.g. 3.2), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
+for the GEMS-Vizor part, and <tt>&lt;revG3K&gt;</tt> is the SVN trunk
+revision number for the GEMS3K code part. The installer (ca. 13 Mb
+size) is prepared using the 7-zip SFX Maker out of a 7-zip archive that
+contains a compressed folder <tt>Gems3-app\</tt> and files <tt>INSTALL.windows.txt,
+rungems3.bat</tt> and <tt>Readme3.txt</tt>. The <tt>
+INSTALL.windows.txt</tt> file describes how to install GEMS3 on a
+Windows PC.</p>
+
+
+<p>When installed, GEM-Selektor occupies ca. 50 Mb on hard disk; a
+modeling project can occupy 1 to 100 Mb depending on the size of
+project chemical system and number of process-generated records.
+Therefore, at least 1 Gb of free HDD space is necessary (SSD disks work
+much faster). The program runs, in principle, on any PC with Intel or
+AMD processor - from netbooks to desktops - but for better performance,
+a quad-core i7 or similar processor with 4 Gb RAM or more is
+recommended. The multi-document GUI of GEMS3 looks nice on color
+displays with 1600 x 900 or higher resolution.</p>
+
+
+<h4>Mac OS X (10.6, 10.7, 10.8)</h4>
+
+
+<p>GEM-Selektor is built using Qt4.8.4 (or Qt5.0.2) which requires the GNU
+C++ compiler and linker (clang for Qt5 variant) provided in the actual version of Xcode. GEMS3
+comes as a disk image file having the name</p>
+
+
+<p>&nbsp; <tt>Gems&lt;ver&gt;-&lt;revGUI&gt;.&lt;revG3K&gt;-OSX-x86-64.dmg
+</tt></p>
+
+
+<p>where&nbsp; <tt>&lt;ver&gt;</tt>&nbsp; stands for version number
+(e.g. 3.2), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
+for the GEMS-Vizor part, and <tt>&lt;revG3K&gt;</tt> is the SVN trunk
+revision number for the GEMS3K code part. The installer (ca. 22 Mb
+size) is prepared using the <tt>macdeployqt</tt> utility of Qt SDK
+from the (updated) <tt>/Applications/gems3.app</tt> application that
+has usual folder structure, as required by OS X.&nbsp;&nbsp; The folder
+<tt>/Applications/gems3.app/Contents/Resources/</tt> contains a file <tt>INSTALL.macosx.txt</tt>
+that describes how to install GEMS3 on Mac.</p>
+
+
+<p>When installed, GEM-Selektor occupies ca. 57 Mb on hard disk; a
+modeling project can occupy 1 to 100 Mb depending on the size of
+project chemical system and number of process-generated records.
+Therefore, at least 1 Gb of free HDD space is necessary (SSD disks work
+much faster). The program runs, in principle, on any Mac with Intel
+processor and OS X 10.6 or higher. For better performance, an iMac, Mac
+Pro, or Mac Book Pro quad-core i7 or similar processor with 4 Gb RAM or
+more is recommended. The multi-document GUI of GEMS3 looks nice on
+color displays with 1600 x 900 or higher resolution.</p>
+
+
+<h4>Linux</h4>
+
+
+<p>GEM-Selektor is built using Qt4.8.4 (or Qt5.0.2)  which uses the native GNU
+C++ compiler and linker. The GEMS3 comes as a tar.gzip (tgz) archive file
+having the name</p>
+
+
+<p>&nbsp;<tt>
+Gems&lt;ver&gt;-&lt;revGUI&gt;.&lt;revG3K&gt;-linux-x86-&lt;bits&gt;.tgz</tt></p>
+
+
+<p>where&nbsp; <tt>&lt;ver&gt;</tt>&nbsp; stands for version number
+(e.g. 3.2), <tt>&lt;revGUI&gt;</tt> is the SVN trunk revision number
+for the GEMS-Vizor part, <tt>&lt;revG3K&gt;</tt> is the SVN trunk
+revision number for the GEMS3K code part, and <tt>&lt;bits&gt;</tt>
+stands for 32 or 64 depending on the linux distribution. The installer
+(ca. 16 Mb size) is prepared on the Ubuntu 12.04 LTS 32 or 64 by
+compressing the folder "<tt>~/Gems3-app/</tt>" application that
+contains the "<tt>Resources/</tt>" subfolder, <tt>gems3</tt>
+executable, and binary Qt4 libraries and plugins used by gems3. The
+folder also contains the <tt>gems3.bash</tt> and <tt>gems3.sh</tt>
+batch files for launching GEMS3 program, and the
+<tt> INSTALL.linux.txt </tt>file. Installation of GEMS3 on linux does
+not require
+sudo or root privileges.&nbsp; </p>
+
+
+<p>When installed, GEM-Selektor occupies ca. 40 Mb on hard disk; a
+modeling project can occupy 1 to 100 Mb depending on the size of
+project chemical system and number of process-generated records.
+Therefore, at least 1 Gb of free HDD space is necessary (SSD disks work
+much faster). The program runs, in principle, on any PC with Intel
+processor. For better performance, a PC with quad-core i7 or similar
+processor with 4 Gb RAM or more is recommended. The multi-document GUI
+of GEMS3 looks nice on color displays with 1600 x 900 or higher
+resolution.</p>
+
+
+<p>Although the GEMS3 installer for linux is prepared on Ubuntu linux,
+it runs on any other linux distribution for the same architecture, e.g.
+on Kubuntu linux 11 and higher, fedora linux 15 and higher, and
+openSuSE linux 12 and higher. The reason is that the installer contains
+all the necessary binary files form Qt, and is simply a tarball zip
+archive that is supposed to run in the home directory of the user with
+normal privileges.</p>
+
+
+<p>On some linuxes, the default font size in GEMS module windows may
+appear odd (too small or too large). This can be fixed in Preferences
+Dialog. Start GEMS3 and click "Help" "Preferences" menu command, then
+click the "Change font..." button.</p>
+
+
+<hr size="2" width="100%">
+<p>Last updated:&nbsp; 30. 04. 2013<br>
+<br>
+Copyright (c)&nbsp; 2003-2013&nbsp; <a href="gems_team.html">GEMS Development Team</a>.<br>
+<br>
+<br>
+</p>
+
+
+<p><br>
+</p>
+
+
+</body></html>

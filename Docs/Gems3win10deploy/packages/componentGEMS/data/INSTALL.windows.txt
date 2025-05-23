@@ -1,0 +1,29 @@
+To install GEM-Selektor v3.x on Windows XP, Windows 7, or Windows 10: 
+
+1. Copy the installer file into a temporary location and execute it.  
+
+2. The installer will ask where to install/update, showing C:\GEMS370 as a suggestion.
+   You need to have administrative rights to install to C:\ drive. 
+   If you accept this option, the program will be located in C:\GEMS370\Gems3-app. 
+   This folder contains the program and the resource files, including help database 
+   and \DB.default folder with the default thermodynamic database.  
+   Upon the first start, a folder C:\GEMS370\Library\Gems3\projects will be created, 
+   where test modeling projects will be copied and your new modelling projects will be stored. 
+
+3. Alternatively, you can type or select another location (\Program Files is not recommended), 
+   for example D:\MyWork\Modeling. In this case, the program will be located in 
+   D:\MyWork\Modeling\Gems3-app and the projects- in D:\MyWork\Modeling\Library\Gems3\projects.
+
+3. After extracting files, GEMS will start; you can exit it and look for a GEMS v3.x icon on 
+   your desktop, to be used further on for staring GEMS.  
+
+5. You can add your old projects folders into \Library\gems3\projects\. Backup of modeling 
+   projects is strongly recommended at least once per day. 
+
+
+To update GEMS3, start the self-extracting installer and browse to the location where GEMS 
+is installed, for example, to D:\MyWork\Modeling. Only files in the \Gems3-app subfolder 
+will be updated; your modeling projects in \Library\gems3\projects\ will not be changed. 
+Alternatively (to make sure that no trash files remain after the update), you can delete 
+the \Gems3-app subfolder before running the GEMS3 installer self-extractor file.    
+ 

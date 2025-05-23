@@ -1020,7 +1020,7 @@ double TSupcrt::dalLVS(double D, double T, double P, double alpha)
 }
 
 //--------------------------------------------------------------------//
-// translate parametrs into users units and load they into tprops.
+// translate parametrs into users units and load them into tprops.
 void TSupcrt::dimLVS(int isat, int itripl, double theta, double T, double *Pbars,
                      double *dL, double *dV, WPROPS *www, int epseqn)
 {
@@ -1050,6 +1050,11 @@ void TSupcrt::dimLVS(int isat, int itripl, double theta, double T, double *Pbars
     betab   = th.betaw / 1.0e1;
 
     if ( approximatelyEqual( fabs(theta), 1.0e0) )
+    {
+        dkgm3 = sa.DH2O;
+        www->Surtenw = 0.0e0;
+    } else
+    if (T > cr->Tc ) // only below critical T we have two phases DM 23.07.2024
     {
         dkgm3 = sa.DH2O;
         www->Surtenw = 0.0e0;

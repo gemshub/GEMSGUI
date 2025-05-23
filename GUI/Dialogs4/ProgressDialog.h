@@ -37,7 +37,6 @@ class IPNCalcObject: public QObject
     Q_OBJECT
 
 signals:
-
     /// Finished process
     void IPM_finish();
     /// Finished with exception
@@ -46,19 +45,12 @@ signals:
     void IPM_OK();
 
 public slots:
-
     /// Start IPM calc
     void IPM_run();
 
-
 public:
-
-    explicit IPNCalcObject()
-    { }
-
-    ~IPNCalcObject()
-    { }
-
+    explicit IPNCalcObject()  {}
+    ~IPNCalcObject() {}
 };
 
 class ProgressDialog : public QDialog
@@ -70,13 +62,15 @@ class ProgressDialog : public QDialog
     int ht_a;
     int ht_s;
     int ht_l;
-    //time_t last_update;
-    //CalcThread* calcThread;
-    //QTimer* timer;
-    //bool autoclose;
-    //clock_t t_start;
 
-    void switchToAccept(bool isAccept);
+#ifndef USE_GEMS3K_SERVER
+    time_t last_update;
+    CalcThread* calcThread=nullptr;
+    QTimer* timer=nullptr;
+    clock_t t_start;
+#endif
+
+    void switchToAccept(bool isAccept, bool stepwise);
 
 public slots:
     virtual void CmClose();
@@ -85,6 +79,12 @@ public slots:
 protected slots:
 
     virtual void CmAccept();
+#ifndef USE_GEMS3K_SERVER
+    virtual void CmStep();
+    virtual void CmStop();
+    virtual void CmResume();
+    virtual void Run();
+#endif
 
 protected:
     void closeEvent(QCloseEvent* ev);
@@ -97,6 +97,7 @@ public:
     virtual ~ProgressDialog();
 
     void Update(bool force=false);
+    void startThread(bool step);
 };
 
 #endif // ProgressDialog_included

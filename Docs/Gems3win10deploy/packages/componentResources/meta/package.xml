@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>GEMS resources</DisplayName>
+    <Description>Various resources (e.g. default thermodynamic databases, GUI configurators, help HTML pages and pdf documentation files) needed by the GEM-Selektor code for normal operation (hotfix 26.06.2023). If you  have the files from third-party thermodynamic databases, add them into the "\Gems3-app\Resources\DB.default\" folder. </Description>
+    <Version>3.9.6</Version>
+    <ReleaseDate>2023-06-26</ReleaseDate>
+    <Default>true</Default>
+</Package>
+

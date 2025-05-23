@@ -1217,8 +1217,8 @@ TProcess::RecCalc( const char *key )
 {
     int nRec;
     TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
-    //TProfil::pm->userCancel = false;
-    //TProfil::pm->stepWise = false;
+    TProfil::pm->userCancel1 = false;
+    TProfil::pm->stepWise1 = false;
     userCancel = false;
     stepWise = false;
     showMss = 1L;

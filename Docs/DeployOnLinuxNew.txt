@@ -1,0 +1,100 @@
+HOW TO PRODUCE AN INSTALLATION PACKAGE OF Qt5/6-based GEMS3 FOR LINUX
+
+(replaces DeployOnLinux.txt). Works on ubuntu 18.04 bionic or older.
+
+This is based on linuxdeployqt tool (https://github.com/probonopd/linuxdeployqt),
+which is an augmented macdeployqt tool distributed with Qt framework.
+Download this tool from https://github.com/probonopd/linuxdeployqt/releases
+, file linuxdeployqt-continuous-x86_64.AppImage, and chmod a+x it to make it executable.
+
+1. Make sure that Qt framework is installed with source code as /Qt in your
+home directory; we assume that the Qt library is located at ~/Qt/5.15.2/gcc_64.
+If not yet done, copy recursively the "/Docs/build-release-new" directory from 
+the folder where this file is located to your home directory. 
+
+2. Copy/refresh the folder Resources from "~/gitGEMS/gems3gui/Resources" to 
+"~/build-release-new/AppDir/usr/bin/Resources". Fix the version by editing the 
+"/share/applications/GEM-Selektor.desktop" file.
+
+3. Make sure that you have built and tested a release variant of the GEM-Selektor 
+v.3.9.6 code (using QtCreator started from ~/Qt/Tools/QtCreator/bin) in the 
+"~/git/GEMS3/build-release" folder. When done, copy the "gems3" executable to
+"~/build-release-new/AppDir/usr/bin/gems3". Also copy the "qhelpgenerator" executable from "~/Qt/5.15.2/gcc_64/bin/" folder to "~/build-release-new/AppDir/usr/bin/". 
+Set the version by a command:
+
+export Version=3.9.6
+export VERSION=3.9.6
+
+4. The -appimage option of linuxdeployqt assumes that the application folder is under git control. 
+If not yet done so, cd to "~/build-release-new", and execute:
+
+git init
+git add .
+git commit -m 'Initial commit in GEMS build release new repository'
+
+5. cd to "~/build-release-new", and execute the linuxdeployqt utility:
+
+./linuxdeployqt-continuous-x86_64.AppImage /home/<your_user>/build-release-new/AppDir/usr/share/applications/*.desktop -appimage -verbose=2 -qmake=$HOME/Qt/5.15.2/gcc_64/bin/qmake -no-translations -bundle-non-qt-libs
+
+In this process, there may be errors regarding the absence of some libraries in 
+ubuntu linux. Upon testing on Kubuntu 18.04 LTS, to get rid of such errors, two 
+packages had to be installed additionally:
+
+sudo apt-get install unixodbc-dev libpq-dev 
+
+6. When finished, find the AppRun file and execute it once to start GEM-Selektor:
+
+./AppRun -d
+
+Close GEM-Selektor and repeat the AppImage generation command given in Section 5.
+Then git commit all changes and copy the generated file "GEM-Selektor-3.9.6-x86_64.AppImage"
+to the ~/GEMS396 folder (create it if needed). In that folder, rename the AppImage file into
+"GEM-Selektor-3.9.6-linux-x86_64.AppImage". Execute this file to run GEM-Selektor and pin the 
+GEM-Selektor entry to taskbar or desktop to start it easily next time. 
+
+Copy the file "GEM-Selektor-3.9.6-linux-x86_64.AppImage" to a location for subsequent distribution.
+
+Appendix: Usage of linuxdeployqt (https://github.com/probonopd/linuxdeployqt) see README.md
+
+Usage: linuxdeployqt <app-binary|desktop file> [options]
+
+Options:
+   -always-overwrite        : Copy files even if the target file exists.
+   -appimage                : Create an AppImage (implies -bundle-non-qt-libs).
+   -bundle-non-qt-libs      : Also bundle non-core, non-Qt libraries.
+   -exclude-libs=<list>     : List of libraries which should be excluded,
+                              separated by comma.
+   -ignore-glob=<glob>      : Glob pattern relative to appdir to ignore when
+                              searching for libraries.
+   -executable=<path>       : Let the given executable use the deployed libraries
+                              too
+   -extra-plugins=<list>    : List of extra plugins which should be deployed,
+                              separated by comma.
+   -no-copy-copyright-files : Skip deployment of copyright files.
+   -no-plugins              : Skip plugin deployment.
+   -no-strip                : Don't run 'strip' on the binaries.
+   -no-translations         : Skip deployment of translations.
+   -qmake=<path>            : The qmake executable to use.
+   -qmldir=<path>           : Scan for QML imports in the given path.
+   -qmlimport=<path>        : Add the given path to QML module search locations.
+   -show-exclude-libs       : Print exclude libraries list.
+   -verbose=<0-3>           : 0 = no output, 1 = error/warning (default),
+                              2 = normal, 3 = debug.
+   -updateinformation=<update string>        : Embed update information STRING; if zsyncmake is installed, generate zsync file
+   -version                 : Print version statement and exit.
+
+linuxdeployqt takes an application as input and makes it
+self-contained by copying in the Qt libraries and plugins that
+the application uses.
+
+By default it deploys the Qt instance that qmake on the $PATH points to.
+The '-qmake' option can be used to point to the qmake executable
+to be used instead.
+
+Plugins related to a Qt library are copied in with the library.
+
+See the "Deploying Applications on Linux" topic in the
+documentation for more information about deployment on Linux.
+
+
+

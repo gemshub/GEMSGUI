@@ -1,0 +1,1 @@
+Before creating the installer, copy into here the files vc_redist.x64 and vc_redist.arm64 from Visual C redist directory.

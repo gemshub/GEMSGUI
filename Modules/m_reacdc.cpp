@@ -625,6 +625,7 @@ TReacDC::RCthermo( int q, int p )
     CV = toupper( rc[q].pct[2] );
 
     // if( CE != CTM_MRB )  // Provisional for MRB model - DK on 06.08.07
+    if (CE != CTM_IKZ)  // Provisional for Lagrange logK interpolation; to calculate logK if T, P are close to std - DM 17-02-2025
     if( fabs( aW.twp->T - 298.15 ) < 0.01 && fabs(aW.twp->P-1.) < 0.01 )
     {   // standard conditions (Tr,Pr)
     	aW.twp->K = rcp->Ks[0];

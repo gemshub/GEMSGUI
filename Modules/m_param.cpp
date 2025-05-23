@@ -31,10 +31,12 @@
 #include "GEMS3K/gdatastream.h"
 #include "nodearray_gui.h"
 
+#ifdef USE_GEMS3K_SERVER
 #ifdef NO_ASYNC_SERVER
 #include "gemsreaktoro/zmq_req_client.hpp"
 #else
 #include "gemsreaktoro/zmq_client.hpp"
+#endif
 #endif
 
 TProfil* TProfil::pm;
@@ -249,8 +251,8 @@ TProfil::TProfil( uint nrt ):
     SBold = nullptr;
     Llold =nullptr;
 
-    //userCancel = false;
-    //stepWise = false;
+    userCancel1 = false;
+    stepWise1 = false;
     calcFinished = false;
     comp_change_all = false;
     internalBufer = nullptr;
@@ -609,8 +611,9 @@ void TProfil::CmReadMulti(const char* path)
     pmp->TC = pmp->TCc;
     pmp->T =  pmp->Tc;
     pmp->P =  pmp->Pc;
-    //pmp->VX_ = pmp->VXc; // from cm3 to m3
-
+#ifndef USE_GEMS3K_SERVER
+    pmp->VX_ = pmp->VXc; // from cm3 to m3
+#endif
     // Set T and P  for key from DataBr
     ChangeTPinKey( pmp->TC, pmp->P );
 
@@ -647,8 +650,13 @@ void TProfil::CmReadMulti(const char* path)
     multi_internal->TMultiBase::DC_LoadThermodynamicData(&na);
 
     // Unpack the pmp->B vector (b) into syp->BI and syp->BI (BI_ vector).
-    for( long i=0; i < pmp->N; i++ )
-        /*syp->BI[pmp->mui[i]] =*/ syp->B[pmp->mui[i]] = pmp->B[i];
+
+    for( long i=0; i < pmp->N; i++ ) {
+#ifndef  USE_GEMS3K_SERVER
+        syp->BI[pmp->mui[i]] =
+#endif
+        syp->B[pmp->mui[i]] = pmp->B[i];
+    }
 
     for( long jj, j=0; j < pmp->L; j++ )
     {
@@ -1015,7 +1023,7 @@ long int TProfil::testMulti()
 }
 moved to TMulti*/
 
-
+#ifdef USE_GEMS3K_SERVER
 // Run process of calculate equilibria into the GEMSGUI shell
 void  TProfil::CalculateEquilibriumGUI()
 {
@@ -1029,7 +1037,7 @@ void  TProfil::CalculateEquilibriumGUI()
     zmqclient.run_task();
 }
 
-
+#endif
 
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
@@ -1041,8 +1049,11 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
 
   //multi->Access_GEM_IMP_init();
   //outMultiTxt( "Reaktoro_before.dump.txt"  );
+#ifdef USE_GEMS3K_SERVER
   CalculateEquilibriumGUI( );
-  //multi->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+#else
+  multi_internal->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+#endif
   //outMultiTxt( "Reaktoro_after.dump.txt"  );
 
   calcFinished = true;

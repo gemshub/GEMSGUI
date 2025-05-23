@@ -309,6 +309,58 @@ void TMTparm::MTparmAlloc()
 
 #define  Fill_zero( type, val )   ( ((type) == 'T') ? (0) : (val) )
 
+double TMTparm::wat_sat_pressure(double cT)
+{
+    // Wagner W., Pruss A. (2002) The IAPWS Formulation 1995 for the Thermodynamic Properties of Ordinary Water Substance for General and Scientific Use. J. Phys. Chem. Ref. Data 31, 387-535.
+    double a1 = -7.85951783;
+    double a2 = 1.84408259;
+    double a3 = -11.7866497;
+    double a4 = 22.6807411;
+    double a5 = -15.9618719;
+    double a6 = 1.80122502;
+    double T_K = cT+273.15;
+    double Tcrit = 647.096;
+    double pcrit = 22064000;
+//    double tau = 1 - T_K / Tcrit;
+//    double ph2o = pcrit * exp((Tcrit / T_K) * (a1 * tau + a2 * pow(tau, 1.5) + a3 * pow(tau, 3) + a4 * pow(tau, 3.5) + a5 * pow(tau, 4) + a6 * pow(tau, 7.5) ));
+//    return ph2o;
+
+    const auto t   = 1 - T_K/Tcrit;
+    const auto t15 = pow(t, 1.5);
+    const auto t30 = t15 * t15;
+    const auto t35 = t15 * t * t;
+    const auto t40 = t30 * t;
+    const auto t75 = t35 * t40;
+
+    return pcrit * exp(Tcrit/T_K * (a1*t + a2*t15 + a3*t30 + a4*t35 + a5*t40 + a6*t75));
+}
+
+double TMTparm::wat_sat_liquid_density(double cT)
+{
+    // Wagner W., Pruss A. (2002) The IAPWS Formulation 1995 for the Thermodynamic Properties of Ordinary Water Substance for General and Scientific Use. J. Phys. Chem. Ref. Data 31, 387-535.
+//    double b1=1.99206;
+//    double b2=1.10123;
+//    double b3=-0.512506;
+//    double b4=-1.75263;
+//    double b5=-45.4485;
+//    double b6=-675615;
+
+    const double b1 =  1.99274064;
+    const double b2 =  1.09965342;
+    const double b3 = -0.510839303;
+    const double b4 = -1.75493479;
+    const double b5 = -45.5170352;
+    const double b6 = -6.74694450e+05;
+
+    double Tcrit = 647.096;
+    double T_K = cT+273.15;
+    double dcrit = 322; // kg/m3
+    const auto t     = 1 - T_K/Tcrit;
+    double rh2o = dcrit*(1+b1*pow(t,1./3)+b2*pow(t,2./3)+b3*pow(t,5./3)+b4*pow(t,16./3)+b5*pow(t,43./3)+b6*pow(t,110./3));
+    return rh2o/1000;
+}
+
+
 double TMTparm::wat_dielectric(double cT, double cP)
 {
     /* Relative dielectric constant of pure water, eps as a function of (P, T)
@@ -374,6 +426,7 @@ void TMTparm::LoadMtparm( double cT, double cP )
         if(TC >= 0.6)
             tp.RoW = 1.-pow(TC-3.9863,2)*(TC+288.9414)/508929.2/(TC+68.12963)+
                     0.011445*exp(-374.3/TC);
+//            tp.RoW = wat_sat_liquid_density(TC);
         else
             tp.RoW = 0.999899; // DM 13.02.2022, value at 0.5, seven digits
         tp.EpsW = wat_dielectric(TC, P); // DM 07.06.2022// 2727.428+0.6224107*TK -466.9151*log(TK) -52000.87/TK;

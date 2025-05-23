@@ -67,10 +67,7 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
     }
 }
 
-
 //--------------------------------------------------------------------------
-
-
 
 //   The constructor
 TVisorImp::TVisorImp(int c, char** v):
@@ -81,7 +78,6 @@ TVisorImp::TVisorImp(int c, char** v):
     last_update( 0 ),
     configAutosave(false),
     proc(nullptr),
-   //zmq_client(nullptr),
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)
 {
@@ -278,7 +274,11 @@ TVisorImp::TVisorImp(int c, char** v):
         }
     }
 
-    //startGEMServer();
+#ifdef USE_GEMS3K_SERVER
+    ui->sactionStepwise->setVisible(false);
+    ui->sactionStepwise->setEnabled(false);
+#endif
+
     updateMenus();
     //moveToolBar();
 }
@@ -289,7 +289,7 @@ TVisorImp::~TVisorImp()
     calc_thread.quit();
     calc_thread.wait();
 
-    killGEMServer();
+    // killGEMServer();
     delete pVisor;
     delete ui;
 }

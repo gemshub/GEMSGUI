@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>GEM-Selektor</DisplayName>
+    <Description>Code package for thermodynamic modelling of complex heterogeneous (geo)chemical systems (hotfix 26.06.2023). First-start the GEM-Selektor from Windows Start menu and pin the GEMS icon to taskbar. Next times, start from the GEMS icon in the taskbar (try again if fails).</Description>
+    <Version>3.9.6</Version>
+    <ReleaseDate>2023-06-26</ReleaseDate>
+    <Default>true</Default>
+    <Script>installgems3.qs</Script>
+</Package>
+

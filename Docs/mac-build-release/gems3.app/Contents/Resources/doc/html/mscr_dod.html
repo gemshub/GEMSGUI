@@ -1,0 +1,767 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  
+  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+
+  
+  <meta name="Author" content="DIA Kulik"><title>GEMS3 Script DOD Reference</title>
+  
+
+  
+  
+  <meta name="description" content="Version 2.0.0-PSI"></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48">
+GEM-Selektor version 3<br>
+</h1>
+
+<h2>Math Script Data Objects Reference</h2>
+
+<hr size="2" width="100%"><br>
+
+Contents<br>
+
+<br>
+
+<span style="color: rgb(255, 0, 0);">&lt;under construction&gt;</span><br style="color: rgb(255, 0, 0);">
+
+<br style="color: rgb(255, 0, 0);">
+
+<span style="color: rgb(255, 0, 0);">To be completed in Version 3.3</span><br>
+
+<br>
+
+<hr size="2" width="100%">
+<h3>DOD lists (for Math Scripts)<br>
+</h3>
+
+
+<p> </p>
+
+<h3> <a name="MATH_SCRIPT_DODNAMES"></a><tt>8. List of Data Object
+Labels (usable as Math Script Variables)</tt></h3>
+
+<b><i>Data Object Descriptors (DOD)</i></b>: In GEMS, the DOD array
+makes a bridge between the users interface, the internal data
+structures, the database
+records and the numerical subroutines. Each data object referred via
+DOD
+has a label which appears usually appears on screen forms and serves as
+a
+link to the on-line help system. The DOD labels with indices also serve
+as
+variables in <a href="GEMS-Linux-HOWTO.html#P5000">Math Script</a>
+expressions. DOD also contains information on the current dimensions
+and type of the
+data.&nbsp; In the lists below, only a subset of the full list of
+numerical
+data object labels are provided. The objects most frequently used in
+math
+scripts are highlighted in red.
+<h4> <a name="PHASEDEF_DODS"></a>8.1. Data objects for non-ideality
+expressions in phase definitions only</h4>
+
+The data object descriptors listed below are automatically updated by
+GammaCalc() subroutine for each multicomponent phase. They can be
+addressed
+from in the Math Script expressions as variables by names (for scalars)
+or
+by names and indices (for vectors and matrices) using&nbsp; <tt>js</tt>&nbsp;
+and <tt>is</tt>&nbsp; indices which are applicable within this phase
+definition only.&nbsp; Data cell types: I_&nbsp; integer;&nbsp; F_
+float;&nbsp; D_ double.&nbsp;
+js&nbsp; index is automatically updated by the program in "public" mode
+of calculation of activity coefficients.
+<p><tt>------------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp;&nbsp; Type&nbsp; Dim.&nbsp; Index&nbsp;&nbsp;
+Explanation</tt> <br>
+<tt>------------------------------------------------------------------------</tt>
+<br>
+<tt>T_C&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Temperature in C</tt> <br>
+<tt><font color="#ff0000">T_K&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Temperature in K</font></tt> <br>
+<tt>P_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pressure
+in bars</tt> <br>
+<tt>IS_&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Effective
+molal ionic strength</tt> <br>
+<tt>is&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Index of
+stoichiometric coefficient</tt> <br>
+<tt>js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Index of
+a species in the phase</tt> <br>
+<tt>nexta&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Logical
+variable: True (1) or False (0)</tt> <br>
+<tt><font color="#ff0000">RT_&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; R*T
+product (J/mole, calculated automatically)</font></tt> <br>
+<tt>FRT_&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F/(R*T)
+product, F is Faraday constant</tt> <br>
+<tt>PhVol&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Volume
+(cm3) of a phase (for increment of Vex)</tt> <br>
+<tt><font color="#ff0000">Xalp&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of
+moles of all components in a phase</font></tt> <br>
+<tt>XalpV&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of
+moles of the solvent or sorbent</tt> <br>
+<tt>XalpS&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total
+moles of sorbates at each surface type</tt> </p>
+
+<p><tt>Ez&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; Ndc
+1&nbsp;&nbsp; js&nbsp;&nbsp;&nbsp;&nbsp;
+Formula charge of species</tt> <br>
+<tt>pCv&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; Ncp 1&nbsp;&nbsp;
+is&nbsp;&nbsp;&nbsp;&nbsp; Non-ideality coefficients for a phase</tt> <br>
+<tt>dCm&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; Ndc Ncd js is&nbsp;
+Non-ideality coefficients for phase components</tt> <br>
+<tt>mVol&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; Ndc 1&nbsp;&nbsp;
+js&nbsp;&nbsp;&nbsp; (Partial) molar/molal volumes of species (cm3/mol)</tt>
+<br>
+<tt>gTn&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; Ndc 1&nbsp;&nbsp;
+js&nbsp;&nbsp;&nbsp;&nbsp; Normalized gT(T,P) values for phase
+components</tt> <br>
+<tt><font color="#ff0000">gam&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;
+Ndc 1&nbsp;&nbsp; js&nbsp;&nbsp;&nbsp;&nbsp; Activity coefficients of
+species (from ln_gam)</font></tt> <br>
+<tt><font color="#ff0000">ln_gam&nbsp; D_&nbsp;&nbsp; Ndc 1&nbsp;&nbsp;
+js&nbsp;&nbsp;&nbsp;&nbsp; Logarithms of activity coefficients
+(calculated)</font></tt> <br>
+<tt>Un&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp;&nbsp; N
+1&nbsp;&nbsp; is&nbsp;&nbsp;&nbsp;&nbsp; Chemical potentials of IC
+(mole/mole)</tt> <br>
+<tt>As&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; Ndc N&nbsp;&nbsp;
+js is&nbsp; Block of stoichiometry matrix for the phase</tt> <br>
+<tt><font color="#ff0000">Xx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp; Ndc 1&nbsp;&nbsp; js&nbsp;&nbsp;&nbsp;&nbsp; Current
+numbers of moles of phase components</font></tt> <br>
+<tt><font color="#ff0000">Wx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp; Ndc 1&nbsp;&nbsp; js&nbsp;&nbsp;&nbsp;&nbsp; Current
+mole fractions (computed automatically)</font></tt> <br>
+<tt>lnWx&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; Ndc 1&nbsp;&nbsp;
+js&nbsp;&nbsp;&nbsp;&nbsp; Natural logarithm of DC mole fractions lnX</tt>
+<br>
+<tt>fMu&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; Ndc 1&nbsp;&nbsp;
+js&nbsp;&nbsp;&nbsp;&nbsp; chemical potentials of phase species
+(mole/mole)</tt> <br>
+<tt><font color="#ff0000">Qp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_ 1
+20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is&nbsp;&nbsp;&nbsp;&nbsp; work cells
+related to the whole phase</font></tt> <br>
+<tt><font color="#ff0000">Qd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_ 1
+20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is&nbsp;&nbsp;&nbsp;&nbsp; work cells
+for the species-related expressions</font></tt> <br>
+<tt><font color="#ff0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(zeroed off before each IPM iteration)</font></tt> <br>
+<tt>-----------------------------------------------------------------------</tt>
+<br>
+&nbsp; </p>
+
+<h4> <a name="GEMIPM_DODS"></a>8.2. Labels of data objects used during
+GEM IPM minimization</h4>
+
+The data objects listed below are accessible in GTDEMO, PROCES, and
+PHASE Math Scripts. Indexed identifiers of these data objects can be
+preprocessed using \i, \j, and \a switches for ICOMP, DCONP, and PHASE
+names, respectively. <br>
+
+Data types: I_ integer; F_ float; D_ double.
+<p><tt>L1. Scalar and static data objects</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp; Type&nbsp; Dim&nbsp;
+Explanations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Switch</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>_nnr&nbsp;&nbsp; I_&nbsp;&nbsp; 1 1&nbsp;&nbsp; N number of IC in
+the IPM problem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+\i base</tt> <br>
+<tt>L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp; 1 1&nbsp;&nbsp; L
+number of DC in the IPM
+problem&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \j base</tt>
+<br>
+<tt>Fi&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp; 1 1&nbsp;&nbsp; FI number
+of phases in the IPM problem&nbsp;&nbsp;&nbsp;&nbsp; \a base</tt> <br>
+<tt>TC&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1 1&nbsp;&nbsp;
+Temperature C</tt> <br>
+<tt><font color="#cc0000">TK&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; Temperature K</font></tt> <br>
+<tt>PG&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1 1&nbsp;&nbsp; Total
+pressure, bar</tt> <br>
+<tt>Vx&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1 1&nbsp;&nbsp; Total
+volume of the system, cm3</tt> <br>
+<tt>Gx&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1 1&nbsp;&nbsp; Total
+Gibbs enery of the system G(X), Joules</tt> <br>
+<tt>Mbx&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1 1&nbsp;&nbsp; Total mass of
+the system, kg</tt> <br>
+<tt>GX&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1 1&nbsp;&nbsp; Total
+Gibbs enery of the system G(X), moles</tt> <br>
+<tt><font color="#cc0000">IS&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; Effective molal ionic strength of aqueous solution</font></tt>
+<br>
+<tt><font color="#cc0000">pH&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; pH of aqueous solution</font></tt> <br>
+<tt><font color="#cc0000">pe&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; pe of aqueous solution</font></tt> <br>
+<tt><font color="#cc0000">Eh&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; Eh of aqueous solution, V</font></tt> <br>
+<tt>denW&nbsp;&nbsp; D_&nbsp;&nbsp; 1 2&nbsp;&nbsp; Density of H2O(l)
+and steam for Tc,Pc</tt> <br>
+<tt>epsW&nbsp;&nbsp; D_&nbsp;&nbsp; 1 2&nbsp;&nbsp; Diel. constant of
+H2O(l) and steam for Tc,Pc</tt> <br>
+<tt>Psi_DK D_&nbsp;&nbsp; 2 1&nbsp;&nbsp; Dikin criterion of IPM
+convergence DK &gt;= DX</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+IPM convergence threshold DX (default 1e-5)</tt> <br>
+<tt><font color="#cc0000">RT&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; RT: 8.31441*T (J/mole/K)</font></tt> <br>
+<tt><font color="#cc0000">F_RT&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; F/RT, F is Faraday constant = 96485 C/mole</font></tt> <br>
+<tt><font color="#cc0000">Xw&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; 1
+1&nbsp;&nbsp; Current number of moles of H2O in aqueous phase</font></tt>
+<br>
+<tt>----------------------------------------------------------------------</tt>
+</p>
+
+<p><tt>L2. Dynamic data objects used in IPM calculations</tt> </p>
+
+<p><a name="ICOMP_DODS"></a><tt>L2.1.Independent components (IC; \i
+preprocessor switch)</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp; Type&nbsp; Dim&nbsp; I/O&nbsp; Explanations</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>mui&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; N 1&nbsp;&nbsp;
+I&nbsp;&nbsp; IC indices in Profile IC list</tt> <br>
+<tt>icM&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; N 1&nbsp;&nbsp;
+I&nbsp;&nbsp; IC atomic (molar) masses, g/mole</tt> <br>
+<tt><font color="#cc0000">b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; N 1&nbsp;&nbsp; I&nbsp;&nbsp; Bulk chemical
+composition of the system</font></tt> <br>
+<tt><font color="#cc0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(moles of IC)</font></tt> <br>
+<tt>u&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; N
+1&nbsp;&nbsp; O&nbsp;&nbsp; IC chemical potentials (mole/mole)</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+dual IPM solution</tt> <br>
+<tt>ue&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; N 1&nbsp;&nbsp;
+O&nbsp;&nbsp; IC chemical potentials (in J/mole)</tt> <br>
+<tt>Cb&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; N 1&nbsp;&nbsp;
+O&nbsp;&nbsp; IC mass-balance residuals (moles)</tt> <br>
+<tt><font color="#cc0000">m_t&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; N
+1&nbsp;&nbsp; O&nbsp;&nbsp; Total IC molalities in aqueous phase</font></tt>
+<br>
+<tt><font color="#cc0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(excluding H2O-solvent), mole/(kg H2O)</font></tt> <br>
+<tt><font color="#cc0000">lgm_t&nbsp; D_&nbsp;&nbsp;&nbsp; N
+1&nbsp;&nbsp; O&nbsp;&nbsp; log(m_t)</font></tt> <br>
+<tt>w_t&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; N 1&nbsp;&nbsp;
+O&nbsp;&nbsp; Total dissolved IC concentrations in g/kg_soln</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+</p>
+
+<p><a name="DCOMP_DODS"></a><tt>L2.2.Dependent components (DC, species;
+\j preprocessor switch)</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp; Type&nbsp; Dim&nbsp; I/O&nbsp; Explanations</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>muj&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp;
+I&nbsp;&nbsp; DC indices in Profile DC list</tt> <br>
+<tt>gEx&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp;
+I&nbsp;&nbsp; Gibbs energy increment (J/mole)</tt> <br>
+<tt>c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp; I&nbsp;&nbsp; Normalized Gibbs energy function, mole/mole</tt>
+<br>
+<tt><font color="#cc0000">g0&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp; I&nbsp;&nbsp; Standard Gibbs
+energy at (T,P), mole/mole</font></tt> <br>
+<tt><font color="#cc0000">lnGam&nbsp; D_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp; O&nbsp;&nbsp; ln of DC activity coefficients (primary)</font></tt>
+<br>
+<tt><font color="#cc0000">x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp; O&nbsp;&nbsp; Moles of DC at
+equilibrium state</font></tt> <br>
+<tt><font color="#cc0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(prime IPM solution)</font></tt> <br>
+<tt>fx&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp;
+O&nbsp;&nbsp; Dual DC chemical potentials (mole/mole)</tt> <br>
+<tt><font color="#cc0000">Wxx&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp; O&nbsp;&nbsp; Mole fractions of DC in phases</font></tt> <br>
+<tt>v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp; O&nbsp;&nbsp; Prime DC chemical potentials (mole/mole)</tt>
+<br>
+<tt>vEx&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp;
+I&nbsp;&nbsp; Excess Gibbs energies of DC, mole/mole</tt> <br>
+<tt>vol&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp;
+I&nbsp;&nbsp; DC (partial molal)/molar volumes, cm3/mole</tt> <br>
+<tt>LnWx&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp; O&nbsp;&nbsp;
+ln of DC mole fraction in phases</tt> <br>
+<tt>mmDC&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp; I&nbsp;&nbsp;
+DC molar masses, g/mole</tt> <br>
+<tt><font color="#cc0000">my&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp; O&nbsp;&nbsp; Molality of aqueous
+species and sorbates</font></tt> <br>
+<tt><font color="#cc0000">lga&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp; O&nbsp;&nbsp; log activity of DC in multi-component phases</font></tt>
+<br>
+<tt>wy&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L 1&nbsp;&nbsp;
+O&nbsp;&nbsp; Mass concentrations of DC in phases, %</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(ppm for aqueous species and sorbates)</tt> <br>
+<tt><font color="#cc0000">gamma&nbsp; F_&nbsp;&nbsp;&nbsp; Ls 1&nbsp;
+O&nbsp;&nbsp; DC activity coefficients</font></tt> <br>
+<tt>ez&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L 1&nbsp;
+I&nbsp;&nbsp; Formal charges of DC</tt> <br>
+<tt>sati&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; Ls 2&nbsp; I&nbsp;&nbsp;
+Surface site type index { 0 to 5 };</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+index for assignment to carrier end-member</tt> <br>
+<tt>masdj&nbsp; F_&nbsp;&nbsp;&nbsp; Ls 1&nbsp; I&nbsp;&nbsp; Maximum
+site density for non-competing</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sorbates, 1/nm2; 1 for competing sorbates</tt> </p>
+
+<p><tt><u>Gases </u>(not available to Math Script preprocessing)</tt> <br>
+<tt>Gfug&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Lg 1&nbsp; O&nbsp;&nbsp;
+Partial fugacities of gases</tt> <br>
+<tt><font color="#cc0000">lgFug&nbsp; F_&nbsp;&nbsp;&nbsp; Lg 1&nbsp;
+O&nbsp;&nbsp; Log partial fugacities of gases</font></tt> <br>
+<tt>lgPpG&nbsp; F_&nbsp;&nbsp;&nbsp; Lg 1&nbsp; O&nbsp;&nbsp; Log
+partial pressures of gases</tt> </p>
+
+<p><tt><u>Other</u></tt> <br>
+<tt>A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L
+N&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DC stoichiometry matrix A</tt> <br>
+<tt><font color="#cc0000">qd&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Work array for
+Math Scripts</font></tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+</p>
+
+<p><a name="PHASE_DODS"></a><tt>L2.3. Phase definitions (\a
+preprocessor switch)</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp; Type&nbsp; Dim&nbsp; I/O&nbsp; Explanations</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>L1&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; FI 1&nbsp;
+I&nbsp;&nbsp; Number of DC included into each phase</tt> <br>
+<tt>muk&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; FI 1&nbsp; I&nbsp;&nbsp;
+Phase indices in Profile phase list</tt> <br>
+<tt>Yof&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FIs 1 I&nbsp;&nbsp;
+Phase Gibbs energy increment (J/g)</tt> <br>
+<tt>phVol&nbsp; F_&nbsp;&nbsp;&nbsp; FI 1&nbsp; O&nbsp;&nbsp; Volumes
+of phases at equilibrium, cm3</tt> <br>
+<tt><font color="#cc0000">phM&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FI
+1&nbsp; O&nbsp;&nbsp; Masses of phases at equilibrium, g</font></tt> <br>
+<tt>Aalp&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FI 1&nbsp; I&nbsp;&nbsp;
+Specific surface area of phases, m2/g</tt> <br>
+<tt>Sigw&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FI 1&nbsp; I&nbsp;&nbsp;
+Specific free energy of solid-aqueous</tt> <br>
+<tt><font color="#cc0000">Xa&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; FI 1&nbsp; O&nbsp;&nbsp; Output total number of
+moles of phase</font></tt> <br>
+<tt><font color="#cc0000">Xwa&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; FI
+1&nbsp; O&nbsp;&nbsp; Moles of carrier in asymmetric phases</font></tt>
+<br>
+<tt>Fa&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; FI 1&nbsp;
+O&nbsp;&nbsp; Karpov phase stability criteria F_a</tt> <br>
+<tt><font color="#cc0000">qp&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; FIs 20&nbsp;&nbsp;&nbsp; Work variables related to
+non-ideal phases</font></tt> <br>
+<tt><font color="#cc0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(for use in Math Scripts)</font></tt> <br>
+<tt><u>Sorption Phases</u></tt> <br>
+<tt>nfsp&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FIs 6 I&nbsp;&nbsp; Fractions
+of surface types</tt> <br>
+<tt>masdt&nbsp; F_&nbsp;&nbsp;&nbsp; FIs 6 I&nbsp;&nbsp; Maximum site
+density, mkmol/g (competitive</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+SAT calculation)</tt> <br>
+<tt>capA&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FIs 6 I&nbsp;&nbsp;
+Capacitance density C1 of Stern layer, F/m2</tt> <br>
+<tt>capB&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FIs 6 I&nbsp;&nbsp;
+Capacitance density of Beta EDL layer, F/m2</tt> <br>
+<tt><font color="#cc0000">psiA&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FIs 6
+O&nbsp;&nbsp; Relative electrical potential on 0 layer, V</font></tt> <br>
+<tt><font color="#cc0000">psiB&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; FIs 6
+O&nbsp;&nbsp; Relative electrical potential on B layer, V</font></tt> <br>
+<tt>etaA&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; FIs 6 O&nbsp;&nbsp; Total
+charge on 0 EDL plane, moles</tt> <br>
+<tt>etaB&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; FIs 6 O&nbsp;&nbsp; Total
+charge on B EDL plane (TLM), moles</tt> <br>
+<tt>Xfts&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; FIs 6 O&nbsp;&nbsp; Total
+number of moles of sorbates at surface</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+type</tt> <br>
+<tt><u>IPM Matrices</u></tt> <br>
+<tt>bXa&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; FIs
+N&nbsp;&nbsp;&nbsp;&nbsp; Bulk compositions of multi-component phases</tt>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(moles)</tt> <br>
+<tt>---------------------------------------------------------------------</tt>
+<br>
+&nbsp; </p>
+
+<h4> <a name="PROCES_GTDEMO_DODS"></a>8.3. Labels of data objects
+accessible in PROCES and GTDEMO Math Scripts</h4>
+
+The labels of dynamic vectors from this list in most cases can be
+preprocessed <br>
+
+using \I, \J, \A and \K switches for ICOMP, DCOMP,&nbsp; Compos and
+PHASE names, <br>
+
+respectively. Data types: I_ integer; F_ float; D_ double.
+<p><tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp; Type&nbsp; Dim&nbsp;&nbsp;&nbsp;&nbsp;
+Explanations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Switch</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Lfi~&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; FI 1&nbsp;&nbsp;&nbsp;
+Numbers of DC included into each
+phase&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \A</tt> <br>
+<tt>W_a&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; N
+1&nbsp;&nbsp;&nbsp;&nbsp; Vector of default valencies of
+IC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \I</tt>
+<br>
+<tt>M_a&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; N
+1&nbsp;&nbsp;&nbsp;&nbsp; Vector of IC atomic (molar) masses,
+g/mole)&nbsp; \I</tt> </p>
+
+<p><tt><u>Thermodynamic data (all vectors can be preprocessed with \J
+switch)</u></tt> <br>
+<tt><font color="#cc0000">T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Temperature T, C</font></tt>
+<br>
+<tt><font color="#cc0000">P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Pressure P, bar</font></tt>
+<br>
+<tt>RoW&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; 1
+2&nbsp;&nbsp;&nbsp;&nbsp; Density of H2O g/cm3 (liquid; vapour)</tt> <br>
+<tt>EpsW&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; 1 2&nbsp;&nbsp;&nbsp;&nbsp;
+Dielectric constant of H2O (liquid; vapour)</tt> <br>
+<tt>VisW&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; 1 2&nbsp;&nbsp;&nbsp;&nbsp;
+Viscosity of H2O, kg/m*sec (water; steam)</tt> <br>
+<tt><font color="#cc0000">gTP&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp;&nbsp;&nbsp; Partial molar(molal) Gibbs energy g0(TP),
+J/mole</font></tt>
+<br>
+<tt>g_d&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp;&nbsp;&nbsp; Uncertainty of g0(TP)</tt> <br>
+<tt>VTP&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp;&nbsp;&nbsp; Partial molar(molal) volume V0(TP), J/bar</tt>
+<br>
+<tt>V_d&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; L
+1&nbsp;&nbsp;&nbsp;&nbsp; Uncertainty of V0(TP)</tt> <br>
+<tt>-----------------------------------------------------------------------</tt>
+</p>
+
+<p><tt>System formulation input data</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp; Type&nbsp; Dim&nbsp;&nbsp;&nbsp;&nbsp;
+Explanations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Switch</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>B_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp; N
+1&nbsp;&nbsp;&nbsp;&nbsp; Vector b (bulk chemical composition)
+moles&nbsp;&nbsp; \I</tt> <br>
+<tt><font color="#cc0000">bi_&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; N
+1&nbsp;&nbsp;&nbsp;&nbsp; IC quantity/conc. input to b
+vector&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \I</font></tt>
+<br>
+<tt><font color="#cc0000">xa_&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; LA
+1&nbsp;&nbsp;&nbsp; COMPOS quanity/conc. input b
+vector&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \K</font></tt>
+<br>
+<tt><font color="#cc0000">xd_&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; L
+1&nbsp;&nbsp;&nbsp;&nbsp; DC quantity/conc. input to b
+vector&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \J</font></tt>
+<br>
+<tt><font color="#cc0000">xp_&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; FI
+1&nbsp;&nbsp;&nbsp; PHASE(equilibrium) quantity/conc. to
+b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \A</font></tt> <br>
+<tt><font color="#cc0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(in sequential reactor mode only)</font></tt> <br>
+<tt>dll_&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; L 1&nbsp;&nbsp;&nbsp;&nbsp;
+Vector of lower DC restrictions to
+x_j&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \J</tt> <br>
+<tt><font color="#cc0000">gEx_&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; L
+1&nbsp;&nbsp;&nbsp;&nbsp; Gibbs energy increments for DC,
+J/mole&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \J</font></tt> <br>
+<tt>Yof_&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; FIs 1&nbsp;&nbsp; Phase
+metastability parameter,
+J/g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \A</tt>
+<br>
+<tt>delB_&nbsp;&nbsp; F_&nbsp;&nbsp; N 1&nbsp;&nbsp;&nbsp;&nbsp;
+Uncertainties of vector b elements, moles&nbsp;&nbsp;&nbsp; \I</tt> <br>
+<tt>lnGmf_&nbsp; F_&nbsp;&nbsp; Ls 1&nbsp;&nbsp;&nbsp; ln of FIA
+initial DC activity coefficients&nbsp;&nbsp; \J</tt> <br>
+<tt>Pp_&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp; L
+1&nbsp;&nbsp;&nbsp;&nbsp; DC partial pressures,
+bar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+\J</tt> </p>
+
+<p><tt><u>Adsorption and dispersity parameters</u></tt> <br>
+<tt>MaSdj_&nbsp; F_&nbsp;&nbsp; Ls 1&nbsp;&nbsp;&nbsp; Maximum site
+density (non-competitive),1/nm2 \J</tt> <br>
+<tt><font color="#cc0000">Aalp_&nbsp;&nbsp; F_&nbsp;&nbsp; FI
+1&nbsp;&nbsp;&nbsp; Specific surface area of phases,
+m2/g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \A</font></tt> <br>
+<tt>Sigm_&nbsp;&nbsp; F_&nbsp;&nbsp; FI 2&nbsp;&nbsp;&nbsp; Specific
+surface free energy in water, J/m2&nbsp; \A</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Specific surface free energy in air,&nbsp;&nbsp; J/m2&nbsp; \A</tt> <br>
+<tt><font color="#cc0000">Nfsp_&nbsp;&nbsp; F_&nbsp;&nbsp; FIs
+6&nbsp;&nbsp; Fraction of surface types
+area&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+\A</font></tt> <br>
+<tt><font color="#cc0000">MaSdt_&nbsp; F_&nbsp;&nbsp; FIs 6&nbsp;&nbsp;
+Maximum site density (competitive), 1/nm2&nbsp;&nbsp;&nbsp; \A</font></tt>
+<br>
+<tt><font color="#cc0000">XcapA_&nbsp; F_&nbsp;&nbsp; FIs 6&nbsp;&nbsp;
+Stern layer capacitance density C1,&nbsp; F/m2&nbsp;&nbsp;&nbsp; \A</font></tt>
+<br>
+<tt>XcapB_&nbsp; F_&nbsp;&nbsp; FIs 6&nbsp;&nbsp; Outer-layer
+capacitance sensity C2(TLM),F/m2 \A</tt> <br>
+<tt>XfIEC_&nbsp; F_&nbsp;&nbsp; FIs 6&nbsp;&nbsp; Constant-charge
+density (CEC) ,mkeq/g&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \A</tt>
+<br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+&nbsp; </p>
+
+<h4> <a name="PROCESONLY_DODS"></a>8.4. Data oblect labels applicable
+to
+PROCES math scripts only</h4>
+
+Labels&nbsp; in this list can not be used for preprocessing ICOMP,
+DCOMP , COMPOS and PHASE names.
+<p><tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp;&nbsp; Type&nbsp; Dim&nbsp;&nbsp;&nbsp;&nbsp;
+Explanations</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Ntxi&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 3
+1&nbsp;&nbsp;&nbsp;&nbsp; N of points: control parameter(s) Nr; time;</tt>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+process extent variable(s)</tt> <br>
+<tt>Npvt&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+3&nbsp;&nbsp;&nbsp;&nbsp; N of points: along P; along T; along V</tt> <br>
+<tt>Nphe&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+3&nbsp;&nbsp;&nbsp;&nbsp; N of inverse titration points: along pH;</tt>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+along pe(Eh); reserved</tt> <br>
+<tt>PeMode&nbsp; I_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Mode
+of points indexation { 0 - 8 }</tt> <br>
+<tt><font color="#cc0000">iTm&nbsp;&nbsp;&nbsp;&nbsp;
+I_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; EqSys CSD definition
+#: start, end, step (initial)</font></tt> <br>
+<tt><font color="#cc0000">iNv&nbsp;&nbsp;&nbsp;&nbsp;
+I_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; Variant # of
+thermodynamic data: start, end, step</font></tt> <br>
+<tt><font color="#cc0000">iP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; Pressure P, bar:
+start, end, increment</font></tt> <br>
+<tt><font color="#cc0000">iTC&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; Temperature T, C:
+start, end, increment</font></tt> <br>
+<tt><font color="#cc0000">iV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; Volume of the system
+(L): start, end, increment</font></tt> <br>
+<tt><font color="#cc0000">iTau&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; 3
+1&nbsp;&nbsp;&nbsp;&nbsp; Time (tau), arbitrary units: start, end,
+increment</font></tt> <br>
+<tt><font color="#cc0000">ipXi&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; 3
+1&nbsp;&nbsp;&nbsp;&nbsp; Process extent pXi = -log(Xi): start, end,
+increment</font></tt> <br>
+<tt><font color="#cc0000">iNu&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; Linear factor of
+extent Nu: start, end, increment</font></tt> <br>
+<tt><font color="#cc0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(precision for inverse titrations)</font></tt> <br>
+<tt><font color="#cc0000">ipH&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; pH values for inverse
+titration: start, end, increment</font></tt> <br>
+<tt><font color="#cc0000">ipe&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; 3 1&nbsp;&nbsp;&nbsp;&nbsp; pe values for inverse
+titrations: start, end, increment</font></tt> <br>
+<tt>NeIt&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+2&nbsp;&nbsp;&nbsp;&nbsp; Max. N of iterations allowed for inverse
+titration</tt> <br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+N of completed EQSTAT computatitons</tt> <br>
+<tt><font color="#cc0000">Next&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; Switch to continue (1) or finish (0) PROCESS
+iterations</font></tt> <br>
+<tt>I&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; I index</tt> <br>
+<tt><font color="#cc0000">J&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+I_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; J index (automatically
+incremented during calculation)</font></tt> <br>
+<tt>cnrk&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; Current index of EQSTAT in record key list</tt>
+<br>
+<tt><font color="#cc0000">cTm&nbsp;&nbsp;&nbsp;&nbsp;
+I_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current Tm - SysEq CSD
+number</font></tt> <br>
+<tt><font color="#cc0000">cNV&nbsp;&nbsp;&nbsp;&nbsp;
+I_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current Nv - SysEq
+variant number</font></tt> <br>
+<tt><font color="#cc0000">cP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current P</font></tt> <br>
+<tt><font color="#cc0000">cV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current V</font></tt> <br>
+<tt><font color="#cc0000">cT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current T</font></tt> <br>
+<tt><font color="#cc0000">cTC&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current TC</font></tt>
+<br>
+<tt><font color="#cc0000">cTau&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; Current Tau</font></tt> <br>
+<tt><font color="#cc0000">cpXi&nbsp;&nbsp;&nbsp; D_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; Current pXi</font></tt> <br>
+<tt><font color="#cc0000">cXi&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current Xi</font></tt>
+<br>
+<tt><font color="#cc0000">cNu&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current Nu</font></tt>
+<br>
+<tt><font color="#cc0000">cpH&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current pH</font></tt>
+<br>
+<tt><font color="#cc0000">cpe&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current pe</font></tt>
+<br>
+<tt><font color="#cc0000">cEh&nbsp;&nbsp;&nbsp;&nbsp;
+D_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Current Eh</font></tt>
+</p>
+
+<p><tt><u>Optional vectors (can be used if allocated, Nr is number of
+records</u></tt> <br>
+<tt><u>to be generated by the process simulation run)</u></tt> <br>
+<tt>vTm&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; Nr
+1&nbsp;&nbsp;&nbsp; Array of tm (SYSTEM CSD #) values</tt> <br>
+<tt>vNV&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; Nr
+1&nbsp;&nbsp;&nbsp; Array of NV (MTPARM variant) values</tt> <br>
+<tt>vP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Nr
+1&nbsp;&nbsp;&nbsp; Array of P values</tt> <br>
+<tt>vV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Nr
+1&nbsp;&nbsp;&nbsp; Array of V values</tt> <br>
+<tt>vT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Nr
+1&nbsp;&nbsp;&nbsp; Array of TC values</tt> <br>
+<tt>vTau&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Nr 1&nbsp;&nbsp;&nbsp;
+Array of Tau (physical time) values</tt> <br>
+<tt>vpXi&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Nr 1&nbsp;&nbsp;&nbsp;
+Array of pXi (-log process extent) values</tt> <br>
+<tt>vNu&nbsp;&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Nr
+1&nbsp;&nbsp;&nbsp; Array of Nu values</tt> <br>
+<tt>vKin&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp; Nr 1&nbsp;&nbsp;&nbsp;
+Array of (reaction) kinetic parameters</tt> <br>
+<tt><font color="#cc0000">modC&nbsp;&nbsp;&nbsp; F_&nbsp;&nbsp;&nbsp;
+Nr 1&nbsp;&nbsp;&nbsp; Array of empirical parameters</font></tt> <br>
+<tt>--------------------------------------------------------------------</tt>
+<br>
+&nbsp; </p>
+
+<h4> <a name="GTDEMOONLY_DODS"></a>8.5. Data objects accessible in
+GTDEMO Math Script expressions</h4>
+
+List of labels accessible in the Data Sampler and Plotter (GTDEMO) Math
+Scripts (objects from the PROCES structure can also be used if this
+GTDEMO record is attached to a PROCES record). Arrays in this list can
+not be used for preprocessing component and phase names.
+<p><tt>----------------------------------------------------------------------</tt>
+<br>
+<tt>Label&nbsp;&nbsp;&nbsp; Type&nbsp;&nbsp;
+Dim&nbsp;&nbsp;&nbsp;&nbsp; Explanations</tt> <br>
+<tt>----------------------------------------------------------------------</tt>
+<br>
+<tt><font color="#cc0000">x0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; Nr 1&nbsp;&nbsp;&nbsp; Vector of abscissa sample</font></tt>
+<br>
+<tt><font color="#cc0000">y0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; Nr Nc&nbsp;&nbsp; Vector of sampled data array
+(ordinates)</font></tt>
+<br>
+<tt><font color="#cc0000">xE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp; NxE 1&nbsp;&nbsp; Abscissa for input empirical data</font></tt>
+<br>
+<tt><font color="#cc0000">yE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; NxE NyE Empirical input data array (optional)</font></tt>
+<br>
+<tt><font color="#cc0000">gd_wc&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; NwN NwM Array of constants (optional)</font></tt> <br>
+<tt><font color="#cc0000">gQp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+F_&nbsp;&nbsp;&nbsp; Nr Nqp&nbsp; Array of work cells (optional)</font></tt>
+<br>
+<tt><font color="#cc0000">jR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+I_&nbsp;&nbsp;&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp; Index of currently
+sampled
+PDB record</font></tt> <br>
+<tt><font color="#cc0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(auto-incremented)</font></tt> <br>
+<tt>next&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; Flag to continue (1) or finish (0) sampling</tt>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+iterations</tt> <br>
+<tt>i0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; i0 index</tt> <br>
+<tt>iE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; iE index</tt> <br>
+<tt>j0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I_&nbsp;&nbsp;&nbsp; 1
+1&nbsp;&nbsp;&nbsp;&nbsp; j0 index</tt> <br>
+<tt>---------------------------------------------------------------------</tt>
+<br>
+Notes: Nr&nbsp; is number of records to be sampled; Nc is number of
+columns (lines) in a sampler array y0; <br>
+NxE is number of points of empirical data for plotting; NyE is number
+of columns in the empirical data array yE; <br>
+NwN, NwM, Nqp, Nxe and NyE dimensions of orptional dynamic objects must
+be specified when the GTDEMO record is rebuild. <br>
+&nbsp; <br>
+&nbsp;</p>
+
+<hr size="2" width="100%">
+<p> </p>
+
+<h3> </h3>
+
+<p>End of Document <br>
+&nbsp; </p>
+
+<br>
+
+<br>
+
+<br>
+
+</body></html>

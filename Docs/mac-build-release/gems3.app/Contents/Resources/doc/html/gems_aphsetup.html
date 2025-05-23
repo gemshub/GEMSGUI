@@ -1,0 +1,347 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+
+
+
+
+
+  
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+
+  
+<meta name="GENERATOR" content="Mozilla/4.72 [en] (Win98; I) [Netscape]"><title>Autophase Setup Wizard</title>
+
+
+
+
+  
+  
+<meta name="author" content="GEMS-PSI Development Team">
+
+
+  
+<meta name="description" content="Small help page for AutoPhaseDialog"></head><body>
+<h1><img src="gems1.png" align="left" height="48" width="48">&nbsp;
+GEM-Selektor version 3</h1>
+
+
+<h2>Automatic Setup of Aqueous and Gas/Fluid Phases</h2>
+
+
+<hr style="width: 100%; height: 2px;">
+<h2> </h2>
+
+
+
+<p>This dialog facilitates definition of the aqueous
+electrolyte
+phase and/or the gas/fluid mixture phase that are automatically
+assembled upon opening or creating a GEMS3 modelling project. 
+Alternatively, a Phase record already available in the project database 
+can be selected,
+ or the aqueous phase (or gas/fluid mixture) can be excluded from the 
+template chemical system definition in this modeling project. </p>
+
+
+
+
+
+<p><span style="font-weight: bold;">The first tab "Select Aqueous Electrolyte Model"</span> lets you define a
+built-in
+function for calculating activity coefficients of individual aqueous
+species.
+These can be selected by clicking on radio buttons on the left-hand side. The two last
+choices
+should be used when none of the built-in functions is applicable, or no
+aqueous
+phase should be included into the chemical system definition. In the
+"Parameters for the aqueous model"
+frame, you can change some default parameters used in some of the
+built-in
+aqueous activity functions that are described below.</p>
+
+
+
+
+
+<p>Most aqueous activity coefficient models that are currently
+supported by the GEMS3 code belong to extended
+Debye-Hückel (EDH) models (see document "/Resources/doc/pdf/Activity-Coeffs.pdf" for
+details  and references). In these models,
+the extended term (b_gamma) can be a function of pressure and
+temperature or a constant value. In the drop-down list "b_gamma(P,T) mode",
+the operation mode of the b_gamma function can be selected. If
+the mode "constant" is chosen, the value of b_gamma at reference state
+conditions (25 <sup>o</sup>C, 1 bar) needs to be selected in the
+"b_gamma(1,298) value" drop-down list, or another value be entered there.</p>
+
+
+
+
+
+<p>Alternatively, for calculations at hydrothermal conditions, the
+    b_gamma term can be a function of temperature and pressure. In this
+case, one of four built-in b_gamma
+ functions for different so-called background
+electrolytes (NaCl, KCl, NaOH, KOH) can be selected. The concept of the
+background electrolyte means an assumption that the aqueous
+solution is dominantly composed of that particular
+electrolyte, so the model should be chosen accordingly. For instance, if
+ in your
+project you mainly deal with NaCl-rich fluids (the most common case) or 
+with seawater, choose the NaCl variant; for cementitious systems, the 
+KOH variant can be chosen. </p>
+
+
+  
+
+
+<p>Note that for internal
+thermodynamic consistency, T-P-dependent b_gamma
+functions should be used in conjunction with the extended
+Debye-Hückel model after <a href="#HELGESON_REFS">Helgeson and coworkers</a>,
+i.e. the second
+model in this tab, which has the code "H". If a T-P dependent b_gamma
+model is
+selected, there is no need to enter a number into the "b_gamma(1,298)
+value" field because this value is automatically calculated by a
+built-in routine. However, it is still necessary to set the appropriate
+value of the ion size parameter a0 for each of the four background
+electrolytes. The value of a0 (also called "distance
+of closest approach") is selected from the drop-down list "Common a0
+value" (or entered there). The recommended a0 values for the four
+background
+electrolytes are:</p>
+
+
+
+
+
+<dl style="margin-left: 40px;">
+
+
+  <table style="width: 689px; height: 73px;" border="1" cols="7">
+    <tbody>
+      <tr>
+        <td style="font-family: Calibri;">
+        <p><span style="font-weight: bold;">Background electrolyte</span></p>
+
+        </td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaCl</p>
+
+        </td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KCl</p>
+
+        </td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaOH</p>
+</td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KOH</p>
+
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; font-family: Calibri;">
+        <p>a0<br>
+</p>
+
+        </td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.72</p>
+
+        </td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4.08</p>
+
+        </td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.31</p>
+</td>
+        <td style="font-family: Calibri;">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.67</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+
+
+<p>From the Debye-Hueckel models described above, the activity coefficients
+of aqueous electrolyte species (charged ions and complexes) will be
+calculated. For uncharged species (neutral ion pairs and complexes,
+neutral dissolved gas molecules such as CO<sub>2</sub>, H<sub>2</sub>S
+etc.) and for water solvent, different activity coefficient model 
+options can
+be used. Four combinations exist, which can be specified using the 
+"Gamma (neutral species)" and "Gamma (water solvent)" drop-down lists. 
+In the former, the activity coefficient of any neutral aqueous species 
+can be either set to unity or calculated as b_gamma * IS;
+ in the latter, the activity coefficient of water-solvent can be set to 
+unity or computed from the osmotic coefficient by the built-in routine.
+
+
+
+</p>
+<p>Note that the 
+basic model should be selected (by clicking the appropriate
+radio button on the left side of the tab) before setting up details of 
+calculation modes and parameters (T-P-dependence of parameters,
+calculation of activity coefficients for neutral species and water
+solvent) on the right side of the tab. Because of thermodynamic 
+consistency, options that explicitly calculate the activity coefficient 
+of
+water solvent
+should only be used with the extended Debye-Hückel model after
+  <a href="#HELGESON_REFS">Helgeson and coworkers</a>.
+
+
+
+</p>
+<p>Clicking on the "Check" button displays a record key of the <a href="gm_phase.html">Phase record</a> to be automatically generated; the
+chosen model and its parameters will be identified in the <a style="font-family: monospace;" href="gm_phase.html#PhName">PhName</a> and <a style="font-family: monospace;" href="gm_phase.html#PhNote">PhNote</a> fields of the record key. You can
+check
+them later when you open the "Phase" page of the "System" window from
+the
+"Single Thermodynamic System" dialog, mark the aqueous phase record key, and
+press
+F7 keyboard key. Note that, before the same modelling project is
+opened
+next time, this Phase definition record will be automatically deleted
+and
+generated again without displaying this setup dialog.
+
+
+</p>
+<p><span style="font-weight: bold;">The second tab "Select Gas/Fluid Mixture Model"</span> defines the
+automatically
+generated Phase record for the gas or fluid mixture. It functions in a way
+similar
+to that for the aqueous phase. The generic models that are currently
+supported are:</p>
+<ol>
+  <li> ideal gas mixture of ideal gases (I); </li>
+  <li>non-ideal gas (fluid)
+mixture calculated with the Churakov-Gottschalk (CG) model (F); </li>
+  <li>non-ideal gas (fluid)
+mixture calculated with the Peng-Robinson (PR) model (7);&nbsp; </li>
+  <li>non-ideal gas (fluid)
+mixture calculated with the Peng-Robinson-Stryjek-Vera (PRSV) model (P); </li>
+  <li>non-ideal gas (fluid)
+mixture calculated with the Soave-Redlich-Kwong (SRK) model (E). </li>
+</ol>
+<p>See document "/Resources/doc/pdf/Activity-Coeffs.pdf" for
+details and references. Other automatic models may be added in future
+versions. Note that interaction parameters of mixing between fluid
+components cannot be entered into the atomatic fluid phase; instead, a
+user-prepared Phase record must be selected. <br>
+</p>
+<p>The use of automatically generated definition of an ideal mixture of ideal gases ('I', default) implies that:</p>
+<ul>
+  <li>DComp records for gases with keys starting with <span style="font-family: monospace;">'g'</span> (gaseous) phase state code are available in the project database;</li>
+  <li>All such records will be taken into one automatically generated Phase record with key beginning with 'g'.<br>
+  </li>
+</ul>
+<p>The use of the 
+automatically generated definition of a non-ideal gas/fluid mixture implies that: <br>
+</p>
+
+<ul>
+  <li>consistent parameters such as <a href="gm_dcomp.html#CritPg"><span style="font-family: monospace;">CritPg</span></a> vector are provided in <a href="gm_dcomp.html">DComp</a> records available in the 
+project database;<br>
+ </li>
+  <li>these DComp record keys start with the <span style="font-family: monospace;">'f'</span> (fluid) phase state code instead of <span style="font-family: monospace;">'g'</span> (gaseous) phase state code;</li>
+  <li>All such records will be taken into one automatically generated Phase record with key beginning with 'f'.<br>
+  </li>
+
+</ul>
+<p>No additional options for
+the gas/fluid
+mixture (right-hand side of the wizard tab) are available in this version of
+GEM-Selektor.
+
+
+
+</p>
+<p><span style="font-weight: bold;">Any "specific interaction" non-ideal model</span> of aqueous electrolyte or gas (fluid)
+mixture cannot be composed in the automatic mode and must be previosly created (prepared by the user) in
+GEMS3 Database Mode as a specific <a href="gm_phase.html">Phase definition record</a>. Such a definition typically contains a list of included chemical species, and an array of
+interaction parameter coefficients entered into the <a style="font-family: monospace;" href="gm_phase.html#ph_cf">ph_cf</a>
+ table. <br>
+</p>
+<p>One or more available Phase
+record can be selected by choosing the option "Do not
+generate; select a user-defined Phase record from database, U" (present
+on both tabs). After
+selecting this option, a list of suitable Phase records will be
+displayed, from which one record must be selected (one or more for the
+fluid/gas phases). If only one suitable record is available in the
+project database, the list will not appear, and this record will be
+taken automatically. By clicking the "Check" button, you can see which
+record has been chosen in the "Phase record key" field.&nbsp; </p>
+
+
+
+
+
+<p>The setup of automatically generated or selected Phase records for aqueous and
+gas
+phases can be changed any time only upon opening the modelling project. To
+change, deactivate the "Retain setup of aqueous (and gas) phases" option in
+the <a href="gm_project.html#HOWTO">"Modelling Projects" dialog</a> before
+selecting an existing project to be opened. <br>
+</p>
+<p>An easy way to prepare a Phase definition e.g. for non-ideal fluid with specific interaction coefficients is described in the <a href="gm_phase#PHASE_GASFLUID">Phase help file</a>.<br>
+</p>
+
+
+
+
+<h4><a name="HELGESON_REFS"></a>References<span style="color: rgb(255, 0, 0);"></span><br>
+</h4>
+
+
+<p>Oelkers, E. H. and H. C. Helgeson (1991). "Calculation of activity 
+coefficients and degrees of formation of neutral ion pairs in 
+supercritical electrolyte solutions." Geochimica et Cosmochimica Acta 
+55: 1235-1251.
+
+
+</p>
+<p>Pokrovskii, V. A. and H. C. Helgeson (1995). "Thermodynamic 
+properties of aqueous species and the solubilities of minerals at high 
+pressures and temperatures: The system Al<sub>2</sub>O<sub>3</sub>-H<sub>2</sub>O-NaCl." American Journal of Science 295: 1255-1342.
+
+
+</p>
+<p>Pokrovskii, V. A. and H. C. Helgeson (1997). "Calculation of the 
+standard partial molal thermodynamic properties of KCl and activity 
+coefficients of aqueous KCl at temperatures and pressures to 1000 <sup>o</sup>C and 5 kbar." Geochimica et Cosmochimica Acta 61(11): 2175-2183.
+
+
+</p>
+<p>Pokrovskii, V. A. and H. C. Helgeson (1997). "Thermodynamic 
+properties of aqueous species and the solubilities of minerals at high 
+pressures and temperatures: The system Al<sub>2</sub>O<sub>3</sub>-H<sub>2</sub>O-KOH." Chemical Geology 137: 221-242.</p>
+
+
+
+
+<hr style="width: 100%; height: 2px;">Copyright (c) 2010-2012 GEMS Development Team<br>
+<br>
+Last change: 4 Dec. 2012 DK<br>
+
+<br>
+
+
+<br>
+
+
+
+
+</body></html>

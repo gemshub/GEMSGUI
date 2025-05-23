@@ -154,6 +154,8 @@ public:
     //Relative dielectric constant of pure water, eps as a function of (P, T)
     //       Bradley and Pitzer, 1979, JPC 83, 1599.
     double wat_dielectric (double cT, double cP);
+    double wat_sat_pressure (double cT);
+    double wat_sat_liquid_density (double cT);
     void MTparmAlloc( );
     void LoadDataToLookup( QWidget* par, DATACH* CSD );
     void LoadDataToPair( QWidget* par, DATACH* CSD );

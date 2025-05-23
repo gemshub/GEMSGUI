@@ -354,6 +354,8 @@ bool TNodeGUI::TestTPGrid(  double Tai[4], double Pai[4] )
     return notChanged;
 }
 
+#ifdef USE_GEMS3K_SERVER
+
 std::vector<string> TNodeGUI::generate_send_msg( bool add_head )
 {
     bool brief_mode = false;
@@ -404,16 +406,15 @@ bool TNodeGUI::set_resv_msg(std::vector<std::string> &&msg_return)
     case BAD_GEM_AIA:
     case BAD_GEM_SIA:  // unpack dbr data
         /*time =*/ readMultiServer( NodeStatusCH, msg_return );
-        Error( *(msg_return.end()-1), msg_return.back() );
+        Error( *(msg_return.end()-2), msg_return.back() );
         break;
     case ERR_GEM_AIA:
     case ERR_GEM_SIA:
     case T_ERROR_GEM:
-        Error( *(msg_return.end()-1), msg_return.back() );
+        Error( *(msg_return.end()-2), msg_return.back() );
     }
     return false;
 }
-
 
 // Reading structure MULTI (GEM IPM work structure)
 double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::string>& recv_msg )
@@ -467,3 +468,5 @@ double TNodeGUI::readMultiServer( long int NodeStatusCH, const std::vector<std::
     ///   !!! G[] and F[] different after IPM and EqstatExpand
     return ret;
 }
+
+#endif

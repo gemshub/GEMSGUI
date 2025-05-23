@@ -21,6 +21,7 @@
 #include "ui_ProgressDialog4.h"
 #include "NewSystemDialog.h"
 #include "m_param.h"
+#include "calcthread.h"
 
 void IPNCalcObject::IPM_run()
 {
@@ -49,66 +50,254 @@ void IPNCalcObject::IPM_run()
 
 ProgressDialog* ProgressDialog::pDia = nullptr;
 
-void ProgressDialog::switchToAccept(bool isAccept)
+void ProgressDialog::switchToAccept(bool isAccept, bool stepwise)
 {
-    ui->pClose->setToolTip( tr( "Cancel this GEM IPM calculation" ) );
-
     if( isAccept ) {
-        ui->pAccept->disconnect();
-        connect( ui->pAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
-        ui->pAccept->setToolTip( tr("Close and save results to SysEq database record" ) );
-        ui->pAccept->show();
+        ui->pClose->setText("&Dismiss");
+        ui->pClose->setToolTip(tr("Close and do not save results to SysEq database record"));
+
+        ui->pStepAccept->disconnect();
+        connect( ui->pStepAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
+        ui->pStepAccept->setText("&Accept");
+        ui->pStepAccept->setToolTip(tr("Close and save results to SysEq database record"));
+        ui->pStepAccept->show();
+
+        ui->pResume->hide();
     }
     else {
-        ui->pAccept->disconnect();
+        ui->pClose->setText("&Cancel");
+        ui->pClose->setToolTip(tr("Cancel this GEM IPM calculation"));
+        ui->pStepAccept->disconnect();
+#ifndef USE_GEMS3K_SERVER
+        ui->pResume->disconnect();
+        ui->pResume->show();
+        if(stepwise) {
+            connect( ui->pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
+            ui->pStepAccept->setText("&Step");
+            ui->pStepAccept->setToolTip(tr("Perform next IPM iteration in Stepwise mode"));
+            ui->pStepAccept->show();
+
+            connect(ui->pResume, SIGNAL(clicked()), this, SLOT(CmResume()));
+            ui->pResume->setText("&Resume");
+            ui->pResume->setToolTip(tr("Resume continuous IPM iteration mode"));
+        }
+        else {
+            ui->pStepAccept->hide();
+
+            connect( ui->pResume, SIGNAL(clicked()), this, SLOT(CmStop()) );
+            ui->pResume->setText("&Stop");
+            ui->pResume->setToolTip(tr("Switch to Stepwise IPM calculation mode"));
+        }
+#else
+        ui->pStepAccept->hide();
+        ui->pResume->hide();
+#endif
     }
 }
 
-
-ProgressDialog::ProgressDialog(QWidget* parent ):
+ProgressDialog::ProgressDialog(QWidget* parent):
     QDialog( parent ),
     ui(new Ui::ProgressDialogData)
+#ifndef USE_GEMS3K_SERVER
+    ,last_update(0),
+    timer(nullptr)
+#endif
 {
     ui->setupUi(this);
     
     pDia = this;
-    //TProfil::pm->userCancel = false;
-    //TProfil::pm->stepWise = step;
-    ui->pAccept->hide();
+    QObject::connect(ui->pClose, SIGNAL(clicked()), this, SLOT(CmClose()));
+}
 
+ProgressDialog::~ProgressDialog()
+{
+#ifndef USE_GEMS3K_SERVER
+    delete calcThread;
+    // timer deleted with the parent
+    //    delete timer;
+#endif
+    delete ui;
+}
+
+void ProgressDialog::startThread(bool step)
+{
+    TProfil::pm->userCancel1 = false;
+    TProfil::pm->stepWise1 = step;
+
+#ifndef USE_GEMS3K_SERVER
+    if(calcThread)
+        delete calcThread;
+    if(timer)
+        delete timer;
+
+    calcThread = new CalcThread(this);
+    timer = new QTimer(this);
+
+    switchToAccept(false, step);
+    if( step ) {
+        setWindowTitle( "Ready to proceed in Stepwise mode :)" );
+        calcThread->start();
+    }
+    else {
+        setWindowTitle( "Running..." );
+        //timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(Run()));
+        calcThread->start();
+        timer->start(pVisorImp->updateInterval()*100);
+    }
+    //    t_start = clock();
+
+#else
     setWindowTitle( "Running..." );
-    ui->pAccept->hide();
-    ui->pClose->setText("&Cancel");
+    switchToAccept(false, false);
+    emit pVisorImp->run_IPM(); //!!!!
+#endif
+    show();
     Update(true);
 }
 
 
-ProgressDialog::~ProgressDialog()
+#ifndef USE_GEMS3K_SERVER
+//!
+//    Step
+//    called after pressing button step
+//    enforces calculation thread to proceed with another step
+//
+void ProgressDialog::CmStep()
 {
-     delete ui;
+    //    MULTI* pData = TProfil::pm->pmp;
+    try
+    {
+        if( calcThread->isRunning() ) {
+            setWindowTitle( "Running the next step..." );
+            ThreadControl::wakeOne();	// let's calc
+        }
+        else {
+            if( calcThread->error.title == "" ) {
+                setWindowTitle( "Running the first step..." );
+                ThreadControl::wakeOne();	// let's calc
+                //		calcThread->start();
+            }
+            else {
+                throw calcThread->error;
+            }
+        }
+
+        // seems like wait(sec) bails out no matter what timeout we set up :( - may be Qt bug?
+        // but we have to specify seconds to prevend deadlock anyway
+        //	ThreadControl::wait(5000); // 5 sec
+
+        Update(true);
+        pVisorImp->Update( true );
+
+        QString str = QString( "Stepped in %1" ).arg( ThreadControl::GetPoint() );
+        setWindowTitle( str );
+
+        if( TProfil::pm->calcFinished ) {
+            CalcFinished();
+            return;
+        }
+    }
+    catch( TError& err )
+    {
+        vfMessage(this, err.title, err.mess);
+        ui->pStepAccept->hide();
+    }
 }
 
+//!
+//    go to Step mode
+//
+void ProgressDialog::CmStop()
+{
+    try
+    {
+        timer->stop();
+        TProfil::pm->stepWise1 = true;
+        switchToAccept(false, true);
+
+        ui->pStepAccept->show();
+    }
+    catch( TError& err )
+    {
+        vfMessage(this, err.title, err.mess);
+    }
+}
+
+void ProgressDialog::CmResume()
+{
+    try
+    {
+        TProfil::pm->stepWise1 = false;
+        switchToAccept(false, false);
+        ui->pStepAccept->hide();
+        ThreadControl::wakeOne();	// let's calc
+
+        timer = new QTimer( this );
+        connect( timer, SIGNAL(timeout()),	this, SLOT(Run()) );
+        timer->start( pVisorImp->updateInterval()*100/* qt3to4, TRUE*/ );
+
+        if( TProfil::pm->calcFinished ) {
+            CalcFinished();
+            return;
+        }
+    }
+    catch( TError& err )
+    {
+        vfMessage(this, err.title, err.mess);
+    }
+}
+
+//! Run
+//    it's called by QTimer timeout
+//    to display updates in stepless mode
+//
+void ProgressDialog::Run()
+{
+    try
+    {
+        Update(true);
+        pVisorImp->Update(true);
+
+        if( TProfil::pm->calcFinished ) {
+            timer->stop();
+            CalcFinished();
+            return;
+        }
+
+        if( calcThread->isRunning() ) {
+            timer->start( pVisorImp->updateInterval()*100/* qt3t04, TRUE */);
+        }
+        else {
+            if( calcThread->error.title != "" ) {
+                throw calcThread->error;
+            }
+        }
+    }
+    catch( TError& err)
+    {
+        vfMessage(this, err.title, err.mess);
+        pVisorImp->Update(true);
+        timer->stop();
+        close();
+    }
+}
+#endif
 
 /*!	CalcFinished
     changes buttons, their names and caption
 */
-
 void ProgressDialog::CalcFinished()
 {
-    switchToAccept(true);
-    ui->pAccept->show();
-    ui->pClose->setText("&Dismiss");
-    ui->pClose->setToolTip( tr( "Close and do not save results to SysEq database record" ) );
+    switchToAccept(true, false);
     QString str = QString("Converged at DK=%1").arg(TMulti::sm->GetPM()->PCI);
     setWindowTitle(str);
     Update(true);
-    //pVisorImp->Update(true);
 }
 
 /*! CmAccept
     Saves system and exit
 */
-
 void ProgressDialog::CmAccept()
 {
     try
@@ -129,18 +318,19 @@ void ProgressDialog::CmAccept()
 //
 void ProgressDialog::CmClose()
 {
-    // we have to cancel calculation here ????
+#ifndef USE_GEMS3K_SERVER
+    // we have to cancel calculation here
     // or discard changes
-    ///	if( calcThread->isRunning() ) {
-    ///	    TProfil::pm->userCancel = true;
-    ///            ThreadControl::wakeOne();	// let's tell the calc that all is over
-    ///	    calcThread->wait();
-    ///	}
+    if( calcThread->isRunning() ) {
+        TProfil::pm->userCancel1 = true;
+        ThreadControl::wakeOne();	// let's tell the calc that all is over
+        calcThread->wait();
+    }
 
     //    calcTread->clean_up(); // will be called in closeEvent()
+#endif
     close();
 }
-
 
 void ProgressDialog::closeEvent(QCloseEvent* ev)
 {
@@ -153,7 +343,6 @@ void ProgressDialog::closeEvent(QCloseEvent* ev)
 // paintEvent
 //    paints the bottle with Gas/Liquid/Solid phases
 //
-
 void ProgressDialog::paintEvent(QPaintEvent* ev)
 {
     QPainter p(this);
@@ -263,7 +452,6 @@ void ProgressDialog::Update(bool force)
     // this really updates window when CPU is heavily loaded
     qApp->processEvents();
 }
-
 
 //--------------------- End of ProgressDialog.cpp ---------------------------
 

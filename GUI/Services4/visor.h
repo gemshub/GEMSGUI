@@ -22,7 +22,6 @@
 #include "v_module.h"
 
 class QWidget;
-//class ZMQClient;
 
 class TVisor
 {
@@ -41,10 +40,9 @@ class TVisor
     string UserProfDir;
     string LocalDir;
 
-    /// Path to gems3_server executable
-    /// <ServerGems3Dir>/server_data/toServer-dat.lst - path to gems3 server data
-    string ServerGems3Dir;
-
+    // Path to gems3_server executable
+    // <ServerGems3Dir>/server_data/toServer-dat.lst - path to gems3 server data
+    //string ServerGems3Dir;
 
     string LocalDocDir;
     string RemoteHTML;
@@ -159,9 +157,9 @@ public:
         LocalDoc = local;
     }
 
-    const string& serverGems3Dir() const {
-        return ServerGems3Dir;
-    }
+    // const string& serverGems3Dir() const {
+    //     return ServerGems3Dir;
+    // }
 
     /// Generate full path to current directory from filename and extension
     std::string filePathFromName( const std::string& filename, const std::string& extension );
@@ -177,7 +175,6 @@ public:
              const char* msg, int prog =0, int total=-1, bool move = false);
     void ProcessProgress( QWidget* parent, int nRT );
     void CloseMessage();
-//    ZMQClient* getZMQclient();
 
 
     bool getElemPrMode() const

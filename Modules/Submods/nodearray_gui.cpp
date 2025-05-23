@@ -1,14 +1,22 @@
-#include <unistd.h>
-#include "m_gem2mt.h"
-//#include "zmqclient.h"
+#include "nodearray_gui.h"
 #include "visor.h"
+#include "v_mod.h"
+#include "service.h"
+#include "GEMS3K/gems3k_impex.h"
 
+#ifndef _WIN32
+#include <unistd.h>
+#else
+#include <io.h>
+#endif
+
+#ifdef USE_GEMS3K_SERVER
 #ifdef NO_ASYNC_SERVER
 #include "gemsreaktoro/zmq_req_client.hpp"
 #else
 #include "gemsreaktoro/zmq_client.hpp"
 #endif
-#include "GEMS3K/gems3k_impex.h"
+#endif
 
 
 TNodeArrayGUI::TNodeArrayGUI( long int nNod, TMultiBase *apm  ):
@@ -26,10 +34,58 @@ TNodeArrayGUI::TNodeArrayGUI( long int asizeN, long int asizeM, long int asizeK,
     internal_Node.reset( calcNodeGUI );
 }
 
+// Writing dataCH, dataBR structure to binary/text files
+// and other necessary GEM2MT files
+std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
+                                          char  type_b, bool brief_mode, bool with_comments,
+                                          bool putNodT1, bool addMui )
+{
+    // Get name of filenames structure
+    std::string path = char_array_to_string( rt[RT_SYSEQ]->FldKey(2), rt[RT_SYSEQ]->FldLen(2));
+    strip(path);
+    GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
+    switch( type_b)
+    {
+    case '-':
+    case 'b': type_f = GEMS3KGenerator::f_binary; break;
+    case 'j': type_f = GEMS3KGenerator::f_json; break;
+    case 'f': type_f = GEMS3KGenerator::f_thermofun; break;
+    case 'o': type_f = GEMS3KGenerator::f_kv_thermofun; break;
+    }
 
+    if( type_f==GEMS3KGenerator::f_binary )
+        path += "-bin.lst";
+    else
+        path += "-dat.lst";
 
+AGAIN:
+    // open file to output
+    if( vfChooseFileSave(par, path, "Please, enter IPM work structure file name", "*.lst" ) == false )
+        return "";
 
+    if( !access(path.c_str(), 0 ) ) //file exists
+        switch( vfQuestion3( par, path.c_str(), "This set of files exists!",
+                            "&Overwrite", "&Rename", "&Cancel") )
+        {
+        case VF3_2:
+            goto AGAIN;
+        case VF3_1:
+            break;
+        case VF3_3:
+            return path;
+        }
 
+    ProcessProgressFunction messageF = [nIV, par](const std::string& message, long point){
+        return  pVisor->Message( par, "GEM2MT node array",  message.c_str() , point, nIV );
+    };
+    genGEMS3KInputFiles(  path, messageF, nIV, type_f, brief_mode, with_comments,
+                        putNodT1, addMui );
+
+    pVisor->CloseMessage();
+    return path;
+}
+
+#ifdef USE_GEMS3K_SERVER
 
 //   Here we call a loop on GEM calculations over nodes
 //   parallelization should affect this loop only
@@ -81,82 +137,6 @@ bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* ,
 #endif
 
     return zmqclient.run_task();
-}
-
-//long int  TNodeArrayGUI::CalcNodeServer( TNode* wrkNode, long int  iNode, long int )
-//{
-//    long int  retCode = T_ERROR_GEM;
-
-//    zmq_message_t send_msg;
-//    send_msg.push_back( std::to_string(iNode) );
-//    send_msg.push_back( wrkNode->datach_to_string( false, false ) );
-//    send_msg.push_back( wrkNode->gemipm_to_string( true, false, false ));
-//    send_msg.push_back( wrkNode->databr_to_string( false, false ));
-
-//    auto recv_message = TProfil::pm->CalculateEquilibriumServer( send_msg );
-
-//    if( recv_message.size() >= 2 )
-//        retCode  =  atol( recv_message[0].c_str() );
-//    else
-//        Error("RunGEM", "Illegal number of messages" );
-
-//    if( retCode == OK_GEM_AIA || retCode ==  OK_GEM_SIA )
-//    {
-//        wrkNode->databr_from_string( recv_message[1] );
-//    }
-
-//    return retCode;
-//}
-
-// Writing dataCH, dataBR structure to binary/text files
-// and other necessary GEM2MT files
-std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
-                                         char  type_b, bool brief_mode, bool with_comments,
-                                         bool putNodT1, bool addMui )
-{
-    // Get name of filenames structure
-    std::string path = char_array_to_string( rt[RT_SYSEQ]->FldKey(2), rt[RT_SYSEQ]->FldLen(2));;
-    strip(path);
-    GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
-    switch( type_b)
-    {
-    case '-':
-    case 'b': type_f = GEMS3KGenerator::f_binary; break;
-    case 'j': type_f = GEMS3KGenerator::f_json; break;
-    case 'f': type_f = GEMS3KGenerator::f_thermofun; break;
-    case 'o': type_f = GEMS3KGenerator::f_kv_thermofun; break;
-    }
-
-    if( type_f==GEMS3KGenerator::f_binary )
-        path += "-bin.lst";
-    else
-        path += "-dat.lst";
-
-AGAIN:
-    // open file to output
-    if( vfChooseFileSave(par, path, "Please, enter IPM work structure file name", "*.lst" ) == false )
-        return "";
-
-    if( !access(path.c_str(), 0 ) ) //file exists
-        switch( vfQuestion3( par, path.c_str(), "This set of files exists!",
-                             "&Overwrite", "&Rename", "&Cancel") )
-        {
-        case VF3_2:
-            goto AGAIN;
-        case VF3_1:
-            break;
-        case VF3_3:
-            return path;
-        }
-
-    ProcessProgressFunction messageF = [nIV, par](const std::string& message, long point){
-        return  pVisor->Message( par, "GEM2MT node array",  message.c_str() , point, nIV );
-    };
-    genGEMS3KInputFiles(  path, messageF, nIV, type_f, brief_mode, with_comments,
-                          putNodT1, addMui );
-
-    pVisor->CloseMessage();
-    return path;
 }
 
 std::vector<string> TNodeArrayGUI::generate_send_msg( bool add_head )
@@ -255,6 +235,7 @@ bool TNodeArrayGUI::set_resv_msg( std::vector<string> &&recv_message )
     return true;
 }
 
+#endif
 
 void TNodeArrayGUI::pVisor_Message(bool toclose, long int ndx, long int size1 )
 {
@@ -265,5 +246,4 @@ void TNodeArrayGUI::pVisor_Message(bool toclose, long int ndx, long int size1 )
                          "Reading from disk a set of node array files to resume an interrupted RMT task. "
                          "Please, wait...", ndx, size1 );
 }
-
 

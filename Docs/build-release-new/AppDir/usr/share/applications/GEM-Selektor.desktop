@@ -1,0 +1,25 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GEM-Selektor
+Categories=Science;
+Comment=GEM-Selektor v.3.9.6 Package
+TryExec=gems3
+Exec=gems3 -c
+Icon=gems3
+Terminal=false
+Actions=Resume;Reload;DBdefault;
+
+X-AppImage-Version=3.9.6
+
+[Desktop Action Resume]
+Exec=gems3 -c
+Name=Resume GEM-Selektor
+
+[Desktop Action Reload]
+Exec=gems3 -d
+Name=Reload GEM-Selektor
+
+[Desktop Action DBdefault]
+Exec=gems3 -d -f
+Name=DBdefault GEM-Selektor

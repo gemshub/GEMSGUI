@@ -78,6 +78,8 @@ const char *WIN_CONF = "windows.conf";
 TVisor::TVisor(int c, char *v[]):
         argc(c), argv(v)
 {
+   Q_INIT_RESOURCE(GUI);
+
     ProfileMode = MDD_DATABASE;
     dbChangeMode = false;
     isElementsProfileMode = true;
@@ -104,7 +106,7 @@ TVisor::TVisor(int c, char *v[]):
     QString dirExe = QCoreApplication::applicationDirPath();
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
-    ServerGems3Dir = dirExe.toStdString();
+    //ServerGems3Dir = dirExe.toStdString();
     QDir dirUp(dirExe);
     if( dirUp.cdUp() )
          dirExe = dirUp.path(); // + QDir::separator();
@@ -145,7 +147,7 @@ TVisor::TVisor(int c, char *v[]):
 
     int isys = 0;		// index of sysdir option
     int iuser = 0;		// index of userdir option
-    int iserver = 0;		// index of server option
+    //int iserver = 0;		// index of server option
 
     for (int ii = 1; ii < argc; ii++)
     {
@@ -155,9 +157,9 @@ TVisor::TVisor(int c, char *v[]):
         else if (strcmp(argv[ii], "-u") == 0
                  || strcmp(argv[ii], "--user-dir") == 0 )
             iuser = ii;
-        else if (strcmp(argv[ii], "-g") == 0
-                 || strcmp(argv[ii], "--gems-server-dir") == 0 )
-            iserver = ii;
+        // else if (strcmp(argv[ii], "-g") == 0
+        //          || strcmp(argv[ii], "--gems-server-dir") == 0 )
+        //     iserver = ii;
     }
     if (isys != 0)
     {
@@ -176,12 +178,12 @@ TVisor::TVisor(int c, char *v[]):
         if (UserGEMDir[UserGEMDir.length() - 1] != '/')
             UserGEMDir += '/';
     }
-    if (iserver != 0)
-    {
-        if (argc <= iserver + 1)
-            Error("Wrong options", "Wrong argument for option -g");
-        ServerGems3Dir = argv[iserver + 1];
-    }
+    // if (iserver != 0)
+    // {
+    //     if (argc <= iserver + 1)
+    //         Error("Wrong options", "Wrong argument for option -g");
+    //     ServerGems3Dir = argv[iserver + 1];
+    // }
 
 //    LocalDir = userGEMDir();
     LocalDocDir = SysGEMDir + HELP_DB_DIR;
@@ -233,8 +235,7 @@ QWidget* TVisor::window()
     return pVisorImp;
 }
 
-void
-TVisor::Setup()
+void TVisor::Setup()
 {
     bool option_d = false;
     bool option_f = false;
@@ -251,43 +252,43 @@ TVisor::Setup()
         if (strcmp(argv[ii], "-d") == 0
                 || strcmp(argv[ii], "--from-ini-files") == 0 )
         {
-           option_d = true;
-           pVisorImp->setConfigAutosave( true );
-        }
-        else
-	if (strcmp(argv[ii], "-f") == 0
-                || strcmp(argv[ii], "--allow-db-change") == 0 )
-	{
-            option_f = true;
-	}
-        else
-    if (strcmp(argv[ii], "-c") == 0
-                || strcmp(argv[ii], "--with-default-config") == 0 )
-	{
-            default_config = true;
+            option_d = true;
             pVisorImp->setConfigAutosave( true );
         }
         else
-	if (strcmp(argv[ii], "-v") == 0
-                || strcmp(argv[ii], "--with-default-settings") == 0 )
-	{
-            default_settings = true;
-            pVisorImp->setConfigAutosave( true );
-        }
+            if (strcmp(argv[ii], "-f") == 0
+                    || strcmp(argv[ii], "--allow-db-change") == 0 )
+            {
+                option_f = true;
+            }
+            else
+                if (strcmp(argv[ii], "-c") == 0
+                        || strcmp(argv[ii], "--with-default-config") == 0 )
+                {
+                    default_config = true;
+                    pVisorImp->setConfigAutosave( true );
+                }
+                else
+                    if (strcmp(argv[ii], "-v") == 0
+                            || strcmp(argv[ii], "--with-default-settings") == 0 )
+                    {
+                        default_settings = true;
+                        pVisorImp->setConfigAutosave( true );
+                    }
     }
 
     if (argc == 1 ) // No command line parameters - assume as -d   since v.3.8.0
     {
-       option_d = true;
-       // default_config = true;
-       pVisorImp->setConfigAutosave( true );
+        option_d = true;
+        // default_config = true;
+        pVisorImp->setConfigAutosave( true );
     }
 
     // check home dir
     string dir = userGEMDir();
     QDir userGEM(dir.c_str());
 
-    bool firstTimeStart = !userGEM.exists();
+    bool firstTimeStart = !userGEM.exists(userProfDir().c_str());
 
     if (firstTimeStart)
     {
@@ -295,24 +296,24 @@ TVisor::Setup()
         default_settings = true;
         pVisorImp->setConfigAutosave( true );
 
-//#ifndef _WIN32
-         // build Library
         string dirUp = string( dir,0, dir.length()-1);
         size_t pos = dirUp.rfind("/");
         if( pos != string::npos )
         {
-          dirUp = dirUp.substr(0,pos);
-          QDir userGEMUP(dirUp.c_str());
-          if(!userGEMUP.exists())
-              if( !userGEMUP.mkdir(dirUp.c_str()) )
-                  throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
-         }
-//#endif
+            dirUp = dirUp.substr(0,pos);
+            QDir userGEMUP(dirUp.c_str());
+            if(!userGEMUP.exists())
+                if( !userGEMUP.mkdir(dirUp.c_str()) )
+                    throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+        }
+
         gui_logger->debug("make home GEM directories");
         gui_logger->debug("UserGEM *: {}", UserGEMDir);
+        if(!userGEM.exists(userGEMDir().c_str())) {
+            if( !userGEM.mkdir(userGEMDir().c_str()) )
+                throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+        }
         gui_logger->debug("UserProj*: {}", UserProfDir);
-        if( !userGEM.mkdir(userGEMDir().c_str()) )
-            throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
         if( !userGEM.mkdir(userProfDir().c_str()) )
             throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
 
@@ -325,32 +326,28 @@ TVisor::Setup()
         cmd += "* ";
         cmd += userProfDir();
 
-        gui_logger->debug("Creating GEMS user directory:  {}", userProfDir());
+        gui_logger->debug("Creating GEMS user directory:  {}", cmd);
 #else
-string sprdir = sysProfDir();
-string uprdir = userProfDir();
-QDir sysProjD( sprdir.c_str() );
-QDir usrProjD( uprdir.c_str() );
-QString sPD = sysProjD.absolutePath();
-QString uPD = usrProjD.absolutePath();
+        string sprdir = sysProfDir();
+        string uprdir = userProfDir();
+        QDir sysProjD( sprdir.c_str() );
+        QDir usrProjD( uprdir.c_str() );
+        QString sPD = sysProjD.absolutePath();
+        QString uPD = usrProjD.absolutePath();
 
         cmd = "xcopy \"";
         cmd += 	qPrintable(	sysProjD.toNativeSeparators( sPD ) );
-//        cmd += DefProfDir;
+        //        cmd += DefProfDir;
         cmd += "\" \"";
         cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
         cmd += "\" /e /y";
 
-        string fname = pVisor->userGEMDir();
-                fname += "out.log";
-        ofstream fdbg(fname.c_str());
-        fdbg << "Creating GEMS user directory:  " << cmd.c_str() << endl;
+        gui_logger->debug("Creating GEMS user directory:  {}", cmd);
 #endif
 
         if (system(cmd.c_str()) != 0)
             throw TFatalError("GEMS Init", "Cannot copy default projects to user directory");
     }
-
 
     if (option_d)
         load();
@@ -894,8 +891,8 @@ TCStringArray readDirs(const char *dir)
     TCStringArray aFiles;
     gui_logger->debug("GEMS DB dir: {}", dir);
     QDir thisDir(dir);
-    if (!thisDir.isReadable())
-        throw TFatalError("GEMS Init", std::string(dir) + ": GEMS DB directory is not readable");
+//    if (!thisDir.isReadable())
+//        throw TFatalError("GEMS Init", std::string(dir) + ": GEMS DB directory is not readable");
 
     thisDir.setFilter(QDir::Dirs);
     //    thisDir.setNameFilter("*.pdb");
@@ -1026,13 +1023,13 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
     TCStringArray aFiles;
 
     QDir thisDir(dir);
-    if (!thisDir.isReadable())
-    {
-#ifndef _WIN32
-        gui_logger->error("{} directory is not readable", dir);
-#endif
-        throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
-    }
+//    if (!thisDir.isReadable())
+//    {
+//#ifndef _WIN32
+//        gui_logger->error("{} directory is not readable", dir);
+//#endif
+//        throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
+//    }
     QStringList afilt(filter);
 
     thisDir.setFilter(QDir::Files);
@@ -1090,11 +1087,6 @@ TVisor::CloseMessage()
 {
     pVisorImp->CloseMessage();
 }
-
-//ZMQClient* TVisor::getZMQclient()
-//{
-//    return pVisorImp->getZMQclient();
-//}
 
 
 TVisor *pVisor;
