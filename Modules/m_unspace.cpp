@@ -20,12 +20,6 @@
 
 #include <cmath>
 #include <cstdio>
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
-
 #include "m_unspace.h"
 #include "m_syseq.h"
 #include "visor.h"
@@ -1207,8 +1201,8 @@ TUnSpace::RecordPrint( const char* key )
 		if( vfChooseFileSave(window(), filename,
 				   "Please, enter the Unspace work structure file name", "*.unc" ) )
 		{
-		    if( !access(filename.c_str(), 0 ) ) //file exists
-		        if( !vfQuestion( window(), filename.c_str(),
+            if( vfExist(filename) )
+                if( !vfQuestion( window(), filename,
 		        		"This file exists! Overwrite?") )
                    return;
             fstream ff( filename, ios::out );

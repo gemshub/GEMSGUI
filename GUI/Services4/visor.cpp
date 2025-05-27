@@ -17,12 +17,6 @@
 //-------------------------------------------------------------------
 //
 #include <QApplication>
-#ifndef _WIN32
-#include <unistd.h>
-//#else
-//#include <io.h>
-#endif
-
 #include <QDir>
 #include <QString>
 #include <QFile>

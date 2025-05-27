@@ -20,11 +20,7 @@
 #ifndef V_DBFILE_H_
 #define V_DBFILE_H_
 
-#include <ctime>
 #include "v_file.h"
-
-
-class GemDataStream;
 
 const int MAXFESTACK = 200; // size array deleted record
 
@@ -111,7 +107,7 @@ public:
     TDBFile(const std::string& fName,
             const std::string& fExt, const std::string& fDir );
     TDBFile(const std::string& path);
-    TDBFile(fstream& f);
+    TDBFile(std::fstream& f);
 
     void check_dh();
 

@@ -17,11 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -509,7 +504,7 @@ AGAIN:
         if( vfChooseFileSave(nullptr/*window()*/, str_file,
                              "Please, enter output file name", "*.out" ) == false )
             return;
-        if( !access(str_file.c_str(), 0 ) ) //file exists
+        if( vfExist(str_file) )
             switch( vfQuestion3( nullptr/*window()*/, str_file,
                                  "This set of files exists!",
                                  "&Overwrite", "&Rename", "&Cancel") )
@@ -728,22 +723,6 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
         ios::openmode mod = ios::out;
         std::string filename = pVisor->userGEMDir();
                 filename +=  "DiscardedRecords.txt";
-// This question is not needed anymore  DK 27.10.2005
-/*      if( !(::access( filename, 0 )) ) //file exists
-            switch( vfQuestion3( window(), filename,
-                                 "This file exists! What to do?",
-                                 "&Append", "&Overwrite", "&Cancel") )
-            {
-            case VF3_2:
-                mod = ios::out;
-                break;
-            case VF3_1:
-                mod = ios::out|ios::app;
-                break;
-            case VF3_3:
-                return true;LoadMtparm
-            }
-*/
         fstream f( filename, mod );
         ErrorIf( !f.good() , filename, "Fileopen error");
         f <<   "Discarded Phase records\n";

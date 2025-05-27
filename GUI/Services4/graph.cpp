@@ -17,19 +17,11 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cstdio>
-#include <limits>
+#include <QPointF>
 #include <QJsonObject>
-#include "GEMS3K/gdatastream.h"
 #include "graph.h"
-#include "GemsMainWindow.h"
-
-void helpWin( const std::string& name, const std::string& item );
-
-void helpWin( const std::string& name, const std::string& item )
-{
-    pVisorImp->OpenHelp( name.c_str(), item.c_str() );
-}
+#include "v_object.h"
+#include "GEMS3K/gdatastream.h"
 
 //---------------------------------------------------------------------------
 // TPlotLine
@@ -76,7 +68,7 @@ void TPlotLine::write(GemDataStream& stream)
     stream.writeArray(name, sizeof(name));
 }
 
-void TPlotLine::read(fstream& stream)
+void TPlotLine::read(std::fstream& stream)
 {
     char buf[256];
     stream >> type;
@@ -88,14 +80,14 @@ void TPlotLine::read(fstream& stream)
     name[15] = '\0';
 }
 
-void TPlotLine::write(fstream& stream)
+void TPlotLine::write(std::fstream& stream)
 {
     stream << type << " ";
     stream << sizes << " ";
     stream << ndxX << " ";
     stream << red << " " << green << " " << blue << " ";
     stream << name;
-    stream << endl;
+    stream << std::endl;
 }
 
 //---------------------------------------------------------------------------
@@ -148,11 +140,11 @@ TPlot::TPlot( TPlot& plt, int aFirst ):
 TPlot::~TPlot()
 {}
 
-string TPlot::getName( int ii )
+std::string TPlot::getName( int ii )
 {
     char s[80];
     sprintf(s, "%s[%u]", aObj[nObjY]->GetKeywd(), ii);
-    return string(s);
+    return std::string(s);
 }
 
 // get point to draw one line

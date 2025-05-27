@@ -18,11 +18,7 @@
 //-------------------------------------------------------------------
 //
 
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
+
 #include "m_proces.h"
 #include "m_syseq.h"
 #include "visor.h"
@@ -1551,8 +1547,8 @@ void TProcess::RecordPrint(const char *key)
         if( vfChooseFileSave(window(), filename1,
                              "Please, enter the Process work structure file name", "*.lst" ) )
         {
-            if( !access(filename1.c_str(), 0 ) ) //file exists
-                if( !vfQuestion( window(), filename1.c_str(),
+            if( vfExist(filename1) )
+                if( !vfQuestion( window(), filename1,
                                  "This file exists! Overwrite?") )
                     return;
             TCStringArray savedSystems;

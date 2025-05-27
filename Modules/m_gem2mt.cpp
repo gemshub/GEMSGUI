@@ -19,12 +19,6 @@
 
 #include <cmath>
 #include <cstdio>
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
-
 #include "m_gem2mt.h"
 #include "visor.h"
 #include "m_syseq.h"
@@ -1200,7 +1194,7 @@ void TGEM2MT::RecordPrint( const char* key )
         if( vfChooseFileSave(window(), filename,
                              "Please, enter the TGEM2MT work structure file name", std::string("*."+f_ext).c_str() ) )
         {
-            if( !access(filename.c_str(), 0 ) ) //file exists
+            if( vfExist(filename) )
                 if( !vfQuestion( window(), filename.c_str(), "This file exists! Overwrite?") )
                     return;
             //mtp->PsScom=S_OFF;

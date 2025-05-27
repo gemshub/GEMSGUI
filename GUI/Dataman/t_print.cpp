@@ -16,16 +16,13 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cstdio>
 #include "t_print.h"
-#include "v_object.h"
 #include "v_dbm.h"
-#include "v_user.h"
 #include "service.h"
 
 
 TPrintData::TPrintData(const char *sd_key,
-    unsigned int nrt, fstream& fout, const char *fmt_text ):
+                       unsigned int nrt, std::fstream& fout, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
   ErrorIf( !fout.good() , rt[nRT]->GetKeywd(), "Fileopen error");
@@ -61,7 +58,7 @@ TPrintData::TPrintData(const char *sd_key,
               count = 1;
        }
        else
-           {  string str_err = "Invalid command: \n";
+           {  std::string str_err = "Invalid command: \n";
               str_err += input;
               Error( key_format, str_err );
             }
@@ -78,7 +75,7 @@ TPrintData::TPrintData(const char *sd_key,
                pose = strchr( pose+1, '#');
             }
             if( !pose )
-            {  string str_err = "Invalid condition: \n";
+            {  std::string str_err = "Invalid condition: \n";
                str_err += input;
                Error( key_format, str_err );
             }
@@ -111,7 +108,7 @@ TPrintData::TPrintData(const char *sd_key,
           /*while( *input == ' ' || *input == '\n' || *input == '\t')
                   input++; */
           if( !getFormat( input ) )
-          {  string str_err = "Wrong or missing format: \n";
+          {  std::string str_err = "Wrong or missing format: \n";
                str_err += input;
             Error( key_format, str_err );
           }   // added by KD 17.06.2002 
@@ -232,7 +229,7 @@ TPrintData::getToken( int& ii, int& jj )
 {
  int i;
  int data=0;
- string str;
+ std::string str;
 
  skipSpace();
 /* while( *input == ' ' || *input == '\n' || *input == '\t')
@@ -294,7 +291,7 @@ TPrintData::getToken( int& ii, int& jj )
         }
         skipSpace();
         if( *input != ']')
-        {  string str_err = "Invalid format: \n";
+        {  std::string str_err = "Invalid format: \n";
                str_err += input;
             Error( key_format, str_err );
         }
@@ -312,7 +309,7 @@ TPrintData::getToken( int& ii, int& jj )
                       else  if( str == "date" ) data = date_d;
                           else  if( str == "time" ) data = time_d;
     else
-    {  string str_err = "Invalid token: \n";
+    {  std::string str_err = "Invalid token: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
@@ -331,7 +328,7 @@ TPrintData::getToken( int& ii, int& jj )
     str = char_array_to_string( input, i );
     data = aObj.Find( str.c_str() );
     if( data < 0 )
-    {  string str_err = "Invalid object name: \n";
+    {  std::string str_err = "Invalid object name: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
@@ -361,7 +358,7 @@ TPrintData::getToken( int& ii, int& jj )
        }
      skipSpace();
      if( *input != ']')
-     {  string str_err = "Invalid format: \n";
+     {  std::string str_err = "Invalid format: \n";
            str_err += input;
        Error( key_format, str_err );
      }
@@ -416,7 +413,7 @@ TPrintData::getData( )
   }
  if( _data < time_d )
  {
-   string str = "Error in format:\n";
+   std::string str = "Error in format:\n";
            str+= input;
    Error( key_format, str);
  }
@@ -426,13 +423,13 @@ TPrintData::getData( )
 
 }
 
-const string emptiness("---");
+const std::string emptiness("---");
 
 void
-TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
+TPrintData::prnData( std::fstream& fout, int ind, PFormat& fmt, PData& dt )
 {
   char strbuf[8192];
-  string format = fmt.FmtOut();
+  std::string format = fmt.FmtOut();
   switch( dt.data )
   {
     case space_d: fmt.type = 's';
@@ -495,7 +492,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                {
                  if( fmt.type == 's' || fmt.type == 'c' )
                  {
-                   string str_data;
+                   std::string str_data;
                    if( dt.end_sub > 0 && ( aObj[dt.data]->GetType() >= 0 ) )
                    { // substring only for string type
                     str_data = aObj[dt.data]->GetString( ind, dt.index_j );

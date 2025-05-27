@@ -59,6 +59,11 @@
 #include "PhaseInfoDialog.h"
 //using namespace std;
 
+bool vfExist(const std::string &file_path)
+{
+    return !(::access(file_path.c_str(), 0 ));
+}
+
 
 void deleteDirectory(QString dir);
 void vfObjToFile(QWidget* par, TObject* obj);
@@ -67,6 +72,7 @@ QMutex qmutex;
 //----------------------------------------------------------------
 // GUI Service functions for modules
 //----------------------------------------------------------------
+
 
 bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
 {
@@ -676,8 +682,8 @@ AGAIN:
     if( vfChooseFileSave(par, filename, "Please, provide name of TXT-file") )
     {
         ios::openmode mod = ios::out;
-        if( !access(filename.c_str(), 0 ) ) //file exists
-            switch( vfQuestion3( par, filename.c_str(), "This file exists! What to do?",
+        if( vfExist(filename) )
+            switch( vfQuestion3( par, filename, "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
             {
             case VF3_2:
@@ -1006,3 +1012,4 @@ void vfPhaseInfo(QWidget* wpar, bool system, int xph, string phname,
 }
 
 //--------------------- End of service.cpp ---------------------------
+

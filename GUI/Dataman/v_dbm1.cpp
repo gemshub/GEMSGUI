@@ -19,12 +19,10 @@
 
 #include <cstdlib>
 #include <cstdarg>
-
-#include "GEMS3K/gdatastream.h"
+#include <ctime>
 #include "v_mod.h"
 #include "v_dbm.h"
-#include "v_dbfile.h"
-#include "v_object.h"
+#include "GEMS3K/gdatastream.h"
 
 int rlencomp( const void *ie_1, const void *ie_2 );
 
@@ -152,7 +150,7 @@ TDBFile::TDBFile(const std::string& path):
 
 //load configurations from cfg file
 
-TDBFile::TDBFile(fstream& file):
+TDBFile::TDBFile(std::fstream& file):
         TFile(file),
         FPosFree(-1),
         dh(nullptr),
@@ -253,7 +251,7 @@ void
 TDBFile::getHead(GemDataStream& fdb)
 {
     check_dh();
-    fdb.seekg( 0L, ios::beg );
+    fdb.seekg( 0L, std::ios::beg );
     //  fdb.read( (char *)dh, sizeof(VDBhead) );
     dh->read (fdb);
 
@@ -277,7 +275,7 @@ TDBFile::PutHead( GemDataStream& fdb, int deltRec )
     dh->nRec += deltRec;
     vdbh_setdt();
 
-    fdb.seekg(0L, ios::beg );
+    fdb.seekg(0L, std::ios::beg );
     // fdb.write( (char *)dh, sizeof(VDBhead) );
     dh->write (fdb);
     if( dh->isDel )
@@ -298,7 +296,7 @@ TDBFile::v_PDBtry( GemDataStream& fdb )
     // check version
     //  if( strncmp( dh->VerP, TFile::VV(), 8 ))
     //      Error( GetPath(), "Invalid version in PDB file.");
-    fdb.seekg(0l, ios::end);
+    fdb.seekg(0l, std::ios::end);
     FPosFree = fdb.tellg();
 }
 
@@ -369,7 +367,7 @@ TDBFile::AddSfe( RecEntry& re )
         }
     }
     // mark deleted record in file
-    f.seekg(re.pos, ios::beg );
+    f.seekg(re.pos, std::ios::beg );
     //   f.read( (char *)&rh, sizeof(RecHead) );
     rh.read (f);
     if( !strncmp( rh.bgm, MARKRECHEAD, 2 ))
@@ -377,7 +375,7 @@ TDBFile::AddSfe( RecEntry& re )
         strncpy( rh.bgm, MARKRECDEL, 2 );
         strncpy( rh.endm, MARKRECDEL, 2 );
     }
-    f.seekg(re.pos, ios::beg );
+    f.seekg(re.pos, std::ios::beg );
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     ErrorIf( !f.good(), GetPath(), "PDB file write error.");
@@ -518,7 +516,7 @@ TDBKey::TDBKey( unsigned char nRkflds, const unsigned char* rkfrm ):
 
 //configuration from cfg file
 
-TDBKey::TDBKey(fstream& in_stream)
+TDBKey::TDBKey(std::fstream& in_stream)
 {
 //    f.read( (char*)&rkFlds, sizeof(unsigned char) );
     int ii;
@@ -600,7 +598,7 @@ TDBKey::SetKey( const char *key )
     std::string sp;
     if( strncmp( key, ALLKEY, fullLen )==0 )
     {
-        string st;
+        std::string st;
         for(int i=0; i<rkFlds; i++)
             st += "*:";
         sp = std::string( st, 0, fullLen);
@@ -703,7 +701,7 @@ TDBKey::unpack( const char *key )
                 }
             }
             else  ln = ( sp1- sp);
-            ln = min<size_t>( ln, rkLen[i] );
+            ln = std::min<size_t>( ln, rkLen[i] );
             strncpy( uKey+rkInd[i], sp, ln );
             if( *(sp+ln) == ':' )
                   ln++;
@@ -834,7 +832,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
                 strcat( pkey, S_ANY );
             else
             {
-                string str=  char_array_to_string( rt[rts]->FldKey( nkf ), min( rt[rts]->FldLen(nkf), rkflen ));
+                std::string str=  char_array_to_string( rt[rts]->FldKey( nkf ), std::min( rt[rts]->FldLen(nkf), rkflen ));
                 StripLine( str );
                 strncat( pkey, str.c_str(), rkflen );
             }
@@ -858,7 +856,7 @@ TDBKeyList::TDBKeyList( unsigned char nRkflds, const unsigned char* rkfrm ):
 }
 
 //configuration from cfg file
-TDBKeyList::TDBKeyList(fstream& f):
+TDBKeyList::TDBKeyList(std::fstream& f):
         TDBKey(f)
 {
     init();
@@ -1049,7 +1047,7 @@ TDBKeyList::PutKey( uint i)
 
 //Put key i record to kbuf in unpack form.
 void
-TDBKeyList::RecKey(uint i, string& kbuf )
+TDBKeyList::RecKey(uint i, std::string& kbuf )
 {
     uint j;
     check_i(i);
@@ -1135,7 +1133,7 @@ NEXTKF:
 void
 TDBKeyList::arec_add( uint ni )
 {
-    string s;
+    std::string s;
     RecKey( ni, s);
     aKey.push_back( s );
     anR.push_back( ni );

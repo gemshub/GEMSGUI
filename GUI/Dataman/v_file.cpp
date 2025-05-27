@@ -16,11 +16,6 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <memory>
-#include <cstdlib>
-#include <cstdio>
-using namespace std;
-
 #ifndef _WIN32
 #include <unistd.h>
 #else
@@ -28,9 +23,8 @@ using namespace std;
 #endif
 
 #include "v_file.h"
-#include "v_user.h"
+#include "GEMS3K/v_service.h"
 #include "GEMS3K/gdatastream.h"
-
 
 //----------------------------------------------------------
 // TFile
@@ -40,26 +34,26 @@ char TFile::vv[9]="GEMBASE1";
 char TFile::pa[9]="01041999";
 
 void
-TFile::write( fstream& out_stream )
+TFile::write( std::fstream& out_stream )
 {
     out_stream << Keywd << "  "; // endl;
     int ln = Path.length() + 1;
     out_stream << ln << ' '; // endl;
-    out_stream << Path.c_str() << endl;
+    out_stream << Path.c_str() << std::endl;
 
     ErrorIf( out_stream.bad(), GetKeywd(),
              "Error writing TFile to configurator.");
 }
 
 void *
-TFile::read( fstream& in_stream )
+TFile::read( std::fstream& in_stream )
 {
     //    is.read( Keywd, MAX_FILENAME_LEN );
     // we should put length here !!
     in_stream >> Keywd;
     int ln;
     in_stream >> ln;
-    string sss;
+    std::string sss;
     in_stream >> sss;
 
     Path = sss;
@@ -71,12 +65,12 @@ TFile::read( fstream& in_stream )
 }
 
 // configuration to file
-void TFile::toCFG(fstream& fcfg)
+void TFile::toCFG(std::fstream& fcfg)
 {
     write(fcfg);
 }
 
-TFile::TFile(fstream& fcfg):
+TFile::TFile(std::fstream& fcfg):
         status( NOT_OPEN ),
 	f(*new GemDataStream())
 {
@@ -203,10 +197,10 @@ if( mode== UPDATE_DBV && access( Path.c_str(), 02 ) != 0)
 
     ErrorIf( !f.good(), GetPath(), "File open error.");
 
-    if( (mode & ios::out) || (mode & ios::app) )
-	f.seekp(0, ios::beg);
-    if( mode & ios::in )
-	f.seekg(0, ios::beg);
+    if( (mode & std::ios::out) || (mode & std::ios::app) )
+    f.seekp(0, std::ios::beg);
+    if( mode & std::ios::in )
+    f.seekg(0, std::ios::beg);
 
     status = mode;
 }

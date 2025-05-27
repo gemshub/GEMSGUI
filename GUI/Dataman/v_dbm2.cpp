@@ -19,16 +19,11 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "v_user.h"
 #include "v_dbm.h"
-#include "v_dbfile.h"
-#include "v_object.h"
 #include "v_mod.h"
 #include "visor.h"
 #include "service.h"
 #include "GEMS3K/gdatastream.h"
-#include "v_module.h"
-
 
 //#define Change_DB_Mode   1 // Set readonly data Base mode
 
@@ -66,7 +61,7 @@ void TDataBase::check_file( uint nF )
 }
 
 //put state to cfg file
-void TDataBase::toCFG(fstream& out_stream)
+void TDataBase::toCFG(std::fstream& out_stream)
 {
     unsigned short numFields = ind.KeyNumFlds();
 //    f.write( (char*)&cc, sizeof(unsigned char) );
@@ -100,7 +95,7 @@ out_stream << fls[ii] << ' '; // << endl;
     }
     int numFiles = aFile.size();
 //    f.write( (char*)&nF, sizeof(int) );
-out_stream << "  " << numFiles << endl;
+out_stream << "  " << numFiles << std::endl;
 
     ErrorIf( !out_stream.good(), GetKeywd(),
              "Error writing TDataBase to configurator");
@@ -111,7 +106,7 @@ out_stream << "  " << numFiles << endl;
 }
 
 //get state from cfg file
-void TDataBase::fromCFG(fstream& in_stream)
+void TDataBase::fromCFG(std::fstream& in_stream)
 {
     unsigned int tmp = 0;
 
@@ -170,7 +165,7 @@ TDataBase::TDataBase( size_t nrt, const char* name,
 }
 
 //configuration from cfg file
-TDataBase::TDataBase( fstream& f ):
+TDataBase::TDataBase( std::fstream& f ):
         status(UNDF_), ind(f ), aFile(), fls()
 {
     fromCFG(f);
@@ -256,7 +251,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     rh.rlen =  rep.len;
     StillLen = rep.len;
     rh.crt = time( nullptr );
-    f.seekg(rep.pos, ios::beg );
+    f.seekg(rep.pos, std::ios::beg );
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     // put packed key
@@ -290,7 +285,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
     rh.rlen =  rep.len;
     StillLen = rep.len;
     rh.crt = rhh.crt;
-    f.seekp(rep.pos, ios::beg );
+    f.seekp(rep.pos, std::ios::beg );
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     // put packed key
@@ -317,7 +312,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     char *key = const_cast<char*>(ind.PackKey());
 
     StillLen = rep.len;
-    f.seekg(rep.pos, ios::beg );
+    f.seekg(rep.pos, std::ios::beg );
     //   f.read( (char *)&rh, sizeof(RecHead) );
     rh.read (f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
@@ -494,7 +489,7 @@ void TDataBase::RenameList( const char* newName,
     if( strlen(newName) > FldLen(0) )
       return;
 
-    string str_old = char_array_to_string( oldName, FldLen(0) );
+    std::string str_old = char_array_to_string( oldName, FldLen(0) );
 //04/09/01 ????    if( strlen(oldName)<FldLen(0) )
         str_old += ":";
     for( int i=1; i<KeyNumFlds(); i++)
@@ -508,7 +503,7 @@ void TDataBase::RenameList( const char* newName,
       return;
 
     int nrec;
-    string str;
+    std::string str;
 
     for(size_t i=0; i<Nrec; i++ )
     {
@@ -558,7 +553,7 @@ std::string TDataBase::fromJsonObject(const QJsonObject &obj)
     int ii, no;
 
     QJsonArray keyArray = obj[ "key" ].toArray();
-    string keyStr = "", kbuf;
+    std::string keyStr = "", kbuf;
     for( ii=0; ii< std::min<int>( KeyNumFlds(), keyArray.size()); ii++ )
     {
         QJsonObject keyObject = keyArray[ii].toObject();
@@ -604,7 +599,7 @@ time_t TDataBase::GetTime( uint i )
     check_file( nF );
 
     aFile[nF]->Open( UPDATE_DBV );
-    aFile[nF]->f.seekg(ree->pos, ios::beg );
+    aFile[nF]->f.seekg(ree->pos, std::ios::beg );
     //   aFile[nF]->f.read( (char *)&rh, sizeof(RecHead) );
     rh.read (aFile[nF]->f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
@@ -694,7 +689,7 @@ bool TDataBase::FindPart( const char *key_, uint field )
     TDBKey dbKey(GetDBKey());
     dbKey.SetKey(key_);
     dbKey.SetFldKey(field,"*");
-    string str_key( dbKey.UnpackKey(), 0, KeyLen() );
+    std::string str_key( dbKey.UnpackKey(), 0, KeyLen() );
     RecStatus iRet = Rtest( str_key.c_str(), 0 );
     return ( iRet==MANY_ || iRet==ONEF_ );
 }
@@ -757,7 +752,7 @@ void TDataBase::GetFileList(int mode, TCStringArray& names,
         if( (nF==-1&&(mode&closef))||(nF!=-1&&(mode&openf)) )
         {
             aFile[i]->Makepath();
-            names.push_back( string(aFile[i]->GetKeywd())+string(" ")+aFile[i]->GetPath());
+            names.push_back( std::string(aFile[i]->GetKeywd())+std::string(" ")+aFile[i]->GetPath());
             indeces.push_back(i);
             if( (mode&oldself) && nF != -1) //select already open files
                 sel.push_back(indeces.size()-1);
@@ -882,7 +877,7 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
       for( jj=0; jj< names.size(); jj++)
       {
           auto all_name =  std::string("."+names[jj]+".");
-          if(  aFile[ii]->GetPath().find( all_name.c_str() ) != string::npos )
+          if(  aFile[ii]->GetPath().find( all_name.c_str() ) != std::string::npos )
             break;
       }
       if( jj < names.size() )
@@ -1037,7 +1032,7 @@ int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
 {
     RecEntry recordEntry;
     RecHead recordHead;
-    string str;
+    std::string str;
     //RecEntry& rep = ind.RecPosit(0);
     int len, fEnd = fPos;
     int nRec=0;
@@ -1048,7 +1043,7 @@ int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
     {
 	char ch;
 
-        inStream.seekg( fPos, ios::beg );
+        inStream.seekg( fPos, std::ios::beg );
         inStream.get(ch);
         if( ch != MARKRECHEAD[0] )
         {
@@ -1140,11 +1135,11 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
         std::string tmpFileName = aFile[nF]->GetPath().c_str();
         tmpFileName += ".tmp";
-        GemDataStream outStream( tmpFileName, ios::out | ios::binary );
+        GemDataStream outStream( tmpFileName, std::ios::out | std::ios::binary );
         for(int ii=0; ii<fPos; ii++ )
             outStream.put(0);
 
-        outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
+        outStream.seekp(fPos/*VDBhead::data_size()*/, std::ios::beg);
 
         nRec = scanfile( nF, fPos, fLen, aFile[nF]->f, outStream );
 
@@ -1301,10 +1296,10 @@ void DataBaseList::Init()
 }
 
 // configuration to file
-void DataBaseList::toCFG(fstream& out_stream)
+void DataBaseList::toCFG(std::fstream& out_stream)
 {
     int nR = size();
-out_stream << nR << endl;
+out_stream << nR << std::endl;
 
 //    f.write( (char*)&nR, sizeof(int) );
     for(size_t ii=0; ii<size(); ii++)
@@ -1312,7 +1307,7 @@ out_stream << nR << endl;
 }
 
 // configuration from file
-void DataBaseList::fromCFG(fstream& in_stream)
+void DataBaseList::fromCFG(std::fstream& in_stream)
 {
     int nDB;
 

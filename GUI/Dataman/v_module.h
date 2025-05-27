@@ -22,6 +22,10 @@
 
 class TCModuleImp;
 class QWidget;
+struct GraphData;
+namespace jsonui {
+class ChartData;
+}
 
 /*
     TSubModule class represents submodules of the program
@@ -30,12 +34,6 @@ class QWidget;
     TModuleImp class is visual representation (window) for TSubModule/TCModule
 */
 
-struct GraphData;
-
-
-namespace jsonui {
-class ChartData;
-}
 
 /// Default logger for gems3gui part
 extern std::shared_ptr<spdlog::logger> gui_logger;
@@ -45,7 +43,7 @@ class TSubModule
     // friend TCModuleImp;
 
 private:
-    string state;
+    std::string state;
 
     TSubModule(const TSubModule&);
     const TSubModule& operator=(const TSubModule&);
@@ -54,7 +52,7 @@ protected:
     uint nRT;
     uint startKeyEdit;
     bool contentsChanged;     // needs to save
-    string iconFileName;
+    std::string iconFileName;
 
     // Events part
     virtual void CloseWin();
@@ -74,7 +72,7 @@ public:
     TCModuleImp* pImp;		// for visor implementation
     QWidget* window();
 
-    TSubModule( uint nrt );
+    TSubModule(uint nrt);
     virtual ~TSubModule();
 
     virtual bool IsSubModule()
@@ -113,9 +111,9 @@ public:
         iconFileName = aIconFileName;
     }
 
-    virtual const char* GetIcon() const
+    virtual const std::string& GetIcon() const
     {
-        return iconFileName.c_str();
+        return iconFileName;
     }
 
     virtual const char* GetHtml();
@@ -134,7 +132,7 @@ public:
     void Show(QWidget* parent, const char *str=nullptr, bool viewmode=false );
 
     void Update(bool force=true);
-    virtual const string& GetString()
+    virtual const std::string& GetString()
     {
         return state;
     }
@@ -147,7 +145,7 @@ public:
 
 
     //-- Module manipulation
-    virtual string  GetKeyofRecord( const char* /*oldKey*/, const char* /*strTitle*/,
+    virtual std::string  GetKeyofRecord( const char* /*oldKey*/, const char* /*strTitle*/,
                                      int /*keyType*/ )
     { return"";}
 
@@ -193,10 +191,10 @@ protected:
 
     TDataBase* db;
     int nQ;                // number of DB structures
-    string Filter;
+    std::string Filter;
 
     TCStringArray aFldKeysHelp;      // string help of fields
-    string start_title;
+    std::string start_title;
 
     virtual void Setup();
     virtual bool EvClose();
@@ -298,9 +296,9 @@ public:
     virtual void MakeQuery();
 
     //-- Module manipulation
-    virtual string  GetKeyofRecord( const char *oldKey, const char *strTitle,
+    virtual std::string  GetKeyofRecord( const char *oldKey, const char *strTitle,
                                      int keyType );
-    virtual string  makeKeyFilter();
+    virtual std::string  makeKeyFilter();
     virtual bool  testKeyFilter();
     const char *getFilter()
     {

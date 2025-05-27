@@ -19,13 +19,9 @@
 #ifndef _v_vals_impl_h_
 #define _v_vals_impl_h_
 
-#include <memory>
-#include <stdint.h>  // To be replaced with cstdint after switching to C++ 11 standard
-#include <cstdio>
 #include "v_vals.h"
-#include "v_user.h"
+#include "GEMS3K/v_service.h"
 #include "GEMS3K/gdatastream.h"
-
 
 /* TVal template is defining implementation
     of TValBase interface for manipulation of
@@ -86,7 +82,7 @@ struct TVal:
     bool IsEmpty(int ndx) const;
 
     /* returns string representation of the cell value */
-    string GetString(int ndx) const;
+    std::string GetString(int ndx) const;
     /* converts string to the type and puts it into cell
     returns false on failure  */
     bool SetString(const char* s, int ndx);
@@ -150,7 +146,7 @@ struct TValFixString:
     {
         return static_cast<char*>(ptr)[ndx*len]=='*';
     }
-    string GetString(int ndx) const
+    std::string GetString(int ndx) const
     {
         if(!ptr)
             return "";
@@ -219,7 +215,7 @@ struct TValString:
             return true;
         return (strcmp(static_cast<char*>(ptr),S_EMPTY)==0);
     }
-    string GetString(int /*ndx*/) const
+    std::string GetString(int /*ndx*/) const
     {
         if(!ptr)
             return S_EMPTY;
@@ -257,7 +253,7 @@ inline bool TVal<T>::IsEmpty(int ndx) const
 }
 
 template <class T>
-inline string TVal<T>::GetString(int ndx) const
+inline std::string TVal<T>::GetString(int ndx) const
 {
     if( IsEmpty(ndx) )
         return S_EMPTY;
@@ -270,7 +266,7 @@ inline string TVal<T>::GetString(int ndx) const
 template<class T>
 bool TVal<T>::SetString(const char* s, int ndx)
 {
-    string ss = s;
+    std::string ss = s;
     strip( ss );
     if( ss==S_EMPTY )
     {
@@ -309,15 +305,15 @@ inline bool TVal<unsigned char>::SetString(const char* s, int ndx)
 }
 
 template<>
-inline string TVal<char>::GetString(int ndx) const
+inline std::string TVal<char>::GetString(int ndx) const
 {
-    return string(1, static_cast<char*>(ptr)[ndx]);
+    return std::string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 template<>
-inline string TVal<unsigned char>::GetString(int ndx) const
+inline std::string TVal<unsigned char>::GetString(int ndx) const
 {
-    return string(1, static_cast<char*>(ptr)[ndx]);
+    return std::string(1, static_cast<char*>(ptr)[ndx]);
 }
 
 

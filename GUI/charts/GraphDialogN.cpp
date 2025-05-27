@@ -53,6 +53,11 @@
 #include "GemsMainWindow.h"
 #include "visor.h"
 
+void helpWin( const std::string& name, const std::string& item )
+{
+    pVisorImp->OpenHelp( name.c_str(), item.c_str() );
+}
+
 namespace jsonui {
 
 /// The constructor

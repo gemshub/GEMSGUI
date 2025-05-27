@@ -15,11 +15,6 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
 
 #include <ctime>
 #include <QJsonDocument>
@@ -1196,7 +1191,7 @@ TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
     {
         ios::openmode mod = ios::out;
 
-        if( !access(filename.c_str(), 0 ) ) //file exists
+        if(vfExist(filename))
             switch( vfQuestion3( window(), filename,
                              "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
@@ -1915,7 +1910,7 @@ void TCModule::RecExport( const char *pattern )
     if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
    ios::openmode mod = ios::out;
-   if( !(::access(filename.c_str(), 0 )) ) //file exists
+   if(vfExist(filename))
      switch( vfQuestion3( window(), filename,
                    "This file exists! What to do?",
                   "&Append", "&Overwrite", "&Cancel") )

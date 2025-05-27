@@ -30,28 +30,28 @@ class TVisor
     int argc;
     char** argv;
 
-    string lastProjectKey;
-    string lastSystemKey;
+    std::string lastProjectKey;
+    std::string lastSystemKey;
 
-    string SysGEMDir;
-    string DefDBDir;
-    string DefProfDir;
-    string UserGEMDir;
-    string UserProfDir;
-    string LocalDir;
+    std::string SysGEMDir;
+    std::string DefDBDir;
+    std::string DefProfDir;
+    std::string UserGEMDir;
+    std::string UserProfDir;
+    std::string LocalDir;
 
     // Path to gems3_server executable
     // <ServerGems3Dir>/server_data/toServer-dat.lst - path to gems3 server data
-    //string ServerGems3Dir;
+    //std::string ServerGems3Dir;
 
-    string LocalDocDir;
-    string RemoteHTML;
+    std::string LocalDocDir;
+    std::string RemoteHTML;
     bool LocalDoc;         // obsolete
 
-    string ImgDir;
+    std::string ImgDir;
 
     bool isElementsProfileMode;
-    string DefaultBuiltinTDB;
+    std::string DefaultBuiltinTDB;
     bool dbChangeMode;
 
 
@@ -96,44 +96,44 @@ public:
 
     bool isDBChangeMode() const { return dbChangeMode; }
 
-    string sysGEMDir() const {
+    std::string sysGEMDir() const {
         return SysGEMDir;
     }
     
-    string sysDBDir() const {
+    std::string sysDBDir() const {
         return SysGEMDir + DefDBDir;
     }
     
-    string sysProfDir() {
+    std::string sysProfDir() {
         return SysGEMDir + DefProfDir;
     }
     
-    string userGEMDir() const {
+    std::string userGEMDir() const {
         return UserGEMDir;
     }
     
-    string userProfDir() const {
+    std::string userProfDir() const {
         return UserGEMDir + UserProfDir;
     }
 
-    string imgDir() {
+    std::string imgDir() {
         return SysGEMDir + ImgDir;
     }
 
-    const string& localDir() const {
+    const std::string& localDir() const {
         return LocalDir;
     }
 
-    string docDir() const {
+    std::string docDir() const {
         return LocalDocDir;
      //	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
     }
 
-    const string& localDocDir() const {
+    const std::string& localDocDir() const {
         return LocalDocDir;
     }
 
-    const string& remoteHTML() const {
+    const std::string& remoteHTML() const {
         return RemoteHTML;
     }
 
@@ -141,15 +141,15 @@ public:
         return LocalDoc;
     }
 
-    void setLocalDir(const string& localDir) {
+    void setLocalDir(const std::string& localDir) {
         LocalDir = localDir;
     }
 
-    void setLocalDocDir(const string& localDir) {
+    void setLocalDocDir(const std::string& localDir) {
         LocalDocDir = localDir;
     }
 
-    void setRemoteHTML(const string& remoteURL) {
+    void setRemoteHTML(const std::string& remoteURL) {
         RemoteHTML = remoteURL;
     }
 
@@ -157,7 +157,7 @@ public:
         LocalDoc = local;
     }
 
-    // const string& serverGems3Dir() const {
+    // const std::string& serverGems3Dir() const {
     //     return ServerGems3Dir;
     // }
 
@@ -186,10 +186,10 @@ public:
         isElementsProfileMode = newData;
     }
 
-    const string& defaultBuiltinTDBL() const {
+    const std::string& defaultBuiltinTDBL() const {
         return DefaultBuiltinTDB;
     }
-    void setDefaultBuiltinTDB(const string& aDefaultBuiltinTDB) {
+    void setDefaultBuiltinTDB(const std::string& aDefaultBuiltinTDB) {
         DefaultBuiltinTDB = aDefaultBuiltinTDB;
     }
 
@@ -198,6 +198,5 @@ public:
 };
 
 extern TVisor* pVisor;
-//extern TVisorImp* pVisorImp;
 
 #endif   // _visor_h

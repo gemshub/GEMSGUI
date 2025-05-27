@@ -16,10 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cstdlib>
 #include <ctime>
-#include <fstream>
-#include <cmath>
 #include "v_user.h"
 
 char chLowUp(char ch);
@@ -59,10 +56,7 @@ void NormFloatRound(float *aArr, int size, int digits)
     }
 }
 
-
-
-istream&
-u_getline(istream& is, string& str, char delim)
+std::istream& u_getline(std::istream& is, std::string& str, char delim)
 {
     char ch;
     is.get(ch);
@@ -92,7 +86,7 @@ void Gcvt(double number, size_t ndigit, char *buf)
 }
 
 
-string curDate()
+std::string curDate()
 {
     struct tm *time_now;
     time_t secs_now;
@@ -128,7 +122,7 @@ std::string curDateSmol(char ch )
     return tstr;
 }
 
-string curTime()
+std::string curTime()
 {
     struct tm *time_now;
     time_t secs_now;
@@ -148,7 +142,7 @@ string curTime()
 
 
 
-void StripLine(string& line)
+void StripLine(std::string& line)
 {
    strip( line );
 }
@@ -214,23 +208,23 @@ char chLowUp(char ch)
 //        n
 
 void
-  ChangeforTempl( string& data_str,  const string& from_templ1,
-                  const string& to_templ1, uint len_ )
+  ChangeforTempl( std::string& data_str,  const std::string& from_templ1,
+                  const std::string& to_templ1, uint len_ )
 {
     if( data_str.empty() )
         return;
 
 
-    string  from_templ = from_templ1;
-    string  to_templ = to_templ1;
+    std::string  from_templ = from_templ1;
+    std::string  to_templ = to_templ1;
     bool inv_case = false;
     size_t ii;
     strip( data_str );
-    string old_str = data_str;
+    std::string old_str = data_str;
 
     if( from_templ =="*" ) // all key
     {
-      if( to_templ.find("invcase") != string::npos )
+      if( to_templ.find("invcase") != std::string::npos )
       {
           if( to_templ == "invcase" )
             for( ii=0; ii<data_str.length(); ii++)
@@ -241,11 +235,11 @@ void
         if( to_templ[0] == '*' )
         {
          if( data_str.length() >= len_ )
-          data_str = string( data_str, 0, len_-1 );
-         data_str += string(to_templ, 1);
+          data_str = std::string( data_str, 0, len_-1 );
+         data_str += std::string(to_templ, 1);
         }
         else
-          if(to_templ.find("*") != string::npos) // no all case
+          if(to_templ.find("*") != std::string::npos) // no all case
             goto PART;
           else
             data_str = to_templ;
@@ -264,9 +258,9 @@ void
 
     PART:
     // Changed first n symbols
-    if( string( to_templ, 0, 7) == "invcase" )
+    if( std::string( to_templ, 0, 7) == "invcase" )
     {  inv_case = true;
-       to_templ = string( to_templ, 7 );
+       to_templ = std::string( to_templ, 7 );
     }
 
     ii=0;
@@ -287,18 +281,18 @@ void
        Error( from_templ, "Error (1): Invalid character in template ");
      ii++;
    }
-   data_str = string( data_str, k );
+   data_str = std::string( data_str, k );
    pos_to = to_templ.find( "*" );
-   data_str = string( to_templ, 0, pos_to) + data_str;
-   if( pos_to  == string::npos )
+   data_str = std::string( to_templ, 0, pos_to) + data_str;
+   if( pos_to  == std::string::npos )
     to_templ = "";
    else
-    to_templ = string( to_templ, pos_to+1);
+    to_templ = std::string( to_templ, pos_to+1);
    pos_to = from_templ.find( "*" );
-   if( pos_to  == string::npos )
+   if( pos_to  == std::string::npos )
     from_templ = "";
    else
-    from_templ = string( from_templ, pos_to+1);
+    from_templ = std::string( from_templ, pos_to+1);
 
    // Changed last n symbols
    inv_case = false;
@@ -327,7 +321,7 @@ void
      ik--;
      jj--;
    }
-   data_str = string( data_str, 0, k );
+   data_str = std::string( data_str, 0, k );
    data_str += to_templ;
    data_str = data_str.substr(0, len_);
    if( data_str == old_str )

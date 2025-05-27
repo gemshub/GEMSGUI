@@ -275,7 +275,7 @@ QJsonArray TIComp::all_to_thermofun()
     QJsonArray allArray;
     TCIntArray anR;
     TCStringArray aIC1;
-    string fld_key;
+    std::string fld_key;
     db->GetKeyList( "*:*:*:", aIC1, anR );
     QJsonArray datasources( {"GEMS3gui"} );
 

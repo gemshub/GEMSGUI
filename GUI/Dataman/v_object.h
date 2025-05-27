@@ -20,7 +20,6 @@
 #define _v_object_h_
 
 #include <fstream>
-#include <memory>
 #include "v_user.h"
 #include "v_vals.h"
 
@@ -51,7 +50,7 @@ class TObject
     bool Dynamic;
     int N;
     int M;
-    string Descr = "";
+    std::string Descr = "";
     TValBase* pV;		//  void* ptr;
     ObjType Type;
     char IndexationCode;
@@ -82,8 +81,8 @@ protected:
     {
         ErrorIf(typ > 126 || typ < N_TYPE_, GetKeywd(), "Invalid object type");
     }
-    void write(ostream & os);
-    void read(istream & os);
+    void write(std::ostream & os);
+    void read(std::istream & os);
 
     int GetCellSize() const;
     int GetSize() const;
@@ -95,14 +94,14 @@ protected:
 
 public:
 
-    void set_empty_string( const string& object_empty )
+    void set_empty_string( const std::string& object_empty )
     {
         string_empty_value = object_empty;
     }
 
     TObject (const char* name, ObjType type, int n, int m,
-             bool dyn, char indexCode, const string descr);
-    TObject (istream & f);
+             bool dyn, char indexCode, const std::string descr);
+    TObject (std::istream & f);
     ~TObject ();
 
     int ndx(int n, int m) const
@@ -110,15 +109,15 @@ public:
         return n * M + m;
     }
 
-    void ToCFG(ostream & f);
+    void ToCFG(std::ostream & f);
 
     //--- Selectors
     const char *GetKeywd() const
     {
         return Keywd;
     }
-    string GetFullName(int aN, int aM);
-    string GetHelpLink(int aN, int aM);
+    std::string GetFullName(int aN, int aM);
+    std::string GetHelpLink(int aN, int aM);
 
     ObjType GetType() const
     {
@@ -177,7 +176,7 @@ public:
     {
     return pV->IsEmpty( ndx(aN, aM) );
     }
-    const string GetDescription(int Ni, int Mi);
+    const std::string GetDescription(int Ni, int Mi);
 
     //--- Object parameters manipulation
     void SetN(int newN)
@@ -200,15 +199,15 @@ public:
     void Put(double value, int n = 0, int m = 0);
     // Put cell of object to string. Return the lengs of string.
     // need inline - time critical function
-    string GetString(int aN = 0, int aM = 0) const
+    std::string GetString(int aN = 0, int aM = 0) const
     {
         check_dim(aN, aM);
-        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : string(S_EMPTY));
+        return ((GetPtr())? pV->GetString(ndx(aN, aM)) : std::string(S_EMPTY));
     }
-    string GetStringEmpty(int aN = 0, int aM = 0) const
+    std::string GetStringEmpty(int aN = 0, int aM = 0) const
     {
-        auto str_value = ((GetPtr())? pV->GetString(ndx(aN, aM)) : string(S_EMPTY) );
-        if(  Type >= 0 && str_value == string(S_EMPTY))
+        auto str_value = ((GetPtr())? pV->GetString(ndx(aN, aM)) : std::string(S_EMPTY) );
+        if(  Type >= 0 && str_value == std::string(S_EMPTY))
             str_value = string_empty_value;
         return str_value;
     }
@@ -230,8 +229,8 @@ public:
     int lenDB() const;
     int toDB(GemDataStream& f);
     int ofDB(GemDataStream& f);
-    void toTXT(fstream& f);
-    void ofTXT(fstream& f);
+    void toTXT(std::fstream& f);
+    void ofTXT(std::fstream& f);
 
     void toJsonObject( QJsonObject& obj ) const;
     void fromJsonObject( const QJsonObject& obj );
@@ -250,10 +249,10 @@ class TObjList : public std::vector<std::shared_ptr<TObject>>
 public:
 
     TObjList();
-    TObjList(istream& f);
+    TObjList(std::istream& f);
 
-    void fromDAT(istream& f);
-    void toDAT(ostream& f);
+    void fromDAT(std::istream& f);
+    void toDAT(std::ostream& f);
     void load(const char* f_obj, int N = -1);	// from '.ini'
 
     //--- Selectors

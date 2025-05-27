@@ -17,9 +17,9 @@
 //-------------------------------------------------------------------
 
 
-#include <cstdio>
-#include <cmath>
+#include <memory>
 #include "v_vals_impl.h"
+#include "GEMS3K/v_detail.h"
 
 int TValBase::doublePrecision = 7;
 
@@ -190,7 +190,7 @@ bool TValString::SetString(const char* s, int )
 
 template<> bool TVal<signed char>::SetString(const char* s, int ndx)
 {
-    string ss = s;
+    std::string ss = s;
     strip( ss );
     if( /*ss.empty() ||*/ ss==S_EMPTY )
     {
