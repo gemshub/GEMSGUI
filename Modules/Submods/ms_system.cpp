@@ -32,7 +32,7 @@ const char* TSyst::GetHtml()
 TSyst* TSyst::sm;
 
 TSyst::TSyst( int nrt ):
-        TSubModule( nrt )
+        TCModule( nrt )
 {
     set_def();
 }
@@ -58,7 +58,7 @@ void TSyst::EvPageChanged(int nPage)
 void TSyst::CellChanged(bool val )
 {
     TSysEq::pm->CellChanged(val);
-    TSubModule::CellChanged(val);
+    TCModule::CellChanged(val);
 }
 
 // link values to objects

@@ -27,7 +27,7 @@
 TMTparm* TMTparm::sm;
 
 TMTparm::TMTparm( int nrt ):
-        TSubModule( nrt )
+        TCModule( nrt )
 {
     set_def();
 }

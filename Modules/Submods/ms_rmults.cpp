@@ -30,7 +30,7 @@
 TRMults* TRMults::sm;
 
 TRMults::TRMults( int nrt ):
-        TSubModule( nrt )
+        TCModule( nrt )
 {
     set_def();
 }

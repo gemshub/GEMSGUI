@@ -62,7 +62,7 @@ TProcess::GetString()
 {
     titler = std::string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
     titler += " : ";
-    titler += TSubModule::GetString();
+    titler += TCModule::GetString();
     return titler;
 }
 */

@@ -170,7 +170,7 @@ string KeyDialog::getKey()
     int sel = ui->pList->currentRow(); //ui->pList->currentItem();
     if( sel != -1 )
     {
-        dynamic_cast<TCModule*>(aMod[iRt].get())->setFilter(keyFilter.c_str());
+        aMod[iRt]->setFilter(keyFilter.c_str());
         string res;
         string s = ui->pList->item(sel)->text().toStdString();
         //string s = ss;

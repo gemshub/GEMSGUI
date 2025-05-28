@@ -53,7 +53,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
     {
         pEdit = new QLineEdit(this);
         aEdit.push_back( std::shared_ptr<QLineEdit>(pEdit) );
-        QString str = dynamic_cast<TCModule*>(aMod[irt].get())->GetFldHelp(ii);
+        QString str = aMod[irt]->GetFldHelp(ii).c_str();
         pEdit->setToolTip( str);
         pEdit->setMaxLength( dbKey.FldLen(ii) );
         pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );

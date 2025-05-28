@@ -101,7 +101,7 @@ RMULTS;
 
 // Data of RMULTS
 class TRMults :
-            public TSubModule
+            public TCModule
 {
     RMULTS mu;
 

@@ -113,20 +113,20 @@ private:
 // CWinInfo class
 //===========================================
 
-class TSubModule;
+class TCModule;
 
 struct CWinInfo
 {
     TCWindow* pWin;
 
-    TSubModule& rM;
+    TCModule& rM;
    std::vector<std::shared_ptr<PageInfo>> aPageInfo;
 
     int init_width;
     int init_height;
 
-    CWinInfo(TSubModule& r, std::istream& is);
-    CWinInfo(TSubModule& r, const TJsonConfig& cnf);
+    CWinInfo(TCModule& r, std::istream& is);
+    CWinInfo(TCModule& r, const TJsonConfig& cnf);
     void load(const TJsonConfig& cnf);
 
     void toDAT(std::ostream& os);

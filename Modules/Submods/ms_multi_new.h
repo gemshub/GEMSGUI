@@ -92,7 +92,7 @@ struct SPP_SETTING
 
 
 // Data of MULTI
-class TMulti: public TMultiBase, public TSubModule
+class TMulti: public TMultiBase, public TCModule
 {
 
 public:

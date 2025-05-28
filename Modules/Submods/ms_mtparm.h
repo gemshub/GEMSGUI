@@ -116,7 +116,7 @@ enum {
 
 // Data of MTPARM
 class TMTparm :
-            public TSubModule
+            public TCModule
 {
     MTPARM tp;
 

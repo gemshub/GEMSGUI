@@ -41,7 +41,7 @@ class TCModuleImp: public QDialog//QMainWindow
     //QToolBar* toolBar;
 
     size_t	    iMod;
-    TSubModule& rMod;
+    TCModule& rMod;
     TCWindow* pWin;
 
     time_t last_update;

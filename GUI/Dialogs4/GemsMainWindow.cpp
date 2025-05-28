@@ -340,7 +340,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
         return;
 
     string oldKey = rt[nRT]->UnpackKey();
-    pFilterKey->setText( dynamic_cast<TCModule*>(aMod[nRT].get())->getFilter());
+    pFilterKey->setText(aMod[nRT]->getFilter().c_str());
 
     // define tbKeys
     tbKeys->clear();
@@ -386,7 +386,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
     {
         tbKeys->setColumnWidth(jj, wdF( ftString, colSizes[jj]+1, eNo ) );
         item = new QTableWidgetItem(tr("%1").arg( jj+1));
-        item->setToolTip( dynamic_cast<TCModule*>(aMod[nRT].get())->GetFldHelp(jj));
+        item->setToolTip( aMod[nRT]->GetFldHelp(jj).c_str());
         tbKeys->setHorizontalHeaderItem( jj, item );
     }
 
@@ -435,7 +435,7 @@ void TVisorImp::changeModulesKeys( int nRT )
     }
     else
     {
-        //pFilterKey->setText(dynamic_cast<TCModule *>(aMod[nRT].get())->getFilter());
+        //pFilterKey->setText(aMod[nRT]->getFilter());
         defineModuleKeysList( nRT );
     }
     // currentNrt = nRT;
@@ -465,7 +465,7 @@ void TVisorImp::changeKeyList()
     if( currentNrt >=0 )
     {
         string filter = pFilterKey->text().toStdString();
-        dynamic_cast<TCModule*>(aMod[currentNrt].get())->setFilter(filter.c_str());
+        aMod[currentNrt]->setFilter(filter);
         defineModuleKeysList( currentNrt );
     }
 }

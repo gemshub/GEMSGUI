@@ -24,14 +24,14 @@
 
 // Data of EQUSTAT calc
 class TEQCalc :
-            public TSubModule
+            public TCModule
 {
 
 protected:
 
 public:
 
-    TEQCalc( int nrt ): TSubModule( nrt )
+    TEQCalc( int nrt ): TCModule( nrt )
     {}
 
     const char* GetName() const override
@@ -63,7 +63,7 @@ public:
 
 // Data of EQUSTAT demo
 class TEQDemo :
-            public TSubModule
+            public TCModule
 {
       std::string titler;
 
@@ -71,7 +71,7 @@ protected:
 
 public:
 
-    TEQDemo( int nrt ): TSubModule( nrt )
+    TEQDemo( int nrt ): TCModule( nrt )
     {}
 
     const char* GetName() const override
@@ -97,8 +97,6 @@ public:
     const std::string& GetString() override
     {
      titler = rt[RT_SYSEQ]->PackKey();
-     //titler += " : ";
-     //titler += TSubModule::GetString();
      return titler;
     }
 

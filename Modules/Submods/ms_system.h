@@ -180,7 +180,7 @@ SYSTEM;
 
 // Data of SYSTEM
 class TSyst :
-            public TSubModule
+            public TCModule
 {
     //RMULTS* mup;
     SYSTEM sy;
@@ -263,8 +263,6 @@ public:
     const std::string& GetString() override
     {
      titler = rt[RT_SYSEQ]->PackKey();
-     //titler += " : ";
-     //titler += TSubModule::GetString();
      return titler;
     }
 

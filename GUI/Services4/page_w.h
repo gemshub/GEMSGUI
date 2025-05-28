@@ -58,7 +58,7 @@ class TCPage:
         return rInfo.aFieldInfo.size();
     }
     
-    TSubModule& getWin() const
+    TCModule& getWin() const
     {
         return rInfo.rWinInfo.rM;
     }
@@ -116,7 +116,7 @@ class TCWindow: public QWidget
         return static_cast<int>(rInfo.aPageInfo.size());
     }
 
-    TSubModule& getCModule() const
+    TCModule& getCModule() const
     {
         return rInfo.rM;
     }

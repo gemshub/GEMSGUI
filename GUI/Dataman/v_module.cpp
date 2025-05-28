@@ -23,7 +23,7 @@
 #include "service.h"
 #include "ms_multi_new.h"
 #include "t_print.h"
-#include "t_read.h"
+//#include "t_read.h"
 #include "NewSystemDialog.h"
 #include <spdlog/sinks/stdout_color_sinks.h>
 
@@ -32,21 +32,23 @@ std::shared_ptr<spdlog::logger> gui_logger = spdlog::stdout_color_mt("gems3gui")
 
 
 // Default constructor and destructor
-
-const std::string replace_question = "Data record with this key already exists! Replace?";
-
-TSubModule::TSubModule(uint nrt):
+TCModule::TCModule(size_t nrt):
         nRT(nrt),
         start_key_field_edit(0),
         contents_changed(false),
+        state_line(),
         icon_file_path(),
-        pImp(nullptr)
+        pImp(nullptr),
+        nQ(1),
+        Filter(ALLKEY),
+        start_title(" "),
+        db( nrt>MD_RMULTS? nullptr: rt[nrt].get())
 {}
 
-TSubModule::~TSubModule()
+TCModule::~TCModule()
 {}
 
-void TSubModule::clearEditFocus()
+void TCModule::clearEditFocus()
 {
     if( window() )  {
         auto* focus_w = window()->focusWidget();
@@ -61,14 +63,14 @@ void TSubModule::clearEditFocus()
     }
 }
 
-uint TSubModule::keyEditField()
+size_t TCModule::keyEditField()
 {
     if(nRT == RT_RTPARM || pVisor->ProfileMode)
         return start_key_field_edit;
     else return 0;
 }
 
-QWidget* TSubModule::window()
+QWidget* TCModule::window()
 {
       if( nRT== RT_SYSEQ && pVisor->ProfileMode )
        return dynamic_cast<QWidget*>(NewSystemDialog::pDia);
@@ -79,60 +81,49 @@ QWidget* TSubModule::window()
 // Updates window contents
 // see also TModuleImp::Update, TCWindow::Update(),
 // TCPage::Update(), TField::Update()
-
-void TSubModule::Update(bool force)
+void TCModule::Update(bool force)
 {
-    if( !pImp )		// module not opened
-        return;
-    pImp->Update(force);
+    if(pImp) {
+       pImp->Update(force);
+    }
 }
 
 // Updates contents of all windows plus caption of the current one
-void TSubModule::ModUpdate(const std::string& str)
+void TCModule::ModUpdate(const std::string& str)
 {
     set_string(str);
     pVisor->Update();
 }
 
 // Open module window
-void TSubModule::Show(QWidget* parent,  const char *str, bool viewmode )
+void TCModule::Show(QWidget* parent, const char *str, bool viewmode)
 {
-    if (str) set_string(str);
+    if(str) set_string(str);
     pVisor->OpenModule(parent, nRT, 0, !viewmode);
 }
 
 // Callback for 'Help' command
-const char* TSubModule::GetHtml()
+const char* TCModule::GetHtml()
 {
    return GEMS_TOC_HTML;
 }
-
-//========================================
-// TCModule class
-//=======================================
-
-// Default constructor
-
-TCModule::TCModule(uint nrt):
-        TSubModule(nrt),
-        db(rt[nrt].get()),
-        nQ(1), Filter(ALLKEY), start_title(" ")
-{}
-// start_title = " Access to database record without remake/recalculation"
-
-TCModule::~TCModule()
-{}
 
 /* opens window with 'Remake record' parameters
 */
 void TCModule::MakeQuery()
 {
-    pImp->MakeQuery();
+    if(pImp) {
+        pImp->MakeQuery();
+    }
 }
 
 /*! returns true if user pressed 'save' or 'discard' and false on 'cancel' */
 bool TCModule::MessageToSave()
 {
+    if(db==nullptr) {
+        return false;
+    }
+
     clearEditFocus();
 
     //--if( nRT != RT_SDATA &&
@@ -158,9 +149,12 @@ bool TCModule::MessageToSave()
 }
 
 // get key of record (existing key, new key or key temlate )
-std::string TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
-                          int keyType )
+std::string TCModule::GetKeyofRecord(const char *oldKey, const char *strTitle, int keyType)
 {
+    if(db==nullptr) {
+        return "";
+    }
+
     std::string str = GetName();
     str += ": ";
     str += strTitle;
@@ -202,6 +196,10 @@ std::string TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
 std::string  TCModule::makeKeyFilter()
 {
     std::string strfilt;
+    if(db==nullptr) {
+        return strfilt;
+    }
+
     if( pVisor->ProfileMode &&
          ( RT_PARAM==nRT || RT_SYSEQ==nRT || RT_PROCES==nRT ||
            RT_GTDEMO==nRT || RT_UNSPACE==nRT || RT_DUALTH==nRT || RT_GEM2MT==nRT ) )
@@ -239,7 +237,7 @@ bool  TCModule::testKeyFilter()
 }
 
 // Tools for correcting IPN Math Scripts
-bool TCModule::CheckEqText( const char *erscan, const char *msg )
+bool TCModule::CheckEqText(const char *erscan, const char *msg)
 {
     std::string msger;
     if( msg==nullptr )
@@ -264,6 +262,10 @@ bool TCModule::CheckEqText( const char *erscan, const char *msg )
 
 void TCModule::RecSave( const char *key, bool onOld )
 {
+    if(db==nullptr) {
+        return;
+    }
+
     int  Rnum = db->Find( key );
     if( Rnum<0 )
     {
@@ -271,7 +273,8 @@ void TCModule::RecSave( const char *key, bool onOld )
        pVisorImp->defineModuleKeysList(nRT);
     }
     else
-        if( onOld == true || vfQuestion(window(), key, replace_question) )
+        if( onOld == true || vfQuestion(window(), key,
+                                    "Data record with this key already exists! Replace?") )
             db->Rep( Rnum );
     contents_changed = false;
 
@@ -281,6 +284,10 @@ void TCModule::RecSave( const char *key, bool onOld )
 
 void TCModule::CmSave()
 {
+    if(db==nullptr) {
+        return;
+    }
+
     try
     {
         clearEditFocus();
@@ -288,11 +295,10 @@ void TCModule::CmSave()
            //--( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA  ))
            //--Error( GetName(), "Please, do it in Database mode!");
 
-        std::string str=db->PackKey();
+        std::string str = db->PackKey();
         if( str.find_first_of("*?" ) != std::string::npos )
         {
-            str = GetKeyofRecord( str.c_str(),
-                     "Insert new record keyed ", KEY_NEW );
+            str = GetKeyofRecord(str.c_str(), "Insert new record keyed ", KEY_NEW);
             if(  str.empty() )
                 return ;
         }
@@ -307,6 +313,10 @@ void TCModule::CmSave()
 // Delete record with key
 void TCModule::DeleteRecord(const char *key, bool errifNo)
 {
+    if(db==nullptr) {
+        return;
+    }
+
     int  Rnum = db->Find( key );
     if( Rnum < 0 )
     {
@@ -323,6 +333,10 @@ void TCModule::DeleteRecord(const char *key, bool errifNo)
 // Read record into memory structure
 void TCModule::RecInput(const char *key)
 {
+    if(db==nullptr) {
+        return;
+    }
+
     int Rnum = db->Find( key );
     if( Rnum<0 )
     {
@@ -341,6 +355,10 @@ void TCModule::RecInput(const char *key)
 // To be converted into wizard form
 int TCModule::RecBuild(const char *key, int mode)
 {
+    if(db==nullptr) {
+        return VF3_3;
+    }
+
     // returns IDYES, IDNO or IDCANCEL
 
     int bldType = mode;
@@ -384,6 +402,10 @@ void TCModule::RecCalc(const char*)
 // Test record with key
 void TCModule::TryRecInp(const char *_key, time_t& time_s, int q, bool save)
 {
+    if(db==nullptr) {
+        return;
+    }
+
     std::string  key( _key, 0, db->KeyLen() );
 
     if(save) {
@@ -462,6 +484,10 @@ void TCModule::RecordPlot( const char* /*key*/ )
 
 void TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
 {
+    if(db==nullptr) {
+        return;
+    }
+
  // read sdref record with format prn
 /* TSData::pm->RecInput( sd_key );
  char * text_fmt = TSData::pm->getAbstr();
@@ -502,6 +528,10 @@ void TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
 // to make some plotting
 void TCModule::RecordPrint(const char* key)
 {
+    if(db==nullptr) {
+        return;
+    }
+
   // select  SDref key
  std::string sd_key;
  if( key )
@@ -516,14 +546,14 @@ void TCModule::RecordPrint(const char* key)
  }
  if( sd_key.find_first_of("*?" ) != std::string::npos )
  {
-     sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(
+     sd_key = aMod[RT_SDATA]->GetKeyofRecord(
           sd_key.c_str(), "Please, select a print script", KEY_OLD);
  }
 
  if( sd_key.empty() )
      return;
 
-  dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->RecInput( sd_key.c_str() );
+  aMod[RT_SDATA]->RecInput( sd_key.c_str() );
   const char * text_fmt = static_cast<const char *>(aObj[o_sdabstr]->GetPtr());
   if( !text_fmt )
        Error( sd_key, "No print script in this record.");
@@ -534,6 +564,10 @@ void TCModule::RecordPrint(const char* key)
 // Adds the record
 void TCModule::AddRecord(const char* key )
 {
+    if(db==nullptr) {
+        return;
+    }
+
     int file = db->fNum;
 
     ErrorIf(!key, "TCModule::AddRecord()", "empty record key!");
@@ -557,6 +591,10 @@ void TCModule::AddRecord(const char* key )
 // Adds the record, or all records to file Sveta 15/06/01
 void TCModule::AddRecord(const char* key, int& fnum )
 {
+    if(db==nullptr) {
+        return;
+    }
+
     int file = db->fNum;
 
     ErrorIf(!key, "TCModule::AddRecord()", "empty record key!");
@@ -591,6 +629,10 @@ void TCModule::AddRecord(const char* key, int& fnum )
 // Test unique keys name before add the record(s)
 int TCModule::AddRecordTest(const char* key, int& fnum )
 {
+    if(db==nullptr) {
+        return 0;
+    }
+
     int  Rnum;
     std::string str = key;
 
@@ -610,6 +652,10 @@ AGN: Rnum = db->Find( str.c_str() );
 
 void TCModule::CurrentToJSON(const std::string& filename)
 {
+    if(db==nullptr) {
+        return;
+    }
+
     QJsonObject recObject;
     db->toJsonObject( recObject );
     QJsonDocument saveDoc(recObject);
@@ -623,6 +669,10 @@ TCIntArray TCModule::SelectFileList(int mode)
     TCStringArray names;
     TCIntArray indx;
     TCIntArray sel;
+
+    if(db==nullptr) {
+        return sel;
+    }
 
     db->GetFileList(mode, names, indx, sel);
 
