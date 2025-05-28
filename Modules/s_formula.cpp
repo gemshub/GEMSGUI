@@ -17,8 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cstdio>
-#include <cmath>
 
 #include "s_formula.h"
 #include "m_icomp.h"
@@ -63,7 +61,7 @@ const char* VACANCY       ="Va";
 */
 Formuan::Formuan( const char *formula )
 {
-   form_str = string(formula);
+   form_str = std::string(formula);
    charge_str = "";
 }
 
@@ -74,7 +72,7 @@ Formuan::~Formuan()
 void Formuan::scanFormula( std::vector<ICTERM>& tt )
 {
   scanCharge();
-  string term = form_str;
+  std::string term = form_str;
   scanFterm( tt, term, '\0');
 
   // added charge item
@@ -120,7 +118,7 @@ void Formuan::icadd(  std::vector<ICTERM>& itt_, const char *icn,
     icadd( itt_, term );
 }
 
-int Formuan::ictcomp( std::vector<ICTERM>& itt_, size_t ii, string& ick, int val )
+int Formuan::ictcomp( std::vector<ICTERM>& itt_, size_t ii, std::string& ick, int val )
 {
     //int iRet = memcmp( itt_[ii].ick.c_str(), ick, MAXICNAME+MAXSYMB );
     //if( iRet ) return( iRet );
@@ -132,12 +130,12 @@ int Formuan::ictcomp( std::vector<ICTERM>& itt_, size_t ii, string& ick, int val
 }
 
 
-void Formuan::xblanc( string& str )
+void Formuan::xblanc( std::string& str )
 {
     if(str.empty())
       return;
     size_t ti = str.find_first_not_of(BLANK_SYMBOLS);
-    if( ti == string::npos ) // no charge token
+    if( ti == std::string::npos ) // no charge token
        str = "";
     else
        str = str.substr(ti);
@@ -152,11 +150,11 @@ void Formuan::xblanc( string& str )
 void Formuan::scanCharge( )
 {
   size_t ti = form_str.find_last_of(CHARGE_TOK );
-  if( ti == string::npos ) // no charge token
+  if( ti == std::string::npos ) // no charge token
      return;
 
   size_t pp = form_str.find( B_VALENT, ti);
-  if( pp != string::npos )   // no charge (this is valence)
+  if( pp != std::string::npos )   // no charge (this is valence)
       return;
 
   // get charge string
@@ -171,7 +169,7 @@ void Formuan::charge(std::vector<ICTERM>& tt)
  double cha = 1.0;
  int sign = 1;
  double aZ = 0.0;
- string chan = charge_str;
+ std::string chan = charge_str;
  //char *chan = (char *)charge_str.c_str();
 
  switch( chan[0] )
@@ -190,7 +188,7 @@ void Formuan::charge(std::vector<ICTERM>& tt)
 
 //get <fterm>  ::= <icterm> | <icterm><icterm>
 //    <icterm> ::= <elem>   | <elem>< elem_st_coef>
-void Formuan::scanFterm( std::vector<ICTERM>& itt_, string& startPos, char endSimb )
+void Formuan::scanFterm( std::vector<ICTERM>& itt_, std::string& startPos, char endSimb )
 {
   //char *cur_ = startPos;
   size_t ii;
@@ -227,7 +225,7 @@ void Formuan::scanFterm( std::vector<ICTERM>& itt_, string& startPos, char endSi
 //                   <isotope_mass><icsymb><valence> |
 //                   <isotope_mass><icsymb> |
 //                   <icsymb><valence> | <icsymb>
-void Formuan::scanElem( std::vector<ICTERM>& itt_, string& startPos )
+void Formuan::scanElem( std::vector<ICTERM>& itt_, std::string& startPos )
 {
   //char *cur = startPos;
 
@@ -262,8 +260,8 @@ void Formuan::scanElem( std::vector<ICTERM>& itt_, string& startPos )
                     [[fallthrough]];
     default: // <isotope_mass><icsymb><valence>
         {
-          string isotop = string(ISOTOPE_N);
-          string icName = "";
+          std::string isotop = std::string(ISOTOPE_N);
+          std::string icName = "";
           int val = SHORT_EMPTY;;
 
           scanIsotope( isotop, startPos);
@@ -281,7 +279,7 @@ void Formuan::scanElem( std::vector<ICTERM>& itt_, string& startPos )
 //  <real>    ::= <num>.<num> | <num>. | .<num> | <num>
 //  <num>     ::= <digit> | <num><digit>
 //  <digit>   ::= 0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9
-void Formuan::getReal( double& valReal, string& cur)
+void Formuan::getReal( double& valReal, std::string& cur)
 {
     xblanc( cur );
     if( cur.empty() )
@@ -291,8 +289,8 @@ void Formuan::getReal( double& valReal, string& cur)
     if(ti == 0)
       return;  // next token no real
 
-    string val = cur.substr(0,ti);
-    if( ti== string::npos )
+    std::string val = cur.substr(0,ti);
+    if( ti== std::string::npos )
        cur="";
     else
        cur = cur.substr(ti);
@@ -303,7 +301,7 @@ void Formuan::getReal( double& valReal, string& cur)
 
 // get <valence>   ::= |-<integer>| \ |+<integer>| \ |<integer>|
 //  <integer>    ::= <num>
-void Formuan::scanValence( int& val, string& cur)
+void Formuan::scanValence( int& val, std::string& cur)
 {
     xblanc( cur );
     if( cur.empty() )
@@ -317,7 +315,7 @@ void Formuan::scanValence( int& val, string& cur)
         Error( cur,  "Term valence scan error");
 
     size_t ti = cur.find_first_of(B_VALENT);
-    if( ti >= 3 || ti==string::npos )
+    if( ti >= 3 || ti==std::string::npos )
         Error( cur,  "Term valence scan error");
 
     if( !sscanf( cur.c_str(), " %d", &val ))
@@ -327,7 +325,7 @@ void Formuan::scanValence( int& val, string& cur)
 
 // /3/H2/18/O             isotopic form of water.
 //  get <isotope_mass>  ::= /<integer>/
-void Formuan::scanIsotope( string& isotop, string& cur)
+void Formuan::scanIsotope( std::string& isotop, std::string& cur)
 {
     xblanc( cur );
     if( cur.empty() )
@@ -341,15 +339,15 @@ void Formuan::scanIsotope( string& isotop, string& cur)
         Error( cur,  "Term isotope scan error");
 
     size_t ti = cur.find_first_of(B_ISOTOPE);
-    if( ti >= MAXICNAME || ti==string::npos )
+    if( ti >= MAXICNAME || ti==std::string::npos )
         Error( cur,  "Term isotope scan error");
 
-    isotop = string( cur, 0, ti );  // test please
+    isotop = std::string( cur, 0, ti );  // test please
     cur = cur.substr(ti+1);
 }
 
 // <icsymb>    ::= <Capital_letter> \ <icsymb><lcase_letter> \ <icsymb>_
-void Formuan::scanICsymb( string& icName, string& cur)
+void Formuan::scanICsymb( std::string& icName, std::string& cur)
 {
     uint i=1;
 
@@ -365,7 +363,7 @@ void Formuan::scanICsymb( string& icName, string& cur)
            break;
     ErrorIf(  i>=MAXICNAME, cur.c_str(),  "IC Symbol scan error");
 
-    icName = string( cur, 0, i ); //  strncpy( ic, aFa.cur, len );
+    icName = std::string( cur, 0, i ); //  strncpy( ic, aFa.cur, len );
     cur = cur.substr(i);
 }
 
@@ -374,9 +372,9 @@ void Formuan::scanICsymb( string& icName, string& cur)
 // <moiety>    ::= {<elem>}   | {<elem>} <elem_st_coef> | Va
 int Formuan::scanMoiety( std::vector<MOITERM>& moit_ )
 {
-  string cur_ = form_str;
+  std::string cur_ = form_str;
   size_t endmoi;
-  string moiName;
+  std::string moiName;
   double nj;          // moiety-site occupancy.
   moit_.clear();
 
@@ -392,9 +390,9 @@ int Formuan::scanMoiety( std::vector<MOITERM>& moit_ )
                       if( cur_.empty() )
                           Error( "scanMoiety","Must be }");
                       endmoi =  cur_.find_first_of( RBRACKET3 );
-                      if( endmoi == string::npos )
+                      if( endmoi == std::string::npos )
                           Error( "scanMoiety","Must be }");
-                      moiName = string( cur_, 0, endmoi );
+                      moiName = std::string( cur_, 0, endmoi );
                       //                                            moiName = string( cur_, 0, endmoi-1 );
                       cur_ = cur_.substr(endmoi+1);
                       nj = 1.;
@@ -453,17 +451,17 @@ void TFormula::Reset()
 void TFormula::fo_unpak( std::vector<ICTERM>& itt_ )
 {
     char ICbuf[MAXICNAME+MAXSYMB+2];
-    string specSim = string(CHARGE_TYPE) + string(ISOTOPE_N) + "v";
+    std::string specSim = std::string(CHARGE_TYPE) + std::string(ISOTOPE_N) + "v";
 
     fo_clear();
 
     for(size_t i=0; i<itt_.size(); i++ )
     {
         memset( ICbuf, ' ', MAXICNAME+MAXSYMB );
-        strncpy( ICbuf, itt_[i].ick.c_str(), min(itt_[i].ick.length(), (size_t)MAXICNAME));
+        strncpy( ICbuf, itt_[i].ick.c_str(), std::min(itt_[i].ick.length(), (size_t)MAXICNAME));
 
-        if( itt_[i].ick_iso.find_first_not_of(specSim) != string::npos )
-            strncpy( ICbuf+MAXICNAME, itt_[i].ick_iso.c_str(), min(itt_[i].ick_iso.length(), (size_t)MAXSYMB));
+        if( itt_[i].ick_iso.find_first_not_of(specSim) != std::string::npos )
+            strncpy( ICbuf+MAXICNAME, itt_[i].ick_iso.c_str(), std::min(itt_[i].ick_iso.length(), (size_t)MAXSYMB));
         else
             ICbuf[MAXICNAME] = '*';
         ICbuf[MAXICNAME+MAXSYMB]=0;

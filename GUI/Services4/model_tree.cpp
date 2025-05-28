@@ -21,7 +21,6 @@
 #include <QMenu>
 #include <QAction>
 #include <QApplication>
-
 #include "model_tree.h"
 #include "units.h"
 #include "m_param.h"

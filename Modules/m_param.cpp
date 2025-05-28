@@ -18,18 +18,14 @@
 //-------------------------------------------------------------------
 //
 
-// #ifndef _WIN32
-// #include <unistd.h>
-// #endif
-
 #include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_syseq.h"
 #include "m_proces.h"
 #include "m_dualth.h"
 #include "visor.h"
-#include "GEMS3K/gdatastream.h"
 #include "nodearray_gui.h"
+#include "GEMS3K/gdatastream.h"
 
 #ifdef USE_GEMS3K_SERVER
 #ifdef NO_ASYNC_SERVER
@@ -182,7 +178,7 @@ void TProfil::ChangeSettings(int nSettings)
 	else if( nSettings == 1 )
 		    pa.p = pa_.p;
 	     else
-            pa.p = dfBase[min(nSettings-2,5)];
+            pa.p = dfBase[std::min(nSettings-2,5)];
     // Added by DK 16.02.2012
     std::string pa_ver = _GEMS_version_stamp;
     pa_ver += _GEMIPM_version_stamp;

@@ -18,14 +18,8 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
-
 #include <QPushButton>
-#if QT_VERSION >= 0x050000
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
-
 #include "v_mod.h"
 #include "page_w.h"
 #include "GemsMainWindow.h"

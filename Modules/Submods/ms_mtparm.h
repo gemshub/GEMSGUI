@@ -20,7 +20,6 @@
 #ifndef _ms_mtparm_h_
 #define _ms_mtparm_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 #include "GEMS3K/datach.h"
 
@@ -137,17 +136,17 @@ public:
 
     TMTparm( int nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "MTparm";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
-    const char* GetHtml();
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
+    const char* GetHtml() override;
 
     void LoadMtparm( double cT, double cP );
     double b_gamma_TP( double tk, double pb, double eps, double gsf, int mode );

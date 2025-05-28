@@ -20,9 +20,8 @@
 #ifndef _m_process_h_
 #define _m_process_h_
 
-#include "v_mod.h"
-#include "v_ipnc.h"
 #include "v_module.h"
+#include "v_ipnc.h"
 #include "graph_window.h"
 
 const int PE_RKLEN = 80;
@@ -237,6 +236,8 @@ public:
     void MakeQuery() override;
     int RecBuild( const char *key, int mode = VF_UNDEF ) override;
     void RecCalc( const char *key ) override;
+    bool ImplementedPrint() const override
+    { return true; }
     void RecordPrint( const char *key=nullptr ) override; //sddata key
     void RecordPlot( const char *key ) override;
 

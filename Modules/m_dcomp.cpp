@@ -21,7 +21,6 @@
 
 #include <cstdio>
 #include <cmath>
-
 #include "m_dcomp.h"
 #include "m_param.h"
 #include "visor.h"
@@ -1281,7 +1280,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
             auto str1 = char_array_to_string( db->UnpackKey(), db->KeyLen());
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
-            SetString(" W20DCrun: Remake of the new record finished OK. "
+            set_string(" W20DCrun: Remake of the new record finished OK. "
                       " It is recommended to re-calculate the data.");
             pVisor->Update();
             Error("W21DCrun: Calculation failed! ",

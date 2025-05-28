@@ -17,6 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 #include "m_syseq.h"
 #include "visor.h"
 
@@ -628,7 +629,7 @@ void TSyst::loadData( bool newRec, int reBuildType )
         mark_dc_to_ic();
         mark_ic_to_bc();
         make_syst_sizes();//         make_syst();
-        contentsChanged = true;
+        contents_changed = true;
     }
 }
 
@@ -1488,7 +1489,7 @@ void TSyst::packData()
             i5++;
         }
     }
-    contentsChanged = false;
+    contents_changed = false;
 }
 
 // pack system in z_sp_conf mode (save for full project mode)
@@ -1709,7 +1710,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
     STat->ssp->DM[15] = (short)DCon[STat->ssp->DM[15]]; //sy.LO
 
 
-    contentsChanged = false;
+    contents_changed = false;
 }
 
 //--------------------- End of ms_system.cpp ---------------------------

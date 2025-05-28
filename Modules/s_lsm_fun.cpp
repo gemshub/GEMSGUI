@@ -20,11 +20,9 @@
 //-------------------------------------------------------------------
 //
 
-
 #include "v_object.h"
 #include "v_mod.h"
 #include "visor.h"
-#include <cmath>
 #include "s_lsm.h"
 
 TLMDataType::TLMDataType(   char afType, char aeType,

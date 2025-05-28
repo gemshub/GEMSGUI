@@ -173,19 +173,19 @@ public:
     TProfil( uint nrt );
     void InitSubModules();
 
-    const char* GetName() const
+    const char* GetName() const  override
     {
         return "Project";
     }
 
-    void ods_link(int i=0);
-    void dyn_set(int i=0);
-    void dyn_kill(int i=0);
-    void dyn_new(int i=0);
-    void set_def(int i=0);
-    void DeleteRecord( const char *key, bool errinNo=true );
-    void MakeQuery();
-    const char* GetHtml();
+    void ods_link(int i=0) override;
+    void dyn_set(int i=0) override;
+    void dyn_kill(int i=0) override;
+    void dyn_new(int i=0) override;
+    void set_def(int i=0) override;
+    void DeleteRecord( const char *key, bool errinNo=true ) override;
+    void MakeQuery() override;
+    const char* GetHtml() override;
 
     // Load Thermodynamic data from Database
     void CheckMtparam();
@@ -212,7 +212,7 @@ public:
     std::string PhNameforDC( int xdc, bool system );
     std::string PhNameforDC( int xdc, int& xph, bool system );
     TCStringArray DCNamesforPh( const char *PhName, bool system );
-    void DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::string>& dcnames);
+    void DCNamesforPh( int xph, bool system, std::vector<int>& xdc, std::vector<std::string>& dcnames);
 
     // Multi make functions
     void PMtest( const char *key );

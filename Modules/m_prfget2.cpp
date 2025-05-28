@@ -25,7 +25,6 @@
 #include "m_dualth.h"
 #include "m_gem2mt.h"
 #include "m_syseq.h"
-#include "visor.h"
 #include "m_dcomp.h"
 #include "m_icomp.h"
 #include "m_compos.h"
@@ -33,6 +32,7 @@
 #include "m_sdata.h"
 #include "m_const.h"
 #include "m_proces.h"
+#include "visor.h"
 #include "service.h"
 
 // save old lists of keys to compare
@@ -513,7 +513,7 @@ AGAIN:
                 goto AGAIN;
             case VF3_1:
             {
-                fstream ff(str_file, ios::out );
+                std::fstream ff(str_file, std::ios::out );
             }
                 break;
             case VF3_3: // only calc and save to db
@@ -558,9 +558,9 @@ AGAIN:
     }
     if( outFile )
     {
-        fstream ff1(str_file, ios::out|ios::app);
+        std::fstream ff1(str_file, std::ios::out|std::ios::app);
         sprintf( tbuf, "\n\nProject: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-        ff1 << tbuf << endl;
+        ff1 << tbuf << std::endl;
     }
 
 }
@@ -720,10 +720,10 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
     if( aPHnoused.size() > 0 || aCMnoused.size() > 0)
     {  // List of Phases or Compos with some species discarded
-        ios::openmode mod = ios::out;
+        std::ios::openmode mod = std::ios::out;
         std::string filename = pVisor->userGEMDir();
                 filename +=  "DiscardedRecords.txt";
-        fstream f( filename, mod );
+        std::fstream f( filename, mod );
         ErrorIf( !f.good() , filename, "Fileopen error");
         f <<   "Discarded Phase records\n";
         for( ii=0; ii<aPHnoused.size(); ii++ )
@@ -1055,7 +1055,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   if( system )
   { for( k=0; k<mup->Fi; k++ )
     {
-      if( !memcmp(PhName, mup->SF[k]+MAXSYMB+MAXPHSYMB, min<size_t>(len,MAXPHNAME)))
+      if( !memcmp(PhName, mup->SF[k]+MAXSYMB+MAXPHSYMB, std::min<size_t>(len,MAXPHNAME)))
         break;
       DCx += mup->Ll[k];
     }
@@ -1069,7 +1069,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   else
   { for( k=0; k<pmp->FI; k++ )
     {
-       if( !memcmp(PhName, pmp->SF[k]+MAXSYMB, min<size_t>(len,MAXPHNAME)))
+       if( !memcmp(PhName, pmp->SF[k]+MAXSYMB, std::min<size_t>(len,MAXPHNAME)))
            break;
        DCx += pmp->L1[k];
     }
@@ -1082,7 +1082,7 @@ TCStringArray TProfil::DCNamesforPh( const char *PhName, bool system )
   return DCnames;
 }
 
-void TProfil::DCNamesforPh( int xph, bool system, vector<int>& xdc, vector<std::string>& dcnames)
+void TProfil::DCNamesforPh( int xph, bool system, std::vector<int>& xdc, std::vector<std::string>& dcnames)
 {
     int k, j, DCx = 0;
     RMULTS* mup = rmults->GetMU();
@@ -1116,8 +1116,8 @@ void TProfil::ShowPhaseWindow( QWidget* par, const char *objName, int nLine )
     bool system = true;
     int  xph, xdc = -1;
     std::string phname;
-    vector<int> xdclist;
-    vector<std::string> dcnames;
+    std::vector<int> xdclist;
+    std::vector<std::string> dcnames;
 
     switch( *objName )
     {
@@ -1328,7 +1328,7 @@ void TProfil::GEMS3KallSystems( int makeCalc, bool brief_mode, bool add_mui )
     }
 }
 
-void TProfil::generate_ThermoFun_input_file_stream(iostream &stream, bool compact)
+void TProfil::generate_ThermoFun_input_file_stream(std::iostream &stream, bool compact)
 {
     QJsonObject thermo_data;
     QJsonArray datasources;

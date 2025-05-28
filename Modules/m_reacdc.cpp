@@ -105,9 +105,9 @@ void TReacDC::ods_link( int q)
     aObj[ o_repkt]->SetDim( MAXCPCOEF, 1 );
 
     aObj[ o_retcint]->SetPtr( rc[q].TCint );
-    aObj[ o_retcint]->SetDim(  max((short)2,rc[q].nTp), 1 );
+    aObj[ o_retcint]->SetDim(  std::max((short)2,rc[q].nTp), 1 );
     aObj[ o_repint]->SetPtr(  rc[q].Pint );
-    aObj[ o_repint]->SetDim(  max((short)2,rc[q].nPp), 1 );
+    aObj[ o_repint]->SetDim(  std::max((short)2,rc[q].nPp), 1 );
     //if( rc[q].PreKP == S_ON && rc[q].nTp && rc[q].nPp ){
     aObj[ o_relgK]->SetPtr(  rc[q].logK );
 //    aObj[ o_relgK]->SetDim(  rc[q].nTp, rc[q].nPp ); // bug fix AY, DM 24.10.2016
@@ -185,9 +185,9 @@ void TReacDC::dyn_new(int q)
     rc[q].rDC =   (char *)aObj[ o_rerdc ]->Alloc(rc[q].nDC, 1, A_);
     rc[q].scDC =  (double *)aObj[ o_rescdc ]->Alloc(rc[q].nDC, 1, D_);
 
-    nTp = max( (short)2, rc[q].nTp );
+    nTp = std::max( (short)2, rc[q].nTp );
     rc[q].TCint = (float *)aObj[ o_retcint ]->Alloc( nTp, 1, F_);
-    nPp = max( (short)2, rc[q].nPp );
+    nPp = std::max( (short)2, rc[q].nPp );
     rc[q].Pint =  (float *)aObj[ o_repint  ]->Alloc(nPp, 1, F_);
 
     if( rc[q].PreKP != S_OFF && rc[q].nTp >0 && rc[q].nPp>0 )
@@ -1669,14 +1669,15 @@ const char* TReacDC::GetHtml()
 
 // Test record with key
 void
-TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
+TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
 {
-
     TCStringArray aDclist;
     TCIntArray anRDc;
 
-    if( ! MessageToSave() )
-	return;
+    if(save) {
+       if(!MessageToSave())
+          return;
+    }
 
     TDBKey dbKey(db->GetDBKey());
     dbKey.SetKey(key_);
@@ -1723,7 +1724,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             std::string str1 = db->UnpackKey();
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
-            SetString("Remake of new record finished OK. "
+            set_string("Remake of new record finished OK. "
                       " It is recommended to re-calculate the data");
             pVisor->Update();
             Error("E21RErun: Calculation failed!",

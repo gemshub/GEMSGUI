@@ -111,10 +111,10 @@ LIBS += -lzmq -lGEMS3K
 #include($$GEMS3K_CPP/gems3k.pri)
 #end link
 
-include($$DATAMAN_CPP/Dataman.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
 include($$NUMERICS_CPP/Numerics.pri)
+include($$DATAMAN_CPP/Dataman.pri)
 include($$SERVICES4_CPP/Services4.pri)
 include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$CHARTS_CPP/charts.pri)

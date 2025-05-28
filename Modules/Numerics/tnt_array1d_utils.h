@@ -20,6 +20,7 @@
 #ifndef TNT_ARRAY1D_UTILS_H
 #define TNT_ARRAY1D_UTILS_H
 
+#include <fstream>
 #include <cstdlib>
 #include <cassert>
 

@@ -19,8 +19,6 @@
 //
 
 #include "m_const.h"
-//#include "v_object.h"
-#include "v_mod.h"
 #include "service.h"
 
 TConst* TConst::pm;

@@ -46,13 +46,13 @@ protected slots:
     void setKeyLine();
 
 protected:
-    string SetKeyString();
+    std::string SetKeyString();
 
 public:
     KeyFilter(QWidget* win, size_t iRt, const char* keyFilter,
               const char* caption, bool allowTemplates=true );
 
-    string getFilter();
+    std::string getFilter();
 };
 
 #endif   // _KeyFilter_h_

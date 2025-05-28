@@ -19,7 +19,6 @@
 #ifndef _ms_calc_h_
 #define _ms_calc_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 #include "service.h"
 
@@ -35,27 +34,27 @@ public:
     TEQCalc( int nrt ): TSubModule( nrt )
     {}
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "Calc";
     }
 
-    void ods_link( int /*i*/=0)
+    void ods_link( int /*i*/=0) override
     {}
 
-    void dyn_set( int /*i*/=0)
+    void dyn_set( int /*i*/=0) override
     {}
 
-    void dyn_kill( int /*i*/=0)
+    void dyn_kill( int /*i*/=0) override
     {}
 
-    void dyn_new( int /*i*/=0)
+    void dyn_new( int /*i*/=0) override
     {}
 
-    void set_def( int /*i*/=0)
+    void set_def( int /*i*/=0) override
     {}
 
-    const char* GetHtml()
+    const char* GetHtml() override
     {
        return GSM_EQDEMO_HTML;
     }
@@ -66,7 +65,7 @@ public:
 class TEQDemo :
             public TSubModule
 {
-      string titler;
+      std::string titler;
 
 protected:
 
@@ -75,27 +74,27 @@ public:
     TEQDemo( int nrt ): TSubModule( nrt )
     {}
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "EqDemo";
     }
 
-    void ods_link( int /*i*/=0)
+    void ods_link( int /*i*/=0) override
     {}
 
-    void dyn_set( int /*i*/=0)
+    void dyn_set( int /*i*/=0) override
     {}
 
-    void dyn_kill( int /*i*/=0)
+    void dyn_kill( int /*i*/=0) override
     {}
 
-    void dyn_new( int /*i*/=0)
+    void dyn_new( int /*i*/=0) override
     {}
 
-    void set_def( int /*i*/=0)
+    void set_def( int /*i*/=0) override
     {}
 
-    const string& GetString()
+    const std::string& GetString() override
     {
      titler = rt[RT_SYSEQ]->PackKey();
      //titler += " : ";
@@ -103,7 +102,7 @@ public:
      return titler;
     }
 
-    const char* GetHtml()
+    const char* GetHtml() override
     {
        return GSM_EQDEMO_HTML;
     }

@@ -66,7 +66,7 @@ struct FieldInfo
     eShowType showType;
     int maxN, maxM;		// max size of grid w/out scrolls
 
-    explicit FieldInfo( istream& is);
+    explicit FieldInfo( std::istream& is);
 
     explicit FieldInfo( TObject& rO, int anO,
               eFieldType fT, int np, bool lb,
@@ -76,8 +76,8 @@ struct FieldInfo
     explicit FieldInfo( int anO, eFieldType fT, int np, bool lb,
                ePlaceMode pl, eEdit e, eShowType sT, int w, int h);
 
-    void toDAT(ostream& os);
-    void fromDAT(istream& os);	// must be protected
+    void toDAT(std::ostream& os);
+    void fromDAT(std::istream& os);	// must be protected
 };
 
 
@@ -90,18 +90,18 @@ struct PageInfo
 //    TCPage* pPage;
 
     std::vector<std::shared_ptr<FieldInfo>> aFieldInfo;
-    string name;
+    std::string name;
 
-    static eFieldType GetType(const string& s);
+    static eFieldType GetType(const std::string& s);
 
     TCWindow& GetWin();
 
-    PageInfo( CWinInfo& wi, istream& is);
+    PageInfo( CWinInfo& wi, std::istream& is);
     PageInfo( CWinInfo& wi, const TJsonConfig& cnf);
     void load(const TJsonConfig& cnf);
 
-    void toDAT(ostream& os);
-    void fromDAT(istream& os);	// must be protected
+    void toDAT(std::ostream& os);
+    void fromDAT(std::istream& os);	// must be protected
 
 private:
     PageInfo(const PageInfo&);
@@ -125,15 +125,15 @@ struct CWinInfo
     int init_width;
     int init_height;
 
-    CWinInfo(TSubModule& r, istream& is);
+    CWinInfo(TSubModule& r, std::istream& is);
     CWinInfo(TSubModule& r, const TJsonConfig& cnf);
     void load(const TJsonConfig& cnf);
 
-    void toDAT(ostream& os);
-    void fromDAT(istream& is);	// must be protected
+    void toDAT(std::ostream& os);
+    void fromDAT(std::istream& is);	// must be protected
 
-    void toWinCFG(ostream& os);
-    void fromWinCFG(istream& is);
+    void toWinCFG(std::ostream& os);
+    void fromWinCFG(std::istream& is);
 
 private:
     //CWinInfo(const CWinInfo&);

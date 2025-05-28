@@ -18,14 +18,13 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
-
 #include "page_f.h"
 #include "units.h"
 #include "v_module.h"
 
 std::vector<std::shared_ptr<CWinInfo>> aWinInfo;
 
-CWinInfo::CWinInfo(TSubModule & m, istream & visor_dat):
+CWinInfo::CWinInfo(TSubModule & m, std::istream & visor_dat):
         pWin(0), rM(m)
 {
     init_width = 600; //400
@@ -44,7 +43,7 @@ CWinInfo::CWinInfo(TSubModule & m, const TJsonConfig& cnf):
 
 void CWinInfo::load(const TJsonConfig& cnf)
 {
-    string sname = rM.GetName();	// section name
+    std::string sname = rM.GetName();	// section name
 
     auto module_section = cnf.section(sname);
     if( !module_section ) {
@@ -74,7 +73,7 @@ const char *SigERROR = "Error in visor description file (visor.cfg)";
 const char *SigTITLE = "Configurator";
 
 void
-CWinInfo::toDAT(ostream & os)
+CWinInfo::toDAT(std::ostream & os)
 {
     // start signature
     os.write(SigBEG, 2);
@@ -92,7 +91,7 @@ CWinInfo::toDAT(ostream & os)
 }
 
 void
-CWinInfo::fromDAT(istream & is)
+CWinInfo::fromDAT(std::istream & is)
 {
     // start signature
     char sg[2];
@@ -115,17 +114,17 @@ CWinInfo::fromDAT(istream & is)
 }
 
 void
-CWinInfo::toWinCFG(ostream & win_cfg)
+CWinInfo::toWinCFG(std::ostream & win_cfg)
 {
-    win_cfg << "[" << rM.GetName() << "]" << endl; 
+    win_cfg << "[" << rM.GetName() << "]" << std::endl;
 //    win_cfg << "init_wdith\t=\t" << init_width << endl;
 //    win_cfg << "init_height\t=\t" << init_height << endl;
-    win_cfg << init_width << endl;
-    win_cfg << init_height << endl;
+    win_cfg << init_width << std::endl;
+    win_cfg << init_height << std::endl;
 }
 
 void
-CWinInfo::fromWinCFG(istream & win_cfg)
+CWinInfo::fromWinCFG(std::istream & win_cfg)
 {
 //    win_cfg.read((char *) &init_width, sizeof init_width);
 //    win_cfg.read((char *) &init_height, sizeof init_height);
@@ -139,7 +138,7 @@ CWinInfo::fromWinCFG(istream & win_cfg)
 // TCPage
 //----------------------------------------------------------------
 
-PageInfo::PageInfo( CWinInfo & wi, istream & is):
+PageInfo::PageInfo( CWinInfo & wi, std::istream & is):
         rWinInfo(wi)/*, pPage(0)*/
 {
     fromDAT(is);
@@ -156,8 +155,8 @@ void PageInfo::load(const TJsonConfig& cnf )
 {
     name = cnf.value_or_default<std::string>("page", "page");
 
-    string obj;
-    string mode;
+    std::string obj;
+    std::string mode;
     eFieldType type;
     int npos;
     int maxM, maxN;
@@ -182,8 +181,8 @@ void PageInfo::load(const TJsonConfig& cnf )
                     throw TError(units_name, "Bad checkbox description");
             }
 
-            maxM = max( obj_line.value_or_default<int>("maxM", DEF_M_BROWSE), DEF_M_BROWSE );
-            maxN = max( obj_line.value_or_default<int>("maxN", DEF_N_BROWSE), DEF_N_BROWSE );
+            maxM = std::max( obj_line.value_or_default<int>("maxM", DEF_M_BROWSE), DEF_M_BROWSE );
+            maxN = std::max( obj_line.value_or_default<int>("maxN", DEF_N_BROWSE), DEF_N_BROWSE );
             mode = obj_line.value_must_exist<std::string>("locus");
 
             int ind = aObj.Find(obj.c_str());
@@ -210,7 +209,7 @@ const char PSigBEG[lnWINSIG + 1] = "Pd";
 const char PSigEND[lnWINSIG + 1] = "dp";
 
 void
-PageInfo::toDAT(ostream & os)
+PageInfo::toDAT(std::ostream & os)
 {
     // begin signature
     os.write(PSigBEG, 2);
@@ -227,7 +226,7 @@ PageInfo::toDAT(ostream & os)
 
 
 void
-PageInfo::fromDAT(istream & is)
+PageInfo::fromDAT(std::istream & is)
 {
     char sg[2];
     is.read(sg, sizeof sg);
@@ -252,7 +251,7 @@ PageInfo::fromDAT(istream & is)
 }
 
 eFieldType
-PageInfo::GetType(const string & s)
+PageInfo::GetType(const std::string & s)
 {
     const char *snames[nFieldTypes] =
         { "F_NUM", "F_FLOAT", "F_STRING", "F_TEXT",
@@ -286,7 +285,7 @@ FieldInfo::FieldInfo( int anO, eFieldType fT, int np, bool lb,
 { }
 
 
-FieldInfo::FieldInfo( istream & is )
+FieldInfo::FieldInfo( std::istream & is )
 {
     fromDAT(is);
 }
@@ -295,7 +294,7 @@ const char FSigBEG[lnWINSIG + 1] = "Fd";
 const char FSigEND[lnWINSIG + 1] = "df";
 
 void
-FieldInfo::toDAT(ostream & os)
+FieldInfo::toDAT(std::ostream & os)
 {
     //  int n = aFieldInfo.GetCount();
     // begin signature
@@ -324,7 +323,7 @@ FieldInfo::toDAT(ostream & os)
 
 
 void
-FieldInfo::fromDAT(istream & is)
+FieldInfo::fromDAT(std::istream & is)
 {
     char sg[2];
     is.read(sg, sizeof sg);

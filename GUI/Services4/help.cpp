@@ -23,7 +23,7 @@
 
 
 // read string untill "end"
-void HelpConfigurator::u_getline(istream& is, QString& str, QString end )
+void HelpConfigurator::u_getline(std::istream& is, QString& str, QString end )
 {
     char ch;
     is.get(ch);
@@ -42,7 +42,7 @@ void HelpConfigurator::u_getline(istream& is, QString& str, QString end )
 void HelpConfigurator::getHrefs( QString file, QString file_name)
 {
    char ch;
-   fstream f_in( file.toStdString(), ios::in );
+   std::fstream f_in( file.toStdString(), std::ios::in );
    QString ref;
 
    if( !f_in.good() )
@@ -149,7 +149,7 @@ int HelpConfigurator::readDir(const char *dir)
 // Build *.qhp file for help system (gems3helpconfig.qhp by default)
 int HelpConfigurator::writeFile(const char *file)
 {
-    fstream f_out( file, ios::out );
+    std::fstream f_out( file, std::ios::out );
     if( !f_out.good() )
     {
         QString str = QString(file) + " Fileopen error";
@@ -158,48 +158,48 @@ int HelpConfigurator::writeFile(const char *file)
     }
 
     // Write head
-    f_out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-    f_out << "<QtHelpProject version=\"1.0\">" << endl;
-    f_out << "    <namespace>gems3</namespace>" << endl;
-    f_out << "    <virtualFolder>help</virtualFolder>" << endl;
-    f_out << "    <filterSection>" << endl;
+    f_out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl;
+    f_out << "<QtHelpProject version=\"1.0\">" << std::endl;
+    f_out << "    <namespace>gems3</namespace>" << std::endl;
+    f_out << "    <virtualFolder>help</virtualFolder>" << std::endl;
+    f_out << "    <filterSection>" << std::endl;
 
     writeContent( f_out);
     writeFiles( f_out );
     writeKeywords( f_out );
 
     // Write end
-    f_out << "    </filterSection>" << endl;
-    f_out << "   </QtHelpProject>" << endl;
+    f_out << "    </filterSection>" << std::endl;
+    f_out << "   </QtHelpProject>" << std::endl;
 
     return 1;
 }
 
 
-void HelpConfigurator::writeFiles( fstream& f_out)
+void HelpConfigurator::writeFiles( std::fstream& f_out)
 {
-    f_out << "      <files>" << endl;
+    f_out << "      <files>" << std::endl;
     for( int ii =0; ii<files.count(); ii++)
     {
-      f_out << "        <file>" << files[ii].toStdString() << "</file>" << endl;
+      f_out << "        <file>" << files[ii].toStdString() << "</file>" << std::endl;
     }
     images.sort();
     images.removeDuplicates();
     for( int ii =0; ii<images.count(); ii++)
     {
-      f_out << "        <file>" << images[ii].toStdString() << "</file>" << endl;
+      f_out << "        <file>" << images[ii].toStdString() << "</file>" << std::endl;
     }
-    f_out << "      </files>" << endl;
+    f_out << "      </files>" << std::endl;
 }
 
 
-void HelpConfigurator::writeKeywords( fstream& f_out)
+void HelpConfigurator::writeKeywords( std::fstream& f_out)
 {
     QStringList kwds;
     QList<QUrl> urls;
 
     kwds = links.uniqueKeys();
-    f_out << "    <keywords>" << endl;
+    f_out << "    <keywords>" << std::endl;
     for( int ii =0; ii<kwds.count(); ii++)
     {
 
@@ -210,17 +210,17 @@ void HelpConfigurator::writeKeywords( fstream& f_out)
 
       for( int jj=0; jj<urls.count(); jj++ )
       f_out << "        <keyword name=\"" << kwds[ii].toStdString()
-            << "\" ref=\"" << urls[jj].toString().toStdString()  << "\"/>" << endl;
+            << "\" ref=\"" << urls[jj].toString().toStdString()  << "\"/>" << std::endl;
     }
-    f_out << "    </keywords>" << endl;
+    f_out << "    </keywords>" << std::endl;
 }
 
-void HelpConfigurator::writeContent( fstream& f_out)
+void HelpConfigurator::writeContent( std::fstream& f_out)
 {
     QString ref;
     QString contentfile = path;
             contentfile += "/gems3helpconfig.toc";
-    fstream f_in( contentfile.toStdString(), ios::in );
+    std::fstream f_in( contentfile.toStdString(), std::ios::in );
     if( !f_in.good() )
     {
         contentfile += " Fileopen error";

@@ -21,7 +21,6 @@
 #ifndef _m_compos_h_
 #define _m_compos_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 
 const int MAXCMPFORM =    255;
@@ -109,26 +108,26 @@ public:
     TCompos( uint nrt );
     ~TCompos();
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "Compos";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char *key ) override;
     double Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
      double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys);
     double MolWeight( int N, double *ICaw, double *Smline );
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
 
     void CopyRecords( const char * prfName, TCStringArray& aCMnoused,
        elmWindowData el_data, cmSetupData st_data, std::set<std::string>& SDlist );

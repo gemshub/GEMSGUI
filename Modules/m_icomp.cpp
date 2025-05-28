@@ -126,7 +126,7 @@ db->SetStatus(ONEF_);
         set_def(); // set default data or zero if necessary
          [[fallthrough]];
     case VF3_2:
-        contentsChanged = true;
+        contents_changed = true;
         break;
     case VF3_1:   // VF3_3   - do nothing
         retType = VF3_3;

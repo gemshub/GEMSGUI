@@ -200,7 +200,7 @@ std::string IPNCalc::Ident()
 {
     int n,m;
     n=strcspn( input, RAZD );
-    m = min( MAXKEYWD, n);
+    m = std::min( MAXKEYWD, n);
     auto str = std::string( input, 0, m);//strncpy( s, input, m);
     input+=n;
     return str;

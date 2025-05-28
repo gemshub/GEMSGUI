@@ -20,7 +20,6 @@
 #ifndef _m_phase_h_
 #define _m_phase_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 
 const int  MAXPHSYMB =      8,

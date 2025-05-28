@@ -22,14 +22,13 @@
 #define _s_formula_h_
 
 #include "v_user.h"
-#include "v_mod.h"
 
 extern const char * CHARGE_NAME;
 
 struct ICTERM     // description of parsed element
 {
-    string ick;
-    string ick_iso;
+    std::string ick;
+    std::string ick_iso;
     int val;             // valence IC
     double stoc;          // stoich. coef.
 
@@ -40,7 +39,7 @@ struct ICTERM     // description of parsed element
 
 struct MOITERM    // description of moiety element
 {
-    string name;
+    std::string name;
     int  site;        // sublattice site
     double nj;          // moiety-site occupancy.
 
@@ -49,15 +48,15 @@ struct MOITERM    // description of moiety element
     {
        char val[100];
        sprintf(val, "{%s}%d", aName, site);
-       name = string(val);
+       name = std::string(val);
     }
 
 };
 
 class Formuan  // stack for analyzing formula
 {
-    string form_str;
-    string charge_str;
+    std::string form_str;
+    std::string charge_str;
 
     //std::vector<ICTERM>  ict_;
 
@@ -69,7 +68,7 @@ protected:
     void icadd(  std::vector<ICTERM>& itt_, const char *icn,
                  const char *iso, int val, double csto );
     void icadd(  std::vector<ICTERM>& itt_, ICTERM it );
-    int ictcomp( std::vector<ICTERM>& itt_, size_t ii, string& ick, int val );
+    int ictcomp( std::vector<ICTERM>& itt_, size_t ii, std::string& ick, int val );
 
 
     inline bool iscapl( char ch )  // is cap letter
@@ -81,16 +80,16 @@ protected:
         return( (ch>='a' && ch<='z') ||  ch == '_' );
     }
     //char *xblanc( char *cur );
-    void xblanc( string& str );
+    void xblanc( std::string& str );
 
     void charge(std::vector<ICTERM>& tt);
     void   scanCharge();
-    void scanFterm( std::vector<ICTERM>& itt_, string& startPos, char endSimb );
-    void scanElem( std::vector<ICTERM>& itt_, string& cur );
-    void getReal( double& real, string& cur);
-    void scanValence( int& val, string& cur);
-    void scanIsotope( string& isotop, string& cur);
-    void scanICsymb(  string& icName, string& cur);
+    void scanFterm( std::vector<ICTERM>& itt_, std::string& startPos, char endSimb );
+    void scanElem( std::vector<ICTERM>& itt_, std::string& cur );
+    void getReal( double& real, std::string& cur);
+    void scanValence( int& val, std::string& cur);
+    void scanIsotope( std::string& isotop, std::string& cur);
+    void scanICsymb(  std::string& icName, std::string& cur);
 
 
 public:

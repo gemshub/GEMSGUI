@@ -18,8 +18,6 @@
 //-------------------------------------------------------------------
 //
 
-#include <cmath>
-#include <cstdio>
 #include "m_unspace.h"
 #include "m_syseq.h"
 #include "visor.h"
@@ -1205,12 +1203,12 @@ TUnSpace::RecordPrint( const char* key )
                 if( !vfQuestion( window(), filename,
 		        		"This file exists! Overwrite?") )
                    return;
-            fstream ff( filename, ios::out );
+            std::fstream ff( filename, std::ios::out );
             ErrorIf( !ff.good() , filename, "Fileopen error");
 	        to_text_file( ff, true );
 
 	        filename +=".res";
-            fstream ff1( filename, ios::out );
+            std::fstream ff1( filename, std::ios::out );
             ErrorIf( !ff1.good() , filename, "Fileopen error");
 	        result_to_text_file( ff1, true );
 		}

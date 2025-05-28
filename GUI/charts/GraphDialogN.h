@@ -35,7 +35,7 @@
 #include <QDialog>
 #include <QTableWidget>
 #include <QItemDelegate>
-#include  "v_module.h"
+#include "v_module.h"
 #include "plot_model.h"
 
 namespace Ui {
@@ -87,23 +87,23 @@ signals:
 public:
      GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::ChartData>& data,
                   const std::vector<std::shared_ptr<PlotModel>>& plotModels,
-                  const string& title= "Graphics Dialog" );
+                  const std::string& title= "Graphics Dialog" );
     ~GraphDialog();
 
     void resetGraphDialog( const std::shared_ptr<jsonui::ChartData>& data,
                            const std::vector<std::shared_ptr<PlotModel>>& plotModels,
-                           const string& title= "Graphics Dialog" );
+                           const std::string& title= "Graphics Dialog" );
 
     /// Update all graphic lines with new title
     void UpdatePlots( const char *title );
 
-    string moduleName() const
-    {  return  (string("gr")+pModule->GetName());   }
+    std::string moduleName() const
+    {  return  (std::string("gr")+pModule->GetName());   }
 
-    string iconFile() const
+    std::string iconFile() const
     {  return  pModule->GetIcon();   }
 
-    string mainModuleName() const
+    std::string mainModuleName() const
     {  return  pModule->GetName();   }
 
     void AddPoint( size_t nPlot, int nPoint );
@@ -127,7 +127,7 @@ private:
 
     // work part
     bool isFragment;
-    size_t activeRow = string::npos;
+    size_t activeRow = std::string::npos;
 
     friend class LabelDelegate;
 };

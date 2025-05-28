@@ -17,7 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include "ms_rmults.h"
+
 #include "m_param.h"
 #include "m_phase.h"
 #include "m_icomp.h"
@@ -437,7 +437,7 @@ TEST2:
         for( j=0; j<aPH->php->nDC; j++ )
         {
             // test to exist of DCOMP or REACDC record later
-            auto ss = string(aPH->php->SM[j], 0, DC_RKLEN);
+            auto ss = std::string(aPH->php->SM[j], 0, DC_RKLEN);
             List.push_back(ss);
             mu.Ll[kk]++;
         } /* j */
@@ -709,24 +709,24 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         {
             //aqueous phase
             if(  mu.SF[kk][0] =='a' )
-                AqKey.push_back( string(mu.SF[kk], 0, PH_RKLEN));
+                AqKey.push_back( std::string(mu.SF[kk], 0, PH_RKLEN));
             //gaseous phase
             else if(  mu.SF[kk][0] =='g' || mu.SF[kk][0] =='f' )
-                GasKey.push_back( string(mu.SF[kk], 0, PH_RKLEN));
+                GasKey.push_back( std::string(mu.SF[kk], 0, PH_RKLEN));
             else break;
         }
 
     }
-    string prfName = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
+    std::string prfName = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
     StripLine( prfName );
 
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
     {
-        string  AqKey1 = "a:*:*:*:*:";
+        std::string  AqKey1 = "a:*:*:*:*:";
         if(AqKey.size()>0)
             AqKey1 = AqKey[0];
 
-        string  GasKey1 = "g:*:*:*:*:";
+        std::string  GasKey1 = "g:*:*:*:*:";
         if(GasKey.size()>0)
             GasKey1 = GasKey[0];
 
@@ -1065,7 +1065,7 @@ void TRMults::TestIComp()
 {
     int  ii, j, i, ij;
     TFormula aFo;
-    string form;
+    std::string form;
 
     // test formules React&DComp
     for( ii=0; ii<mu.L; ii++ )
@@ -1088,10 +1088,10 @@ void TRMults::TestIComp()
                     ij++;
             if( !ij )
             {
-                string msg= "IComp: ";
-                msg += string(aCMP->bcp->SB[i], 0,MAXICNAME+MAXSYMB );
+                std::string msg= "IComp: ";
+                msg += std::string(aCMP->bcp->SB[i], 0,MAXICNAME+MAXSYMB );
                 msg += "\n in Compos record: \n";
-                msg += string(mu.SA[j], 0, BC_RKLEN );
+                msg += std::string(mu.SA[j], 0, BC_RKLEN );
 
                 Error( "Invalid IComp", msg );
             }

@@ -65,12 +65,12 @@ public:
     bool IsSubModule()
     { return rMod.IsSubModule();  }
 
-    string moduleName() const
+    std::string moduleName() const
     {  return   rMod.GetName();   }
 
     size_t rtNum() const;
     size_t rtNumRecord() const;
-    string iconFile() const;
+    std::string iconFile() const;
 
     void Update(bool force=true);
     QSize sizeHint() const;

@@ -430,7 +430,7 @@ void TGtDemo::MakeQuery()
         }
         gdp->lNam0 = static_cast<char (*)[MAXGRNAME]>(aObj[ o_gdlnam ]->Alloc( 1,
                      dimPclnam, MAXGRNAME));
-        for(size_t ii=0; ii< min<size_t>( namesLines.size(),gdp->dimXY[1]); ii++)
+        for(size_t ii=0; ii< std::min<size_t>( namesLines.size(),gdp->dimXY[1]); ii++)
         {
             strncpy( gdp->lNam0[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -713,7 +713,7 @@ void TGtDemo::RecordPlot( const char* /*key*/ )
     if(  gdp->PsRes4 == S_ON)
     {
         gdp->PsRes4 = S_OFF;
-        contentsChanged = true;
+        contents_changed = true;
         return;
     }
 
@@ -816,7 +816,7 @@ bool TGtDemo::SaveChartData( jsonui::ChartData* gr )
     //   gr->getColorList();
 
     pVisor->Update();
-    contentsChanged = true;
+    contents_changed = true;
 
     return true;
 }

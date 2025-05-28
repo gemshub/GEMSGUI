@@ -32,13 +32,11 @@
 #ifndef _s_lmmin_h_
 #define _s_lmmin_h_
 
-#include "v_ipnc.h"
 
+#include "v_ipnc.h"
 #include <jama_svd.h>
 using namespace JAMA;
-//#include "num_methods.h"
 double enorm( int n, double *x );
-
 
 
 class TLMDataType  // data for the task

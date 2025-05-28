@@ -20,20 +20,18 @@
 #ifndef _model_w_h
 #define _model_w_h
 
-#include "page_f.h"
-#include "GemsMainWindow.h"
-
 #include <QAbstractTableModel>
 #include <QItemDelegate>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QTextEdit>
 #include <QTableView>
-
 #include <QAbstractItemDelegate>
 #include <QFontMetrics>
 #include <QModelIndex>
 #include <QSize>
+#include "page_f.h"
+#include "GemsMainWindow.h"
 
 class QAbstractItemModel;
 class QObject;

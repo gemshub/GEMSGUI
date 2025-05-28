@@ -24,7 +24,6 @@
 #include <QLabel>
 #include <QButtonGroup>
 #include <QDialog>
-
 #include "model_w.h"
 #include "v_module.h"
 

@@ -27,13 +27,13 @@
 
 const char *defVALS = "+-* `";
 
-string sunits::getVals(int m) const
+std::string sunits::getVals(int m) const
 {
     if(vals_list.size()<1)	// empty
         return  defVALS;
     if(vals_list.size()==1)
         return vals_list[0];
-    size_t pos = min<size_t>(m, vals_list.size()-1);
+    size_t pos = std::min<size_t>(m, vals_list.size()-1);
     return vals_list[pos]+" `";
 }
 
@@ -49,7 +49,7 @@ const char *USigTITLE = "Configurator";
 //,"Config error"
 
 
-void TUnitsList::toDAT(ostream& visor_dat)
+void TUnitsList::toDAT(std::ostream& visor_dat)
 {
     // begin signature
     visor_dat << USigBEG;
@@ -75,7 +75,7 @@ void TUnitsList::toDAT(ostream& visor_dat)
     visor_dat << USigEND;
 }
 
-void TUnitsList::fromDAT(istream& visor_dat)
+void TUnitsList::fromDAT(std::istream& visor_dat)
 {
     char sg[2];
     visor_dat.read(sg, sizeof sg);
@@ -96,7 +96,7 @@ void TUnitsList::fromDAT(istream& visor_dat)
         visor_dat.read((char *) &n, sizeof n);
         visor_dat.read(vl, n);
         auto units_list = split(vl, "/");
-        push_back(sunits(string (nm), units_list));
+        push_back(sunits(std::string (nm), units_list));
     }
 
     visor_dat.read(sg, sizeof sg);
@@ -129,7 +129,7 @@ void TUnitsList::load(const std::string& f_units)
     }
 }
 
-int TUnitsList::Find(const string &s)
+int TUnitsList::Find(const std::string &s)
 {
     for (size_t ii = 0; ii < size(); ii++)
         if (at(ii).name == s)

@@ -23,7 +23,6 @@
 #include <QMenu>
 #include <QAction>
 #include <QApplication>
-
 #include "model_w.h"
 #include "units.h"
 #include "service.h"

@@ -22,8 +22,6 @@
 #include "m_param.h"
 #include "v_ipnc.h"
 #include "graph_window.h"
-//#include "v_mod.h"
-//#include "v_module.h"
 
 const int UNSP_RKLEN = 80,
           NAME_SIZE = 10,
@@ -377,8 +375,8 @@ protected:
     void calc_graph();
 
     // for separete TUnSpace
-    void to_text_file( fstream& ff, bool with_comments );
-    void result_to_text_file( fstream& ff, bool with_comments );
+    void to_text_file( std::fstream& ff, bool with_comments );
+    void result_to_text_file( std::fstream& ff, bool with_comments );
 
 
 
@@ -395,34 +393,36 @@ public:
     }
 
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "UnSpace";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
-    bool check_input( const char *key, int level=1 );
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
+    bool check_input( const char *key, int level=1 ) override;
 
     std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
-                              int keyType );
+                              int keyType ) override;
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
-    void RecordPrint( const char *key=0 ); //sddata key
-    void RecordPlot( const char *key );
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char *key ) override;
+    bool ImplementedPrint() const override
+    { return true; }
+    void RecordPrint( const char *key=0 ) override; //sddata key
+    void RecordPlot( const char *key ) override;
 
-    bool SaveChartData( jsonui::ChartData* grdata );
-    void ClearGraphDialog()
+    bool SaveChartData( jsonui::ChartData* grdata ) override;
+    void ClearGraphDialog() override
     {  gd_gr = nullptr; }
 
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
 
     //insert changes in profile  (must be in next version)
     void InsertChanges( std::vector<CompItem>& aIComp,

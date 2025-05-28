@@ -17,8 +17,8 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cmath>
 
+#include <cmath>
 #include "visor.h"
 #include "service.h"
 #include "m_dcomp.h"
@@ -1002,7 +1002,7 @@ AGAIN_SETUP:
 
     //---------------------------------------------------------------------------------
         php->nSub = 0;
-        SetString("PH_make   Remaking Phase definition");
+        set_string("PH_make   Remaking Phase definition");
         pVisor->Update();
 
         // Pre-proc. loop for SIT or Pitzer: determining number of cations and anion
@@ -1172,7 +1172,7 @@ AGAIN_SETUP:
     // set up default comments
     set_def_comments( ret == VF3_1, old_sol, old_kin );
 
-    SetString("PH_make   Remake of Phase definition OK");
+    set_string("PH_make   Remake of Phase definition OK");
     pVisor->Update();
     return ret;
 }
@@ -1214,7 +1214,7 @@ TPhase::RecCalc( const char *key )
     }
 
     CalcPhaseRecord( /*getDCC*/ );
-    SetString("PH_solm   PHASE-solution model OK");
+    set_string("PH_solm   PHASE-solution model OK");
     TCModule::RecCalc(key);
 }
 
@@ -1244,7 +1244,7 @@ void TPhase::RecordPrint(const char* /*key_*/)
                           "Yes", "No", "Cancel");
     if( res == VF3_1 )
     {
-        fstream f(GemsSettings::with_directory("noMg-test.txt"), ios::out);
+        std::fstream f(GemsSettings::with_directory("noMg-test.txt"), std::ios::out);
         ErrorIf( !f.good() , GetName(), "File write error");
 
         aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>("test")));

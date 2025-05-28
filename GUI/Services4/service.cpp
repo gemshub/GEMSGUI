@@ -31,7 +31,6 @@
 
 #include "service.h"
 #include "visor.h"
-
 #include "SelectDialog.h"
 #include "KeyFilter.h"
 #include "ExcludeFillDialog.h"
@@ -57,7 +56,7 @@
 #include "LoadMessage.h"
 #include "InputSystemDialog.h"
 #include "PhaseInfoDialog.h"
-//using namespace std;
+
 
 bool vfExist(const std::string &file_path)
 {

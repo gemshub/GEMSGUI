@@ -5,7 +5,6 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QClipboard>
-
 #include "table_model.h"
 #include "v_mod.h"
 #include "v_module.h"

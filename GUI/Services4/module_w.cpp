@@ -19,8 +19,6 @@
 #include <QCloseEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-
-
 #include "GemsMainWindow.h"
 #include "visor.h"
 #include "module_w.h"

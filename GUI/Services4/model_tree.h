@@ -19,11 +19,9 @@
 #ifndef _model_tree_h
 #define _model_tree_h
 
-
-#include "model_w.h"
-
 #include <QAbstractItemModel>
 #include <QTreeView>
+#include "model_w.h"
 
 class QObject;
 class QPainter;
