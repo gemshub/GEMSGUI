@@ -627,6 +627,7 @@ void NewSystemDialog::CmSaveAs()
         clearEditFocus();
         TProfil::pm->SyTestSizes();
         TSysEq::pm->SaveAs();
+        pVisorImp->Update( true );
     }
     catch( TError& xcpt )
     {

@@ -86,6 +86,11 @@ public:
         return icon_file_path;
     }
 
+    void SetTitle()
+    {
+        set_string( start_title );
+    }
+
     size_t keyEditField();
     void  setKeyEditField(size_t fld)
     {

@@ -42,6 +42,7 @@ TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
 
     std::string s = rMod.GetName();
     s += " :: ";
+    rMod.SetTitle();
     s += rMod.GetString();
     SetCaption( s.c_str() );
 

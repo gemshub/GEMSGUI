@@ -173,6 +173,7 @@ void TCModuleImp::CmShow( const char *key )
         else  str = string(key);
 
         rMod.RecInput( str.c_str() );
+        rMod.SetTitle();
     	pVisor->Update( true );
     }
     catch( TError& xcpt )
