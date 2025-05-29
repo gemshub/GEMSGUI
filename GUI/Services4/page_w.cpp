@@ -400,7 +400,7 @@ void TCWindow::EvTabSelChange(QAbstractButton* button)
 void TCWindow::ShowInfo()
 {
     int nR;
-    if( getCModule().pImp->IsSubModule() )
+    if( getCModule().IsSubModule() )
         nR = RT_SYSEQ;
     else nR = getCModule().rtNum();
 

@@ -1302,7 +1302,7 @@ pep->ccTime = 0.0;
           pep->kst = -1;
           pep->c_Tau = pep->Taui[0];
           pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
-          TSysEq::pm->CmSave();  // save results
+          TSysEq::pm->SaveCurrentKey();  // save results
           pep->kst = 0;
         }
 
@@ -1432,7 +1432,7 @@ else {
 }
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
 //13/08/2009        	    if( pep->Istat < P_MT_MODE )
-                 TSysEq::pm->CmSave();  // save results
+                 TSysEq::pm->SaveCurrentKey();  // save results
 //        }
 
      // set results

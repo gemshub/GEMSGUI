@@ -77,7 +77,7 @@ void TUnSpace::unsp_eqkey()
     } // j loop
   } // k loop	
     if( usp->PsSY != S_OFF )
-       TSysEq::pm->CmSave();           // save SysEq record with results to DB
+       TSysEq::pm->SaveCurrentKey();           // save SysEq record with results to DB
     if( usp->stl )
        memcpy( usp->stl+usp->q, usp->stkey, EQ_RKLEN );
  

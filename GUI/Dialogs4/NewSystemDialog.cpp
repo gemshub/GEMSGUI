@@ -612,7 +612,7 @@ void NewSystemDialog::CmSave()
             }
         }
         TProfil::pm->SyTestSizes();
-        TSysEq::pm->CmSaveM();
+        TSysEq::pm->SaveM();
     }
     catch( TError& xcpt )
     {
@@ -626,7 +626,7 @@ void NewSystemDialog::CmSaveAs()
     {
         clearEditFocus();
         TProfil::pm->SyTestSizes();
-        TSysEq::pm->CmSaveAs();
+        TSysEq::pm->SaveAs();
     }
     catch( TError& xcpt )
     {
@@ -636,7 +636,14 @@ void NewSystemDialog::CmSaveAs()
 
 void NewSystemDialog::CmDelete()
 {
-    TSysEq::pm->CmDelete();            // Delete
+    try
+    {
+    TSysEq::pm->DeleteCurrent();            // Delete
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(this, xcpt.title, xcpt.mess);
+    }
 }
 
 void NewSystemDialog::CmNext()
@@ -654,7 +661,7 @@ void NewSystemDialog::CmNext()
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ]->GetKeyList(TSysEq::pm->getFilter(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList(TSysEq::pm->getFilter().c_str(), aKey, anR );
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
@@ -696,7 +703,7 @@ void NewSystemDialog::CmPrevious()
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ]->GetKeyList( TSysEq::pm->getFilter(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList( TSysEq::pm->getFilter().c_str(), aKey, anR );
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key

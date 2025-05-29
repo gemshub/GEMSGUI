@@ -447,7 +447,7 @@ void TGEM2MT::calc_eqstat( bool startSys )
    if( startSys )
    {
       if( mtp->PsSYd == S_ON && mtp->PsMode != RMT_MODE_S)
-        TSysEq::pm->CmSave();           // save results to DB
+        TSysEq::pm->SaveCurrentKey();           // save results to DB
 
      if( mtp->stld )
        memcpy( mtp->stld+mtp->kv, mtp->sykey, EQ_RKLEN );

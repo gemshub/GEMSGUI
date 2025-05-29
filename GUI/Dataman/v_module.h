@@ -117,6 +117,9 @@ public:
     virtual void dyn_new(int i=0) = 0;    // realloc dynamic memory
     virtual void set_def(int /*i*/=0)
     {}  // set default data or zero if nessasary
+    /// this function is called when active page of submodule is changed
+    virtual void EvPageChanged(int /*nPage*/)
+    {}
 
     //-- Module manipulation
 
@@ -163,9 +166,50 @@ public:
     void CurrentToJSON(const std::string& filename);
     TCIntArray SelectFileList(int mode);
 
+    //-- Database manipulation
+    void DelList();
+    void Transfer();
+    void CopyRecordsList(bool if_rename );
+    void KeysToTXT();
+    void RecToTXT();
+    void RecOfTXT();
+    void RecExport();
+    void RecImport( );
+    void RecListToJSON();
+    void RecListFromJSON();
+
+    void SaveM();
+    void SaveCurrentKey();
+    void SaveAs();
+    void DeleteCurrent();
+    void RunFilter();
+    void RunNext();
+    void RunPrevious();
+    void RunDerive();
+    void RunCalc();
+    void RunNew();
+    void RunCreate();
+    void RecordLoadinProfile(const char *key);
+    void NewinProfile();
+    void CreateinProfile();
+    std::string CurrentKey();
+    std::string DBKeywd() const
+    {
+        return (db ? db->GetKeywd() :"");
+    }
+    void SetString(const std::string s)
+    {
+        state_line = s;
+    }
+
+    void RebildFile();
+    void AddFileToList();
+    void ReOpenFileList();
+    void AddOpenFile();
+    void ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply);
+
     //--- Manipulation show current record
     bool  CheckEqText( const char *erscan, const char *msg=nullptr );
-    void CmSave(); //!!??
     bool MessageToSave();  //!!??
     void ModUpdate(const std::string& str);  //!!??
     void Show(QWidget* parent, const char *str=nullptr, bool viewmode=false); //!!??

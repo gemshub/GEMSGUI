@@ -482,7 +482,7 @@ void TVisorImp::CmHelp()
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
     {
-        aMod[actwin->rtNum()]->CmHelp();
+        actwin->CmHelp();
     }
     else
     {
@@ -755,7 +755,6 @@ void TVisorImp::CmFilter()
     }
 }
 
-
 void TVisorImp::CmNext()
 {
     /*TCModuleImp *actwin = activeMdiChild();
@@ -806,7 +805,7 @@ void TVisorImp::CmPrevious()
 #define TCM_EV_COMMAND(mm,ff)	void TVisorImp::ff() \
 { TCModuleImp *actwin = activeMdiChild();\
     if( actwin )\
-{  dynamic_cast<TCModule*>(aMod[actwin->rtNum()].get())->ff(); \
+{   actwin->ff(); \
     int nRT_ = static_cast<int>(actwin->rtNum()); \
     defineModuleKeysList( nRT_ );  }    \
     }

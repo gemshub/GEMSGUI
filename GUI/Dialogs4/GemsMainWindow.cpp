@@ -836,7 +836,7 @@ void TVisorImp::CmHelp2()
 {
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
-        aMod[actwin->rtNum()]->CmHelp2();
+        actwin->CmHelp2();
     else
     {
         NewSystemDialog *wn = activeNewSystem();

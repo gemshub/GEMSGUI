@@ -42,7 +42,6 @@ TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
 
     std::string s = rMod.GetName();
     s += " :: ";
-    rMod.SetTitle();
     s += rMod.GetString();
     SetCaption( s.c_str() );
 
@@ -55,7 +54,6 @@ TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
     //setCentralWidget(pWin);
     QVBoxLayout* mainBox = new QVBoxLayout(this);
     mainBox->addWidget( pWin );
-    rMod.Setup();
 }
 
 /*!
@@ -104,7 +102,7 @@ void TCModuleImp::closeEvent(QCloseEvent* e)
     }
 
     // close module
-    if( rMod.EvClose() ) 
+    if( EvClose() )
     {
 	  pWin->close();
 	  rMod.pImp = NULL;
@@ -152,10 +150,10 @@ void TCModuleImp::SelectStart()
    {
        if( iMod <= RT_SYSEQ && iMod != RT_SDATA)
         return;
-       ((TCModule*)&rMod)->CmLoadinProfile();
+       CmLoadinProfile();
     }
      else
-      ((TCModule*)&rMod)->CmShow();
+      CmShow();
 }
 
 /*!

@@ -207,7 +207,7 @@ protected:
     void mark_dc_to_ic();
     void mark_ic_to_dc();
 
-    void EvPageChanged(int nPage);
+    void EvPageChanged(int nPage) override;
 
     void syIC_pr_tab( const char *key  );
     void syDC_pr_tab( const char *key  );
@@ -216,7 +216,7 @@ protected:
 public:
     static TSyst* sm;
 
-    void CellChanged( bool val = true );
+    void CellChanged( bool val = true ) override;
 
     SYSTEM* GetSY()
     {

@@ -40,7 +40,7 @@ class TCModuleImp: public QDialog//QMainWindow
 
     //QToolBar* toolBar;
 
-    size_t	    iMod;
+    size_t    iMod;
     TCModule& rMod;
     TCWindow* pWin;
 
@@ -52,10 +52,59 @@ protected:
     void closeEvent(QCloseEvent*);
 
 public slots:
-    
     void CloseWin()
     {  close();  }
     void saveGraphData( jsonui::ChartData* );
+
+    //void Setup(); empty
+    bool EvClose();
+    void CmHelp();
+    void CmHelp2();
+
+    //--- Manipulation files of Data Base   (Servis functions )
+    void CmRebildFile();
+    void CmAddFileToList();
+    void CmAddOpenFile();
+    void CmReOpenFileList();
+
+    //--- Manipulation list of records
+    void CmKeysToTXT();
+    void CmDeleteList();
+    void CmCopyList();
+    void CmRenameList();
+    void CmTransferList();
+
+    void CmImport();
+    void CmExport();
+    void CmBackup();
+    void CmRestore();
+    void CmBackuptoJson();
+    void CmRestorefromJson();
+
+    //--- Manipulation current record
+    void CmDelete();
+    void CmDerive();
+    void CmShow( const char *key=nullptr );  //Demonstrate (show) Data Record
+    void CmFilter();  // set Data Record filter
+    void CmNew();
+    void CmCreate();
+    void CmNext();
+    void CmPrevious();
+
+    void CmPlot();
+
+    //--- Manipulation current record
+    void CmSave();
+    void CmSaveM();
+    void CmSaveAs();
+    void CmCalc();  //Calculate or create Data Record
+
+    void CmNewinProfile();
+    void CmCreateinProfile();
+    void RecordLoadinProfile( const char *key=nullptr );
+    void CmLoadinProfile( const char *key=nullptr );
+    void CmPrint();
+    void CmScript();
 
 public:
     TCModuleImp(size_t aiMod, int page=0, int viewmode=0);
@@ -95,6 +144,7 @@ public:
     { return viewmode; }
 
     int curPage();
+    void clearFocus();
 };
 
 #endif   // _module_w_h
