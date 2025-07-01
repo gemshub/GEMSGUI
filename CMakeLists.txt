@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Set the name of the project
-project(GEMSGUI VERSION 4.4.2 LANGUAGES CXX)
+project(GEMSGUI VERSION 3.10.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -54,12 +54,52 @@ endif()
 # Set libraries to be compiled with position independent code mode (i.e., fPIC option in GNU compilers)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+# Find other dependencies
+include(GEMSGUIFindDeps)
+
 # Find Qt dependencies
 find_package(Qt6 6.2 COMPONENTS Core Gui Widgets Charts Concurrent PrintSupport Svg Help Sql REQUIRED)
 qt_standard_project_setup(REQUIRES 6.7)
 
-# Find other dependencies
-include(GEMSGUIFindDeps)
+# Versioning
+set(GEMSGUI_VERSION "${PROJECT_VERSION}")
+find_package(Git)
+if(GIT_FOUND)
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    OUTPUT_VARIABLE GEMSGUI_VERSION_HASH
+    ERROR_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    OUTPUT_VARIABLE GEMSGUI_GIT_BRANCH
+    ERROR_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    if(NOT GEMSGUI_VERSION_HASH)
+        set(GEMSGUI_VERSION_HASH "---")
+    endif()
+    if(NOT GEMSGUI_GIT_BRANCH)
+        set(GEMSGUI_GIT_BRANCH "---")
+    endif()
+else()
+  set(GEMSGUI_VERSION_HASH "<unknown>")
+  set(GEMSGUI_GIT_BRANCH "<unknown>")
+endif()
+
+set(GEMSGUI_OSX "${CMAKE_SYSTEM_NAME}")
+set(GEMSGUI_COMPILER_ID "${CMAKE_CXX_COMPILER_ID}")
+set(GEMSGUI_COMPILER_VERSION "${CMAKE_CXX_COMPILER_VERSION}")
+set(GEMSGUI_QT_VERSION "${Qt6_VERSION}")
+
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gemsgui_version.h.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Modules/gemsgui_version.h"
+  @ONLY
+  )
 
 # Set the list of compiler flags for Clang compiler
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")

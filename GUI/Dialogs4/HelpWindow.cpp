@@ -41,12 +41,12 @@
 #include "GemsMainWindow.h"
 #include "visor.h"
 #include "service.h"
+#include "gemsgui_version.h"
 
 static const char *GEMS_HOWHELP_HTML = "gems_miscel.html#HOWHELP";
 const char *GEMS_ABOUT_HTML = "gems_about.html#PAGE_ABOUT";
 
-const char *_GEMS_version_stamp = " GEMS-GUI v.3.9.6 c.7f2d47b ";
-extern const char *_GEMIPM_version_stamp;
+//extern const std::string _GEMIPM_version_stamp;
 
 HelpWindow* HelpWindow::pDia = nullptr;
 
@@ -95,7 +95,6 @@ HelpWindow::HelpWindow( QWidget* parent):
     tab_->setCurrentIndex(0);
 
 #if QT_VERSION >= 0x050000
-#include <QtWidgets>
     tab_->setTabText(tab_->indexOf(tabContents),  "Contents");
     label->setText("TextLabel");
     tab_->setTabText(tab_->indexOf(tabIndex), "Index");
@@ -125,10 +124,14 @@ HelpWindow::HelpWindow( QWidget* parent):
     adressLine->setReadOnly( true );
     adressLine->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     ui->toolAddress->addWidget( adressLine );
-#endif  
+#endif
+
+    gui_logger->info("HelpWindow collectionFile= {}", collectionFile.toStdString());
 
     hEngine = new QHelpEngine(collectionFile, this);
     if (!hEngine->setupData()) {
+
+        gui_logger->error("Error QHelpEngine {}", hEngine->error().toStdString());
         delete hEngine;
         hEngine = nullptr;
         srchWidget =nullptr;
@@ -137,7 +140,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     }
     else
     {
-        gui_logger->debug("HelpWindow collectionFile= {}", collectionFile.toStdString());
+        gui_logger->info("HelpWindow collectionFile= {}", collectionFile.toStdString());
 
         // Contents part
         wContents = hEngine->contentWidget();
@@ -238,22 +241,14 @@ HelpWindow::~HelpWindow()
 
 void HelpWindow::helpVersion()
 {
-    QMessageBox::information(this,
-                         #ifndef _WIN32
-                         #ifdef __APPLE__
-                             "Title", "GEMS3.9 (MacOS 10.13-13.3, clang x64, Qt6)\n\n"+
-                         #else
-                             "GEMS3.9 (Linux x64 C++ gcc7.3 up, Qt5.12 up, Qt6)",
-                         #endif
-                         #else
-                             "GEMS3.9 (Windows 10 C++ MSVC19 x64 Qt5.15 up, Qt6)",
-                         #endif
-                             QString("\nThis is GEM-Selektor code package\n\n") +
-                             _GEMS_version_stamp   +  "\n\nusing "  +
-                             _GEMIPM_version_stamp   + "\n\n      and  Qt6 framework " +
-                             "\n\nFor GEMS R&D community, GPL v.3\n\n"
-                  "(c) 2023,  GEMS Development Team\n\n"
-                  "          Paul Scherrer Institute" );
+    QMessageBox::information( this,   QString("GEMSGUI v.") + GEMSGUI_VERSION,
+                                 QString("\nThis is GEM-Selektor code package\n\n") +
+                                 QString::fromStdString(_GEMS_version_stamp) + "\n\n  using \n\n"  +
+                                 QString::fromStdString(_GEMIPM_version_stamp) + "\n\nand  Qt6 framework v." + GEMSGUI_QT_VERSION +
+                                 "\n\n   OS " + GEMSGUI_OSX  + " compiler  " + GEMSGUI_COMPILER_ID + " " + GEMSGUI_COMPILER_VERSION +
+                                 "\n\nFor GEMS R&D community, GPL v.3\n\n"
+                                 "(c) 2025,  GEMS Development Team\n\n"
+                                 "          Paul Scherrer Institute" );
 }
 
 void HelpWindow::helpAbout()

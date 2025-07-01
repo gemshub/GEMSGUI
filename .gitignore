@@ -12,4 +12,5 @@ Docs/.directory
 *.bak
 build
 .vs
+/gems3gui_with_gems3k_source.pro.user
 

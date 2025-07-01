@@ -654,6 +654,7 @@ TRTParm::RecCalc( const char *key )
                 aW.twp->TCst = aRDC->rcp->TCst;
                 aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aRDC->rcp->Pst;
+                aSpc.on_sat_curve = false; // 11.06.2025
                 aRDC->RCthermo( 0, 0 );
                 aRDC->ods_link(0);
                aW.ods_link(0);

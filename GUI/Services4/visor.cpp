@@ -82,15 +82,15 @@ TVisor::TVisor(int c, char *v[]):
 #ifdef __APPLE__
 
     QString dirExe = QCoreApplication::applicationDirPath();
-    auto app_index = dirExe.lastIndexOf("/gems3.app/Contents", -1, Qt::CaseInsensitive );
+    auto app_index = dirExe.lastIndexOf("/gem-selektor.app/Contents", -1, Qt::CaseInsensitive );
 
     if( app_index >= 0 )
     {
-        SysGEMDir = dirExe.left(app_index).toStdString() + "/gems3.app/Contents/Resources/";
+        SysGEMDir = dirExe.left(app_index).toStdString() + "/gem-selektor.app/Contents/Resources/";
     }
     else {
         // non-standard executable path, search for resources starting with current dir
-        SysGEMDir = dirExe.toStdString() + "/gems3.app/Contents/Resources/";
+        SysGEMDir = dirExe.toStdString() + "/gem-selektor.app/Contents/Resources/";
     }
     UserGEMDir = home_dir() + DEFAULT_USER_DIR; // "/Library/gems3/";
 
@@ -98,6 +98,9 @@ TVisor::TVisor(int c, char *v[]):
        // By default: /Resources in the same dir as the exe file;
        //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
+    if(dirExe.endsWith("/bin") || dirExe.endsWith("\bin")) { // Try found Resource up level
+        dirExe.chop(4);
+    }
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
     //ServerGems3Dir = dirExe.toStdString();
@@ -119,6 +122,9 @@ TVisor::TVisor(int c, char *v[]):
       // By default: /Resources in the same dir as the exe file;
       //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
+    if(dirExe.endsWith("/bin") || dirExe.endsWith("\bin")) { // Try found Resource up level
+        dirExe.chop(4);
+    }
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
     QDir dirUp(dirExe);

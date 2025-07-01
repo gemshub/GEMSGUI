@@ -23,7 +23,8 @@
                     $$MODULES_H/s_tpwork.h  \
                     $$MODULES_H/v_ipnc.h  \
                     $$MODULES_H/v_mod.h   \
-                    $$MODULES_H/v_thermofun.h
+                    $$MODULES_H/v_thermofun.h \
+                    $$MODULES_H/gemsgui_version.h
 
         SOURCES	 +=  $$MODULES_CPP/m_const.cpp \
                      $$MODULES_CPP/m_sdata.cpp \

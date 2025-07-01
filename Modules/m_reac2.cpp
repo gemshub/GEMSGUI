@@ -1149,7 +1149,7 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
     R_T = aW.WW(p).T * RR;
 		// R_T = aW.WW(p).RT;
     if (rc[q].Ks[0]!=DOUBLE_EMPTY && rc[q].Gs[1]!=DOUBLE_EMPTY ) // to calcuate TP if fields in record are empty --- DM 17-02-2025
-    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
+        if(( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.01 ) && (fabs( aW.twp->P - aSta.Pres ) > 0.001)) // --- DM 11-06-2025 calculate properties if T and P other than reference
     {
         aW.WW(p).K =   rc[q].Ks[0];
         aW.WW(p).lgK = rc[q].Ks[1];

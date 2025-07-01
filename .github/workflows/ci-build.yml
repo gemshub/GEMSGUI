@@ -3,9 +3,11 @@ on:
   push:
     branches:
       - no_client_mode1
+      - master
   pull_request:
     branches:
       - main
+      - master
 jobs:
   build:
     runs-on: ${{ matrix.os }}

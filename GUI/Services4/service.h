@@ -217,6 +217,8 @@ void vfPhaseInfo(QWidget* wpar, bool system, int xph, std::string phname,
 //----------------------------------------------------------------
 // Help file name constant
 
+extern const std::string _GEMS_version_stamp;
+
 extern const char *WZSTEP;
 extern const char *MWPAGE;
 extern const char *DBM;

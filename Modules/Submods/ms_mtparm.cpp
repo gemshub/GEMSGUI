@@ -413,9 +413,9 @@ void TMTparm::LoadMtparm( double cT, double cP )
     TK = TC + C_to_K;
     P_old = P = cP;
     tp.T = TC; tp.TK = TK; /* scales !!! */
-    if( P < 1e-5 ) { // trial check  5.12.2006
-       P = 1e-5;
-    }
+    // if( P < 1e-5 ) { // trial check  5.12.2006
+    //    P = 1e-5;
+    // } // DM 11.06.2025 P = 0 is set for Psat
     tp.P = P;
     tp.RT = R_CONSTANT * TK;
 
