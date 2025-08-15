@@ -2,7 +2,7 @@ name: deploy-linux
 on:
   push:
     branches:
-      - fix_icons1
+      - dark_light
   release:
     types:
       - published
@@ -85,18 +85,19 @@ jobs:
           rm -f ${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/Gems3-app/lib/librt.so.1
           rm -f ${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/Gems3-app/lib/libpthread.so.0
           
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-${{ steps.strings.outputs.deploy-name }}
-          path: ${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}
-      
       - name: Create zip archive for GitHub release
         run: |
           cd ${{ github.workspace }}
-          zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
+          zip -y -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
       
+      - name: Upload zip archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ steps.strings.outputs.deploy-name }}
+          path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
+
       - name: Upload release asset
+        if: github.event_name == 'release' && github.event.action == 'published'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -105,5 +106,6 @@ jobs:
           asset_path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
           asset_name: ${{ steps.strings2.outputs.deploy-output-name }}
           asset_content_type: application/zip
+
 
 
