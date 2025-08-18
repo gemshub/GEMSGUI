@@ -36,6 +36,7 @@ SettingsDialog::SettingsDialog (QWidget* parent)
 
     ui->pUpdateInterval->setValue( pVisorImp->updateInterval() );
 
+    ui->comboBox->setCurrentIndex(pVisorImp->getColorScheme());
     ui->pLocalDocDir->setText(pVisor->localDocDir().c_str());
     ui->pRemoteHTML->setText(pVisor->remoteHTML().c_str());
     //pLocalDoc->setChecked(pVisor->localDoc());
@@ -84,6 +85,7 @@ void SettingsDialog::CmApply()
 {
     pVisorImp->setCellFont(cellFont);
 
+    pVisorImp->setColorScheme(ui->comboBox->currentIndex());
     pVisorImp->setDoubleDigits(ui->pNumDigits->value());
     pVisorImp->setUpdateInterval( ui->pUpdateInterval->value() );
     pVisorImp->setConfigAutosave( ui->pConfigAutosave->isChecked() );
@@ -114,37 +116,6 @@ void SettingsDialog::CmUserDBDirSelect()
 {
     qWarning("SettingsDialogData::CmUserDBDirSelect(): Not implemented yet");
 }
-
-/*
-void
-SettingsDialog::CmSysDBDirSelect()
-{
-    QString dir( pDBDir->text() );
-
-    QFileDialog file_dlg( dir, QString::null, this, 0, true);
-    file_dlg.setMode(QFileDialog::DirectoryOnly);
-    if( file_dlg.exec() )
-    {
-//	pDBDir->setText( file_dlg.dirPath() );
-    pDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
-    }
-}
-
-
-void
-SettingsDialog::CmUserDBDirSelect()
-{
-    QString dir( pUserDBDir->text() );
-
-    QFileDialog file_dlg( dir, QString::null, this, 0, true);
-    file_dlg.setMode(QFileDialog::DirectoryOnly);
-    if( file_dlg.exec() )
-    {
-//	pUserDBDir->setText( file_dlg.dirPath() );
-    pUserDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
-    }
-}
-*/
 
 void SettingsDialog::CmChangeFont()
 {

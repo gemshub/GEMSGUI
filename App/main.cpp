@@ -80,6 +80,7 @@ TIntegApp::TIntegApp(int& c, char** v):
 void TIntegApp::InitMainWindow()
 {
     pVisorImp = new TVisorImp(argc, argv);
+    styleHints()->setColorScheme(static_cast<Qt::ColorScheme>(pVisorImp->getColorScheme()));
     pVisorImp->show();
     // init Help Window
     pVisorImp->GetHelp();

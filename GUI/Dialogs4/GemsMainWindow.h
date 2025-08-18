@@ -167,6 +167,7 @@ class TVisorImp: public QMainWindow
     QFont	defaultFont;
     int charWidth;
     int charHeight;
+    int colorScheme=0;
 
     bool configAutosave;
 
@@ -242,6 +243,11 @@ public:
     {  return TValBase::doublePrecision;  }
     void setDoubleDigits(int newDoubleDigits)
     {  TValBase::doublePrecision = newDoubleDigits;   }
+
+    int getColorScheme() const
+    {  return colorScheme;  }
+    void setColorScheme(int newColorScheme)
+    {  colorScheme = newColorScheme;   }
 
     void setConfigAutosave(bool autosave)
     {  configAutosave = autosave;  }

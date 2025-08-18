@@ -558,6 +558,7 @@ void TVisor::toWinCFG()
     string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF + ".json";
 
     QJsonObject win_cfg_object;
+    win_cfg_object["color_scheme"] = pVisorImp->getColorScheme();
     win_cfg_object["double_precision"] = pVisorImp->getDoubleDigits();
     win_cfg_object["update_interval"] = pVisorImp->updateInterval();
     win_cfg_object["general_font_string"] = pVisorImp->getCellFont().toString();
@@ -597,6 +598,7 @@ void TVisor::fromWinCFG()
     string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
     TJsonConfig visor_conf( fname_ini+".json" );
+    pVisorImp->setColorScheme(visor_conf.value_or_default("color_scheme", 0));
     pVisorImp->setDoubleDigits(visor_conf.value_or_default("double_precision", pVisorImp->getDoubleDigits()));
     pVisorImp->setUpdateInterval(visor_conf.value_or_default("update_interval", pVisorImp->updateInterval()));
     std::string font_str = visor_conf.value_or_default<std::string>("general_font_string", "");
