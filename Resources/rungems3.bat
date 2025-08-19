@@ -5,7 +5,7 @@ rem 1. First launch with default location of modeling projects (usually done by 
 rem gem-selektor.exe -d > gems3.log
 
 rem 2. Normal runs in default locations (retains all settings from previous session)
-gem-selektor.exe > gems3.log
+gem-selektor.exe -c > gems3.log
 rem or 
 rem gem-selektor.exe -s . -u C:\Users\<USER>\Library\Gems3 > gems3.log
 
