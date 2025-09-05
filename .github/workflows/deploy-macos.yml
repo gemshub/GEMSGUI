@@ -73,33 +73,37 @@ jobs:
           cp "${{ github.workspace }}/Resources/rungems3-mac.sh" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
           cp "${{ github.workspace }}/Resources/README-macos.txt" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/README.txt"
 
-      - name: Create DMG with macdeployqt
-        shell: bash -l {0}   # important so conda env stays active
-        run: |
-          conda activate GEMSGUI
-          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          # Use macdeployqt from the conda-installed Qt
-          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
-          mv gem-selektor.dmg "${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}"
-
-      - name: Upload artifact DMG
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-${{ steps.strings.outputs.deploy-name }}
-          path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
-
+     # Create ZIP archive for GitHub release (unchanged)
       - name: Create zip archive for GitHub release
         run: |
           cd ${{ github.workspace }}
           zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
-      
-      - name: Upload artifact zip archive
+
+      # Create DMG with macdeployqt from Conda Qt
+      - name: Create DMG with macdeployqt
+        shell: bash -l {0}   # keep conda env active
+        run: |
+          conda activate GEMSGUI
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
+          mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
+
+      # Upload ZIP artifact
+      - name: Upload artifact ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: macos-${{ steps.strings.outputs.deploy-name }}
+          name: macos-${{ steps.strings.outputs.deploy-name }}-zip
           path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
 
-      - name: Upload release asset
+      # Upload DMG artifact
+      - name: Upload artifact DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ steps.strings.outputs.deploy-name }}-dmg
+          path: ${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg
+     
+      # Upload ZIP release asset
+      - name: Upload ZIP release asset
         if: github.event_name == 'release' && github.event.action == 'published'
         uses: actions/upload-release-asset@v1
         env:
@@ -109,4 +113,17 @@ jobs:
           asset_path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
           asset_name: ${{ steps.strings2.outputs.deploy-output-name }}
           asset_content_type: application/zip
+
+      # Upload DMG release asset
+      - name: Upload DMG release asset
+        if: github.event_name == 'release' && github.event.action == 'published'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg
+          asset_name: macos-${{ steps.strings.outputs.deploy-name }}.dmg
+          asset_content_type: application/x-apple-diskimage
+
 
