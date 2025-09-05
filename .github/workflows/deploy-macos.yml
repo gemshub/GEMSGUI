@@ -74,9 +74,12 @@ jobs:
           cp "${{ github.workspace }}/Resources/README-macos.txt" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/README.txt"
 
       - name: Create DMG with macdeployqt
+        shell: bash -l {0}   # important so conda env stays active
         run: |
+          conda activate GEMSGUI
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          macdeployqt gem-selektor.app -verbose=2 -dmg
+          # Use macdeployqt from the conda-installed Qt
+          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
           mv gem-selektor.dmg "${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}"
 
       - name: Upload artifact DMG
