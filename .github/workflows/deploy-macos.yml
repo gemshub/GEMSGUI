@@ -125,5 +125,3 @@ jobs:
           asset_path: ${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg
           asset_name: macos-${{ steps.strings.outputs.deploy-name }}.dmg
           asset_content_type: application/x-apple-diskimage
-
-
