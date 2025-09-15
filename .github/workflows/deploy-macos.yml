@@ -33,14 +33,12 @@ jobs:
         shell: bash
         run: >
           echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}" >> "$GITHUB_OUTPUT"
-
       - name: Set deploy dir
         id: strings2
         shell: bash
         run: |
           echo "deploy-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}" >> "$GITHUB_OUTPUT"
           echo "deploy-output-name=macos-${{ steps.strings.outputs.deploy-name }}.zip" >> "$GITHUB_OUTPUT"
-
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
@@ -54,7 +52,6 @@ jobs:
           conda config --add channels conda-forge
           conda install conda-devenv
           conda devenv
-
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
         shell: bash -l {0}
@@ -64,7 +61,6 @@ jobs:
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
           ninja install
-
       - name: Check deploy
         run: |
           cd ${{ github.workspace }}
@@ -72,13 +68,11 @@ jobs:
           cp -r "${{ github.workspace }}/Resources" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
           cp "${{ github.workspace }}/Resources/rungems3-mac.sh" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
           cp "${{ github.workspace }}/Resources/README-macos.txt" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/README.txt"
-
      # Create ZIP archive for GitHub release (unchanged)
       - name: Create zip archive for GitHub release
         run: |
           cd ${{ github.workspace }}
           zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
-
       # Create DMG with macdeployqt from Conda Qt
       - name: Create DMG with macdeployqt
         shell: bash -l {0}   # keep conda env active
@@ -87,7 +81,6 @@ jobs:
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
           /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
           mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
-
       # Upload ZIP artifact
       - name: Upload artifact ZIP
         uses: actions/upload-artifact@v4
