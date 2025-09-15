@@ -73,6 +73,16 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
+          
+      - name: Clean previous DMG
+        run: |
+          hdiutil detach /Volumes/gem-selektor || true
+          rm -f gem-selektor.dmg
+      - name: List mounted volumes
+        run: mount
+      - name: Check for existing DMG
+        run: ls -lh *.dmg || echo "No DMG found"
+
       # Create DMG with macdeployqt from Conda Qt
       - name: Create DMG with macdeployqt
         shell: bash -l {0}   # keep conda env active
