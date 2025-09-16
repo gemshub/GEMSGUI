@@ -2,7 +2,7 @@ name: deploy-linux
 on:
   push:
     branches:
-      - dark_light
+      - test_ilegal_overwrite
   release:
     types:
       - published
