@@ -1,1 +1,0 @@
-exec qcollectiongenerator gems3helpconfig.qhcp -o gems3help.qhc

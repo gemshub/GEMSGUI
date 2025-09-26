@@ -2,7 +2,8 @@ Resources/help/.gems3help
 Resources/help/gems3help.qhc
 Resources/visor.data/visobj.dat
 Resources/visor.data/visor.dat
-/tools
+/tools/tools.pro.user
+/tools/tools.pro.user.*
 /tmp*
 /gems3gui.pro.user
 /gems3gui.pro.user.*
@@ -12,5 +13,7 @@ Docs/.directory
 *.bak
 build
 .vs
+.cache
 /gems3gui_with_gems3k_source.pro.user
+environment.yml
 

@@ -433,6 +433,7 @@ TEST2:
             continue;
         kk++;
         memcpy( mu.SF[kk], aPhaseList[k].c_str(), PH_RKLEN );
+
         mu.Ll[kk] = 0;
         for( j=0; j<aPH->php->nDC; j++ )
         {
@@ -572,6 +573,8 @@ void TRMults::PHmake()
         item = mu.DCF;
     }
     ii=0;
+    phase_descr.clear();
+    decomp_descr.clear();
     for( kk=0; kk<mu.Fi; kk++ ) // phase list
     {
         jj=ii;
@@ -581,6 +584,7 @@ void TRMults::PHmake()
         mu.PHC[kk] = aPH->php->PphC;
         // test and load � DCOMP and REACDC
         fillValue( dkey, '\0', MAXRKEYLEN );
+        phase_descr.push_back(char_array_to_string( aPH->php->name, MAXFORMULA)+" (Phase)");
 
         for( ; jj<ii; jj++ )
         {
@@ -603,11 +607,15 @@ void TRMults::PHmake()
             {
                 TDComp::pm->TryRecInp( dkey, crt, 0 );
                 Formula = aDC->dcp->form;
+                decomp_descr.push_back(char_array_to_string(aDC->dcp->form, MAXFORMULA)+"\n"+
+                                       char_array_to_string(aDC->dcp->name, MAXFORMULA)+" (DComp)");
             }
             if( aPH->php->DCS[ij] == SRC_REACDC )
             {
                 TReacDC::pm->TryRecInp( dkey, crt, 0 );
                 Formula = aRC->rcp->form;
+                decomp_descr.push_back(char_array_to_string(aRC->rcp->form, MAXFORMULA)+"\n"+
+                                       char_array_to_string(aRC->rcp->name, MAXFORMULA)+" (ReacDC)");
             }
             /* dependent component read! */
             mu.DCS[jj] =  aPH->php->DCS[ij]; /* mu[p].DCS[jj]; */
@@ -717,8 +725,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
         }
 
     }
-    std::string prfName = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
-    StripLine( prfName );
+    std::string prfName = TProfil::pm->projectName();
 
     if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
     {

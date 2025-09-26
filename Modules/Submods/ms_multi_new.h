@@ -164,6 +164,26 @@ public:
 
     long get_sizeFIs () { return sizeFIs; }
 
+     std::string phase_description(size_t index) const
+     {
+         if(index< phase_descr.size()) {
+             return phase_descr[index];
+         }
+         else {
+             return "undefined phase";
+         }
+     }
+
+     std::string component_description(size_t index) const
+     {
+         if(index< decomp_descr.size()) {
+             return decomp_descr[index];
+         }
+         else {
+             return "undefined component";
+         }
+     }
+
 protected:
 
     void get_PAalp_PSigm(char &PAalp, char &PSigm) override;
@@ -205,6 +225,8 @@ protected:
     //void load_all_thermodynamic_from_grid(TNode *aNa, double TK, double P) override;
 
 private:
+    std::vector<std::string> phase_descr;
+    std::vector<std::string> decomp_descr;
 
     // These pointers and methods are only used in GEMS-PSI
     void MultiSystemInit();

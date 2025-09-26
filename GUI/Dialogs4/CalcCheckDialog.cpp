@@ -22,7 +22,7 @@
 #include "page_f.h"
 
 CalcCheckDialog::CalcCheckDialog(QWidget* parent,
-                                 const int nO, const string& Vals):
+                                 const int nO, const std::string& Vals):
     QDialog( parent ),
     ui(new Ui::CalcCheckDialogData),
     nO_(nO)

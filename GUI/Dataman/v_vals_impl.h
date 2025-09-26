@@ -140,11 +140,11 @@ struct TValFixString:
 
     bool IsAny(int ndx) const
     {
-        return static_cast<char*>(ptr)[ndx*len]=='`';
+        return static_cast<char*>(ptr)[ndx*len]=='*';
     }
     bool IsEmpty(int ndx) const
     {
-        return static_cast<char*>(ptr)[ndx*len]=='*';
+        return static_cast<char*>(ptr)[ndx*len]=='`';
     }
     std::string GetString(int ndx) const
     {

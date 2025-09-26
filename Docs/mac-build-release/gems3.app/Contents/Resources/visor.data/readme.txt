@@ -1,1 +1,0 @@
-Here the configuration files visobj.dat and visor.dat will be saved when gems3.exe was called with -d command line key.

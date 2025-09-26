@@ -46,7 +46,6 @@ protected slots:
     virtual void CmUserDBDirSelect();
     virtual void CmApply();
     virtual void CmHelp();
-    virtual void CmHelpGenerate();
     virtual void CmDefaultFont();
     void accept();
 };

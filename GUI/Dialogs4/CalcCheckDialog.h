@@ -36,7 +36,7 @@ class CalcCheckDialog: public QDialog
     
 public:
 
-    CalcCheckDialog(QWidget* parent, const int nO, const string& Vals);
+    CalcCheckDialog(QWidget* parent, const int nO, const std::string& Vals);
 
     virtual ~CalcCheckDialog();
 

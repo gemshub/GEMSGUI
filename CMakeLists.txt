@@ -25,6 +25,7 @@ include(CondaAware)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_STATIC_LIBS "Build static libraries" ON)
 option(BUILD_APP "Build application." ON)
+option(BUILD_TOOLS "Build tools." ON)
 option(USE_THERMOFUN "Use ThermoFun" ON)
 option(USE_GEMS3K_SERVER "Use gems3k external server" OFF)
 option(BUILD_NLOHMANNJSON "Use nlohmann json" OFF)
@@ -48,7 +49,11 @@ endif()
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     set(BUILD_SHARED_LIBS OFF)
 else()
-    set(BUILD_STATIC_LIBS OFF)
+#    set(BUILD_STATIC_LIBS OFF)
+endif()
+
+if(BUILD_APP)
+   set(BUILD_STATIC_LIBS ON)
 endif()
 
 # Set libraries to be compiled with position independent code mode (i.e., fPIC option in GNU compilers)
@@ -171,13 +176,19 @@ add_subdirectory(GUI)
 # make application
 if(BUILD_APP)
    add_subdirectory(App)
+   # Copy Resources folder
+   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
+           DESTINATION ${CMAKE_BINARY_DIR}/App)
 endif()
 
-
-# Copy Resources folder
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
-        DESTINATION ${CMAKE_BINARY_DIR}/App)
-
+# make service tools
+if(BUILD_TOOLS)
+   # use nlohmann/json.hpp
+   add_subdirectory(tools)
+   # Copy Resources folder
+   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
+           DESTINATION ${CMAKE_BINARY_DIR}/tools)
+endif()
 
 # Install the cmake config files that permit users to use find_package(ThermoFunGui)
 #include(ThermoFunGuiInstallCMakeConfigFiles)

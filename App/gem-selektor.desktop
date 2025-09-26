@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=GEM-Selektor
+Comment=GEM-Selektor package for geochemical modeling
+Exec="/home/sveta/deploy/bin/gem-selektor" %F
+Icon=gem-selektor.png
+Terminal=true
+Type=Application
+Categories=Application;Network;

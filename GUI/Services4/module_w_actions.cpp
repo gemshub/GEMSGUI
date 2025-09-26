@@ -727,38 +727,43 @@ void TCModuleImp::CmRestore()
 
 void TCModuleImp::CmBackuptoJson()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
             return;
 
-        rMod.RecListToJSON();
+        std::string s= rMod.GetName();
+        std::string filename = s + ".backup.json";
+        s += " : Please, give a file name for unloading records";
+        if( vfChooseFileSave( window(), filename, s.c_str(), "*.json" ) == false )
+            return;
+
+        rMod.RecListToJSON(rMod.Filter.c_str(), filename);
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         pVisor->Update();
-        vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
 void TCModuleImp::CmRestorefromJson()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
             return;
-
-        rMod.RecListFromJSON();
+        // Choose file name
+        std::string s = std::string( rMod.GetName() )+" : Please, select file with unloaded records";
+        std::string filename;
+        if( vfChooseFileOpen( window(), filename, s.c_str(), "*.json" ) == false )
+            return;
+        rMod.RecListFromJSON(filename);
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
-        vfMessage(this, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
-
 //--------------------- End of module_w_actions.cpp ---------------------------
 
 

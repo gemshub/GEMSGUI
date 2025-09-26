@@ -106,6 +106,8 @@ class TRMults :
     RMULTS mu;
 
 protected:
+    std::vector<std::string> phase_descr;
+    std::vector<std::string> decomp_descr;
 
     void MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey );
 
@@ -140,6 +142,26 @@ public:
     //void SelectAqPhase(TCStringArray dfKey );
     //void SelectGasPhase(TCStringArray dfKey );
     void SetAqGas( const char* AqKey, const char* GasKey );
+
+    std::string phase_description(size_t index) const
+    {
+        if(index< phase_descr.size()) {
+            return phase_descr[index];
+        }
+        else {
+            return "undefined phase";
+        }
+    }
+
+    std::string component_description(size_t index) const
+    {
+        if(index< decomp_descr.size()) {
+            return decomp_descr[index];
+        }
+        else {
+            return "undefined component";
+        }
+    }
 };
 
 #endif      //_ms_rmults_h

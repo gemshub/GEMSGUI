@@ -1073,8 +1073,7 @@ TDBKeyList::PutKeyList( uint nF, GemDataStream& f)
 }
 
 // read the keys of records from ndx file
-void
-TDBKeyList::GetKeyList_i(uint nF, int nRec, GemDataStream& f)
+void TDBKeyList::GetKeyList_i(uint nF, int nRec, GemDataStream& f, const std::string& file_name)
 {
     RecEntry re_;
     //vvstr key(KeyLen()+1);
@@ -1084,12 +1083,13 @@ TDBKeyList::GetKeyList_i(uint nF, int nRec, GemDataStream& f)
     {
         f.readArray( key, KeyLen());
         //     f.read( (char *)&re_, sizeof(RecEntry));
+        ErrorIf( !f.good(), "TDBKeyList", file_name+ " index file read error.");
         re_.read (f);
         auto indRec = addndx( nF, re_.len, key);
         re[indRec].pos = re_.pos;
     }
     SetKey(ALLKEY); // bugfix: current key for not readed record
-    ErrorIf( !f.good(), "TDBKeyList", "Index file read error.");
+    ErrorIf( !f.good(), "TDBKeyList", file_name+ " index file read error.");
 }
 
 // compare key ni record and pattern in work key

@@ -29,6 +29,7 @@ namespace jsonui {
 class ChartData;
 }
 
+
 // --- Parametres of function GetKeyofRecord()
 const int KEY_OLD = 1;
 const int KEY_NEW = 2;
@@ -52,7 +53,6 @@ extern std::shared_ptr<spdlog::logger> gui_logger;
 */
 class TCModule
 {
-
 public:
     TCModule(size_t nrt);
     virtual ~TCModule();
@@ -180,8 +180,8 @@ public:
     void RecOfTXT();
     void RecExport();
     void RecImport( );
-    void RecListToJSON();
-    void RecListFromJSON();
+    void RecListToJSON(const char *pattern, const std::string&filename, bool all_records=false);
+    void RecListFromJSON(const std::string&filename);
 
     void SaveM();
     void SaveCurrentKey();

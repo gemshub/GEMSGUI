@@ -27,6 +27,7 @@
 #include "nodearray_gui.h"
 #include "GEMS3K/gdatastream.h"
 #include "gemsgui_version.h"
+#include "GEMS3K/gems3k_version.h"
 
 #ifdef USE_GEMS3K_SERVER
 #ifdef NO_ASYNC_SERVER
@@ -39,10 +40,9 @@
 TProfil* TProfil::pm;
 
 const std::string _GEMS_version_stamp = std::string(" GEMS-GUI v.") + GEMSGUI_VERSION + " c." + GEMSGUI_VERSION_HASH;
-//extern const std::string _GEMIPM_version_stamp;
 
 SPP_SETTING pa_ = {
-    " Tolerances and controls: GEMSGUI v.x.x.x  and " " GEMS3K v.x.x.x ",
+    "Tolerances and controls: GEMSGUI v." GEMSGUI_VERSION " and GEMS3K v." GEMS3K_VERSION,
     {   // Typical default set (30.06.2025) new PSSC( logSI ) & uDD(), 0.7,   /* AG */   -0.0065,
         2,  /* PC */  2,     /* PD */   -4,   /* PRD */
         1,  /* PSM  */ 130,  /* DP */   1,   /* DW */

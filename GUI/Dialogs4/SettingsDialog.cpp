@@ -22,7 +22,6 @@
 #include "SettingsDialog.h"
 #include "service.h"
 #include "visor.h"
-#include "help.h"
 #include "GemsMainWindow.h"
 
 
@@ -37,6 +36,7 @@ SettingsDialog::SettingsDialog (QWidget* parent)
 
     ui->pUpdateInterval->setValue( pVisorImp->updateInterval() );
 
+    ui->comboBox->setCurrentIndex(pVisorImp->getColorScheme());
     ui->pLocalDocDir->setText(pVisor->localDocDir().c_str());
     ui->pRemoteHTML->setText(pVisor->remoteHTML().c_str());
     //pLocalDoc->setChecked(pVisor->localDoc());
@@ -65,7 +65,6 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     QObject::connect(ui->pButtonHelp, SIGNAL(clicked()), this, SLOT(CmHelp()));
     QObject::connect(ui->pButtonChFont, SIGNAL(clicked()), this, SLOT(CmChangeFont()));
     QObject::connect(ui->pushButton5, SIGNAL(clicked()), this, SLOT(CmDefaultFont()));
-    connect(ui->butGenerate, SIGNAL(clicked()), this, SLOT(CmHelpGenerate()));
 
     ui->pFontRawName->setReadOnly(true);	// no meaning for Win32 (now)
 }
@@ -86,6 +85,7 @@ void SettingsDialog::CmApply()
 {
     pVisorImp->setCellFont(cellFont);
 
+    pVisorImp->setColorScheme(ui->comboBox->currentIndex());
     pVisorImp->setDoubleDigits(ui->pNumDigits->value());
     pVisorImp->setUpdateInterval( ui->pUpdateInterval->value() );
     pVisorImp->setConfigAutosave( ui->pConfigAutosave->isChecked() );
@@ -107,77 +107,6 @@ void SettingsDialog::CmHelp()
     pVisorImp->OpenHelp( GEMS_SETUP_HTML, nullptr );
 }
 
-void SettingsDialog::CmHelpGenerate()
-{
-    try
-    {
-        QString qhpFile = ui->pRemoteHTML->text()+"gems3helpconfig.qhp";
-        HelpConfigurator rr;
-        if( rr.readDir(ui->pRemoteHTML->text().toLatin1().data()))
-            rr.writeFile(qhpFile.toLatin1().data());
-
-        //if( HelpWindow::pDia )
-        //{
-        //   HelpWindow::pDia->close();
-        //   delete HelpWindow::pDia;
-        //   build new file
-        if(!pVisorImp->proc) {
-            pVisorImp->proc = new QProcess();
-        }
-        if (pVisorImp->proc->state() != QProcess::Running)
-        {
-
-            QString docPath =  ui->pRemoteHTML->text();
-            QString app;
-            QString exeunix;
-            QString exewin;
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            exeunix = QLatin1String("qcollectiongenerator");
-            exewin = QLatin1String("qcollectiongenerator.exe");
-#else
-            exeunix = QLatin1String("qhelpgenerator");      // qcollectiongenerator was removed since Qt 6.0
-            exewin = QLatin1String("qhelpgenerator.exe");
-#endif
-
-#ifndef _WIN32
-#ifdef __APPLE__
-            //                    app += QLatin1String("/Applications/Gems3.app/Contents/MacOS/qcollectiongenerator");    // expected to work
-            app += exeunix;       // app += QLatin1String("qcollectiongenerator");
-#else
-            // app = pVisor->sysGEMDir().c_str() + QLatin1String("/qcollectiongenerator");
-            //                   app = QLatin1String(getenv("HOME"));
-            //                   app += QLatin1String("/Gems3-app/qcollectiongenerator");
-            app += exeunix;      //app += QLatin1String("qcollectiongenerator");
-#endif
-#else    // windows
-            app += exewin;       //app += QLatin1String("qcollectiongenerator.exe");
-#endif
-            QStringList args;
-            args << docPath + QLatin1String("gems3helpconfig.qhcp")
-                 << QLatin1String("-o")
-                 << docPath + QLatin1String("gems3help.qhc");
-            ;
-
-            pVisorImp->proc->start(app, args);
-            gui_logger->info("CmHelpGenerate start {} {}", app.toStdString(), args[2].toStdString());
-            if (!pVisorImp->proc->waitForStarted())
-            {
-                Error( "Gems3", "Unable to launch qhelpgenerator (in Qt5, qcollectiongenerator)");
-            }
-        }
-        // open it
-        //   (new HelpWindow(  0  ));
-        // }
-
-    }
-    catch(TError& e)
-    {
-        vfMessage(this, e.title.c_str(), e.mess.c_str() );
-    }
-}
-
-
 void SettingsDialog::CmSysDBDirSelect()
 {
     qWarning("SettingsDialogData::CmSysDBDirSelect(): Not implemented yet");
@@ -187,37 +116,6 @@ void SettingsDialog::CmUserDBDirSelect()
 {
     qWarning("SettingsDialogData::CmUserDBDirSelect(): Not implemented yet");
 }
-
-/*
-void
-SettingsDialog::CmSysDBDirSelect()
-{
-    QString dir( pDBDir->text() );
-
-    QFileDialog file_dlg( dir, QString::null, this, 0, true);
-    file_dlg.setMode(QFileDialog::DirectoryOnly);
-    if( file_dlg.exec() )
-    {
-//	pDBDir->setText( file_dlg.dirPath() );
-    pDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
-    }
-}
-
-
-void
-SettingsDialog::CmUserDBDirSelect()
-{
-    QString dir( pUserDBDir->text() );
-
-    QFileDialog file_dlg( dir, QString::null, this, 0, true);
-    file_dlg.setMode(QFileDialog::DirectoryOnly);
-    if( file_dlg.exec() )
-    {
-//	pUserDBDir->setText( file_dlg.dirPath() );
-    pUserDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
-    }
-}
-*/
 
 void SettingsDialog::CmChangeFont()
 {

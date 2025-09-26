@@ -239,11 +239,6 @@ the aqueous phase model</string>
            <widget class="QComboBox" name="pBG_T">
             <item>
              <property name="text">
-              <string>Constant</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>NaCl</string>
              </property>
             </item>
@@ -260,6 +255,11 @@ the aqueous phase model</string>
             <item>
              <property name="text">
               <string>KOH</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Constant</string>
              </property>
             </item>
            </widget>
@@ -315,12 +315,12 @@ the aqueous phase model</string>
            <widget class="QComboBox" name="apEdit2">
             <item>
              <property name="text">
-              <string>Set to 1.0</string>
+              <string>Calculate as b_gamma*IS</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Calculate as b_gamma*IS</string>
+              <string>Set to 1.0</string>
              </property>
             </item>
            </widget>
@@ -342,12 +342,12 @@ the aqueous phase model</string>
             </property>
             <item>
              <property name="text">
-              <string>Set to 1.0</string>
+              <string>From osmotic coefficient</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>From osmotic coefficient</string>
+              <string>Set to 1.0</string>
              </property>
             </item>
            </widget>
@@ -554,7 +554,7 @@ the aqueous phase model</string>
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <pointsize>10</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -585,7 +585,7 @@ the aqueous phase model</string>
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <pointsize>10</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -626,7 +626,7 @@ the aqueous phase model</string>
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <pointsize>10</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -673,7 +673,7 @@ the aqueous phase model</string>
        </property>
        <property name="font">
         <font>
-         <weight>75</weight>
+         <pointsize>10</pointsize>
          <bold>true</bold>
         </font>
        </property>

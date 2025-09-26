@@ -30,7 +30,7 @@ class ElementsDialogData;
 
 class ElementsDialog : public QDialog
 {
-    string prf_name;
+    std::string prf_name;
     setFiltersData sf_data;
     elmWindowData  el_data;
     elmFilesConfData files_data;
@@ -48,7 +48,7 @@ class ElementsDialog : public QDialog
     TCStringArray aICkey2_sel;  // lists from template bgOther
 
     // working with open files
-    int  isOpenFile( string& name );
+    int  isOpenFile( std::string& name );
     void setFilesList();
     void resetFilesSelection();
     void openFilesSelection();
@@ -58,8 +58,8 @@ class ElementsDialog : public QDialog
     void setTreeWidget();
     void setSelectionTreeWidget();  // set up selection in wiget use selNames
     void getSelectionTreeWidget();
-    void getTag( string tag, QStandardItem* pdb);
-    void setTag( string fname, QStandardItem* pdb);
+    void getTag( std::string tag, QStandardItem* pdb);
+    void setTag( std::string fname, QStandardItem* pdb);
     void deleteTag( QString aTag, QStandardItem* pdb);
 
     // working with elements buttoms

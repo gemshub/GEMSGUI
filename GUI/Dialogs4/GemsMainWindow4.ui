@@ -98,6 +98,9 @@
     <addaction name="separator"/>
     <addaction name="sactionOutMulti"/>
     <addaction name="sactionReadMulti"/>
+    <addaction name="separator"/>
+    <addaction name="actionExport_JSON_files"/>
+    <addaction name="actionImport_JSON_files"/>
    </widget>
    <widget class="QMenu" name="smenu_Calc">
     <property name="title">
@@ -1286,6 +1289,16 @@
    </property>
    <property name="toolTip">
     <string>ThermoFun as option in GEMS3K</string>
+   </property>
+  </action>
+  <action name="actionExport_JSON_files">
+   <property name="text">
+    <string>Export JSON files...</string>
+   </property>
+  </action>
+  <action name="actionImport_JSON_files">
+   <property name="text">
+    <string>Import JSON files...</string>
    </property>
   </action>
  </widget>

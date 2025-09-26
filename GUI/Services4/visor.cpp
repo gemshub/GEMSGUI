@@ -552,6 +552,7 @@ void TVisor::toWinCFG()
     string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF + ".json";
 
     QJsonObject win_cfg_object;
+    win_cfg_object["color_scheme"] = pVisorImp->getColorScheme();
     win_cfg_object["double_precision"] = pVisorImp->getDoubleDigits();
     win_cfg_object["update_interval"] = pVisorImp->updateInterval();
     win_cfg_object["general_font_string"] = pVisorImp->getCellFont().toString();
@@ -591,6 +592,7 @@ void TVisor::fromWinCFG()
     string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
     TJsonConfig visor_conf( fname_ini+".json" );
+    pVisorImp->setColorScheme(visor_conf.value_or_default("color_scheme", 0));
     pVisorImp->setDoubleDigits(visor_conf.value_or_default("double_precision", pVisorImp->getDoubleDigits()));
     pVisorImp->setUpdateInterval(visor_conf.value_or_default("update_interval", pVisorImp->updateInterval()));
     std::string font_str = visor_conf.value_or_default<std::string>("general_font_string", "");
@@ -768,10 +770,13 @@ TVisor::defaultCFG()
     unsigned char icomp_rkfrm[3] = { MAXICNAME, MAXSYMB, MAXICGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "icomp", false, true,
                          o_icsst, 6, 0, 3, icomp_rkfrm));
+    rt.back()->updateJsonOD(o_icawt, o_icint);
+
     // RT_DCOMP default
     unsigned char dcomp_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "dcomp", false, true,
                          o_dcstr, 20, 0, 4, dcomp_rkfrm));
+    rt.back()->updateJsonOD(o_dcpct, o_dcsdval);
 
     // RT_COMPOS default
     unsigned char compos_rkfrm[3] = { MAXCMPNAME, MAXSYMB, MAXCMPGROUP };
@@ -782,6 +787,7 @@ TVisor::defaultCFG()
     unsigned char reacdc_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "reacdc", false, true,
                          o_restr, 20, 0, 4, reacdc_rkfrm));
+    rt.back()->updateJsonOD(o_repct, o_resdval);
 
     // RT_RTPARM default
     unsigned char rtparm_rkfrm[6] =
@@ -794,6 +800,7 @@ TVisor::defaultCFG()
         { MAXSYMB, MAXPHSYMB, MAXPHNAME, MAXSYMB, MAXPHGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "phase", true, true,
                          o_phstr, 22+38/*13/06/13*/, 0, 5, phase_rkfrm));
+    rt.back()->updateJsonOD(o_phsolt, o_phlicu);
 
     // RT_SYSEQ default
     unsigned char syseq_rkfrm[8] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,

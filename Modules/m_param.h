@@ -178,6 +178,14 @@ public:
         return "Project";
     }
 
+
+    static std::string projectName()
+    {
+        auto strfilt = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
+        StripLine(strfilt);
+        return strfilt;
+    }
+
     void ods_link(int i=0) override;
     void dyn_set(int i=0) override;
     void dyn_kill(int i=0) override;
@@ -260,6 +268,10 @@ public:
     bool CompareProjectName( const char* SysKey );
     void ChangeTPinKey( double T, double P );
     void SetSysSwitchesFromMulti( );
+
+    void  exportJsonFiles(QWidget* par);
+    void  importJsonFiles(QWidget* par);
+
 };
 
 #endif  // _m_param_h

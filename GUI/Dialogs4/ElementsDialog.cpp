@@ -77,7 +77,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     string str =
             "Basis configuration of a new Modelling Project  ";
-    str +=  string(rt[RT_PARAM]->FldKey(0), 0, rt[RT_PARAM]->FldLen(0));
+    str +=  TProfil::pm->projectName();
     setWindowTitle( str.c_str() );
 
     QObject::connect( ui->bBack, SIGNAL(clicked()), this, SLOT(CmBack()));
@@ -997,15 +997,15 @@ int ElementsDialog::isOpenFile(string& name)
 
     // first tag name of chain
     pos1 = fname.find(".");
-    fname = fname.substr( pos1+1 );
+    fname = fname.substr( pos1+1 )+".";
 
     gui_logger->debug("ElementsDialog::isOpenFile({})", fname);
     for(size_t ii=0; ii < selNames.size(); ii++ )
     {
         if(  name.find( selNames[ii] ) != string::npos )
             return 1;
-
-        if(  selNames[ii].find(fname) != string::npos )
+        auto sel_with_point = selNames[ii]+".";
+        if(  sel_with_point.find(fname) != string::npos ) ///
             return 1;
     }
     return 0;

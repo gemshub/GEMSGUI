@@ -6,10 +6,9 @@ This repository contains the source code and default resources for [GEM-Selektor
 
 - [Building using Conda](#building-using-conda)
 - [How to build on Linux or Mac OS](#how-to-build-the-gem-selektor-application-using-qt-on-linux-or-mac-os)
-- [How to run the application](#how-to-run-the-application)
+- [How to run the GEM-Selektor](#how-to-run-gem-selektor)
 - [How to build and run GEM-Selektor application using Qt Creator](#how-to-build-and-run-gem-selektor-application-using-qt-creator)
 - [How to use the application](#how-to-use-gem-selektor-application)
-
 
 ## Briefly about GEM-Selektor v.3 
 
@@ -39,7 +38,6 @@ GEM-Selektor graphical user interface (GEMSGUI) is available under GNU General P
 
 ```sh
 git clone https://github.com/gemshub/GEMSGUI.git
-
 ```
 
 ### Building using Conda
@@ -68,13 +66,16 @@ Now it's time to use `cmake` to configure and build the GEM-Selektor application
 
 ```sh
 cmake -S . -B build
-cmake --build build --parallel
+cmake --build build -j 5
 ```
 
-This step will produce `gem-selector` application inside the created directory `GEMSGUI/build/App`:
+This step will produce `gem-selektor` application inside the created directory `GEMSGUI/build/App`. `-j 5` lets you chose the number of CPU threads used for building the code.
 
-Now you can run the [GEMSGUI](#how-to-run-the-gem-selektor-application) application
+Now you can run the [GEMSGUI](#how-to-run-gem-selektor) application
 
+```sh
+./GEMSGUI/build/App/gem-selektor
+```
 
 ### How to build the GEM-Selektor application using Qt on Linux or Mac OS
 
@@ -106,7 +107,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=<deploy_path>  -DCMAKE_PREFIX_PATH=/home/<you>/Q
 make -j 4
 ```
 
-### How to run the application
+### How to run GEM-Selektor
 
 * To run Qt GEM-Selektor application, execute the following (or use *GEMSGUI/gems3gui.pro* with QtCreator):
 
@@ -114,7 +115,7 @@ make -j 4
 ./GEMSGUI/build/App/gem-selektor
 ```
 
-* For more details about command line parameters, see into *GEMSGUI/Resources/rungems3.sh* or *GEMSGUI/Resources/rungems3.bat*
+* For more details about command line parameters, see into *GEMSGUI/Resources/rungems3.sh* (for Linux), *GEMSGUI/Resources/rungems3-mac.sh* (for Mac) or *GEMSGUI/Resources/rungems3.bat* (for Windows)
 
 ```sh
 #  Change the path to the actual location of gem-selektor executable and Resources

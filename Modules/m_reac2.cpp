@@ -274,6 +274,7 @@ void TReacDC::Recalc( int q, const char *key  )
             {
                 aDC->TryRecInp( dcn, crt, 0, false );
                 aDC->RecCalc(dcn, rc[q].TCst, rc[q].Pst);
+                aDC->CellChanged(false);
             }
             else
                 aDC->TryRecInp( dcn, crt, 0 );

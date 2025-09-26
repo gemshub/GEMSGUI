@@ -57,7 +57,7 @@ public:
 
 
     TCStringArray allSelectedKeys();
-    string getKey();
+    std::string getKey();
 };
 
 // work with ReacDC&DComp keys lists
@@ -66,7 +66,7 @@ class RDKeyDialog : public QDialog
     Q_OBJECT
 
     Ui::KeyDialogData *ui;
-    string keyFilter;
+    std::string keyFilter;
     QStringList old_sel;
     short NsuT;     // N of surface site types (to set up on remake)
     void SetList();

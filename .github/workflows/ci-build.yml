@@ -2,7 +2,8 @@ name: ci-build
 on:
   push:
     branches:
-      - no_client_mode1
+      - psinagra2020
+      - fix_icons
       - master
   pull_request:
     branches:

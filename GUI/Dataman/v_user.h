@@ -91,6 +91,5 @@ inline std::string curDateTime()
 
 // reads line to string class from istream with a delimiter
 std::istream& u_getline(std::istream& instream, std::string& dst_string, char delimit = '\n');
-
 #endif // _v_user_h_
 
