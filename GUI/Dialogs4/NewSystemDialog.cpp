@@ -32,7 +32,7 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* /*name*/):
     ui(new Ui::NewSystemDialogData)
 {
     ui->setupUi(this);
-    string titl; // = pVisorImp->getGEMTitle();
+    std::string titl; // = pVisorImp->getGEMTitle();
     titl = "EqStat:: Single Thermodynamic System in Project ";
     titl+= TProfil::pm->projectName();
     setWindowTitle(  titl.c_str()  );
@@ -310,12 +310,12 @@ void NewSystemDialog::closeEvent(QCloseEvent* ev)
     }
 }
 
-void NewSystemDialog::printResultList( fstream& f )
+void NewSystemDialog::printResultList( std::fstream& f )
 {
     ListViewResult->printList( f );
 }
 
-void NewSystemDialog::printInputList( fstream& f )
+void NewSystemDialog::printInputList( std::fstream& f )
 {
     ListViewInput->printList( f );
 }
@@ -327,8 +327,8 @@ void NewSystemDialog::printInputList( fstream& f )
 bool NewSystemDialog::MessageToSave()
 {
     clearEditFocus();
-    string key_str = rt[RT_SYSEQ]->PackKey();
-    if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == string::npos )
+    std::string key_str = rt[RT_SYSEQ]->PackKey();
+    if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == std::string::npos )
     {
         int res = vfQuestion3(this, key_str,
                               "Data record has been changed!",
@@ -508,7 +508,7 @@ void NewSystemDialog::CmPrResults()
         if( vfChooseFileSave(this, filename,
                              "Put file name for printing" ) == false )
             return;
-        fstream f(filename, ios::out);
+        std::fstream f(filename, std::ios::out);
         ErrorIf( !f.good() , filename, "Fileopen error");
 
         printResultList(f);
@@ -531,7 +531,7 @@ void NewSystemDialog::CmPrInput()
         if( vfChooseFileSave(this, filename,
                              "Put file name for printing" ) == false )
             return;
-        fstream f(filename, ios::out);
+        std::fstream f(filename, std::ios::out);
         ErrorIf( !f.good() , filename, "Fileopen error");
 
         printInputList(f);
@@ -627,7 +627,7 @@ void NewSystemDialog::CmSave()
         clearEditFocus();
         if( TSysEq::pm->ifCalcFlag()== false )
         {
-            string key_s = rt[RT_SYSEQ]->PackKey();
+            std::string key_s = rt[RT_SYSEQ]->PackKey();
             if( rt[RT_SYSEQ]->Find( key_s.c_str()  ) < 0) // FindCurrent
             { vfMessage( this, key_s.c_str(),
                          "Please, calculate the equilibrium state before saving this record!");
@@ -681,7 +681,7 @@ void NewSystemDialog::CmNext()
 
         size_t i_next = 0;
         // get current record key
-        string str=rt[RT_SYSEQ]->UnpackKey();
+        std::string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
@@ -689,7 +689,7 @@ void NewSystemDialog::CmNext()
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != string::npos) )
+        if( !(str.find_first_of("*?" ) != std::string::npos) )
             //Current record key is defined!
         {
             for(size_t i=0; i<aKey.size(); i++ )
@@ -723,7 +723,7 @@ void NewSystemDialog::CmPrevious()
 
         size_t i_next = 0;
         // get current record key
-        string str=rt[RT_SYSEQ]->UnpackKey();
+        std::string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
         TCIntArray anR;
@@ -731,7 +731,7 @@ void NewSystemDialog::CmPrevious()
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != string::npos) )
+        if( !(str.find_first_of("*?" ) != std::string::npos) )
             //Current record key is defined!
         {
             for(size_t i=0; i<aKey.size(); i++ )

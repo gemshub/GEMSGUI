@@ -45,7 +45,7 @@ const char  splitRow = '\n';
 const char  splitCol = '\t';
 #endif
 
-const string emptiness("---");
+const std::string emptiness("---");
 //const string short_emptiness("---");
 
 struct Selection {
@@ -310,7 +310,7 @@ class TCellCheck:
 {
     Q_OBJECT
 
-    string Vals;
+    std::string Vals;
     int startIndex;
 
 protected:
@@ -379,7 +379,7 @@ public:
 
 };
 
-inline string visualizeEmpty(const string& text)
+inline std::string visualizeEmpty(const std::string& text)
 {
     return (text==S_EMPTY) ? emptiness : text;
 }
@@ -389,7 +389,7 @@ inline int wdF(eFieldType ft, int npos, eEdit edit )
 {
     if( ft == ftCheckBox ) {	// we'd like to get square 'checkbox cell'
         //    	return 2 * pVisorImp->getCharWidth();
-        int size = max( pVisorImp->getCharWidth(), pVisorImp->getCharHeight());
+        int size = std::max( pVisorImp->getCharWidth(), pVisorImp->getCharHeight());
         if( edit == eYes )
             size *= 2;
         return size;

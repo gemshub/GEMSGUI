@@ -85,26 +85,25 @@ public slots:
     void CmDelete();
     void CmDerive();
     void CmShow( const char *key=nullptr );  //Demonstrate (show) Data Record
-    void CmFilter();  // set Data Record filter
+    //void CmFilter();  // set Data Record filter
     void CmNew();
     void CmCreate();
-    void CmNext();
-    void CmPrevious();
+    //void CmNext();
+    //void CmPrevious();
 
     void CmPlot();
 
     //--- Manipulation current record
-    void CmSave();
+    //void CmSave();
     void CmSaveM();
     void CmSaveAs();
     void CmCalc();  //Calculate or create Data Record
 
     void CmNewinProfile();
     void CmCreateinProfile();
-    void RecordLoadinProfile( const char *key=nullptr );
+    //void RecordLoadinProfile( const char *key=nullptr );
     void CmLoadinProfile( const char *key=nullptr );
     void CmPrint();
-    void CmScript();
 
 public:
     TCModuleImp(size_t aiMod, int page=0, int viewmode=0);

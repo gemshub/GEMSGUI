@@ -41,8 +41,6 @@
 #include "jsonio/jsondom.h"
 #endif
 
-using namespace std;
-
 namespace jsonui {
 
 QFont ChartData::axisFont("Sans Serif", 14);

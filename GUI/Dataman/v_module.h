@@ -88,7 +88,7 @@ public:
 
     void SetTitle()
     {
-        set_string( start_title );
+        set_string(start_title);
     }
 
     size_t keyEditField();
@@ -188,8 +188,6 @@ public:
     void SaveAs();
     void DeleteCurrent();
     void RunFilter();
-    void RunNext();
-    void RunPrevious();
     void RunDerive();
     void RunCalc();
     void RunNew();
@@ -236,6 +234,7 @@ protected:   // SumModule level
     TCModuleImp* pImp;  //!!??
     void clearEditFocus(); //!!??
     friend class TCModuleImp;
+    friend class TVisorImp;
 
     TCModule(const TCModule&);
     const TCModule& operator=(const TCModule&);

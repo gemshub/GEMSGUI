@@ -285,7 +285,7 @@ void TVisor::Setup()
     }
 
     // check home dir
-    string dir = userGEMDir();
+    std::string dir = userGEMDir();
     QDir userGEM(dir.c_str());
 
     bool firstTimeStart = !userGEM.exists(userProfDir().c_str());
@@ -296,9 +296,9 @@ void TVisor::Setup()
         default_settings = true;
         pVisorImp->setConfigAutosave( true );
 
-        string dirUp = string( dir,0, dir.length()-1);
+        std::string dirUp = std::string( dir,0, dir.length()-1);
         size_t pos = dirUp.rfind("/");
-        if( pos != string::npos )
+        if( pos != std::string::npos )
         {
             dirUp = dirUp.substr(0,pos);
             QDir userGEMUP(dirUp.c_str());
@@ -318,7 +318,7 @@ void TVisor::Setup()
             throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
 
         // copy default project
-        string cmd;
+        std::string cmd;
 
 #ifndef _WIN32
         cmd = "cp -r ";
@@ -379,7 +379,7 @@ const char SigEND[lnWINSIG + 1] = "sX";
 
 void TVisor::load()
 {
-    string fname = sysGEMDir() + OBJECT_INI;
+    std::string fname = sysGEMDir() + OBJECT_INI;
     gui_logger->debug("TVisor::load {}", fname);
     aObj.load(fname.c_str());
 
@@ -405,10 +405,10 @@ void TVisor::load()
 void
 TVisor::toDAT()
 {
-    string fname = sysGEMDir();
+    std::string fname = sysGEMDir();
     fname += VISOBJ_DAT;
 
-    ofstream obj_dat(fname, ios::binary | ios::out);
+    std::ofstream obj_dat(fname, std::ios::binary | std::ios::out);
     // begin signature
     obj_dat << SigBEG;
     aObj.toDAT(obj_dat);
@@ -419,7 +419,7 @@ TVisor::toDAT()
     fname = sysGEMDir();
     fname += VISOR_DAT;
 
-    ofstream visor_dat(fname.c_str(), ios::binary | ios::out);
+    std::ofstream visor_dat(fname.c_str(), std::ios::binary | std::ios::out);
     // begin signature
     visor_dat << SigBEG;
 
@@ -443,10 +443,10 @@ const char *vSigTITLE = "Configurator";
 void
 TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_v*/)
 {
-    string fname = sysGEMDir() + VISOBJ_DAT;
+    std::string fname = sysGEMDir() + VISOBJ_DAT;
 
     // objects' DAT
-    ifstream obj_dat(fname.c_str(), ios::binary | ios::in);
+    std::ifstream obj_dat(fname.c_str(), std::ios::binary | std::ios::in);
 
     if ( !obj_dat.good() ) {
         std::string message = "Can't open ";
@@ -483,7 +483,7 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
     // loading static info for visor (DAT files)
     fname = sysGEMDir() + VISOR_DAT;
 
-    ifstream visor_dat(fname.c_str(), ios::binary | ios::in);
+    std::ifstream visor_dat(fname.c_str(), std::ios::binary | std::ios::in);
 
     if ( !obj_dat.good() ) {
         std::string message = "Can't open ";
@@ -520,10 +520,10 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
 void
 TVisor::toModCFG()
 {
-    string fname = userProfDir();//userGEMDir();
+    std::string fname = userProfDir();//userGEMDir();
     fname += GEM_CONF;
 
-    fstream f_gems(fname.c_str(), ios::out /*| ios::binary*/);
+    std::fstream f_gems(fname.c_str(), std::ios::out /*| ios::binary*/);
     ErrorIf(!f_gems.good(), "GEMS Init",
             "Error writing configuration file (gemsdbf.conf)");
     rt.toCFG(f_gems);
@@ -535,10 +535,10 @@ TVisor::toModCFG()
 void
 TVisor::fromModCFG()
 {
-    string fname = userProfDir();//userGEMDir();
+    std::string fname = userProfDir();//userGEMDir();
     fname += GEM_CONF;
 
-    fstream f_gems(fname.c_str(), ios::in | ios::binary );
+    std::fstream f_gems(fname.c_str(), std::ios::in | std::ios::binary );
     ErrorIf(!f_gems.good(), "GEMS Init",
             "Error reading configuration file (gemsdbf.conf)");
     rt.fromCFG(f_gems);
@@ -549,7 +549,7 @@ TVisor::fromModCFG()
 
 void TVisor::toWinCFG()
 {
-    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF + ".json";
+    std::string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF + ".json";
 
     QJsonObject win_cfg_object;
     win_cfg_object["color_scheme"] = pVisorImp->getColorScheme();
@@ -568,17 +568,17 @@ void TVisor::toWinCFG()
     win_cfg_object["current_system"] = rt[RT_SYSEQ]->PackKey();
     win_cfg_object["default_built_in_TDB"] = QString::fromStdString(DefaultBuiltinTDB);
 
-    fstream f_win_ini(fname_ini.c_str(), ios::out );
+    std::fstream f_win_ini(fname_ini.c_str(), std::ios::out );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error writing configurator file (visor.conf)");
     QJsonDocument doc(win_cfg_object);
     QString str_json(doc.toJson());
-    f_win_ini << str_json.toStdString()  << endl;
+    f_win_ini << str_json.toStdString()  << std::endl;
     f_win_ini.close();
 
     // Window-specific settings
     fname_ini = /*userGEMDir*/userProfDir() + WIN_CONF;
-    f_win_ini.open(fname_ini.c_str(), ios::out );
+    f_win_ini.open(fname_ini.c_str(), std::ios::out );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error writing configurator file (windows.conf)" );
     //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
@@ -589,7 +589,7 @@ void TVisor::toWinCFG()
 
 void TVisor::fromWinCFG()
 {
-    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    std::string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
     TJsonConfig visor_conf( fname_ini+".json" );
     pVisorImp->setColorScheme(visor_conf.value_or_default("color_scheme", 0));
@@ -620,8 +620,8 @@ void TVisor::fromWinCFG()
     lastSystemKey = visor_conf.value_or_default<std::string>("current_system", lastSystemKey);
 
     // Window-specific settings
-    string fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
-    ifstream f_win_ini(fwin_ini_name.c_str() );
+    std::string fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
+    std::ifstream f_win_ini(fwin_ini_name.c_str() );
     ErrorIf(!f_win_ini.good(), "GEMS Init",
             "Error reading configurator file (windows.conf)" );
 
@@ -658,7 +658,7 @@ TVisor::Update(bool force)
     pVisorImp->Update(force);
 }
 
-string TVisor::filePathFromName(const string& filename, const string& extension)
+std::string TVisor::filePathFromName(const std::string& filename, const std::string& extension)
 {
     auto fname_default = filename;
     replace_all(fname_default, " <>:\"/\\|?*.", '_' );
@@ -852,7 +852,7 @@ TVisor::defaultCFG()
     {
         int cnt = 0;
          for (size_t ii = 0; ii < aDBFiles.size(); ii++)
-        { string flnm = string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
+        { std::string flnm = std::string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
             if ( flnm == rt[jj]->GetKeywd() ||
                  ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                  ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
@@ -870,19 +870,19 @@ TVisor::defaultCFG()
     TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
     for (size_t ii = 0; ii < aDBDirs.size(); ii++)
     {
-        string dir(pVisor->userProfDir());
+        std::string dir(pVisor->userProfDir());
         dir += aDBDirs[ii];
         aDBFiles = readPDBDir(dir.c_str(), "*.pdb");
 
         for (size_t jj = 0; jj < rt.size(); jj++)
         {
           for (size_t kk = 0; kk < aDBFiles.size(); kk++)
-          { string flnm = string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
+          { std::string flnm = std::string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
             if ( flnm == rt[jj]->GetKeywd() ||
                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
                 {
-                    string path(dir);
+                    std::string path(dir);
                     path += "/";
                     path += aDBFiles[kk];
                     rt[jj]->AddFile(path.c_str());
@@ -957,10 +957,10 @@ TVisor::deleteDBDir(const char *dir)
     std::string path;
     for (size_t ii = 0; ii < aFiles.size(); ii++)
     {
-        if (string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
+        if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
         {
             for (size_t jj = 0; jj < rt.size(); jj++)
-                if (string(aFiles[ii], 0, aFiles[ii].find("."))
+                if (std::string(aFiles[ii], 0, aFiles[ii].find("."))
                         == rt[jj]->GetKeywd())
                 {
                     path = dir;

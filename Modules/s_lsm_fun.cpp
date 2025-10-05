@@ -345,7 +345,7 @@ void TLMDataType::lm_print_default( double* par, double* /*fvec*/, double *CVM,
     double f, y, *t;
     int i, j;
 
-    fstream f_out(fname.c_str(), ios::out|ios::app  );
+    std::fstream f_out(fname.c_str(), std::ios::out|std::ios::app  );
  if( !f_out.good() )
    return;
 
@@ -369,29 +369,29 @@ void TLMDataType::lm_print_default( double* par, double* /*fvec*/, double *CVM,
     f_out << "  par: " ;
     for( i=0; i<n_par; ++i )
         f_out <<  par[i] << "    " ;
-    f_out << " => norm: " << norm << endl;
+    f_out << " => norm: " << norm << std::endl;
 
-    f_out << "  fitting data as follows:" << endl;
+    f_out << "  fitting data as follows:" << std::endl;
         for( i=0; i<m_dat; ++i ) {
             t = getX(i);
             y = getY(i);
             f = function( i, t, par );
             f_out << "  t[ " << i << " ]= " << t[0] << "  y= ";
-            f_out <<  y << " fit = " << f << " residue =  " << (y-f) << endl;
+            f_out <<  y << " fit = " << f << " residue =  " << (y-f) << std::endl;
         }
 
-    f_out << endl;
+    f_out << std::endl;
     f_out << " status: " << lm_shortmsg[iter];
-    f_out  << " after " << nfev << " iterations" << endl;
-    f_out << endl;
-    f_out << "cvm = " << endl;
+    f_out  << " after " << nfev << " iterations" << std::endl;
+    f_out << std::endl;
+    f_out << "cvm = " << std::endl;
     for( i=0; i<n_par; i++ )
     {  for( j=0; j<n_par; j++ )
        f_out << CVM[i*n_par+j] << " ";
-      f_out << endl;
+      f_out << std::endl;
     }
-    f_out << endl;
-    f_out << endl;
+    f_out << std::endl;
+    f_out << std::endl;
   }
 
  }

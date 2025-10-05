@@ -3,7 +3,7 @@
 
 #include "graph.h"
 #include "graph_data.h"
-#include "plot_model.h"
+//#include "plot_model.h"
 #include "GraphDialogN.h"
 jsonui::SeriesLineData convertor( const TPlotLine& plotData );
 TPlotLine convertor( const jsonui::SeriesLineData& serData );

@@ -36,7 +36,6 @@
 #include "LegendDialogN.h"
 #include "GraphDialogN.h"
 #include "graph_data.h"
-using namespace std;
 
 namespace jsonui {
 

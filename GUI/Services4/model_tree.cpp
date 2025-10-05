@@ -198,8 +198,8 @@ void TTreeModel::setGOcorr(const QModelIndex& index, QString& value, int nO, int
 	     case 'm': dat *=R_CONSTANT*tK; // mol/mol
 	           break;   
 	  }
-	QString res = QString("%1").arg(dat);	
-    string txt = res.toStdString();
+	QString res = QString("%1").arg(dat);
+    std::string txt = res.toStdString();
     aObj[nO]->SetString( txt.c_str(), iN, 0 );
 }
 
@@ -301,7 +301,7 @@ QString TTreeModel::getDescription( int nO, int N) const
       return "";
     
     TObject& pObj = *aObj[nO];
-    string desc = pObj.GetDescription(N,0);
+    std::string desc = pObj.GetDescription(N,0);
 	const char *keyWd = pObj.GetKeywd();
 	switch( nO )
 	{

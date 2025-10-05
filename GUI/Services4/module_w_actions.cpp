@@ -32,32 +32,31 @@
 
 void TCModuleImp::clearFocus()
 {
-        auto* focus_w = focusWidget();
-        TCellInput* cell_w = dynamic_cast<TCellInput*>(focus_w);
-        if( cell_w ) {
-            cell_w->clearFocus();
-        }
-        TCellText* cell_t = dynamic_cast<TCellText*>(focus_w);
-        if( cell_t ) {
-            cell_t->clearFocus();
-        }
+    auto* focus_w = focusWidget();
+    TCellInput* cell_w = dynamic_cast<TCellInput*>(focus_w);
+    if( cell_w ) {
+        cell_w->clearFocus();
+    }
+    TCellText* cell_t = dynamic_cast<TCellText*>(focus_w);
+    if( cell_t ) {
+        cell_t->clearFocus();
+    }
 }
 
 void TCModuleImp::CmHelp()
 {
     if(pVisor->ProfileMode && rMod.rtNum() == RT_PARAM)
-         pVisorImp->OpenHelp( rMod.GetHtml(), NUMSET );
+        pVisorImp->OpenHelp( rMod.GetHtml(), NUMSET );
     else
-         pVisorImp->OpenHelp( rMod.GetHtml() );
+        pVisorImp->OpenHelp( rMod.GetHtml() );
 }
 
 void TCModuleImp::CmHelp2()
 {
-   pVisorImp->OpenHelp( rMod.GetHtml(), MWPAGE, curPage()+1 );
+    pVisorImp->OpenHelp( rMod.GetHtml(), MWPAGE, curPage()+1 );
 }
 
-/*! returns true if we can close the window
-*/
+// returns true if we can close the window
 bool TCModuleImp::EvClose()
 {
     try  {
@@ -70,36 +69,21 @@ bool TCModuleImp::EvClose()
     return false;	// can close on error ??
 }
 
-
-
 //----------------------------------------------------------
 //--- Manipulation of the current record
 //----------------------------------------------------------
 
-
 // Save record to DB file
 void TCModuleImp::CmSaveM()
 {
-  try{
-      if(rMod.IsSubModule()) {
-          return;
-        }
-       rMod.SaveM();
-     }
-   catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
-void TCModuleImp::CmSave()
-{
-    try{
-        if(rMod.IsSubModule()) {
-            return;
-        }
+    try {
         rMod.clearEditFocus();
-        rMod.SaveCurrentKey();
+
+        auto nrt_db = rMod.rtNum();
+        if(rMod.IsSubModule()) {
+            nrt_db = RT_SYSEQ;
+        }
+        aMod[nrt_db]->SaveM();
     }
     catch( TError& xcpt )
     {
@@ -108,21 +92,19 @@ void TCModuleImp::CmSave()
 }
 
 // Save record to DB file as new
-
 void TCModuleImp::CmSaveAs()
 {
-    try
-    {
-        if(rMod.IsSubModule()) {
-            return;
-        }
-
+    try {
         rMod.clearEditFocus();
-        rMod.SaveAs();
+
+        auto nrt_db = rMod.rtNum();
+        if(rMod.IsSubModule()) {
+            nrt_db = RT_SYSEQ;
+        }
+        aMod[nrt_db]->SaveAs();
         pVisor->Update( true );
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -130,18 +112,16 @@ void TCModuleImp::CmSaveAs()
 
 
 // Delete current record
-
 void TCModuleImp::CmDelete()
 {
-    try
-    {
+    try  {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
-        rMod.DeleteCurrent();
+        aMod[nrt_db]->DeleteCurrent();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
@@ -149,123 +129,52 @@ void TCModuleImp::CmDelete()
 // Show another record from DB (Without check)
 void TCModuleImp::CmShow( const char *key )
 {
-    try
-    {
+    try  {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
 
         if( pVisor->ProfileMode &&
-                ( rMod.rtNum() >= RT_SYSEQ || rMod.rtNum() == RT_PARAM )  )
-            Error( rMod.GetName(), "Invalid command in Project mode!");
+            ( aMod[nrt_db]->rtNum() >= RT_SYSEQ || aMod[nrt_db]->rtNum() == RT_PARAM )  )
+            Error( aMod[nrt_db]->GetName(), "Invalid command in Project mode!");
 
-        if( !rMod.MessageToSave() )
-	    return;
-
-    	// get key of record
-        string str;
-        if( key == nullptr )
-        { str = rMod.GetKeyofRecord(
-          /*db->PackKey()*/nullptr, "Select data record key ", KEY_OLD );
-          if( str.empty() )
-    	    return;
-        }
-        else  str = string(key);
-
-        rMod.RecInput( str.c_str() );
-        rMod.SetTitle();
-    	pVisor->Update( true );
-    }
-    catch( TError& xcpt )
-    {
-        pVisor->Update( true );
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
-// Set new Filter and select first records from list (Sveta 12/06/01)
-void TCModuleImp::CmFilter()
-{
-    try
-    {
-        if(rMod.IsSubModule()) {
+        if( !aMod[nrt_db]->MessageToSave() )
             return;
+
+        // get key of record
+        std::string str;
+        if( key == nullptr )    {
+            str = aMod[nrt_db]->GetKeyofRecord( /*db->PackKey()*/nullptr, "Select data record key ", KEY_OLD );
+            if(str.empty() )
+                return;
         }
+        else  str = std::string(key);
 
-        if( !rMod.MessageToSave() )
-	    return;
-
-        rMod.RunFilter();
-       pVisor->Update( true );
+        aMod[nrt_db]->RecInput(str.c_str());
+        aMod[nrt_db]->SetTitle();
+        pVisor->Update( true );
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
-
-// Show next record from template list (Sveta 14/06/01)
-void
-TCModuleImp::CmNext()
-{
-    try
-    {
-        if(rMod.IsSubModule()) {
-            return;
-        }
-
-        if( rMod.MessageToSave() ) {
-         rMod.RunNext();
-         pVisor->Update( true );
-        }
-    }
-    catch( TError& xcpt )
-    {
-        pVisor->Update( true );
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
-// Show previous record from template list (Sveta 14/06/01)
-void
-TCModuleImp::CmPrevious()
-{
-    try
-    {
-        if(rMod.IsSubModule()) {
-            return;
-        }
-
-        if( rMod.MessageToSave() ) {
-            rMod.RunPrevious();
-            pVisor->Update( true );
-        }
-    }
-    catch( TError& xcpt )
-    {
-        pVisor->Update( true );
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
 
 // Rebuild loading before record (error if current record undefined)
-void
-TCModuleImp::CmDerive()
+void TCModuleImp::CmDerive()
 {
-    try
-    {
+    try {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
-        if( rMod.MessageToSave() ) {
-            rMod.RunDerive();
+        if( aMod[nrt_db]->MessageToSave() ) {
+            aMod[nrt_db]->RunDerive();
             pVisor->Update();
         }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -275,18 +184,17 @@ TCModuleImp::CmDerive()
 // Calc loading before record (error if current record undefined)
 void TCModuleImp::CmCalc()
 {
-    try
-    {
-        if(rMod.IsSubModule()) {
-            return;
-        }
-
+    try  {
         rMod.clearEditFocus();
-        rMod.RunCalc();
+
+        auto nrt_db = rMod.rtNum();
+        if(rMod.IsSubModule()) {
+            nrt_db = RT_SYSEQ;
+        }
+        aMod[nrt_db]->RunCalc();
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -295,19 +203,17 @@ void TCModuleImp::CmCalc()
 // Add new record to DB
 void TCModuleImp::CmNew()
 {
-    try
-    {
+    try {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
-
-        if( rMod.MessageToSave() ) {
-            rMod.RunNew();
+        if( aMod[nrt_db]->MessageToSave() ) {
+            aMod[nrt_db]->RunNew();
             pVisor->Update();
         }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -315,20 +221,17 @@ void TCModuleImp::CmNew()
 
 void TCModuleImp::CmCreate()
 {
-    try
-    {
+    try {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
-
-
-        if( rMod.MessageToSave() ) {
-            rMod.RunCreate();
+        if( aMod[nrt_db]->MessageToSave() ) {
+            aMod[nrt_db]->RunCreate();
             pVisor->Update();
         }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -340,30 +243,31 @@ void TCModuleImp::CmCreate()
 //--- Process, UnSpace, GTdemo, Duterm in project mode
 //----------------------------------------------------------
 
-
 // loads the project
 void TCModuleImp::CmLoadinProfile(const char *key)
 {
-    try
-    {
+    try {
         if(rMod.IsSubModule()) {
+            if( aMod[RT_SYSEQ]->MessageToSave() ) {
+                aMod[RT_SYSEQ]->RecordLoadinProfile(key);
+                pVisor->Update();
+            }
             return;
         }
 
         if( rMod.rtNum() < RT_SYSEQ && rMod.rtNum() != RT_SDATA)
         {
-          //  Error( GetName(),  "Please, do it in Database mode!");
-          CmShow(key);
-          return;
+            //  Error( GetName(),  "Please, do it in Database mode!");
+            CmShow(key);
+            return;
         }
 
         if( !rMod.MessageToSave() )
-	    return;
+            return;
         rMod.RecordLoadinProfile(key);
         pVisor->Update(true);
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -372,19 +276,17 @@ void TCModuleImp::CmLoadinProfile(const char *key)
 // Adds new record to DB in Project mode
 void TCModuleImp::CmNewinProfile()
 {
-    try
-    {
+    try {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
-
-        if( rMod.MessageToSave() ) {
-            rMod.NewinProfile();
+        if( aMod[nrt_db]->MessageToSave() ) {
+            aMod[nrt_db]->NewinProfile();
             pVisor->Update();
         }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )   {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -392,98 +294,58 @@ void TCModuleImp::CmNewinProfile()
 
 void TCModuleImp::CmCreateinProfile()
 {
-    try
-    {
+    try  {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
-
-        if( rMod.MessageToSave() ) {
-            rMod.CreateinProfile();
+        if( aMod[nrt_db]->MessageToSave() ) {
+            aMod[nrt_db]->CreateinProfile();
             pVisor->Update();
         }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update( true );
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
-
 void TCModuleImp::CmPlot()
 {
-    try
-    {
+    try {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
 
-        if( !rMod.MessageToSave() )
-	    return;
+        if( !aMod[nrt_db]->MessageToSave() )
+            return;
 
-        string str=rMod.CurrentKey();
-        rMod.RecordPlot( str.c_str() );
+        std::string str=aMod[nrt_db]->CurrentKey();
+        aMod[nrt_db]->RecordPlot( str.c_str() );
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
 void TCModuleImp::CmPrint()
 {
-    try
-    {
+    try  {
+        auto nrt_db = rMod.rtNum();
         if(rMod.IsSubModule()) {
-            return;
+            nrt_db = RT_SYSEQ;
         }
 
-        if( !rMod.MessageToSave() )
-	    return;
+        if( !aMod[nrt_db]->MessageToSave() )
+            return;
 
-        /*string str=db->PackKey();
-        if( str.find_first_of("*?" ) != string::npos )
-            Error( GetName(), "Current record is not defined!");*/
-        rMod.RecordPrint();
-        rMod.SetString("Printing of a record finished OK. ");
+        aMod[nrt_db]->RecordPrint();
+        aMod[nrt_db]->SetString("Printing of a record finished OK. ");
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
-void TCModuleImp::CmScript()
-{
-    try
-    {
-        // read sdref record with format prn
-      string sd_key = "?script*:*:";
-
-      if( rMod.rtNum() < MD_RMULTS )
-        sd_key += rMod.DBKeywd();
-      else
-      {
-        sd_key += rMod.GetName();
-      }
-
-      sd_key += "*";
-      sd_key += ":";
-      sd_key =aMod[RT_SDATA]->GetKeyofRecord(
-          sd_key.c_str(), "Please, select an appropriate script", KEY_OLD);
-      if( sd_key.empty() )
-           return;
-      aMod[RT_SDATA]->RecInput( sd_key.c_str() );
-       /*if( pImp )
-           pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
-       else*/ pVisor->OpenModule(nullptr, RT_SDATA,0,true);  // KD: workaround for NewSystemDialog
-      aMod[RT_SDATA]->Update();
-    }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
@@ -495,20 +357,17 @@ void TCModuleImp::CmScript()
 // Index files of data base
 void TCModuleImp::CmRebildFile()
 {
-    try
-    {
+    try  {
         if(rMod.IsSubModule()) {
             return;
         }
 
-        if( !rMod.MessageToSave() )
-	    return;
-
-        rMod.RebildFile();
-        pVisor->Update();
+        if(rMod.MessageToSave()) {
+            rMod.RebildFile();
+            pVisor->Update();
+        }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -517,17 +376,14 @@ void TCModuleImp::CmRebildFile()
 // Rename files from opend files list of data base
 void TCModuleImp::CmAddFileToList()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.AddFileToList();
         pVisor->Update(); // no objecs change, only title
     }
-
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -536,15 +392,13 @@ void TCModuleImp::CmAddFileToList()
 // Open new files from the list of closed files in the data base
 void TCModuleImp::CmAddOpenFile()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
         rMod.AddOpenFile();
         pVisor->Update(); // no objecs change, only title
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
@@ -552,16 +406,14 @@ void TCModuleImp::CmAddOpenFile()
 // Rebuild the list of opened files for the data base
 void TCModuleImp::CmReOpenFileList()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.ReOpenFileList();
         pVisor->Update(); // no objecs change, only title
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
@@ -573,15 +425,13 @@ void TCModuleImp::CmReOpenFileList()
 // Export list of keys to TXT file
 void TCModuleImp::CmKeysToTXT()
 {
-    try
-    {
-        if( !rMod.MessageToSave() )
-	    return;
-        rMod.KeysToTXT();
-        pVisor->Update(); // no objecs change, only title
+    try {
+        if( rMod.MessageToSave() ) {
+            rMod.KeysToTXT();
+            pVisor->Update(); // no objecs change, only title
+        }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt )  {
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
@@ -589,33 +439,28 @@ void TCModuleImp::CmKeysToTXT()
 // Delete the list of records
 void TCModuleImp::CmDeleteList()
 {
-    try
-    {
-        if( !rMod.MessageToSave() )
-	    return;
-        rMod.DelList();
+    try {
+        if( rMod.MessageToSave() ) {
+            rMod.DelList();
+        }
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
 
-
 // Copy list command (Sveta 14/06/01)
 void TCModuleImp::CmCopyList( )
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.CopyRecordsList( false );
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -623,16 +468,14 @@ void TCModuleImp::CmCopyList( )
 
 void TCModuleImp::CmRenameList( )
 {
-    try
-    {
+    try  {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.CopyRecordsList(true);
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -641,15 +484,13 @@ void TCModuleImp::CmRenameList( )
 // Transfer the list of records
 void TCModuleImp::CmTransferList()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
         rMod.Transfer();
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -658,16 +499,14 @@ void TCModuleImp::CmTransferList()
 // Export data to text file
 void TCModuleImp::CmExport()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.RecExport();
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -675,16 +514,14 @@ void TCModuleImp::CmExport()
 
 void TCModuleImp::CmBackup()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.RecToTXT();
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -693,16 +530,14 @@ void TCModuleImp::CmBackup()
 // Import data from text file
 void TCModuleImp::CmImport()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.RecImport();
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -710,16 +545,14 @@ void TCModuleImp::CmImport()
 
 void TCModuleImp::CmRestore()
 {
-    try
-    {
+    try {
         if( !rMod.MessageToSave() )
-	    return;
+            return;
 
         rMod.RecOfTXT();
         pVisor->Update();
     }
-    catch( TError& xcpt )
-    {
+    catch( TError& xcpt ) {
         pVisor->Update();
         vfMessage(this, xcpt.title, xcpt.mess);
     }
@@ -764,6 +597,7 @@ void TCModuleImp::CmRestorefromJson()
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
+
 //--------------------- End of module_w_actions.cpp ---------------------------
 
 

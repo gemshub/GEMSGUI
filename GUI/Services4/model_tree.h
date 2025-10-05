@@ -97,7 +97,7 @@ public:
 	if( parentItem->iDC == -1 ) // row for phase
 	{
 		iN = parentItem->iPh;
-        return fldsPh[min<int>(index.column(), fldsPh.count())];
+        return fldsPh[std::min<int>(index.column(), fldsPh.count())];
 	} else
         {	iN = parentItem->iDC;
    		    return fldsDC[index.column()];
@@ -158,7 +158,7 @@ class TTreeView: public QTreeView
     
  public:
 	 TTreeView( QWidget * parent = 0 );
-	 void printList( fstream& ff );
+     void printList( std::fstream& ff );
      void resetList()
 	 {
     	 ((TTreeModel *)(model() ))->setupModelData();

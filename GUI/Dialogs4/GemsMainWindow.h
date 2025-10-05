@@ -49,7 +49,6 @@ namespace jsonui {
 class GraphDialog;
 }
 using namespace jsonui;
-using namespace std;
 
 #ifdef QT_NO_DEBUG
 #define GEMS_RELEASE
@@ -416,7 +415,7 @@ private:
     QMdiSubWindow *findMdiChild(const QString &moduleName);
     QMdiSubWindow *findMdiGraph(const QString &moduleName);
     QMdiSubWindow *findNewSystem();
-    string nameMdiChild( QWidget *p );
+    std::string nameMdiChild( QWidget *p );
     int nRTofActiveSubWindow();
     QIcon iconMdiChild( QWidget *p );
 

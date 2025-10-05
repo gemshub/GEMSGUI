@@ -101,7 +101,7 @@ bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
     return rest==QMessageBox::Yes;
 }
 
-int vfQuestYesNoCancel(QWidget* par, const string& title, const string& mess)
+int vfQuestYesNoCancel(QWidget* par, const std::string& title, const std::string& mess)
 {
     QString titl, spac, messag;
     titl = title.c_str(); spac = "\n\n"; messag = mess.c_str();
@@ -427,7 +427,7 @@ vfExcludeFillEdit(QWidget* par, const char* caption,
 // KeyEdit dialogs
 //=============================================
 
-string
+std::string
 vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
 {
     KeyDialog dbk(par, iRt, key, caption);
@@ -442,9 +442,9 @@ vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
 // int genGEMS3k > 0 generate GEMS IPN files for all systems and processes;  genGEMS3k == 2 brife mode
 // int recalc_all > 0 recalculate all systems before open project;  recalc_all == 2 generate dump file with result
 // makeCalc: 0 - no recalculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
-string vfKeyProfile( QWidget* par, const char* caption, int iRt,
+std::string vfKeyProfile( QWidget* par, const char* caption, int iRt,
                      bool& chAqGas, bool& addFiles, bool& remake,
-                     string& key_templ,
+                     std::string& key_templ,
                      int& recalc_all, int& genGEMS3k, int& makeCalc )
 {
     KeyProfile dbk(par, iRt, caption);
@@ -463,7 +463,7 @@ string vfKeyProfile( QWidget* par, const char* caption, int iRt,
     return dbk.getKey();
 }
 
-string
+std::string
 vfKeyTemplEdit(QWidget* par, const char* caption, uint iRt, const char* key,
                bool allowTemplate)
 {
@@ -480,7 +480,7 @@ vfKeyTemplEdit(QWidget* par, const char* caption, uint iRt, const char* key,
 
 bool
 vfKeyCanged(QWidget* par, const char* caption,
-            string& from_str, string& to_str, int fldLen )
+            std::string& from_str, std::string& to_str, int fldLen )
 {
     ChangeKeyDialog dbk(par, fldLen, caption );
     if( !dbk.exec() )
@@ -680,21 +680,21 @@ void vfObjToFile(QWidget* par, TObject* obj)
 AGAIN:
     if( vfChooseFileSave(par, filename, "Please, provide name of TXT-file") )
     {
-        ios::openmode mod = ios::out;
+        std::ios::openmode mod = std::ios::out;
         if( vfExist(filename) )
             switch( vfQuestion3( par, filename, "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
             {
             case VF3_2:
-                mod = ios::out;
+                mod = std::ios::out;
                 break;
             case VF3_1:
-                mod = ios::out|ios::app;
+                mod = std::ios::out|std::ios::app;
                 break;
             case VF3_3:
                 goto AGAIN;
             }
-        fstream f( filename.c_str(), mod );
+        std::fstream f( filename.c_str(), mod );
         /// errors
         obj->toTXT( f );
     }
@@ -765,8 +765,8 @@ vfSystemInput(QWidget* par, const char * p_key,
 bool
 vfProcessSet(QWidget* par, const char * p_key,
              char flgs[24], int size[8], short tabInt[6], double tabDoubl[24],
-string& calcScript, string& outScript, TCStringArray& names,
-string& xName, string& yName )
+std::string& calcScript, std::string& outScript, TCStringArray& names,
+std::string& xName, std::string& yName )
 {
     ProcessWizard pdlg( p_key, flgs, size,  tabInt, tabDoubl,
                         calcScript.c_str(), outScript.c_str(),
@@ -788,8 +788,8 @@ string& xName, string& yName )
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
             char flgs[32], int size[20],  double Tai[4], double Pai[4], double Tau[3],
-string& calcScript, string& outScript, TCStringArray& names,
-string& xName, string& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
+std::string& calcScript, std::string& outScript, TCStringArray& names,
+std::string& xName, std::string& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
 {
     GEM2MTWizard pdlg( p_key, flgs, size, Tai, Pai, Tau,
                        calcScript.c_str(), outScript.c_str(),
@@ -826,8 +826,8 @@ vfUnSpaceSet(QWidget* par, const char * p_key,
 }
 
 bool vfGtDemoSet( QWidget* par, const char * p_key, char flgs[16], int size[8],
-                  string& prkey, string& script, TCStringArray& names,
-                  string& xName, string& yName, TCStringArray& keys )
+                  std::string& prkey, std::string& script, TCStringArray& names,
+                  std::string& xName, std::string& yName, TCStringArray& keys )
 {
     GtDemoWizard cdlg( p_key, flgs, size, script, prkey,
                        xName, yName, keys, par );
@@ -884,10 +884,10 @@ bool vfReacDCSet(QWidget* par, const char * p_key,
 bool
 vfRTparmSet(QWidget* par, const char * p_key,
             char flgs[10], int size[7], double val[6],
-            string& script, string& xName,  string& yName,
+            std::string& script, std::string& xName,  std::string& yName,
             TCStringArray& names )
 {
-    string axName;
+    std::string axName;
     RTparmWizard cdlg( p_key, flgs, size, val, script.c_str(),
                        xName.c_str(), yName.c_str(), par );
      if( !cdlg.exec() )
@@ -945,7 +945,7 @@ vfProjectSet(QWidget* par, const char * p_key,
 
 bool
 vfSystemSet(QWidget* par, const char * p_key,
-            char flgs[40],  string& name, string& comment, string& EQkey )
+            char flgs[40],  std::string& name, std::string& comment, std::string& EQkey )
 {
      SystemWizard pdlg( p_key, flgs, name, comment,  EQkey, par );
      if( !pdlg.exec() )
@@ -961,7 +961,7 @@ vfSystemSet(QWidget* par, const char * p_key,
 
 // call to AutoPhaseDialog  added 18.07.03
 bool
-vfAutoPhaseSet(QWidget* wpar, const char *pr_key, string& a_key, string& g_key,
+vfAutoPhaseSet(QWidget* wpar, const char *pr_key, std::string& a_key, std::string& g_key,
          char& acode, char& gcode, float apar[8]  )
 {
      AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );
@@ -1003,8 +1003,8 @@ bool vfLookupDialogSet(QWidget* wpar, char flags[6],
     return true;
 }
 
-void vfPhaseInfo(QWidget* wpar, bool system, int xph, string phname,
-                 vector<int>& xdclist, vector<string>& dcnames, int xdc )
+void vfPhaseInfo(QWidget* wpar, bool system, int xph, std::string phname,
+                 std::vector<int>& xdclist, std::vector<std::string>& dcnames, int xdc )
 {
     PhaseInfoDialog dlg( wpar,  system, xph, phname, xdclist, dcnames, xdc );
     dlg.exec();
