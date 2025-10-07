@@ -55,7 +55,7 @@ HelpWindow::HelpWindow( QWidget* parent):
     ui(new Ui::HelpWindowData)
 {
     ui->setupUi(this);
-    string titl = pVisorImp->getGEMTitle();
+    std::string titl = pVisorImp->getGEMTitle();
     titl+= " : Help Viewer ";
     setWindowTitle(  titl.c_str()  );
 
@@ -385,7 +385,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
     if (!hEngine)
         return;
 
-    string path = "qthelp://gems3/help/";
+    std::string path = "qthelp://gems3/help/";
     QUrl path_str;
 
     if( !file/*item1*/ )
@@ -397,7 +397,7 @@ void HelpWindow::showDocumentation(const char* file, const char* item1)
         path += file;
         // adding ".html" if needed
         if( path.rfind( "#" ) == path.npos )
-        {   if( string(path, path.length()-5, 5) != ".html" )
+        {   if( std::string(path, path.length()-5, 5) != ".html" )
                 path += ".html";
             if( item1  )
             {  path += "#";

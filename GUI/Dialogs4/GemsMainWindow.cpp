@@ -332,14 +332,14 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
 {
     size_t  kk, ln;
     int jj, ii, colsz;
-    string keyfld;
+    std::string keyfld;
     QTableWidgetItem *item, *curItem=nullptr;
     settedCureentKeyIntotbKeys = false;
 
     if( currentNrt != static_cast<int>(nRT) )
         return;
 
-    string oldKey = rt[nRT]->UnpackKey();
+    std::string oldKey = rt[nRT]->UnpackKey();
     pFilterKey->setText(aMod[nRT]->getFilter().c_str());
 
     // define tbKeys
@@ -349,7 +349,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
 
 
     // get list or record keys
-    string keyFilter = pFilterKey->text().toStdString();
+    std::string keyFilter = pFilterKey->text().toStdString();
     TCIntArray temp, colSizes;
     TCStringArray keyList;
     int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList, temp);
@@ -367,7 +367,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
         {
 
             ln = rt[nRT]->FldLen(jj);
-            keyfld = string(keyList[ii], kk, ln);
+            keyfld = std::string(keyList[ii], kk, ln);
             StripLine(keyfld);
             colsz = keyfld.length()+1;
             if( colsz > colSizes[jj])
@@ -444,7 +444,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 
 void TVisorImp::openRecordKey( int row, int    )
 {
-    string currentKey ="";
+    std::string currentKey ="";
 
     if( row >= tbKeys->rowCount())
         return;
@@ -464,7 +464,7 @@ void TVisorImp::changeKeyList()
 {
     if( currentNrt >=0 )
     {
-        string filter = pFilterKey->text().toStdString();
+        std::string filter = pFilterKey->text().toStdString();
         aMod[currentNrt]->setFilter(filter);
         defineModuleKeysList( currentNrt );
     }
@@ -820,7 +820,7 @@ void TVisorImp::OpenHelp(const char* file, const char* item1, int page )
         {
             QString res = item1;
             res += QString("_%1").arg(page);
-            string txt = res.toStdString();
+            std::string txt = res.toStdString();
             HelpWindow::pDia->showDocumentation( file, txt.c_str() );
         }
         else

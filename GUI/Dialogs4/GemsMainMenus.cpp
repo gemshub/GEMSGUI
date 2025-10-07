@@ -139,9 +139,9 @@ void TVisorImp::setMenuEnabled( bool menuEnabled )
     itemWidget1->setEnabled(menuEnabled);
 }
 
-string TVisorImp::nameMdiChild( QWidget *p )
+std::string TVisorImp::nameMdiChild( QWidget *p )
 {
-    string mdName;
+    std::string mdName;
 
     TCModuleImp *child = qobject_cast<TCModuleImp *>(p);
     if(child)
@@ -165,7 +165,7 @@ string TVisorImp::nameMdiChild( QWidget *p )
 
 QIcon TVisorImp::iconMdiChild( QWidget *p )
 {
-    string iconName;
+    std::string iconName;
 
     TCModuleImp *child = qobject_cast<TCModuleImp *>(p);
     if(child)
@@ -245,12 +245,12 @@ void  TVisorImp::moveToolBar( int , int )
     auto size =  ui->toolBar->size().width();
 
     if(pVisor->ProfileMode == MDD_SYSTEM ) {
-        size = max(size, toolProject->size().width());
+        size = std::max(size, toolProject->size().width());
         ui->toolBar->setFixedWidth(size);
         toolProject->setFixedWidth(size);
     }
     else {
-        size = max(size, toolDataBase->size().width());
+        size = std::max(size, toolDataBase->size().width());
         ui->toolBar->setFixedWidth(size);
         toolDataBase->setFixedWidth(size);
     }
@@ -548,7 +548,7 @@ void TVisorImp::CmScript()
     }
     try {
         // read sdref record with format prn
-        string sd_key = "?script*:*:";
+        std::string sd_key = "?script*:*:";
 
         if( nRt_ < MD_RMULTS )
             sd_key += aMod[nRt_]->DBKeywd();
@@ -854,7 +854,7 @@ TVisorImp::CmOpen_SYSTEM_ICOMP()
 void                                 // Bulk composition (b)
 TVisorImp::CmInsert_SYSTEM()
 {
-    string key_s = rt[RT_SYSEQ]->PackKey();
+    std::string key_s = rt[RT_SYSEQ]->PackKey();
     TProfil::pm->systbcInput( this, key_s.c_str() );
     Update( true );
 }

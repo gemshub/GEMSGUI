@@ -26,13 +26,13 @@
 #include "model_w.h"
 #include "service.h"
 
-PhaseInfoDialog::PhaseInfoDialog( QWidget* parent, bool system, int xph, string phname,
-                                  vector<int>& xdclist, vector<string>& dcnames, int xdc):
+PhaseInfoDialog::PhaseInfoDialog( QWidget* parent, bool system, int xph, std::string phname,
+                                  std::vector<int>& xdclist, std::vector<std::string>& dcnames, int xdc):
     QDialog( parent ),
     ui(new Ui::PhaseInfoDialogData)
 {
     int row = 0;
-    string str;
+    std::string str;
 
     ui->setupUi(this);
     setWindowTitle("Phase Information Widget");
@@ -74,14 +74,14 @@ PhaseInfoDialog::PhaseInfoDialog( QWidget* parent, bool system, int xph, string 
 
     ui->tablePh->setItem(0, 0, new QTableWidgetItem(tr("%1").arg( xph)) );
     str = phname;
-    ui->tablePh->setItem(0, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
+    ui->tablePh->setItem(0, 1, new QTableWidgetItem(tr("%1").arg( std::string(str, 0, MAXSYMB).c_str() )) );
     str = str.substr(MAXSYMB);
     if( system)
-    { ui->tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, 8).c_str() )) );
+    { ui->tablePh->setItem(0, 2, new QTableWidgetItem(tr("%1").arg( std::string(str, 0, 8).c_str() )) );
         str = str.substr(8);
-        ui->tablePh->setItem(0, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXPHNAME).c_str() )) );
+        ui->tablePh->setItem(0, 3, new QTableWidgetItem(tr("%1").arg( std::string(str, 0, MAXPHNAME).c_str() )) );
         str = str.substr(MAXPHNAME);
-        ui->tablePh->setItem(0, 4, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
+        ui->tablePh->setItem(0, 4, new QTableWidgetItem(tr("%1").arg( std::string(str, 0, MAXSYMB).c_str() )) );
         str = str.substr(MAXSYMB);
         ui->tablePh->setItem(0, 5, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
     } else
@@ -120,11 +120,11 @@ PhaseInfoDialog::PhaseInfoDialog( QWidget* parent, bool system, int xph, string 
             str = dcnames[ii];
             gui_logger->trace("PhaseInfoDialog {} {}", str, xdc);
 
-            ui->tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXSYMB).c_str() )) );
+            ui->tableDC->setItem(ii, 1, new QTableWidgetItem(tr("%1").arg( std::string(str, 0, MAXSYMB).c_str() )) );
             str = str.substr(MAXSYMB);
-            ui->tableDC->setItem(ii, 2, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDRGROUP).c_str() )) );
+            ui->tableDC->setItem(ii, 2, new QTableWidgetItem(tr("%1").arg( std::string(str, 0, MAXDRGROUP).c_str() )) );
             str = str.substr(MAXDRGROUP);
-            ui->tableDC->setItem(ii, 3, new QTableWidgetItem(tr("%1").arg( string(str, 0, MAXDCNAME).c_str() )) );
+            ui->tableDC->setItem(ii, 3, new QTableWidgetItem(tr("%1").arg( std::string(str, 0, MAXDCNAME).c_str() )) );
             str = str.substr(MAXDCNAME);
             ui->tableDC->setItem(ii, 4, new QTableWidgetItem(tr("%1").arg( str.c_str() )) );
         } else

@@ -67,7 +67,7 @@ QWidget* parent):
 {
 
     ui->setupUi(this);
-    string str1= "GEM-Selektor DComp Setup:  ";
+    std::string str1= "GEM-Selektor DComp Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 

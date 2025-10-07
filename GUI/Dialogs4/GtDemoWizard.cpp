@@ -93,8 +93,8 @@ void GtDemoWizard::resetBackButton()
 }
 
 
-GtDemoWizard::GtDemoWizard( const string& pkey, char flgs[16], int size[8], const string& ascript,
-                            const string& proc_key, const string& aXname, const string& aYname,
+GtDemoWizard::GtDemoWizard( const std::string& pkey, char flgs[16], int size[8], const std::string& ascript,
+                            const std::string& proc_key, const std::string& aXname, const std::string& aYname,
                             TCStringArray& keys, QWidget* parent):
     QDialog( parent ),
     ui(new Ui::GtDemoWizardData),
@@ -105,7 +105,7 @@ GtDemoWizard::GtDemoWizard( const string& pkey, char flgs[16], int size[8], cons
 {
     ui->setupUi(this);
 
-    string str1= "GEM-Selektor GtDemo Setup:  ";
+    std::string str1= "GEM-Selektor GtDemo Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 
@@ -384,8 +384,8 @@ void GtDemoWizard::alloc_keys_model(int cRT)
 
 void GtDemoWizard::selChangeFilter()
 {
-    string keyFilter = ui->lineFilter->text().toStdString();
-    string str_name = "Template for record key";
+    std::string keyFilter = ui->lineFilter->text().toStdString();
+    std::string str_name = "Template for record key";
     KeyFilter dbFilter(this, keysRT, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )
     {
@@ -405,8 +405,8 @@ void GtDemoWizard::selSelectionChanged(int state)
 
 void GtDemoWizard::processChangeFilter()
 {
-    string keyFilter = ui->lineFilter->text().toStdString();
-    string str_name = "Template for process record key";
+    std::string keyFilter = ui->lineFilter->text().toStdString();
+    std::string str_name = "Template for process record key";
     KeyFilter dbFilter(this, RT_PROCES, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )
     {

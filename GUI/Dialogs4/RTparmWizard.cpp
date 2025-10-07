@@ -97,7 +97,7 @@ QWidget* parent):
 
 
     ui->setupUi(this);
-    string str1= "GEM-Selektor RTparm Setup:  ";
+    std::string str1= "GEM-Selektor RTparm Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
     ui->stackedWidget->setCurrentIndex (0);
@@ -106,7 +106,7 @@ QWidget* parent):
 
 
     // page1
-    ii = min( size[2],ui->pMode->count()-1 );
+    ii = std::min( size[2],ui->pMode->count()-1 );
     ui->pMode->setCurrentIndex(ii);
     ui->pTfrom->setValue(val[0]);
     ui->pTuntil->setValue(val[1]);
@@ -205,7 +205,7 @@ void   RTparmWizard::getSizes( int size[7] )
     size[2] = ui->pMode->currentIndex();
 }
 
-void RTparmWizard::getFlags( char flgs[6], string& xName )
+void RTparmWizard::getFlags( char flgs[6], std::string& xName )
 {
     // Page 1 - not return
     QString str = ui->pPtun->currentText();
@@ -288,7 +288,7 @@ void RTparmWizard::definePTArray()
     int nPT;
     //double *arP, *arT;
 
-    nPT = max( ui->pNP->value(), ui->pNT->value());
+    nPT = std::max( ui->pNP->value(), ui->pNT->value());
     /*arP = (double *)*/ aObj[ o_rpxp]->Alloc( nPT, 1, D_);
     /*arT = (double *)*/ aObj[ o_rpxt]->Alloc( nPT, 1, D_);
 }

@@ -59,7 +59,7 @@ int TObjectModel::rCount() const
     for(int  ii=1; ii< flds.count(); ii++)
     {
         if(  flds[ii].place == Tied )
-            sizeN = max( sizeN, flds[ii].pObj->GetNS() );
+            sizeN = std::max( sizeN, flds[ii].pObj->GetNS() );
 
         if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
         {
@@ -93,19 +93,19 @@ int TObjectModel::cCount() const
     {
         if(  flds[ii].place == UndeTabl )
         {
-            deltaM = max(deltaM, currentdeltaM + sizeM);
+            deltaM = std::max(deltaM, currentdeltaM + sizeM);
             currentdeltaM = 0;
             sizeM =0;
         }
         if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
-            sizeM = max( sizeM, flds[ii].pObj->GetMS() );
+            sizeM = std::max( sizeM, flds[ii].pObj->GetMS() );
         if(  flds[ii].place == Tied )
         {
             currentdeltaM += sizeM;
             sizeM = flds[ii].pObj->GetMS();
         }
     }
-    return max(deltaM, currentdeltaM+sizeM );
+    return std::max(deltaM, currentdeltaM+sizeM );
 }
 
 int TObjectModel::columnCount( const QModelIndex & /*parent*/ ) const
@@ -137,7 +137,7 @@ int TObjectModel::getObjFromModel( int row, int col,
         {
             deltaM += sizeM;
             sizeM = flds[ii].pObj->GetMS();
-            sizeN = max( sizeN, flds[ii].pObj->GetNS() );
+            sizeN = std::max( sizeN, flds[ii].pObj->GetNS() );
         }
         if( flds[ii].place == UndeTabl )
         {
@@ -149,7 +149,7 @@ int TObjectModel::getObjFromModel( int row, int col,
         {
             deltaN += sizeN;
             sizeN = flds[ii].pObj->GetNS();
-            sizeM = max( sizeM, flds[ii].pObj->GetMS() );
+            sizeM = std::max( sizeM, flds[ii].pObj->GetMS() );
         }
         if( ( deltaN + flds[ii].pObj->GetNS() > row ) &&
                 ( deltaM + flds[ii].pObj->GetMS() > col ) )
@@ -165,10 +165,10 @@ int TObjectModel::getObjFromModel( int row, int col,
             if( sel ) // get selection
             {
                 // deltaM += fuldeltaM;
-                sel->N1 = max(deltaN, sel->N1 );
-                sel->N2 = min(deltaN + flds[ii].pObj->GetNS()-1, sel->N2 );
-                sel->M1 = max(deltaM, sel->M1 );
-                sel->M2 = min(deltaM + flds[ii].pObj->GetMS()-1, sel->M2 );
+                sel->N1 = std::max(deltaN, sel->N1 );
+                sel->N2 = std::min(deltaN + flds[ii].pObj->GetNS()-1, sel->N2 );
+                sel->M1 = std::max(deltaM, sel->M1 );
+                sel->M2 = std::min(deltaM + flds[ii].pObj->GetMS()-1, sel->M2 );
                 /*if( to_calc == 1 )
                {
                  sel->N1 -= deltaN;
@@ -332,7 +332,7 @@ QVariant TObjectModel::headerData( int section, Qt::Orientation orientation, int
             {
                 auto label = getHorizontalLabel(aObj[nO].get(), iM);
                 int label_size = (label.size()+1)*pVisorImp->getCharWidth();
-                label_size = max(label_size, wdF(flds[ii].fType, flds[ii].npos+1, flds[ii].edit));
+                label_size = std::max(label_size, wdF(flds[ii].fType, flds[ii].npos+1, flds[ii].edit));
                 return QSize(label_size, htF(flds[ii].fType, 1)+4);
             }
             else
@@ -484,8 +484,8 @@ void TObjectTable::getObjectSize( int& rowSize, int& colSize )
     }
     else
     {
-        colSize = ( horizontalHeader()->sectionSize(0) * min(flds[ii].maxM, sizeM ) );
-        rowSize  = ( verticalHeader()->sectionSize(0) * min(flds[ii].maxN, sizeN ) );
+        colSize = ( horizontalHeader()->sectionSize(0) * std::min(flds[ii].maxM, sizeM ) );
+        rowSize  = ( verticalHeader()->sectionSize(0) * std::min(flds[ii].maxN, sizeN ) );
     }
 
     fullcolSize = ( horizontalHeader()->sectionSize(0) *  sizeM  );
@@ -499,7 +499,7 @@ void TObjectTable::getObjectSize( int& rowSize, int& colSize )
     {
         if(  flds[ii].place == Tied )
         {
-            sizeN = max( sizeN, flds[ii].pObj->GetNS() );
+            sizeN = std::max( sizeN, flds[ii].pObj->GetNS() );
             col_ii += sizeM;
             sizeM = flds[ii].pObj->GetMS();
 
@@ -508,18 +508,18 @@ void TObjectTable::getObjectSize( int& rowSize, int& colSize )
 
             if(fullrowSize == 0 || fullcolSize == 0) // first not empty
             {
-                rowSize  += ( verticalHeader()->sectionSize(row_ii) * min(flds[ii].maxN, sizeN ) );
+                rowSize  += ( verticalHeader()->sectionSize(row_ii) * std::min(flds[ii].maxN, sizeN ) );
                 fullrowSize  += ( verticalHeader()->sectionSize(row_ii) *  sizeN  );
             }
 
-            colSize += ( horizontalHeader()->sectionSize(col_ii) * min(abs(flds[ii].maxM), sizeM ) );
+            colSize += ( horizontalHeader()->sectionSize(col_ii) * std::min(abs(flds[ii].maxM), sizeM ) );
             fullcolSize += ( horizontalHeader()->sectionSize(col_ii) * sizeM  );
         }
 
         if( flds[ii].place == UndeTabl )
         {
-            maxColSize = max( maxColSize, colSize);
-            maxfullcolSize = max( maxfullcolSize, fullcolSize);
+            maxColSize = std::max( maxColSize, colSize);
+            maxfullcolSize = std::max( maxfullcolSize, fullcolSize);
             col_ii=0;
             colSize = 0;
             fullcolSize =0;
@@ -528,25 +528,25 @@ void TObjectTable::getObjectSize( int& rowSize, int& colSize )
 
         if(  flds[ii].place == Sticked || flds[ii].place == UndeTabl )
         {
-            sizeM = max( sizeM, flds[ii].pObj->GetMS() );
+            sizeM = std::max( sizeM, flds[ii].pObj->GetMS() );
             row_ii += sizeN;
             sizeN = flds[ii].pObj->GetNS();
 
             if( flds[ii].pObj->GetMS() == 0 || sizeN ==0 )
                 continue;
 
-            rowSize += ( verticalHeader()->sectionSize( row_ii ) * min(abs(flds[ii].maxN), sizeN ) );
+            rowSize += ( verticalHeader()->sectionSize( row_ii ) * std::min(abs(flds[ii].maxN), sizeN ) );
             fullrowSize += ( verticalHeader()->sectionSize( row_ii ) *  sizeN  );
             if(fullcolSize == 0 /*&& maxfullcolSize==0*/ ) // first not empty
             {
-                colSize = ( horizontalHeader()->sectionSize(col_ii) * min(flds[ii].maxM, sizeM ) );
+                colSize = ( horizontalHeader()->sectionSize(col_ii) * std::min(flds[ii].maxM, sizeM ) );
                 fullcolSize = ( horizontalHeader()->sectionSize(col_ii) *  sizeM  );
             }
         }
     }
 
-    colSize = max( maxColSize, colSize);
-    fullcolSize = max( maxfullcolSize, fullcolSize);
+    colSize = std::max( maxColSize, colSize);
+    fullcolSize = std::max( maxfullcolSize, fullcolSize);
 
     if( fullcolSize > colSize )
     {
@@ -567,12 +567,12 @@ void TObjectTable::getObjectSize( int& rowSize, int& colSize )
 
     int  colHead = model()->headerData( 0,  Qt::Vertical, Qt::SizeHintRole ).toSize().width();
     for( ii=1; ii<model()->rowCount(); ii++ )
-        colHead = max( colHead, model()->headerData( ii,  Qt::Vertical, Qt::SizeHintRole ).toSize().width());
+        colHead = std::max( colHead, model()->headerData( ii,  Qt::Vertical, Qt::SizeHintRole ).toSize().width());
     colSize += colHead;
 
     int  rowHead = model()->headerData( 0,  Qt::Horizontal, Qt::SizeHintRole ).toSize().height();
     for( ii=1; ii<model()->columnCount(); ii++ )
-        rowHead = max( rowHead, model()->headerData( ii,  Qt::Horizontal, Qt::SizeHintRole ).toSize().height());
+        rowHead = std::max( rowHead, model()->headerData( ii,  Qt::Horizontal, Qt::SizeHintRole ).toSize().height());
     rowSize += rowHead;
     // 	colSize += verticalHeader()->width();
     //   rowSize += horizontalHeader()->height();

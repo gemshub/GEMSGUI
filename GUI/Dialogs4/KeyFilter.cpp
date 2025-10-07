@@ -58,7 +58,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
         pEdit->setMaxLength( dbKey.FldLen(ii) );
         pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
         pEdit->setMinimumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
-        string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
+        std::string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
         pEdit->setText( s.c_str() );
         connect( pEdit, SIGNAL(editingFinished()), this, SLOT(setKeyLine()) );
@@ -132,15 +132,15 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
 ///  pVisor->SetStatus( aMod[iRt]->GetFldHelp(ii).c_str() );
 void KeyFilter::CmHelp()
 {                               
-    string dbName =  DBM;
+    std::string dbName =  DBM;
     dbName +="_";
-    dbName += string(aMod[iRt]->GetName());
+    dbName += std::string(aMod[iRt]->GetName());
     pVisorImp->OpenHelp(  GEMS_REKEY_HTML, dbName.c_str() );
 }
 
 void KeyFilter::CmOk()
 {
-    if( allowTemplates || SetKeyString().find_first_of("*?") == string::npos )
+    if( allowTemplates || SetKeyString().find_first_of("*?") == std::string::npos )
     {
         accept();
         return;
@@ -149,15 +149,15 @@ void KeyFilter::CmOk()
     vfMessage(this, "Key error", "No templates allowed!", vfErr);
 }
 
-string KeyFilter::SetKeyString()
+std::string KeyFilter::SetKeyString()
 {
     //TDBKey dbKey( rt[iRt].GetDBKey() );
-    string Key;
+    std::string Key;
 
     Key = "";
     for( size_t ii=0/*, jj=0*/; ii<aEdit.size(); ii++/*, jj=Key.length()*/)
     {
-        string s = aEdit[ii]->text().toStdString();
+        std::string s = aEdit[ii]->text().toStdString();
         Key += s;
         StripLine(Key);
         //Sveta 04/09/01 ????  if( Key.length()-jj < dbKey.FldLen(ii) )
@@ -191,14 +191,14 @@ void KeyFilter::EvGetList()
 
     for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
     {
-        string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
+        std::string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
         StripLine(s);
         aEdit[ii]->setText( s.c_str() );
     }
     setKeyLine();
 }
 
-string KeyFilter::getFilter()
+std::string KeyFilter::getFilter()
 {
     //  if( result )
     return SetKeyString();

@@ -64,7 +64,7 @@ int size[10], QWidget* parent):
 {
     //setFinishEnabled( WizardPage_3, true);
     ui->setupUi(this);
-    string str1= "GEM-Selektor UnSpace Setup:  ";
+    std::string str1= "GEM-Selektor UnSpace Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 

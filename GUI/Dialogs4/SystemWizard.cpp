@@ -58,13 +58,13 @@ void 	SystemWizard::resetBackButton()
 }
 
 SystemWizard::SystemWizard( const char* pkey, char flgs[40],
-string name, string comment, string EQkey,  QWidget* parent):
+std::string name, std::string comment, std::string EQkey,  QWidget* parent):
     QDialog( parent ),
     ui(new Ui::SystemWizardData)
 {
     //setFinishEnabled( WizardPage3, true);
     ui->setupUi(this);
-    string str1= "GEM-Selektor System Setup:  ";
+    std::string str1= "GEM-Selektor System Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 
@@ -149,17 +149,17 @@ SystemWizard::~SystemWizard()
     delete ui;
 }
 
-string SystemWizard::getName(  )
+std::string SystemWizard::getName(  )
 {
     return ui->pName->text().toStdString();
 }
 
-string SystemWizard::getComment(  )
+std::string SystemWizard::getComment(  )
 {
     return ui->pComment->text().toStdString();
 }
 
-string SystemWizard::getEQkey(  )
+std::string SystemWizard::getEQkey(  )
 {
     return ui->pKey->text().toStdString();
 }

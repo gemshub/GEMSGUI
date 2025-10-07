@@ -93,7 +93,7 @@ const char* aXname, const char* aYname, QWidget* parent):
     outScript(aoutScript), pageScript(nullptr)
 {
     ui->setupUi(this);
-    string str1= "GEM-Selektor Process Setup:  ";
+    std::string str1= "GEM-Selektor Process Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 
@@ -501,9 +501,9 @@ void   ProcessWizard::getFlags( char flgs[24] )
     //Putting flags, using sizes is out of this function
 }
 
-string ProcessWizard::getCalcScript() const
+std::string ProcessWizard::getCalcScript() const
 {
-    string res = ui->textEquat1->toPlainText().toStdString();
+    std::string res = ui->textEquat1->toPlainText().toStdString();
     return res;
 }
 
@@ -759,7 +759,7 @@ int  ProcessWizard::getNPV( char type, int subtype)   // get number of points
                     i1 = 1;
                 if( i2 < 1 )
                     i2 = 1;
-                ret = min( i1, i2);
+                ret = std::min( i1, i2);
             }
         }   // foolproof
         ui->tIters->item(2, 0)->setText( QString::number( 0 ));  // set iTm[2] to 0
@@ -1039,7 +1039,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
             for(int jj=0; jj<6; jj++ )
             {
                 lst = getSelected( jj );
-                string oName = aObj[pgData[jj].nObj]->GetKeywd();
+                std::string oName = aObj[pgData[jj].nObj]->GetKeywd();
                 for(ii=0; ii<lst.count();ii++)
                 {
                     lst[ii] = lst[ii].trimmed();
@@ -1066,7 +1066,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
             for(int jj=0; jj<6; jj++ )
             {
                 lst = getSelected( jj );
-                string oName = aObj[pgData[jj].nObj]->GetKeywd();
+                std::string oName = aObj[pgData[jj].nObj]->GetKeywd();
                 for(ii=0; ii<lst.count();ii++)
                 {
                     lst[ii] = lst[ii].trimmed();
@@ -1096,7 +1096,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
             QString EM0 = "EM0", EM1 = "EM1";
             lst = getSelected( "Phases" );
             if( lst.count() > 0 )
-            {   string phname = lst[0].trimmed().toStdString();
+            {   std::string phname = lst[0].trimmed().toStdString();
 
                 dclst = TProfil::pm->DCNamesforPh( phname.c_str() , true );
                 // Here may be message if Invalid phase
@@ -1152,7 +1152,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         //    if( subtype == 0 )
     {
         QString pH = "Output", com = "Input";
-        string oName;
+        std::string oName;
 
         // select input (titrant)
         for(int jj=0; jj<4; jj++ )
@@ -1351,7 +1351,7 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         {
             auto nO = pgData[jj].nObj;
             lst = getSelected( jj );
-            string oName = aObj[nO]->GetKeywd();
+            std::string oName = aObj[nO]->GetKeywd();
 
             for(ii=0; ii<lst.count();ii++)
             {
@@ -1486,7 +1486,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
             lst = getSelected( "Phases" );
             if( lst.count() < 1 )
                 return;
-            string phname = lst[0].trimmed().toStdString();
+            std::string phname = lst[0].trimmed().toStdString();
             dclst = TProfil::pm->DCNamesforPh( phname.c_str(), true );
             if( dclst.size() < 2 )
                 return;
@@ -1606,7 +1606,7 @@ void  ProcessWizard::setOutScript( char type, int subtype)   // get output scrip
         if( subtype == 0 )
         {
             QString pH, com;
-            string oName;
+            std::string oName;
 
             // find titrant
             for(ii=0; ii<4; ii++ )
@@ -1828,7 +1828,7 @@ int  ProcessWizard::getNPoints( int col )
         nP = -1;
     if( (nP < 1 || nP > 9999) && nP != -1 )
     {
-        string str = ui->tIters->horizontalHeaderItem( col )->text().toStdString();
+        std::string str = ui->tIters->horizontalHeaderItem( col )->text().toStdString();
         vfMessage(this, str.c_str(), "Wrong number of steps - please, check values in this iterator!");
         return nP;
     }

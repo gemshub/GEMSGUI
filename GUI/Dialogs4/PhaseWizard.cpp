@@ -87,7 +87,7 @@ QWidget* parent):
 {
     //setFinishEnabled( WizardPage3, true);
     ui->setupUi(this);
-    string str1= "GEM-Selektor Phase Setup:  ";
+    std::string str1= "GEM-Selektor Phase Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 
@@ -504,8 +504,8 @@ void PhaseWizard::help()
 
 void PhaseWizard::rdChangeFilter()
 {
-    string keyFilter = ui->lineRDFilter->text().toStdString();
-    string str_name = "Template for ";
+    std::string keyFilter = ui->lineRDFilter->text().toStdString();
+    std::string str_name = "Template for ";
     str_name +=  rt[RT_REACDC]->GetKeywd();
     str_name +=  "&";
     str_name +=  rt[RT_DCOMP]->GetKeywd();
@@ -529,8 +529,8 @@ void PhaseWizard::rdSelectionChanged(int state)
 
 void PhaseWizard::phaseChangeFilter()
 {
-    string keyFilter = ui->linePhFilter->text().toStdString();
-    string str_name = "Template for Phase record key";
+    std::string keyFilter = ui->linePhFilter->text().toStdString();
+    std::string str_name = "Template for Phase record key";
     KeyFilter dbFilter(this, RT_PHASE, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )
     {
@@ -550,8 +550,8 @@ void PhaseWizard::phaseSelectionChanged(int state)
 
 void PhaseWizard::lDCrChangeFilter()
 {
-    string keyFilter = ui->lineDCrFilter->text().toStdString();
-    string str_name = "Template for ";
+    std::string keyFilter = ui->lineDCrFilter->text().toStdString();
+    std::string str_name = "Template for ";
     str_name +=  rt[RT_REACDC]->GetKeywd();
     str_name +=  "&";
     str_name +=  rt[RT_DCOMP]->GetKeywd();

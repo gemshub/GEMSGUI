@@ -441,7 +441,7 @@ bool TTreeModel::setData( const QModelIndex& index, const QVariant& value, int r
            if( nO >= 0 )
 	   {
              QString val = QVariant(value).toString();
-             string txt = val.toStdString();
+             std::string txt = val.toStdString();
 	
             if( index.column()== 3 ) // + or - (switch all dcomps with phase)
              {   char old_data = aObj[nO]->GetStringEmpty( iN, iM )[0];
@@ -473,7 +473,7 @@ void TTreeModel::childChanged(const QModelIndex& index, const QVariant& value, c
 {
     if( index.column()== 3 ) // + or - (switch all dcomps with phase)
     {
-        string txt = QVariant(value).toString().toStdString();
+        std::string txt = QVariant(value).toString().toStdString();
 
        if( txt[0] == '-' ||
                (( txt[0] == '+' || txt[0] == '*' ) && old_data == '-' ))
@@ -583,7 +583,7 @@ void TTreeView::changeCurrent( int section )
 }
 
 //Printing all items to txt file
-void TTreeView::printList( fstream& ff )
+void TTreeView::printList( std::fstream& ff )
  {
 	 int row, rw, col;
 	 QModelIndex index, childIndex;
@@ -596,7 +596,7 @@ void TTreeView::printList( fstream& ff )
             QString value = model()->data(index).toString();
             ff << value.toStdString() << " ";
          }  
-    	 ff << endl;
+         ff << std::endl;
     	 
          for (rw = 0; rw < model()->rowCount( childIndex ); rw++ ) 
          {
@@ -606,7 +606,7 @@ void TTreeView::printList( fstream& ff )
                 QString value = model()->data(index).toString();
                 ff << value.toStdString() << " ";
              }  
-        	 ff << endl;
+             ff << std::endl;
          }
      }
  }
@@ -918,13 +918,13 @@ void TTreeView::SelectColumn()
 
       if(  fld.fType == ftCheckBox )
       {
-          string Vals = aUnits[fld.npos].getVals(iM);
+          std::string Vals = aUnits[fld.npos].getVals(iM);
           CalcCheckDialog calc(topLevelWidget(), fld.nO, Vals);
 
           if( calc.exec() )
           {
               int ii = calc.fun();
-              QString res  = string(Vals, ii, 1).c_str();
+              QString res  = std::string(Vals, ii, 1).c_str();
               for(int row = 0; row < model->rowCount( parIndex ); row++ )
               {
                   index = model->index(row, col, parIndex );
@@ -954,7 +954,7 @@ void TTreeView::SelectColumn()
         	return;
         
       //string item = fld.pObj->GetFullName(iN,iM); // for old indexation
-      string item = fld.pObj->GetHelpLink(iN,iM);
+      std::string item = fld.pObj->GetHelpLink(iN,iM);
       pVisorImp->OpenHelp( 0, item.c_str());
     }
   

@@ -76,7 +76,7 @@ KeyProfile::~KeyProfile()
     delete ui;
 }
 
-string KeyProfile::getKey() const
+std::string KeyProfile::getKey() const
 {
     pVisor->setElemPrMode(ui->rbNewPrMode->isChecked());
     if( newKey == true )
@@ -85,7 +85,7 @@ string KeyProfile::getKey() const
     if( sel != -1 )
         return ui->pList->item(sel)->text().toStdString();
 
-    return string();
+    return std::string();
 }
 
 void KeyProfile::CmReturnIA()
@@ -154,7 +154,7 @@ bool KeyProfile::getRemakeState() const
 
 }
 
-string KeyProfile::getTemplateKey() const
+std::string KeyProfile::getTemplateKey() const
 {
     if( newKey == true && ui->pTemplate->isChecked() )
     {
@@ -163,7 +163,7 @@ string KeyProfile::getTemplateKey() const
             return ui->pList->item(sel)->text().toStdString();
         Error( "New Modelling Project", "No template record selected");
     }
-    return string();
+    return std::string();
 }
 
 int KeyProfile::getGEMSExportMode() const

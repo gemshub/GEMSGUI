@@ -857,7 +857,7 @@ TVisor::defaultCFG()
                  ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                  ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
             {
-                string path = pVisor->sysDBDir();
+                std::string path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
                 rt[jj]->AddFile(path.c_str());
                 cnt++;
