@@ -328,8 +328,8 @@ void TVisor::Setup()
 
         gui_logger->debug("Creating GEMS user directory:  {}", cmd);
 #else
-        string sprdir = sysProfDir();
-        string uprdir = userProfDir();
+        std::string sprdir = sysProfDir();
+        std::string uprdir = userProfDir();
         QDir sysProjD( sprdir.c_str() );
         QDir usrProjD( uprdir.c_str() );
         QString sPD = sysProjD.absolutePath();
