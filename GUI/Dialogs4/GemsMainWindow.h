@@ -62,9 +62,6 @@ struct ModuleListItem
     QString toolTip;
 };
 
-// new enums
-enum { MDD_DATABASE=0, MDD_SYSTEM=1 };
-
 enum myThreadEvents { thMessage = 0, thQuestion, thQuestion3,
                       thChoice, thChoice2, thExcludeFillEdit, thQuestionYesNoAll  };
 // data for thread
@@ -168,7 +165,7 @@ class TVisorImp: public QMainWindow
     int charHeight;
     int colorScheme=0;
 
-    bool configAutosave;
+    // bool configAutosave;
 
     char TCpoint[32];  // Step point ID for stepwise mode
 
@@ -238,20 +235,20 @@ public:
     int getCharHeight() const
     {  return charHeight; /* + 4;*/  }
 
-    int getDoubleDigits() const
-    {  return TValBase::doublePrecision;  }
-    void setDoubleDigits(int newDoubleDigits)
-    {  TValBase::doublePrecision = newDoubleDigits;   }
+    // int getDoubleDigits() const
+    // {  return TValBase::doublePrecision;  }
+    // void setDoubleDigits(int newDoubleDigits)
+    // {  TValBase::doublePrecision = newDoubleDigits;   }
 
     int getColorScheme() const
     {  return colorScheme;  }
     void setColorScheme(int newColorScheme)
     {  colorScheme = newColorScheme;   }
 
-    void setConfigAutosave(bool autosave)
-    {  configAutosave = autosave;  }
-    bool getConfigAutosave() const
-    {  return configAutosave;   }
+    // void setConfigAutosave(bool autosave)
+    // {  configAutosave = autosave;  }
+    // bool getConfigAutosave() const
+    // {  return configAutosave;   }
 
     char* getTCpoint()
     {  return TCpoint;   }

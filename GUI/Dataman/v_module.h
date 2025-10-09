@@ -29,7 +29,6 @@ namespace jsonui {
 class ChartData;
 }
 
-
 // --- Parametres of function GetKeyofRecord()
 const int KEY_OLD = 1;
 const int KEY_NEW = 2;

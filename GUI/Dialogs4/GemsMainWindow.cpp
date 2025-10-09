@@ -76,7 +76,6 @@ TVisorImp::TVisorImp(int c, char** v):
     argc(c),
     argv(v),
     last_update( 0 ),
-    configAutosave(false),
     proc(nullptr),
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)

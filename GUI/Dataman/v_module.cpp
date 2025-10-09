@@ -27,8 +27,13 @@
 #include "t_print.h"
 #include "t_read.h"
 #include "m_param.h"
-#include "NewSystemDialog.h"
 #include <spdlog/sinks/stdout_color_sinks.h>
+
+#ifndef NO_GUI
+#include "GraphDialogN.h"
+#else
+#include <iostream>
+#endif
 
 // Thread-safe logger to stdout with colors
 std::shared_ptr<spdlog::logger> gui_logger = spdlog::stdout_color_mt("gems3gui");
@@ -53,18 +58,14 @@ TCModule::TCModule(size_t nrt):
 TCModule::~TCModule()
 {}
 
+
+#ifndef NO_GUI
+
 void TCModule::clearEditFocus()
 {
     if( pImp )  {
         pImp->clearFocus();
     }
-}
-
-size_t TCModule::keyEditField()
-{
-    if(nRT == RT_RTPARM || pVisor->ProfileMode)
-        return start_key_field_edit;
-    else return 0;
 }
 
 QWidget* TCModule::window()
@@ -84,6 +85,39 @@ void TCModule::Update(bool force)
        pImp->Update(force);
     }
 }
+
+// opens window with 'Remake record' parameters
+void TCModule::MakeQuery()
+{
+    if(pImp) {
+        pImp->MakeQuery();
+    }
+}
+#else
+
+void TCModule::clearEditFocus()
+{
+    std::cout<< "TCModule::clearEditFocus" << GetName() << std::endl;
+}
+
+QWidget* TCModule::window()
+{
+    std::cout<< "TCModule::window" << GetName() << std::endl;
+    return nullptr;
+}
+
+void TCModule::Update(bool force)
+{
+    std::cout<< "TCModule::Update" << GetName() << std::endl;
+}
+
+// opens window with 'Remake record' parameters
+void TCModule::MakeQuery()
+{
+    std::cout<< "TCModule::MakeQuery" << GetName() << std::endl;
+}
+
+#endif
 
 // Updates contents of all windows plus caption of the current one
 void TCModule::ModUpdate(const std::string& str)
@@ -105,13 +139,11 @@ const char* TCModule::GetHtml()
    return GEMS_TOC_HTML;
 }
 
-/* opens window with 'Remake record' parameters
-*/
-void TCModule::MakeQuery()
+size_t TCModule::keyEditField()
 {
-    if(pImp) {
-        pImp->MakeQuery();
-    }
+    if(nRT == RT_RTPARM || pVisor->ProfileMode)
+        return start_key_field_edit;
+    else return 0;
 }
 
 /*! returns true if user pressed 'save' or 'discard' and false on 'cancel' */
@@ -276,7 +308,7 @@ void TCModule::RecSave( const char *key, bool onOld )
     if( Rnum<0 )
     {
        AddRecord( key );
-       pVisorImp->defineModuleKeysList(nRT);
+       pVisor->defineModuleKeysList(nRT);
     }
     else
         if( onOld == true || vfQuestion(window(), key, replace_question) )
@@ -639,7 +671,7 @@ void TCModule::TryRecInp(const char *_key, time_t& time_s, int q, bool save)
                 Error( GetName(), "Record creation rejected!");
             int  Rnum = db->Find( str.c_str() );
             ErrorIf( Rnum>=0, GetName(), "A record with such key already exists!");
-            pVisor->OpenModule(pVisorImp, nRT);
+            pVisor->OpenModule(pVisor->window(), nRT);
             std::string str1 = char_array_to_string( db->UnpackKey(), db->KeyLen() );
             check_input( str1.c_str() );
             RecBuild( str.c_str() );

@@ -3,8 +3,30 @@
 
 #include "graph.h"
 #include "graph_data.h"
-//#include "plot_model.h"
+
+#ifndef NO_GUI
 #include "GraphDialogN.h"
+#else
+
+#include <iostream>
+namespace jsonui {
+class GraphDialog {
+
+public:
+
+    void AddPoint(size_t nPlot, int nPoint)
+    {
+        std::cout << "AddPoint" << nPlot << " " << nPoint << std::endl;
+    }
+    void ShowGraph(const char * capAdd = nullptr)
+    {
+        std::cout << "ShowGraph" << capAdd << std::endl;
+    }
+};
+
+}
+#endif
+
 jsonui::SeriesLineData convertor( const TPlotLine& plotData );
 TPlotLine convertor( const jsonui::SeriesLineData& serData );
 class TCModule;
@@ -22,7 +44,7 @@ jsonui::GraphDialog* updateGraphWindow(  jsonui::GraphDialog* graph_dlg,
                                          TCModule *pmodule, std::vector<TPlot>& aPlots,
                                          const char * aTitle,
                                          const char *aXName, const char *aYname,
-                                         TCStringArray line_names,
+                                         std::vector<std::string> line_names,
                                          const std::vector<TPlotLine>& def_plt_lines,
                                          int agraphType = LINES_POINTS  );
 

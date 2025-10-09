@@ -20,6 +20,7 @@
 #define _v_vals_impl_h_
 
 #include "v_vals.h"
+#include "GEMS3K/v_detail.h"
 #include "GEMS3K/v_service.h"
 #include "GEMS3K/gdatastream.h"
 
@@ -260,7 +261,7 @@ inline std::string TVal<T>::GetString(int ndx) const
     if( IsAny(ndx) )
         return S_ANY;
 
-    return value2string(static_cast<T*>(ptr)[ndx], doublePrecision );
+    return value2string<T>(static_cast<T*>(ptr)[ndx], doublePrecision );
 }
 
 template<class T>
@@ -280,7 +281,7 @@ bool TVal<T>::SetString(const char* s, int ndx)
     }
 
     T v;
-    if( !string2value( v, ss ) )
+    if( !string2value<T>( v, ss ) )
         return false;
 
     static_cast<T*>(ptr)[ndx] = v;

@@ -23,6 +23,9 @@
 
 class QWidget;
 
+// new enums
+enum { MDD_DATABASE=0, MDD_SYSTEM=1 };
+
 class TVisor
 {
     friend class TVisorImp;
@@ -47,13 +50,12 @@ class TVisor
     std::string LocalDocDir;
     std::string RemoteHTML;
     bool LocalDoc;         // obsolete
-
     std::string ImgDir;
 
     bool isElementsProfileMode;
     std::string DefaultBuiltinTDB;
     bool dbChangeMode;
-
+    bool configAutosave = false;
 
     void initModules();
     template <class T>
@@ -92,9 +94,9 @@ public:
     TVisor(int argc, char* argv[]);
     ~TVisor();
 
-    void Update(bool force=true);
-
-    bool isDBChangeMode() const { return dbChangeMode; }
+    bool isDBChangeMode() const {
+        return dbChangeMode;
+    }
 
     std::string sysGEMDir() const {
         return SysGEMDir;
@@ -126,7 +128,7 @@ public:
 
     std::string docDir() const {
         return LocalDocDir;
-     //	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
+        //	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
     }
 
     const std::string& localDocDir() const {
@@ -161,28 +163,10 @@ public:
     //     return ServerGems3Dir;
     // }
 
-    /// Generate full path to current directory from filename and extension
-    std::string filePathFromName( const std::string& filename, const std::string& extension );
-
-    void deleteDBDir( const char * dir);
-    void CopyF( const char * fName, const char* fTempl );
-    void makeDBDir(const char *dir);
-    TCStringArray readPDBDir(const char *dir, const char *filter );
-
-    //void OpenHelp(const char* file, const char* item=0, int page =-1 );
-    void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
-    bool Message( QWidget* parent, const char* name,
-             const char* msg, int prog =0, int total=-1, bool move = false);
-    void ProcessProgress( QWidget* parent, int nRT );
-    void CloseMessage();
-
-
-    bool getElemPrMode() const
-    {
+    bool getElemPrMode() const {
         return isElementsProfileMode;
     }
-    void setElemPrMode(bool newData)
-    {
+    void setElemPrMode(bool newData) {
         isElementsProfileMode = newData;
     }
 
@@ -193,8 +177,34 @@ public:
         DefaultBuiltinTDB = aDefaultBuiltinTDB;
     }
 
+    void setConfigAutosave(bool autosave)
+    {  configAutosave = autosave;  }
+    bool getConfigAutosave() const
+    {  return configAutosave;   }
 
+    int getDoubleDigits() const
+    {  return TValBase::doublePrecision;  }
+    void setDoubleDigits(int newDoubleDigits)
+    {  TValBase::doublePrecision = newDoubleDigits;   }
+
+
+    /// Generate full path to current directory from filename and extension
+    std::string filePathFromName(const std::string& filename, const std::string& extension);
+
+    void deleteDBDir(const char * dir);
+    void CopyF( const char * fName, const char* fTempl );
+    void makeDBDir(const char *dir);
+    TCStringArray readPDBDir(const char *dir, const char *filter );
+
+    // GUI
     QWidget* window();
+    void Update(bool force=true);
+    void OpenModule(QWidget* parent, uint i, int page=0, int viewmode=0, bool select=false);
+    bool Message( QWidget* parent, const char* name,
+                 const char* msg, int prog =0, int total=-1, bool move = false);
+    void ProcessProgress( QWidget* parent, int nRT );
+    void CloseMessage();
+    void defineModuleKeysList(size_t nRT);
 };
 
 extern TVisor* pVisor;
