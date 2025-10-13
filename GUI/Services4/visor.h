@@ -3,7 +3,7 @@
 //
 // Declaration of TVisor class, setup and config functions
 //
-// Copyright (C) 1996-2001 A.Rysin,S.Dmytriyeva,D.Kulik
+// Copyright (C) 1996-2025 A.Rysin,S.Dmytriyeva,D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -52,12 +52,11 @@ class TVisor
     bool LocalDoc;         // obsolete
     std::string ImgDir;
 
-    bool isElementsProfileMode;
+    bool isElementsProfileMode = true;
     std::string DefaultBuiltinTDB;
-    bool dbChangeMode;
+    bool dbChangeMode = false;
     bool configAutosave = false;
 
-    void initModules();
     template <class T>
     void addModule(T* pm, bool selectFiles=false)
     {
@@ -72,6 +71,7 @@ class TVisor
         rt[pm->rtNum()]->SetKey(ALLKEY);
     }
 
+    void initModules();
     void load();
     void fromDAT( bool option_c, bool option_v );
     void toDAT();
@@ -80,12 +80,7 @@ class TVisor
     void fromModCFG();
     void toWinCFG();
     void fromWinCFG();
-
     void Exit();
-
-protected:
-    bool CanClose();
-
 
 public:
     int ProfileMode;
@@ -94,6 +89,8 @@ public:
     ~TVisor();
 
     void Setup();
+    bool CanClose();
+
     bool isDBChangeMode() const {
         return dbChangeMode;
     }
@@ -125,36 +122,31 @@ public:
     const std::string& localDir() const {
         return LocalDir;
     }
+    void setLocalDir(const std::string& localDir) {
+        LocalDir = localDir;
+    }
 
     std::string docDir() const {
         return LocalDocDir;
         //	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
     }
-
     const std::string& localDocDir() const {
         return LocalDocDir;
+    }
+    void setLocalDocDir(const std::string& localDir) {
+        LocalDocDir = localDir;
     }
 
     const std::string& remoteHTML() const {
         return RemoteHTML;
     }
-
-    bool localDoc() const { // obsolete
-        return LocalDoc;
-    }
-
-    void setLocalDir(const std::string& localDir) {
-        LocalDir = localDir;
-    }
-
-    void setLocalDocDir(const std::string& localDir) {
-        LocalDocDir = localDir;
-    }
-
     void setRemoteHTML(const std::string& remoteURL) {
         RemoteHTML = remoteURL;
     }
 
+    bool localDoc() const { // obsolete
+        return LocalDoc;
+    }
     void setLocalDoc(bool local) { // obsolete
         LocalDoc = local;
     }
@@ -186,7 +178,6 @@ public:
     {  return TValBase::doublePrecision;  }
     void setDoubleDigits(int newDoubleDigits)
     {  TValBase::doublePrecision = newDoubleDigits;   }
-
 
     /// Generate full path to current directory from filename and extension
     std::string filePathFromName(const std::string& filename, const std::string& extension);

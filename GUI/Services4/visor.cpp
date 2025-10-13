@@ -3,7 +3,7 @@
 //
 // Implementation of TVisor class, setup and config functions
 //
-// Copyright (C) 1996-2012 A.Rysin,S.Dmytriyeva,D.Kulik
+// Copyright (C) 1996-2025 A.Rysin,S.Dmytriyeva,D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -68,6 +68,14 @@ const char *GEM_CONF = "gemsdbf.conf";
 const char *VIS_CONF = "visor.conf";
 const char *WIN_CONF = "windows.conf";
 
+const char *vSigERROR_VISOR = "Error in visor data file visor.dat - wrong markers";
+const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong markers";
+const char *vSigTITLE = "Configurator";
+const int lnWINSIG = 2;
+const char SigBEG[lnWINSIG + 1] = "Vs";
+const char SigEND[lnWINSIG + 1] = "sX";
+
+
 TCStringArray readDirs(const char *dir);
 
 //----------------------------------------------------------------
@@ -81,7 +89,7 @@ TCStringArray readDirs(const char *dir);
 //  Reorganized by KD on E.Curti' comment 04.04.01
 bool TVisor::CanClose()
 {
-    if( pVisor->getConfigAutosave() ) {
+    if(pVisor->getConfigAutosave()) {
         Exit();
         return true;
     }
@@ -105,7 +113,6 @@ void TVisor::Update(bool force)
 {
     pVisorImp->Update(force);
 }
-
 
 QWidget* TVisor::window()
 {
@@ -163,16 +170,15 @@ void TVisor::OpenModule(QWidget* parent, uint i, int page, int viewmode, bool se
     std::cout<< "TVisor::OpenModule" << std::endl;
 }
 
-void TVisor::ProcessProgress( QWidget* parent, int nRT )
+void TVisor::ProcessProgress(QWidget* parent, int nRT)
 {
     std::cout<< "TVisor::ProcessProgress" << std::endl;
 }
 
-// return true if canceled
-bool TVisor::Message( QWidget* parent, const char* name,
+bool TVisor::Message(QWidget* parent, const char* name,
                      const char* msg, int prog, int total, bool move)
 {
-    std::cout<< "TVisor::Message" << std::endl;
+    std::cout<< "TVisor::Message " << msg << std::endl;
     return false;
 }
 
@@ -189,13 +195,13 @@ void TVisor::defineModuleKeysList(size_t nRT)
 #endif
 
 
-
 TVisor::TVisor(int c, char *v[]):
     argc(c), argv(v)
 {
 #ifndef NO_GUI
     Q_INIT_RESOURCE(GUI);
 #endif
+
     ProfileMode = MDD_DATABASE;
     dbChangeMode = false;
     isElementsProfileMode = true;
@@ -359,7 +365,7 @@ void TVisor::Setup()
     bool default_settings = false;
 #ifdef __APPLE__
     bool default_config = true;
-    pVisorImp->setConfigAutosave( true );
+    pVisor->setConfigAutosave( true );
 #else
     bool default_config = false;
 #endif
@@ -489,10 +495,6 @@ void TVisor::Setup()
         dbChangeMode = true;
 }
 
-const int lnWINSIG = 2;
-const char SigBEG[lnWINSIG + 1] = "Vs";
-const char SigEND[lnWINSIG + 1] = "sX";
-
 void TVisor::load()
 {
     std::string fname = sysGEMDir() + OBJECT_INI;
@@ -541,12 +543,11 @@ void TVisor::toDAT()
     std::ofstream visor_dat(fname.c_str(), std::ios::binary | std::ios::out);
     // begin signature
     visor_dat << SigBEG;
-
     int n = aMod.size(); // Do not change type, used in configuration
     visor_dat.write((char *) &n, sizeof n);
-    for (int ii = 0; ii < n; ii++)
+    for (int ii = 0; ii < n; ii++) {
         aWinInfo[ii]->toDAT(visor_dat);
-
+    }
     // end signature
     visor_dat << SigEND;
 
@@ -555,18 +556,13 @@ void TVisor::toDAT()
 #endif
 }
 
-const char *vSigERROR_VISOR = "Error in visor data file visor.dat - wrong markers";
-const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong markers";
-const char *vSigTITLE = "Configurator";
-
 void TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings /*option_v*/)
 {
     std::string fname = sysGEMDir() + VISOBJ_DAT;
 
     // objects' DAT
     std::ifstream obj_dat(fname.c_str(), std::ios::binary | std::ios::in);
-
-    if ( !obj_dat.good() ) {
+    if (!obj_dat.good()) {
         std::string message = "Can't open ";
         message += fname.c_str();
         throw TError(vSigTITLE, message);
@@ -637,7 +633,7 @@ void TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings /*o
 
 void TVisor::toModCFG()
 {
-    std::string fname = userProfDir();//userGEMDir();
+    std::string fname = userProfDir();
     fname += GEM_CONF;
 
     std::fstream f_gems(fname.c_str(), std::ios::out /*| ios::binary*/);
@@ -651,7 +647,7 @@ void TVisor::toModCFG()
 
 void TVisor::fromModCFG()
 {
-    std::string fname = userProfDir();//userGEMDir();
+    std::string fname = userProfDir();
     fname += GEM_CONF;
 
     std::fstream f_gems(fname.c_str(), std::ios::in | std::ios::binary );
@@ -758,8 +754,9 @@ std::string TVisor::filePathFromName(const std::string& filename, const std::str
 {
     auto fname_default = filename;
     replace_all(fname_default, " <>:\"/\\|?*.", '_' );
-    if( fname_default.empty() )
+    if(fname_default.empty()) {
         fname_default =  "empty";
+    }
 
     auto  file_path  =  pVisor->localDir();
     file_path  +=  "/";
@@ -772,8 +769,7 @@ std::string TVisor::filePathFromName(const std::string& filename, const std::str
 //Init work structures
 void TVisor::initModules()
 {
-    try
-    {
+    try {
         addModule(TSData::pm = new TSData(RT_SDATA));
         addModule(TConst::pm = new TConst(RT_CONST));
         addModule(TProfil::pm = new TProfil(RT_PARAM));
@@ -808,8 +804,7 @@ void TVisor::initModules()
 
         TProfil::pm->InitSubModules();
     }
-    catch(TError & xcpt)
-    {
+    catch(TError & xcpt) {
         throw TFatalError(xcpt);
     }
 }
@@ -817,8 +812,7 @@ void TVisor::initModules()
 // Exit of program, save cfg
 void TVisor::Exit()
 {
-    try
-    {
+    try  {
         // delete auto-generated aq and gas phases if still in database
         TProfil::pm->deleteAutoGenerated();
 
@@ -836,8 +830,7 @@ void TVisor::Exit()
         aObj[ o_nlphh]->SetPtr(0);
         TGEM2MT::pm->FreeNa();
     }
-    catch(TError & xcpt)
-    {
+    catch(TError & xcpt) {
         throw TFatalError(xcpt);
     }
 }
@@ -850,7 +843,8 @@ void TVisor::defaultCFG()
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "projec", true, true,
-                                             o_spppar, 15, 0, 2, param_rkfrm));      // 12.12.12 added new object to Project record
+                                             o_spppar, 15, 0, 2, param_rkfrm));
+    // 12.12.12 added new object to Project record
 
     // RT_ICOMP default
     unsigned char icomp_rkfrm[3] = { MAXICNAME, MAXSYMB, MAXICGROUP };
@@ -933,11 +927,10 @@ void TVisor::defaultCFG()
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");
     //  readPDBDir(pVisor->userProfDir().c_str());
 
-    for (size_t jj = 0; jj < rt.size(); jj++)
-    {
+    for (size_t jj = 0; jj < rt.size(); jj++) {
         int cnt = 0;
-        for (size_t ii = 0; ii < aDBFiles.size(); ii++)
-        { std::string flnm = std::string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
+        for (size_t ii = 0; ii < aDBFiles.size(); ii++) {
+            std::string flnm = std::string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
             if ( flnm == rt[jj]->GetKeywd() ||
                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
@@ -953,16 +946,14 @@ void TVisor::defaultCFG()
 
     // reading project dirs
     TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
-    for (size_t ii = 0; ii < aDBDirs.size(); ii++)
-    {
+    for (size_t ii = 0; ii < aDBDirs.size(); ii++) {
         std::string dir(pVisor->userProfDir());
         dir += aDBDirs[ii];
         aDBFiles = readPDBDir(dir.c_str(), "*.pdb");
 
-        for (size_t jj = 0; jj < rt.size(); jj++)
-        {
-            for (size_t kk = 0; kk < aDBFiles.size(); kk++)
-            { std::string flnm = std::string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
+        for (size_t jj = 0; jj < rt.size(); jj++)  {
+            for (size_t kk = 0; kk < aDBFiles.size(); kk++)  {
+                std::string flnm = std::string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
                 if ( flnm == rt[jj]->GetKeywd() ||
                     ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                     ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
@@ -975,7 +966,6 @@ void TVisor::defaultCFG()
             }
         }
     }
-
 }
 
 TCStringArray readDirs(const char *dir)
@@ -990,16 +980,15 @@ TCStringArray readDirs(const char *dir)
     //    thisDir.setNameFilter("*.pdb");
 
     QFileInfoList files = thisDir.entryInfoList();
-    if (files.empty())
+    if(files.empty()) {
         return aFiles;
+    }
 
     QListIterator<QFileInfo> it(files);
     QFileInfo f;
-    while (it.hasNext())
-    {
-        f = it.next();;
-        if (f.isDir() && f.fileName() != "." && f.fileName() != "..")
-        {
+    while(it.hasNext())  {
+        f = it.next();
+        if (f.isDir() && f.fileName() != "." && f.fileName() != "..") {
             gui_logger->debug("Adding dir: {}", f.fileName().toStdString());
             aFiles.push_back( f.fileName().toStdString());
         }
@@ -1013,23 +1002,23 @@ void TVisor::deleteDBDir(const char *dir)
     TCStringArray aFiles;
 
     QDir thisDir(dir);
-    if (!thisDir.exists())
+    if(!thisDir.exists()) {
         return;
+    }
 
     //--QDir::setCurrent(dir);
     thisDir.setFilter(QDir::Files);
 
-    QFileInfoList files = thisDir.entryInfoList(); //Qt3to4 
-    if (files.empty()) //Qt3to4
+    QFileInfoList files = thisDir.entryInfoList();
+    if (files.empty()) {
         return;
+    }
 
     QListIterator<QFileInfo> it(files);
     QFileInfo f;
-    while ( it.hasNext() ) //qt3to4
-    {
+    while( it.hasNext() ) {
         f = it.next();;
-        if (f.isSymLink() || f.isFile())
-        {
+        if(f.isSymLink() || f.isFile()) {
             gui_logger->trace("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
@@ -1039,14 +1028,10 @@ void TVisor::deleteDBDir(const char *dir)
     //--QDir::setCurrent(dir);
     // delete files in module list
     std::string path;
-    for (size_t ii = 0; ii < aFiles.size(); ii++)
-    {
-        if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
-        {
-            for (size_t jj = 0; jj < rt.size(); jj++)
-                if (std::string(aFiles[ii], 0, aFiles[ii].find("."))
-                    == rt[jj]->GetKeywd())
-                {
+    for(size_t ii = 0; ii < aFiles.size(); ii++) {
+        if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb") {
+            for(size_t jj = 0; jj < rt.size(); jj++) {
+                if(std::string(aFiles[ii], 0, aFiles[ii].find(".")) == rt[jj]->GetKeywd()) {
                     path = dir;
                     path += "/";
                     path += aFiles[ii];
@@ -1055,6 +1040,7 @@ void TVisor::deleteDBDir(const char *dir)
                     rt[jj]->DelFile(path);
                     rt[jj]->Open(true, UPDATE_DBV, {});
                 }
+            }
         }
         path = dir;
         path += "/";
@@ -1071,12 +1057,14 @@ void TVisor::deleteDBDir(const char *dir)
 void TVisor::CopyF( const char * fName, const char* fTempl )
 {
     QFile ff_tmp(fTempl);
-    if( !ff_tmp.open(QIODevice::ReadOnly))
+    if(!ff_tmp.open(QIODevice::ReadOnly)) {
         Error(fTempl, "File copy error" );
+    }
     ff_tmp.flush();
     QFile ff_new(fName);
-    if( !ff_new.open(QIODevice::WriteOnly))
+    if(!ff_new.open(QIODevice::WriteOnly)) {
         Error(fName, "File copy error" );
+    }
 
     char *p = new char[ff_tmp.size()+2];
     ff_tmp.read(p, ff_tmp.size());
@@ -1090,23 +1078,25 @@ void TVisor::makeDBDir(const char *dir)
 {
     // make directory dir (find system function)
     QDir d(dir);
-    if ( d.exists() )
-    { if( d.count()>2)
-        {
+    if( d.exists() ) {
+        if( d.count()>2 ) {
             QStringList filters = (QStringList() << "*.ndx" << "*.pdb");
             QStringList lst = d.entryList( filters, QDir::Files );
-            if (lst.count()<=0)
+            if (lst.count()<=0) {
                 vfMessage(0, dir, "This directory is not empty.");
-            else
-                Error( dir, "Error creating Modelling Project directory!");
+            }
+            else {
+                Error(dir, "Error creating Modelling Project directory!");
+            }
         }
         return;
     }
-    if( !d.mkdir( dir ))
+    if(!d.mkdir( dir )) {
         Error( dir, "Error creating Modelling Project directory!");
+    }
 }
 
-TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
+TCStringArray TVisor::readPDBDir(const char *dir, const char *filter)
 {
     TCStringArray aFiles;
 
@@ -1123,23 +1113,21 @@ TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
     thisDir.setFilter(QDir::Files);
     thisDir.setNameFilters(afilt);
 
-    QFileInfoList files = thisDir.entryInfoList(); //Qt3to4 
-    if (files.empty()) //Qt3to4
+    QFileInfoList files = thisDir.entryInfoList();
+    if (files.empty()) {
         return aFiles;
+    }
 
     QListIterator<QFileInfo> it(files);
     QFileInfo f;
-    while ( it.hasNext() ) //qt3to4
-    {
+    while( it.hasNext() ) {
         f = it.next();;
-        if (f.isSymLink() || f.isFile())
-        {
+        if(f.isSymLink() || f.isFile()) {
             gui_logger->trace("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
     }
-
     return aFiles;
 }
 
