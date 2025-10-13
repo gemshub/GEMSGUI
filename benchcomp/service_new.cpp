@@ -3,8 +3,9 @@
 #else
 #include <io.h>
 #endif
-#include <iostream>
 
+#include <iostream>
+#include <QDir>
 #include "service.h"
 #include "visor.h"
 
@@ -282,9 +283,49 @@ bool vfChooseDirectory(QWidget* par, std::string& path_, const char* title )
     return false;
 }
 
+void deleteDirectory(QString dir)
+{
+    QDir data_dir(dir);
+
+    //First delete any files in the current directory
+    QFileInfoList files = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
+    for(int file = 0; file < files.count(); file++)
+    {
+        data_dir.remove(files.at(file).fileName());
+    }
+
+    //Now recursively delete any child directories
+    QFileInfoList dirs = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
+    for(int dr = 0; dr < dirs.count(); dr++)
+    {
+        deleteDirectory(dirs.at(dr).absoluteFilePath());
+        data_dir.rmdir(dirs.at(dr).absoluteFilePath());
+    }
+}
+
 void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite)
 {
-    std::cout << "vfMakeDirectory: " << dir << std::endl;
+    // make directory dir (find system function)
+    QDir d(dir);
+    if ( d.exists() )
+    {
+        if( askOverwrite )
+        {
+            std::string mess = dir;
+            mess += "\n";
+            mess+=  "This directory exists! Overwrite?";
+            if( !vfQuestion( par, "Create new directory",mess) )
+                Error( dir, "Error creating directory!");
+
+            if( askOverwrite == 2)
+            {
+                deleteDirectory(dir);
+            }
+        }
+        return;
+    }
+    if( !d.mkdir( dir ))
+        Error( dir, "Error creating directory!");
 }
 
 const char * dfAqKeyD =  "a   AQELIA  aq_gen          aq  Davies          ";

@@ -124,15 +124,6 @@ protected:
     /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
     void System2GEMS3K( const std::string key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui = false );
 
-    /// For all systems in project generate MULTI, DATACH and DATABR files structure prepared from GEMS.
-    /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
-    /// \param savedSystems - system records key to be ignored
-    /// \param calc_mode - system calculate mode: 0 - no calculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
-    /// \param files_dir - IPM work structure directory name
-    /// \param brief_mode - Do not write data items that contain only default values
-    /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
-    void allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, const std::string& files_dir, bool brief_mode, bool add_mui = false);
-
     /// For all processes in project generate MULTI, DATACH and DATABR files structure prepared from GEMS.
     /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
     /// \param savedSystems - system records key to be ignored
@@ -251,6 +242,16 @@ public:
     {
         return multi_internal->InternalEnergy( TC, P );
     }
+
+    /// For all systems in project generate MULTI, DATACH and DATABR files structure prepared from GEMS.
+    /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
+    /// \param savedSystems - system records key to be ignored
+    /// \param calc_mode - system calculate mode: 0 - no calculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
+    /// \param files_dir - IPM work structure directory name
+    /// \param brief_mode - Do not write data items that contain only default values
+    /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
+    void allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, const std::string& files_dir, bool brief_mode, bool add_mui = false);
+
 
     //test
     /// The export to ThermoFun JSON format file should include all IComp, DComp and ReacDC records

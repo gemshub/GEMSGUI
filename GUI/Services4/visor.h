@@ -85,7 +85,6 @@ class TVisor
 
 protected:
     bool CanClose();
-    void Setup();
 
 
 public:
@@ -94,6 +93,7 @@ public:
     TVisor(int argc, char* argv[]);
     ~TVisor();
 
+    void Setup();
     bool isDBChangeMode() const {
         return dbChangeMode;
     }

@@ -30,7 +30,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 
 #ifndef NO_GUI
-#include "GraphDialogN.h"
+#include "GemsMainWindow.h"
+#include "NewSystemDialog.h"
 #else
 #include <iostream>
 #endif
@@ -97,7 +98,7 @@ void TCModule::MakeQuery()
 
 void TCModule::clearEditFocus()
 {
-    std::cout<< "TCModule::clearEditFocus" << GetName() << std::endl;
+    //std::cout<< "TCModule::clearEditFocus " << GetName() << std::endl;
 }
 
 QWidget* TCModule::window()

@@ -141,6 +141,11 @@ void TVisor::defineModuleKeysList(size_t nRT)
 
 #else
 
+bool TVisor::CanClose()
+{
+    return true;
+}
+
 void TVisor::Update(bool force)
 {
     std::cout<< "TVisor::Update" << std::endl;
@@ -168,6 +173,7 @@ bool TVisor::Message( QWidget* parent, const char* name,
                      const char* msg, int prog, int total, bool move)
 {
     std::cout<< "TVisor::Message" << std::endl;
+    return false;
 }
 
 void TVisor::CloseMessage()
