@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Set the name of the project
-project(GEMSGUI VERSION 3.10.0 LANGUAGES CXX)
+project(GEMSGUI VERSION 3.10.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
