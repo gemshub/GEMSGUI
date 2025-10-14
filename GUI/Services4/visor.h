@@ -33,6 +33,10 @@ class TVisor
     int argc;
     char** argv;
 
+    bool option_d = false;
+    bool option_c = false;
+    bool option_v = false;
+
     std::string lastProjectKey;
     std::string lastSystemKey;
 
@@ -55,7 +59,7 @@ class TVisor
     bool isElementsProfileMode = true;
     std::string DefaultBuiltinTDB;
     bool dbChangeMode = false;
-    bool configAutosave = false;
+    bool configAutosave = true;
 
     template <class T>
     void addModule(T* pm, bool selectFiles=false)
@@ -71,15 +75,24 @@ class TVisor
         rt[pm->rtNum()]->SetKey(ALLKEY);
     }
 
-    void initModules();
-    void load();
-    void fromDAT( bool option_c, bool option_v );
-    void toDAT();
+    int extract_args(int argc, char *argv[]);
+    void firstTimeSetup();
     void defaultCFG();
+    void initModules();
+
+    void toSettingsCFG();
+    void fromSettingsCFG();
+
+    void toObjDAT();
+    bool fromObjDAT();
+    void toWinDAT();
+    bool fromWinDAT();
+
     void toModCFG();
-    void fromModCFG();
+    bool fromModCFG();
     void toWinCFG();
-    void fromWinCFG();
+    bool fromWinCFG();
+
     void Exit();
 
 public:
@@ -181,7 +194,6 @@ public:
 
     /// Generate full path to current directory from filename and extension
     std::string filePathFromName(const std::string& filename, const std::string& extension);
-
     void deleteDBDir(const char * dir);
     void CopyF( const char * fName, const char* fTempl );
     void makeDBDir(const char *dir);
@@ -196,6 +208,9 @@ public:
     void ProcessProgress( QWidget* parent, int nRT );
     void CloseMessage();
     void defineModuleKeysList(size_t nRT);
+
+private:
+    void free_memory();
 };
 
 extern TVisor* pVisor;

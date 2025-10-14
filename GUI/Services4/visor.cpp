@@ -89,24 +89,27 @@ TCStringArray readDirs(const char *dir);
 //  Reorganized by KD on E.Curti' comment 04.04.01
 bool TVisor::CanClose()
 {
+    bool ret = true;
+
     if(pVisor->getConfigAutosave()) {
         Exit();
-        return true;
     }
-
-    switch (vfQuestion3(window(),
-                        "Exit GEM-Selektor", "Save configuration?",
-                        "Do not save", "Save"))
-    {
-    case VF3_1:
-        return true;
-    case VF3_2:
-        Exit();
-        return true;
-    case VF3_3:
-        ;
+    else {
+        switch(vfQuestion3(window(), "Exit GEM-Selektor",
+                            "Save configuration?", "Do not save", "Save")) {
+        case VF3_1:
+            break;
+        case VF3_2:
+            Exit();
+            break;
+        case VF3_3:
+            ret = false;
+        }
     }
-    return false;
+    if(ret) {
+        free_memory();
+    }
+    return ret;
 }
 
 void TVisor::Update(bool force)
@@ -150,6 +153,7 @@ void TVisor::defineModuleKeysList(size_t nRT)
 
 bool TVisor::CanClose()
 {
+    free_memory();
     return true;
 }
 
@@ -206,6 +210,7 @@ TVisor::TVisor(int c, char *v[]):
     dbChangeMode = false;
     isElementsProfileMode = true;
 
+// get default path
 #ifndef _WIN32
 #ifdef __APPLE__
 
@@ -223,7 +228,7 @@ TVisor::TVisor(int c, char *v[]):
     UserGEMDir = home_dir() + DEFAULT_USER_DIR; // "/Library/gems3/";
 
 #else  // Linux - in user's home directory \
-    // By default: /Resources in the same dir as the exe file; \
+    // By default: /Resources in the same dir as the exe file;  or up if bin \
     //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
     if(dirExe.endsWith("/bin") || dirExe.endsWith("\bin")) { // Try found Resource up level
@@ -232,9 +237,9 @@ TVisor::TVisor(int c, char *v[]):
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
     //ServerGems3Dir = dirExe.toStdString();
-    QDir dirUp(dirExe);
-    if( dirUp.cdUp() )
-        dirExe = dirUp.path(); // + QDir::separator();
+    //QDir dirUp(dirExe);
+    //if(dirUp.cdUp())
+    //    dirExe = dirUp.path();
     LocalDir = dirExe.toStdString();
 
 #ifdef NDEBUG
@@ -255,9 +260,9 @@ TVisor::TVisor(int c, char *v[]):
     }
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
-    QDir dirUp(dirExe);
-    if( dirUp.cdUp() )
-        dirExe = dirUp.path();
+    //QDir dirUp(dirExe);
+    //if(dirUp.cdUp())
+    //    dirExe = dirUp.path();
     LocalDir = dirExe.toStdString();
 #ifdef NDEBUG
     UserGEMDir =  home_dir() + DEFAULT_USER_DIR;
@@ -271,47 +276,8 @@ TVisor::TVisor(int c, char *v[]):
     UserProfDir = DEFAULT_PR_DIR;
     ImgDir = IMAGES_SRC_DIR;
 
-    // parsing options -s and -u if given
-
-    int isys = 0;		// index of sysdir option
-    int iuser = 0;		// index of userdir option
-    //int iserver = 0;		// index of server option
-
-    for (int ii = 1; ii < argc; ii++)
-    {
-        if (strcmp(argv[ii], "-s") == 0
-            || strcmp(argv[ii], "--system-dir") == 0 )
-            isys = ii;
-        else if (strcmp(argv[ii], "-u") == 0
-                 || strcmp(argv[ii], "--user-dir") == 0 )
-            iuser = ii;
-        // else if (strcmp(argv[ii], "-g") == 0
-        //          || strcmp(argv[ii], "--gems-server-dir") == 0 )
-        //     iserver = ii;
-    }
-    if (isys != 0)
-    {
-        if (argc <= isys + 1)
-            Error("Wrong options", "Wrong argument for option -s");
-        SysGEMDir = argv[isys + 1];
-        if (SysGEMDir[SysGEMDir.length() - 1] == '/')
-            SysGEMDir += '\0';
-        SysGEMDir += RESOURCES_DIR;
-    }
-    if (iuser != 0)
-    {
-        if (argc <= iuser + 1)
-            Error("Wrong options", "Wrong argument for option -u");
-        UserGEMDir = argv[iuser + 1];
-        if (UserGEMDir[UserGEMDir.length() - 1] != '/')
-            UserGEMDir += '/';
-    }
-    // if (iserver != 0)
-    // {
-    //     if (argc <= iserver + 1)
-    //         Error("Wrong options", "Wrong argument for option -g");
-    //     ServerGems3Dir = argv[iserver + 1];
-    // }
+    // parsing all options if given
+    extract_args(argc, argv);
 
     //    LocalDir = userGEMDir();
     LocalDocDir = SysGEMDir + HELP_DB_DIR;
@@ -337,145 +303,92 @@ TVisor::TVisor(int c, char *v[]):
     gui_logger->debug("UserProj : {}", UserProfDir);
     gui_logger->debug("LocalDoc : {}", LocalDocDir);
     gui_logger->debug("LocalHTML: {}", RemoteHTML);
-    /*
-#ifndef _WIN32
-#ifndef GEMS_RELEASE
-// added SD oct 2005
-     if( LocalDocDir[0] == '.' && LocalDocDir[1] == '/' )
-     {
-	char cur_dir[PATH_MAX];
-
-	// let's try to find resources by path of the executable
-	getcwd(cur_dir, PATH_MAX);
-    LocalDocDir = string(cur_dir) + string(LocalDocDir,1);
-        RemoteHTML = string(cur_dir) + string(RemoteHTML,1);
-     }
-#endif
-#endif
-*/
 }
 
 TVisor::~TVisor()
 {}
 
+void  TVisor::free_memory()
+{
+    try  {
+        // delete auto-generated aq and gas phases if still in database
+        TProfil::pm->deleteAutoGenerated();
+        aObj[o_wo_bfc3]->SetPtr(0);
+        aObj[ o_neqtxt]->SetPtr(0);
+        aObj[ o_dtnam_nr]->SetPtr(0);
+        aObj[ o_dtres]->SetPtr(0);
+        aObj[ o_unpmr]->SetPtr(0);
+        aObj[ o_nlich]->SetPtr(0);
+        aObj[ o_nldch]->SetPtr(0);
+        aObj[ o_nldcvs]->SetPtr(0);
+        aObj[ o_nldchs]->SetPtr(0);
+        aObj[ o_nlphh]->SetPtr(0);
+        TGEM2MT::pm->FreeNa();
+    }
+    catch(TError & xcpt) {
+        gui_logger->info("!!! Local    : {}", LocalDir);
+        throw TFatalError(xcpt);
+    }
+}
+
 void TVisor::Setup()
 {
-    bool option_d = false;
-    bool option_f = false;
-    bool default_settings = false;
 #ifdef __APPLE__
-    bool default_config = true;
-    pVisor->setConfigAutosave( true );
-#else
-    bool default_config = false;
+    pVisor->setConfigAutosave(true);
 #endif
-
-    for (int ii = 1; ii < argc; ii++)	//Sveta 16/06/1999
-    {
-        if (strcmp(argv[ii], "-d") == 0
-            || strcmp(argv[ii], "--from-ini-files") == 0 )
-        {
-            option_d = true;
-            pVisor->setConfigAutosave( true );
-        }
-        else
-            if (strcmp(argv[ii], "-f") == 0
-                || strcmp(argv[ii], "--allow-db-change") == 0 )
-            {
-                option_f = true;
-            }
-            else
-                if (strcmp(argv[ii], "-c") == 0
-                    || strcmp(argv[ii], "--with-default-config") == 0 )
-                {
-                    default_config = true;
-                    pVisor->setConfigAutosave( true );
-                }
-                else
-                    if (strcmp(argv[ii], "-v") == 0
-                        || strcmp(argv[ii], "--with-default-settings") == 0 )
-                    {
-                        default_settings = true;
-                        pVisor->setConfigAutosave( true );
-                    }
-    }
-
-    if (argc == 1 ) // No command line parameters - assume as -d   since v.3.8.0
-    {
-        option_d = true;
-        // default_config = true;
-        pVisor->setConfigAutosave( true );
-    }
 
     // check home dir
     std::string dir = userGEMDir();
     QDir userGEM(dir.c_str());
-
     bool firstTimeStart = !userGEM.exists(userProfDir().c_str());
 
-    if (firstTimeStart)
-    {
-        default_config = true;
-        default_settings = true;
-        pVisor->setConfigAutosave( true );
-
-        std::string dirUp = std::string( dir,0, dir.length()-1);
-        size_t pos = dirUp.rfind("/");
-        if( pos != std::string::npos )
-        {
-            dirUp = dirUp.substr(0,pos);
-            QDir userGEMUP(dirUp.c_str());
-            if(!userGEMUP.exists())
-                if( !userGEMUP.mkdir(dirUp.c_str()) )
-                    throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
-        }
-
-        gui_logger->debug("make home GEM directories");
-        gui_logger->debug("UserGEM *: {}", UserGEMDir);
-        if(!userGEM.exists(userGEMDir().c_str())) {
-            if( !userGEM.mkdir(userGEMDir().c_str()) )
-                throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
-        }
-        gui_logger->debug("UserProj*: {}", UserProfDir);
-        if( !userGEM.mkdir(userProfDir().c_str()) )
-            throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
-
-        // copy default project
-        std::string cmd;
-
-#ifndef _WIN32
-        cmd = "cp -r ";
-        cmd += sysProfDir();
-        cmd += "* ";
-        cmd += userProfDir();
-
-        gui_logger->debug("Creating GEMS user directory:  {}", cmd);
-#else
-        std::string sprdir = sysProfDir();
-        std::string uprdir = userProfDir();
-        QDir sysProjD( sprdir.c_str() );
-        QDir usrProjD( uprdir.c_str() );
-        QString sPD = sysProjD.absolutePath();
-        QString uPD = usrProjD.absolutePath();
-
-        cmd = "xcopy \"";
-        cmd += 	qPrintable(	sysProjD.toNativeSeparators( sPD ) );
-        //        cmd += DefProfDir;
-        cmd += "\" \"";
-        cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
-        cmd += "\" /e /y";
-
-        gui_logger->debug("Creating GEMS user directory:  {}", cmd);
-#endif
-
-        if (system(cmd.c_str()) != 0)
-            throw TFatalError("GEMS Init", "Cannot copy default projects to user directory");
+    // copy default projects if first run
+    if(firstTimeStart)  {
+        option_d = true;
+        firstTimeSetup();
     }
 
-    if (option_d)
-        load();
-    else
-        fromDAT(default_config, default_settings);
+    // define objects
+    if( option_d || !fromObjDAT() ) {
+        std::string fname = sysGEMDir() + OBJECT_INI;
+        gui_logger->debug("TVisor::load {}", fname);
+        aObj.load(fname.c_str());
+        toObjDAT();
+    }
+
+    // define database
+    if( option_d || option_c || !fromModCFG() ) {
+        defaultCFG();
+        toModCFG();
+    }
+
+    // init modules
+    initModules();
+
+    // init windows
+    if( option_d || !fromWinDAT() ) {
+        std::string fname = sysGEMDir() + UNITS_INI;
+        aUnits.load(fname);
+
+#ifndef NO_GUI
+        fname = sysGEMDir() + VISOR_INI;
+        TJsonConfig cnf( std::string(fname) + ".json");
+        for (size_t ii = 0; ii < aMod.size(); ii++)
+            aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
+#endif
+        toWinDAT();
+        toWinCFG();
+    }
+    else {
+        if(option_c || !fromWinCFG()) {
+            toWinCFG();
+        }
+    }
+
+    // read settings
+    if( !option_v && !option_d ) {
+        fromSettingsCFG();
+    }
 
     aObj[o_n0w_mps]->SetPtr(0);
     aObj[o_n1w_mps]->SetPtr(0);
@@ -489,58 +402,194 @@ void TVisor::Setup()
     aObj[o_n1w_mju]->SetPtr(0);
     aObj[o_n0w_lga]->SetPtr(0);
     aObj[o_n1w_lga]->SetPtr(0);
-
-    // Sveta permission to change data in special DB files
-    if (option_f)
-        dbChangeMode = true;
 }
 
-void TVisor::load()
+// Exit of program, save cfg
+void TVisor::Exit()
 {
-    std::string fname = sysGEMDir() + OBJECT_INI;
-    gui_logger->debug("TVisor::load {}", fname);
-    aObj.load(fname.c_str());
+    try  {
+        toModCFG();
+        toWinCFG();
+        toSettingsCFG();
+    }
+    catch(TError & xcpt) {
+        throw TFatalError(xcpt);
+    }
+}
 
-    defaultCFG();
-    initModules();
+//--------------------------------------------------------
 
-    fname = sysGEMDir();
-    fname += UNITS_INI;
-    aUnits.load(fname);
+int TVisor::extract_args( int argc, char* argv[])
+{
+    // No command line parameters - assume as -d   since v.3.8.0
+    if(argc == 1) {
+        option_d = true;
+        pVisor->setConfigAutosave(true);
+        return 0;
+    }
 
-#ifndef NO_GUI
+    int i=0;
+    for( i = 1; i < argc; ++i)
+    {
+        std::string arg = argv[i];
+        if( (arg == "-d") || (arg == "--from-ini-files") ) {
+            option_d = true;
+        }
+        else  if( (arg == "-f") || (arg == "--allow-db-change") ) {
+            dbChangeMode = true;
+        }
+        else if( (arg == "-c") || (arg == "--with-default-config")) {
+            option_c = true;
+        }
+        else  if( (arg == "-v") || (arg == "--with-default-settings") ) {
+            option_v = true;
+        }
+        else if ((arg == "-s") || (arg == "--system-dir"))  {
+            if (i + 1 < argc) {
+                SysGEMDir = argv[++i];
+                if (SysGEMDir[SysGEMDir.length() - 1] == '/') {
+                    SysGEMDir += '\0';
+                }
+                SysGEMDir += RESOURCES_DIR;
+            }
+            else {
+                Error("Wrong options", "Wrong argument for option -s");
+                return 1;
+            }
+        }
+        else if ((arg == "-u") || (arg == "--user-dir"))
+        {
+            if (i + 1 < argc) {
+                UserGEMDir = argv[++i];
+                if (UserGEMDir[UserGEMDir.length() - 1] != '/') {
+                    UserGEMDir += '/';
+                }
+            }
+            else {
+                Error("Wrong options", "Wrong argument for option -u");
+                return 1;
+            }
+        }
+        // else if ((arg == "-g") || (arg == "--gems-server-dir"))  {
+        //     if (i + 1 < argc) {
+        //         ServerGems3Dir = argv[++i];
+        //     }
+        //     else {
+        //         Error("Wrong options", "Wrong argument for option -g");
+        //         return 1;
+        //     }
+        // }
+    }
 
-    fname = sysGEMDir();
-    fname += VISOR_INI;
+    return 0;
+}
 
-    TJsonConfig cnf( std::string(fname) + ".json");
-    for (size_t ii = 0; ii < aMod.size(); ii++)
-        aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
+void TVisor::firstTimeSetup()
+{
+    std::string dir = userGEMDir();
+    QDir userGEM(dir.c_str());
+    std::string dirUp = std::string(dir, 0, dir.length()-1);
+    size_t pos = dirUp.rfind("/");
+    if( pos != std::string::npos )  {
+        dirUp = dirUp.substr(0,pos);
+        QDir userGEMUP(dirUp.c_str());
+        if(!userGEMUP.exists()) {
+            if( !userGEMUP.mkdir(dirUp.c_str()) ) {
+                throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+            }
+        }
+    }
+
+    gui_logger->debug("make home GEM directories");
+    gui_logger->debug("UserGEM *: {}", UserGEMDir);
+    if(!userGEM.exists(userGEMDir().c_str())) {
+        if( !userGEM.mkdir(userGEMDir().c_str()) ) {
+            throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+        }
+    }
+    gui_logger->debug("UserProj*: {}", UserProfDir);
+    if( !userGEM.mkdir(userProfDir().c_str()) )
+        throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
+
+    // copy default project
+    std::string cmd;
+
+#ifndef _WIN32
+    cmd = "cp -r ";
+    cmd += sysProfDir();
+    cmd += "* ";
+    cmd += userProfDir();
+
+    gui_logger->debug("Creating GEMS user directory:  {}", cmd);
+#else
+    std::string sprdir = sysProfDir();
+    std::string uprdir = userProfDir();
+    QDir sysProjD( sprdir.c_str() );
+    QDir usrProjD( uprdir.c_str() );
+    QString sPD = sysProjD.absolutePath();
+    QString uPD = usrProjD.absolutePath();
+
+    cmd = "xcopy \"";
+    cmd += 	qPrintable(	sysProjD.toNativeSeparators( sPD ) );
+    //        cmd += DefProfDir;
+    cmd += "\" \"";
+    cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
+    cmd += "\" /e /y";
+
+    gui_logger->debug("Creating GEMS user directory:  {}", cmd);
 #endif
 
-    toDAT();
-    toModCFG();
-    toWinCFG();
+    if (system(cmd.c_str()) != 0) {
+        throw TFatalError("GEMS Init", "Cannot copy default projects to user directory");
+    }
 }
 
-void TVisor::toDAT()
+void TVisor::toObjDAT()
 {
-    std::string fname = sysGEMDir();
-    fname += VISOBJ_DAT;
-
+    std::string fname = sysGEMDir() + VISOBJ_DAT;
     std::ofstream obj_dat(fname, std::ios::binary | std::ios::out);
     // begin signature
     obj_dat << SigBEG;
     aObj.toDAT(obj_dat);
     // end signature
     obj_dat << SigEND;
-    obj_dat.close();
+}
 
+bool TVisor::fromObjDAT()
+{
+    std::string fname = sysGEMDir() + VISOBJ_DAT;
+
+    if(!vfExist(fname)) {
+        gui_logger->info("Used ini file, file {} does not exist.", fname);
+        return false;
+    }
+
+    // objects' DAT
+    std::ifstream obj_dat(fname, std::ios::binary | std::ios::in);
+    if (!obj_dat.good()) {
+        std::string message = "Can't open " + fname;
+        throw TError(vSigTITLE, message);
+    }
+
+    char sg[2];
+    obj_dat.read(sg, sizeof sg);
+    if (sg[0] != SigBEG[0] || sg[1] != SigBEG[1])
+        throw TError(vSigTITLE, vSigERROR_VISOBJ);
+
+    aObj.fromDAT(obj_dat);
+
+    obj_dat.read(sg, sizeof sg);
+    if (sg[0] != SigEND[0] || sg[1] != SigEND[1])
+        throw TError(vSigTITLE, vSigERROR_VISOBJ);
+
+    return true;
+}
+
+void TVisor::toWinDAT()
+{
 #ifndef NO_GUI
-    fname = sysGEMDir();
-    fname += VISOR_DAT;
-
-    std::ofstream visor_dat(fname.c_str(), std::ios::binary | std::ios::out);
+    std::string fname = sysGEMDir()+VISOR_DAT;
+    std::ofstream visor_dat(fname, std::ios::binary | std::ios::out);
     // begin signature
     visor_dat << SigBEG;
     int n = aMod.size(); // Do not change type, used in configuration
@@ -556,55 +605,25 @@ void TVisor::toDAT()
 #endif
 }
 
-void TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings /*option_v*/)
+bool TVisor::fromWinDAT()
 {
-    std::string fname = sysGEMDir() + VISOBJ_DAT;
+#ifndef NO_GUI
+    // loading static info for visor (DAT files)
+    std::string fname = sysGEMDir() + VISOR_DAT;
 
-    // objects' DAT
-    std::ifstream obj_dat(fname.c_str(), std::ios::binary | std::ios::in);
-    if (!obj_dat.good()) {
-        std::string message = "Can't open ";
-        message += fname.c_str();
+    if(!vfExist(fname)) {
+        gui_logger->info("Used ini files, file {} does not exist.", fname);
+        return false;
+    }
+
+    std::ifstream visor_dat(fname, std::ios::binary | std::ios::in);
+
+    if ( !visor_dat.good() ) {
+        std::string message = "Can't open " + fname;
         throw TError(vSigTITLE, message);
     }
 
     char sg[2];
-    obj_dat.read(sg, sizeof sg);
-    if (sg[0] != SigBEG[0] || sg[1] != SigBEG[1])
-        throw TError(vSigTITLE, vSigERROR_VISOBJ);
-
-    aObj.fromDAT(obj_dat);
-
-    obj_dat.read(sg, sizeof sg);
-    if (sg[0] != SigEND[0] || sg[1] != SigEND[1])
-        throw TError(vSigTITLE, vSigERROR_VISOBJ);
-
-    obj_dat.close();
-
-    if( default_config )
-    {
-        defaultCFG();
-        toModCFG();
-    }
-    else
-    {
-        fromModCFG();
-    }
-
-    initModules();
-
-#ifndef NO_GUI
-    // loading static info for visor (DAT files)
-    fname = sysGEMDir() + VISOR_DAT;
-
-    std::ifstream visor_dat(fname.c_str(), std::ios::binary | std::ios::in);
-
-    if ( !obj_dat.good() ) {
-        std::string message = "Can't open ";
-        message += fname.c_str();
-        throw TError(vSigTITLE, message);
-    }
-
     visor_dat.read(sg, sizeof sg);
     if (sg[0] != SigBEG[0] || sg[1] != SigBEG[1])
         throw TError(vSigTITLE, vSigERROR_VISOR);
@@ -625,43 +644,42 @@ void TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings /*o
     // Units' part to load
     aUnits.fromDAT(visor_dat);
 #endif
-    if( default_settings )
-        toWinCFG();
-    else
-        fromWinCFG();
+    return true;
 }
 
 void TVisor::toModCFG()
 {
-    std::string fname = userProfDir();
-    fname += GEM_CONF;
+    std::string fname = userProfDir()+GEM_CONF;
 
-    std::fstream f_gems(fname.c_str(), std::ios::out /*| ios::binary*/);
-    ErrorIf(!f_gems.good(), "GEMS Init",
-            "Error writing configuration file (gemsdbf.conf)");
+    std::fstream f_gems(fname, std::ios::out /*| ios::binary*/);
+    ErrorIf(!f_gems.good(), "GEMS Init", "Error writing configuration file (gemsdbf.conf)");
     rt.toCFG(f_gems);
 #ifndef _WIN32
     gui_logger->info("gems.cfg saved");
 #endif
 }
 
-void TVisor::fromModCFG()
+bool TVisor::fromModCFG()
 {
-    std::string fname = userProfDir();
-    fname += GEM_CONF;
+    std::string fname = userProfDir()+GEM_CONF;
+
+    if(!vfExist(fname)) {
+        gui_logger->info("Used default configuration, file {} does not exist.", fname);
+        return false;
+    }
 
     std::fstream f_gems(fname.c_str(), std::ios::in | std::ios::binary );
-    ErrorIf(!f_gems.good(), "GEMS Init",
-            "Error reading configuration file (gemsdbf.conf)");
+    ErrorIf(!f_gems.good(), "GEMS Init", "Error reading configuration file (gemsdbf.conf)");
     rt.fromCFG(f_gems);
 #ifndef _WIN32
     gui_logger->info("gems.cfg read");
 #endif
+    return true;
 }
 
-void TVisor::toWinCFG()
+void TVisor::toSettingsCFG()
 {
-    std::string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF + ".json";
+    std::string fname_ini = userProfDir() + VIS_CONF + ".json";
 
     QJsonObject win_cfg_object;
 #ifndef NO_GUI
@@ -682,32 +700,23 @@ void TVisor::toWinCFG()
     win_cfg_object["current_system"] = rt[RT_SYSEQ]->PackKey();
     win_cfg_object["default_built_in_TDB"] = QString::fromStdString(DefaultBuiltinTDB);
 
-    std::fstream f_win_ini(fname_ini.c_str(), std::ios::out );
-    ErrorIf(!f_win_ini.good(), "GEMS Init",
-            "Error writing configurator file (visor.conf)");
+    std::fstream f_win_ini(fname_ini, std::ios::out);
+    ErrorIf(!f_win_ini.good(), "GEMS Init", "Error writing configurator file (visor.conf.json)");
     QJsonDocument doc(win_cfg_object);
     QString str_json(doc.toJson());
     f_win_ini << str_json.toStdString()  << std::endl;
-    f_win_ini.close();
-
-#ifndef NO_GUI
-    // Window-specific settings
-    fname_ini = /*userGEMDir*/userProfDir() + WIN_CONF;
-    f_win_ini.open(fname_ini.c_str(), std::ios::out );
-    ErrorIf(!f_win_ini.good(), "GEMS Init",
-            "Error writing configurator file (windows.conf)" );
-    //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
-    for (size_t ii = 0; ii < aWinInfo.size(); ii++)
-        aWinInfo[ii]->toWinCFG(f_win_ini);
-    f_win_ini.close();
-#endif
 }
 
-void TVisor::fromWinCFG()
+void TVisor::fromSettingsCFG()
 {
-    std::string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    std::string fname_ini = userProfDir() + VIS_CONF + ".json";
 
-    TJsonConfig visor_conf( fname_ini+".json" );
+    if(!vfExist(fname_ini)) {
+        gui_logger->info("Used default settings, file {} does not exist.", fname_ini);
+        return;
+    }
+
+    TJsonConfig visor_conf(fname_ini);
 
 #ifndef NO_GUI
     pVisorImp->setColorScheme(visor_conf.value_or_default("color_scheme", 0));
@@ -737,17 +746,40 @@ void TVisor::fromWinCFG()
     setDefaultBuiltinTDB(visor_conf.value_or_default<std::string>("default_built_in_TDB", DefaultBuiltinTDB));
     lastProjectKey = visor_conf.value_or_default<std::string>("current_project", lastProjectKey);
     lastSystemKey = visor_conf.value_or_default<std::string>("current_system", lastSystemKey);
+}
 
+// Window-specific settings
+void TVisor::toWinCFG()
+{
 #ifndef NO_GUI
-    // Window-specific settings
-    std::string fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
-    std::ifstream f_win_ini(fwin_ini_name.c_str() );
+    std::string fname_ini = /*userGEMDir*/userProfDir() + WIN_CONF;
+    std::fstream  f_win_ini(fname_ini, std::ios::out);
     ErrorIf(!f_win_ini.good(), "GEMS Init",
-            "Error reading configurator file (windows.conf)" );
+            "Error writing configurator file (windows.conf)" );
+    //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
+    for (size_t ii = 0; ii < aWinInfo.size(); ii++)
+        aWinInfo[ii]->toWinCFG(f_win_ini);
+#endif
+}
+
+// Window-specific settings
+bool TVisor::fromWinCFG()
+{
+#ifndef NO_GUI
+    std::string fwin_ini_name = userProfDir() + WIN_CONF;
+
+    if(!vfExist(fwin_ini_name)) {
+        gui_logger->info("Used default data, file {} does not exist.", fwin_ini_name);
+        return false;
+    }
+
+    std::ifstream f_win_ini(fwin_ini_name);
+    ErrorIf(!f_win_ini.good(), "GEMS Init", "Error reading configurator file (windows.conf)");
 
     for (size_t ii = 0; ii < aWinInfo.size(); ii++)
         aWinInfo[ii]->fromWinCFG(f_win_ini);
 #endif
+    return true;
 }
 
 std::string TVisor::filePathFromName(const std::string& filename, const std::string& extension)
@@ -803,32 +835,6 @@ void TVisor::initModules()
         TGEM2MT::pm->SetIcon(":/modules/Icons/GEM2MTModuleIcon.png");
 
         TProfil::pm->InitSubModules();
-    }
-    catch(TError & xcpt) {
-        throw TFatalError(xcpt);
-    }
-}
-
-// Exit of program, save cfg
-void TVisor::Exit()
-{
-    try  {
-        // delete auto-generated aq and gas phases if still in database
-        TProfil::pm->deleteAutoGenerated();
-
-        toModCFG();
-        toWinCFG();
-        aObj[o_wo_bfc3]->SetPtr(0);
-        aObj[ o_neqtxt]->SetPtr(0);
-        aObj[ o_dtnam_nr]->SetPtr(0);
-        aObj[ o_dtres]->SetPtr(0);
-        aObj[ o_unpmr]->SetPtr(0);
-        aObj[ o_nlich]->SetPtr(0);
-        aObj[ o_nldch]->SetPtr(0);
-        aObj[ o_nldcvs]->SetPtr(0);
-        aObj[ o_nldchs]->SetPtr(0);
-        aObj[ o_nlphh]->SetPtr(0);
-        TGEM2MT::pm->FreeNa();
     }
     catch(TError & xcpt) {
         throw TFatalError(xcpt);

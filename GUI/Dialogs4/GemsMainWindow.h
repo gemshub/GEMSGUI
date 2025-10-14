@@ -155,8 +155,6 @@ class TVisorImp: public QMainWindow
     time_t last_update;
     int updateTime;
 
-    //int ProfileMode;
-
     // Appearance settings
     QFont	CellFont;
     QFont	axisLabelFont;
@@ -164,8 +162,6 @@ class TVisorImp: public QMainWindow
     int charWidth;
     int charHeight;
     int colorScheme=0;
-
-    // bool configAutosave;
 
     char TCpoint[32];  // Step point ID for stepwise mode
 
@@ -244,11 +240,6 @@ public:
     {  return colorScheme;  }
     void setColorScheme(int newColorScheme)
     {  colorScheme = newColorScheme;   }
-
-    // void setConfigAutosave(bool autosave)
-    // {  configAutosave = autosave;  }
-    // bool getConfigAutosave() const
-    // {  return configAutosave;   }
 
     char* getTCpoint()
     {  return TCpoint;   }
