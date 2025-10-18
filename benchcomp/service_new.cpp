@@ -1,18 +1,17 @@
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
-
 #include <iostream>
-#include <QDir>
+#include <filesystem>
+namespace fs = std::filesystem;
+
+
 #include "service.h"
 #include "visor.h"
 
 
 bool vfExist(const std::string &file_path)
 {
-    return !(::access(file_path.c_str(), 0 ));
+    // return !(::access(file_path.c_str(), 0 ));
+    fs::path ps(file_path);
+    return fs::exists(ps);
 }
 
 int vfQuestYesNoCancel(QWidget* par, const std::string& title, const std::string& mess)
@@ -283,49 +282,15 @@ bool vfChooseDirectory(QWidget* par, std::string& path_, const char* title )
     return false;
 }
 
-void deleteDirectory(QString dir)
-{
-    QDir data_dir(dir);
-
-    //First delete any files in the current directory
-    QFileInfoList files = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
-    for(int file = 0; file < files.count(); file++)
-    {
-        data_dir.remove(files.at(file).fileName());
-    }
-
-    //Now recursively delete any child directories
-    QFileInfoList dirs = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
-    for(int dr = 0; dr < dirs.count(); dr++)
-    {
-        deleteDirectory(dirs.at(dr).absoluteFilePath());
-        data_dir.rmdir(dirs.at(dr).absoluteFilePath());
-    }
-}
-
 void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite)
 {
-    // make directory dir (find system function)
-    QDir d(dir);
-    if ( d.exists() )
-    {
-        if( askOverwrite )
-        {
-            std::string mess = dir;
-            mess += "\n";
-            mess+=  "This directory exists! Overwrite?";
-            if( !vfQuestion( par, "Create new directory",mess) )
-                Error( dir, "Error creating directory!");
-
-            if( askOverwrite == 2)
-            {
-                deleteDirectory(dir);
-            }
+    fs::path ps(dir);
+    if (fs::exists(ps))  {
+        if(askOverwrite)  {
+            fs::remove_all(ps);
         }
-        return;
     }
-    if( !d.mkdir( dir ))
-        Error( dir, "Error creating directory!");
+    fs::create_directories(ps);
 }
 
 const char * dfAqKeyD =  "a   AQELIA  aq_gen          aq  Davies          ";
