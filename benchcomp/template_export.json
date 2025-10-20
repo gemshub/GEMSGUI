@@ -1,0 +1,60 @@
+{
+     "comment" :   "template file for gems3k export",
+     "calc_mode" :   0,
+     "io_mode" :   "-j",
+     "brief_mode" :   true,
+     "with_comments" :   false,
+     "projects" :   [
+          {
+               "key" :   "Kaolinite:Test-JNC:",
+               "systems" :   [
+                    {
+                         "key" :   "Kaolinite:G:pHtitr:0:0:1:25:0:",
+                         "calc_mode" :   1,
+                         "brief_mode" :   false,
+                         "io_mode" :   "-j",
+                         "Tai" :   [
+                              25,
+                              125,
+                              10,
+                              1
+                         ],
+                         "Pai" :   [
+                              1,
+                              1,
+                              0,
+                              0.5
+                         ]
+                    },
+                    {
+                         "key" :   "Kaolinite:G:pHtitrKa:0:0:1:25:0:",
+                         "io_mode" :   "-t"
+                    }
+               ]
+          },
+          {
+               "key" :   "Solvus:test project solvus:",
+               "systems" :   [
+                    {
+                         "key" :   "Solvus:G:series1:0001:0:500:400:0:",
+                         "brief_mode" :   false,
+                         "Tai" :   [
+                              400,
+                              700,
+                              10,
+                              1
+                         ],
+                         "Pai" :   [
+                              500,
+                              500,
+                              0,
+                              500
+                         ]
+                    },
+                    {
+                         "key" :   "Solvus:G:series2:0002:0:1000:640:0:"
+                    }
+               ]
+          }
+     ]
+}
