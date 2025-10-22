@@ -3,7 +3,7 @@
      "calc_mode" :   0,
      "io_mode" :   "-j",
      "brief_mode" :   true,
-     "with_comments" :   false,
+     "with_comments" :  true,
      "projects" :   [
           {
                "key" :   "Kaolinite:Test-JNC:",

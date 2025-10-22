@@ -1,6 +1,6 @@
 ## Export to gems3k format files
 
-gems3k-export the Qt console application for export systems from the internal database projects.
+**gems3k-export** the Qt console application for export systems from the internal database projects.
 
 
 ## How to execute
@@ -28,7 +28,7 @@ Options:
 
 ## Export template file
 
-File template_export.json consists of a list of projects and systems to be unloaded, and describes some export rules.
+File `template_export.json` consists of a list of projects and systems to be unloaded, and describes some export rules.
 
 
 ```json
@@ -94,16 +94,16 @@ File template_export.json consists of a list of projects and systems to be unloa
      ]
 }
 
-````
+```
 
 
 Commentas for template_export.json  
 
-1. "calc_mode" flag for calculation of equilibrium state before export. Possible values: 0 - no recalculate system; 1 - NEED_GEM_AIA; 2 - NEED_GEM_SIA.
+1. **"calc_mode"** flag for calculation of equilibrium state before export. Possible values: 0 - no recalculate system; 1 - NEED_GEM_AIA; 2 - NEED_GEM_SIA.
 
-2. "io_mode" flag to write IPM, DCH, and DBR files in binary, txt, or JSON mode. Possible values: `-j` - json format; '-t' - key-value format; '-f' - json format with thermofun files; '-o' - key-value format with thermofun files. 
+2. **"io_mode"** flag to write IPM, DCH, and DBR files in binary, txt, or JSON mode. Possible values: `-j` - json format; `-t` - key-value format; `-f` - json format with thermofun files; `-o` - key-value format with thermofun files. 
 
-3. If not defined, "calc_mode", "io_mode", or "brief_mode" flags use top-level or default values.
+3. If not defined, *"calc_mode"*, *"io_mode"*, or *"brief_mode"* flags use top-level or default values.
 
-4. If not defined, "Tai" and "Pai" use T and P from the current system.
+4. If not defined, *"Tai"* and *"Pai"* use T and P from the current system.
 

@@ -1,7 +1,7 @@
 
 TEMPLATE	= app
 LANGUAGE        = C++
-TARGET		= export_gems3
+TARGET		= gems3k-export
 
 DEFINES     += NO_GUI
 
