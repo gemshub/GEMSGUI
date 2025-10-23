@@ -38,7 +38,7 @@ jobs:
         id: strings2
         shell: bash
         run: |
-          echo "export-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/export_gems3k" >> "$GITHUB_OUTPUT"
+          echo "export-output-dir=${{ github.workspace }}/export-${{ steps.strings.outputs.deploy-name }}/gems3k" >> "$GITHUB_OUTPUT"
           echo "deploy-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/Gems3-app" >> "$GITHUB_OUTPUT"
           echo "deploy-output-name=linux-${{ steps.strings.outputs.deploy-name }}.zip" >> "$GITHUB_OUTPUT"
 
@@ -111,11 +111,23 @@ jobs:
           asset_name: ${{ steps.strings2.outputs.deploy-output-name }}
           asset_content_type: application/zip
 
-      - name: Upload export archive
+      - name: Upload export gems3k archive
         uses: actions/upload-artifact@v4
         with:
-          name: linux-gems3k
+          name: gems3k-${{ steps.strings.outputs.deploy-name }}
           path: ${{ steps.strings2.outputs.export-output-dir }}
+
+      - name: Upload release asset
+        if: github.event_name == 'release' && github.event.action == 'published'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ github.workspace }}/export-${{ steps.strings.outputs.deploy-name }}
+          asset_name: gems3k-${{ steps.strings.outputs.deploy-name }}
+          asset_content_type: application/zip
+
 
 
 
