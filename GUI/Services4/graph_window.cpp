@@ -1,6 +1,5 @@
 #include <QObject>
 #include "v_mod.h"
-#include "graph.h"
 #include "GraphDialogN.h"
 #include "GemsMainWindow.h"
 #include "graph_window.h"
@@ -16,7 +15,7 @@ SeriesLineData convertor( const TPlotLine& plotData )
                          plotData.getType()%20, plotData.getSize(),
                          plotData.getLineSize(),
                          plotData.getLineStyle(), plotData.getSpline(), // could be add: penStyle  end  spline now default
-                         plotData.getColor()  );
+                         plotData.getRed(), plotData.getGreen(), plotData.getBlue() );
     data.setXColumn(plotData.getIndex());
     return data;
 }
@@ -26,7 +25,7 @@ TPlotLine convertor( const SeriesLineData& serData )
     TPlotLine data( serData.getName().c_str(), serData.getMarkerShape(), serData.getMarkerSize(),
                     serData.getPenSize(), serData.getPenStyle(), serData.getSpline(), serData.getXColumn(),
                     // could be add: penStyle  end  spline
-                    serData.getColor()  );
+                    serData.getRed(), serData.getGreen(), serData.getBlue() );
     return data;
 }
 
@@ -74,8 +73,8 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
     // alloc memory
     m_chartData.reset( allocateData( aPlots, plotModels, aTitle, aXName, aYName, aAxisType[4] ));
     // get data from settings
-    m_chartData->setBackgroundColor( QColor(aAxisType[1], aAxisType[2], aAxisType[3]) );
-    m_chartData->setAxisTypes( aAxisType[0], aAxisType[5] );
+    m_chartData->setBackgroundColor(aAxisType[1], aAxisType[2], aAxisType[3]);
+    m_chartData->setAxisTypes(aAxisType[0], aAxisType[5]);
     for(int i=0; i<4; i++ )
     {
         m_chartData->region[i] = static_cast<double>(sizeReg[i]);
@@ -180,8 +179,8 @@ GraphDialog* updateGraphWindow(  GraphDialog* graph_dlg,
         TCModuleImp *topw =	 qobject_cast<TCModuleImp *>( pmodule->window());
         if( topw )
         {
-            QObject::connect( graph_dlg, SIGNAL( dataChanged( jsonui::ChartData* ) ),
-                              topw,  SLOT( saveGraphData( jsonui::ChartData* ) ) );
+            QObject::connect( graph_dlg, SIGNAL( dataChanged(jsonui::ChartData*) ),
+                              topw,  SLOT(saveGraphData(jsonui::ChartData*) ) );
             //connect( _page, SIGNAL( updateGraphWindow() ),
             //         graph_dlg,  SLOT( UpdateAll() ) );
         }

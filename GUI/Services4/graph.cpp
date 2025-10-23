@@ -23,9 +23,24 @@
 #include "v_object.h"
 #include "GEMS3K/gdatastream.h"
 
+namespace jsonui {
+   void colorAt(int ndx, int size, int& red, int& green, int& blue);
+}
+
 //---------------------------------------------------------------------------
 // TPlotLine
 //---------------------------------------------------------------------------
+
+TPlotLine::TPlotLine(int ii, int maxII, const char *aName, int aPointType, int aPointSize, int aPutLine, int andx):
+    type(aPointType), sizes(aPutLine*100+aPointSize), ndxX(andx)
+{
+    jsonui::colorAt(ii, maxII, red, green, blue);
+    setChanges( aPointType, aPointSize, aPutLine, red, green, blue);
+    memset( name, '\0', 16*sizeof(char));
+    if(aName) {
+        strncpy( name, aName, sizeof(char)*15);
+    }
+}
 
 void TPlotLine::toJsonObject( QJsonObject& obj ) const
 {

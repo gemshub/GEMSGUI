@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
                 // Save all systems
                 TCStringArray saved_systems;
                 vfMakeDirectory(nullptr, export_dir.c_str(), 2);
-                TProfil::pm->allSystems2GEMS3K( saved_systems, true, export_dir, top_settings.brief_mode, false);
+                TProfil::pm->allSystems2GEMS3K(saved_systems, true, export_dir, top_settings.brief_mode, false);
             }
         }
 

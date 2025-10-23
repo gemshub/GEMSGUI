@@ -155,13 +155,14 @@ void LegendDialog::setChartData()
     ui->pfYn->setValidator( new QDoubleValidator( ui->pfYn ) );
     ui->pfYn->setText( str.setNum (graph->part[3]) );
 
-    backgroundColor = graph->getBackgroundColor();
+    backgroundColor = QColor(graph->getRed(), graph->getGreen(), graph->getBlue());
+
     ui->pColor->setAutoFillBackground( true);
     QPalette pl = ui->pColor->palette();
     pl.setColor( QPalette::Window, backgroundColor );
     ui->pColor->setPalette(pl);
 
-    labelFont = graph->axisFont;
+    labelFont.fromString(graph->axisFont);
     ui->pLabelFont->setText(labelFont.toString());
 }
 
@@ -195,8 +196,8 @@ bool LegendDialog::applyToDialog()
     graph->part[2] = std::min(fy0, fyn);
     graph->part[3] = std::max(fy0, fyn);
 
-    graph->axisFont = labelFont;
-    graph->setBackgroundColor(backgroundColor);
+    graph->axisFont = labelFont.toString();
+    graph->setBackgroundColor(backgroundColor.red(), backgroundColor.green(), backgroundColor.blue());
 
     graphDlg->UpdateAll(nullptr);
     emit graphDlg->dataChanged( graph );

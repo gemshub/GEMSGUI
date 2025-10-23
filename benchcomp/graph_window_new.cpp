@@ -1,12 +1,21 @@
 #include "graph.h"
 #include "graph_window.h"
 
+namespace jsonui {
+
+void colorAt(int ndx, int size, int& red, int& green, int& blue)
+{
+
+}
+
+}
+
 TPlotLine convertor( const jsonui::SeriesLineData& serData )
 {
     TPlotLine data( serData.getName().c_str(), serData.getMarkerShape(), serData.getMarkerSize(),
                     serData.getPenSize(), serData.getPenStyle(), serData.getSpline(), serData.getXColumn(),
                     // could be add: penStyle  end  spline
-                    serData.getColor()  );
+                    serData.getRed(), serData.getGreen(), serData.getBlue());
     return data;
 }
 
