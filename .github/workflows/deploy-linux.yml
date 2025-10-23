@@ -38,6 +38,7 @@ jobs:
         id: strings2
         shell: bash
         run: |
+          echo "export-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/export_gems3k" >> "$GITHUB_OUTPUT"
           echo "deploy-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/Gems3-app" >> "$GITHUB_OUTPUT"
           echo "deploy-output-name=linux-${{ steps.strings.outputs.deploy-name }}.zip" >> "$GITHUB_OUTPUT"
 
@@ -69,7 +70,7 @@ jobs:
           ninja install
           cd benchcomp
           ls
-          ./gems3k-export -h
+          ./gems3k-export -d -s . -p template_export.json -e ${{ steps.strings2.outputs.export-output-dir }}
 
       - name: Check deploy
         run: |
@@ -109,6 +110,12 @@ jobs:
           asset_path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
           asset_name: ${{ steps.strings2.outputs.deploy-output-name }}
           asset_content_type: application/zip
+
+      - name: Upload export archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-gems3k
+          path: ${{ steps.strings2.outputs.export-output-dir }}
 
 
 
