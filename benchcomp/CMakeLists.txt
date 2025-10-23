@@ -39,7 +39,7 @@ set(EXPORT_SOURCES
 qt_add_executable(gems3k-export ${EXPORT_SOURCES})
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-    target_link_libraries(gems3k-export PRIVATE GEMS3K::GEMS3K Qt6::Core)
+    target_link_libraries(gems3k-export PRIVATE GEMS3K::GEMS3K-static Qt6::Core)
 else()
     target_link_libraries(gems3k-export PRIVATE GEMS3K::GEMS3K Qt6::Core)
 endif()
