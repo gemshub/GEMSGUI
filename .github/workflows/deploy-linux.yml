@@ -2,7 +2,7 @@ name: deploy-linux
 on:
   push:
     branches:
-      - dark_light
+      - export_projecs_app
   release:
     types:
       - published
@@ -67,6 +67,9 @@ jobs:
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX
           ninja
           ninja install
+          cd benchcomp
+          ls
+          ./gems3k-export -h
 
       - name: Check deploy
         run: |

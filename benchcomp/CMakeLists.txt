@@ -1,5 +1,8 @@
 # **gems3k-export** the Qt console application for export systems from the internal database projects.
 message(STATUS "Generatethe Qt console application for export systems")
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/template_export.json" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+
 add_definitions(-DNO_GUI)
 
 aux_source_directory(${GEMSGUI_MODULES_SOURCE_DIR} MODULES_SOURCE_FILES1)
