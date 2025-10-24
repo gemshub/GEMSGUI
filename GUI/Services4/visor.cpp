@@ -421,12 +421,13 @@ void TVisor::Exit()
 
 int TVisor::extract_args( int argc, char* argv[])
 {
+    // now -d only for first run
     // No command line parameters - assume as -d   since v.3.8.0
-    if(argc == 1) {
-        option_d = true;
-        pVisor->setConfigAutosave(true);
-        return 0;
-    }
+    // if(argc == 1) {
+    //     option_d = true;
+    //     pVisor->setConfigAutosave(true);
+    //     return 0;
+    // }
 
     int i=0;
     for( i = 1; i < argc; ++i)

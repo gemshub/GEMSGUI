@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - dark_light
+      - export_projecs_app
   release:
     types:
       - published

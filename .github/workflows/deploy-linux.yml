@@ -115,7 +115,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gems3k-${{ steps.strings.outputs.deploy-name }}
-          path: ${{ steps.strings2.outputs.export-output-dir }}
+          path: ${{ github.workspace }}/export-${{ steps.strings.outputs.deploy-name }}
 
       - name: Upload release asset
         if: github.event_name == 'release' && github.event.action == 'published'
