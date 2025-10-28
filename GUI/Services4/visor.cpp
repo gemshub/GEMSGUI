@@ -157,43 +157,43 @@ bool TVisor::CanClose()
     return true;
 }
 
-void TVisor::Update(bool force)
+void TVisor::Update(bool)
 {
-    std::cout<< "TVisor::Update" << std::endl;
+    gui_logger->debug("TVisor::Update ");
 }
 
 
 QWidget* TVisor::window()
 {
-    std::cout<< "TVisor::window" << std::endl;
+    gui_logger->debug("TVisor::window ");
     return nullptr;
 }
 
-void TVisor::OpenModule(QWidget* parent, uint i, int page, int viewmode, bool select)
+void TVisor::OpenModule(QWidget*, uint i, int page, int, bool)
 {
-    std::cout<< "TVisor::OpenModule" << std::endl;
+    gui_logger->debug("TVisor::OpenModule {}({}) ", i, page);
 }
 
-void TVisor::ProcessProgress(QWidget* parent, int nRT)
+void TVisor::ProcessProgress(QWidget*, int nRT)
 {
-    std::cout<< "TVisor::ProcessProgress" << std::endl;
+    gui_logger->debug("TVisor::ProcessProgress {}", nRT);
 }
 
-bool TVisor::Message(QWidget* parent, const char* name,
-                     const char* msg, int prog, int total, bool move)
+bool TVisor::Message(QWidget*, const char* /*name*/,
+                     const char* msg, int prog, int total, bool)
 {
-    std::cout<< "TVisor::Message " << msg << std::endl;
+    gui_logger->debug("TVisor::Message {} {}/{}", msg, prog, total);
     return false;
 }
 
 void TVisor::CloseMessage()
 {
-    std::cout<< "TVisor::CloseMessage" << std::endl;
+    gui_logger->debug("TVisor::CloseMessage");
 }
 
 void TVisor::defineModuleKeysList(size_t nRT)
 {
-    std::cout<< "TVisor::defineModuleKeysList" << std::endl;
+    gui_logger->debug("TVisor::defineModuleKeysList {}", nRT);
 }
 
 #endif
@@ -227,8 +227,9 @@ TVisor::TVisor(int c, char *v[]):
     }
     UserGEMDir = home_dir() + DEFAULT_USER_DIR; // "/Library/gems3/";
 
-#else  // Linux - in user's home directory \
-    // By default: /Resources in the same dir as the exe file;  or up if bin \
+#else
+    // Linux - in user's home directory
+    // By default: /Resources in the same dir as the exe file;  or up if bin
     //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
     if(dirExe.endsWith("/bin") || dirExe.endsWith("\bin")) { // Try found Resource up level
@@ -250,9 +251,9 @@ TVisor::TVisor(int c, char *v[]):
 
 #endif // __unix
 
-#else \
-    // windows - in any non-system directory on C:/ or D:/ \
-    // By default: /Resources in the same dir as the exe file; \
+#else
+    // windows - in any non-system directory on C:/ or D:/
+    // By default: /Resources in the same dir as the exe file;
     //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
     if(dirExe.endsWith("/bin") || dirExe.endsWith("\bin")) { // Try found Resource up level

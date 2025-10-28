@@ -1,7 +1,5 @@
-#include <iostream>
 #include <filesystem>
 namespace fs = std::filesystem;
-
 
 #include "service.h"
 #include "visor.h"
@@ -14,275 +12,255 @@ bool vfExist(const std::string &file_path)
     return fs::exists(ps);
 }
 
-int vfQuestYesNoCancel(QWidget* par, const std::string& title, const std::string& mess)
+int vfQuestYesNoCancel(QWidget*, const std::string& title, const std::string& mess)
 {
-    std::cout << "vfQuestYesNoCancel: " << title << " " << mess << std::endl;
+    gui_logger->info("vfQuestYesNoCancel {} {}", title, mess);
     return 0;
 }
 
-bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess)
+bool vfQuestion(QWidget*, const std::string& title, const std::string& mess)
 {
-    std::cout << "vfQuestion: " << title << " " << mess << std::endl;
+    gui_logger->info("vfQuestion {} {}", title, mess);
     return false;
 }
 
 // returns VF3_1, VF3_2 or VF3_3
-int vfQuestion3(QWidget* par, const std::string& title, const std::string& mess,
-                const std::string& s1, const std::string& s2,  const std::string& s3, bool i_mov)
+int vfQuestion3(QWidget*, const std::string& title, const std::string& mess,
+                const std::string&, const std::string&, const std::string&, bool )
 {
-    std::cout << "vfQuestion3: " << title << " " << mess << std::endl;
+    gui_logger->info("vfQuestion3 {} {}", title, mess);
     return 0;
 }
 
-int vfQuestionYesNoAll(QWidget* par, const std::string& title, const std::string& mess, const std::string& s1)
+int vfQuestionYesNoAll(QWidget*, const std::string& title, const std::string& mess, const std::string&)
 {
-    std::cout << "vfQuestionYesNoAll: " << title << " " << mess << std::endl;
+    gui_logger->info("vfQuestionYesNoAll {} {}", title, mess);
     return 0;
 }
 
-void vfMessage(QWidget* par, const std::string& title, const std::string& mess, WarnType type)
+void vfMessage(QWidget*, const std::string& title, const std::string& mess, WarnType)
 {
-    std::cout << "vfMessage: " << title << " " << mess << std::endl;
+    gui_logger->info("vfMessage {} {}", title, mess);
 }
 
-int vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel)
+int vfChoice(QWidget*, TCStringArray& arr, const char* prompt, int)
 {
-    std::cout << "vfChoice: " << prompt << " " << arr.size() << std::endl;
+    gui_logger->info("vfChoice {} {}", prompt, arr.size());
     return 0;
 }
 
-int vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt, int sel, bool& all_)
+int vfChoice2(QWidget*, TCStringArray& arr, const char* prompt, int, bool&)
 {
-    std::cout << "vfChoice2: " << prompt << " " << arr.size() << std::endl;
+    gui_logger->info("vfChoice2 {} {}", prompt, arr.size());
     return 0;
 }
 
-int vfChoice(QWidget* par, const char* title, const char* prompt,
-             int nVal, int *arr, int sel)
+int vfChoice(QWidget*, const char* title, const char* prompt, int nVal, int *, int)
 {
-    std::cout << "vfChoice3: " << title << " " << prompt << std::endl;
+    gui_logger->info("vfChoice3 {} {} {}", title, prompt, nVal);
     return 0;
 }
 
-TCIntArray vfMultiChoice(QWidget* par, TCStringArray& arr, const char* prompt)
+TCIntArray vfMultiChoice(QWidget*, TCStringArray& arr, const char* prompt)
 {
-    std::cout << "vfMultiChoice: " << prompt << " " << arr.size() << std::endl;
+    gui_logger->info("vfMultiChoice {} {}", prompt, arr.size());
     return {};
 }
 
-TCIntArray vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArray& sel)
+TCIntArray vfMultiChoiceSet(QWidget*, TCStringArray& arr, const char* prompt, TCIntArray&)
 {
-    std::cout << "vfMultiChoiceSet: " << prompt << " " << arr.size() << std::endl;
+    gui_logger->info("vfMultiChoiceSet {} {}", prompt, arr.size());
     return {};
 }
 
-TCStringArray vfMultiKeys(QWidget* par, const char* caption, unsigned int iRt, const char* key )
+TCStringArray vfMultiKeys(QWidget*, const char* caption, unsigned int iRt, const char* key)
 {
-    std::cout << "vfMultiKeys: " << caption << " " << key << std::endl;
+    gui_logger->info("vfMultiKeys {} {} {}", caption, key, iRt);
     return {};
 }
 
-TCStringArray vfMultiKeysSet(QWidget* par, const char* caption,
-                             unsigned int iRt, const char* key, TCStringArray& sel )
+TCStringArray vfMultiKeysSet(QWidget*, const char* caption,
+                             unsigned int iRt, const char* key, TCStringArray&)
 {
-    std::cout << "vfMultiKeysSet: " << caption << " " << key << std::endl;
-    return {};
-}
-TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
-                               const char* key, TCStringArray& sel, short NsuT )
-{
-    std::cout << "vfRDMultiKeysSet: " << caption << " " << key << std::endl;
+    gui_logger->info("vfMultiKeysSet {} {} {}", caption, key, iRt);
     return {};
 }
 
-bool vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
-                 TCStringArray& fls, TCIntArray& cnt )
+TCStringArray vfRDMultiKeysSet(QWidget*, const char* caption,
+                               const char* key, TCStringArray&, short)
 {
-    std::cout << "vfListFiles: " << prfName << " " << show_dlg << std::endl;
+    gui_logger->info("vfRDMultiKeysSet {} {}", caption, key);
+    return {};
+}
+
+bool vfListFiles(QWidget*, bool show_dlg, const char* prfName,
+                 TCStringArray&, TCIntArray&)
+{
+    gui_logger->info("vfListFiles {} {}", prfName, show_dlg);
     return false;
 }
 
-std::string vfKeyEdit(QWidget* par, const char* title, unsigned int iRt, const char* key)
+std::string vfKeyEdit(QWidget*, const char* title, unsigned int iRt, const char* key)
 {
-    std::cout << "vfKeyEdit: " << title << " " << key << std::endl;
+    gui_logger->info("vfKeyEdit {} {} {}", title, iRt, key);
     return "";
 }
 
-std::string vfKeyProfile( QWidget* par, const char* caption, int iRt,
-                         bool& chAqGas, bool& addFiles, bool& remake,
-                         std::string& key_templ,
-                         int& recalc_all, int& genGEMS3k, int& makeCalc)
+std::string vfKeyProfile(QWidget*, const char* caption, int iRt,
+                         bool&, bool&, bool&, std::string&, int&, int&, int&)
 {
-    std::cout << "vfKeyProfile: " << caption << " " << iRt << std::endl;
+    gui_logger->info("vfKeyProfile {} {}", caption, iRt);
     return "";
 }
 
 
-std::string vfKeyTemplEdit(QWidget* par, const char* title, unsigned int iRt, const char* key,
-                           bool allowTemplate)
+std::string vfKeyTemplEdit(QWidget*, const char* title, unsigned int iRt, const char* key, bool)
 {
-    std::cout << "vfKeyTemplEdit: " << title << " " << iRt << std::endl;
+    gui_logger->info("vfKeyTemplEdit {} {} {}", title, iRt, key);
     return "";
 }
 
-bool vfKeyCanged(QWidget* par, const char* caption,
-                 std::string& from_str, std::string& to_str, int fldLen )
+bool vfKeyCanged(QWidget*, const char* caption, std::string& from_str, std::string& to_str, int)
 {
-    std::cout << "vfKeyCanged: " << caption << " " << to_str << std::endl;
-    return "";
-}
-
-bool vfExcludeFillEdit(QWidget* par, const char* caption,
-                       TCStringArray& aICkeys, std::vector<bool>& sel, double& fill_data )
-{
-    std::cout << "vfExcludeFillEdit: " << caption << " " << aICkeys.size() << std::endl;
-    return "";
-}
-
-bool vfElements(QWidget* par, const char * prfName,
-                elmWindowData& elm_data, setFiltersData& sf_data )
-{
-    std::cout << "vfElements: " << prfName << std::endl;
+    gui_logger->info("vfKeyCanged {} {} {}", caption, from_str, to_str);
     return false;
 }
 
-bool vfSystemInput(QWidget* par, const char * p_key,
-                   std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
-                   std::vector<pagesSetupData>& scalarsList )
+bool vfExcludeFillEdit(QWidget*, const char* caption, TCStringArray& aICkeys, std::vector<bool>&, double&)
 {
-    std::cout << "vfSystemInput: " << p_key << std::endl;
+    gui_logger->info("vfExcludeFillEdit {} {}", caption, aICkeys.size());
     return false;
 }
 
-bool vfProcessSet(QWidget* par, const char * p_key,
-                  char flds[24], int size[8], short tabInt[6], double tabDoubl[24],
-                  std::string& calcScript, std::string& outScript, TCStringArray& names,
-                  std::string& xName, std::string& yName )
+bool vfElements(QWidget*, const char* prfName, elmWindowData&, setFiltersData&)
 {
-    std::cout << "vfProcessSet: " << p_key << std::endl;
+    gui_logger->info("vfElements {}", prfName);
     return false;
 }
 
-bool vfGEM2MTSet(QWidget* par, const char * p_key,
-                 char flds[32], int size[20],  double Tai[4], double Pai[4],double Tau[3],
-                 std::string& calcScript, std::string& outScript, TCStringArray& names,
-                 std::string& xName, std::string& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
+bool vfSystemInput(QWidget*, const char* p_key, std::vector<windowSetupData>&,
+                   std::vector<tableSetupData>&, std::vector<pagesSetupData>&)
 {
-    std::cout << "vfGEM2MTSet: " << p_key << std::endl;
+    gui_logger->info("vfSystemInput {}", p_key);
     return false;
 }
 
-bool vfUnSpaceSet(QWidget* par, const char * p_key, char flds[38], int size[10] )
+bool vfProcessSet(QWidget*, const char* p_key, char [24], int [8], short [6], double [24],
+                  std::string&, std::string&, TCStringArray&,  std::string&, std::string&)
 {
-    std::cout << "vfUnSpaceSet: " << p_key << std::endl;
+    gui_logger->info("vfProcessSet {}", p_key);
     return false;
 }
 
-bool vfGtDemoSet(QWidget* par, const char * p_key, char flgs[16], int size[8],
-                 std::string& prkey, std::string& script, TCStringArray& names,
-                 std::string& xName, std::string& yName, TCStringArray& keys )
+bool vfGEM2MTSet(QWidget*, const char* p_key, char [32], int [20], double [4], double [4], double [3],
+                 std::string&, std::string&, TCStringArray&, std::string&, std::string&, TCIntArray&, TCIntArray&)
 {
-    std::cout << "vfGtDemoSet: " << p_key << std::endl;
+    gui_logger->info("vfGEM2MTSet {}", p_key);
     return false;
 }
 
-bool vfComposSet(QWidget* par, const char * p_key,
-                 char flgs[6], int sizes[2], double& r2 )
+bool vfUnSpaceSet(QWidget*, const char* p_key, char [38], int [10])
 {
-    std::cout << "vfComposSet: " << p_key << std::endl;
+    gui_logger->info("vfUnSpaceSet {}", p_key);
     return false;
 }
 
-bool vfDCompSet(QWidget* par, const char * p_key,
-                char flgs[15], int sizes[4] )
+bool vfGtDemoSet(QWidget*, const char* p_key, char [16], int [8], std::string&, std::string&,
+                 TCStringArray&, std::string&, std::string&, TCStringArray&)
 {
-    std::cout << "vfDCompSet: " << p_key << std::endl;
+    gui_logger->info("vfGtDemoSet {}", p_key);
     return false;
 }
 
-bool vfReacDCSet(QWidget* par, const char * p_key,
-                 char flgs[12], int sizes[4], TCStringArray& sel )
+bool vfComposSet(QWidget*, const char* p_key, char [6], int [2], double&)
 {
-    std::cout << "vfReacDCSet: " << p_key << std::endl;
+    gui_logger->info("vfComposSet {}", p_key);
     return false;
 }
 
-bool vfRTparmSet(QWidget* par, const char * p_key,
-                 char flgs[10], int sizes[7], double val[6],
-                 std::string& script, std::string& xName, std::string& yName, TCStringArray& names)
+bool vfDCompSet(QWidget*, const char* p_key, char [15], int [4])
 {
-    std::cout << "vfRTparmSet: " << p_key << std::endl;
+    gui_logger->info("vfDCompSet {}", p_key);
     return false;
 }
 
-bool vfPhaseSet( QWidget* par, const char * p_key,
-                char flgs[37], int sizes[30], double& r2, TCStringArray& rd_sel,
-                TCStringArray& phase_sel, TCStringArray& lDCr_sel )
+bool vfReacDCSet(QWidget*, const char* p_key, char [12], int [4], TCStringArray&)
 {
-    std::cout << "vfPhaseSet: " << p_key << std::endl;
+    gui_logger->info("vfReacDCSet {}", p_key);
     return false;
 }
 
-bool vfDualThSet(QWidget* par, const char * p_key, char flgs[20], int size[8] )
+bool vfRTparmSet(QWidget*, const char* p_key, char [10], int [7], double [6],
+                 std::string&, std::string&, std::string&, TCStringArray&)
 {
-    std::cout << "vfDualThSet: " << p_key << std::endl;
+    gui_logger->info("vfRTparmSet {}", p_key);
     return false;
 }
 
-bool vfProjectSet(QWidget* par, const char * p_key, char flds[38], int&  taskset )
+bool vfPhaseSet(QWidget*, const char* p_key, char [37], int [30], double&,
+                TCStringArray&, TCStringArray&, TCStringArray&)
 {
-    std::cout << "vfProjectSet: " << p_key << std::endl;
+    gui_logger->info("vfPhaseSet {}", p_key);
     return false;
 }
 
-bool vfSystemSet(QWidget* par, const char * p_key,
-                 char flgs[40],  std::string& name, std::string& comment, std::string& EQkey )
+bool vfDualThSet(QWidget*, const char* p_key, char [20], int [8])
 {
-    std::cout << "vfSystemSet: " << p_key << std::endl;
+    gui_logger->info("vfDualThSet {}", p_key);
     return false;
 }
 
-bool vfAutoPhaseSet(QWidget* par, const char* pr_key, std::string& a_key, std::string& g_key,
-                    char& acode, char& gcode, float apar[8])
+bool vfProjectSet(QWidget*, const char* p_key, char [38], int&)
 {
-    std::cout << "vfAutoPhaseSet: " << pr_key << std::endl;
+    gui_logger->info("vfProjectSet {}", p_key);
     return false;
 }
 
-bool vfLookupDialogSet(QWidget* wpar, char flags[6], double Tai[4], double Pai[4] )
+bool vfSystemSet(QWidget*, const char* p_key, char [40], std::string&, std::string&, std::string&)
 {
-    std::cout << "vfLookupDialogSet: " << flags << std::endl;
+    gui_logger->info("vfSystemSet {}", p_key);
     return false;
 }
 
-void vfPhaseInfo(QWidget* wpar, bool system, int xph, std::string phname,
-                 std::vector<int>& xdclist, std::vector<std::string>& dcnames, int xdc )
+bool vfAutoPhaseSet(QWidget*, const char* pr_key, std::string& a_key,
+                    std::string& g_key, char&, char&, float [8])
 {
-    std::cout << "vfPhaseInfo: " << phname << std::endl;
-}
-
-
-bool vfChooseFileOpen(QWidget* par, std::string& path,
-                      const char* title, const char* filter)
-{
-    std::cout << "vfChooseFileOpen: " << title << std::endl;
+    gui_logger->info("vfAutoPhaseSet {} {} {}", pr_key, a_key, g_key);
     return false;
 }
 
-bool vfChooseFileSave(QWidget* par, std::string& path,
-                      const char* title, const char* filter)
+bool vfLookupDialogSet(QWidget*, char flags[6], double [4], double [4])
 {
-    std::cout << "vfChooseFileSave: " << path << std::endl;
+    gui_logger->info("vfSystemSet {}", flags);
     return false;
 }
 
-bool vfChooseDirectory(QWidget* par, std::string& path_, const char* title )
+void vfPhaseInfo(QWidget*, bool, int, std::string phname,
+                 std::vector<int>&, std::vector<std::string>&, int)
 {
-    std::cout << "vfChooseDirectory: " << title << std::endl;
+    gui_logger->info("vfPhaseInfo {}", phname);
+}
+
+
+bool vfChooseFileOpen(QWidget*, std::string&, const char* title, const char* filter)
+{
+    gui_logger->info("vfChooseFileOpen {} {}", title, filter);
     return false;
 }
 
-void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite)
+bool vfChooseFileSave(QWidget*, std::string&, const char* title, const char* filter)
+{
+    gui_logger->info("vfChooseFileSave {} {}", title, filter);
+    return false;
+}
+
+bool vfChooseDirectory(QWidget*, std::string&, const char* title)
+{
+    gui_logger->info("vfChooseDirectory {}", title);
+    return false;
+}
+
+void vfMakeDirectory(QWidget* , const char *dir, int askOverwrite)
 {
     fs::path ps(dir);
     if (fs::exists(ps))  {

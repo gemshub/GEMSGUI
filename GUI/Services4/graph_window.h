@@ -8,20 +8,12 @@
 #include "GraphDialogN.h"
 #else
 
-#include <iostream>
 namespace jsonui {
+
 class GraphDialog {
-
 public:
-
-    void AddPoint(size_t nPlot, int nPoint)
-    {
-        std::cout << "AddPoint" << nPlot << " " << nPoint << std::endl;
-    }
-    void ShowGraph(const char * capAdd = nullptr)
-    {
-        std::cout << "ShowGraph" << capAdd << std::endl;
-    }
+    void AddPoint(size_t nPlot, int nPoint);
+    void ShowGraph(const char * capAdd = nullptr);
 };
 
 }
