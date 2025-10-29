@@ -139,23 +139,23 @@ void TCModuleImp::Update(bool force)
     last_update = time(0);
 }
 
-void TCModuleImp::SelectStart()
-{
-   //if( qApp->focusWidget() )
-   //   qApp->focusWidget()->clearFocus();
+// void TCModuleImp::SelectStart()
+// {
+//    //if( qApp->focusWidget() )
+//    //   qApp->focusWidget()->clearFocus();
 
-   if( iMod >= rt.size() || rt[iMod]->RecCount() <= 0)
-       return;   // Added to avoid a selection
+//    if( iMod >= rt.size() || rt[iMod]->RecCount() <= 0)
+//        return;   // Added to avoid a selection
 
-   if( pVisor->ProfileMode )
-   {
-       if( iMod <= RT_SYSEQ && iMod != RT_SDATA)
-        return;
-       CmLoadinProfile();
-    }
-     else
-      CmShow();
-}
+//    if( pVisor->ProfileMode )
+//    {
+//        if( iMod <= RT_SYSEQ && iMod != RT_SDATA)
+//         return;
+//        CmLoadinProfile();
+//     }
+//      else
+//       CmShow();
+// }
 
 /*!
     Starts dialog for remake parameters

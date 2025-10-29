@@ -125,7 +125,7 @@ public:
 
     /* Shows the window or raises 'page' if it exists */
     //--void Raise(int page=0);
-    void SelectStart();
+    //--void SelectStart();
 
     void MakeQuery();
 

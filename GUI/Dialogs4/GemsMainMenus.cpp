@@ -839,7 +839,7 @@ TCM_EV_COMMAND(CM_EXPORT2, CmRestorefromJson)
 // NewSystemDialog commands
 
 //Data insert actions
-void                                 // Thermodynamic data
+void                                // Thermodynamic data
 TVisorImp::CmOpen_MTPARAM()
 {
     OpenModule(this, MD_MTPARM, 0, true);

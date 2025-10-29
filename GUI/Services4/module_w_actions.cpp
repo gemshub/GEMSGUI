@@ -255,17 +255,15 @@ void TCModuleImp::CmLoadinProfile(const char *key)
             return;
         }
 
-        if( rMod.rtNum() < RT_SYSEQ && rMod.rtNum() != RT_SDATA)
-        {
-            //  Error( GetName(),  "Please, do it in Database mode!");
+        if( rMod.rtNum() < RT_SYSEQ && rMod.rtNum() != RT_SDATA) {
             CmShow(key);
             return;
         }
 
-        if( !rMod.MessageToSave() )
-            return;
-        rMod.RecordLoadinProfile(key);
-        pVisor->Update(true);
+        if( rMod.MessageToSave() ) {
+            rMod.RecordLoadinProfile(key);
+            pVisor->Update(true);
+        }
     }
     catch( TError& xcpt )  {
         pVisor->Update( true );
@@ -322,6 +320,10 @@ void TCModuleImp::CmPlot()
             return;
 
         std::string str=aMod[nrt_db]->CurrentKey();
+        if( str.find_first_of("*?" ) != std::string::npos )
+           // || ( db->GetStatus()== UNDF_ && db->RecCount() && nrt_db != RT_SDATA ))
+            Error( aMod[nrt_db]->GetName(), "E4 Cannot save under record key template, or record contents are not yet loaded!");
+
         aMod[nrt_db]->RecordPlot( str.c_str() );
         pVisor->Update();
     }
