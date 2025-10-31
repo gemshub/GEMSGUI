@@ -2,7 +2,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - P_limit
+      - fix_dmg
   release:
     types:
       - published
@@ -74,14 +74,26 @@ jobs:
           cd ${{ github.workspace }}
           zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
           
-      - name: Clean previous DMG
+      # Clean previous DMG and any mounted volumes
+      - name: Cleanup leftover DMG mounts (prevent Resource busy)
         run: |
-          hdiutil detach /Volumes/gem-selektor || true
-          rm -f gem-selektor.dmg
+          echo "Unmounting any leftover dmg volumes..."
+          for v in $(hdiutil info | grep '/Volumes/' | awk '{print $1}'); do
+            echo "Detaching $v"
+            hdiutil detach "$v" || true
+          done
+          echo "Removing any temporary dmg files..."
+          rm -f gem-selektor.dmg /tmp/gem-selektor.dmg || true
+          sleep 2
+
+      # Optional: list current mounts for debugging
       - name: List mounted volumes
-        run: mount
+        run: hdiutil info
+
+      # Verify no existing DMG in workspace
       - name: Check for existing DMG
-        run: ls -lh *.dmg || echo "No DMG found"
+        run: |
+          ls -lh *.dmg || echo "No DMG found"
 
       # Create DMG with macdeployqt from Conda Qt
       - name: Create DMG with macdeployqt
@@ -89,8 +101,11 @@ jobs:
         run: |
           conda activate GEMSGUI
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
+          echo "Creating DMG..."
+          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg || (echo "macdeployqt failed"; ls -lh && exit 1)
+          ls -lh
           mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
+
       # Upload ZIP artifact
       - name: Upload artifact ZIP
         uses: actions/upload-artifact@v4
@@ -104,7 +119,7 @@ jobs:
         with:
           name: macos-${{ steps.strings.outputs.deploy-name }}-dmg
           path: ${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg
-     
+
       # Upload ZIP release asset
       - name: Upload ZIP release asset
         if: github.event_name == 'release' && github.event.action == 'published'
@@ -128,3 +143,4 @@ jobs:
           asset_path: ${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg
           asset_name: macos-${{ steps.strings.outputs.deploy-name }}.dmg
           asset_content_type: application/x-apple-diskimage
+
