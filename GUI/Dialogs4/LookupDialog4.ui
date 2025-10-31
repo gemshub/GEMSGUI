@@ -3,7 +3,7 @@
  <class>LookupDialogData</class>
  <widget class="QDialog" name="LookupDialogData">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -144,11 +144,8 @@
                <property name="layoutDirection">
                 <enum>Qt::LeftToRight</enum>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
-                <number>2</number>
+                <number>6</number>
                </property>
                <property name="maximum">
                 <double>10000.000000000000000</double>
@@ -167,11 +164,8 @@
              </item>
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="pPuntil">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
-                <number>2</number>
+                <number>6</number>
                </property>
                <property name="maximum">
                 <double>10000.000000000000000</double>
@@ -190,11 +184,8 @@
              </item>
              <item row="2" column="1">
               <widget class="QDoubleSpinBox" name="pPstep">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
-                <number>2</number>
+                <number>6</number>
                </property>
                <property name="maximum">
                 <double>1000.000000000000000</double>
@@ -210,14 +201,11 @@
              </item>
              <item row="3" column="1">
               <widget class="QDoubleSpinBox" name="pPtol">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
-                <number>2</number>
+                <number>6</number>
                </property>
                <property name="minimum">
-                <double>0.010000000000000</double>
+                <double>0.000001000000000</double>
                </property>
                <property name="maximum">
                 <double>10.000000000000000</double>
@@ -248,9 +236,6 @@
              </item>
              <item row="0" column="1">
               <widget class="QDoubleSpinBox" name="pTfrom">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
                 <number>2</number>
                </property>
@@ -271,9 +256,6 @@
              </item>
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="pTuntil">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
                 <number>2</number>
                </property>
@@ -294,9 +276,6 @@
              </item>
              <item row="2" column="1">
               <widget class="QDoubleSpinBox" name="pTstep">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
                 <number>2</number>
                </property>
@@ -317,9 +296,6 @@
              </item>
              <item row="3" column="1">
               <widget class="QDoubleSpinBox" name="pTtol">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
                <property name="decimals">
                 <number>2</number>
                </property>
@@ -436,7 +412,6 @@
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -450,9 +425,6 @@
    </item>
    <item row="1" column="1">
     <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>218</width>
@@ -466,7 +438,6 @@
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -480,7 +451,6 @@
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -494,7 +464,6 @@
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
