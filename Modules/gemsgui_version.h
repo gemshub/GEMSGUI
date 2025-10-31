@@ -1,6 +1,6 @@
 #pragma once
 
-#define GEMSGUI_VERSION "3.10.1"
+#define GEMSGUI_VERSION "3.10.2"
 #define GEMSGUI_VERSION_HASH "3a3d5d74"
 #define GEMSGUI_GIT_BRANCH "dark_light"
 #define GEMSGUI_OSX "Linux"
