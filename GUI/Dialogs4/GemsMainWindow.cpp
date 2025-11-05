@@ -255,7 +255,6 @@ TVisorImp::TVisorImp(int c, char** v):
     }
     else
     {
-
         // Open calc mode and load last project
         if( !SetProfileMode(pVisor->lastProjectKey.c_str()))
         {
@@ -267,9 +266,10 @@ TVisorImp::TVisorImp(int c, char** v):
         {
             ui->action_calcMode->setChecked(true);
             // load last system
-            if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 )
-                CmShow( pVisor->lastSystemKey.c_str() );
-            //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
+            if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 ) {
+            //  CmShow( pVisor->lastSystemKey.c_str() );
+                 NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
+            }
         }
     }
 
