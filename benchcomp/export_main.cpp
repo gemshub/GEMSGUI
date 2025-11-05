@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
             gui_logger->info("Project : {}", project_key);
 
             // read project
+            pVisor->ProfileMode = MDD_SYSTEM;
             if(!TProfil::pm->initCalcMode(project_key.c_str())) {
                 pVisor->ProfileMode = MDD_DATABASE;
                 std::cout << "Error when read project: " << project_key;
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
                 return 1;
             }
 
+            TMulti::sm->GetPM()->pIPN = 0;
             auto system_section = project_conf.section("systems");
             if(system_section) {
 
@@ -142,7 +144,8 @@ int main(int argc, char *argv[])
         std::cout  << "unknown exception" << std::endl;
         gui_logger->error("unknown exception");
     }
-    return -1;
+    pVisor->CanClose();
+    return 1;
 }
 
 
@@ -170,7 +173,8 @@ void CurrentSystem2GEMS3K(const std::string& filepath, const ExportTask& setting
         Tai[0] = Tai[1] = pmp->TCc;
         Pai[0] = Pai[1] = pmp->Pc;
         Tai[2] = Pai[2] = 0.;
-        Tai[3] = Pai[3] = 0.1;
+        Tai[3] = 1;
+        Pai[3] = 0.5;
     }
     else {
         Tai[0] = settings.Tai[0];
@@ -207,6 +211,7 @@ void System2GEMS3K(const std::string& key, const std::string& files_dir, const E
     // generate name and create directory
     auto systemname = packkey;
     KeyToName(systemname);
+    systemname = settings.io_mode.back()+std::string("_")+systemname;
     std::string record_path = files_dir + systemname + "/";
     vfMakeDirectory( nullptr, record_path.c_str(), 0 );
     record_path += systemname+ "-dat.lst";

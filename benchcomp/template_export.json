@@ -2,17 +2,31 @@
      "comment" :   "template file for gems3k export",
      "calc_mode" :   0,
      "io_mode" :   "-j",
-     "brief_mode" :   true,
-     "with_comments" :  true,
+     "brief_mode" :   false,
+     "with_comments" :   true,
      "projects" :   [
           {
                "key" :   "Kaolinite:Test-JNC:",
                "systems" :   [
                     {
                          "key" :   "Kaolinite:G:pHtitr:0:0:1:25:0:",
-                         "calc_mode" :   1,
-                         "brief_mode" :   false,
                          "io_mode" :   "-j",
+                         "Tai" :   [
+                              25,
+                              125,
+                              10,
+                              1
+                         ],
+                         "Pai" :   [
+                              1,
+                              1,
+                              0,
+                              0.5
+                         ]
+                    },
+                    {
+                         "key" :   "Kaolinite:G:pHtitr:0:0:1:25:0:",
+                         "io_mode" :   "-f",
                          "Tai" :   [
                               25,
                               125,
@@ -29,6 +43,10 @@
                     {
                          "key" :   "Kaolinite:G:pHtitrKa:0:0:1:25:0:",
                          "io_mode" :   "-t"
+                    },
+                    {
+                         "key" :   "Kaolinite:G:pHtitrKa:0:0:1:25:0:",
+                         "io_mode" :   "-o"
                     }
                ]
           },
@@ -37,7 +55,7 @@
                "systems" :   [
                     {
                          "key" :   "Solvus:G:series1:0001:0:500:400:0:",
-                         "brief_mode" :   false,
+                         "io_mode" :   "-j",
                          "Tai" :   [
                               400,
                               700,
@@ -52,7 +70,132 @@
                          ]
                     },
                     {
-                         "key" :   "Solvus:G:series2:0002:0:1000:640:0:"
+                         "key" :   "Solvus:G:series1:0001:0:500:400:0:",
+                         "io_mode" :   "-f",
+                         "Tai" :   [
+                              400,
+                              700,
+                              10,
+                              1
+                         ],
+                         "Pai" :   [
+                              500,
+                              500,
+                              0,
+                              500
+                         ]
+                    },
+                    {
+                         "key" :   "Solvus:G:series2:0002:0:1000:640:0:",
+                         "io_mode" :   "-t"
+                    },
+                    {
+                         "key" :   "Solvus:G:series2:0002:0:1000:640:0:",
+                         "io_mode" :   "-o"
+                    }
+               ]
+          },
+          {
+               "key" :   "CalcDolo:GEMS3K-test-example:",
+               "systems" :   [
+                    {
+                         "key" :   "CalcDolo:G:CalcColumn:0:0:1:25:0:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "CalcDolo:G:CalcColumn:0:0:1:25:0:",
+                         "io_mode" :   "-f"
+                    }
+               ]
+          },
+          {
+               "key" :   "CASHNK:CASHNK-SS-modelling-2:",
+               "systems" :   [
+                    {
+                         "key" :   "CASHNK:G:Chen04C-3T:0:0:1:25:0:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "CASHNK:G:Chen04C-3T:0:0:1:25:0:",
+                         "io_mode" :   "-f"
+                    }
+               ]
+          },
+          {
+               "key" :   "ClaySorMo:Clay_sorption_montmorillonite:",
+               "systems" :   [
+                    {
+                         "key" :   "ClaySorMo:G:TestUO2I001:7:0:1:25:0:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "ClaySorMo:G:TestUO2I001:7:0:1:25:0:",
+                         "io_mode" :   "-f"
+                    }
+               ]
+          },
+          {
+               "key" :   "Flowline:test project gem2mt:",
+               "systems" :   [
+                    {
+                         "key" :   "Flowline:G:series1:0001:0:1000:400:1:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "Flowline:G:series1:0001:0:1000:400:1:",
+                         "io_mode" :   "-f"
+                    }
+               ]
+          },
+          {
+               "key" :   "GEOTHERM:Soultz_1:",
+               "systems" :   [
+                    {
+                         "key" :   "GEOTHERM:G:Test1:0:0:1:75:0:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "GEOTHERM:G:Test1:0:0:1:75:0:",
+                         "io_mode" :   "-f"
+                    }
+               ]
+          },
+          {
+               "key" :   "PitzerTHE:Pitzer THEREDA TDB benchmark PHREEQC:",
+               "systems" :   [
+                    {
+                         "key" :   "PitzerTHE:G:KCaSO4:10:0:0:100:0:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "PitzerTHE:G:KCaSO4:10:0:0:100:0:",
+                         "io_mode" :   "-f"
+                    }
+               ]
+          },
+          {
+               "key" :   "TestSUP98:Test-SUPCRT98-linked:",
+               "systems" :   [
+                    {
+                         "key" :   "TestSUP98:G:TestSystem:0:0:1:25:0:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "TestSUP98:G:TestSystem:0:0:1:25:0:",
+                         "io_mode" :   "-f"
+                    }
+               ]
+          },
+          {
+               "key" :   "TestPNTDB:Test-PSI-Nagra-TDB-07-12:",
+               "systems" :   [
+                    {
+                         "key" :   "TestPNTDB:G:Neutral:0:0:1:75:0:",
+                         "io_mode" :   "-j"
+                    },
+                    {
+                         "key" :   "TestPNTDB:G:Neutral:0:0:1:75:0:",
+                         "io_mode" :   "-f"
                     }
                ]
           }
