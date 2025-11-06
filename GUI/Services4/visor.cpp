@@ -337,6 +337,11 @@ void TVisor::Setup()
 #ifdef __APPLE__
     pVisor->setConfigAutosave(true);
 #endif
+    // check exist Resources
+    std::string fname = sysGEMDir();
+    if(!vfExist(fname)) {
+        Error("Setup", fname + "- The Resource directory does not exist.");
+    }
 
     // check home dir
     std::string dir = userGEMDir();
