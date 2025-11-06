@@ -81,7 +81,7 @@ TVisorImp::TVisorImp(int c, char** v):
     settedCureentKeyIntotbKeys(false)
 {
     ui->setupUi(this);
-    GEMS3KGenerator::default_type_f = GEMS3KGenerator::f_thermofun;
+    GEMS3KGenerator::default_type_f = GEMS3KGenerator::f_json;
     ui->action_Use_ThermoFUN->setChecked(GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun);
 
     (void)statusBar();

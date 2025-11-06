@@ -2,7 +2,7 @@
 cd ./Gems3-app/bin
 
 # 1. First launch with default location of modeling projects (usually done by the installer)
-# ./gem-selektor -d > gems3.log
+./gem-selektor -d > gems3.log
 
 # 2. Normal runs in default locations (retains all settings from previous session)
 # ./gem-selektor  > gems3.log
