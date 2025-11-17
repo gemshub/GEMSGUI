@@ -2,7 +2,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - process_reset_err
+      - process_reset_err1
   release:
     types:
       - published
