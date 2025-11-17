@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - psinagra2020
-      - fix_icons
+      - process_reset_err
       - master
   pull_request:
     branches:
