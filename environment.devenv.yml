@@ -17,8 +17,8 @@ dependencies:
   #- thermofun>=0.4.3
   - cppzmq
   - mesa-libgl-devel-conda-x86_64 # [unix]
-  - qt6-main>=6.10.1
-  - qt6-charts>=6.10.1
+  - qt6-main=6.9.3
+  - qt6-charts=6.9.3
   #- eigen=3.4.0
   #- nlohmann_json
   #- spdlog
