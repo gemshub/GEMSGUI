@@ -2,7 +2,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - process_reset_err1
+      - process_reset_err
   release:
     types:
       - published
@@ -15,8 +15,8 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ macos-13 ]
-        conda_platform: [ osx-64 ]
+        os: [ macos-latest ]
+        conda_platform: [ osx-arm64 ]
         artifact_name: [ gemsgui-macos ]
 
     steps:

@@ -13,7 +13,7 @@ dependencies:
   - make  # [unix]
   - ninja
   - 7zip  # [win]
-  - gems3k>=4.4.2
+  - gems3k>=4.4.4
   #- thermofun>=0.4.3
   - cppzmq
   - mesa-libgl-devel-conda-x86_64 # [unix]
@@ -22,5 +22,5 @@ dependencies:
   #- eigen=3.4.0
   #- nlohmann_json
   #- spdlog
-  - python>=3.7
+  - python>=3.10
   - pytest
