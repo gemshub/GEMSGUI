@@ -1,4 +1,4 @@
-name: deploy-macos
+name: deploy-macos64intel
 on:
   push:
     branches:
@@ -17,7 +17,7 @@ jobs:
       matrix:
         os: [ macos-14 ]
         conda_platform: [ osx-64 ]
-        artifact_name: [ gemsgui-macos ]
+        artifact_name: [ gemsgui-macos64intel ]
 
     steps:
 
