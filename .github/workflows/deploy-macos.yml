@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ macos-latest ]
+        os: [ macos-13 ]
         conda_platform: [ osx-64 ]
         artifact_name: [ gemsgui-macos ]
 
