@@ -298,7 +298,9 @@ enum DC_CNTRL_CODES {
     CEM_O2 = 'O',    // subroutine for O2 fluid
     CEM_AR = 'A',    // subroutine for Ar fluid
     CEM_PO = 'P',    // subroutine for polar fluids
-    CEM_NP = 'Q'     // subroutine for nonpolar fluids
+    CEM_NP = 'Q',    // subroutine for nonpolar fluids
+    //CEM_H2O_HK_HGK = 'K', // conversion to geochemical convention using the water triple properties based Helgeson_Kirkham_1974
+    CEM_H2O_NEA_HGK = 'E' // conversion to geochemical convention usinf the water triple properties based NEA and HGK EoS
 
 };
 

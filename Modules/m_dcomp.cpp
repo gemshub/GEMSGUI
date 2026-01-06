@@ -713,7 +713,7 @@ RESULT:
 // uses calc_tpcv() and calc_voldp()
 void TDComp::DCthermo( int q, int p )
 {
-    int idx, CM, CE, CV;
+    int idx, CM, CE, CV, CF;
     double rho, eps, alp, dal, bet, xborn, yborn, /*zborn,*/ qborn;
 //    char wPdcC = "87 'W'";
 
@@ -728,6 +728,7 @@ void TDComp::DCthermo( int q, int p )
     CM = toupper( dcp->pct[0] );
     CE = toupper( dcp->pct[1] );
     CV = toupper( dcp->pct[2] );
+    CF = toupper( dcp->pct[3] );
 
     if( CM != CTPM_HKF && aW.twp->P < 1e-5 )
     	aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
@@ -751,7 +752,10 @@ void TDComp::DCthermo( int q, int p )
             //
 
     		TSupcrt supCrt;
-            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
+            unsigned int triple = 1;
+            if (CF == CEM_H2O_NEA_HGK)
+                triple = 2;
+            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres, triple );
             if( aW.twp->P < 6.11732e-3 )   // 06.12.2006  DK
                 aW.twp->P = aSta.Pres;
 

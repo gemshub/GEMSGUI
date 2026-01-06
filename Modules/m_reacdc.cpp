@@ -611,7 +611,7 @@ TReacDC::RecCalc( const char* key )
 void
 TReacDC::RCthermo( int q, int p )
 {
-	int CM,CE,CV, j, isotop = 0;
+    int CM,CE,CV,CF, j, isotop = 0;
     double rho, eps, alp, dal, bet, xborn, yborn, /*zborn,*/ qborn;
     time_t tim;
     char  /*buf[121],*/ dckey[DC_RKLEN + 10];
@@ -623,6 +623,7 @@ TReacDC::RCthermo( int q, int p )
     CM = toupper( rc[q].pct[0] );
     CE = toupper( rc[q].pct[1] );
     CV = toupper( rc[q].pct[2] );
+    CF = toupper( rc[q].pct[3] );
 
     // if( CE != CTM_MRB )  // Provisional for MRB model - DK on 06.08.07
     if (CE != CTM_IKZ)  // Provisional for Lagrange logK interpolation; to calculate logK if T, P are close to std - DM 17-02-2025
@@ -660,7 +661,10 @@ TReacDC::RCthermo( int q, int p )
 			aSta.Temp = aW.twp->TC;
 			aSta.Pres = aW.twp->P;
 			TSupcrt supCrt;
-			supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
+            unsigned int triple = 1;
+            if (CF == CEM_H2O_NEA_HGK)
+                triple = 2;
+            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres, triple);
 			aW.twp->P = aSta.Pres;
         }
 
