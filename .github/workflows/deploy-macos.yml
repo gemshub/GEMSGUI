@@ -22,15 +22,6 @@ jobs:
     steps:
 
       # -------------------------
-      # System Qt installation
-      # -------------------------
-      - name: Install Qt6
-        shell: bash -l {0}
-        run: |
-          brew update
-          brew install qt
-
-      # -------------------------
       # Checkout
       # -------------------------
       - name: Checkout code
@@ -54,6 +45,14 @@ jobs:
         run: |
           echo "deploy-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}" >> "$GITHUB_OUTPUT"
           echo "deploy-output-name=macos-${{ steps.strings.outputs.deploy-name }}.zip" >> "$GITHUB_OUTPUT"
+      # -------------------------
+      # System Qt installation
+      # -------------------------
+      - name: Install Qt6
+        shell: bash -l {0}
+        run: |
+          brew update
+          brew install qt
 
       # -------------------------
       # Conda environment
