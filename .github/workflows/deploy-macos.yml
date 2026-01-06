@@ -25,6 +25,7 @@ jobs:
       # System Qt installation
       # -------------------------
       - name: Install Qt6
+        shell: bash -l {0}
         run: |
           brew update
           brew install qt
