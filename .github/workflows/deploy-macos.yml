@@ -1,4 +1,5 @@
 name: deploy-macos
+
 on:
   push:
     branches:
@@ -13,7 +14,6 @@ jobs:
 
     strategy:
       fail-fast: false
-
       matrix:
         os: [ macos-latest ]
         conda_platform: [ osx-arm64 ]
@@ -21,9 +21,23 @@ jobs:
 
     steps:
 
+      # -------------------------
+      # System Qt installation
+      # -------------------------
+      - name: Install Qt6
+        run: |
+          brew update
+          brew install qt
+
+      # -------------------------
+      # Checkout
+      # -------------------------
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # -------------------------
+      # Version extraction
+      # -------------------------
       - name: Get version from CMakeLists.txt
         id: get_version
         uses: DarwinInnovation/cmake-project-version-action@v1.0
@@ -31,14 +45,18 @@ jobs:
       - name: Set deploy name
         id: strings
         shell: bash
-        run: >
-          echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}" >> "$GITHUB_OUTPUT"
+        run: echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}" >> "$GITHUB_OUTPUT"
+
       - name: Set deploy dir
         id: strings2
         shell: bash
         run: |
           echo "deploy-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}" >> "$GITHUB_OUTPUT"
           echo "deploy-output-name=macos-${{ steps.strings.outputs.deploy-name }}.zip" >> "$GITHUB_OUTPUT"
+
+      # -------------------------
+      # Conda environment
+      # -------------------------
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
@@ -52,60 +70,74 @@ jobs:
           conda config --add channels conda-forge
           conda install conda-devenv
           conda devenv
+
+      # -------------------------
+      # Build & Install
+      # -------------------------
       - name: Building, Testing & Installing GEMSGUI
-        if: matrix.os != 'windows-latest'
         shell: bash -l {0}
         run: |
           conda activate GEMSGUI
           mkdir .build && cd .build
-          cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
+          cmake -GNinja .. \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH=$(brew --prefix qt) \
+            -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
           ninja install
+
+      # -------------------------
+      # Post-install adjustments
+      # -------------------------
       - name: Check deploy
         run: |
           cd ${{ github.workspace }}
-          ls
-          cp -r "${{ github.workspace }}/Resources" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
-          cp "${{ github.workspace }}/Resources/rungems3-mac.sh" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
-          cp "${{ github.workspace }}/Resources/README-macos.txt" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/README.txt"
-     # Create ZIP archive for GitHub release (unchanged)
+          cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
+          cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
+          cp "Resources/README-macos.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
+
+      # -------------------------
+      # ZIP packaging
+      # -------------------------
       - name: Create zip archive for GitHub release
         run: |
           cd ${{ github.workspace }}
           zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
-          
+
+      # -------------------------
+      # DMG packaging (system Qt)
+      # -------------------------
       - name: Clean previous DMG
         run: |
           hdiutil detach /Volumes/gem-selektor || true
           rm -f gem-selektor.dmg
-      - name: List mounted volumes
-        run: mount
-      - name: Check for existing DMG
-        run: ls -lh *.dmg || echo "No DMG found"
 
-      # Create DMG with macdeployqt from Conda Qt
       - name: Create DMG with macdeployqt
-        shell: bash -l {0}   # keep conda env active
+        shell: bash -l {0}
         run: |
           conda activate GEMSGUI
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
+          $(brew --prefix qt)/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
           mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
-      # Upload ZIP artifact
+
+      # -------------------------
+      # Upload artifacts
+      # -------------------------
       - name: Upload artifact ZIP
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ steps.strings.outputs.deploy-name }}-zip
           path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
 
-      # Upload DMG artifact
       - name: Upload artifact DMG
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ steps.strings.outputs.deploy-name }}-dmg
           path: ${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg
-     
-      # Upload ZIP release asset
+
+      # -------------------------
+      # Release assets
+      # -------------------------
       - name: Upload ZIP release asset
         if: github.event_name == 'release' && github.event.action == 'published'
         uses: actions/upload-release-asset@v1
@@ -117,7 +149,6 @@ jobs:
           asset_name: ${{ steps.strings2.outputs.deploy-output-name }}
           asset_content_type: application/zip
 
-      # Upload DMG release asset
       - name: Upload DMG release asset
         if: github.event_name == 'release' && github.event.action == 'published'
         uses: actions/upload-release-asset@v1
