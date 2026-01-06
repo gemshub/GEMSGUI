@@ -1824,8 +1824,9 @@ int  ProcessWizard::getNPoints( int col )
             nP  = static_cast<int>((until-from)/step+1.000001);
         else nP = -1;          // changed by DK 21.05.10
     }
-    if( ( getType() == 'G'  && col == 6 ) || ( getType() == 'T' && col == 8 )) // workaround for checking min.addition of titrant
-        nP = -1;
+    if( ( getType() == 'G'  && col == 6 ) || ( getType() == 'T' && col == 8 )) { // workaround for checking min.addition of titrant
+        nP = (nP > 9999 ? 1: nP );
+    }
     if( (nP < 1 || nP > 9999) && nP != -1 )
     {
         string str = ui->tIters->horizontalHeaderItem( col )->text().toStdString();
