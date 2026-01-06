@@ -53,6 +53,16 @@ jobs:
           conda config --add channels conda-forge
           conda install conda-devenv
           conda devenv
+      
+      # -------------------------
+      # System Qt installation for macos
+      # -------------------------
+      - name: Install Qt6
+        if: matrix.os == 'macos-latest'
+        shell: bash -l {0}
+        run: |
+          brew update
+          brew install qt
 
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
