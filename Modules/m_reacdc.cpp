@@ -859,7 +859,7 @@ CALCULATE_DELTA_R:
     // case CPM_VBM:
     // case CPM_CEH: // constant volume only in this version!
          if( (CE != CTM_MRB) && (CE != CTM_DKR) )  // if not Ryzhenko-Bryzgalin model (provisional)
-        	 calc_tpcv_r( q, p, CM, CV );
+            calc_tpcv_r( q, p, CM, CV );
     default:
         break;
     }
@@ -880,7 +880,12 @@ CALCULATE_DELTA_R:
         aW.WW(p).S =  (aW.WW(p).dS - S)/rc[q].scDC[rc[q].nDC-1] /* -foS */ ;
         aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
         aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+        if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
+        {
+            aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
+            calc_tpcv_r3( q, p, CM, CPM_CON); // apply correction to rdc assuming constant volume
+        } else
+            aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
     }
     else
     { /*This is an isotopic form pseudo-reaction */
@@ -902,7 +907,13 @@ CALCULATE_DELTA_R:
         aW.WW(p).S =  -S/rc[q].scDC[rc[q].nDC-1];
         aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
         aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+        if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
+        {
+            aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
+            calc_tpcv_r3( q, p, CM, CPM_CON ); // apply correction to rdc assuming constant volume
+        } else
+            aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+
     }
     //Sveta 10/09/99
     w_dyn_kill();
