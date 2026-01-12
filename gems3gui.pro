@@ -3,13 +3,13 @@ TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
 
-DEFINES         += NODEARRAYLEVEL
+#DEFINES         += NO_NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM
 DEFINES  += NO_JSONIO
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
-DEFINES += USE_THERMOFUN
-DEFINES += USE_THERMO_LOG
+#DEFINES += NO_THERMOFUN
+#DEFINES += USE_THERMO_LOG
 #DEFINES += USE_GEMS3K_SERVER
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
@@ -83,13 +83,13 @@ INCLUDEPATH   += $$MODULES_H
 INCLUDEPATH   += $$SUBMODS_H   
 INCLUDEPATH   += $$NUMERICS_H 
 
-contains(DEFINES, USE_THERMOFUN) {
+!contains(DEFINES, NO_THERMOFUN) {
 
   TFUN_CFUN_H  =  /usr/local/include
   INCLUDEPATH  += $$TFUN_CFUN_H
 !win32:LIBS += -L/usr/local/lib -lThermoFun -lChemicalFun
 win32:LIBS += -LC:\usr\local\bin -lThermoFun -lChemicalFun
-} ## end USE_THERMOFUN
+} ## end NO_THERMOFUN
 
 MOC_DIR = tmp
 UI_DIR  = $$MOC_DIR
