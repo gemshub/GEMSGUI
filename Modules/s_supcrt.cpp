@@ -69,14 +69,42 @@ TSupcrt::unit(int it, int id1, int ip, int ih, int itripl)
     un.fst = ffst[id1];
     un.fc  = ffcd[id1] * ffch[ih];
     if ( itripl == 1 )
-        tpset();
+        tpset_HK();
+    else
+        if ( itripl == 2 )
+        tpset_NEA();
 }
 
 //--------------------------------------------------------------------//
 // tpset - calculate values U, S, H, A, G in 3-y point (in J/g from
 // Table 2,  Helgeson & Kirkham,  1974a)
 void
-TSupcrt::tpset()
+TSupcrt::tpset_HK()
+{
+    double Utr, Str, Htr, Atr, Gtr;
+    // 29.10.2025 fix to CODATA/NEA slected standard water properties H -285830 J/mol and S 69.95 J/mol
+    // Using the values at 298.15 K for H 1888.803 J/mol and S 6.6102 J/(mol*K ) calculated from the HGK84 (IAPWS84) EoS
+
+    Utr = -15766.0e0;
+    Str =  3.5144e0;
+    Htr = -15971.0e0;
+    Atr = -12870.0e0;
+    Gtr = -13073.0e0;
+
+    tt->Utri = Utr * un.fh;
+    tt->Stri = Str * un.fh;
+    tt->Htri = Htr * un.fh;
+    tt->Atri = Atr * un.fh;
+    tt->Gtri = Gtr * un.fh;
+
+}
+
+//--------------------------------------------------------------------//
+// tpset - calculate values U, S, H, A, G in 3-y point (in J/g from
+// 29.10.2025 fix to CODATA/NEA slected standard water properties H -285830 J/mol and S 69.95 J/mol
+// Using the values at 298.15 K for H 1888.803 J/mol and S 6.6102 J/(mol*K ) calculated from the HGK84 (IAPWS84) EoS
+void
+TSupcrt::tpset_NEA()
 {
     double Utr, Str, Htr, Atr, Gtr;
     // 29.10.2025 fix to CODATA/NEA slected standard water properties H -285830 J/mol and S 69.95 J/mol
@@ -104,7 +132,7 @@ int TSupcrt::valspc(int it, int id1, int ip, int ih, int itripl,
             (0 <= id1)     && (id1     <= 3) &&
             (0 <= ip)     && (ip     <= 4) &&
             (0 <= ih)     && (ih     <= 5) &&
-            (0 <= itripl) && (itripl <= 1) &&
+            (0 <= itripl) && (itripl <= 2) &&
             (0 <= isat)   && (isat   <= 1) &&
             (1 <= iopt)   && (iopt   <= 2) &&
             (0 <= useLVS) && (useLVS <= 1) &&
@@ -969,7 +997,7 @@ void TSupcrt::dimHGK(int isat,
     wr.Visckw = wr.Viscw / un.fvd / dkgm3 * un.fvk;
     wr.Albew  = wr.Alphaw / wr.Betaw;
 
-    if (itripl == 1)
+    if (itripl == 1 || itripl == 2)
         triple(t, &wr);
 }
 
