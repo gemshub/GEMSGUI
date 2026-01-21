@@ -1751,7 +1751,7 @@ void TReacDC::calc_tpcv_r3( int q, int /*p*/, int /*CM*/, int CV )
 {
     double  V,  P_Pst, dT, VP;
     /* set standard values */
-    V = aW.twp->V;
+    V = rcp->Vs[1];
     if( IsDoubleEmpty( V ))
         V = 0;
     dT = TK_DELTA; //TC = aW.twp->TC;
