@@ -1714,40 +1714,8 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
         aW.twp->lgK -= aW.twp->dV * (aW.twp->P - aW.twp->Pst) / aW.twp->RT / lg_to_ln;
 }
 
-//  Calc volume if calc params of reaction
-void TReacDC::calc_tpcv_r2( int q, int /*p*/, int /*CM*/, int CV )
-{
-    double  dV,  P_Pst, dT, VP;
-    /* set standard values */
-    dV = aW.twp->dV;
-    if( IsDoubleEmpty( dV ))
-        dV = 0;
-    dT = TK_DELTA; //TC = aW.twp->TC;
-    aW.twp->T =   aW.twp->TC + dT;
-    aW.twp->Tst =  (double)rc[q].TCst + dT;
-    aW.twp->Pst = (double)rc[q].Pst;
-
-    // set begin values
-    aW.twp->dV = dV;
-
-    if( (CV == CPM_CON || CV == CPM_NUL) && !approximatelyZero(dV))
-    {
-        P_Pst = aW.twp->P - aW.twp->Pst;
-        VP = dV * P_Pst;
-            // VT = Vst * T_Tst;
-        aW.twp->dG += VP;
-        aW.twp->dH += VP;
-        //tpr.reaction_internal_energy = tpr.reaction_enthalpy - aW.twp->P * dV;
-        //tpr.reaction_helmholtz_energy = tpr.reaction_internal_energy - aW.twp->T * tpr.reaction_entropy;
-    }
-
-    // Calculating pressure correction to logK
-    if (!approximatelyZero(dV))
-        aW.twp->lgK -= aW.twp->dV * (aW.twp->P - aW.twp->Pst) / aW.twp->RT / lg_to_ln;
-}
-
 //  Constant molar volume correction to the ReacDC
-void TReacDC::calc_tpcv_r3( int q, int /*p*/, int /*CM*/, int CV )
+void TReacDC::calc_tpcv_r2( int q, int /*p*/, int /*CM*/, int CV )
 {
     double  V,  P_Pst, dT, VP;
     /* set standard values */
@@ -1774,7 +1742,6 @@ void TReacDC::calc_tpcv_r3( int q, int /*p*/, int /*CM*/, int CV )
         aW.twp->dH += VP*rc[q].scDC[rc[q].nDC-1];
         aW.twp->lgK -= (VP*rc[q].scDC[rc[q].nDC-1])/(aW.twp->RT*lg_to_ln);
     }
-
 }
 
 

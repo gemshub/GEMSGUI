@@ -153,7 +153,6 @@ protected:
     void calc_tpcv_r( int q, int p, int CM, int CV );
     //  Calc volume if calc params of reaction
     void calc_tpcv_r2( int q, int p, int CM, int CV );
-    void calc_tpcv_r3( int q, int p, int CM, int CV );
     void PronsPrep( const char *key );
 void PronsPrepOH( const char *key, int nICs, short *listAN );   // added by TW 28.03.2008 
 void calc_r_MRB( int q, int p, int CE, int CV );
