@@ -490,8 +490,8 @@
         <keyword name="ICf_0" ref="gm_unspace.html#ICf_0"/>
         <keyword name="ICf_1" ref="gm_unspace.html#ICf_1"/>
         <keyword name="ICform" ref="gm_icomp.html#ICform"/>
-        <keyword name="ICmm" ref="gm_gem2mt.html#ICmm"/>
         <keyword name="ICmm" ref="gm_compos.html#ICmm"/>
+        <keyword name="ICmm" ref="gm_gem2mt.html#ICmm"/>
         <keyword name="ICnam" ref="gems_sys.html#ICnam"/>
         <keyword name="ICnam_" ref="gems_sys.html#ICnam_"/>
         <keyword name="ICname" ref="gm_icomp.html#ICname"/>

@@ -307,7 +307,7 @@ bool TReacDC::check_input( const char *key, int Level )
     ods_link( q+1);
     try
     {
-    	for( i=0; i<rc[q].nDC; i++ )
+        for( i=0; i<rc[q].nDC; i++ )
         {
             if( rc[q].rDC[i] == SRC_DCOMP )
             {
@@ -618,8 +618,8 @@ TReacDC::RCthermo( int q, int p )
 
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T; /* !!!! */
-	/* aW.twp->ln10RT ??? */
-	// test method codes for thermodynamic calculations
+    /* aW.twp->ln10RT ??? */
+    // test method codes for thermodynamic calculations
     CM = toupper( rc[q].pct[0] );
     CE = toupper( rc[q].pct[1] );
     CV = toupper( rc[q].pct[2] );
@@ -629,7 +629,7 @@ TReacDC::RCthermo( int q, int p )
     if (CE != CTM_IKZ)  // Provisional for Lagrange logK interpolation; to calculate logK if T, P are close to std - DM 17-02-2025
     if( fabs( aW.twp->T - 298.15 ) < 0.01 && fabs(aW.twp->P-1.) < 0.01 )
     {   // standard conditions (Tr,Pr)
-    	aW.twp->K = rcp->Ks[0];
+        aW.twp->K = rcp->Ks[0];
         aW.twp->lgK = rcp->Ks[1];
         aW.twp->dG =  rcp->Gs[0];
         aW.twp->dS =  rcp->Ss[0];
@@ -658,14 +658,14 @@ TReacDC::RCthermo( int q, int p )
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                /* ( aW.twp->P > 1e-4 && */ fabs( aW.twp->P - aSta.Pres ) > 0.001 ) // )
         {  // calculate water properties from HGK EoS
-			aSta.Temp = aW.twp->TC;
-			aSta.Pres = aW.twp->P;
-			TSupcrt supCrt;
+            aSta.Temp = aW.twp->TC;
+            aSta.Pres = aW.twp->P;
+            TSupcrt supCrt;
             unsigned int triple = 1;
             if (CF == CEM_H2O_NEA_HGK)
                 triple = 2;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres, triple);
-			aW.twp->P = aSta.Pres;
+            aW.twp->P = aSta.Pres;
         }
 
         // pull water properties from WATERPARAM
@@ -824,7 +824,7 @@ CALCULATE_DELTA_R:
             /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
                                break;  */
         case CTM_DKR: // Marshall-Franck density model
-        	calc_r_FMD( q, p, CE, CV );
+            calc_r_FMD( q, p, CE, CV );
             break;
         case CTM_MRB: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
              calc_r_MRB( q, p, CE, CV );
@@ -859,7 +859,7 @@ CALCULATE_DELTA_R:
     // case CPM_VBM:
     // case CPM_CEH: // constant volume only in this version!
          if( (CE != CTM_MRB) && (CE != CTM_DKR) )  // if not Ryzhenko-Bryzgalin model (provisional)
-        	 calc_tpcv_r( q, p, CM, CV );
+            calc_tpcv_r( q, p, CM, CV );
     default:
         break;
     }
@@ -880,7 +880,12 @@ CALCULATE_DELTA_R:
         aW.WW(p).S =  (aW.WW(p).dS - S)/rc[q].scDC[rc[q].nDC-1] /* -foS */ ;
         aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
         aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+        if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
+        {
+            aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
+            calc_tpcv_r2( q, p, CM, CPM_CON); // apply correction to rdc assuming constant volume
+        } else
+            aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
     }
     else
     { /*This is an isotopic form pseudo-reaction */
@@ -902,7 +907,13 @@ CALCULATE_DELTA_R:
         aW.WW(p).S =  -S/rc[q].scDC[rc[q].nDC-1];
         aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
         aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+        if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
+        {
+            aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
+            calc_tpcv_r2( q, p, CM, CPM_CON ); // apply correction to rdc assuming constant volume
+        } else
+            aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+
     }
     //Sveta 10/09/99
     w_dyn_kill();
@@ -1043,9 +1054,9 @@ void TReacDC::PronsPrep( const char *key )
     H1 = DELHR1 + HC + (1.0*HL);
     /*
       Here the Cp predictor starts for the first complex.
-    	modified 8 Aug 1992 after latest revision
-    	Modified 17 March 1992 to incorporate changes
-    	from last July 1991
+        modified 8 Aug 1992 after latest revision
+        Modified 17 March 1992 to incorporate changes
+        from last July 1991
     */
     if(ZL > -1.1)
     {
@@ -1187,8 +1198,8 @@ void TReacDC::PronsPrep( const char *key )
     V4 = DELVR4 + DELVR3 + DELVR2 + DELVR1 + VC + (4.0*VL);
 //    Z4 = Z;
     /*
-    	The following section has been altered so that
-    	there will be output only from where BETA != 0
+        The following section has been altered so that
+        there will be output only from where BETA != 0
     */
     if( b1 )
     {
@@ -1295,12 +1306,12 @@ void TReacDC::PronsPrep( const char *key )
 
 /* --------------------------------------------------------------- */
 /* This is an implementation of the hydroxide algorithm of:
-	Shock, E.L., Sassani, D.C., Willis, M., Sverjensky, D.A. (1997):
-	Inorganic species in geologic fluids: Correlations among standard
-	molal thermodynamic properties of aqueous ions and hydroxide
-	complexes. Geochim. Cosmochim. Acta, 61, 907-950.
-	note: the calculated properties are those of hydroxide species
-	with non-conventional stoichiometry, i.e. MOH, MO, HMO2, MO2
+    Shock, E.L., Sassani, D.C., Willis, M., Sverjensky, D.A. (1997):
+    Inorganic species in geologic fluids: Correlations among standard
+    molal thermodynamic properties of aqueous ions and hydroxide
+    complexes. Geochim. Cosmochim. Acta, 61, 907-950.
+    note: the calculated properties are those of hydroxide species
+    with non-conventional stoichiometry, i.e. MOH, MO, HMO2, MO2
 */
 
 void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
@@ -1363,208 +1374,208 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     // calculations for complex number 1
     switch ( ZZ )
     {
-	case 1:
-		S1 = 1.32*SC - 6.0;
-		CP1 = (-1.14)*S1 + 9.0;
-		DELVR1 = 0.11419*VC + 8.9432;
-		V1 = DELVR1 + VC + (1.0*VL);
-		DELSR1 = S1 - SC - (1.0*SL);
-		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR1 = DELGR1 + (298.15*DELSR1);
-		H1 = DELHR1 + HC + (1.0*HL);
-		break;
-	case 2:
-		S1 = 1.32*SC + 24.5;
-		CP1 = (-1.14)*S1 + 9.0;
-		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
-			V1 = 0.16*S1 + 4.9;
-		else
-			V1 = 0.45*S1 - 12.0;
-		DELSR1 = S1 - SC - (1.0*SL);
-		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR1 = DELGR1 + (298.15*DELSR1);
-		H1 = DELHR1 + HC + (1.0*HL);
-		break;
-	case 3:
-		if ( NC == 31 || NC == 49 || NC == 81 || NC == 83 )
-			S1 = 1.32*SC + 37.0;
-		else
-			S1 = 1.32*SC + 62.0;
-		CP1 = (-1.14)*S1 - 37.2;
-		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
-			|| NC == 27 || NC == 28 )
-			V1 = 0.45*S1 - 12.0;
-		else
-			V1 = 0.16*S1 + 4.9;
-		DELSR1 = S1 - SC - (1.0*SL);
-		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR1 = DELGR1 + (298.15*DELSR1);
-		H1 = DELHR1 + HC + (1.0*HL);
-		break;
-	case 4:
-		S1 = 1.32*SC + 74.0;
-		CP1 = (-1.14)*S1 - 37.2;
-		V1 = 0.16*S1 + 4.9;
-		DELSR1 = S1 - SC - (1.0*SL);
-		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR1 = DELGR1 + (298.15*DELSR1);
-		H1 = DELHR1 + HC + (1.0*HL);
-		break;
-	default:
-		Error( GetName(), "E16RErun: Estimation of standard state properties "
-				"is not possible for cations with charge > 4!");
-		break;
-	}
+    case 1:
+        S1 = 1.32*SC - 6.0;
+        CP1 = (-1.14)*S1 + 9.0;
+        DELVR1 = 0.11419*VC + 8.9432;
+        V1 = DELVR1 + VC + (1.0*VL);
+        DELSR1 = S1 - SC - (1.0*SL);
+        DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR1 = DELGR1 + (298.15*DELSR1);
+        H1 = DELHR1 + HC + (1.0*HL);
+        break;
+    case 2:
+        S1 = 1.32*SC + 24.5;
+        CP1 = (-1.14)*S1 + 9.0;
+        if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+            V1 = 0.16*S1 + 4.9;
+        else
+            V1 = 0.45*S1 - 12.0;
+        DELSR1 = S1 - SC - (1.0*SL);
+        DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR1 = DELGR1 + (298.15*DELSR1);
+        H1 = DELHR1 + HC + (1.0*HL);
+        break;
+    case 3:
+        if ( NC == 31 || NC == 49 || NC == 81 || NC == 83 )
+            S1 = 1.32*SC + 37.0;
+        else
+            S1 = 1.32*SC + 62.0;
+        CP1 = (-1.14)*S1 - 37.2;
+        if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+            || NC == 27 || NC == 28 )
+            V1 = 0.45*S1 - 12.0;
+        else
+            V1 = 0.16*S1 + 4.9;
+        DELSR1 = S1 - SC - (1.0*SL);
+        DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR1 = DELGR1 + (298.15*DELSR1);
+        H1 = DELHR1 + HC + (1.0*HL);
+        break;
+    case 4:
+        S1 = 1.32*SC + 74.0;
+        CP1 = (-1.14)*S1 - 37.2;
+        V1 = 0.16*S1 + 4.9;
+        DELSR1 = S1 - SC - (1.0*SL);
+        DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR1 = DELGR1 + (298.15*DELSR1);
+        H1 = DELHR1 + HC + (1.0*HL);
+        break;
+    default:
+        Error( GetName(), "E16RErun: Estimation of standard state properties "
+                "is not possible for cations with charge > 4!");
+        break;
+    }
 
 
     // calculations for the complex number 2
     switch ( ZZ )
     {
-	case 1:
-		S2 = 1.42*SC - 11.0;
-		CP2 = (-1.14)*S2 - 15.5;
-		V2 = 0.45*S2 - 12.0;
-		DELSR2 = S2 - SC - (2.0*SL) + Sw;
-		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR2 = DELGR2 + (298.15*DELSR2);
-		H2 = DELHR2 + HC + (2.0*HL) - Hw;
-		break;
-	case 2:
-		S2 = 1.42*SC + 20.5;
-		CP2 = (-1.14)*S2 - 15.5;
-		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
-			V2 = 0.16*S2 + 4.9;
-		else
-			V2 = 0.45*S2 - 12.0;
-		DELSR2 = S2 - SC - (2.0*SL) + Sw;
-		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR2 = DELGR2 + (298.15*DELSR2);
-		H2 = DELHR2 + HC + (2.0*HL) - Hw;
-		break;
-	case 3:
-		S2 = 1.42*SC + 83.0;
-		CP2 = (-1.14)*S2 - 60.8;
-		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
-			|| NC == 27 || NC == 28 )
-			V2 = 0.45*S2 - 12.0;
-		else
-			V2 = 0.16*S2 + 4.9;
-		DELSR2 = S2 - SC - (2.0*SL) + Sw;
-		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR2 = DELGR2 + (298.15*DELSR2);
-		H2 = DELHR2 + HC + (2.0*HL) - Hw;
-		break;
-	case 4:
-		S2 = 1.42*SC + 108.0;
-		CP2 = (-1.14)*S2 - 60.8;
-		V2 = 0.16*S2 + 4.9;
-		DELSR2 = S2 - SC - (2.0*SL) + Sw;
-		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR2 = DELGR2 + (298.15*DELSR2);
-		H2 = DELHR2 + HC + (2.0*HL) - Hw;
-		break;
-	default:
-		Error( GetName(), "E16RErun: Estimation of standard state properties "
-				"is not possible for cations with charge > 4!" );
-		break;
-	}
+    case 1:
+        S2 = 1.42*SC - 11.0;
+        CP2 = (-1.14)*S2 - 15.5;
+        V2 = 0.45*S2 - 12.0;
+        DELSR2 = S2 - SC - (2.0*SL) + Sw;
+        DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR2 = DELGR2 + (298.15*DELSR2);
+        H2 = DELHR2 + HC + (2.0*HL) - Hw;
+        break;
+    case 2:
+        S2 = 1.42*SC + 20.5;
+        CP2 = (-1.14)*S2 - 15.5;
+        if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+            V2 = 0.16*S2 + 4.9;
+        else
+            V2 = 0.45*S2 - 12.0;
+        DELSR2 = S2 - SC - (2.0*SL) + Sw;
+        DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR2 = DELGR2 + (298.15*DELSR2);
+        H2 = DELHR2 + HC + (2.0*HL) - Hw;
+        break;
+    case 3:
+        S2 = 1.42*SC + 83.0;
+        CP2 = (-1.14)*S2 - 60.8;
+        if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+            || NC == 27 || NC == 28 )
+            V2 = 0.45*S2 - 12.0;
+        else
+            V2 = 0.16*S2 + 4.9;
+        DELSR2 = S2 - SC - (2.0*SL) + Sw;
+        DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR2 = DELGR2 + (298.15*DELSR2);
+        H2 = DELHR2 + HC + (2.0*HL) - Hw;
+        break;
+    case 4:
+        S2 = 1.42*SC + 108.0;
+        CP2 = (-1.14)*S2 - 60.8;
+        V2 = 0.16*S2 + 4.9;
+        DELSR2 = S2 - SC - (2.0*SL) + Sw;
+        DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR2 = DELGR2 + (298.15*DELSR2);
+        H2 = DELHR2 + HC + (2.0*HL) - Hw;
+        break;
+    default:
+        Error( GetName(), "E16RErun: Estimation of standard state properties "
+                "is not possible for cations with charge > 4!" );
+        break;
+    }
 
     // calculations for complex number 3
     switch ( ZZ )
     {
-	case 1:
-		if( !(scL == 1 || scL == 2) )
-		   Error( GetName(), "E16RErun: Estimation of standard state properties "
-	   	   "is not possible for complexes of monovalent cations with ligand number > 2!");
-		break;
-	case 2:
-		S3 = 1.52*SC + 15.5;
-		CP3 = (-2.28)*S3 - 24.0;
-		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
-			V3 = 0.25*S3 + 11.7;
-		else
-			V3 = 0.54*S3 - 4.8;
-		DELSR3 = S3 - SC - (3.0*SL) + Sw;
-		DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR3 = DELGR3 + (298.15*DELSR3);
-		H3 = DELHR3 + HC + (3.0*HL) - Hw;
-		break;
-	case 3:
-		S3 = 1.52*SC + 123.0;
-		CP3 = (-2.28)*S3 - 24.0;
-		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
-			|| NC == 27 || NC == 28 )
-			V3 = 0.54*S3 - 4.8;
-		else
-			V3 = 0.25*S3 + 11.7;
-		DELSR3 = S3 - SC - (3.0*SL) + Sw;
-		DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR3 = DELGR3 + (298.15*DELSR3);
-		H3 = DELHR3 + HC + (3.0*HL) - Hw;
-		break;
-	case 4:
-		S3 = 1.52*SC + 140.0;
-		CP3 = (-2.28)*S3 - 24.0;
-		V3 = 0.25*S3 + 11.7;
-		DELSR3 = S3 - SC - (3.0*SL) + Sw;
-		DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR3 = DELGR3 + (298.15*DELSR3);
-		H3 = DELHR3 + HC + (3.0*HL) - Hw;
-		break;
-	default:
-		Error( GetName(), "E16RErun: Estimation of standard state properties "
-				"is not possible for cations with charge > 4!");
-		break;
-	}
+    case 1:
+        if( !(scL == 1 || scL == 2) )
+           Error( GetName(), "E16RErun: Estimation of standard state properties "
+           "is not possible for complexes of monovalent cations with ligand number > 2!");
+        break;
+    case 2:
+        S3 = 1.52*SC + 15.5;
+        CP3 = (-2.28)*S3 - 24.0;
+        if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+            V3 = 0.25*S3 + 11.7;
+        else
+            V3 = 0.54*S3 - 4.8;
+        DELSR3 = S3 - SC - (3.0*SL) + Sw;
+        DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR3 = DELGR3 + (298.15*DELSR3);
+        H3 = DELHR3 + HC + (3.0*HL) - Hw;
+        break;
+    case 3:
+        S3 = 1.52*SC + 123.0;
+        CP3 = (-2.28)*S3 - 24.0;
+        if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+            || NC == 27 || NC == 28 )
+            V3 = 0.54*S3 - 4.8;
+        else
+            V3 = 0.25*S3 + 11.7;
+        DELSR3 = S3 - SC - (3.0*SL) + Sw;
+        DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR3 = DELGR3 + (298.15*DELSR3);
+        H3 = DELHR3 + HC + (3.0*HL) - Hw;
+        break;
+    case 4:
+        S3 = 1.52*SC + 140.0;
+        CP3 = (-2.28)*S3 - 24.0;
+        V3 = 0.25*S3 + 11.7;
+        DELSR3 = S3 - SC - (3.0*SL) + Sw;
+        DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR3 = DELGR3 + (298.15*DELSR3);
+        H3 = DELHR3 + HC + (3.0*HL) - Hw;
+        break;
+    default:
+        Error( GetName(), "E16RErun: Estimation of standard state properties "
+                "is not possible for cations with charge > 4!");
+        break;
+    }
 
 
     // calculations for complex number 4
     switch ( ZZ )
     {
-	case 1:
-		if( !(scL == 1 || scL == 2) )
-		   Error( GetName(), "E16RErun: Estimation of standard state properties "
-			"is not possible for complexes of monovalent cations with ligand number > 2!");
-		break;
-	case 2:
-		S4 = 1.62*SC + 11.0;
-		CP4 = (-2.28)*S4 - 106.2;
-		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
-			V4 = 0.25*S4 + 11.7;
-		else
-			V4 = 0.54*S4 - 4.8;
-		DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
-		DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR4 = DELGR4 + (298.15*DELSR4);
-		H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
-		break;
-	case 3:
-		S4 = 1.62*SC + 118.0;
-		CP4 = (-2.06)*S4 - 34.5;
-		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
-			|| NC == 27 || NC == 28 )
-			V4 = 0.54*S4 - 4.8;
-		else
-			V4 = 0.25*S4 + 11.7;
-		DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
-		DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR4 = DELGR4 + (298.15*DELSR4);
-		H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
-		break;
-	case 4:
-		S4 = 1.62*SC + 135.0;
-		CP4 = (-2.06)*S4 - 34.5;
-		V4 = 0.25*S4 + 11.7;
-		DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
-		DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
-		DELHR4 = DELGR4 + (298.15*DELSR4);
-		H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
-		break;
-	default:
-		Error( GetName(), "E16RErun: Pronsprep-OH is not possible for cations "
-				"with charge > 4!");
-		break;
-	}
+    case 1:
+        if( !(scL == 1 || scL == 2) )
+           Error( GetName(), "E16RErun: Estimation of standard state properties "
+            "is not possible for complexes of monovalent cations with ligand number > 2!");
+        break;
+    case 2:
+        S4 = 1.62*SC + 11.0;
+        CP4 = (-2.28)*S4 - 106.2;
+        if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+            V4 = 0.25*S4 + 11.7;
+        else
+            V4 = 0.54*S4 - 4.8;
+        DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
+        DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR4 = DELGR4 + (298.15*DELSR4);
+        H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
+        break;
+    case 3:
+        S4 = 1.62*SC + 118.0;
+        CP4 = (-2.06)*S4 - 34.5;
+        if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+            || NC == 27 || NC == 28 )
+            V4 = 0.54*S4 - 4.8;
+        else
+            V4 = 0.25*S4 + 11.7;
+        DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
+        DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR4 = DELGR4 + (298.15*DELSR4);
+        H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
+        break;
+    case 4:
+        S4 = 1.62*SC + 135.0;
+        CP4 = (-2.06)*S4 - 34.5;
+        V4 = 0.25*S4 + 11.7;
+        DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
+        DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+        DELHR4 = DELGR4 + (298.15*DELSR4);
+        H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
+        break;
+    default:
+        Error( GetName(), "E16RErun: Pronsprep-OH is not possible for cations "
+                "with charge > 4!");
+        break;
+    }
 
 
     if( scL == 1 )
@@ -1680,7 +1691,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     TCIntArray anRDc;
 
     if( ! MessageToSave() )
-	return;
+    return;
 
     TDBKey dbKey(db->GetDBKey());
     dbKey.SetKey(key_);
