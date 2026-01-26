@@ -71,7 +71,8 @@ jobs:
 
       - name: Check deploy
         run: |
-          cd $CONDA_PREFIX/bin
+          find / -name "qhelpgenerator"
+          cd $CONDA_PREFIX/lib
           ls
           cd ${{ github.workspace }}
           ls
