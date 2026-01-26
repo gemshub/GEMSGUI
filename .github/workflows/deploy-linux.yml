@@ -71,8 +71,7 @@ jobs:
 
       - name: Check deploy
         run: |
-          find / -name "qhelpgenerator"
-          cd $CONDA_PREFIX/lib
+          cd $CONDA_PREFIX/lib/qt6
           ls
           cd ${{ github.workspace }}
           ls
