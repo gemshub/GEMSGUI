@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - fix-t-props-h2o
-      - process_reset_err
+      - help_generation_ci
   release:
     types:
       - published
@@ -86,6 +86,7 @@ jobs:
             -DCMAKE_PREFIX_PATH=$(brew --prefix qt) \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
+          ./generate_gems3help.sh
           ninja install
 
       # -------------------------
