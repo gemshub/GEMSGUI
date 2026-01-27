@@ -61,10 +61,11 @@ jobs:
           call conda activate GEMSGUI || goto :eof
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
           cmake --build build --target install --config Release || goto :eof
+          generate_gems3help.bat || goto :eof
 
       - name: Check deploy
         run: |
-          cd C:/Miniconda/envs/GEMSGUI/Library/lib/qt6/bin
+          cd C:/Miniconda/envs/GEMSGUI/Library/lib/qt6
           ls
           cd ${{ github.workspace }}
           ls
