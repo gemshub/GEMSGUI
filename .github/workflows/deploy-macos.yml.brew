@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - fix-t-props-h2o
-      - help_generation_ci
+      - help_generation_ci1
   release:
     types:
       - published
@@ -65,6 +65,15 @@ jobs:
           conda devenv
 
       # -------------------------
+      # System Qt installation
+      # -------------------------
+      - name: Install Qt6
+        shell: bash -l {0}
+        run: |
+          brew update
+          brew install qt
+
+      # -------------------------
       # Build & Install
       # -------------------------
       - name: Building, Testing & Installing GEMSGUI
@@ -74,9 +83,10 @@ jobs:
           mkdir .build && cd .build
           cmake -GNinja .. \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH=$(brew --prefix qt) \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
-          ./generate_gems3help.sh
+          ./generate_gems3help-mac.sh
           ninja install
 
       # -------------------------
@@ -84,6 +94,7 @@ jobs:
       # -------------------------
       - name: Check deploy
         run: |
+          find "$(brew --prefix qt)" -name "qhelpgenerator"
           cd ${{ github.workspace }}
           cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
           cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
@@ -110,7 +121,7 @@ jobs:
         run: |
           conda activate GEMSGUI
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
+          $(brew --prefix qt)/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
           mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
 
       # -------------------------

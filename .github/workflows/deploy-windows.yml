@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - help_generation_ci1
+      - help_generation_ci
   release:
     types:
       - published
@@ -64,7 +64,7 @@ jobs:
 
       - name: Check deploy
         run: |
-          cd C:/Miniconda/envs/GEMSGUI/Library/bin
+          cd C:/Miniconda/envs/GEMSGUI/Library/lib/qt6/bin
           ls
           cd ${{ github.workspace }}
           ls
