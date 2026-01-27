@@ -39,15 +39,21 @@ endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
   target_link_libraries (gem-selektor PRIVATE GEMSGUI-static GEMS3K::GEMS3K-static)
+
+  install(TARGETS gem-selektor
+    BUNDLE  DESTINATION .
+   )
 else()
   target_link_libraries (gem-selektor PRIVATE GEMSGUI-static )
+
+  install(TARGETS gem-selektor
+      BUNDLE  DESTINATION .
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
 endif()
 
-install(TARGETS gem-selektor
-    BUNDLE  DESTINATION .
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+
 
 
 if(DEFINED ENV{CONDA_PREFIX})
