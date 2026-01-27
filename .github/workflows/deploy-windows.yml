@@ -63,7 +63,7 @@ jobs:
           cmake --build build --target install --config Release || goto :eof
           cd build || goto :eof
           ls || goto :eof
-          cd tool || goto :eof
+          cd tools || goto :eof
           ls || goto :eof
           qhelpgenerator gems3helpconfig.qhcp -o Resources/help/gems3help.qhc || goto :eof
           cp -r Resources/help ../../Resources || goto :eof
