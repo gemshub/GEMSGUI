@@ -86,7 +86,7 @@ jobs:
             -DCMAKE_PREFIX_PATH=$(brew --prefix qt) \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
-          ./generate_gems3help.sh
+          ./generate_gems3help-mac.sh
           ninja install
 
       # -------------------------
@@ -94,9 +94,7 @@ jobs:
       # -------------------------
       - name: Check deploy
         run: |
-          cd /Users/runner/miniconda3/envs/GEMSGUI
-          ls
-          find . -name "qhelpgenerator"
+          find "$(brew --prefix qt)" -name "qhelpgenerator"
           cd ${{ github.workspace }}
           cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
           cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
