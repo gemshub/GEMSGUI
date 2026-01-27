@@ -64,8 +64,9 @@ jobs:
           cd build || goto :eof
           ls || goto :eof
           cd tools || goto :eof
-          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o Resources/help/gems3help.qhc  || goto :eof
-          cp -r Resources/help ../../Resources || goto :eof
+          ls
+    #      C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o Resources/help/gems3help.qhc  || goto :eof
+    #      cp -r Resources/help ../../Resources || goto :eof
 
       - name: Check deploy
         run: |
