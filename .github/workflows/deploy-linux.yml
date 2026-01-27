@@ -71,7 +71,7 @@ jobs:
 
       - name: Check deploy
         run: |
-          cd $CONDA_PREFIX/lib/qt6
+          cd /usr/share/miniconda/envs/GEMSGUI
           ls
           cd ${{ github.workspace }}
           ls

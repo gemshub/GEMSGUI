@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - fix-t-props-h2o
-      - help_generation_ci1
+      - help_generation_ci
   release:
     types:
       - published
@@ -94,6 +94,8 @@ jobs:
       # -------------------------
       - name: Check deploy
         run: |
+          cd /usr/share/miniconda/envs/GEMSGUI/lib
+          ls
           cd ${{ github.workspace }}
           cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
           cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
