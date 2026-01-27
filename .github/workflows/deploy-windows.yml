@@ -65,7 +65,7 @@ jobs:
           ls || goto :eof
           cd tools || goto :eof
           ls || goto :eof
-          qhelpgenerator gems3helpconfig.qhcp -o Resources/help/gems3help.qhc || goto :eof
+          qhelpgenerator.exe gems3helpconfig.qhcp -o Resources/help/gems3help.qhc || goto :eof
           cp -r Resources/help ../../Resources || goto :eof
 
       - name: Check deploy
