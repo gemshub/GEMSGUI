@@ -105,6 +105,7 @@ qt_generate_deploy_app_script(
     TARGET gem-selektor
     OUTPUT_SCRIPT deploy_script
     NO_TRANSLATIONS
+    NO_COMPILER_RUNTIME
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
