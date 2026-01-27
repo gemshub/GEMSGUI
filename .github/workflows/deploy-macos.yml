@@ -94,8 +94,9 @@ jobs:
       # -------------------------
       - name: Check deploy
         run: |
-          cd /usr/share/miniconda/envs/GEMSGUI/lib
+          cd /Users/runner/miniconda3/envs/GEMSGUI
           ls
+          find . -name "qhelpgenerator"
           cd ${{ github.workspace }}
           cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
           cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
