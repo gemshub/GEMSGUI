@@ -66,10 +66,9 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:/Miniconda/envs/GEMSGUI/Library/lib/qt6 -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
           cmake --build build --target install --config Release || goto :eof
           cd build || goto :eof
-          ls || goto :eof
           cd tools || goto :eof
           ls
     #      C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o Resources/help/gems3help.qhc  || goto :eof
