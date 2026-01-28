@@ -19,8 +19,8 @@ dependencies:
   - mesa-libgl-devel-conda-x86_64 # [unix]
   - qt6-main=6.10.1 # [not win]
   - qt6-charts=6.10.1 # [not win]
-  - qt6-main=6.10.1 # [win]
-  - qt6-charts=6.10.1 # [win]
+  - qt6-main=6.8.2 # [win]
+  - qt6-charts=6.8.2 # [win]
   #- eigen=3.4.0
   #- nlohmann_json
   #- spdlog
