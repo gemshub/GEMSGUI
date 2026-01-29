@@ -70,7 +70,7 @@ jobs:
           cmake --build build --target install --config Release || goto :eof
           cd build || goto :eof
           cd tools || goto :eof
-          ls
+          D:\a\GEMSGUI\GEMSGUI\build\Release\gems3helpconfig-qhp-generator.exe || goto :eof
           cd Resources/doc/html || goto :eof
           ls
           C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc  || goto :eof
