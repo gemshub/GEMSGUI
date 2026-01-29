@@ -68,16 +68,17 @@ jobs:
           call conda activate GEMSGUI || goto :eof
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
           cmake --build build --target install --config Release || goto :eof
-          cd build || goto :eof
-          cd tools || goto :eof
+          cd ${{ github.workspace }} || goto :eof
           D:\a\GEMSGUI\GEMSGUI\build\Release\gems3helpconfig-qhp-generator.exe || goto :eof
-          cd Resources/doc/html || goto :eof
-          ls
-          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc  || goto :eof
+    #      cd Resources/doc/html || goto :eof
+    #      ls
+    #      C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc  || goto :eof
     #      cp -r Resources/help ../../Resources || goto :eof
 
       - name: Check deploy
         run: |
+          cd ${{ github.workspace }}/Resources/doc/html
+          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
           cd ${{ github.workspace }}
           cp -r "Resources" ${{ steps.strings2.outputs.deploy-output-dir }}
           cp "Resources/rungems3.bat" "${{ steps.strings.outputs.deploy-name }}"
