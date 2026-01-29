@@ -69,7 +69,9 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
           cmake --build build --target install --config Release || goto :eof
           cd build || goto :eof
-          cd tools/Resources/doc/html || goto :eof
+          cd tools || goto :eof
+          ls
+          cd Resources/doc/html || goto :eof
           ls
           C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc  || goto :eof
     #      cp -r Resources/help ../../Resources || goto :eof
