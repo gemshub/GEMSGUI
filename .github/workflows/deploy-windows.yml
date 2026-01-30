@@ -57,6 +57,7 @@ jobs:
 
       - name: Install Qt
         run: |
+          conda activate GEMSGUI
           conda install qt6-main
           conda install qt6-charts
           cd C:/Miniconda/envs/GEMSGUI/Library/lib
