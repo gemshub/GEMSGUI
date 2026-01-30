@@ -742,7 +742,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
                 mod = ios::out|ios::app;
                 break;
             case VF3_3:
-                return true;LoadMtparm
+                return true;
             }
 */
         fstream f( filename, mod );

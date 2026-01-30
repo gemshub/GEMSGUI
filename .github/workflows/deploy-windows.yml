@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - process_reset_err
+      - fix_70_73_75
   release:
     types:
       - published

@@ -629,7 +629,16 @@ std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)
     for( int no=frstODjson; no<=lastODjson;  no++) {
         if( frstODjson!=frstOD && aObj[no]->GetDescription(0,0) == "internaldb" )
             continue;
-        aObj[no]->fromJsonValue(dodAll[aObj[no]->GetKeywd()]);
+        QString obj_key(aObj[no]->GetKeywd());
+        aObj[no]->fromJsonValue(dodAll[obj_key]);
+        if( obj_key == "dSDref") {
+            auto nSd = aObj[no]->GetN();
+            aObj[o_dcdim]->Put(nSd, 0, 2);
+        }
+        if( obj_key == "rSDref") {
+            auto nSd = aObj[no]->GetN();
+            aObj[o_redim]->Put(nSd, 0, 7);
+        }
     }
     return keyStr;
 }

@@ -884,7 +884,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
 
          CSD->G0[ll] =  tp.G[jj]+ TSyst::sm->GetSY()->GEX[jj]; //
          CSD->V0[ll] =  tp.Vm[jj]*1e-5;
-         if( tp.H )
+         if( tp.H && !IsDoubleEmpty(tp.H[jj]))
            CSD->H0[ll] = tp.H[jj];
          else
            CSD->H0[ll] = 0;
@@ -1003,7 +1003,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
 
          CSD->G0[ll] =  tp.G[jj]+ TSyst::sm->GetSY()->GEX[jj]; //
          CSD->V0[ll] =  tp.Vm[jj]*1e-5;
-         if( tp.H )
+         if( tp.H && !IsDoubleEmpty(tp.H[jj]))
            CSD->H0[ll] = tp.H[jj];
          else
            CSD->H0[ll] = 0;
