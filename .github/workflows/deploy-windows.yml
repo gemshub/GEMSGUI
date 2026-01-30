@@ -71,7 +71,7 @@ jobs:
       - name: Check deploy
         run: |
           conda activate GEMSGUI
-          conda install qt6-main
+          conda install qt-main
           cd ${{ github.workspace }}/Resources/doc/html
           C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
           cd ${{ github.workspace }}
