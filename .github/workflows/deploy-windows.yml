@@ -55,11 +55,11 @@ jobs:
           conda install conda-devenv
           conda devenv
 
-      - name: Check Qt
+      - name: Install Qt
         run: |
-          cd C:/Miniconda/envs/GEMSGUI/Library/lib/qt6/bin
-          ls
-          cd C:/Miniconda/envs/GEMSGUI/Library/lib/qt6/mkspecs
+          conda install qt6-main
+          conda install qt6-charts
+          cd C:/Miniconda/envs/GEMSGUI/Library/lib
           ls
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
