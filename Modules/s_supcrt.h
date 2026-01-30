@@ -270,7 +270,8 @@ protected:
     void load(int phase, WATERPARAM& wp);
     void load_metastable(/*int phase,*/ WATERPARAM& wp);
     void unit(int it, int id, int ip, int ih, int itripl);
-    void tpset();
+    void tpset_HK();
+    void tpset_NEA();
     void valid(int it, int id, int ip, int ih, int itripl, int isat,
                int iopt, int useLVS, int epseqn, double Temp, double *Pres,
                double *Dens0, int *eR);
@@ -342,7 +343,7 @@ public:
 
     TSupcrt();
     //--- Value manipulation
-    void Supcrt_H2O( double TC, double *P );
+    void Supcrt_H2O(double TC, double *P , unsigned int triple=1);
 
     // 09.06.2016 DM
     double getPsatHGK (double TK);

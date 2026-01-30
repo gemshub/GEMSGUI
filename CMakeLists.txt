@@ -1,5 +1,5 @@
 # Require a certain version of cmake
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.16..4.2)
 
 # Set the name of the project
 project(GEMSGUI VERSION 3.11.0 LANGUAGES CXX)
@@ -155,12 +155,13 @@ include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dataman)
 #include_directories("/usr/local/include/GEMS3K")
 
 # Set some necessary definitions
-add_definitions(-DNODEARRAYLEVEL)
 add_definitions(-DNO_JSONIO)
 
-if(USE_THERMOFUN MATCHES ON)
-  add_definitions(-DUSE_THERMOFUN)
-  add_definitions(-DUSE_THERMO_LOG)
+# Set some necessary definitions
+if(USE_THERMOFUN MATCHES OFF)
+  add_definitions(-DNO_THERMOFUN)
+else()
+  #add_definitions(-DUSE_THERMO_LOG)
 endif()
 
 if(USE_GEMS3K_SERVER MATCHES ON)

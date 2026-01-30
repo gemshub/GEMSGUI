@@ -1577,7 +1577,7 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
     double a, T,  Vst, Tst, Pst, P_Pst, T_Tst, Ts2, dT,
     VP, VT, aC, aE;
     int i;
-    /* set standart values */
+    /* set standard values */
     Pst = (double)rc[q].Pst;
     Vst = (double)rc[q].Vs[0];
     if( IsDoubleEmpty( Vst ))
@@ -1711,6 +1711,36 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
     // Calculating pressure correction to logK
     if (!approximatelyZero(Vst))
         aW.twp->lgK -= aW.twp->dV * (aW.twp->P - aW.twp->Pst) / aW.twp->RT / lg_to_ln;
+}
+
+//  Constant molar volume correction to the ReacDC
+void TReacDC::calc_tpcv_r2( int q, int /*p*/, int /*CM*/, int CV )
+{
+    double  V,  P_Pst, dT, VP;
+    /* set standard values */
+    V = rcp->Vs[1];
+    if( IsDoubleEmpty( V ))
+        V = 0;
+    dT = TK_DELTA; //TC = aW.twp->TC;
+    aW.twp->T =   aW.twp->TC + dT;
+    aW.twp->Tst =  (double)rc[q].TCst + dT;
+    aW.twp->Pst = (double)rc[q].Pst;
+
+    // set begin values
+    aW.twp->V = V;
+
+    if( (CV == CPM_CON || CV == CPM_NUL) && !approximatelyZero(V))
+    {
+        P_Pst = aW.twp->P - aW.twp->Pst;
+        VP = V * P_Pst;
+            // VT = Vst * T_Tst;
+        aW.twp->G += VP;
+        aW.twp->H += VP;
+        // reaction props
+        aW.twp->dG += VP*rc[q].scDC[rc[q].nDC-1];
+        aW.twp->dH += VP*rc[q].scDC[rc[q].nDC-1];
+        aW.twp->lgK -= (VP*rc[q].scDC[rc[q].nDC-1])/(aW.twp->RT*lg_to_ln);
+    }
 }
 
 

@@ -71,6 +71,12 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
     if( !dc[q].Cp )
     {
         aW.twp->Cp = (double)dc[q].Cps[0];
+        // DM 05.01.2026 temperature correction based on S and Cp integration
+        aW.twp->G -= aW.twp->S * (T - Tst);
+        aW.twp->S += (aW.twp->Cp * log(T/Tst) );
+        aW.twp->G -= (aW.twp->Cp * ( T * log(T/Tst) - (T - Tst) ) );
+        aW.twp->H += (aW.twp->Cp * (T - Tst) );
+
         goto NEXT;
     }
 

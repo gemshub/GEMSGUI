@@ -1085,7 +1085,7 @@ void TSupcrt::dimLVS(int isat, int itripl, double theta, double T, double *Pbars
     www->Visckw = www->Viscw / un.fvd / dkgm3 * un.fvk;
     www->Albew = www->Alphaw / www->Betaw;
 
-    if (itripl == 1)
+    if (itripl == 1 || itripl == 2)
         triple(T, www);
 }
 
@@ -1357,7 +1357,7 @@ double TSupcrt::TdegUS(int it, double t)
 }
 
 //--------------------------------------------------------------------//
-void TSupcrt::Supcrt_H2O( double TC, double *P )
+void TSupcrt::Supcrt_H2O(double TC, double *P, unsigned int triple)
 {
     int eR, CV;
     char PdcC;
@@ -1382,7 +1382,7 @@ void TSupcrt::Supcrt_H2O( double TC, double *P )
     aSpc.id=1;
     aSpc.ip=1;
     aSpc.ih=4;
-    aSpc.itripl=1;
+    aSpc.itripl=triple;
     // 01.06.2016
     double psat = PsHGK(TC + 273.15)*10.0;
     if (( approximatelyZero( fabs( *P ), 1e-5 ) || aSpc.on_sat_curve || fabs(*P -  psat) <  1.e-4*psat) && TC <= cr->Tc - 273.15e0) // || aSpc.on_sat_curve || fabs(*P -  psat) < 1.e-9* psat added 01.06.2016, fix 06.11.2025

@@ -23,4 +23,12 @@ Application for developers to generate `gems3helpconfig.qhp` if new HTML files o
 ./gems3helpconfig-qhp-generator <path_to_Resources> 
 ```
 
+### gems help files generator
+
+Example command
+
+```sh
+~/Qt/6.9.3/gcc_64/libexec/qhelpgenerator gems3helpconfig.qhcp -o gems3help.qhc
+```
+
 
