@@ -55,14 +55,6 @@ jobs:
           conda install conda-devenv
           conda devenv
 
-      - name: Install Qt
-        run: |
-          conda activate GEMSGUI
-          conda install qt6-main
-          conda install qt6-charts
-          cd C:/Miniconda/envs/GEMSGUI/Library/lib
-          ls
-
       - name: Building, Testing & Installing GEMSGUI (Windows)
         shell: cmd
         run: |
@@ -79,6 +71,7 @@ jobs:
       - name: Check deploy
         run: |
           conda activate GEMSGUI
+          conda install qt6-main
           cd ${{ github.workspace }}/Resources/doc/html
           C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
           cd ${{ github.workspace }}
