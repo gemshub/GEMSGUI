@@ -79,13 +79,13 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI
+          set QT_PLUGIN_PATH=C:\Miniconda\envs\GEMSGUI\Library\plugins
           cd %GITHUB_WORKSPACE%\Resources\doc\html
           C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
           cd %GITHUB_WORKSPACE%
-          xcopy Resources %{{ steps.strings2.outputs.deploy-output-dir }} /E /I
+          xcopy Resources %{{ steps.strings2.outputs.deploy-output-dir }} /E /I /Y
           copy Resources\rungems3.bat %{{ steps.strings.outputs.deploy-name }}\
           copy Resources\README-windows.txt %{{ steps.strings.outputs.deploy-name }}\README.txt
-
 
       - name: Create zip archive (Windows)
         shell: pwsh
