@@ -110,33 +110,41 @@ install(SCRIPT ${deploy_script})
 
 # --- Post-install help generation ---
 if (WIN32)
+    # Normalize paths to avoid backslash escape issues
+    file(TO_CMAKE_PATH "$ENV{CONDA_PREFIX}" CONDA_PREFIX_CMAKE)
+    file(TO_CMAKE_PATH "${PROJECT_SOURCE_DIR}" PROJECT_SOURCE_CMAKE)
+    file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX_CMAKE)
+
+    set(QT_PLUGIN_PATH_CMAKE "${CONDA_PREFIX_CMAKE}/Library/plugins")
+    set(QT_PLATFORM_PLUGIN_PATH_CMAKE "${CONDA_PREFIX_CMAKE}/Library/plugins/platforms")
+    set(QHELPGENERATOR_EXE "${CONDA_PREFIX_CMAKE}/Library/lib/qt6/qhelpgenerator.exe")
+    set(HELP_CONFIG_QHCP "${PROJECT_SOURCE_CMAKE}/Resources/doc/html/gems3helpconfig.qhcp")
+    set(HELP_OUTPUT_QHC "${INSTALL_PREFIX_CMAKE}/Resources/help/gems3help.qhc")
+    set(CUSTOM_HELPGEN_EXE "${INSTALL_PREFIX_CMAKE}/bin/gems3helpconfig-qhp-generator.exe")
+
     install(CODE "
         message(STATUS \"Running help config generator...\")
+        set(ENV{QT_PLUGIN_PATH} \"${QT_PLUGIN_PATH_CMAKE}\")
+        set(ENV{QT_QPA_PLATFORM_PLUGIN_PATH} \"${QT_PLATFORM_PLUGIN_PATH_CMAKE}\")
 
-        # Fix: use forward slashes so CMake does not interpret escapes
-        set(ENV{QT_PLUGIN_PATH} \"$ENV{CONDA_PREFIX}/Library/plugins\")
-        set(ENV{QT_QPA_PLATFORM_PLUGIN_PATH} \"$ENV{CONDA_PREFIX}/Library/plugins/platforms\")
-
-        # 1. Run your custom generator
         execute_process(
-            COMMAND \"${CMAKE_INSTALL_PREFIX}/bin/gems3helpconfig-qhp-generator.exe\"
-            WORKING_DIRECTORY \"${PROJECT_SOURCE_DIR}\"
+            COMMAND \"${CUSTOM_HELPGEN_EXE}\"
+            WORKING_DIRECTORY \"${PROJECT_SOURCE_CMAKE}\"
             RESULT_VARIABLE gen1_result
         )
         if (NOT gen1_result EQUAL 0)
-            message(FATAL_ERROR \"gems3helpconfig-qhp-generator failed: ${gen1_result}\")
+            message(FATAL_ERROR \"gems3helpconfig-qhp-generator failed: \${gen1_result}\")
         endif()
 
         message(STATUS \"Generating Qt Help...\")
-        # 2. Run qhelpgenerator
         execute_process(
-            COMMAND \"$ENV{CONDA_PREFIX}/Library/lib/qt6/qhelpgenerator.exe\"
-                    \"${PROJECT_SOURCE_DIR}/Resources/doc/html/gems3helpconfig.qhcp\"
-                    -o \"${CMAKE_INSTALL_PREFIX}/Resources/help/gems3help.qhc\"
+            COMMAND \"${QHELPGENERATOR_EXE}\"
+                    \"${HELP_CONFIG_QHCP}\"
+                    -o \"${HELP_OUTPUT_QHC}\"
             RESULT_VARIABLE gen2_result
         )
         if (NOT gen2_result EQUAL 0)
-            message(FATAL_ERROR \"qhelpgenerator failed: ${gen2_result}\")
+            message(FATAL_ERROR \"qhelpgenerator failed: \${gen2_result}\")
         endif()
     ")
 endif()
