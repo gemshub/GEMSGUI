@@ -112,6 +112,8 @@ install(SCRIPT ${deploy_script})
 if (WIN32)
     install(CODE "
         message(STATUS \"Running help config generator...\")
+
+        # Fix: use forward slashes so CMake does not interpret escapes
         set(ENV{QT_PLUGIN_PATH} \"$ENV{CONDA_PREFIX}/Library/plugins\")
         set(ENV{QT_QPA_PLATFORM_PLUGIN_PATH} \"$ENV{CONDA_PREFIX}/Library/plugins/platforms\")
 
@@ -138,3 +140,4 @@ if (WIN32)
         endif()
     ")
 endif()
+
