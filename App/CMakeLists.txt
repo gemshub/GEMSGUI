@@ -108,8 +108,10 @@ qt_generate_deploy_app_script(
 )
 install(SCRIPT ${deploy_script})
 
-# --- Post-install help generation ---
-if (WIN32)
+# --- Install help tools (Windows) ---
+if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
+    file(TO_CMAKE_PATH "$ENV{CONDA_PREFIX}" CONDA_PREFIX_CMAKE)
+
     install(FILES
         "${CMAKE_BINARY_DIR}/Release/gems3helpconfig-qhp-generator.exe"
         DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -117,44 +119,69 @@ if (WIN32)
 endif()
 
 # --- Post-install help generation (Windows) ---
-
 if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
     # Normalize paths to avoid backslash escape issues
     file(TO_CMAKE_PATH "$ENV{CONDA_PREFIX}" CONDA_PREFIX_CMAKE)
     file(TO_CMAKE_PATH "${PROJECT_SOURCE_DIR}" PROJECT_SOURCE_CMAKE)
     file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX_CMAKE)
 
-    set(QT_PLUGIN_PATH_CMAKE         "${CONDA_PREFIX_CMAKE}/Library/plugins")
+    # Plugin paths (from Conda)
+    set(QT_PLUGIN_PATH_CMAKE          "${CONDA_PREFIX_CMAKE}/Library/plugins")
     set(QT_PLATFORM_PLUGIN_PATH_CMAKE "${CONDA_PREFIX_CMAKE}/Library/plugins/platforms")
-    set(QHELPGENERATOR_EXE           "${CONDA_PREFIX_CMAKE}/Library/lib/qt6/qhelpgenerator.exe")
-    set(HELP_CONFIG_QHCP             "${PROJECT_SOURCE_CMAKE}/Resources/doc/html/gems3helpconfig.qhcp")
-    set(HELP_OUTPUT_QHC              "${INSTALL_PREFIX_CMAKE}/Resources/help/gems3help.qhc")
-    set(CUSTOM_HELPGEN_EXE           "${INSTALL_PREFIX_CMAKE}/${CMAKE_INSTALL_BINDIR}/gems3helpconfig-qhp-generator.exe")
+
+    # Use Conda's qhelpgenerator (complete Qt runtime)
+    set(QHELPGENERATOR_EXE "${CONDA_PREFIX_CMAKE}/Library/lib/qt6/qhelpgenerator.exe")
+
+    # Installed custom generator
+    set(CUSTOM_HELPGEN_EXE "${INSTALL_PREFIX_CMAKE}/${CMAKE_INSTALL_BINDIR}/gems3helpconfig-qhp-generator.exe")
+
+    # Input + output help files
+    set(HELP_CONFIG_QHCP "${PROJECT_SOURCE_CMAKE}/Resources/doc/html/gems3helpconfig.qhcp")
+    set(HELP_OUTPUT_QHC  "${INSTALL_PREFIX_CMAKE}/Resources/help/gems3help.qhc")
 
     install(CODE "
-        message(STATUS \"Running help config generator...\")
+        message(STATUS \"[help] QT_PLUGIN_PATH = ${QT_PLUGIN_PATH_CMAKE}\")
+        message(STATUS \"[help] CUSTOM_HELPGEN_EXE = ${CUSTOM_HELPGEN_EXE}\")
+        message(STATUS \"[help] QHELPGENERATOR_EXE = ${QHELPGENERATOR_EXE}\")
+
         set(ENV{QT_PLUGIN_PATH} \"${QT_PLUGIN_PATH_CMAKE}\")
         set(ENV{QT_QPA_PLATFORM_PLUGIN_PATH} \"${QT_PLATFORM_PLUGIN_PATH_CMAKE}\")
 
+        message(STATUS \"[help] Running help config generator...\")
         execute_process(
             COMMAND \"${CUSTOM_HELPGEN_EXE}\"
             WORKING_DIRECTORY \"${PROJECT_SOURCE_CMAKE}\"
             RESULT_VARIABLE gen1_result
+            OUTPUT_VARIABLE gen1_out
+            ERROR_VARIABLE  gen1_err
+            TIMEOUT 60
         )
-        if (NOT gen1_result EQUAL 0)
+        message(STATUS \"[help] helpconfig stdout: \${gen1_out}\")
+        message(STATUS \"[help] helpconfig stderr: \${gen1_err}\")
+        if (gen1_result EQUAL 124 OR gen1_result EQUAL 258)
+            message(FATAL_ERROR \"gems3helpconfig-qhp-generator timed out\")
+        elseif (NOT gen1_result EQUAL 0)
             message(FATAL_ERROR \"gems3helpconfig-qhp-generator failed: \${gen1_result}\")
         endif()
 
-        message(STATUS \"Generating Qt Help...\")
+        message(STATUS \"[help] Generating Qt Help...\")
         execute_process(
             COMMAND \"${QHELPGENERATOR_EXE}\"
                     \"${HELP_CONFIG_QHCP}\"
                     -o \"${HELP_OUTPUT_QHC}\"
             RESULT_VARIABLE gen2_result
+            OUTPUT_VARIABLE gen2_out
+            ERROR_VARIABLE  gen2_err
+            TIMEOUT 60
         )
-        if (NOT gen2_result EQUAL 0)
+        message(STATUS \"[help] qhelpgenerator stdout: \${gen2_out}\")
+        message(STATUS \"[help] qhelpgenerator stderr: \${gen2_err}\")
+        if (gen2_result EQUAL 124 OR gen2_result EQUAL 258)
+            message(FATAL_ERROR \"qhelpgenerator timed out\")
+        elseif (NOT gen2_result EQUAL 0)
             message(FATAL_ERROR \"qhelpgenerator failed: \${gen2_result}\")
         endif()
     ")
 endif()
+
 
