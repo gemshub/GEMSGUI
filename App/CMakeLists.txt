@@ -110,17 +110,26 @@ install(SCRIPT ${deploy_script})
 
 # --- Post-install help generation ---
 if (WIN32)
+    install(FILES
+        "${CMAKE_BINARY_DIR}/Release/gems3helpconfig-qhp-generator.exe"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()
+
+# --- Post-install help generation (Windows) ---
+
+if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
     # Normalize paths to avoid backslash escape issues
     file(TO_CMAKE_PATH "$ENV{CONDA_PREFIX}" CONDA_PREFIX_CMAKE)
     file(TO_CMAKE_PATH "${PROJECT_SOURCE_DIR}" PROJECT_SOURCE_CMAKE)
     file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" INSTALL_PREFIX_CMAKE)
 
-    set(QT_PLUGIN_PATH_CMAKE "${CONDA_PREFIX_CMAKE}/Library/plugins")
+    set(QT_PLUGIN_PATH_CMAKE         "${CONDA_PREFIX_CMAKE}/Library/plugins")
     set(QT_PLATFORM_PLUGIN_PATH_CMAKE "${CONDA_PREFIX_CMAKE}/Library/plugins/platforms")
-    set(QHELPGENERATOR_EXE "${CONDA_PREFIX_CMAKE}/Library/lib/qt6/qhelpgenerator.exe")
-    set(HELP_CONFIG_QHCP "${PROJECT_SOURCE_CMAKE}/Resources/doc/html/gems3helpconfig.qhcp")
-    set(HELP_OUTPUT_QHC "${INSTALL_PREFIX_CMAKE}/Resources/help/gems3help.qhc")
-    set(CUSTOM_HELPGEN_EXE "${INSTALL_PREFIX_CMAKE}/bin/gems3helpconfig-qhp-generator.exe")
+    set(QHELPGENERATOR_EXE           "${CONDA_PREFIX_CMAKE}/Library/lib/qt6/qhelpgenerator.exe")
+    set(HELP_CONFIG_QHCP             "${PROJECT_SOURCE_CMAKE}/Resources/doc/html/gems3helpconfig.qhcp")
+    set(HELP_OUTPUT_QHC              "${INSTALL_PREFIX_CMAKE}/Resources/help/gems3help.qhc")
+    set(CUSTOM_HELPGEN_EXE           "${INSTALL_PREFIX_CMAKE}/${CMAKE_INSTALL_BINDIR}/gems3helpconfig-qhp-generator.exe")
 
     install(CODE "
         message(STATUS \"Running help config generator...\")
