@@ -64,20 +64,15 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
           cmake --build build --target install --config Release || goto :eof
 
-          rem --- Run your custom help config generator ---
-          D:\a\GEMSGUI\GEMSGUI\build\Release\gems3helpconfig-qhp-generator.exe || goto :eof
-
-          rem --- Generate Qt help ---
-          cd %GITHUB_WORKSPACE%\Resources\doc\html || goto :eof
-          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc || goto :eof
-
-          rem --- Copy Resources folder into deployment ---
-          cd %GITHUB_WORKSPACE% || goto :eof
-          xcopy Resources "${{ steps.strings2.outputs.deploy-output-dir }}\Resources" /E /I /Y || goto :eof
-
-          rem --- Copy extra files into the top-level deploy folder ---
-          copy Resources\rungems3.bat "${{ steps.strings.outputs.deploy-name }}\" || goto :eof
-          copy Resources\README-windows.txt "${{ steps.strings.outputs.deploy-name }}\README.txt" || goto :eof
+      - name: Check deploy
+        run: |
+          cd C:/Miniconda/envs/GEMSGUI/Library/bin
+          ls
+          cd ${{ github.workspace }}
+          ls
+          cp -r "${{ github.workspace }}/Resources" ${{ steps.strings2.outputs.deploy-output-dir }}
+          cp "${{ github.workspace }}/Resources/rungems3.bat" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}"
+          cp "${{ github.workspace }}/Resources/README-windows.txt" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/README.txt"
 
       - name: Create zip archive (Windows)
         shell: pwsh

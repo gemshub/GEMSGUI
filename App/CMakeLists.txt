@@ -107,3 +107,34 @@ qt_generate_deploy_app_script(
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
+
+# --- Post-install help generation ---
+if (WIN32)
+    install(CODE "
+        message(STATUS \"Running help config generator...\")
+        set(ENV{QT_PLUGIN_PATH} \"$ENV{CONDA_PREFIX}/Library/plugins\")
+        set(ENV{QT_QPA_PLATFORM_PLUGIN_PATH} \"$ENV{CONDA_PREFIX}/Library/plugins/platforms\")
+
+        # 1. Run your custom generator
+        execute_process(
+            COMMAND \"${CMAKE_INSTALL_PREFIX}/bin/gems3helpconfig-qhp-generator.exe\"
+            WORKING_DIRECTORY \"${PROJECT_SOURCE_DIR}\"
+            RESULT_VARIABLE gen1_result
+        )
+        if (NOT gen1_result EQUAL 0)
+            message(FATAL_ERROR \"gems3helpconfig-qhp-generator failed: ${gen1_result}\")
+        endif()
+
+        message(STATUS \"Generating Qt Help...\")
+        # 2. Run qhelpgenerator
+        execute_process(
+            COMMAND \"$ENV{CONDA_PREFIX}/Library/lib/qt6/qhelpgenerator.exe\"
+                    \"${PROJECT_SOURCE_DIR}/Resources/doc/html/gems3helpconfig.qhcp\"
+                    -o \"${CMAKE_INSTALL_PREFIX}/Resources/help/gems3help.qhc\"
+            RESULT_VARIABLE gen2_result
+        )
+        if (NOT gen2_result EQUAL 0)
+            message(FATAL_ERROR \"qhelpgenerator failed: ${gen2_result}\")
+        endif()
+    ")
+endif()
