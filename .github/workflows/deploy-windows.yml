@@ -68,12 +68,11 @@ jobs:
     #      C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc  || goto :eof
     #      cp -r Resources/help ../../Resources || goto :eof
 
-      - name: Check deploy
+      - name: Generate help Copy Resources
         run: |
-          conda activate GEMSGUI
-          conda install qt-main
+          conda run -n GEMSGUI conda install qt-main
           cd ${{ github.workspace }}/Resources/doc/html
-          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
+          conda run -n GEMSGUI C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
           cd ${{ github.workspace }}
           cp -r "Resources" ${{ steps.strings2.outputs.deploy-output-dir }}
           cp "Resources/rungems3.bat" "${{ steps.strings.outputs.deploy-name }}"
