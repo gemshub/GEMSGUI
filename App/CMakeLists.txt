@@ -108,7 +108,7 @@ qt_generate_deploy_app_script(
 )
 install(SCRIPT ${deploy_script})
 
-# --- Install help tools (Windows) ---
+# --- Install custom help config generator (Windows) ---
 if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
     file(TO_CMAKE_PATH "$ENV{CONDA_PREFIX}" CONDA_PREFIX_CMAKE)
 
@@ -135,14 +135,21 @@ if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
     # Installed custom generator
     set(CUSTOM_HELPGEN_EXE "${INSTALL_PREFIX_CMAKE}/${CMAKE_INSTALL_BINDIR}/gems3helpconfig-qhp-generator.exe")
 
-    # Input + output help files
-    set(HELP_CONFIG_QHCP "${PROJECT_SOURCE_CMAKE}/Resources/doc/html/gems3helpconfig.qhcp")
+    # --- CRITICAL FIX: copy help sources into install tree (avoid QtHelp cross-drive hang) ---
+    install(CODE "
+        file(COPY \"${PROJECT_SOURCE_CMAKE}/Resources/doc/html\"
+             DESTINATION \"${INSTALL_PREFIX_CMAKE}/Resources/doc\")
+    ")
+
+    # Updated paths (now inside install tree)
+    set(HELP_CONFIG_QHCP "${INSTALL_PREFIX_CMAKE}/Resources/doc/html/gems3helpconfig.qhcp")
     set(HELP_OUTPUT_QHC  "${INSTALL_PREFIX_CMAKE}/Resources/help/gems3help.qhc")
 
     install(CODE "
         message(STATUS \"[help] QT_PLUGIN_PATH = ${QT_PLUGIN_PATH_CMAKE}\")
         message(STATUS \"[help] CUSTOM_HELPGEN_EXE = ${CUSTOM_HELPGEN_EXE}\")
         message(STATUS \"[help] QHELPGENERATOR_EXE = ${QHELPGENERATOR_EXE}\")
+        message(STATUS \"[help] HELP_CONFIG_QHCP = ${HELP_CONFIG_QHCP}\")
 
         set(ENV{QT_PLUGIN_PATH} \"${QT_PLUGIN_PATH_CMAKE}\")
         set(ENV{QT_QPA_PLATFORM_PLUGIN_PATH} \"${QT_PLATFORM_PLUGIN_PATH_CMAKE}\")
@@ -150,7 +157,7 @@ if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
         message(STATUS \"[help] Running help config generator...\")
         execute_process(
             COMMAND \"${CUSTOM_HELPGEN_EXE}\"
-            WORKING_DIRECTORY \"${PROJECT_SOURCE_CMAKE}\"
+            WORKING_DIRECTORY \"${INSTALL_PREFIX_CMAKE}/Resources/doc/html\"
             RESULT_VARIABLE gen1_result
             OUTPUT_VARIABLE gen1_out
             ERROR_VARIABLE  gen1_err
@@ -183,5 +190,6 @@ if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
         endif()
     ")
 endif()
+
 
 
