@@ -75,14 +75,16 @@ jobs:
           conda activate GEMSGUI
           conda install -y qt-main
 
-      - name: Generate help & copy Resouces
+      - name: Generate help & copy Resources
+        shell: cmd
         run: |
-          cd ${{ github.workspace }}/Resources/doc/html
-          conda run -n GEMSGUI C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
-          cd ${{ github.workspace }}
-          cp -r "Resources" ${{ steps.strings2.outputs.deploy-output-dir }}
-          cp "Resources/rungems3.bat" "${{ steps.strings.outputs.deploy-name }}"
-          cp "Resources/README-windows.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
+          call conda activate GEMSGUI
+          cd %GITHUB_WORKSPACE%\Resources\doc\html
+          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
+          cd %GITHUB_WORKSPACE%
+          xcopy Resources %{{ steps.strings2.outputs.deploy-output-dir }} /E /I
+          copy Resources\rungems3.bat %{{ steps.strings.outputs.deploy-name }}\
+          copy Resources\README-windows.txt %{{ steps.strings.outputs.deploy-name }}\README.txt
 
 
       - name: Create zip archive (Windows)
