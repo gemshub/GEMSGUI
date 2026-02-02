@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - help_generation_ci1
+      - help_generation_ci
   release:
     types:
       - published
@@ -58,7 +58,7 @@ jobs:
       - name: Check run
         run: |
           conda activate GEMSGUI
-          cd C:/Miniconda/envs/GEMSGUI/Library/bin
+          cd C:/Miniconda/envs/GEMSGUI/Library/lib/qt6/bin
           ls
           cd ${{ github.workspace }}/Resources/doc/html
           C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe -v
