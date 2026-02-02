@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - help_generation_ci1
+      - help_generation_ci
   release:
     types:
       - published
@@ -55,44 +55,16 @@ jobs:
           conda install conda-devenv
           conda devenv
 
-      - name: Building, Testing & Installing GEMSGUI (Windows)
-        shell: cmd
+      - name: Check run
         run: |
-          call conda activate GEMSGUI || goto :eof
-
-          rem --- Build and install ---
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
-          cmake --build build --target install --config Release || goto :eof
-
-      - name: Check deploy
-        run: |
+          conda activate GEMSGUI
           cd C:/Miniconda/envs/GEMSGUI/Library/bin
           ls
-          cd ${{ github.workspace }}
+          cd ${{ github.workspace }}/Resources/doc/html
+          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe -v
           ls
           cp -r "${{ github.workspace }}/Resources" ${{ steps.strings2.outputs.deploy-output-dir }}
           cp "${{ github.workspace }}/Resources/rungems3.bat" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}"
           cp "${{ github.workspace }}/Resources/README-windows.txt" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/README.txt"
 
-      - name: Create zip archive (Windows)
-        shell: pwsh
-        run: |
-          Compress-Archive -Path "${{ steps.strings.outputs.deploy-name }}" -DestinationPath "${{ steps.strings2.outputs.deploy-output-name }}"
-      
-      - name: Upload zip archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-${{ steps.strings.outputs.deploy-name }}
-          path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
-
-      - name: Upload release asset
-        if: github.event_name == 'release' && github.event.action == 'published'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
-          asset_name: ${{ steps.strings2.outputs.deploy-output-name }}
-          asset_content_type: application/zip
 
