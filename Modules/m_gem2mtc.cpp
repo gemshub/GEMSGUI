@@ -447,7 +447,7 @@ void TGEM2MT::calc_eqstat( bool startSys )
    if( startSys )
    {
       if( mtp->PsSYd == S_ON && mtp->PsMode != RMT_MODE_S)
-        TSysEq::pm->CmSave();           // save results to DB
+        TSysEq::pm->SaveCurrentKey();           // save results to DB
 
      if( mtp->stld )
        memcpy( mtp->stld+mtp->kv, mtp->sykey, EQ_RKLEN );
@@ -722,7 +722,7 @@ void TGEM2MT::CalcGraph()
 // LinkCSD(0);
  for( long int ii=0; ii<mtp->nC; ii++)
  {
-   mtp->jt = min( ii, (mtp->nC-1));
+   mtp->jt = std::min( ii, (mtp->nC-1));
    mtp->qc = ii;
    LinkNode0(ii);
    LinkNode1(ii);
@@ -753,7 +753,7 @@ void TGEM2MT::CalcControlScript()
     {
         // BR0 = na->pNodT0()[ii];
         // BR1 = na->pNodT1()[ii];
-        mtp->jt = min( ii, (mtp->nC-1));
+        mtp->jt = std::min( ii, (mtp->nC-1));
         mtp->qc = ii;
         LinkNode0(ii); // linking node DODs to current node with index qc
         LinkNode1(ii);
@@ -770,11 +770,11 @@ void TGEM2MT::CalcStartScript()
       return;
 
   // generate Ti, Pi, Vi, DiCp, HydP, ... and fluxes arrays
-    for( long int ii=0; ii< max( mtp->nC, mtp->nFD ); ii++)
+    for( long int ii=0; ii< std::max( mtp->nC, mtp->nFD ); ii++)
     {
-      mtp->jt = min(ii, mtp->nC-1);
-      mtp->qc = min(ii, mtp->nC-1);  // index of node
-      mtp->qf = min(ii, mtp->nFD-1);  // index of flux
+      mtp->jt = std::min(ii, mtp->nC-1);
+      mtp->qc = std::min(ii, mtp->nC-1);  // index of node
+      mtp->qf = std::min(ii, mtp->nFD-1);  // index of flux
       rpn[0].CalcEquat();
     }
 
@@ -1011,7 +1011,7 @@ bool TGEM2MT::SaveChartData( jsonui::ChartData* gr )
     //   gr->getColorList();
 
     pVisor->Update();
-    contentsChanged = true;
+    contents_changed = true;
 
     return true;
 }

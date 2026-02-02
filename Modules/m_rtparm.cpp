@@ -18,8 +18,6 @@
 //-------------------------------------------------------------------
 //
 
-//#include <cmath>
-//#include <cstdio>
 #include "m_rtparm.h"
 #include "m_param.h"
 #include "m_dcomp.h"
@@ -258,14 +256,14 @@ void TRTParm::set_def( int q)
     {
     default:
     case 0:
-        rp[q].NV = max( rp[q].NP, rp[q].NT );
+        rp[q].NV = std::max( rp[q].NP, rp[q].NT );
         break;
     case 1:
     case 2:
         rp[q].NV = (rp[q].NP * rp[q].NT);
         break;
     case 3:
-        rp[q].NV = max( rp[q].NP, rp[q].NT );
+        rp[q].NV = std::max( rp[q].NP, rp[q].NT );
         break;
     }
     rp[q].Pi[0] = aPa->pa.Pi[0];
@@ -405,7 +403,7 @@ TRTParm::MakeQuery()
      {
         rpp->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_rtlnam ]->Alloc( 1,
                          rpp->dimXY[1], MAXGRNAME));
-        for(size_t ii=0; ii< min<size_t>( namesLines.size(),rpp->dimXY[1]); ii++)
+        for(size_t ii=0; ii< std::min<size_t>( namesLines.size(),rpp->dimXY[1]); ii++)
         {
           strncpy(  rpp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -443,14 +441,14 @@ AGAIN_SETUP:
     {
     default:
     case 0: // the user must enter all P and T values in xP and xT vectors
-        rpp->NV = max( rpp->NP, rpp->NT );
+        rpp->NV = std::max( rpp->NP, rpp->NT );
         break;
     case 1: // increments in cycle on P nested into cycle on T
     case 2: // increments in cycle on T nested into cycle on P (default)
         rpp->NV = (rpp->NP * rpp->NT);
         break;
     case 3: // parallel increments of T and P in one cycle
-        rpp->NV = max( rpp->NP, rpp->NT );
+        rpp->NV = std::max( rpp->NP, rpp->NT );
         break;
     }
     if( rpp->NV < 1 || rpp->NV > 4192 )
@@ -676,7 +674,7 @@ TRTParm::RecCalc( const char *key )
         rpn[0].CalcEquat();
         aMod[nRT]->ModUpdate("Calculation of RTparm arrays");
     }
-    SetString("RTPARM arrays calculated OK");
+    set_string("RTPARM arrays calculated OK");
     TCModule::RecCalc(key);
     pVisor->CloseMessage();
     check_input( key );
@@ -792,7 +790,7 @@ bool TRTParm::SaveChartData( jsonui::ChartData* gr )
    //    gr->getColorList();
 
     pVisor->Update();
-    contentsChanged = true;
+    contents_changed = true;
 
     return true;
 }

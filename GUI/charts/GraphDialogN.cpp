@@ -53,12 +53,17 @@
 #include "GemsMainWindow.h"
 #include "visor.h"
 
+void helpWin( const std::string& name, const std::string& item )
+{
+    pVisorImp->OpenHelp( name.c_str(), item.c_str() );
+}
+
 namespace jsonui {
 
 /// The constructor
 GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::ChartData>& data1,
                           const std::vector<std::shared_ptr<PlotModel>>& aplotModels,
-                          const string& title ):
+                          const std::string& title ):
         QDialog( pmodule->window() ), pModule(pmodule), gr_data(data1), plotModels(aplotModels),
         ui(new Ui::GraphDialogData),
         isFragment(false)
@@ -124,7 +129,7 @@ GraphDialog::~GraphDialog()
 
 void GraphDialog::resetGraphDialog(const std::shared_ptr<ChartData> &data1,
                                    const std::vector<std::shared_ptr<PlotModel> > &aplotModels,
-                                   const string &title)
+                                   const std::string &title)
 {
   gr_data = data1;
   plotModels = aplotModels;
@@ -382,9 +387,9 @@ void GraphDialog::highlightRow( size_t row )
 
 void GraphDialog::restoreRow()
 {
-    if( activeRow != string::npos)
+    if( activeRow != std::string::npos)
         plot->highlightLine(activeRow, false);
-    activeRow = string::npos;
+    activeRow = std::string::npos;
 }
 
 void GraphDialog::updateFragment(QRectF  rect)

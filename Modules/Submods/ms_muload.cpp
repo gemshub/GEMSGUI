@@ -19,9 +19,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cmath>
-#include <cstdio>
-#include <cstring>
 
 #include "m_syseq.h"
 #include "s_formula.h"
@@ -701,7 +698,7 @@ void TMulti::sm_text_analyze( int nph, int Type,
                                int JB, int JE, int jb, int je )
 {
     char *erscan = nullptr;
-    string save;
+    std::string save;
 
     erscan = static_cast<char *>(aObj[ o_nwtext]->Alloc(  1, 2048, S_ ));
     //AGAIN: // translate equations
@@ -745,7 +742,7 @@ void TMulti::sm_text_analyze( int nph, int Type,
 //--------------------------------------------------------------------
 // Packs the script of PRIVATE type of solution phase
 //
-string TMulti::PressSolMod( int nP )
+std::string TMulti::PressSolMod( int nP )
 {
     int j, jp, k, ks, jb=0, je=0;
     size_t EGlen;
@@ -753,7 +750,7 @@ string TMulti::PressSolMod( int nP )
     TPhase* aPH=TPhase::pm;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
-    string etext;
+    std::string etext;
 
     for( k=0,ks=-1; k < mup->Fis && ks < nP; k++ )
     {  // calculating indexes
@@ -864,7 +861,7 @@ int TMulti::find_icnum( char *name, int LNmode )
     { /* this is ordinary IC */
         ICs[MAXICNAME] = IC_ELEMENT;
     }
-    memcpy( ICs, nbg, min<size_t>( 6, strlen( nbg )));
+    memcpy( ICs, nbg, std::min<size_t>( 6, strlen( nbg )));
     aFo.fixup_ics( ICs );
     if( LNmode == 1 )
     {
@@ -903,7 +900,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
     if( LNmode == 1 )
     {
         for( j=jb; j<=je && ii<20; j++ )
-            if(!memcmp(name, pmp->SM[j], min<size_t>(len,MAXDCNAME)))
+            if(!memcmp(name, pmp->SM[j], std::min<size_t>(len,MAXDCNAME)))
                 jf[ii++] = j;
         if( !ii )
             Error( name, "E05MSPrep: DC name cannot be found in GEM IPM work data lists..." );
@@ -912,7 +909,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
     {
         for( j=jb; j<=je && ii<20; j++ )
             if(!memcmp(name, TRMults::sm->GetMU()->SM[j]+MAXSYMB+MAXDRGROUP,
-                       min<size_t>(len,MAXDCNAME)))
+                       std::min<size_t>(len,MAXDCNAME)))
                 jf[ii++] = j;
         if( !ii )
             Error( name, "E15MSPrep: DC name cannot be found in Project system definition lists..." );
@@ -943,7 +940,7 @@ int TMulti::find_dcnum( char *name, int jb, int je, int LNmode, char *stmt )
     if( ii == 1 )
         return( jf[0] );
 
-    string pbuf = "Please, select DC index for the DC name ";
+    std::string pbuf = "Please, select DC index for the DC name ";
             pbuf += name;
             pbuf += "\n in the first script statement below \n";
             pbuf += stmt;
@@ -964,7 +961,7 @@ int TMulti::find_phnum_multi( const char *name)
 {
     auto len = strlen( name );
     for(int k=0; k < pmp->FI; k++ )
-      if( !memcmp(name, pmp->SF[k], min<size_t>(len,(MAXPHSYMB+MAXSYMB))))
+      if( !memcmp(name, pmp->SF[k], std::min<size_t>(len,(MAXPHSYMB+MAXSYMB))))
                 return k;
     return -1;
 }
@@ -978,7 +975,7 @@ int TMulti::find_icnum_multi( const char *name)
 {
     auto len = strlen( name );
     for(int i=0; i < pmp->N; i++ )
-      if( !memcmp(name, pmp->SB1[i], min<size_t>(len,MAXICNAME)) )
+      if( !memcmp(name, pmp->SB1[i], std::min<size_t>(len,MAXICNAME)) )
                 return i;
     return -1;
 }
@@ -991,7 +988,7 @@ int TMulti::find_dcnum_multi( const char *name)
 {
     auto len = strlen( name );
     for(int j=0; j < pmp->L; j++ )
-      if( !memcmp(name, pmp->SM[j], min<size_t>(len,MAXDCNAME)) )
+      if( !memcmp(name, pmp->SM[j], std::min<size_t>(len,MAXDCNAME)) )
                 return j;
     return -1;
 }
@@ -1009,7 +1006,7 @@ int TMulti::find_phnum( char *name, int LNmode )
     if( LNmode == 1 )
     {
         for( k=0; k < pmp->FI && ii < 8; k++ )
-            if( !memcmp(name, pmp->SF[k]+MAXSYMB, min<size_t>(len,MAXPHNAME)))
+            if( !memcmp(name, pmp->SF[k]+MAXSYMB, std::min<size_t>(len,MAXPHNAME)))
                 kf[ii++] = k;
         if( !ii )
           Error( name, "E06MSPrep: Phase name cannot be found in GEM IPM work data lists..." );
@@ -1018,7 +1015,7 @@ int TMulti::find_phnum( char *name, int LNmode )
     {
         RMULTS* mup = TRMults::sm->GetMU();
         for( k=0; k < mup->Fi && ii < 8; k++ )
-            if( !memcmp(name, mup->SF[k]+MAXSYMB+MAXPHSYMB, min<size_t>(len,MAXPHNAME)))
+            if( !memcmp(name, mup->SF[k]+MAXSYMB+MAXPHSYMB, std::min<size_t>(len,MAXPHNAME)))
                 kf[ii++] = k;
         if( !ii )
           Error( name, "E16MSPrep: Phase name cannot be found in Project system definition lists..." );
@@ -1027,7 +1024,7 @@ int TMulti::find_phnum( char *name, int LNmode )
         return( kf[0] );
     /* more then one useful index */
     char pbuf_[164];
-    string pbuf;
+    std::string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of Phase indices found for the phase name ";
@@ -1058,7 +1055,7 @@ int TMulti::find_acnum( char *name, int LNmode )
         Error( name, "E10MSPrep: This modelling project has no PCO name lists." );
     auto len = strlen( name );
     for( j=0; j<mup->La && ii< 8; j++ )
-        if( !memcmp(name, mup->SA[j], min<size_t>(len,MAXCMPNAME)))
+        if( !memcmp(name, mup->SA[j], std::min<size_t>(len,MAXCMPNAME)))
             jf[ii++]=j;
     if( !ii )
         Error( name, "E07MSPrep: PCO name cannot be found in Project system definition lists..." );
@@ -1068,7 +1065,7 @@ int TMulti::find_acnum( char *name, int LNmode )
     //sprintf( pbuf, "%d of PCO indices found for the PCO name %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
     char pbuf_[164];
-    string pbuf;
+    std::string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of PCO indices found for the PCO name ";
@@ -1099,7 +1096,7 @@ int TMulti::find_mgpnum( const char *name1 )
         Error( name, "E11MSPrep: This GEM2MT instance has no MGP name lists." );
     auto len = strlen( name );
     for( j=0; j<mtp->nPG && ii< 8; j++ )
-        if( !memcmp(name, mtp->MGPid[j], min<size_t>(len,MAXSYMB)))
+        if( !memcmp(name, mtp->MGPid[j], std::min<size_t>(len,MAXSYMB)))
             jf[ii++]=j;
     if( !ii )
         Error( name, "E08MSPrep: MGP name cannot be found in this GEM2MT instance..." );
@@ -1109,7 +1106,7 @@ int TMulti::find_mgpnum( const char *name1 )
     //sprintf( pbuf, "%d of MGP indices found for the MGP name %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
     char pbuf_[164];
-    string pbuf;
+    std::string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of MGP indices found for the MGP name ";
@@ -1137,7 +1134,7 @@ int TMulti::find_flnum( const char *name1 )
         Error( name, "E12MSPrep: This GEM2MT instance has no flux ID lists." );
     auto len = strlen( name );
     for( j=0; j<mtp->nFD && ii< 8; j++ )
-        if( !memcmp(name, mtp->FDLid[j], min<size_t>(len,MAXSYMB)))
+        if( !memcmp(name, mtp->FDLid[j], std::min<size_t>(len,MAXSYMB)))
             jf[ii++]=j;
     if( !ii )
         Error( name, "E08MSPrep: Flux ID cannot be found in this GEM2MT instance..." );
@@ -1147,7 +1144,7 @@ int TMulti::find_flnum( const char *name1 )
     //sprintf( pbuf, "%d of flux indices found for the flux ID %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
     char pbuf_[164];
-    string pbuf;
+    std::string pbuf;
     sprintf( pbuf_, "%d", ii);
     pbuf = pbuf_;
     pbuf += " of flux indices found for the flux ID ";
@@ -1275,7 +1272,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             ii = aObj.Find( odlab );
             if( ii<0 )
             { // wrong data object name
-                string err = "Identifier (variable) ";
+                std::string err = "Identifier (variable) ";
                 err += odlab;
                 err += " is not known.";
                 Error( "E00MSPrep: ", err.c_str() );
@@ -1503,7 +1500,7 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
                   break;
        case A_dcx:
        case A_dcxicx:
-                   for( i=0; i<min(pmp->L,nOsz); i++ )
+                   for( i=0; i<std::min(pmp->L,nOsz); i++ )
                        lst.push_back( char_array_to_string( pmp->SM[i], MAXDCNAME) );
                    break;
        case A_dcsx:
@@ -1511,7 +1508,7 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
                        lst.push_back( char_array_to_string( pmp->SM[i], MAXDCNAME) );
                    break;
        case A_phx:
-                   for( i=0; i<min(pmp->FI,nOsz); i++ )
+                   for( i=0; i<std::min(pmp->FI,nOsz); i++ )
                      lst.push_back( char_array_to_string( pmp->SF[i]+MAXSYMB, MAXPHNAME));
                    break;
        case A_phxicx:

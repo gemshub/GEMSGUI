@@ -24,7 +24,6 @@
 #include "v_object.h"
 #include "v_dbfile.h"
 
-
 class GemDataStream;
 
 const int	MAXRKFRMSTR = 20;  // max fields in key

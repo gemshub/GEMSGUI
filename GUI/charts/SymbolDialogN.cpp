@@ -60,7 +60,7 @@ SymbolDialog::SymbolDialog( const SeriesLineData& aData, QWidget* parent):
 
     ui->pColor->setAutoFillBackground( true);
     QPalette pl = ui->pColor->palette();
-    pl.setColor( QPalette::Window, linedata.getColor() );
+    pl.setColor( QPalette::Window, QColor(linedata.getRed(), linedata.getGreen(), linedata.getBlue()));
     ui->pColor->setPalette(pl);
 
     ui->pLineSize->setValue( linedata.getPenSize() );
@@ -88,8 +88,9 @@ SeriesLineData& SymbolDialog::GetPlotLine()
 {
     int type = smbGroup->checkedId();
     QColor cl = ui->pColor->palette().color(QPalette::Window); //backgroundColor();
-    linedata.setChanges( type, ui->pSymbolSize->value(), ui->pLineSize->value(),
-                         ui->pLineStyle->currentIndex(), ui->pSpline->isChecked(), cl );
+    linedata.setChanges(type, ui->pSymbolSize->value(), ui->pLineSize->value(),
+                        ui->pLineStyle->currentIndex(), ui->pSpline->isChecked(),
+                        cl.red(), cl.green(), cl.blue());
     return linedata;
 }
 

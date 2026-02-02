@@ -19,10 +19,9 @@
 
 #include <fstream>
 #include "m_gem2mt.h"
-#include "GEMS3K/v_service.h"
-
 #include "visor.h"
 #include "stepwise.h"
+#include "GEMS3K/v_service.h"
 
 #ifdef useOMP
 #include <omp.h>

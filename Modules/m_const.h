@@ -42,18 +42,18 @@ public:
     static TConst* pm;
 
     TConst( uint nrt );
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "Const";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
     void CopyRecords( const char *prfName );
-    const char* GetHtml();
+    const char* GetHtml() override;
     void *CA;
 
 };

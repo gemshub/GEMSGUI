@@ -21,7 +21,6 @@
 #ifndef _m_icomp_h_
 #define _m_icomp_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 
 class QJsonArray;
@@ -71,21 +70,21 @@ public:
 
     TIComp( uint nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "IComp";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
 
-    void RecInput( const char *key );
-    int RecBuild( const char *key, int mode = VF_UNDEF );
+    void RecInput( const char *key ) override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
     //void RecBild( const char *key );
     //void RecCalc( const char *key );
 

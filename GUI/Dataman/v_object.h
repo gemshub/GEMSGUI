@@ -20,7 +20,6 @@
 #define _v_object_h_
 
 #include <fstream>
-#include <memory>
 #include "v_user.h"
 #include "v_vals.h"
 

@@ -31,9 +31,10 @@
 #ifndef ms_multi_new_h
 #define ms_multi_new_h
 
-#include "GEMS3K/ms_multi.h"
 #include "v_module.h"
 #include "v_ipnc.h"
+#include "GEMS3K/ms_multi.h"
+
 // Internal subroutine for ET_translate() to process Phase scripts
 typedef int (tget_ndx)( int nI, int nO, int Xplace );
 
@@ -91,7 +92,7 @@ struct SPP_SETTING
 
 
 // Data of MULTI
-class TMulti: public TMultiBase, public TSubModule
+class TMulti: public TMultiBase, public TCModule
 {
 
 public:

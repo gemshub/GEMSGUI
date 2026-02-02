@@ -1,10 +1,9 @@
 #pragma once
 
-#include "string"
-#include "vector"
-#include "GEMS3K/v_detail.h"
+#include <vector>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "GEMS3K/v_detail.h"
 
 std::string thf_string( const char* value, size_t size );
 

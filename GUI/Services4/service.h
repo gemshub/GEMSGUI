@@ -34,6 +34,8 @@ const int VF_YES_ALL =8;
 const int VF_NO_ALL = 9;
 const int VF_CANCEL = 2;
 
+bool vfExist(const std::string& file_path);
+
 int vfQuestYesNoCancel(QWidget* par, const std::string& title, const std::string& mess);
 
 bool vfQuestion(QWidget* par, const std::string& title, const std::string& mess);

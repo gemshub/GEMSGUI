@@ -3,7 +3,7 @@
 //
 // Implementation of TVisor class, setup and config functions
 //
-// Copyright (C) 1996-2012 A.Rysin,S.Dmytriyeva,D.Kulik
+// Copyright (C) 1996-2025 A.Rysin,S.Dmytriyeva,D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
@@ -16,26 +16,19 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <QApplication>
-#ifndef _WIN32
-#include <unistd.h>
-//#else
-//#include <io.h>
-#endif
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QString>
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonObject>
 #include <QJsonDocument>
-#include <cstdlib>
 
 #include "GEMS3K/jsonconfig.h"
 #include "service.h"
 #include "visor.h"
 #include "units.h"
-#include "page_w.h"
 
 #include "m_const.h"
 #include "m_sdata.h"
@@ -52,7 +45,11 @@
 #include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_dualth.h"
+
+#ifndef NO_GUI
+#include "page_w.h"
 #include "GemsMainWindow.h"
+#endif
 
 // subfolder and file names constants
 const char *VISOR_INI = "data/vis_cn.ini";
@@ -71,19 +68,149 @@ const char *GEM_CONF = "gemsdbf.conf";
 const char *VIS_CONF = "visor.conf";
 const char *WIN_CONF = "windows.conf";
 
+const char *vSigERROR_VISOR = "Error in visor data file visor.dat - wrong markers";
+const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong markers";
+const char *vSigTITLE = "Configurator";
+const int lnWINSIG = 2;
+const char SigBEG[lnWINSIG + 1] = "Vs";
+const char SigEND[lnWINSIG + 1] = "sX";
+
+
+TCStringArray readDirs(const char *dir);
+
 //----------------------------------------------------------------
 // TVisor  class implementation
 //----------------------------------------------------------------
 
-TVisor::TVisor(int c, char *v[]):
-        argc(c), argv(v)
+#ifndef NO_GUI
+
+// GUI ------------------------------------------------
+
+//  Reorganized by KD on E.Curti' comment 04.04.01
+bool TVisor::CanClose()
 {
-   Q_INIT_RESOURCE(GUI);
+    bool ret = true;
+
+    if(pVisor->getConfigAutosave()) {
+        Exit();
+    }
+    else {
+        switch(vfQuestion3(window(), "Exit GEM-Selektor",
+                            "Save configuration?", "Do not save", "Save")) {
+        case VF3_1:
+            break;
+        case VF3_2:
+            Exit();
+            break;
+        case VF3_3:
+            ret = false;
+        }
+    }
+    if(ret) {
+        free_memory();
+    }
+    return ret;
+}
+
+void TVisor::Update(bool force)
+{
+    pVisorImp->Update(force);
+}
+
+QWidget* TVisor::window()
+{
+    return pVisorImp;
+}
+
+void TVisor::OpenModule(QWidget* parent, uint i, int page, int viewmode, bool select)
+{
+    pVisorImp->OpenModule( parent, i, page, viewmode,  select);
+}
+
+void TVisor::ProcessProgress( QWidget* parent, int nRT )
+{
+    pVisorImp->ProcessProgress( parent,  nRT );
+}
+
+// return true if canceled
+bool TVisor::Message( QWidget* parent, const char* name,
+                     const char* msg, int prog, int total, bool move)
+{
+    return pVisorImp->Message( parent, name, msg, prog, total, move);
+}
+
+void TVisor::CloseMessage()
+{
+    pVisorImp->CloseMessage();
+}
+
+void TVisor::defineModuleKeysList(size_t nRT)
+{
+    pVisorImp->defineModuleKeysList(nRT);
+}
+
+#else
+
+bool TVisor::CanClose()
+{
+    free_memory();
+    return true;
+}
+
+void TVisor::Update(bool)
+{
+    gui_logger->debug("TVisor::Update ");
+}
+
+
+QWidget* TVisor::window()
+{
+    gui_logger->debug("TVisor::window ");
+    return nullptr;
+}
+
+void TVisor::OpenModule(QWidget*, uint i, int page, int, bool)
+{
+    gui_logger->debug("TVisor::OpenModule {}({}) ", i, page);
+}
+
+void TVisor::ProcessProgress(QWidget*, int nRT)
+{
+    gui_logger->debug("TVisor::ProcessProgress {}", nRT);
+}
+
+bool TVisor::Message(QWidget*, const char* /*name*/,
+                     const char* msg, int prog, int total, bool)
+{
+    gui_logger->debug("TVisor::Message {} {}/{}", msg, prog, total);
+    return false;
+}
+
+void TVisor::CloseMessage()
+{
+    gui_logger->debug("TVisor::CloseMessage");
+}
+
+void TVisor::defineModuleKeysList(size_t nRT)
+{
+    gui_logger->debug("TVisor::defineModuleKeysList {}", nRT);
+}
+
+#endif
+
+
+TVisor::TVisor(int c, char *v[]):
+    argc(c), argv(v)
+{
+#ifndef NO_GUI
+    Q_INIT_RESOURCE(GUI);
+#endif
 
     ProfileMode = MDD_DATABASE;
     dbChangeMode = false;
     isElementsProfileMode = true;
 
+// get default path
 #ifndef _WIN32
 #ifdef __APPLE__
 
@@ -100,9 +227,10 @@ TVisor::TVisor(int c, char *v[]):
     }
     UserGEMDir = home_dir() + DEFAULT_USER_DIR; // "/Library/gems3/";
 
-#else  // Linux - in user's home directory
-       // By default: /Resources in the same dir as the exe file;
-       //       /Library/gems3/projects on the same level as the /Gems3-app dir.
+#else
+    // Linux - in user's home directory
+    // By default: /Resources in the same dir as the exe file;  or up if bin
+    //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
     if(dirExe.endsWith("/bin") || dirExe.endsWith("\bin")) { // Try found Resource up level
         dirExe.chop(4);
@@ -110,9 +238,9 @@ TVisor::TVisor(int c, char *v[]):
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
     //ServerGems3Dir = dirExe.toStdString();
-    QDir dirUp(dirExe);
-    if( dirUp.cdUp() )
-         dirExe = dirUp.path(); // + QDir::separator();
+    //QDir dirUp(dirExe);
+    //if(dirUp.cdUp())
+    //    dirExe = dirUp.path();
     LocalDir = dirExe.toStdString();
 
 #ifdef NDEBUG
@@ -124,18 +252,18 @@ TVisor::TVisor(int c, char *v[]):
 #endif // __unix
 
 #else
-      // windows - in any non-system directory on C:/ or D:/
-      // By default: /Resources in the same dir as the exe file;
-      //       /Library/gems3/projects on the same level as the /Gems3-app dir.
+    // windows - in any non-system directory on C:/ or D:/
+    // By default: /Resources in the same dir as the exe file;
+    //       /Library/gems3/projects on the same level as the /Gems3-app dir.
     QString dirExe = QCoreApplication::applicationDirPath();
     if(dirExe.endsWith("/bin") || dirExe.endsWith("\bin")) { // Try found Resource up level
         dirExe.chop(4);
     }
     SysGEMDir = dirExe.toStdString();
     SysGEMDir += RESOURCES_DIR;
-    QDir dirUp(dirExe);
-    if( dirUp.cdUp() )
-         dirExe = dirUp.path();
+    //QDir dirUp(dirExe);
+    //if(dirUp.cdUp())
+    //    dirExe = dirUp.path();
     LocalDir = dirExe.toStdString();
 #ifdef NDEBUG
     UserGEMDir =  home_dir() + DEFAULT_USER_DIR;
@@ -149,56 +277,17 @@ TVisor::TVisor(int c, char *v[]):
     UserProfDir = DEFAULT_PR_DIR;
     ImgDir = IMAGES_SRC_DIR;
 
-    // parsing options -s and -u if given
+    // parsing all options if given
+    extract_args(argc, argv);
 
-    int isys = 0;		// index of sysdir option
-    int iuser = 0;		// index of userdir option
-    //int iserver = 0;		// index of server option
-
-    for (int ii = 1; ii < argc; ii++)
-    {
-        if (strcmp(argv[ii], "-s") == 0
-                || strcmp(argv[ii], "--system-dir") == 0 )
-            isys = ii;
-        else if (strcmp(argv[ii], "-u") == 0
-                 || strcmp(argv[ii], "--user-dir") == 0 )
-            iuser = ii;
-        // else if (strcmp(argv[ii], "-g") == 0
-        //          || strcmp(argv[ii], "--gems-server-dir") == 0 )
-        //     iserver = ii;
-    }
-    if (isys != 0)
-    {
-        if (argc <= isys + 1)
-            Error("Wrong options", "Wrong argument for option -s");
-        SysGEMDir = argv[isys + 1];
-        if (SysGEMDir[SysGEMDir.length() - 1] == '/')
-            SysGEMDir += '\0';
-        SysGEMDir += RESOURCES_DIR;
-    }
-    if (iuser != 0)
-    {
-        if (argc <= iuser + 1)
-            Error("Wrong options", "Wrong argument for option -u");
-        UserGEMDir = argv[iuser + 1];
-        if (UserGEMDir[UserGEMDir.length() - 1] != '/')
-            UserGEMDir += '/';
-    }
-    // if (iserver != 0)
-    // {
-    //     if (argc <= iserver + 1)
-    //         Error("Wrong options", "Wrong argument for option -g");
-    //     ServerGems3Dir = argv[iserver + 1];
-    // }
-
-//    LocalDir = userGEMDir();
+    //    LocalDir = userGEMDir();
     LocalDocDir = SysGEMDir + HELP_DB_DIR;
     //RemoteDocURL = "http://gems.web.psi.ch/doc/html/";
     RemoteHTML = SysGEMDir + HELP_SRC_DIR;
     LocalDoc = true;
     DefaultBuiltinTDB = "psi-nagra";  // PSI-Nagra TDB update TT 03.04.2013
-//    DefaultBuiltinTDB = "kernel";   temporary for using old Nagra-PSI (2003) dataset
-//    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
+    //    DefaultBuiltinTDB = "kernel";   temporary for using old Nagra-PSI (2003) dataset
+    //    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
 
     GemsSettings::data_logger_directory = UserGEMDir+"logs/";
     GemsSettings::settings_file_name = SysGEMDir+"gemsgui-config.json";
@@ -208,157 +297,104 @@ TVisor::TVisor(int c, char *v[]):
     //gui_logger->set_level(spdlog::level::info);
 
 
-// For debugging the directories
+    // For debugging the directories
     gui_logger->info("Local    : {}", LocalDir);
     gui_logger->info("SysGEM   : {}", SysGEMDir);
     gui_logger->info("UserGEM  : {}", UserGEMDir);
     gui_logger->debug("UserProj : {}", UserProfDir);
     gui_logger->debug("LocalDoc : {}", LocalDocDir);
     gui_logger->debug("LocalHTML: {}", RemoteHTML);
-/*
-#ifndef _WIN32
-#ifndef GEMS_RELEASE
-// added SD oct 2005
-     if( LocalDocDir[0] == '.' && LocalDocDir[1] == '/' )
-     {
-	char cur_dir[PATH_MAX];
-
-	// let's try to find resources by path of the executable
-	getcwd(cur_dir, PATH_MAX);
-    LocalDocDir = string(cur_dir) + string(LocalDocDir,1);
-        RemoteHTML = string(cur_dir) + string(RemoteHTML,1);
-     }
-#endif
-#endif
-*/
 }
 
 TVisor::~TVisor()
 {}
 
-QWidget* TVisor::window()
+void  TVisor::free_memory()
 {
-    return pVisorImp;
+    try  {
+        // delete auto-generated aq and gas phases if still in database
+        TProfil::pm->deleteAutoGenerated();
+        aObj[o_wo_bfc3]->SetPtr(0);
+        aObj[ o_neqtxt]->SetPtr(0);
+        aObj[ o_dtnam_nr]->SetPtr(0);
+        aObj[ o_dtres]->SetPtr(0);
+        aObj[ o_unpmr]->SetPtr(0);
+        aObj[ o_nlich]->SetPtr(0);
+        aObj[ o_nldch]->SetPtr(0);
+        aObj[ o_nldcvs]->SetPtr(0);
+        aObj[ o_nldchs]->SetPtr(0);
+        aObj[ o_nlphh]->SetPtr(0);
+        TGEM2MT::pm->FreeNa();
+    }
+    catch(TError & xcpt) {
+        gui_logger->info("!!! Local    : {}", LocalDir);
+        throw TFatalError(xcpt);
+    }
 }
 
 void TVisor::Setup()
 {
-    bool option_d = false;
-    bool option_f = false;
-    bool default_settings = false;
 #ifdef __APPLE__
-    bool default_config = true;
-    pVisorImp->setConfigAutosave( true );
-#else
-    bool default_config = false;
+    pVisor->setConfigAutosave(true);
 #endif
-
-    for (int ii = 1; ii < argc; ii++)	//Sveta 16/06/1999
-    {
-        if (strcmp(argv[ii], "-d") == 0
-                || strcmp(argv[ii], "--from-ini-files") == 0 )
-        {
-            option_d = true;
-            pVisorImp->setConfigAutosave( true );
-        }
-        else
-            if (strcmp(argv[ii], "-f") == 0
-                    || strcmp(argv[ii], "--allow-db-change") == 0 )
-            {
-                option_f = true;
-            }
-            else
-                if (strcmp(argv[ii], "-c") == 0
-                        || strcmp(argv[ii], "--with-default-config") == 0 )
-                {
-                    default_config = true;
-                    pVisorImp->setConfigAutosave( true );
-                }
-                else
-                    if (strcmp(argv[ii], "-v") == 0
-                            || strcmp(argv[ii], "--with-default-settings") == 0 )
-                    {
-                        default_settings = true;
-                        pVisorImp->setConfigAutosave( true );
-                    }
-    }
-
-    if (argc == 1 ) // No command line parameters - assume as -d   since v.3.8.0
-    {
-        option_d = true;
-        // default_config = true;
-        pVisorImp->setConfigAutosave( true );
+    // check exist Resources
+    std::string fname = sysGEMDir();
+    if(!vfExist(fname)) {
+        Error("Setup", fname + "- The Resource directory does not exist.");
     }
 
     // check home dir
-    string dir = userGEMDir();
+    std::string dir = userGEMDir();
     QDir userGEM(dir.c_str());
-
     bool firstTimeStart = !userGEM.exists(userProfDir().c_str());
 
-    if (firstTimeStart)
-    {
-        default_config = true;
-        default_settings = true;
-        pVisorImp->setConfigAutosave( true );
-
-        string dirUp = string( dir,0, dir.length()-1);
-        size_t pos = dirUp.rfind("/");
-        if( pos != string::npos )
-        {
-            dirUp = dirUp.substr(0,pos);
-            QDir userGEMUP(dirUp.c_str());
-            if(!userGEMUP.exists())
-                if( !userGEMUP.mkdir(dirUp.c_str()) )
-                    throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
-        }
-
-        gui_logger->debug("make home GEM directories");
-        gui_logger->debug("UserGEM *: {}", UserGEMDir);
-        if(!userGEM.exists(userGEMDir().c_str())) {
-            if( !userGEM.mkdir(userGEMDir().c_str()) )
-                throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
-        }
-        gui_logger->debug("UserProj*: {}", UserProfDir);
-        if( !userGEM.mkdir(userProfDir().c_str()) )
-            throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
-
-        // copy default project
-        string cmd;
-
-#ifndef _WIN32
-        cmd = "cp -r ";
-        cmd += sysProfDir();
-        cmd += "* ";
-        cmd += userProfDir();
-
-        gui_logger->debug("Creating GEMS user directory:  {}", cmd);
-#else
-        string sprdir = sysProfDir();
-        string uprdir = userProfDir();
-        QDir sysProjD( sprdir.c_str() );
-        QDir usrProjD( uprdir.c_str() );
-        QString sPD = sysProjD.absolutePath();
-        QString uPD = usrProjD.absolutePath();
-
-        cmd = "xcopy \"";
-        cmd += 	qPrintable(	sysProjD.toNativeSeparators( sPD ) );
-        //        cmd += DefProfDir;
-        cmd += "\" \"";
-        cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
-        cmd += "\" /e /y";
-
-        gui_logger->debug("Creating GEMS user directory:  {}", cmd);
-#endif
-
-        if (system(cmd.c_str()) != 0)
-            throw TFatalError("GEMS Init", "Cannot copy default projects to user directory");
+    // copy default projects if first run
+    if(firstTimeStart)  {
+        option_d = true;
+        firstTimeSetup();
     }
 
-    if (option_d)
-        load();
-    else
-        fromDAT(default_config, default_settings);
+    // define objects
+    if( option_d || !fromObjDAT() ) {
+        std::string fname = sysGEMDir() + OBJECT_INI;
+        gui_logger->debug("TVisor::load {}", fname);
+        aObj.load(fname.c_str());
+        toObjDAT();
+    }
+
+    // define database
+    if( option_d || option_c || !fromModCFG() ) {
+        defaultCFG();
+        toModCFG();
+    }
+
+    // init modules
+    initModules();
+
+    // init windows
+    if( option_d || !fromWinDAT() ) {
+        std::string fname = sysGEMDir() + UNITS_INI;
+        aUnits.load(fname);
+
+#ifndef NO_GUI
+        fname = sysGEMDir() + VISOR_INI;
+        TJsonConfig cnf( std::string(fname) + ".json");
+        for (size_t ii = 0; ii < aMod.size(); ii++)
+            aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
+#endif
+        toWinDAT();
+        toWinCFG();
+    }
+    else {
+        if(option_c || !fromWinCFG()) {
+            toWinCFG();
+        }
+    }
+
+    // read settings
+    if( !option_v && !option_d ) {
+        fromSettingsCFG();
+    }
 
     aObj[o_n0w_mps]->SetPtr(0);
     aObj[o_n1w_mps]->SetPtr(0);
@@ -372,91 +408,173 @@ void TVisor::Setup()
     aObj[o_n1w_mju]->SetPtr(0);
     aObj[o_n0w_lga]->SetPtr(0);
     aObj[o_n1w_lga]->SetPtr(0);
-
-    // Sveta permission to change data in special DB files
-    if (option_f)
-        dbChangeMode = true;
 }
 
-
-const int lnWINSIG = 2;
-const char SigBEG[lnWINSIG + 1] = "Vs";
-const char SigEND[lnWINSIG + 1] = "sX";
-
-void TVisor::load()
+// Exit of program, save cfg
+void TVisor::Exit()
 {
-    string fname = sysGEMDir() + OBJECT_INI;
-    gui_logger->debug("TVisor::load {}", fname);
-    aObj.load(fname.c_str());
-
-    defaultCFG();
-    initModules();
-
-    fname = sysGEMDir();
-    fname += UNITS_INI;
-    aUnits.load(fname);
-
-    fname = sysGEMDir();
-    fname += VISOR_INI;
-
-    TJsonConfig cnf( std::string(fname) + ".json");
-    for (size_t ii = 0; ii < aMod.size(); ii++)
-        aWinInfo.push_back( std::make_shared<CWinInfo>(*aMod[ii], cnf));
-
-    toDAT();
-    toModCFG();
-    toWinCFG();
+    try  {
+        toModCFG();
+        toWinCFG();
+        toSettingsCFG();
+    }
+    catch(TError & xcpt) {
+        throw TFatalError(xcpt);
+    }
 }
 
-void
-TVisor::toDAT()
-{
-    string fname = sysGEMDir();
-    fname += VISOBJ_DAT;
+//--------------------------------------------------------
 
-    ofstream obj_dat(fname, ios::binary | ios::out);
+int TVisor::extract_args( int argc, char* argv[])
+{
+    // now -d only for first run
+    // No command line parameters - assume as -d   since v.3.8.0
+    // if(argc == 1) {
+    //     option_d = true;
+    //     pVisor->setConfigAutosave(true);
+    //     return 0;
+    // }
+
+    int i=0;
+    for( i = 1; i < argc; ++i)
+    {
+        std::string arg = argv[i];
+        if( (arg == "-d") || (arg == "--from-ini-files") ) {
+            option_d = true;
+        }
+        else  if( (arg == "-f") || (arg == "--allow-db-change") ) {
+            dbChangeMode = true;
+        }
+        else if( (arg == "-c") || (arg == "--with-default-config")) {
+            option_c = true;
+        }
+        else  if( (arg == "-v") || (arg == "--with-default-settings") ) {
+            option_v = true;
+        }
+        else if ((arg == "-s") || (arg == "--system-dir"))  {
+            if (i + 1 < argc) {
+                SysGEMDir = argv[++i];
+                if (SysGEMDir[SysGEMDir.length() - 1] == '/') {
+                    SysGEMDir += '\0';
+                }
+                SysGEMDir += RESOURCES_DIR;
+            }
+            else {
+                Error("Wrong options", "Wrong argument for option -s");
+                return 1;
+            }
+        }
+        else if ((arg == "-u") || (arg == "--user-dir"))
+        {
+            if (i + 1 < argc) {
+                UserGEMDir = argv[++i];
+                if (UserGEMDir[UserGEMDir.length() - 1] != '/') {
+                    UserGEMDir += '/';
+                }
+            }
+            else {
+                Error("Wrong options", "Wrong argument for option -u");
+                return 1;
+            }
+        }
+        // else if ((arg == "-g") || (arg == "--gems-server-dir"))  {
+        //     if (i + 1 < argc) {
+        //         ServerGems3Dir = argv[++i];
+        //     }
+        //     else {
+        //         Error("Wrong options", "Wrong argument for option -g");
+        //         return 1;
+        //     }
+        // }
+    }
+
+    return 0;
+}
+
+void TVisor::firstTimeSetup()
+{
+    std::string dir = userGEMDir();
+    QDir userGEM(dir.c_str());
+    std::string dirUp = std::string(dir, 0, dir.length()-1);
+    size_t pos = dirUp.rfind("/");
+    if( pos != std::string::npos )  {
+        dirUp = dirUp.substr(0,pos);
+        QDir userGEMUP(dirUp.c_str());
+        if(!userGEMUP.exists()) {
+            if( !userGEMUP.mkdir(dirUp.c_str()) ) {
+                throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+            }
+        }
+    }
+
+    gui_logger->debug("make home GEM directories");
+    gui_logger->debug("UserGEM *: {}", UserGEMDir);
+    if(!userGEM.exists(userGEMDir().c_str())) {
+        if( !userGEM.mkdir(userGEMDir().c_str()) ) {
+            throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+        }
+    }
+    gui_logger->debug("UserProj*: {}", UserProfDir);
+    if( !userGEM.mkdir(userProfDir().c_str()) )
+        throw TFatalError("GEMS Init", "Cannot create user GEMS projects directory");
+
+    // copy default project
+    std::string cmd;
+
+#ifndef _WIN32
+    cmd = "cp -r ";
+    cmd += sysProfDir();
+    cmd += "* ";
+    cmd += userProfDir();
+
+    gui_logger->debug("Creating GEMS user directory:  {}", cmd);
+#else
+    std::string sprdir = sysProfDir();
+    std::string uprdir = userProfDir();
+    QDir sysProjD( sprdir.c_str() );
+    QDir usrProjD( uprdir.c_str() );
+    QString sPD = sysProjD.absolutePath();
+    QString uPD = usrProjD.absolutePath();
+
+    cmd = "xcopy \"";
+    cmd += 	qPrintable(	sysProjD.toNativeSeparators( sPD ) );
+    //        cmd += DefProfDir;
+    cmd += "\" \"";
+    cmd += 	qPrintable( usrProjD.toNativeSeparators( uPD ) );
+    cmd += "\" /e /y";
+
+    gui_logger->debug("Creating GEMS user directory:  {}", cmd);
+#endif
+
+    if (system(cmd.c_str()) != 0) {
+        throw TFatalError("GEMS Init", "Cannot copy default projects to user directory");
+    }
+}
+
+void TVisor::toObjDAT()
+{
+    std::string fname = sysGEMDir() + VISOBJ_DAT;
+    std::ofstream obj_dat(fname, std::ios::binary | std::ios::out);
     // begin signature
     obj_dat << SigBEG;
     aObj.toDAT(obj_dat);
     // end signature
     obj_dat << SigEND;
-    obj_dat.close();
-
-    fname = sysGEMDir();
-    fname += VISOR_DAT;
-
-    ofstream visor_dat(fname.c_str(), ios::binary | ios::out);
-    // begin signature
-    visor_dat << SigBEG;
-
-    int n = aMod.size(); // Do not change type, used in configuration
-    visor_dat.write((char *) &n, sizeof n);
-    for (int ii = 0; ii < n; ii++)
-        aWinInfo[ii]->toDAT(visor_dat);
-
-    // end signature
-    visor_dat << SigEND;
-
-    // Units' part to save
-    aUnits.toDAT(visor_dat);
 }
 
-
-const char *vSigERROR_VISOR = "Error in visor data file visor.dat - wrong markers";
-const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong markers";
-const char *vSigTITLE = "Configurator";
-
-void
-TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_v*/)
+bool TVisor::fromObjDAT()
 {
-    string fname = sysGEMDir() + VISOBJ_DAT;
+    std::string fname = sysGEMDir() + VISOBJ_DAT;
+
+    if(!vfExist(fname)) {
+        gui_logger->info("Used ini file, file {} does not exist.", fname);
+        return false;
+    }
 
     // objects' DAT
-    ifstream obj_dat(fname.c_str(), ios::binary | ios::in);
-
-    if ( !obj_dat.good() ) {
-        std::string message = "Can't open ";
-        message += fname.c_str();
+    std::ifstream obj_dat(fname, std::ios::binary | std::ios::in);
+    if (!obj_dat.good()) {
+        std::string message = "Can't open " + fname;
         throw TError(vSigTITLE, message);
     }
 
@@ -471,32 +589,48 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
     if (sg[0] != SigEND[0] || sg[1] != SigEND[1])
         throw TError(vSigTITLE, vSigERROR_VISOBJ);
 
-    obj_dat.close();
+    return true;
+}
 
-
-    if( default_config )
-    {
-        defaultCFG();
-        toModCFG();
+void TVisor::toWinDAT()
+{
+#ifndef NO_GUI
+    std::string fname = sysGEMDir()+VISOR_DAT;
+    std::ofstream visor_dat(fname, std::ios::binary | std::ios::out);
+    // begin signature
+    visor_dat << SigBEG;
+    int n = aMod.size(); // Do not change type, used in configuration
+    visor_dat.write((char *) &n, sizeof n);
+    for (int ii = 0; ii < n; ii++) {
+        aWinInfo[ii]->toDAT(visor_dat);
     }
-    else
-    {
-        fromModCFG();
-    }
+    // end signature
+    visor_dat << SigEND;
 
-    initModules();
+    // Units' part to save
+    aUnits.toDAT(visor_dat);
+#endif
+}
 
+bool TVisor::fromWinDAT()
+{
+#ifndef NO_GUI
     // loading static info for visor (DAT files)
-    fname = sysGEMDir() + VISOR_DAT;
+    std::string fname = sysGEMDir() + VISOR_DAT;
 
-    ifstream visor_dat(fname.c_str(), ios::binary | ios::in);
+    if(!vfExist(fname)) {
+        gui_logger->info("Used ini files, file {} does not exist.", fname);
+        return false;
+    }
 
-    if ( !obj_dat.good() ) {
-        std::string message = "Can't open ";
-        message += fname.c_str();
+    std::ifstream visor_dat(fname, std::ios::binary | std::ios::in);
+
+    if ( !visor_dat.good() ) {
+        std::string message = "Can't open " + fname;
         throw TError(vSigTITLE, message);
     }
 
+    char sg[2];
     visor_dat.read(sg, sizeof sg);
     if (sg[0] != SigBEG[0] || sg[1] != SigBEG[1])
         throw TError(vSigTITLE, vSigERROR_VISOR);
@@ -516,55 +650,54 @@ TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_
 
     // Units' part to load
     aUnits.fromDAT(visor_dat);
-
-    if( default_settings )
-        toWinCFG();
-    else
-        fromWinCFG();
+#endif
+    return true;
 }
 
-void
-TVisor::toModCFG()
+void TVisor::toModCFG()
 {
-    string fname = userProfDir();//userGEMDir();
-    fname += GEM_CONF;
+    std::string fname = userProfDir()+GEM_CONF;
 
-    fstream f_gems(fname.c_str(), ios::out /*| ios::binary*/);
-    ErrorIf(!f_gems.good(), "GEMS Init",
-            "Error writing configuration file (gemsdbf.conf)");
+    std::fstream f_gems(fname, std::ios::out /*| ios::binary*/);
+    ErrorIf(!f_gems.good(), "GEMS Init", "Error writing configuration file (gemsdbf.conf)");
     rt.toCFG(f_gems);
 #ifndef _WIN32
     gui_logger->info("gems.cfg saved");
 #endif
 }
 
-void
-TVisor::fromModCFG()
+bool TVisor::fromModCFG()
 {
-    string fname = userProfDir();//userGEMDir();
-    fname += GEM_CONF;
+    std::string fname = userProfDir()+GEM_CONF;
 
-    fstream f_gems(fname.c_str(), ios::in | ios::binary );
-    ErrorIf(!f_gems.good(), "GEMS Init",
-            "Error reading configuration file (gemsdbf.conf)");
+    if(!vfExist(fname)) {
+        gui_logger->info("Used default configuration, file {} does not exist.", fname);
+        return false;
+    }
+
+    std::fstream f_gems(fname.c_str(), std::ios::in | std::ios::binary );
+    ErrorIf(!f_gems.good(), "GEMS Init", "Error reading configuration file (gemsdbf.conf)");
     rt.fromCFG(f_gems);
 #ifndef _WIN32
     gui_logger->info("gems.cfg read");
 #endif
+    return true;
 }
 
-void TVisor::toWinCFG()
+void TVisor::toSettingsCFG()
 {
-    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF + ".json";
+    std::string fname_ini = userProfDir() + VIS_CONF + ".json";
 
     QJsonObject win_cfg_object;
+#ifndef NO_GUI
     win_cfg_object["color_scheme"] = pVisorImp->getColorScheme();
-    win_cfg_object["double_precision"] = pVisorImp->getDoubleDigits();
     win_cfg_object["update_interval"] = pVisorImp->updateInterval();
     win_cfg_object["general_font_string"] = pVisorImp->getCellFont().toString();
     win_cfg_object["axis_label_font_string"] = pVisorImp->getAxisLabelFont().toString();
     win_cfg_object["number_of_windows"] = static_cast<int>(aWinInfo.size());
-    win_cfg_object["config_autosave"] = pVisorImp->getConfigAutosave();
+#endif
+    win_cfg_object["double_precision"] = pVisor->getDoubleDigits();
+    win_cfg_object["config_autosave"] = pVisor->getConfigAutosave();
     win_cfg_object["local_dir"] = QString::fromStdString(LocalDir);
     win_cfg_object["local_doc_dir"] = QString::fromStdString(LocalDocDir);
     win_cfg_object["remote_doc_url"] = QString::fromStdString(RemoteHTML);
@@ -574,32 +707,26 @@ void TVisor::toWinCFG()
     win_cfg_object["current_system"] = rt[RT_SYSEQ]->PackKey();
     win_cfg_object["default_built_in_TDB"] = QString::fromStdString(DefaultBuiltinTDB);
 
-    fstream f_win_ini(fname_ini.c_str(), ios::out );
-    ErrorIf(!f_win_ini.good(), "GEMS Init",
-            "Error writing configurator file (visor.conf)");
+    std::fstream f_win_ini(fname_ini, std::ios::out);
+    ErrorIf(!f_win_ini.good(), "GEMS Init", "Error writing configurator file (visor.conf.json)");
     QJsonDocument doc(win_cfg_object);
     QString str_json(doc.toJson());
-    f_win_ini << str_json.toStdString()  << endl;
-    f_win_ini.close();
-
-    // Window-specific settings
-    fname_ini = /*userGEMDir*/userProfDir() + WIN_CONF;
-    f_win_ini.open(fname_ini.c_str(), ios::out );
-    ErrorIf(!f_win_ini.good(), "GEMS Init",
-            "Error writing configurator file (windows.conf)" );
-    //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
-    for (size_t ii = 0; ii < aWinInfo.size(); ii++)
-        aWinInfo[ii]->toWinCFG(f_win_ini);
-    f_win_ini.close();
+    f_win_ini << str_json.toStdString()  << std::endl;
 }
 
-void TVisor::fromWinCFG()
+void TVisor::fromSettingsCFG()
 {
-    string fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
+    std::string fname_ini = userProfDir() + VIS_CONF + ".json";
 
-    TJsonConfig visor_conf( fname_ini+".json" );
+    if(!vfExist(fname_ini)) {
+        gui_logger->info("Used default settings, file {} does not exist.", fname_ini);
+        return;
+    }
+
+    TJsonConfig visor_conf(fname_ini);
+
+#ifndef NO_GUI
     pVisorImp->setColorScheme(visor_conf.value_or_default("color_scheme", 0));
-    pVisorImp->setDoubleDigits(visor_conf.value_or_default("double_precision", pVisorImp->getDoubleDigits()));
     pVisorImp->setUpdateInterval(visor_conf.value_or_default("update_interval", pVisorImp->updateInterval()));
     std::string font_str = visor_conf.value_or_default<std::string>("general_font_string", "");
     if( !font_str.empty() ) {
@@ -615,7 +742,9 @@ void TVisor::fromWinCFG()
         axisLabelFont.fromString( font_str.c_str() );
         pVisorImp->setAxisLabelFont(axisLabelFont);
     }
-    pVisorImp->setConfigAutosave(visor_conf.value_or_default("config_autosave",  pVisorImp->getConfigAutosave()));
+#endif
+    pVisor->setDoubleDigits(visor_conf.value_or_default("double_precision", pVisor->getDoubleDigits()));
+    pVisor->setConfigAutosave(visor_conf.value_or_default("config_autosave",  pVisor->getConfigAutosave()));
     setLocalDir(visor_conf.value_or_default<std::string>("local_dir", LocalDir));
     setLocalDocDir(visor_conf.value_or_default<std::string>("local_doc_dir", LocalDocDir));
     setRemoteHTML(visor_conf.value_or_default<std::string>("remote_doc_url", RemoteHTML));
@@ -624,52 +753,49 @@ void TVisor::fromWinCFG()
     setDefaultBuiltinTDB(visor_conf.value_or_default<std::string>("default_built_in_TDB", DefaultBuiltinTDB));
     lastProjectKey = visor_conf.value_or_default<std::string>("current_project", lastProjectKey);
     lastSystemKey = visor_conf.value_or_default<std::string>("current_system", lastSystemKey);
+}
 
-    // Window-specific settings
-    string fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;
-    ifstream f_win_ini(fwin_ini_name.c_str() );
+// Window-specific settings
+void TVisor::toWinCFG()
+{
+#ifndef NO_GUI
+    std::string fname_ini = /*userGEMDir*/userProfDir() + WIN_CONF;
+    std::fstream  f_win_ini(fname_ini, std::ios::out);
     ErrorIf(!f_win_ini.good(), "GEMS Init",
-            "Error reading configurator file (windows.conf)" );
+            "Error writing configurator file (windows.conf)" );
+    //    f_win_ini << "# Format of the file and the order should be exactly the same" << endl;
+    for (size_t ii = 0; ii < aWinInfo.size(); ii++)
+        aWinInfo[ii]->toWinCFG(f_win_ini);
+#endif
+}
+
+// Window-specific settings
+bool TVisor::fromWinCFG()
+{
+#ifndef NO_GUI
+    std::string fwin_ini_name = userProfDir() + WIN_CONF;
+
+    if(!vfExist(fwin_ini_name)) {
+        gui_logger->info("Used default data, file {} does not exist.", fwin_ini_name);
+        return false;
+    }
+
+    std::ifstream f_win_ini(fwin_ini_name);
+    ErrorIf(!f_win_ini.good(), "GEMS Init", "Error reading configurator file (windows.conf)");
 
     for (size_t ii = 0; ii < aWinInfo.size(); ii++)
         aWinInfo[ii]->fromWinCFG(f_win_ini);
+#endif
+    return true;
 }
 
-//  Reorganized by KD on E.Curti' comment 04.04.01
-bool TVisor::CanClose()
-{
-    if( pVisorImp->getConfigAutosave() ) {
-        Exit();
-        return true;
-    }
-
-    switch (vfQuestion3(pVisorImp,
-    		"Exit GEM-Selektor", "Save configuration?",
-		"Do not save", "Save"))
-    {
-    case VF3_1:
-        return true;
-    case VF3_2:
-        Exit();
-        return true;
-    case VF3_3:
-        ;
-    }
-    return false;
-}
-
-void
-TVisor::Update(bool force)
-{
-    pVisorImp->Update(force);
-}
-
-string TVisor::filePathFromName(const string& filename, const string& extension)
+std::string TVisor::filePathFromName(const std::string& filename, const std::string& extension)
 {
     auto fname_default = filename;
     replace_all(fname_default, " <>:\"/\\|?*.", '_' );
-    if( fname_default.empty() )
+    if(fname_default.empty()) {
         fname_default =  "empty";
+    }
 
     auto  file_path  =  pVisor->localDir();
     file_path  +=  "/";
@@ -679,14 +805,10 @@ string TVisor::filePathFromName(const string& filename, const string& extension)
     return  file_path;
 }
 
-
-
 //Init work structures
-void
-TVisor::initModules()
+void TVisor::initModules()
 {
-    try
-    {
+    try {
         addModule(TSData::pm = new TSData(RT_SDATA));
         addModule(TConst::pm = new TConst(RT_CONST));
         addModule(TProfil::pm = new TProfil(RT_PARAM));
@@ -721,149 +843,112 @@ TVisor::initModules()
 
         TProfil::pm->InitSubModules();
     }
-    catch(TError & xcpt)
-    {
+    catch(TError & xcpt) {
         throw TFatalError(xcpt);
     }
 }
-
-// Exit of program, save cfg
-void
-TVisor::Exit()
-{
-    try
-    {
-        // delete auto-generated aq and gas phases if still in database
-    	TProfil::pm->deleteAutoGenerated();
-
-        toModCFG();
-        toWinCFG();
-        aObj[o_wo_bfc3]->SetPtr(0);
-        aObj[ o_neqtxt]->SetPtr(0);
-        aObj[ o_dtnam_nr]->SetPtr(0);
-        aObj[ o_dtres]->SetPtr(0);
-        aObj[ o_unpmr]->SetPtr(0);
-        aObj[ o_nlich]->SetPtr(0);
-        aObj[ o_nldch]->SetPtr(0);
-        aObj[ o_nldcvs]->SetPtr(0);
-        aObj[ o_nldchs]->SetPtr(0);
-        aObj[ o_nlphh]->SetPtr(0);
-        TGEM2MT::pm->FreeNa();
-
-    }
-    catch(TError & xcpt)
-    {
-        throw TFatalError(xcpt);
-    }
-}
-
-//TCStringArray readPDBDir(const char *dir);
-TCStringArray readDirs(const char *dir);
 
 // default configuration
-void
-TVisor::defaultCFG()
+void TVisor::defaultCFG()
 {
     rt.Init();
-
 
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "projec", true, true,
-                         o_spppar, 15, 0, 2, param_rkfrm));      // 12.12.12 added new object to Project record
+                                             o_spppar, 15, 0, 2, param_rkfrm));
+    // 12.12.12 added new object to Project record
 
     // RT_ICOMP default
     unsigned char icomp_rkfrm[3] = { MAXICNAME, MAXSYMB, MAXICGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "icomp", false, true,
-                         o_icsst, 6, 0, 3, icomp_rkfrm));
+                                             o_icsst, 6, 0, 3, icomp_rkfrm));
     rt.back()->updateJsonOD(o_icawt, o_icint);
 
     // RT_DCOMP default
     unsigned char dcomp_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "dcomp", false, true,
-                         o_dcstr, 20, 0, 4, dcomp_rkfrm));
+                                             o_dcstr, 20, 0, 4, dcomp_rkfrm));
     rt.back()->updateJsonOD(o_dcpct, o_dcsdval);
 
     // RT_COMPOS default
     unsigned char compos_rkfrm[3] = { MAXCMPNAME, MAXSYMB, MAXCMPGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "compos", false, true,
-                         o_bcpcc, 20, 0, 3, compos_rkfrm));
+                                             o_bcpcc, 20, 0, 3, compos_rkfrm));
 
     // RT_REACDC default
     unsigned char reacdc_rkfrm[4] = { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "reacdc", false, true,
-                         o_restr, 20, 0, 4, reacdc_rkfrm));
+                                             o_restr, 20, 0, 4, reacdc_rkfrm));
     rt.back()->updateJsonOD(o_repct, o_resdval);
 
     // RT_RTPARM default
     unsigned char rtparm_rkfrm[6] =
         { MAXSYMB, MAXDRGROUP, MAXDCNAME, MAXSYMB, MAXNV, MAXRTNAME };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "rtparm", true, true,
-                         o_rtname, 27, 0, 6, rtparm_rkfrm));
+                                             o_rtname, 27, 0, 6, rtparm_rkfrm));
 
     // RT_PHASE default
     unsigned char phase_rkfrm[5] =
         { MAXSYMB, MAXPHSYMB, MAXPHNAME, MAXSYMB, MAXPHGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "phase", true, true,
-                         o_phstr, 22+38/*13/06/13*/, 0, 5, phase_rkfrm));
+                                             o_phstr, 22+38/*13/06/13*/, 0, 5, phase_rkfrm));
     rt.back()->updateJsonOD(o_phsolt, o_phlicu);
 
     // RT_SYSEQ default
     unsigned char syseq_rkfrm[8] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
-                                     MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV
-                                   };
+        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV
+    };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "syseq", false, true,
-                         o_ssphst, 71, 0, 8, syseq_rkfrm));
+                                             o_ssphst, 71, 0, 8, syseq_rkfrm));
 
     // RT_PROCES default
     unsigned char proces_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
-                                       MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
-                                     };
+        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
+    };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "proces", true, true,
-                         o_pestr, 26+14/*11/03/02*/, 0, 10, proces_rkfrm));
+                                             o_pestr, 26+14/*11/03/02*/, 0, 10, proces_rkfrm));
 
     // RT_UNSPACE default
     unsigned char unspace_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
-                 MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
-                                       };
+        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
+    };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "unspac", true, true,
-                         o_unname, 70, 0, 10, unspace_rkfrm));
-
+                                             o_unname, 70, 0, 10, unspace_rkfrm));
 
     // RT_GTDEMO default
     unsigned char gtdemo_rkfrm[5] =
         { MAXMUNAME, MAXDATATYPE, MAXGTDCODE, MAXNV, MAXGDGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "gtdemo", true, true,
-                         o_gdps, 27, 0, 5, gtdemo_rkfrm));
+                                             o_gdps, 27, 0, 5, gtdemo_rkfrm));
 
     // RT_DUALTH default
     unsigned char dualth_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
-       MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
-                                  };
+        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
+    };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "dualth", true, true,
-                         o_dtname, 53, 0, 10, dualth_rkfrm));
+                                             o_dtname, 53, 0, 10, dualth_rkfrm));
 
     // RT_GEM2MT default
     unsigned char gem2mt_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
-       MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
-                                  };
+        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
+    };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "gem2mt", true, true,
-                         o_mtname, 67, 0, 10, gem2mt_rkfrm));
+                                             o_mtname, 67, 0, 10, gem2mt_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");
     //  readPDBDir(pVisor->userProfDir().c_str());
 
-    for (size_t jj = 0; jj < rt.size(); jj++)
-    {
+    for (size_t jj = 0; jj < rt.size(); jj++) {
         int cnt = 0;
-         for (size_t ii = 0; ii < aDBFiles.size(); ii++)
-        { string flnm = string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
+        for (size_t ii = 0; ii < aDBFiles.size(); ii++) {
+            std::string flnm = std::string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
             if ( flnm == rt[jj]->GetKeywd() ||
-                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
-                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
+                ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
+                ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
             {
-                string path = pVisor->sysDBDir();
+                std::string path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
                 rt[jj]->AddFile(path.c_str());
                 cnt++;
@@ -874,29 +959,26 @@ TVisor::defaultCFG()
 
     // reading project dirs
     TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
-    for (size_t ii = 0; ii < aDBDirs.size(); ii++)
-    {
-        string dir(pVisor->userProfDir());
+    for (size_t ii = 0; ii < aDBDirs.size(); ii++) {
+        std::string dir(pVisor->userProfDir());
         dir += aDBDirs[ii];
         aDBFiles = readPDBDir(dir.c_str(), "*.pdb");
 
-        for (size_t jj = 0; jj < rt.size(); jj++)
-        {
-          for (size_t kk = 0; kk < aDBFiles.size(); kk++)
-          { string flnm = string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
-            if ( flnm == rt[jj]->GetKeywd() ||
-                ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
-                ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
+        for (size_t jj = 0; jj < rt.size(); jj++)  {
+            for (size_t kk = 0; kk < aDBFiles.size(); kk++)  {
+                std::string flnm = std::string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
+                if ( flnm == rt[jj]->GetKeywd() ||
+                    ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
+                    ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
                 {
-                    string path(dir);
+                    std::string path(dir);
                     path += "/";
                     path += aDBFiles[kk];
                     rt[jj]->AddFile(path.c_str());
                 }
-          }
+            }
         }
     }
-
 }
 
 TCStringArray readDirs(const char *dir)
@@ -904,23 +986,22 @@ TCStringArray readDirs(const char *dir)
     TCStringArray aFiles;
     gui_logger->debug("GEMS DB dir: {}", dir);
     QDir thisDir(dir);
-//    if (!thisDir.isReadable())
-//        throw TFatalError("GEMS Init", std::string(dir) + ": GEMS DB directory is not readable");
+    //    if (!thisDir.isReadable())
+    //        throw TFatalError("GEMS Init", std::string(dir) + ": GEMS DB directory is not readable");
 
     thisDir.setFilter(QDir::Dirs);
     //    thisDir.setNameFilter("*.pdb");
 
     QFileInfoList files = thisDir.entryInfoList();
-    if (files.empty())
+    if(files.empty()) {
         return aFiles;
+    }
 
     QListIterator<QFileInfo> it(files);
     QFileInfo f;
-    while (it.hasNext())
-    {
-        f = it.next();;
-        if (f.isDir() && f.fileName() != "." && f.fileName() != "..")
-        {
+    while(it.hasNext())  {
+        f = it.next();
+        if (f.isDir() && f.fileName() != "." && f.fileName() != "..") {
             gui_logger->debug("Adding dir: {}", f.fileName().toStdString());
             aFiles.push_back( f.fileName().toStdString());
         }
@@ -929,29 +1010,28 @@ TCStringArray readDirs(const char *dir)
     return aFiles;
 }
 
-void
-TVisor::deleteDBDir(const char *dir)
+void TVisor::deleteDBDir(const char *dir)
 {
     TCStringArray aFiles;
 
     QDir thisDir(dir);
-    if (!thisDir.exists())
+    if(!thisDir.exists()) {
         return;
+    }
 
     //--QDir::setCurrent(dir);
     thisDir.setFilter(QDir::Files);
 
-    QFileInfoList files = thisDir.entryInfoList(); //Qt3to4 
-    if (files.empty()) //Qt3to4
+    QFileInfoList files = thisDir.entryInfoList();
+    if (files.empty()) {
         return;
+    }
 
     QListIterator<QFileInfo> it(files);
     QFileInfo f;
-    while ( it.hasNext() ) //qt3to4
-    {
+    while( it.hasNext() ) {
         f = it.next();;
-        if (f.isSymLink() || f.isFile())
-        {
+        if(f.isSymLink() || f.isFile()) {
             gui_logger->trace("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
@@ -961,14 +1041,10 @@ TVisor::deleteDBDir(const char *dir)
     //--QDir::setCurrent(dir);
     // delete files in module list
     std::string path;
-    for (size_t ii = 0; ii < aFiles.size(); ii++)
-    {
-        if (string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb")
-        {
-            for (size_t jj = 0; jj < rt.size(); jj++)
-                if (string(aFiles[ii], 0, aFiles[ii].find("."))
-                        == rt[jj]->GetKeywd())
-                {
+    for(size_t ii = 0; ii < aFiles.size(); ii++) {
+        if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb") {
+            for(size_t jj = 0; jj < rt.size(); jj++) {
+                if(std::string(aFiles[ii], 0, aFiles[ii].find(".")) == rt[jj]->GetKeywd()) {
                     path = dir;
                     path += "/";
                     path += aFiles[ii];
@@ -977,6 +1053,7 @@ TVisor::deleteDBDir(const char *dir)
                     rt[jj]->DelFile(path);
                     rt[jj]->Open(true, UPDATE_DBV, {});
                 }
+            }
         }
         path = dir;
         path += "/";
@@ -989,118 +1066,83 @@ TVisor::deleteDBDir(const char *dir)
     thisDir.rmdir(dir);
 }
 
-// added Sveta 23-07-2001
-
 // copy file
 void TVisor::CopyF( const char * fName, const char* fTempl )
 {
-  QFile ff_tmp(fTempl);
-  if( !ff_tmp.open(QIODevice::ReadOnly))
-     Error(fTempl, "File copy error" );
-  ff_tmp.flush();
-  QFile ff_new(fName);
-  if( !ff_new.open(QIODevice::WriteOnly))
-     Error(fName, "File copy error" );
-
-  char *p = new char[ff_tmp.size()+2];
-  ff_tmp.read(p, ff_tmp.size());
-  ff_new.write(p, ff_tmp.size());
-  delete[] p;
-  ff_tmp.close();
-  ff_new.close();
-}
-
-void
-TVisor::makeDBDir(const char *dir)
-{
-  // make directory dir (find system function)
-    QDir d(dir);
-    if ( d.exists() )
-    { if( d.count()>2)
-      {
-    	  QStringList filters = (QStringList() << "*.ndx" << "*.pdb");
-         QStringList lst = d.entryList( filters, QDir::Files );
-         if (lst.count()<=0)
-           vfMessage(0, dir, "This directory is not empty.");
-         else
-          Error( dir, "Error creating Modelling Project directory!");
-      }
-      return;
+    QFile ff_tmp(fTempl);
+    if(!ff_tmp.open(QIODevice::ReadOnly)) {
+        Error(fTempl, "File copy error" );
     }
-    if( !d.mkdir( dir ))
-        Error( dir, "Error creating Modelling Project directory!");
+    ff_tmp.flush();
+    QFile ff_new(fName);
+    if(!ff_new.open(QIODevice::WriteOnly)) {
+        Error(fName, "File copy error" );
+    }
+
+    char *p = new char[ff_tmp.size()+2];
+    ff_tmp.read(p, ff_tmp.size());
+    ff_new.write(p, ff_tmp.size());
+    delete[] p;
+    ff_tmp.close();
+    ff_new.close();
 }
 
-TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )
+void TVisor::makeDBDir(const char *dir)
+{
+    // make directory dir (find system function)
+    QDir d(dir);
+    if( d.exists() ) {
+        if( d.count()>2 ) {
+            QStringList filters = (QStringList() << "*.ndx" << "*.pdb");
+            QStringList lst = d.entryList( filters, QDir::Files );
+            if (lst.count()<=0) {
+                vfMessage(0, dir, "This directory is not empty.");
+            }
+            else {
+                Error(dir, "Error creating Modelling Project directory!");
+            }
+        }
+        return;
+    }
+    if(!d.mkdir( dir )) {
+        Error( dir, "Error creating Modelling Project directory!");
+    }
+}
+
+TCStringArray TVisor::readPDBDir(const char *dir, const char *filter)
 {
     TCStringArray aFiles;
 
     QDir thisDir(dir);
-//    if (!thisDir.isReadable())
-//    {
-//#ifndef _WIN32
-//        gui_logger->error("{} directory is not readable", dir);
-//#endif
-//        throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
-//    }
+    //    if (!thisDir.isReadable())
+    //    {
+    //#ifndef _WIN32
+    //        gui_logger->error("{} directory is not readable", dir);
+    //#endif
+    //        throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
+    //    }
     QStringList afilt(filter);
 
     thisDir.setFilter(QDir::Files);
     thisDir.setNameFilters(afilt);
 
-    QFileInfoList files = thisDir.entryInfoList(); //Qt3to4 
-    if (files.empty()) //Qt3to4
+    QFileInfoList files = thisDir.entryInfoList();
+    if (files.empty()) {
         return aFiles;
+    }
 
     QListIterator<QFileInfo> it(files);
     QFileInfo f;
-    while ( it.hasNext() ) //qt3to4
-    {
+    while( it.hasNext() ) {
         f = it.next();;
-        if (f.isSymLink() || f.isFile())
-        {
+        if(f.isSymLink() || f.isFile()) {
             gui_logger->trace("Adding file: {}", f.fileName().toStdString());
             aFiles.push_back(f.fileName().toStdString());
         }
         // else 'special file'
     }
-
     return aFiles;
 }
-
-// added Sveta 14/08/2001
-//void
-//TVisor::OpenHelp(const char* file, const char* item, int page)
-//{
-//    pVisorImp->OpenHelp( file );
-//}
-
-void
-TVisor::OpenModule(QWidget* parent, uint i, int page, int viewmode, bool select)
-{
-    pVisorImp->OpenModule( parent, i, page, viewmode,  select);
-}
-
-void
-TVisor::ProcessProgress( QWidget* parent, int nRT )
-{
-    pVisorImp->ProcessProgress( parent,  nRT );
-}
-
-// return true if canceled
-bool
-TVisor::Message( QWidget* parent, const char* name,
-             const char* msg, int prog, int total, bool move)
-{
-    return pVisorImp->Message( parent, name, msg, prog, total, move);
-}
-
-void
-TVisor::CloseMessage()
-{
-    pVisorImp->CloseMessage();
-}
-
 
 TVisor *pVisor;
 

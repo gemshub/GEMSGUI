@@ -18,7 +18,6 @@
 #ifndef _t_print_h_
 #define _t_print_h_
 
-#include <vector>
 #include "v_ipnc.h"
 
  // Format: % [flags] [width] [.prec] type_char
@@ -34,18 +33,18 @@ struct PFormat
 {
   char type;
   char long_;
-  string fmt;
+  std::string fmt;
 
-  PFormat( const char aType, string aFmt ):
+  PFormat( const char aType, std::string aFmt ):
     type( aType), long_(' '), fmt(aFmt)
   {}
 
-  string FmtOut()
+  std::string FmtOut()
   {
-    string res = fmt;
+    std::string res = fmt;
     if( long_ == 'l' && type != 's')
       res += "l";
-    res += string( 1, type);
+    res += std::string( 1, type);
     return res;
   }
 
@@ -78,7 +77,7 @@ struct PData
   int end_sub;   // end substring  or
 
    // object line for  line type
-  string line;
+  std::string line;
 
   PData( int _data, int _i, int _j,
         int bg_, int end_, bool _all, bool _label):
@@ -96,7 +95,7 @@ struct PData
 
 class TPrintData  // print resalts of module calc
 {
-    string key_format;        // key of SDref record
+    std::string key_format;        // key of SDref record
     unsigned int nRT;          // module number
 
     char *input;               // current position
@@ -104,7 +103,7 @@ class TPrintData  // print resalts of module calc
     std::vector<PData> aDts;     // list of datas
 
     bool  ifcond;
-    string cond;      // Text with IPN-expression << prn=: cond; >>
+    std::string cond;      // Text with IPN-expression << prn=: cond; >>
                        // ii - index of line in expression
     IPNCalc rpn;       // IPN of equats of print condition
     int prr;           // internal
@@ -115,13 +114,13 @@ protected:
     bool getFormat( const char * aFmt );
     int  getToken( int& ii, int& jj );
     void getData();
-    void prnData( fstream& fout, int ind, PFormat& fmt, PData& dt );
+    void prnData( std::fstream& fout, int ind, PFormat& fmt, PData& dt );
     void skipSpace();
 
 
 public:
 
-    TPrintData(const char *sd_key, unsigned int nrt, fstream& fout, const char *fmt_text );
+    TPrintData(const char *sd_key, unsigned int nrt, std::fstream& fout, const char *fmt_text );
     ~TPrintData();
 
 };

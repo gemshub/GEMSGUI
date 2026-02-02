@@ -33,7 +33,7 @@
 /// Output to "ipmlog.txt" file Warnings
 TMulti::TMulti(int nrt):
     TMultiBase(nullptr),
-    TSubModule( nrt )
+    TCModule( nrt )
 {
     if(!TNode::ipmlog_file) {
         TNode::ipmlog_file = spdlog::rotating_logger_mt("ipmlog", GemsSettings::with_directory("ipmlog.txt"),

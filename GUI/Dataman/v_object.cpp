@@ -15,15 +15,12 @@
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-#include <cstdlib>
-#include <cstdio>
-#include <cmath>
-#include <cctype>
+
 #include <QJsonObject>
 #include <QJsonArray>
-#include "v_vals_impl.h"
 #include "v_object.h"
-#include "m_param.h"
+#include "v_vals_impl.h"
+#include "ms_multi_new.h"
 #include "graph.h"
 #include "GEMS3K/jsonconfig.h"
 
@@ -77,7 +74,7 @@ TObjList aObj;
 
 // DOD list element explicit ctor
 TObject::TObject( const char* name, ObjType t, int n,
-                  int m, bool dyn, char indexCode, const string desc):
+                 int m, bool dyn, char indexCode, const std::string desc):
         Dynamic(dyn),   // Flag of dynamic/static data
         N(n), M(m),     // Dimensions N,M
         Descr(desc),    // Description (tooltip) line
@@ -91,7 +88,7 @@ TObject::TObject( const char* name, ObjType t, int n,
 
 // Ctor by readind from configurator file
 
-TObject::TObject(istream& f):
+TObject::TObject(std::istream& f):
         pV(nullptr)
 {
     read(f);
@@ -106,16 +103,16 @@ TObject::~TObject()
 
 // Writes configuration to file f
 void
-TObject::ToCFG(ostream& f)
+TObject::ToCFG(std::ostream& f)
 {
     write(f);
 }
 
-string
+std::string
 TObject::GetFullName(int aN, int aM)
 {
   char v[15];
-  string item = GetKeywd();
+  std::string item = GetKeywd();
   if( N > 1 )
   {
     sprintf(v, "[%u]", aN );
@@ -129,10 +126,10 @@ TObject::GetFullName(int aN, int aM)
   return item;
 }
 
-string TObject::GetHelpLink(int aN, int aM)
+std::string TObject::GetHelpLink(int aN, int aM)
 {
   char v[15];
-  string item = GetKeywd();
+  std::string item = GetKeywd();
   if( !(N<=1 || Descr[0] == '|') )
   {
     sprintf(v, "_%u", aN );
@@ -149,13 +146,13 @@ string TObject::GetHelpLink(int aN, int aM)
 
 // Gets description line from Ni line of DOD list
 //    e.g., for displaying a tooltip
-const string
+const std::string
 TObject::GetDescription(int Ni, int Mi)
 {
     size_t prev_pos = 0;
     size_t pos = Descr.find('\n');
 
-    if( pos == string::npos )
+    if( pos == std::string::npos )
         return Descr;
 
     int NMi = Ni;   // Description by lines
@@ -167,18 +164,18 @@ TObject::GetDescription(int Ni, int Mi)
         prev_pos = pos + 1;
 
         if( prev_pos >= Descr.length() )
-            return string("TObject:E01 -bad description line in DOD-");
+            return std::string("TObject:E01 -bad description line in DOD-");
 
         pos = Descr.find("\n", prev_pos);
-        if( pos == string::npos )
-            return Descr.substr(prev_pos, string::npos);
+        if( pos == std::string::npos )
+            return Descr.substr(prev_pos, std::string::npos);
     }
     return Descr.substr(prev_pos, pos-prev_pos-1);
 }
 
 // Writes DOD data to ostream file
 void
-TObject::write( ostream& os )
+TObject::write( std::ostream& os )
 {
     os.write( Keywd, MAXKEYWD );
     os.write( reinterpret_cast<const char*>(&Type), sizeof(ObjType) );
@@ -192,7 +189,7 @@ TObject::write( ostream& os )
 
 // Reads DOD data from istream file
 void
-TObject::read( istream& is )
+TObject::read( std::istream& is )
 {
     is.read( Keywd, MAXKEYWD );
     is.read( reinterpret_cast<char*>(&Type), sizeof(ObjType) );
@@ -342,7 +339,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     }
     else if( newType > 0  )  // Added by Sveta 16/09/99
     {
-        string str( newType, ' ' );
+        std::string str( newType, ' ' );
         for( int ii=0; ii<newN; ii++ )
             for( int jj=0; jj<newM; jj++ )
                 pV1->SetString( str.c_str(), ii*newM+jj );
@@ -355,8 +352,8 @@ TObject::Alloc(int newN, int newM, ObjType newType)
     }
 
     /* Saving old values */
-    int n = min(N,newN);
-    int m = min(M,newM);
+    int n = std::min(N,newN);
+    int m = std::min(M,newM);
 
     if( !IsNull() )
     {
@@ -379,7 +376,7 @@ TObject::Alloc(int newN, int newM, ObjType newType)
                     for( int ii=0; ii<n; ii++ )
                         for( int jj=0; jj<m; jj++ )
                         {
-                            string str = pV->GetString(ndx(ii,jj));
+                            std::string str = pV->GetString(ndx(ii,jj));
                             pV1->SetString( str.c_str(), ii*newM+jj );
                         }
             }
@@ -747,7 +744,7 @@ int  TObject::ofDB( GemDataStream& f )
         size_t off = 0;
         size_t r_pos = f.tellg();
 
-        f.seekg( 758+r_pos, ios::beg );
+        f.seekg( 758+r_pos, std::ios::beg );
         f.sync();
 
         char ch;
@@ -765,12 +762,12 @@ int  TObject::ofDB( GemDataStream& f )
         }
         while(1);
 
-        f.seekg( r_pos, ios::beg );
+        f.seekg( r_pos, std::ios::beg );
         f.sync();
 
         static_cast<SPP_SETTING*>(GetPtr())->read(f);
         // ios::cur - dosen't work in BCB4 :-(
-        f.seekg( off + f.tellg(), ios::beg );
+        f.seekg( off + f.tellg(), std::ios::beg );
         //ssize = 768;
     }
     else	// all object with Keyword "**plt" considered PlotLine object !!!
@@ -794,7 +791,7 @@ int  TObject::ofDB( GemDataStream& f )
 
 
 //Puts data object to backup format TXT file
-void TObject::toTXT( fstream& to )
+void TObject::toTXT( std::fstream& to )
 {
     int dimM, i, j;
 
@@ -856,7 +853,7 @@ void TObject::toTXT( fstream& to )
  }
 
 //Gets data object from backup format TXT file
-void TObject::ofTXT( fstream& of )
+void TObject::ofTXT( std::fstream& of )
 {
     int rdimN, rdimM, i, j;
     int r_otype;
@@ -1093,7 +1090,7 @@ void TObject::fromJsonObject(const QJsonObject &obj)
     if( strcmp(Keywd+2, "plt") == 0 )
     {
         QJsonArray pltArray = obj["val"].toArray();
-        for(int ii=0; ii< min<int>( N, pltArray.size()); ii++)
+        for(int ii=0; ii< std::min<int>( N, pltArray.size()); ii++)
         {
             QJsonObject pltObject = pltArray[ii].toObject();
             ((TPlotLine*)GetPtr() + ii)->fromJsonObject( pltObject );
@@ -1214,7 +1211,7 @@ void TObject::fromJsonValue(const QJsonValue &obj)
     if( strcmp(Keywd+2, "plt") == 0 )  {
         QJsonArray pltArray = obj.toArray();
         auto plot = static_cast<TPlotLine * >(Alloc( pltArray.size(), sizeof(TPlotLine) ));
-        for(int ii=0; ii< min<int>( N, pltArray.size()); ii++) {
+        for(int ii=0; ii< std::min<int>( N, pltArray.size()); ii++) {
             QJsonObject pltObject = pltArray[ii].toObject();
             plot[ii].fromJsonObject( pltObject );
         }
@@ -1320,7 +1317,7 @@ TObjList::TObjList():
 
 // Reads DOD list configuration from file
 
-TObjList::TObjList(istream& f):
+TObjList::TObjList(std::istream& f):
         std::vector<std::shared_ptr<TObject>>()
 {
     fromDAT(f);
@@ -1329,7 +1326,7 @@ TObjList::TObjList(istream& f):
 
 // Writes DOD list configuration to file
 void
-TObjList::toDAT(ostream& f)
+TObjList::toDAT(std::ostream& f)
 {
     double Value = 0.0;
     auto nObj = size();
@@ -1343,7 +1340,7 @@ TObjList::toDAT(ostream& f)
 
 // Reads DOD configuration from config file
 void
-TObjList::fromDAT(istream& f)
+TObjList::fromDAT(std::istream& f)
 {
     double Value;	// not used
 

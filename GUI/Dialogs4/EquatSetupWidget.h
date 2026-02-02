@@ -35,10 +35,10 @@ class EquatWidgetForm;
 
 struct equatSetupData
 {
-    string xName; // Abscissa name
-    string yName; // Ordinate name
-    string indexName; // Index name
-    string abscissaEquat; // Abscissa first object name
+    std::string xName; // Abscissa name
+    std::string yName; // Ordinate name
+    std::string indexName; // Index name
+    std::string abscissaEquat; // Abscissa first object name
 
     bool useSeveral; // More then one Abscissa is permitted
     TCStringArray abscissaLines;  // Abscissa object names (if more then one Abscissa)
@@ -65,9 +65,9 @@ struct scriptSetupData
     //double val;
     //char unit;
 
-    string objName;
-    string ndxName;
-    string lineText;
+    std::string objName;
+    std::string ndxName;
+    std::string lineText;
 
     scriptSetupData( int aWin, int aobj, const char * oName,
                      int aIdx, const char * ndName,
@@ -97,8 +97,8 @@ class EquatSetup : public QWidget
     bool useCalc;
 
     TCStringArray namLines;
-    string xNam;
-    string yNam;
+    std::string xNam;
+    std::string yNam;
 
 
     // internal functions
@@ -107,7 +107,7 @@ class EquatSetup : public QWidget
     void tableDeleteRow( int row );
     void scriptUpdate( );
     void emptyScriptTable();
-    string getStringValue( int nO, int ndx, const char * andName );
+    std::string getStringValue( int nO, int ndx, const char * andName );
 
 protected slots:
 
@@ -121,8 +121,8 @@ public:
                 const char* script = nullptr, const char* aXname = nullptr, const char* aYname = nullptr  );
     virtual ~EquatSetup();
 
-    string getScript() const;
-    TCStringArray getNames( string& xName, string& yName ) const;
+    std::string getScript() const;
+    TCStringArray getNames( std::string& xName, std::string& yName ) const;
     void setNames(TCStringArray lst );
     void setXname( const char* name )
     {

@@ -36,8 +36,6 @@
 
 #include <memory>
 #include <QObject>
-#include <QFont>
-#include <QColor>
 #include <QJsonObject>
 #include "chart_model.h"
 
@@ -54,14 +52,13 @@ enum GRAPHTYPES_ {
 
 class SeriesLineData;
 
+void colorAt(int ndx, int size, int& red, int& green, int& blue);
 QImage markerShapeImage( const SeriesLineData& linedata );
 QIcon markerShapeIcon( const SeriesLineData& linedata );
 QImage textImage( const QFont& font, const QString& text );
 
 //QImage paintMarkerShape( const SeriesLineData& linedata, bool onLegend =false );
 void getLinePen( QPen& pen, const SeriesLineData& linedata  );
-
-QColor colorAt(const QColor &start, const QColor &end, qreal pos);
 
 /// Description of one plot curve -
 /// the representation of a series of points in the x-y plane
@@ -84,24 +81,22 @@ class SeriesLineData
 
 public:
 
-    SeriesLineData( const std::string& aName = "",
-                    int mrkType = 0, int mrkSize = 8,
-                    int lineSize = 2,  int lineStyle = 1, int usespline =0,
-                    const QColor& aColor = QColor( 25, 0, 150)  ):
+    SeriesLineData(const std::string& aName = "",
+                   int mrkType = 0, int mrkSize = 8,
+                   int lineSize = 2,  int lineStyle = 1, int usespline =0,
+                   int ared=25, int agreen=0, int ablue=150):
         name(aName), xcolumn(0/*-1*/) // iterate by index
     {
-        setChanges( mrkType, mrkSize, lineSize,  lineStyle, usespline, aColor );
+        setChanges( mrkType, mrkSize, lineSize,  lineStyle, usespline, ared, agreen, ablue);
     }
 
     SeriesLineData( size_t ndx, size_t maxLines, const std::string& aName = "",
-                    int mrkType = 0, int mrkSize = 8,
-                    int lineSize = 2,  int lineStyle = 1, int usespline =0 ):
+                   int mrkType = 0, int mrkSize = 8,
+                   int lineSize = 2,  int lineStyle = 1, int usespline =0 ):
         name(aName), xcolumn(0/*-1*/)
     {
-        QColor aColor;
-        aColor.setHsv( static_cast<int>(360/maxLines*ndx), 200, 200);
-        //aColor = colorAt(green, blue, double(ndx)/maxLines );
-        setChanges( mrkType, mrkSize, lineSize,  lineStyle, usespline, aColor );
+        colorAt(ndx, maxLines, red, green, blue);
+        setChanges(mrkType, mrkSize, lineSize,  lineStyle, usespline, red, green, blue);
     }
 
     int getMarkerShape() const
@@ -134,22 +129,36 @@ public:
         return spline;
     }
 
-    QColor getColor() const
+    // QColor getColor() const
+    // {
+    //     return QColor(red, green, blue);
+    // }
+
+    int getRed() const
     {
-        return QColor(red, green, blue);
+        return red;
+    }
+    int getGreen() const
+    {
+        return green;
+    }
+    int getBlue() const
+    {
+        return blue;
     }
 
     void setChanges( int mrkType, int mrkSize, int pnSize,
-                     int pnStyle, int usespline, const QColor& aColor )
+                    int pnStyle, int usespline,
+                    int ared, int agreen, int ablue)
     {
         markerShape = mrkType;
         markerSize = mrkSize;
         penSize = pnSize;
         penStyle = pnStyle;
         spline  = usespline;
-        red   = aColor.red();
-        green = aColor.green();
-        blue  = aColor.blue();
+        red   = ared;
+        green = agreen;
+        blue  = ablue;
     }
 
     void setLineChanges( int pnSize, int pnStyle, int usespline )
@@ -203,7 +212,7 @@ public slots:
 public:
 
     /// Define Axis Font
-    static QFont axisFont;
+    static QString axisFont;
 
     std::string title;  ///< Title of graphic
 
@@ -222,13 +231,13 @@ public:
 
     template <class T>
     ChartData( const std::vector<std::shared_ptr<T>>& aPlots,  const std::string& atitle,
-               const std::string& aXName, const std::string& aYname,
-               int agraphType = LineChart ):
+              const std::string& aXName, const std::string& aYname,
+              int agraphType = LineChart ):
         title(atitle), axisTypeX(4), axisTypeY(4),
         xName(aXName), yName(aYname), graphType( agraphType )
     {
         // Define background color
-        setBackgroundColor( QColor(Qt::white) );
+        setBackgroundColor(255, 255, 255);
 
         // Insert Plots and curves description
         modelsdata.clear();
@@ -260,9 +269,9 @@ public:
                 linesdata.push_back( SeriesLineData( jj, nLinN, aPlot->getName(jj)  ) );
         }
         connect( modelsdata.back().get(), SIGNAL( changedXSelections() ),
-                 this,  SLOT( updateXSelections() ) );
+                this,  SLOT( updateXSelections() ) );
         connect( modelsdata.back().get(), SIGNAL( changedYSelections(bool) ),
-                 this,  SLOT( updateYSelections(bool) ) );
+                this,  SLOT( updateYSelections(bool) ) );
     }
 
 
@@ -295,7 +304,7 @@ public:
     int getSeriesNumber() const
     {
         size_t nmb = 0;
-        for( auto model: modelsdata)
+        for( const auto& model: modelsdata)
             nmb += model->getSeriesNumber();
         return static_cast<int>(nmb);
     }
@@ -339,16 +348,28 @@ public:
         linesdata[ndx].setName( aName );
     }
 
-    QColor getBackgroundColor() const
+    // QColor getBackgroundColor() const
+    // {
+    //     return QColor(b_color[0], b_color[1], b_color[2]);
+    // }
+    int getRed() const
     {
-        return QColor(b_color[0], b_color[1], b_color[2]);
+        return b_color[0];
+    }
+    int getGreen() const
+    {
+        return b_color[1];
+    }
+    int getBlue() const
+    {
+        return b_color[2];
     }
 
-    void setBackgroundColor( const QColor& aColor )
+    void setBackgroundColor(int ared, int agreen, int ablue)
     {
-        b_color[0] = aColor.red();
-        b_color[1] = aColor.green();
-        b_color[2] = aColor.blue();
+        b_color[0] = ared;
+        b_color[1] = agreen;
+        b_color[2] = ablue;
     }
 
     void setMinMaxRegion( double reg[4] );

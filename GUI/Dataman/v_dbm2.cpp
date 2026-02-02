@@ -19,16 +19,11 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "v_user.h"
 #include "v_dbm.h"
-#include "v_dbfile.h"
-#include "v_object.h"
 #include "v_mod.h"
 #include "visor.h"
 #include "service.h"
 #include "GEMS3K/gdatastream.h"
-#include "v_module.h"
-
 
 //#define Change_DB_Mode   1 // Set readonly data Base mode
 

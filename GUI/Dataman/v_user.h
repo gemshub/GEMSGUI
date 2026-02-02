@@ -26,24 +26,11 @@
 #ifndef _v_user_h_
 #define _v_user_h_
 
-#include <set>
 #include <vector>
 #include <algorithm>
 #include "GEMS3K/v_detail.h"
 #include "GEMS3K/v_service.h"
 
-
-#ifdef __APPLE__
-
-#ifndef __unix
-#define __unix
-#endif
-#ifndef __FreeBSD
-#define __FreeBSD
-#endif
-
-typedef unsigned int uint;
-#endif
 
 // added for convenience because of frequent use
 typedef std::vector<std::string> TCStringArray;
@@ -84,8 +71,7 @@ void KeyToName(std::string& line);
 
 // Added by SD on 22/12/2001
 // Change string on templates
-void
-ChangeforTempl( std::string& data_str,  const std::string& from_templ1,
+void ChangeforTempl( std::string& data_str,  const std::string& from_templ1,
                 const std::string& to_templ1, uint len_ );
 
 // Returns string representation of current date in dd/mm/yyyy format
@@ -98,28 +84,12 @@ std::string curDateSmol(char ch = '/');
 std::string curTime();
 
 // Returns string representation of current date and time
-inline
-std::string curDateTime()
+inline std::string curDateTime()
 {
     return curDate() + curTime();
 }
 
 // reads line to string class from istream with a delimiter
 std::istream& u_getline(std::istream& instream, std::string& dst_string, char delimit = '\n');
-
-
-#ifdef __FreeBSD
-// replacement for missing function in FreeBSD
-inline char* gcvt(double num, int digit, char* buf)
-{
-    sprintf(buf, "%*g", digit, num);
-    return buf;
-}
-
-#endif  // __FreeBSD
-
-
-
-
 #endif // _v_user_h_
 

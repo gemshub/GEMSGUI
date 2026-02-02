@@ -67,7 +67,7 @@ QWidget* parent):
 
     // setFinishEnabled( WizardPage2, true);
     ui->setupUi(this);
-    string str1= "GEM-Selektor DualTh Setup:  ";
+    std::string str1= "GEM-Selektor DualTh Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 

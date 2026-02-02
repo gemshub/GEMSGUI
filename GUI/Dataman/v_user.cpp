@@ -16,10 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cstdlib>
 #include <ctime>
-#include <fstream>
-#include <cmath>
 #include "v_user.h"
 
 char chLowUp(char ch);
@@ -58,8 +55,6 @@ void NormFloatRound(float *aArr, int size, int digits)
        aArr[ii] = NormFloatRound(aArr[ii], digits);
     }
 }
-
-
 
 std::istream& u_getline(std::istream& is, std::string& str, char delim)
 {

@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.16..4.2)
 
 # Set the name of the project
-project(GEMSGUI VERSION 3.10.2 LANGUAGES CXX)
+project(GEMSGUI VERSION 3.11.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -25,6 +25,7 @@ include(CondaAware)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_STATIC_LIBS "Build static libraries" ON)
 option(BUILD_APP "Build application." ON)
+option(BUILD_EXPORT "Build the Qt console export application." ON)
 option(BUILD_TOOLS "Build tools." ON)
 option(USE_THERMOFUN "Use ThermoFun" ON)
 option(USE_GEMS3K_SERVER "Use gems3k external server" OFF)
@@ -180,6 +181,14 @@ if(BUILD_APP)
    # Copy Resources folder
    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
            DESTINATION ${CMAKE_BINARY_DIR}/App)
+endif()
+
+# make service tools
+if(BUILD_EXPORT)
+   add_subdirectory(benchcomp)
+   # Copy Resources folder
+   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
+           DESTINATION ${CMAKE_BINARY_DIR}/benchcomp)
 endif()
 
 # make service tools

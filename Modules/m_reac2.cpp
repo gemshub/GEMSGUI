@@ -17,8 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-//#include <cmath>
-//#include <cstdio>
+
 #include "m_param.h"
 #include "m_reacdc.h"
 #include "s_formula.h"
@@ -337,7 +336,7 @@ void TReacDC::Recalc( int q, const char *key  )
     else rc[q].Zz = (float)Z;
     rc[q].mwt = (float)MW;
 
-    SetString("RC_test   Checking this ReacDC definition");
+    set_string("RC_test   Checking this ReacDC definition");
     Update();
 
     switch( rc[q].pstate[0] )

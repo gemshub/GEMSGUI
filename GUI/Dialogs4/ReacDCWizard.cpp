@@ -68,7 +68,7 @@ const TCStringArray& sel, QWidget* parent):
     ui(new Ui::ReacDCWizardData), old_selection(sel)
 {
     ui->setupUi(this);
-    string str1= "GEM-Selektor ReacDC Setup:  ";
+    std::string str1= "GEM-Selektor ReacDC Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 
@@ -185,8 +185,8 @@ void ReacDCWizard::help()
 
 void ReacDCWizard::ChangeFilter()
 {
-    string keyFilter = ui->lineFilter->text().toStdString();
-    string str_name = "Template for ";
+    std::string keyFilter = ui->lineFilter->text().toStdString();
+    std::string str_name = "Template for ";
     str_name +=  rt[RT_REACDC]->GetKeywd();
     str_name +=  "&";
     str_name +=  rt[RT_DCOMP]->GetKeywd();

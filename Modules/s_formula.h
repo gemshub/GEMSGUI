@@ -22,7 +22,6 @@
 #define _s_formula_h_
 
 #include "v_user.h"
-#include "v_mod.h"
 
 extern const char * CHARGE_NAME;
 

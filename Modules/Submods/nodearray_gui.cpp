@@ -4,12 +4,6 @@
 #include "service.h"
 #include "GEMS3K/gems3k_impex.h"
 
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
-
 #ifdef USE_GEMS3K_SERVER
 #ifdef NO_ASYNC_SERVER
 #include "gemsreaktoro/zmq_req_client.hpp"
@@ -63,8 +57,8 @@ AGAIN:
     if( vfChooseFileSave(par, path, "Please, enter IPM work structure file name", "*.lst" ) == false )
         return "";
 
-    if( !access(path.c_str(), 0 ) ) //file exists
-        switch( vfQuestion3( par, path.c_str(), "This set of files exists!",
+    if( vfExist(path))
+        switch( vfQuestion3( par, path, "This set of files exists!",
                             "&Overwrite", "&Rename", "&Cancel") )
         {
         case VF3_2:

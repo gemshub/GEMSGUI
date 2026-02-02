@@ -17,8 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cstdio>
-#include <cmath>
 
 #include "s_formula.h"
 #include "m_icomp.h"

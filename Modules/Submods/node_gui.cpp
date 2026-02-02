@@ -28,10 +28,10 @@
 
 
 #include "node_gui.h"
-#include "GEMS3K/num_methods.h"
 #include "visor.h"
 #include "service.h"
 #include "m_param.h"
+#include "GEMS3K/num_methods.h"
 
 TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
 {
@@ -40,7 +40,7 @@ TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
     pmm = multi_base->GetPM();
 }
 
-void TNodeGUI::write_ThermoFun_format_stream(iostream &stream, bool compact)
+void TNodeGUI::write_ThermoFun_format_stream(std::iostream &stream, bool compact)
 {
     TProfil::pm->generate_ThermoFun_input_file_stream(stream, compact);
 }
@@ -216,19 +216,19 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
         CSD->nDCinPH[i1] = pmm->L1[i1];
         CSD->ccPH[i1] = pmm->PHC[i1];
         fillValue( CSD->PHNL[i1], ' ', MaxPHN );
-        copyValues( CSD->PHNL[i1], pmm->SF[i1]+MAXSYMB, min(MaxPHN,(long int)MAXPHNAME) );
+        copyValues( CSD->PHNL[i1], pmm->SF[i1]+MAXSYMB, std::min(MaxPHN,(long int)MAXPHNAME) );
     }
     for( i1=0; i1< CSD->nIC; i1++ )
     {
         CSD->ICmm[i1] = pmm->Awt[i1]/kg_to_g;
         CSD->ccIC[i1] = pmm->ICC[i1];
-        copyValues( CSD->ICNL[i1], pmm->SB[i1] , min(MaxICN,(long int)MAXICNAME) );
+        copyValues( CSD->ICNL[i1], pmm->SB[i1] , std::min(MaxICN,(long int)MAXICNAME) );
     }
     for( i1=0; i1< CSD->nDC; i1++ )
     {
         CSD->DCmm[i1] = pmm->MM[i1]/kg_to_g;
         CSD->ccDC[i1] = pmm->DCC[i1];
-        copyValues( CSD->DCNL[i1], pmm->SM[i1] , min(MaxDCN,(long int)MAXDCNAME) );
+        copyValues( CSD->DCNL[i1], pmm->SM[i1] , std::min(MaxDCN,(long int)MAXDCNAME) );
     }
 
     // set default data to DataBr

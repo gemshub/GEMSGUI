@@ -43,8 +43,8 @@ class GEM2MTWizard : public QDialog
     Q_OBJECT
 
     Ui::GEM2MTWizardData *ui;
-    string calcScript;
-    string outScript;
+    std::string calcScript;
+    std::string outScript;
     EquatSetup *pageScript;
 
     QButtonGroup *GroupBox1;
@@ -96,11 +96,11 @@ public:
     void   getPdata( double Pai[4] );
     void   getTaudata( double Tau[3] );
 
-    string getCalcScript() const;
-    string getOutScript() const
+    std::string getCalcScript() const;
+    std::string getOutScript() const
     { return pageScript->getScript(); }
 
-    TCStringArray getNames( string& xName, string& yName ) const
+    TCStringArray getNames( std::string& xName, std::string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
     void getVTK( TCIntArray& vtk1, TCIntArray& vtk2  );

@@ -19,7 +19,6 @@
 #ifndef _m_dcomp_h_
 #define _m_dcomp_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 #include "s_tpwork.h"
 
@@ -176,7 +175,7 @@ public:
 
     TDComp( uint nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "DComp";
     }
@@ -185,20 +184,20 @@ public:
     {
         return dcp==&dc[0];
     }
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0)  override;
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc(const char *key);
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc(const char *key) override;
     void RecCalc(const char *key, double TCst=25.0, double Pst=1.0 );
-    void TryRecInp(const char *key, time_t& time_s, int q , bool save = true);
+    void TryRecInp(const char *key, time_t& time_s, int q , bool save = true) override;
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
 
     // necessary new command in menu
     void DCthermo( int q, int p);

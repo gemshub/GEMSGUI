@@ -15,6 +15,12 @@ class ThreadControl {
     static void SetPoint( const char* str );
 };
 
+#ifdef NO_GUI
+
+#define STEP_POINT1( sp ) {}
+#define STEP_POINT2( sp ) {}
+
+#else
 #ifdef USE_GEMS3K_SERVER
 
 #define STEP_POINT1( sp ) {}
@@ -41,4 +47,5 @@ if( TProfil::pm->stepWise1 ) { \
            throw UserCancelException(); \
 	}
 
+#endif
 #endif

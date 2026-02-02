@@ -19,8 +19,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cmath>
-#include <iomanip>
 
 #include "m_param.h"
 #include "s_formula.h"
@@ -175,7 +173,7 @@ void TMulti::multi_sys_dc()
     double a, *A; // , Vv =0.;
     double mm;
     std::vector<TFormula> aFo;
-    string form;
+    std::string form;
     RMULTS* mup = TRMults::sm->GetMU();
     SYSTEM *syp = TSyst::sm->GetSY();
 

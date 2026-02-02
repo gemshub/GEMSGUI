@@ -17,7 +17,6 @@
 //-------------------------------------------------------------------
 
 #include <cmath>
-// #include <cfloat>  // to set consistent checks of number limits in script function arguments
 #include <cstdio>
 #include "v_ipnc.h"
 #include "v_object.h"
@@ -26,7 +25,6 @@ const char* DIGIT="0123456789.";
 const char* OPER="!^*/+-<a>b=c&|()";
 const char* RAZD=" +-*/^:[]();=$&|!<>?#,";
 const int FuncNumber=29; // number of functions
-
 
 
 double derf(double x);
@@ -198,12 +196,12 @@ void IPNCalc::IsAscii()
 }
 
 //get identifier
-string IPNCalc::Ident()
+std::string IPNCalc::Ident()
 {
     int n,m;
     n=strcspn( input, RAZD );
-    m = min( MAXKEYWD, n);
-    auto str = string( input, 0, m);//strncpy( s, input, m);
+    m = std::min( MAXKEYWD, n);
+    auto str = std::string( input, 0, m);//strncpy( s, input, m);
     input+=n;
     return str;
 
@@ -211,7 +209,7 @@ string IPNCalc::Ident()
 }
 
 //analyse IPN function
-void IPNCalc::Ffun(const string& str)
+void IPNCalc::Ffun(const std::string& str)
 {
     int i,j;
     std::string err;
@@ -274,7 +272,7 @@ OSH:
 }
 
 //analyse IPN variable
-void IPNCalc::Variab( const string& str)
+void IPNCalc::Variab( const std::string& str)
 {
     int j = aObj.Find(str.c_str());
 
@@ -329,7 +327,7 @@ OSH:
 }
 
 //analyse IPN interval variable
-void IPNCalc::I_Variab( const string& str)
+void IPNCalc::I_Variab( const std::string& str)
 {
     int j = aObj.Find(str.c_str());
 
@@ -1211,7 +1209,7 @@ void IPNCalc::CalcEquat( bool use_empty )
 }
 
 //print IPN notation
-void IPNCalc::PrintEquat( char *s, fstream& f)
+void IPNCalc::PrintEquat( char *s, std::fstream& f)
 {
     int k,l=0,j;
 

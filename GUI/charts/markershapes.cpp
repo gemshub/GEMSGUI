@@ -36,6 +36,7 @@
 #include <QPen>
 #include <QPainter>
 #include <QFont>
+#include <QtGui/QColor>
 #include <QtCore/QtMath>
 #include "markershapes.h"
 #include "graph_data.h"
@@ -43,6 +44,15 @@
 const double Pi = 3.14159;
 
 namespace jsonui {
+
+void colorAt(int ndx, int size, int& red, int& green, int& blue)
+{
+    QColor aColor;
+    aColor.setHsv( static_cast<int>(360/size*ndx), 200, 200);
+    red = aColor.red();
+    green = aColor.green();
+    blue = aColor.blue();
+}
 
 QImage markerShapeImage( const SeriesLineData& linedata )
 {
@@ -53,12 +63,13 @@ QImage markerShapeImage( const SeriesLineData& linedata )
 
     QPainter painter(&image);
     painter.setRenderHint( QPainter::Antialiasing );
-    QPen pen = QPen( linedata.getColor(), 3 );
+    QColor line_color = QColor(linedata.getRed(), linedata.getGreen(), linedata.getBlue());
+    QPen pen = QPen( line_color, 3 );
     pen.setJoinStyle( Qt::MiterJoin );
     painter.setPen( pen );
 
     if( static_cast<size_t>(linedata.getMarkerShape()) < shapes().size() )
-        painter.setBrush( linedata.getColor() );
+        painter.setBrush( line_color );
     painter.drawPath(imagePath);
 
     return image;
@@ -109,7 +120,8 @@ QIcon markerShapeIcon( const SeriesLineData& linedata )
     QPainter painter(&pic);
 
     QRect rect(0,0,dsize, dsize);
-    painter.setPen( QPen( linedata.getColor(), 2 ) );
+    QColor line_color = QColor(linedata.getRed(), linedata.getGreen(), linedata.getBlue());
+    painter.setPen( QPen(line_color, 2) );
     painter.drawImage( QRectF( QPointF(size/2, size/2), QSizeF(size,size)),
                        markerShapeImage( linedata ));
 
@@ -129,7 +141,8 @@ QIcon markerShapeIcon( const SeriesLineData& linedata )
 
 void getLinePen( QPen& pen, const SeriesLineData& linedata  )
 {
-    pen.setColor(linedata.getColor() );
+    QColor line_color = QColor(linedata.getRed(), linedata.getGreen(), linedata.getBlue());
+    pen.setColor(line_color);
     pen.setWidth(linedata.getPenSize());
     Qt::PenStyle style = static_cast<Qt::PenStyle>(linedata.getPenStyle());
     pen.setStyle(style);

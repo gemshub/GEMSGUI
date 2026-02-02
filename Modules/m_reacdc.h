@@ -20,7 +20,6 @@
 #ifndef _m_reacdc_h_
 #define _m_reacdc_h_
 
-#include "v_mod.h"
 #include "m_dcomp.h"
 
 const int RE_RKLEN = 32;
@@ -169,7 +168,7 @@ public:
 
     TReacDC( uint nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "ReacDC";
     }
@@ -178,20 +177,20 @@ public:
     {
         return rcp==&rc[0];
     }
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
-    bool check_input( const char *key, int level=1 );
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
+    bool check_input( const char *key, int level=1 ) override;
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char* key );
-    void TryRecInp( const char *key, time_t& time_s, int q );
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char* key ) override;
+    void TryRecInp( const char *key, time_t& time_s, int q , bool save = true ) override;
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
 
     void RCthermo( int q, int p );
 

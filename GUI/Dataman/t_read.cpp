@@ -16,13 +16,8 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <cstdio>
 #include "t_read.h"
-#include "v_object.h"
 #include "v_dbm.h"
-#include "v_user.h"
-#include "service.h"
-
 
 TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
@@ -56,7 +51,7 @@ TReadData::TReadData(const char *sd_key,  unsigned int nrt, const char *fmt_text
                pose = strchr( pose+1, '#');
             }
             if( !pose )
-            {  string str_err = "Invalid condition: \n";
+            {  std::string str_err = "Invalid condition: \n";
                str_err += input;
                Error( key_format, str_err );
             }
@@ -93,7 +88,7 @@ TReadData::getFormat()
        while( isdigit(input[i]))
                i++;
        if( input[i] != 's' )
-       {  string str_err = "Invalid format (must be '%nns'): \n";
+       {  std::string str_err = "Invalid format (must be '%nns'): \n";
                 str_err += input;
          Error( key_format, str_err );
        }
@@ -112,7 +107,7 @@ TReadData::getFormat()
          input+=4;
        } else
        {
-         string str_err = "Invalid format (must be IREC): \n";
+         std::string str_err = "Invalid format (must be IREC): \n";
                 str_err += input;
          Error( key_format, str_err );
        }
@@ -123,7 +118,7 @@ TReadData::getFormat()
          aFmts.push_back( RFormat( empty_r, 0, S_EMPTY ));
          input+=5;
        } else
-         { string str_err = "Invalid format (must be EMPTY): \n";
+         { std::string str_err = "Invalid format (must be EMPTY): \n";
                 str_err += input;
            Error( key_format, str_err );
           }
@@ -136,10 +131,10 @@ TReadData::getFormat()
                input[i] != '[' && input[i] != '\0'&&
                input[i] != '\n')
            i++;
-        string str = char_array_to_string( input, i );
+        std::string str = char_array_to_string( input, i );
         int data = aObj.Find( str.c_str() );
         if( data == -1 )
-        {  string str_err = "Invalid object name: \n";
+        {  std::string str_err = "Invalid object name: \n";
             str_err += str;
            Error( key_format, str_err );
         }
@@ -169,7 +164,7 @@ TReadData::getFormat()
           }
           skipSpace();
           if( *input != ']')
-           {  string str_err = "Invalid format (left ']'): \n";
+           {  std::string str_err = "Invalid format (left ']'): \n";
                str_err += input;
               Error( key_format, str_err );
             }
@@ -182,7 +177,7 @@ TReadData::getFormat()
        input++;
        char* pose = strchr( input, '\"');
        if( !pose )
-       {  string str_err = "Invalid string ( left simbol '\"'): \n";
+       {  std::string str_err = "Invalid string ( left simbol '\"'): \n";
               str_err += input;
           Error( key_format, str_err );
        }
@@ -191,7 +186,7 @@ TReadData::getFormat()
        }
        break;
    default:
-      {  string str_err = "Invalid format: \n";
+      {  std::string str_err = "Invalid format: \n";
          str_err += input;
          Error( key_format, str_err );
       }
@@ -223,7 +218,7 @@ void
 TReadData::getData( bool isList )
 {
  int i, data;
- string str;
+ std::string str;
  uint ii=0, jj=0;
 
  if( isList )
@@ -231,7 +226,7 @@ TReadData::getData( bool isList )
 
  if( *input != '#') // special world
  {
-   string str_err = "Must be #: \n";
+   std::string str_err = "Must be #: \n";
    str_err += input;
    Error( key_format, str_err );
  }
@@ -248,7 +243,7 @@ TReadData::getData( bool isList )
         data = skip_s;
       else data = aObj.Find( str.c_str() );
  if( data == -1 )
- {  string str_err = "Invalid object name: \n";
+ {  std::string str_err = "Invalid object name: \n";
            str_err += str;
        Error( key_format, str_err );
  }
@@ -276,7 +271,7 @@ TReadData::getData( bool isList )
        }
      skipSpace();
      if( *input != ']')
-     {  string str_err = "Invalid format: \n";
+     {  std::string str_err = "Invalid format: \n";
            str_err += input;
        Error( key_format, str_err );
      }
@@ -289,10 +284,10 @@ TReadData::getData( bool isList )
 
 
 void
-TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
+TReadData::readData( std::fstream& fin, RFormat& fmt, RData& dt )
 {
   char strbuf[500];
-  string dat_str;
+  std::string dat_str;
 
   
   switch( fmt.type )
@@ -302,7 +297,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
                   fin.read( strbuf, fmt.size );
                  else
                   fin >> strbuf;
-                 dat_str = string(strbuf);
+                 dat_str = std::string(strbuf);
                  break;
       case empty_r:
       case string_r:
@@ -310,7 +305,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
                  break;
       case irec_r:
                  sprintf( strbuf, "%d", fmt.size );
-                 dat_str = string(strbuf);
+                 dat_str = std::string(strbuf);
                  break;
       case object_r:
                  dat_str = aObj[fmt.size]->GetStringEmpty( fmt.i, fmt.j );
@@ -322,7 +317,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
       {
           memset( rt[nRT]->FldKey( dt.i ), ' ', rt[nRT]->FldLen( dt.i ));
           strncpy( rt[nRT]->FldKey( dt.i ), dat_str.c_str(),
-                   min( static_cast<size_t>(rt[nRT]->FldLen( dt.i )), dat_str.length() ));
+                   std::min( static_cast<size_t>(rt[nRT]->FldLen( dt.i )), dat_str.length() ));
       }
   }
   else if(  dt.objNum > 0  )
@@ -330,7 +325,7 @@ TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
 
 }
 
-void  TReadData::readRecord( int n_itr, fstream& fread )
+void  TReadData::readRecord( int n_itr, std::fstream& fread )
 {
 
  for(size_t ii=0; ii<aList.size(); ii++)

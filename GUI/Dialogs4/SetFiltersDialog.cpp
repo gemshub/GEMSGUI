@@ -250,7 +250,7 @@ void SetFiltersDialog::getFiles()
             pFile = pMod->child( jj );
             if( pFile->isSelected() )
             {
-                string col =pFile->text( 0 ).toStdString();
+                std::string col =pFile->text( 0 ).toStdString();
                 cnt++;
                 el_data->selKeywds.push_back( col );
             }
@@ -279,10 +279,10 @@ void SetFiltersDialog::setFiles()
         for( jk = 0; jk< nF; jk++ )
         {
             pFile = pMod->child( jk );
-            string col =pFile->text( 0 ).toStdString();
+            std::string col =pFile->text( 0 ).toStdString();
             isSel = false;
             for(  ii=0; ii<el_data->selCnt[ik]; ii++ )
-                if( el_data->selKeywds[jj+ii].find( col ) != string::npos )
+                if( el_data->selKeywds[jj+ii].find( col ) != std::string::npos )
                 {
                     isSel = true;
                     break;

@@ -158,7 +158,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
         auto iWin = atbData[ii].nWin;
         auto nO = atbData[ii].nObj;
         if( iWin  >= wnData.size()-1 ) // static list
-            jj = max(0,staticFindRow( nO, jj ));
+            jj = std::max(0,staticFindRow( nO, jj ));
         pLists[iWin]->item(jj)->setSelected(true);
         atbData[ii].ndxName =
                 pLists[iWin]->item(jj)->text().toStdString();
@@ -199,7 +199,7 @@ InputSystemDialog::~InputSystemDialog()
 
 void InputSystemDialog::getTable( std::vector<tableSetupData>& tab ) const
 {
-    string txt = pTname->text().toStdString();
+    std::string txt = pTname->text().toStdString();
 
     if( txt == emptiness /*|| txt == short_emptiness*/ )
         aObj[o_ssname]->SetString( S_EMPTY, 0, 0 );
@@ -245,7 +245,7 @@ void InputSystemDialog::changeTable(const QItemSelection & selected, const QItem
     // added selected
     foreach( ndx,  selected.indexes()  )
     {
-        string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
+        std::string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
         nO = wnData[curPage].nObj;
         ndx_row = ndx.row();
         if( nO<0 || curPage >= wnData.size()-1 )
@@ -292,7 +292,7 @@ void InputSystemDialog::CmPrint()
         if( vfChooseFileSave(this, filename,
                              "Put file name for printing" ) == false )
             return;
-        fstream f(filename, ios::out);
+        std::fstream f(filename, std::ios::out);
         ErrorIf( !f.good() , filename, "Fileopen error");
 
         /*recTable->selectAll();
@@ -309,7 +309,7 @@ void InputSystemDialog::CmPrint()
         sprintf( buf, "%-14.11s", recTable->horizontalHeaderItem(2)->text().toStdString().c_str() );
         f << buf;
         sprintf( buf, "%-6.6s", recTable->horizontalHeaderItem(3)->text().toStdString().c_str() );
-        f << buf << endl;
+        f << buf << std::endl;
 
         for(size_t  ii=0; ii<tbData.size(); ii++ )
         {
@@ -320,7 +320,7 @@ void InputSystemDialog::CmPrint()
             sprintf( buf, "%-14.4lg", tbData[ii].val );
             f << buf;
             sprintf( buf, "%c", tbData[ii].unit );
-            f << buf << endl;
+            f << buf << std::endl;
         }
     }
     catch( TError& xcpt )
@@ -441,7 +441,7 @@ void InputSystemDialog::deleteRows( int f_from, int r_to )
         nO = tbData[row].nObj;
 
         if( iWin  >= wnData.size()-1 ) // static list
-            jj = max(0,staticFindRow( nO, jj ));
+            jj = std::max(0,staticFindRow( nO, jj ));
 
         pLists[iWin]->item(jj)->setSelected(false);
         if( iWin != curPage )

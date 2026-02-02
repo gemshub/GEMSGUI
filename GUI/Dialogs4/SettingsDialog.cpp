@@ -45,9 +45,9 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     ui->pUserDBDir->setText(pVisor->userGEMDir().c_str());
     ui->pUserDBDir->setText(pVisor->userProfDir().c_str());
     ui->pFontRawName->setText(cellFont.toString());
-    ui->pNumDigits->setValue(pVisorImp->getDoubleDigits());
+    ui->pNumDigits->setValue(pVisor->getDoubleDigits());
     ui->pUpdateInterval->setValue(pVisorImp->updateInterval());
-    ui->pConfigAutosave->setChecked(pVisorImp->getConfigAutosave());
+    ui->pConfigAutosave->setChecked(pVisor->getConfigAutosave());
     //    pConfigAutosave->setChecked( true );
 
     if( pVisor->getElemPrMode() )
@@ -86,9 +86,9 @@ void SettingsDialog::CmApply()
     pVisorImp->setCellFont(cellFont);
 
     pVisorImp->setColorScheme(ui->comboBox->currentIndex());
-    pVisorImp->setDoubleDigits(ui->pNumDigits->value());
+    pVisor->setDoubleDigits(ui->pNumDigits->value());
     pVisorImp->setUpdateInterval( ui->pUpdateInterval->value() );
-    pVisorImp->setConfigAutosave( ui->pConfigAutosave->isChecked() );
+    pVisor->setConfigAutosave( ui->pConfigAutosave->isChecked() );
     pVisor->setElemPrMode(ui->rbNewPrMode->isChecked());
 
     pVisor->setLocalDocDir(ui->pLocalDocDir->text().toStdString());

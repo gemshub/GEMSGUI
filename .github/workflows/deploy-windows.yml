@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - fix_70_73_75
+      - export_projecs_app
   release:
     types:
       - published

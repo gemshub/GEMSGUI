@@ -18,11 +18,9 @@
 #ifndef _t_read_h_
 #define _t_read_h_
 
-#include <vector>
 #include "v_ipnc.h"
 
-
-  enum data_rftype { 
+enum data_rftype {
      read_r = 1, /*%nns*/
      empty_r = 2, /*EMPTY*/
      object_r = 3,/*#obj_name[i,j]*/
@@ -48,9 +46,9 @@ struct RFormat
                 // or object index for object_r type
   int  i;        // to object_r i(N) index
   int  j;        // to object_r j(M) index
-  string fmt;
+  std::string fmt;
 
-  RFormat( const char aType, int aSize, string aFmt ):
+  RFormat( const char aType, int aSize, std::string aFmt ):
     type( aType), size(aSize), i(0), j(0), fmt(aFmt)
   {
 
@@ -100,7 +98,7 @@ struct RData
 
 class TReadData  // reading data by format
 {
-    string key_format;        // key of SDref record
+    std::string key_format;        // key of SDref record
     unsigned int nRT;                   // module number
 
     char *input;               // current position
@@ -108,7 +106,7 @@ class TReadData  // reading data by format
     std::vector<RFormat> aFmts;  // list of formats
     std::vector<RData> aDts;     // list of datas
 
-   string mScript;     // Text with IPN-expression ## equations ##
+   std::string mScript;     // Text with IPN-expression ## equations ##
    IPNCalc rpn;       // IPN of equats of print condition
 
 protected:
@@ -116,14 +114,14 @@ protected:
    void skipSpace();
    void getFormat();
    void getData( bool isList );
-   void readData( fstream& fin, RFormat& fmt, RData& dt );
+   void readData( std::fstream& fin, RFormat& fmt, RData& dt );
 
 public:
 
     TReadData(const char *sd_key, unsigned int nrt, const char *fmt_text );
     ~TReadData();
 
-    void  readRecord( int n_itr, fstream& fread );
+    void  readRecord( int n_itr, std::fstream& fread );
 };
 
 #endif  // _t_read_h

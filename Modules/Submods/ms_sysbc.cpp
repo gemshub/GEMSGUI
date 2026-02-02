@@ -17,6 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 #include "m_compos.h"
 #include "m_syseq.h"
 #include "s_formula.h"

@@ -20,10 +20,8 @@
 #ifndef _s_tpwork_h_
 #define _s_tpwork_h_
 
-#include <cctype>
 #include <vector>
 #include <memory>
-#include <cstring>
 #include "v_mod.h"
 
 struct TPWORK

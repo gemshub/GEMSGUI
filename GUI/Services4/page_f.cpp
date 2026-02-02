@@ -18,14 +18,13 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
-
 #include "page_f.h"
 #include "units.h"
 #include "v_module.h"
 
 std::vector<std::shared_ptr<CWinInfo>> aWinInfo;
 
-CWinInfo::CWinInfo(TSubModule & m, std::istream & visor_dat):
+CWinInfo::CWinInfo(TCModule & m, std::istream & visor_dat):
         pWin(0), rM(m)
 {
     init_width = 600; //400
@@ -33,7 +32,7 @@ CWinInfo::CWinInfo(TSubModule & m, std::istream & visor_dat):
     fromDAT(visor_dat);
 }
 
-CWinInfo::CWinInfo(TSubModule & m, const TJsonConfig& cnf):
+CWinInfo::CWinInfo(TCModule & m, const TJsonConfig& cnf):
         pWin(0), rM(m)
 {
     init_width = 600; //400;

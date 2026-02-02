@@ -19,7 +19,7 @@
 #ifndef _m_gtdemo_h_
 #define _m_gtdemo_h_
 
-#include "v_mod.h"
+#include "v_module.h"
 #include "v_ipnc.h"
 #include "graph_window.h"
 
@@ -152,24 +152,24 @@ public:
         delete gd_gr;
     }
 
-    const char* GetName() const
+    const char* GetName() const  override
     {
         return "GtDemo";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
     std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
-                              int keyType );
+                              int keyType ) override;
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
-    void RecordPlot( const char *key );
+    void RecInput( const char *key )  override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char *key ) override;
+    void RecordPlot( const char *key ) override;
 
     //Get key from list
     const char * GetRkey( int j) const
@@ -177,13 +177,13 @@ public:
         return gdp->rkey+j*gdp->rtLen;
     }
 
-    bool SaveChartData( jsonui::ChartData* grdata );
-    void ClearGraphDialog()
+    bool SaveChartData( jsonui::ChartData* grdata ) override;
+    void ClearGraphDialog() override
     {  gd_gr = nullptr; }
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
 
-    const std::string& GetString();
+    const std::string& GetString() override;
 
 };
 

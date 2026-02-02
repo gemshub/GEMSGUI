@@ -21,7 +21,6 @@
 #include "m_sdata.h"
 #include "service.h"
 #include "visor.h"
-//#include "filters_data.h"
 
 TSData* TSData::pm;
 
@@ -198,7 +197,7 @@ void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
 }
 
 // Test record with key
-void TSData::TryRecInp( const char *key_, time_t& time_s, int q )
+void TSData::TryRecInp( const char *key_, time_t& time_s, int q, bool )
 {
     TCStringArray aSDlist;
     TCIntArray anRDc;

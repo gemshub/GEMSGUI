@@ -55,7 +55,7 @@ AutoPhaseDialog::AutoPhaseDialog (
 {
     
     ui->setupUi(this);
-    string str= "Setup of aqueous and gas phases in project:  ";
+    std::string str= "Setup of aqueous and gas phases in project:  ";
     str += pr_key;
     setWindowTitle( str.c_str() );
 
@@ -146,12 +146,12 @@ char AutoPhaseDialog::get_acode()
     return aqu_code;
 }
 
-void AutoPhaseDialog::get_akey( string& a_key )
+void AutoPhaseDialog::get_akey( std::string& a_key )
 {
     a_key = aqu_key;
 }
 
-void AutoPhaseDialog::set_akey( string& a_key )
+void AutoPhaseDialog::set_akey( std::string& a_key )
 {
     aqu_key = a_key;
     /*  if( ui->aselU->isChecked())
@@ -197,12 +197,12 @@ char AutoPhaseDialog::get_gcode()
     return gas_code;
 }
 
-void AutoPhaseDialog::get_gkey( string& g_key )
+void AutoPhaseDialog::get_gkey( std::string& g_key )
 {
     g_key = gas_key;
 }
 
-void AutoPhaseDialog::set_gkey( string& g_key )
+void AutoPhaseDialog::set_gkey( std::string& g_key )
 {
     gas_key = g_key;
 
@@ -228,8 +228,8 @@ void AutoPhaseDialog::set_gkey( string& g_key )
 void AutoPhaseDialog::CmCheck()
 {
     float par[16];
-    string a_key = aqu_key;
-    string g_key = gas_key;
+    std::string a_key = aqu_key;
+    std::string g_key = gas_key;
 
     if( a_key.empty()  )
         a_key = "a:*:*:*:*:";
