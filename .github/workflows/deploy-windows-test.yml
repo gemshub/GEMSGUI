@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - help_generation_ci
+      - help_generation_ci1
   release:
     types:
       - published
