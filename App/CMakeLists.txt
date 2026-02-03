@@ -108,13 +108,4 @@ qt_generate_deploy_app_script(
 )
 install(SCRIPT ${deploy_script})
 
-# --- Install custom help config generator (Windows) ---
-if (WIN32 AND DEFINED ENV{CONDA_PREFIX})
-    file(TO_CMAKE_PATH "$ENV{CONDA_PREFIX}" CONDA_PREFIX_CMAKE)
-
-    install(FILES
-        "${CMAKE_BINARY_DIR}/Release/gems3helpconfig-qhp-generator.exe"
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
-endif()
 
