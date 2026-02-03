@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - help_generation_ci1
+      - help_generation_ci
   release:
     types:
       - published
@@ -67,9 +67,12 @@ jobs:
 
       - name: Check deploy
         run: |
-          cd C:/Miniconda/envs/GEMSGUI/Library/bin
-          ls
-          cd ${{ github.workspace }}
+          conda activate GEMSGUI
+          cd ${{ github.workspace }}/Resources/doc/html
+          C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\qhelpgenerator.exe gems3helpconfig.qhcp -o gems3help.qhc
+          cp "gems3help.qhc" "${{ github.workspace }}/Resources/help"
+          cp "gems3help.qch" "${{ github.workspace }}/Resources/help"
+          cd ${{ github.workspace }}/Resources/help
           ls
           cp -r "${{ github.workspace }}/Resources" ${{ steps.strings2.outputs.deploy-output-dir }}
           cp "${{ github.workspace }}/Resources/rungems3.bat" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}"

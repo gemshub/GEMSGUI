@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - fix-t-props-h2o
-      - help_generation_ci1
+      - help_generation_ci
   release:
     types:
       - published
