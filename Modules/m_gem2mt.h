@@ -19,17 +19,15 @@
 #ifndef _m_gem2mt_h_
 #define _m_gem2mt_h_
 
+#include "m_param.h"
+#include "v_ipnc.h"
+#include "graph_window.h"
+#include "nodearray_gui.h"
 #include "particlearray.h"
 
 namespace  io_formats {
 class TRWArrays;
 }
-
-
-#include "m_param.h"
-#include "nodearray_gui.h"
-#include "v_ipnc.h"
-#include "graph_window.h"
 
 const long int MT_RKLEN = 80,
                SIZE_HYDP = 7;
@@ -439,33 +437,35 @@ public:
         delete gd_gr;
     }
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "GEM2MT";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
-    bool check_input( const char *key, int level=1 );
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
+    bool check_input( const char *key, int level=1 ) override;
     std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
-                              int keyType );
+                              int keyType ) override;
 
-    void RecInput( const char *key );
-    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
-    void RecordPrint( const char *key=nullptr ); //sddata key
-    void RecordPlot( const char *key );
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char *key ) override;
+    bool ImplementedPrint() const override
+    { return true; }
+    void RecordPrint( const char *key=nullptr ) override; //sddata key
+    void RecordPlot( const char *key ) override;
 
-    bool SaveChartData( jsonui::ChartData* grdata );
-    void ClearGraphDialog()
+    bool SaveChartData( jsonui::ChartData* grdata ) override;
+    void ClearGraphDialog() override
     {  gd_gr = nullptr; }
 
     //void CmHelp();
-    const char* GetHtml();
+    const char* GetHtml() override;
 
    void InsertChanges( std::vector<CompItem>& aIComp,
           std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );

@@ -19,8 +19,6 @@
 #include <QCloseEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-
-
 #include "GemsMainWindow.h"
 #include "visor.h"
 #include "module_w.h"
@@ -57,7 +55,6 @@ TCModuleImp::TCModuleImp(size_t irt, int page, int aviewmode):
     //setCentralWidget(pWin);
     QVBoxLayout* mainBox = new QVBoxLayout(this);
     mainBox->addWidget( pWin );
-    rMod.Setup();
 }
 
 /*!
@@ -106,7 +103,7 @@ void TCModuleImp::closeEvent(QCloseEvent* e)
     }
 
     // close module
-    if( rMod.EvClose() ) 
+    if( EvClose() )
     {
 	  pWin->close();
 	  rMod.pImp = NULL;
@@ -142,23 +139,23 @@ void TCModuleImp::Update(bool force)
     last_update = time(0);
 }
 
-void TCModuleImp::SelectStart()
-{
-   //if( qApp->focusWidget() )
-   //   qApp->focusWidget()->clearFocus();
+// void TCModuleImp::SelectStart()
+// {
+//    //if( qApp->focusWidget() )
+//    //   qApp->focusWidget()->clearFocus();
 
-   if( iMod >= rt.size() || rt[iMod]->RecCount() <= 0)
-       return;   // Added to avoid a selection
+//    if( iMod >= rt.size() || rt[iMod]->RecCount() <= 0)
+//        return;   // Added to avoid a selection
 
-   if( pVisor->ProfileMode )
-   {
-       if( iMod <= RT_SYSEQ && iMod != RT_SDATA)
-        return;
-       ((TCModule*)&rMod)->CmLoadinProfile();
-    }
-     else
-      ((TCModule*)&rMod)->CmShow();
-}
+//    if( pVisor->ProfileMode )
+//    {
+//        if( iMod <= RT_SYSEQ && iMod != RT_SDATA)
+//         return;
+//        CmLoadinProfile();
+//     }
+//      else
+//       CmShow();
+// }
 
 /*!
     Starts dialog for remake parameters

@@ -19,10 +19,9 @@
 
 #include <fstream>
 #include "m_gem2mt.h"
-#include "GEMS3K/v_service.h"
-
 #include "visor.h"
 #include "stepwise.h"
+#include "GEMS3K/v_service.h"
 
 #ifdef useOMP
 #include <omp.h>
@@ -60,7 +59,7 @@ void  TGEM2MT::putHydP( DATABRPTR* C0 )
     for( long int jj=0; jj<mtp->nC; jj ++)
     {
         C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
-#ifdef NODEARRAYLEVEL
+#ifndef NO_NODEARRAYLEVEL
         if( mtp->HydP )
         { C0[jj]->Vt = mtp->HydP[jj][0];
             C0[jj]->vp = mtp->HydP[jj][1];

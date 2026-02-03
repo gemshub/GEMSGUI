@@ -18,148 +18,16 @@
 #ifndef _v_module_h_
 #define _v_module_h_
 
+#include <set>
+#include "v_mod.h"
 #include "v_dbm.h"
 
 class TCModuleImp;
 class QWidget;
-
-/*
-    TSubModule class represents submodules of the program
-    and is the base for TCModule class which is for full-featured modules
-    'aMod' is the list of all the modules and submodules in the system
-    TModuleImp class is visual representation (window) for TSubModule/TCModule
-*/
-
 struct GraphData;
-
-
 namespace jsonui {
 class ChartData;
 }
-
-/// Default logger for gems3gui part
-extern std::shared_ptr<spdlog::logger> gui_logger;
-
-class TSubModule
-{
-    // friend TCModuleImp;
-
-private:
-    std::string state;
-
-    TSubModule(const TSubModule&);
-    const TSubModule& operator=(const TSubModule&);
-
-protected:
-    uint nRT;
-    uint startKeyEdit;
-    bool contentsChanged;     // needs to save
-    std::string iconFileName;
-
-    // Events part
-    virtual void CloseWin();
-
-    void SetString(const char* s)
-    {
-        state = s;
-    }
-
-public:
-    virtual void Setup();
-    virtual bool EvClose();
-    virtual void CmHelp();
-    virtual void CmHelp2();
-
- public:
-    TCModuleImp* pImp;		// for visor implementation
-    QWidget* window();
-
-    TSubModule( uint nrt );
-    virtual ~TSubModule();
-
-    virtual bool IsSubModule()
-    {
-        return true;
-    }
-
-    virtual void SetTitle()
-    {}
-
-    // this function is called when active page of submodule is changed
-    virtual void EvPageChanged(int /*nPage*/)
-    {}
-
-    // used by TCell derivatives to mark changes in the module
-    virtual void CellChanged( bool val = true)
-    {
-        contentsChanged = val;
-    }
-
-    // used by TCell derivatives to mark changes in the module
-    virtual bool isCellChanged() const
-    {
-        return contentsChanged;
-    }
-
-    void clearEditFocus();  // commit last editor if exist
-
-    uint rtNum() const
-    {
-        return nRT;
-    }
-
-    virtual void SetIcon(const char* aIconFileName )
-    {
-        iconFileName = aIconFileName;
-    }
-
-    virtual const char* GetIcon() const
-    {
-        return iconFileName.c_str();
-    }
-
-    virtual const char* GetHtml();
-
-    virtual const char* GetName() const = 0;
-    virtual void ods_link( int i=0 )=0;   // link values to objects
-    virtual void dyn_set( int i=0 )=0;    // set dynamic objects ptr to values
-    virtual void dyn_kill(int i=0 )=0;  // free dynamic memory in objects and values
-    virtual void dyn_new( int i=0 )=0;   // realloc dynamic memory
-    virtual void set_def(int /*i*/=0)
-    {}  // set default data or zero if nessasary
-
-    //-- Module manipulation
-
-    void ModUpdate( const char *str );
-    void Show(QWidget* parent, const char *str=nullptr, bool viewmode=false );
-
-    void Update(bool force=true);
-    virtual const std::string& GetString()
-    {
-        return state;
-    }
-
-    uint keyEditField();
-    void  setKeyEditField( uint fld )
-    {
-       startKeyEdit = fld;
-    }
-
-
-    //-- Module manipulation
-    virtual std::string  GetKeyofRecord( const char* /*oldKey*/, const char* /*strTitle*/,
-                                     int /*keyType*/ )
-    { return"";}
-
-    //-- for graphic data set
-
-    virtual bool SaveChartData( jsonui::ChartData* /*graph*/ )
-    { return false; }
-
-    virtual void ClearGraphDialog()
-    { }
-
-};
 
 // --- Parametres of function GetKeyofRecord()
 const int KEY_OLD = 1;
@@ -173,174 +41,222 @@ const int VF_BYPASS =  6;
 const int VF_REMAKE =  7;
 const int VF_CLEARALL = 2;
 
+/// Default logger for gems3gui part
+extern std::shared_ptr<spdlog::logger> gui_logger;
 
 /*
     TCModule class represents full-featured modules of the program
     and is the derived from TSubModule class
     'aMod' is the list of all the modules and submodules in the system
-    TModuleImp class is visual representation (window) for TSubModule/TCModule
+    TModuleImp class is visual representation (window) for TCModule
 */
-
-class TCModule:
-            public TSubModule
+class TCModule
 {
-    // friend TCModuleImp;
-
-    TCModule(const TCModule&);
-    const TCModule& operator=(const TCModule&);
-
-protected:
-
-    TDataBase* db;
-    int nQ;                // number of DB structures
-    std::string Filter;
-
-    TCStringArray aFldKeysHelp;      // string help of fields
-    std::string start_title;
-
-    virtual void Setup();
-    virtual bool EvClose();
-    void PrintSDref( const char* sd_key , const char* text_fmt );
-
-public:	// moved to public to remove 'friend' for TCModuleImp
-    //--- Manipulation files of Data Base   (Servis functions )
-    void CmRebildFile();
-    void CmAddFileToList();
-    void CmAddOpenFile();
-    void CmReOpenFileList();
-
-    //--- Manipulation list of records
-    void CmKeysToTXT();
-    void CmDeleteList();
-    void CmCopyList();
-    void CmRenameList();
-    void CmTransferList();
-
-    virtual void CmImport();
-    virtual void CmExport();
-    virtual void CmBackup();
-    virtual void CmRestore();
-    virtual void CmBackuptoJson();
-    virtual void CmRestorefromJson();
-
-    //--- Manipulation current record
-    void CmDelete();
-    void CmDerive();
-    void CmShow( const char *key=nullptr );  //Demonstrate (show) Data Record
-    void CmFilter();  // set Data Record filter
-    void CmNew();
-    void CmCreate();
-    void CmNext();
-    void CmPrevious();
-
-    void CmPlot();
-
 public:
-    TCModule( uint nrt );
+    TCModule(size_t nrt);
     virtual ~TCModule();
 
-    bool IsSubModule()
+    virtual bool IsSubModule()
     {
-        return false;
+        return nRT>=MD_RMULTS;
+    }
+    size_t rtNum() const
+    {
+        return nRT;
+    }
+
+    /// Mark changes in the module
+    virtual void CellChanged(bool val = true)
+    {
+        contents_changed = val;
+    }
+    /// Test changes in the module
+    virtual bool isCellChanged() const
+    {
+        return contents_changed;
+    }
+
+    void SetIcon(const char* icon_file )
+    {
+        icon_file_path = icon_file;
+    }
+    const std::string& GetIcon() const
+    {
+        return icon_file_path;
     }
 
     void SetTitle()
     {
-        SetString( start_title.c_str() );
+        set_string(start_title);
     }
 
-    //--- Manipulation current record
-    void CmSave();
-    void CmSaveM();
-    void CmSaveAs();
-    void CmCalc();  //Calculate or create Data Record
-
-    void CmNewinProfile();
-    void CmCreateinProfile();
-    void RecordLoadinProfile( const char *key=nullptr );
-    void CmLoadinProfile( const char *key=nullptr );
-    void CmPrint();
-    void CmScript();
-
-    virtual bool check_input( const char* /*key*/, int /*level*/=1 )
+    size_t keyEditField();
+    void  setKeyEditField(size_t fld)
     {
-        return false;
-    }        // test input data (nessasary recalck)
-
-    bool MessageToSave();  // save solicitation
-    virtual void RecSave( const char *key, bool onOld= true );
-    virtual void RecInput( const char *key );
-    virtual int RecBuild( const char *key, int mode = VF_UNDEF );
-    virtual void RecCalc( const char *key );
-    virtual void TryRecInp( const char *key, time_t& time, int q );
-    virtual void AddRecord(const char* key);
-    virtual void AddRecord(const char* key, int& fnum );
-    virtual void ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply);
-    virtual int AddRecordTest(const char* key, int& fnum );
-    virtual void DeleteRecord( const char *key, bool errifNo = true  );
-    virtual void RecordPrint( const char *key=nullptr ); //sddata key
-    virtual void RecordPlot( const char *key );
-
-    //-- Database manipulation
-    void DelList(const char *pattern);
-    void Transfer(const char *pattern);
-    void CopyRecordsList(const char *pattern, bool if_rename);
-    void KeysToTXT(const char *pattern);
-    void RecToTXT(const char *pattern);
-    void RecOfTXT();
-    void RecExport(const char *pattern);
-    void RecImport();
-    void RecListToJSON(const char *pattern, const std::string&filename, bool all_records=false);
-    void RecListFromJSON(const std::string&filename);
-
-    TCIntArray SelectFileList(int mode);
-
-    virtual void MakeQuery();
-
-    //-- Module manipulation
-    virtual std::string  GetKeyofRecord(const char *oldKey, const char *strTitle, int keyType);
-    virtual std::string  makeKeyFilter();
-    virtual bool  testKeyFilter();
-    const char *getFilter()
-    {
-        if( testKeyFilter() )
-           Filter = makeKeyFilter();
-        return Filter.c_str();
+        start_key_field_edit = fld;
     }
-    void setFilter( const char *filt)
+
+    const std::string& getFilter()
+    {
+        if(testKeyFilter()) {
+            Filter = makeKeyFilter();
+        }
+        return Filter;
+    }
+    void setFilter(const std::string& filt)
     {
         Filter = filt;
     }
 
+    virtual const std::string& GetString()
+    {
+        return state_line;
+    }
+    virtual const char* GetName() const = 0;
+    virtual const char* GetHtml();
 
-    //  const string& GetFldHelp( int Ni ) const { return aFldKeysHelp[Ni];}
-    bool  CheckEqText( const char *erscan, const char *msg=nullptr );
+    virtual void ods_link(int i=0) = 0;   // link values to objects
+    virtual void dyn_set(int i=0) = 0;    // set dynamic objects ptr to values
+    virtual void dyn_kill(int i=0) = 0;    // free dynamic memory in objects and values
+    virtual void dyn_new(int i=0) = 0;    // realloc dynamic memory
+    virtual void set_def(int /*i*/=0)
+    {}  // set default data or zero if nessasary
+    /// this function is called when active page of submodule is changed
+    virtual void EvPageChanged(int /*nPage*/)
+    {}
 
-    //-- Module Information
+    //-- Module manipulation
+
     size_t NumberOpenFils() const
     {
-        return rt[nRT]->GetOpenFiles().size();
+        return (db ? db->GetOpenFiles().size(): 0);
     }
-    const char* GetFldHelp( uint Ni ) const
+    std::string GetFldHelp(size_t ni) const
     {
-        return aFldKeysHelp[Ni].c_str();
+        return ( ni<aFldKeysHelp.size() ? aFldKeysHelp[ni] : "");
     }
-    const char* GetKey()  const
+    const char* GetKey() const
     {
-        return db->PackKey();
+        return (db ? db->PackKey(): nullptr);
     }
 
+    /// Test input data (necessary recalculations)
+    virtual bool check_input( const char* /*key*/, int /*level*/=1 )
+    {
+        return false;
+    }
+    virtual std::string GetKeyofRecord(const char *oldKey, const char *strTitle, int keyType);
+    /// opens window with 'Remake record' parameters
+    virtual void MakeQuery(); //!!??
+    virtual void RecSave(const char *key, bool onOld= true);
+    virtual void RecInput(const char *key);
+    virtual int RecBuild(const char *key, int mode = VF_UNDEF);
+    virtual void RecCalc(const char *key);
+    virtual void TryRecInp(const char *key, time_t& time, int q, bool save = true);
+    virtual void AddRecord(const char* key);
+    virtual void AddRecord(const char* key, int& fnum);
+    virtual int AddRecordTest(const char* key, int& fnum );
+    virtual void DeleteRecord(const char *key, bool errifNo = true);
+    virtual bool ImplementedPrint() const
+    { return false; }
+    virtual void RecordPrint(const char *key=nullptr);
+    virtual void RecordPlot(const char *key);
+    //-- for graphic data set
+    virtual bool SaveChartData( jsonui::ChartData* /*graph*/ )
+    { return false; }
+    virtual void ClearGraphDialog()
+    { }
+
     void CurrentToJSON(const std::string& filename);
+    TCIntArray SelectFileList(int mode);
+
+    //-- Database manipulation
+    void DelList();
+    void Transfer();
+    void CopyRecordsList(bool if_rename );
+    void KeysToTXT();
+    void RecToTXT();
+    void RecOfTXT();
+    void RecExport();
+    void RecImport( );
+    void RecListToJSON(const char *pattern, const std::string&filename, bool all_records=false);
+    void RecListFromJSON(const std::string&filename);
+
+    void SaveM();
+    void SaveCurrentKey();
+    void SaveAs();
+    void DeleteCurrent();
+    void RunFilter();
+    void RunDerive();
+    void RunCalc();
+    void RunNew();
+    void RunCreate();
+    void RecordLoadinProfile(const char *key);
+    void NewinProfile();
+    void CreateinProfile();
+    std::string CurrentKey();
+    std::string DBKeywd() const
+    {
+        return (db ? db->GetKeywd() :"");
+    }
+    void SetString(const std::string s)
+    {
+        state_line = s;
+    }
+
+    void RebildFile();
+    void AddFileToList();
+    void ReOpenFileList();
+    void AddOpenFile();
+    void ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply);
+
+    //--- Manipulation show current record
+    bool  CheckEqText( const char *erscan, const char *msg=nullptr );
+    bool MessageToSave();  //!!??
+    void ModUpdate(const std::string& str);  //!!??
+    void Show(QWidget* parent, const char *str=nullptr, bool viewmode=false); //!!??
+    void Update(bool force=true); //!!??
+    QWidget* window(); //!!??
+
+protected:   // SumModule level
+    size_t nRT;
+    size_t start_key_field_edit;
+    bool contents_changed;     // needs to save
+    std::string state_line;
+    std::string icon_file_path;
+
+    void set_string(const std::string s)
+    {
+        state_line = s;
+    }
+
+    TCModuleImp* pImp;  //!!??
+    void clearEditFocus(); //!!??
+    friend class TCModuleImp;
+    friend class TVisorImp;
+
+    TCModule(const TCModule&);
+    const TCModule& operator=(const TCModule&);
+
+protected:  // Module level
+    int nQ;                // number of DB structures
+    std::string Filter;
+    TCStringArray aFldKeysHelp;      // string help of fields
+    std::string start_title;
+    TDataBase* db=nullptr;
+
+    void PrintSDref( const char* sd_key , const char* text_fmt ); // !!! To do
+    std::string  makeKeyFilter();
+    bool  testKeyFilter();
 };
 
 
-// TSubModule and TCModule container
-class TModuleList:
-            public std::vector<std::shared_ptr<TSubModule>>
+// TCModule container
+class TModuleList: public std::vector<std::shared_ptr<TCModule>>
 {
 public:
     TModuleList():
-          std::vector<std::shared_ptr<TSubModule>>()
+      std::vector<std::shared_ptr<TCModule>>()
     {}
 
     ~TModuleList();

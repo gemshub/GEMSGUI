@@ -18,19 +18,15 @@
 //-------------------------------------------------------------------
 //
 
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
+
 #include "m_proces.h"
 #include "m_syseq.h"
 #include "visor.h"
 #include "t_print.h"
 #include "stepwise.h"
+#include "nodearray_gui.h"
 #include "GEMS3K/num_methods.h"
 #include "GEMS3K/gems3k_impex.h"
-#include "nodearray_gui.h"
 
 double ff_proc( double x, double );
 TProcess* TProcess::pm;
@@ -725,7 +721,7 @@ void TProcess::pe_next()
     if( !pep->Nst )
         return;
     pep->j = pep->Nst;
-    pep->c_nrk = min<short>( pep->Nst, pep->NR1-1);
+    pep->c_nrk = std::min<short>( pep->Nst, pep->NR1-1);
     pep->c_tm += pep->tmi[STEP_];
     pep->c_NV += pep->NVi[STEP_];
     pep->c_P += pep->Pi[STEP_];
@@ -830,7 +826,7 @@ TProcess::MakeQuery()
          }
          pep->lNam = static_cast<char (*)[MAXGRNAME]>(aObj[ o_pclnam ]->Alloc( 1,
                     dimPclnam, MAXGRNAME));
-         for(size_t ii=0; ii< min<size_t>( namesLines.size(), pep->dimXY[1] ); ii++)
+         for(size_t ii=0; ii< std::min<size_t>( namesLines.size(), pep->dimXY[1] ); ii++)
          {
            strncpy(  pep->lNam[ii+ndxy], namesLines[ii].c_str(), MAXGRNAME );
          }
@@ -927,7 +923,7 @@ TProcess::pe_test()
         nIt = pep->Nst;
         pep->j = nIt /*+1*/;
     }
-    pep->c_nrk = min<short>( nIt, pep->NR1-1);
+    pep->c_nrk = std::min<short>( nIt, pep->NR1-1);
 
     if( pep->Ntm>nIt && pep->Pvtm != S_OFF ) pep->tm[nIt] = pep->c_tm;
     if( pep->dNNV>nIt && pep->PvNV != S_OFF ) pep->nv[nIt] = pep->c_NV;
@@ -1296,7 +1292,7 @@ pep->ccTime = 0.0;
           pep->kst = -1;
           pep->c_Tau = pep->Taui[0];
           pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
-          TSysEq::pm->CmSave();  // save results
+          TSysEq::pm->SaveCurrentKey();  // save results
           pep->kst = 0;
         }
 
@@ -1426,7 +1422,7 @@ else {
 }
         if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
 //13/08/2009        	    if( pep->Istat < P_MT_MODE )
-                 TSysEq::pm->CmSave();  // save results
+                 TSysEq::pm->SaveCurrentKey();  // save results
 //        }
 
      // set results
@@ -1454,7 +1450,7 @@ else {
 
                 // export script
                 if( text_fmt )
-                { fstream f( filename, ios::out|ios::app );
+                { std::fstream f( filename, std::ios::out|std::ios::app );
                   ErrorIf( !f.good() , filename, "Fileopen error");
                    // scan and print format
                   TPrintData dat( sd_key.c_str(), nRT, f, text_fmt );
@@ -1541,8 +1537,8 @@ void TProcess::RecordPrint(const char *key)
         if( vfChooseFileSave(window(), filename1,
                              "Please, enter the Process work structure file name", "*.lst" ) )
         {
-            if( !access(filename1.c_str(), 0 ) ) //file exists
-                if( !vfQuestion( window(), filename1.c_str(),
+            if( vfExist(filename1) )
+                if( !vfQuestion( window(), filename1,
                                  "This file exists! Overwrite?") )
                     return;
             TCStringArray savedSystems;
@@ -1659,7 +1655,7 @@ bool TProcess::SaveChartData( jsonui::ChartData* gr )
     //if( gr->graphType == ISOLINES )
     //   gr->getColorList();
     pVisor->Update();
-    contentsChanged = true;
+    contents_changed = true;
 
     return true;
 }
@@ -1702,7 +1698,7 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
     std::string name;
     std::string newname;
     u_splitpath( dbr_list, dir, name, newname );
-    ofstream fout2( dbr_list, ios::app);
+    std::ofstream fout2( dbr_list, std::ios::app);
     auto f_ext = GEMS3KGenerator::default_ext();
     for( int ii=0; ii<pep->NR1 ; ++ii )
     {

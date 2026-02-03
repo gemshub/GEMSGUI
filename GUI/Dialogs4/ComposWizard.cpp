@@ -64,7 +64,7 @@ double r2, QWidget* parent):
     ui(new Ui::ComposWizardData)
 {
     ui->setupUi(this);
-    string str1= "GEM-Selektor Compos Setup:  ";
+    std::string str1= "GEM-Selektor Compos Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
     ui->stackedWidget->setCurrentIndex (0);

@@ -19,12 +19,6 @@
 
 #include <cmath>
 #include <cstdio>
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
-
 #include "m_gem2mt.h"
 #include "visor.h"
 #include "m_syseq.h"
@@ -876,7 +870,7 @@ void TGEM2MT::MakeQuery()
     {
         mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam ]->Alloc(
                       1, mtp->nYS, MAXGRNAME);
-       for(size_t ii=0; ii< min<size_t>( namesLines.size(),mtp->nYS); ii++)
+       for(size_t ii=0; ii< std::min<size_t>( namesLines.size(),mtp->nYS); ii++)
        {
            strncpy(  mtp->lNam[ii], namesLines[ii].c_str(), MAXGRNAME );
         }
@@ -946,7 +940,7 @@ AGAIN:
 
     init_arrays( setdef ); //clear all
 
-    SetString("Record build OK");
+    set_string("Record build OK");
     pVisor->Update();
 
     //FreeNa();
@@ -1199,11 +1193,11 @@ void TGEM2MT::RecordPrint( const char* key )
         if( vfChooseFileSave(window(), filename,
                              "Please, enter the TGEM2MT work structure file name", std::string("*."+f_ext).c_str() ) )
         {
-            if( !access(filename.c_str(), 0 ) ) //file exists
+            if( vfExist(filename) )
                 if( !vfQuestion( window(), filename.c_str(), "This file exists! Overwrite?") )
                     return;
             //mtp->PsScom=S_OFF;
-            fstream ff( filename, ios::out );
+            std::fstream ff( filename, std::ios::out );
             ErrorIf( !ff.good() , filename, "Fileopen error");
             switch( type_f )
             {

@@ -541,6 +541,9 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
         reaction_data["reactants"] = oreactants;
         if( oreactants.last().toObject()["symbol"] != reaction_data["symbol"] )
         {
+            gui_logger->error("ReactDC {}: {} != {} ", aRC1[ii],
+                              oreactants.last().toObject()["symbol"].toString().toStdString(),
+                              reaction_data["symbol"].toString().toStdString());
             error_reactdc.push_back(aRC1[ii]);
         }
 

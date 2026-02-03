@@ -67,7 +67,7 @@ ProjectWizard::ProjectWizard( const char* pkey, char flgs[38], QWidget* parent):
 
     //setFinishEnabled( WizardPage3, true);
     ui->setupUi(this);
-    string str1= "GEM-Selektor Project Setup:  ";
+    std::string str1= "GEM-Selektor Project Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 

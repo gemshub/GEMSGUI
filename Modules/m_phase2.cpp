@@ -17,8 +17,8 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cmath>
 
+#include <cmath>
 #include "visor.h"
 #include "service.h"
 #include "m_dcomp.h"
@@ -452,7 +452,7 @@ void TPhase::makeReacDCompListNew( TCStringArray& aDclist, short nDC,  char (*SM
           {
             rt[RT_DCOMP]->SetKey( key_dr.c_str() );
             //rt[RT_DCOMP]->SetFldKey( 3, "*" );
-            key_dr  = string(1, DCS[i]);
+            key_dr  = std::string(1, DCS[i]);
             key_dr += ' ';
             key_dr += rt[RT_DCOMP]->UnpackKey();
           }
@@ -683,7 +683,7 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
       {
          for( i1=0; i1<nMoi; i1++)
          {
-           if( moit_[ii].name == string(php->lsMoi[i1]) )
+           if( moit_[ii].name == std::string(php->lsMoi[i1]) )
               break;
          }
          if( i1 == nMoi )
@@ -704,10 +704,10 @@ void TPhase::MakeSublatticeLists( const TCStringArray& form_array  )
    // setup data to formula list
    if( php->nMoi >0 )
    {
-       string moi_lst = "$";
+       std::string moi_lst = "$";
        for( i1=0; i1<php->nMoi; i1++)
        {
-         moi_lst += string(php->lsMoi[i1])+";";
+         moi_lst += std::string(php->lsMoi[i1])+";";
        }
        php->PdEq = S_ON;
        php->dEq  =  static_cast<char *>(aObj[ o_phdeq ]->Alloc( 1, moi_lst.size()+10, S_));
@@ -802,7 +802,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
                // Collecting coefficients of EoS for fluids and gases
                if( aDC->dcp->Cemp && !aDC->dcp->CPg )
                {    // CG fluid model coefficients
-                  mcex = min( aDC->dcp->Nemp, nsc );
+                  mcex = std::min( aDC->dcp->Nemp, nsc );
                   for( kx=0; kx< nsc; kx++ )
                   {
                     if( kx < mcex ) // Copying only what is possible
@@ -813,7 +813,7 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
                }
                if( aDC->dcp->CPg && !aDC->dcp->Cemp )
                {
-                  mcex = min<int>( MAXCRITPARAM, nsc );  // PRSV, SRK, PR78, CORK and STP model coefficients
+                  mcex = std::min<int>( MAXCRITPARAM, nsc );  // PRSV, SRK, PR78, CORK and STP model coefficients
                   for( kx=0; kx< nsc; kx++ )
                   {
                     if( kx < mcex ) // Copying only what is possible
@@ -1142,7 +1142,7 @@ MAKE_GAS_PHASE:
 
     // Do sometning else here?
     DONE:
-    contentsChanged = false;
+    contents_changed = false;
 }
 
 
@@ -1312,7 +1312,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     for( i=0; i<php->ncpN * php->ncpM; i++)
     	php->pnc[i] = 0.;
 
-    for( i=0; i < min(Npar,(php->ncpN * php->ncpM)); i++ )
+    for( i=0; i < std::min(Npar,(php->ncpN * php->ncpM)); i++ )
     	php->pnc[i] = param[i];
 
 // Calculating the phase record and saving it to database

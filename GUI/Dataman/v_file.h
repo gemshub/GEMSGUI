@@ -20,7 +20,6 @@
 #define _v_file_h_
 
 #include <fstream>
-
 class GemDataStream;
 
 typedef std::ios::openmode FileStatus;

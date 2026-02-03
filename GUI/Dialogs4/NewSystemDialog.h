@@ -71,9 +71,9 @@ protected:
     //--void setActions();
 
     void defineInputList();
-    void printInputList(fstream& f);
+    void printInputList(std::fstream& f);
     void defineResultList();
-    void printResultList(fstream& f);
+    void printResultList(std::fstream& f);
     bool MessageToSave();
     
 public slots:

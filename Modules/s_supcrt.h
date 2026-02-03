@@ -19,6 +19,7 @@
 #ifndef _s_supcrt_h_
 #define _s_supcrt_h_
 
+#include <cstring>
 #include "s_tpwork.h"
 
 double TdegK(int it, double t);

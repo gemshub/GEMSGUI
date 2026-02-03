@@ -405,8 +405,11 @@ void PlotChartViewPrivate::updateMinMax()
 
 void PlotChartViewPrivate::updateGrid()
 {
-    chart->setFont(gr_data->axisFont);
-    auto titleFont = gr_data->axisFont;
+    QFont axis_font;
+    axis_font.fromString(gr_data->axisFont);
+
+    chart->setFont(axis_font);
+    auto titleFont = axis_font;
     titleFont.setPointSize(titleFont.pointSize()+2);
     chart->setTitleFont(titleFont);
     chart->setTitle( gr_data->title.c_str() );
@@ -416,12 +419,12 @@ void PlotChartViewPrivate::updateGrid()
 
     updateMinMax();
 
-    chart->setBackgroundBrush( gr_data->getBackgroundColor() );
+    chart->setBackgroundBrush(QColor(gr_data->getRed(), gr_data->getGreen(), gr_data->getBlue()));
 
     axisX->setTickCount( gr_data->axisTypeX+1 );
     //axisX->setMinorTickCount(4);
     axisX->setTitleFont( titleFont );
-    axisX->setLabelsFont( gr_data->axisFont );
+    axisX->setLabelsFont(axis_font);
     axisX->setTitleText( gr_data->xName.c_str() );
     auto penX = axisX->linePen();
     penX.setWidth(3);
@@ -431,7 +434,7 @@ void PlotChartViewPrivate::updateGrid()
     axisY->setTickCount( gr_data->axisTypeY+1 );
     //axisY->setMinorTickCount(4);
     axisY->setTitleFont( titleFont );
-    axisY->setLabelsFont( gr_data->axisFont );
+    axisY->setLabelsFont(axis_font);
     axisY->setTitleText( gr_data->yName.c_str() );
     axisY->setLinePen(penX);
 
@@ -628,14 +631,16 @@ QScatterSeries* PlotChartViewPrivate::newScatterLabel(
         const QPointF& pointF, const QString& label )
 {
     QScatterSeries *series  =  new QScatterSeries;
-    QFontMetrics fm(gr_data->axisFont);
+    QFont axis_font;
+    axis_font.fromString(gr_data->axisFont);
+    QFontMetrics fm(axis_font);
     int size = std::max(fm.horizontalAdvance(label)+2, fm.height());
 
     series->setName( label );
     series->setPen( QPen(Qt::transparent));
     series->setMarkerShape(QScatterSeries::MarkerShapeRectangle);
     series->setMarkerSize(size);
-    series->setBrush( textImage( gr_data->axisFont, label ));
+    series->setBrush( textImage(axis_font, label ));
 
     auto pointV = chart->mapToValue( QPointF(pointF.x()+size/2, pointF.y()) );
     series->append(pointV);

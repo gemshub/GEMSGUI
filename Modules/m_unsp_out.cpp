@@ -1,9 +1,9 @@
 
 #include <iomanip>
+#include "m_unspace.h"
 #include "GEMS3K/io_template.h"
 #include "GEMS3K/io_keyvalue.h"
 
-#include "m_unspace.h"
 // !!! internal using  syp->GEX, mup->Laq, pm->tpp->G
 
 
@@ -491,7 +491,7 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
 //====================================================================
 extern bool _comment_bool;
 
-void TUnSpace::to_text_file( fstream& ff1, bool with_comments )
+void TUnSpace::to_text_file( std::fstream& ff1, bool with_comments )
 {
     bool _comment = with_comments;
 
@@ -760,7 +760,7 @@ void TUnSpace::to_text_file( fstream& ff1, bool with_comments )
     out_format.dump(  _comment );
 }
 
-void TUnSpace::result_to_text_file( fstream& ff1, bool with_comments )
+void TUnSpace::result_to_text_file( std::fstream& ff1, bool with_comments )
 {
     bool _comment = with_comments;
 

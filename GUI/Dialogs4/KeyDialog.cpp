@@ -54,11 +54,11 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
     else
         keyFilter = key;
 
-    string s = "Please, select one record key. Filter: ";
+    std::string s = "Please, select one record key. Filter: ";
     s +=  keyFilter;
     ui->pLabel->setText(s.c_str());
 
-    s  = string(rt[irt]->UnpackKey());
+    s  = std::string(rt[irt]->UnpackKey());
     auto n = rt[irt]->GetKeyList( keyFilter.c_str(), keyList, temp);
     uint sel = 0;
 
@@ -138,7 +138,7 @@ void KeyDialog::SetList()
     TCIntArray temp;
     TCStringArray keyList;
 
-    string s = "Please, mark one or more record keys. Filter: ";
+    std::string s = "Please, mark one or more record keys. Filter: ";
     s +=  keyFilter;
     ui->pLabel->setText(s.c_str());
 
@@ -153,8 +153,8 @@ void KeyDialog::SetList()
             {
                 // comparing parts before '*' for overwrite dcomp, reacdc ....
                 size_t pos = old_sel[jj].find('*');
-                string str(old_sel[jj], 0, pos);
-                if( keyList[ii].find(str) != string::npos )
+                std::string str(old_sel[jj], 0, pos);
+                if( keyList[ii].find(str) != std::string::npos )
                 {
                     ui->pList->item(ii)->setSelected( true); //ui->pList->setSelected(ii, true);
                     break;
@@ -165,14 +165,14 @@ void KeyDialog::SetList()
 
 
 // olvase unpaked keys?
-string KeyDialog::getKey()
+std::string KeyDialog::getKey()
 {
     int sel = ui->pList->currentRow(); //ui->pList->currentItem();
     if( sel != -1 )
     {
-        dynamic_cast<TCModule*>(aMod[iRt].get())->setFilter(keyFilter.c_str());
-        string res;
-        string s = ui->pList->item(sel)->text().toStdString();
+        aMod[iRt]->setFilter(keyFilter.c_str());
+        std::string res;
+        std::string s = ui->pList->item(sel)->text().toStdString();
         //string s = ss;
         uint ln;
         for( uint ii=0, jj=0; ii<rt[iRt]->KeyNumFlds(); ii++)
@@ -182,20 +182,20 @@ string KeyDialog::getKey()
             // if( pos) ln = min( ln, pos-s+jj );
 
             //res += string(s+jj, 0, ln);
-            res += string(s, jj, ln);
+            res += std::string(s, jj, ln);
             StripLine(res);
             res += ":";
             jj += ln;
         }
         return res;
     }
-    return string();
+    return std::string();
 }
 
 
 void KeyDialog::CmFilter()
 {
-    string str_name = "Template for ";
+    std::string str_name = "Template for ";
     str_name +=  rt[iRt]->GetKeywd();
     str_name += " record key";
     KeyFilter dbFilter(this, iRt, keyFilter.c_str(), str_name.c_str() );
@@ -233,7 +233,7 @@ TCStringArray KeyDialog::allSelectedKeys()
     for( int ii=0; ii<ui->pList->count(); ii++ )
         if( ui->pList->item(ii)->isSelected() )
         {
-            string s = ui->pList->item(ii)->text().toStdString();;
+            std::string s = ui->pList->item(ii)->text().toStdString();;
             arr.push_back(s.c_str());
         }
     return arr;
@@ -312,7 +312,7 @@ void RDKeyDialog::SetList()
     TCStringArray keyList;
     int jj=0;
 
-    string s = "Please, mark one or more record keys. Filter: ";
+    std::string s = "Please, mark one or more record keys. Filter: ";
     s +=  keyFilter;
 
     // ReacDC list
@@ -357,7 +357,7 @@ void RDKeyDialog::SetList()
 
 void RDKeyDialog::CmFilter()
 {
-    string str_name = "Template for ";
+    std::string str_name = "Template for ";
     str_name +=  rt[RT_REACDC]->GetKeywd();
     str_name +=  "&";
     str_name +=  rt[RT_DCOMP]->GetKeywd();
@@ -398,7 +398,7 @@ TCStringArray RDKeyDialog::allSelectedKeys()
     for( int ii=0; ii<ui->pList->count(); ii++ )
         if( ui->pList->item(ii)->isSelected() )
         {
-            string s = ui->pList->item(ii)->text().toStdString();;
+            std::string s = ui->pList->item(ii)->text().toStdString();;
             arr.push_back(s.c_str());
         }
     return arr;

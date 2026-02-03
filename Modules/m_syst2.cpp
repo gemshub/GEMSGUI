@@ -17,6 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 #include "m_syseq.h"
 #include "visor.h"
 
@@ -136,9 +137,9 @@ void TSysEq::ods_link( int q)
     aObj[o_ssxlam]->SetPtr( ss[q].Xlam );
     aObj[o_ssxlam]->SetDim(ss[q].DM[20], ss[q].DM[17] );
     aObj[ o_sysdref ]->SetPtr( ss[q].sdref );
-    aObj[ o_dcsdref ]->SetDim( ss[q].DM[16], 1 );
+    aObj[ o_sysdref ]->SetDim( ss[q].DM[16], 1 );
     aObj[ o_sysdval ]->SetPtr( ss[q].sdval );
-    aObj[ o_dcsdval ]->SetDim( ss[q].DM[16], 1 );
+    aObj[ o_sysdval ]->SetDim( ss[q].DM[16], 1 );
     // Equstat ------------------------------------------------------------------
 
     aObj[ o_stdim]->SetPtr( &st[q].N );  /*i 4*/

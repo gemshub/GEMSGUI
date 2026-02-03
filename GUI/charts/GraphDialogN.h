@@ -35,7 +35,7 @@
 #include <QDialog>
 #include <QTableWidget>
 #include <QItemDelegate>
-#include  "v_module.h"
+#include "v_module.h"
 #include "plot_model.h"
 
 namespace Ui {

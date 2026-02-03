@@ -20,15 +20,13 @@
 #ifndef _s_tpwork_h_
 #define _s_tpwork_h_
 
-#include <cctype>
 #include <vector>
 #include <memory>
-#include <cstring>
 #include "v_mod.h"
 
 struct TPWORK
 {      // working t/d parametres
-    char DRkey[DC_RKLEN],	// DCOMP or REACDC rkey with source data
+    char DRkey[DC_RKLEN+5],	// DCOMP or REACDC rkey with source data
     pSD,                	// data origin { d n i f r }
     pTM,	//Terminal state for  n i r : { + - * }
     unE,	// Units of energy  { j c J C n N }

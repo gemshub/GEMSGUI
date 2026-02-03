@@ -18,18 +18,16 @@
 //-------------------------------------------------------------------
 //
 
-#include "ms_mtparm.h"
 #include "m_param.h"
 #include "m_reacdc.h"
 #include "m_dcomp.h"
 #include "visor.h"
-// added 09.06.2016 for calculating Psat when exporting GEMS3K files and P=0 is not specified; DM
 #include "s_supcrt.h"
 
 TMTparm* TMTparm::sm;
 
 TMTparm::TMTparm( int nrt ):
-        TSubModule( nrt )
+        TCModule( nrt )
 {
     set_def();
 }
@@ -582,8 +580,8 @@ void TMTparm::LoadMtparm( double cT, double cP )
             if( mup->DCS[j] == SRC_REACDC && aRC->rcp->TCint )
             {
                 short nTp, nPp;
-                nTp = max( aRC->rcp->nTp, (short)2 );
-                nPp = max( (short)2, aRC->rcp->nPp );
+                nTp = std::max( aRC->rcp->nTp, (short)2 );
+                nPp = std::max( (short)2, aRC->rcp->nPp );
                 if( aW.twp->TC < aRC->rcp->TCint[0] ||
                         aW.twp->TC > aRC->rcp->TCint[nTp-1] ||
                         aW.twp->P > aRC->rcp->Pint[nPp-1] )
@@ -884,7 +882,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
 
          CSD->G0[ll] =  tp.G[jj]+ TSyst::sm->GetSY()->GEX[jj]; //
          CSD->V0[ll] =  tp.Vm[jj]*1e-5;
-         if( tp.H )
+         if( tp.H && !IsDoubleEmpty(tp.H[jj]))
            CSD->H0[ll] = tp.H[jj];
          else
            CSD->H0[ll] = 0;
@@ -910,12 +908,12 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
   if( par )
      pVisor->CloseMessage();
 
-  string err = "";
+  std::string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
   {
      if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
      {	  err +=" ";
-          err += string(CSD->DCNL[kk],0, MaxDCN);
+          err += std::string(CSD->DCNL[kk],0, MaxDCN);
           if(!((++jj)%5)) err += "\n";
      }
   }
@@ -947,7 +945,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
           pVisor->Message( par, "Building lookup arrays",
               "Loading thermodynamic data", ip, CSD->nPp );
 
-       it = min<int>( ip, CSD->nTp-1 );
+       it = std::min<int>( ip, CSD->nTp-1 );
        cT = CSD->TKval[it]-C_to_K;
        cP = CSD->Pval[ip]/1e5; //bar_to_Pa;
        // calculates new G0, V0, H0, Cp0, S0
@@ -1003,7 +1001,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
 
          CSD->G0[ll] =  tp.G[jj]+ TSyst::sm->GetSY()->GEX[jj]; //
          CSD->V0[ll] =  tp.Vm[jj]*1e-5;
-         if( tp.H )
+         if( tp.H && !IsDoubleEmpty(tp.H[jj]))
            CSD->H0[ll] = tp.H[jj];
          else
            CSD->H0[ll] = 0;
@@ -1028,12 +1026,12 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
   if( par )
      pVisor->CloseMessage();
 
-  string err = "";
+  std::string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
   {
      if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
      {	  err +=" ";
-          err += string(CSD->DCNL[kk],0, MaxDCN);
+          err += std::string(CSD->DCNL[kk],0, MaxDCN);
           if(!((++jj)%5)) err += "\n";
      }
   }

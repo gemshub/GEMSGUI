@@ -3,7 +3,6 @@ CONFIG += console c++20
 CONFIG -= app_bundle
 CONFIG -= qt
 
-DEFINES  += NODEARRAYLEVEL
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions

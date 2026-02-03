@@ -21,9 +21,10 @@
 #define graph_data_old_h
 
 #include <math.h>
+#include <cstring>
 #include <vector>
 #include <fstream>
-#include <QtGui/QColor>
+#include <QString>
 
 class QPointF;
 class QJsonObject;
@@ -67,21 +68,21 @@ public:
 
     TPlotLine( const char *aName, int aPointType, int aPointSize,
                int aLineSize, int lineStyle, int usespline,
-               int andx, const QColor& aColor  ):
-        TPlotLine( aName, aPointType, aPointSize, aLineSize,
-                   aColor.red(), aColor.green(), aColor.blue()  )
+               int andx, int aRed, int aGreen, int aBlue):
+        TPlotLine(aName, aPointType, aPointSize, aLineSize,
+                   aRed, aGreen, aBlue)
     {
        setIndex( andx );
        setSpline( usespline );
        setLineStyle( lineStyle );
     }
 
-    TPlotLine( const char *aName = nullptr,
+    TPlotLine(const char *aName = nullptr,
                int aPointType = 0, int aPointSize = 4, int aPutLine = 2,
-               int aRed = 25, int aGreen = 0, int aBlue = 150  )
+               int aRed = 25, int aGreen = 0, int aBlue = 150)
     {
         ndxX = 0;
-        setChanges( aPointType, aPointSize, aPutLine, QColor(aRed, aGreen, aBlue) );
+        setChanges( aPointType, aPointSize, aPutLine, aRed, aGreen, aBlue);
         memset( name, '\0', 16*sizeof(char));
         if(aName) {
            strncpy( name, aName, sizeof(name));
@@ -89,18 +90,8 @@ public:
     }
 
     TPlotLine( int ii, int maxII, const char *aName = nullptr,
-               int aPointType = 0, int aPointSize = 4, int aPutLine = 2,
-               int andx = 0):
-        type(aPointType), sizes(aPutLine*100+aPointSize), ndxX(andx)
-    {
-        QColor aColor;
-        aColor.setHsv( 360/maxII*ii, 200, 200);
-        setChanges( aPointType, aPointSize, aPutLine, aColor );
-        memset( name, '\0', 16*sizeof(char));
-        if(aName) {
-          strncpy( name, aName, sizeof(char)*15);
-        }
-    }
+              int aPointType = 0, int aPointSize = 4, int aPutLine = 2,
+              int andx = 0);
 
     TPlotLine(const TPlotLine& plt ):
         type(plt.type), sizes(plt.sizes), ndxX(plt.ndxX),
@@ -169,18 +160,31 @@ public:
         sizes += style*1000;
     }
 
-    QColor getColor() const
-    {
-        return QColor(red, green, blue);
-    }
+    // QColor getColor() const
+    // {
+    //     return QColor(red, green, blue);
+    // }
 
-    void setChanges( int aPointType, int aPointSize, int aPutLine, QColor aColor )
+    int getRed() const
+    {
+        return red;
+    }
+    int getGreen() const
+    {
+        return green;
+    }
+    int getBlue() const
+    {
+        return blue;
+    }
+    void setChanges(int aPointType, int aPointSize, int aPutLine,
+                    int ared, int agreen, int ablue)
     {
         type = aPointType;
         sizes = aPutLine*100+aPointSize;
-        red =   aColor.red();
-        green = aColor.green();
-        blue  = aColor.blue();
+        red =   ared;
+        green = agreen;
+        blue  = ablue;
     }
 
     void setName( const char *aName )

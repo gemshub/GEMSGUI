@@ -32,7 +32,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
     ui->setupUi(this);
 
     //setWindowTitle(prfName);
-    string label = "Please, check database files to be linked to Modeling Project ";
+    std::string label = "Please, check database files to be linked to Modeling Project ";
     label += prfName;
     ui->pLabel->setText( tr(label.c_str()) );
 
@@ -67,7 +67,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         for( ii=0; ii<names.size(); ii++ )
         {
             // select only DB.default files
-            if( names[ii].find( pVisor->sysDBDir())== string::npos )
+            if( names[ii].find( pVisor->sysDBDir())== std::string::npos )
                 continue;
             // get 2 colums
             pos1 = names[ii].find_first_of(" ");
@@ -93,7 +93,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         for( ii=0; ii<names.size(); ii++ )
         {
             // select only Projecte files
-            if( names[ii].find( prfName/*Path*/ ) == string::npos )
+            if( names[ii].find( prfName/*Path*/ ) == std::string::npos )
                 continue;
             // get 2 colums
             pos1 = names[ii].find_first_of(" ");
@@ -151,7 +151,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
             pFile = pMod->child( jj );
             if( pFile->isSelected() )
             {
-                string col =pFile->text( 0 ).toStdString();
+                std::string col =pFile->text( 0 ).toStdString();
                 cnt++;
                 aFls.push_back( col.c_str() );
             }
@@ -164,7 +164,7 @@ void ListFilesDialog::allSelected( TCStringArray& aFls, TCIntArray& aCnt)
             pFile = pMod->child( jj );
             if( pFile->isSelected() )
             {
-                string col =pFile->text( 0 ).toStdString();
+                std::string col =pFile->text( 0 ).toStdString();
                 cnt++;
                 aFls.push_back( col.c_str() );
             }

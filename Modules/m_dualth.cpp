@@ -19,7 +19,6 @@
 //
 
 #include <cmath>
-
 #include "m_dualth.h"
 #include "m_syseq.h"
 #include "visor.h"

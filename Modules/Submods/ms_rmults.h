@@ -20,7 +20,6 @@
 #ifndef _ms_rmults_h_
 #define _ms_rmults_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 
 const int MAXMUGROUP =     38;
@@ -102,7 +101,7 @@ RMULTS;
 
 // Data of RMULTS
 class TRMults :
-            public TSubModule
+            public TCModule
 {
     RMULTS mu;
 
@@ -122,16 +121,16 @@ public:
 
     TRMults( int nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "RMults";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
 
     void DCListLoad( TCStringArray AqKey, TCStringArray GasKey,
                      bool useLst = false, TCStringArray lst = {} );

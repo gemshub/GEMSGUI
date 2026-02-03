@@ -20,11 +20,7 @@
 #ifndef V_DBFILE_H_
 #define V_DBFILE_H_
 
-#include <ctime>
 #include "v_file.h"
-
-
-class GemDataStream;
 
 const int MAXFESTACK = 200; // size array deleted record
 

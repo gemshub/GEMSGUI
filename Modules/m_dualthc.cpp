@@ -156,7 +156,7 @@ void TDualTh::calc_eqstat()
 // calc current SyStat
    TProfil::pm->CalcEqstat( dummy );
    if( dtp->PsSYd == S_ON )
-     TSysEq::pm->CmSave();           // save results to DB
+     TSysEq::pm->SaveCurrentKey();           // save results to DB
    if( dtp->stld )
        memcpy( dtp->stld+dtp->q, dtp->sykey, EQ_RKLEN );
 }

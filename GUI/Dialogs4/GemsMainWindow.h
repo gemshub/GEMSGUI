@@ -49,7 +49,6 @@ namespace jsonui {
 class GraphDialog;
 }
 using namespace jsonui;
-using namespace std;
 
 #ifdef QT_NO_DEBUG
 #define GEMS_RELEASE
@@ -62,9 +61,6 @@ struct ModuleListItem
     //QString modName; // short name (aMod[nRT].GetName())
     QString toolTip;
 };
-
-// new enums
-enum { MDD_DATABASE=0, MDD_SYSTEM=1 };
 
 enum myThreadEvents { thMessage = 0, thQuestion, thQuestion3,
                       thChoice, thChoice2, thExcludeFillEdit, thQuestionYesNoAll  };
@@ -159,8 +155,6 @@ class TVisorImp: public QMainWindow
     time_t last_update;
     int updateTime;
 
-    //int ProfileMode;
-
     // Appearance settings
     QFont	CellFont;
     QFont	axisLabelFont;
@@ -168,8 +162,6 @@ class TVisorImp: public QMainWindow
     int charWidth;
     int charHeight;
     int colorScheme=0;
-
-    bool configAutosave;
 
     char TCpoint[32];  // Step point ID for stepwise mode
 
@@ -239,20 +231,15 @@ public:
     int getCharHeight() const
     {  return charHeight; /* + 4;*/  }
 
-    int getDoubleDigits() const
-    {  return TValBase::doublePrecision;  }
-    void setDoubleDigits(int newDoubleDigits)
-    {  TValBase::doublePrecision = newDoubleDigits;   }
+    // int getDoubleDigits() const
+    // {  return TValBase::doublePrecision;  }
+    // void setDoubleDigits(int newDoubleDigits)
+    // {  TValBase::doublePrecision = newDoubleDigits;   }
 
     int getColorScheme() const
     {  return colorScheme;  }
     void setColorScheme(int newColorScheme)
     {  colorScheme = newColorScheme;   }
-
-    void setConfigAutosave(bool autosave)
-    {  configAutosave = autosave;  }
-    bool getConfigAutosave() const
-    {  return configAutosave;   }
 
     char* getTCpoint()
     {  return TCpoint;   }
@@ -416,7 +403,7 @@ private:
     QMdiSubWindow *findMdiChild(const QString &moduleName);
     QMdiSubWindow *findMdiGraph(const QString &moduleName);
     QMdiSubWindow *findNewSystem();
-    string nameMdiChild( QWidget *p );
+    std::string nameMdiChild( QWidget *p );
     int nRTofActiveSubWindow();
     QIcon iconMdiChild( QWidget *p );
 

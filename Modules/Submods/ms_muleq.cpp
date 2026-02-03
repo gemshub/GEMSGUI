@@ -17,9 +17,6 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#include <cstdio>
-#include <iomanip>
-#include <cmath>
 
 #include "m_syseq.h"
 
@@ -161,8 +158,8 @@ void TMulti::unpackData()
                 goto FOUNDI;
             }
         pm.pNP = 1;
-        { string err = "No ";
-          err += string(TRMults::sm->GetMU()->SB[i], 0, MAXICNAME);
+        { std::string err = "No ";
+          err += std::string(TRMults::sm->GetMU()->SB[i], 0, MAXICNAME);
           err += " IComp in the system!";
           Error( GetName(), err /*"no such IComp in this system"*/ );
         }
@@ -241,13 +238,13 @@ void TMulti::MultiKeyInit( const char*key )
 
    
    // Get V, P and T from SysEq record key
-   string s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
+   std::string s = std::string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME,MAXPTN);
    V = atof(s.c_str());
-   s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
+   s = std::string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
    P = atof(s.c_str());
-   s = string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
+   s = std::string( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
    T = atof(s.c_str());
-   s = string( key,MAXMUNAME, MAXTDPCODE);
+   s = std::string( key,MAXMUNAME, MAXTDPCODE);
 
    typeMin = s[0];
    switch( typeMin )

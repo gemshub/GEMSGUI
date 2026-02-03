@@ -19,10 +19,9 @@
 #ifndef __v_ipnc_h_
 #define __v_ipnc_h_
 
-#include <cctype>
+#include <string>
 #include <vector>
 #include <fstream>
-using namespace std;
 
 const double IPNC_DBL_MAX = 1e307;
 const double IPNC_DBL_MIN = 1e-307;
@@ -112,10 +111,10 @@ protected:
     int SPRTY( char c );
     void InDigit();
     void IsAscii();
-    string Ident();
-    void Ffun( const string& str);
-    void Variab( const string& str);
-    void I_Variab( const string& str);
+    std::string Ident();
+    void Ffun( const std::string& str);
+    void Variab( const std::string& str);
+    void I_Variab( const std::string& str);
     void bildEquat();
     void bildWhile();
     void bildIf();
@@ -126,7 +125,7 @@ public:
     ~IPNCalc();
     void GetEquat( char *txt );
     void CalcEquat( bool use_empty = false);
-    void PrintEquat( char *s, fstream& f);
+    void PrintEquat( char *s, std::fstream& f);
     size_t nEquat() const
     {
         return aEq.size();

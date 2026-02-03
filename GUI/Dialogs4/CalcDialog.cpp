@@ -197,7 +197,7 @@ int CalcDialog::funName(double& val)
 }
 
 
-string CalcDialog::funText(const char * valText )
+std::string CalcDialog::funText(const char * valText )
 {
     int ii, pos;
     QString res;
@@ -251,7 +251,7 @@ string CalcDialog::funText(const char * valText )
         res = "empty()"; //No Data value
     }
 
-    string rres = res.toStdString();
+    std::string rres = res.toStdString();
     return rres;
 }
 

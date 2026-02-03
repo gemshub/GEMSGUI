@@ -3,13 +3,14 @@ TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems3
 
-DEFINES         += NODEARRAYLEVEL
+#DEFINES         += NO_NODEARRAYLEVEL
 #DEFINES         += NOMUPNONLOGTERM
+#DEFINES         += GEMITERTRACE
 DEFINES  += NO_JSONIO
 #DEFINES += USE_NLOHMANNJSON
 DEFINES += NDEBUG
-DEFINES += USE_THERMOFUN
-DEFINES += USE_THERMO_LOG
+#DEFINES += NO_THERMOFUN
+#DEFINES += USE_THERMO_LOG
 #DEFINES += USE_GEMS3K_SERVER
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
@@ -83,13 +84,13 @@ INCLUDEPATH   += $$MODULES_H
 INCLUDEPATH   += $$SUBMODS_H   
 INCLUDEPATH   += $$NUMERICS_H 
 
-contains(DEFINES, USE_THERMOFUN) {
+!contains(DEFINES, NO_THERMOFUN) {
 
   TFUN_CFUN_H  =  /usr/local/include
   INCLUDEPATH  += $$TFUN_CFUN_H
 !win32:LIBS += -L/usr/local/lib -lThermoFun -lChemicalFun
 win32:LIBS += -LC:\usr\local\bin -lThermoFun -lChemicalFun
-} ## end USE_THERMOFUN
+} ## end NO_THERMOFUN
 
 MOC_DIR = tmp
 UI_DIR  = $$MOC_DIR
@@ -111,10 +112,10 @@ LIBS += -lzmq -lGEMS3K
 #include($$GEMS3K_CPP/gems3k.pri)
 #end link
 
-include($$DATAMAN_CPP/Dataman.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
 include($$NUMERICS_CPP/Numerics.pri)
+include($$DATAMAN_CPP/Dataman.pri)
 include($$SERVICES4_CPP/Services4.pri)
 include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$CHARTS_CPP/charts.pri)

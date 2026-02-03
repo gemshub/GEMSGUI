@@ -41,22 +41,11 @@
 #include "jsonio/jsondom.h"
 #endif
 
-using namespace std;
-
 namespace jsonui {
 
-QFont ChartData::axisFont("Sans Serif", 14);
+//QFont ChartData::axisFont("Sans Serif", 14);
+QString ChartData::axisFont("Sans Serif,14,-1,5,400,0,0,0,0,0,0,0,0,0,0,1");
 
-QColor colorAt(const QColor &start, const QColor &end, qreal pos)
-{
-    Q_ASSERT(pos >= 0.0 && pos <= 1.0);
-    qreal r = start.redF() + ((end.redF() - start.redF()) * pos);
-    qreal g = start.greenF() + ((end.greenF() - start.greenF()) * pos);
-    qreal b = start.blueF() + ((end.blueF() - start.blueF()) * pos);
-    QColor c;
-    c.setRgbF(r, g, b);
-    return c;
-}
 
 //---------------------------------------------------------------------------
 // SeriesLineData
@@ -165,7 +154,7 @@ void ChartData::toJsonNode( jsonio::JsonDom *object ) const
     // define grid of plot
     object->appendInt( "axisTypeX", axisTypeX );
     object->appendInt( "axisTypeY", axisTypeY );
-    object->appendString( "axisFont", axisFont.toString().toStdString() );
+    object->appendString( "axisFont", axisFont.toStdString() );
     object->appendString( "xName", xName );
     object->appendString( "yName", yName );
 
@@ -210,9 +199,9 @@ void ChartData::fromJsonNode( const jsonio::JsonDom *object )
         axisTypeX = 5;
     if(!object->findValue( "axisTypeY", axisTypeY ) )
         axisTypeY = 5;
-    string fntName;
+    std::string fntName;
     if( object->findValue( "axisFont", fntName ) )
-        axisFont.fromString( fntName.c_str() );
+        axisFont = QString::fromStdString(fntName);
     if( !object->findValue( "xName", xName ) )
         xName = "x";
     if( !object->findValue( "yName", yName ) )
@@ -263,7 +252,7 @@ void ChartData::toJsonObject(QJsonObject& json) const
     json[ "graphType" ] = graphType;
     json[ "axisTypeX" ] = axisTypeX;
     json[ "axisTypeY" ] = axisTypeY;
-    json[ "axisFont" ] = axisFont.toString();
+    json[ "axisFont" ] = axisFont;
     json[ "xName" ] =  xName.c_str();
     json[ "yName" ] = yName.c_str();
 
@@ -306,8 +295,8 @@ void ChartData::fromJsonObject(const QJsonObject& json)
     graphType = json[ "graphType" ].toInt( LineChart );
     axisTypeX = json[ "axisTypeX" ].toInt( 5 );
     axisTypeY = json[ "axisTypeY" ].toInt( 5 );
-    QString fntname = json[ "axisFont" ].toString( "Sans Serif" );
-    axisFont.fromString( fntname );
+    axisFont = json[ "axisFont" ].toString( "Sans Serif" );
+
     xName = json[ "xName" ].toString( "x" ).toStdString();
     yName = json[ "yName" ].toString( "y" ).toStdString();
 

@@ -21,7 +21,6 @@
 #ifndef _r_sdata_h_
 #define _r_sdata_h_
 
-#include "v_mod.h"
 #include "v_module.h"
 
 const int
@@ -62,26 +61,28 @@ public:
     static TSData* pm;
 
     TSData( uint nrt );
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "SDref";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
 
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecSave( const char *key, bool onOld ); // Added 09.04.03 KD
-    void RecordPrint( const char *key=0 ); //sddata key
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecSave( const char *key, bool onOld ) override; // Added 09.04.03 KD
+    bool ImplementedPrint() const override
+    { return true; }
+    void RecordPrint( const char *key=0 ) override; //sddata key
     void CopyRecords( const char * prfName, std::set<std::string>& SDlist );
-    void TryRecInp( const char *key_, time_t& time_s, int q );
+    void TryRecInp( const char *key_, time_t& time_s, int q, bool save = true ) override;
 
 
     //void CmHelp();
-    const char* GetHtml();                       // 05.01.01
+    const char* GetHtml() override;                       // 05.01.01
     char *getAbstr() const
      { return abstr;  }             //Abstract
 

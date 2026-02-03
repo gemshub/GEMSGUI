@@ -18,14 +18,8 @@
 //-------------------------------------------------------------------
 
 #include <cstdio>
-
 #include <QPushButton>
-#if QT_VERSION >= 0x050000
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
-
 #include "v_mod.h"
 #include "page_w.h"
 #include "GemsMainWindow.h"
@@ -205,8 +199,8 @@ void TCPage::RedrawFields()
     	  aFields[ii]->show();
       
       // size of the window
-        mwidth = max( mwidth,  x+colSize );
-        mheight = max( mheight, y+rowSize );
+        mwidth = std::max( mwidth,  x+colSize );
+        mheight = std::max( mheight, y+rowSize );
 
         // estimating the height of the line
         switch( place )
@@ -217,7 +211,7 @@ void TCPage::RedrawFields()
         case Right:
         case Fixed:
         case NextP:
-            rowSize = max(rowSize, oldRowSize );
+            rowSize = std::max(rowSize, oldRowSize );
             break;
         case Under:
         case UndeTabl:
@@ -242,7 +236,7 @@ TQueryWindow::TQueryWindow(CWinInfo& w):
         QDialog( w.pWin ),
         rInfo( w )
 {
-    string s = w.rM.GetName();
+    std::string s = w.rM.GetName();
     s += ": Remake dialog (press Ok to use default parameters)";
     setWindowTitle(s.c_str());
 
@@ -406,7 +400,7 @@ void TCWindow::EvTabSelChange(QAbstractButton* button)
 void TCWindow::ShowInfo()
 {
     int nR;
-    if( getCModule().pImp->IsSubModule() )
+    if( getCModule().IsSubModule() )
         nR = RT_SYSEQ;
     else nR = getCModule().rtNum();
 

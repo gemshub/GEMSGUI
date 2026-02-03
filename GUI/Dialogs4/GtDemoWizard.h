@@ -37,7 +37,7 @@ class GtDemoWizard : public QDialog
     int curentRT;
 
     int equatRT = -1;
-    string script;
+    std::string script;
     EquatSetup *pageScript;
 
     KeyModel* process_keys_model = nullptr;
@@ -60,16 +60,16 @@ protected slots:
 
 public:
 
-    GtDemoWizard( const string& pkey, char flgs[16], int sizes[8], const string& ascript,
-                  const string& proc_key, const string& aXname, const string& aYname,
+    GtDemoWizard( const std::string& pkey, char flgs[16], int sizes[8], const std::string& ascript,
+                  const std::string& proc_key, const std::string& aXname, const std::string& aYname,
                   TCStringArray& keys, QWidget* parent = nullptr );
     virtual ~GtDemoWizard();
 
     void   getFlags( char flgs[16] );
     void   getSizes( int size[8], std::string& prKey, TCStringArray& keys );
-    string getScript() const
+    std::string getScript() const
     { return pageScript->getScript(); }
-    TCStringArray getNames( string& xName, string& yName ) const
+    TCStringArray getNames( std::string& xName, std::string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
 protected:

@@ -62,17 +62,17 @@ ChangeKeyDialog::~ChangeKeyDialog()
     delete ui;
 }
 
-string ChangeKeyDialog::getTemplFrom()
+std::string ChangeKeyDialog::getTemplFrom()
 {
     SetFromString();
-    string ret = ui->templFrom->text().toStdString();
+    std::string ret = ui->templFrom->text().toStdString();
     return ret;
 }
 
-string ChangeKeyDialog::getTemplTo()
+std::string ChangeKeyDialog::getTemplTo()
 {
     SetToString();
-    string ret = ui->templTo->text().toStdString();
+    std::string ret = ui->templTo->text().toStdString();
     return ret;
 }
 
@@ -84,17 +84,17 @@ void ChangeKeyDialog::CmHelp()
 
 void ChangeKeyDialog::SetFromString()
 {
-    string ret;
+    std::string ret;
 
     if(ui->rAll->isChecked())
         ret = "*";
     else //  ??*???, *?, ??*
     {
         auto n = ui->nfirst->value();
-        ret = string(n, '?');
+        ret = std::string(n, '?');
         ret+= "*";
         n = ui->nlast->value();
-        ret += string(n, '?');
+        ret += std::string(n, '?');
     }
 
     ui->templFrom->setText( ret.c_str() );
@@ -102,8 +102,8 @@ void ChangeKeyDialog::SetFromString()
 
 void ChangeKeyDialog::SetToString()
 {
-    string ret="";
-    string part;
+    std::string ret="";
+    std::string part;
 
     if(ui->rAll->isChecked()) // *abc, abc, invcase
     {

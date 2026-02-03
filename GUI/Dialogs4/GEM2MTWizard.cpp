@@ -205,7 +205,7 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
     TTable = nullptr;
     //    setFinishEnabled( WizardPage2, true);
     ui->setupUi(this);
-    string str1= "GEM-Selektor GEM2MT Setup:  ";
+    std::string str1= "GEM-Selektor GEM2MT Setup:  ";
     str1 += pkey;
     setWindowTitle( str1.c_str() );
 
@@ -541,9 +541,9 @@ void   GEM2MTWizard::getTaudata( double Tau[3] )
     Tau[1] = Tau[2]* ui->pntM->value()+Tau[0];
 }
 
-string GEM2MTWizard::getCalcScript() const
+std::string GEM2MTWizard::getCalcScript() const
 {
-    string res= ui->pScript_t->toPlainText().toStdString();
+    std::string res= ui->pScript_t->toPlainText().toStdString();
     return res;
 }
 
@@ -1030,7 +1030,7 @@ void GEM2MTWizard::changeTable(const QItemSelection & selected, const QItemSelec
     // added selected
     foreach( ndx,  selected.indexes()  )
     {
-        string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
+        std::string stt = ndx.data(Qt::DisplayRole).toString().toStdString();
         tableInsertRow( pgData[cPage].nObj, ndx.row(), stt.c_str() );
     }
     // delete deselected
@@ -1134,7 +1134,7 @@ void GEM2MTWizard::setVTK( TCIntArray vtk1, TCIntArray vtk2  )
             if(vtk1[ii] == f_bPS) // bPS
             { cPage1 +=  vtk2[ii]/TMulti::sm->GetPM()->N;
                 ndx = vtk2[ii]%TMulti::sm->GetPM()->N;
-                cPage1 = min<int>(cPage1, pLists.count()-1);
+                cPage1 = std::min<int>(cPage1, pLists.count()-1);
             }
         }
 

@@ -75,7 +75,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 {
     ui->setupUi(this);
 
-    string str =
+    std::string str =
             "Basis configuration of a new Modelling Project  ";
     str +=  TProfil::pm->projectName();
     setWindowTitle( str.c_str() );
@@ -290,7 +290,7 @@ ElementsDialog::~ElementsDialog()
 void ElementsDialog::setOpenFilesAsDefault()
 {
     selNames.clear();
-    string defName;
+    std::string defName;
 
     if( el_data.aSelNames.empty() )
     {  defName = ".";
@@ -304,7 +304,7 @@ void ElementsDialog::setOpenFilesAsDefault()
         el_data.setFlags( el_data.aSelNames);
 
         pos1 =  el_data.aSelNames.find( "<TDBfilters> = " ); //15
-        if( pos1 == string::npos )
+        if( pos1 == std::string::npos )
         {
             defName = ".";
             defName += pVisor->defaultBuiltinTDBL();
@@ -313,7 +313,7 @@ void ElementsDialog::setOpenFilesAsDefault()
         }
         pos1 += 15;
         pos2 = el_data.aSelNames.find_first_of(",;", pos1 );
-        while( pos2 != string::npos  )
+        while( pos2 != std::string::npos  )
         {
             defName = el_data.aSelNames.substr(pos1, pos2-pos1);
             strip( defName );
@@ -530,7 +530,7 @@ void ElementsDialog::SetICompList()
     for( size_t ii=0; ii<aIC.size(); ii++ )
         if( aIndMT[ii] == -1) // additional
         {
-            string name= std::string( aIC[ii], 0, rt[RT_ICOMP]->FldLen(0) );
+            std::string name= std::string( aIC[ii], 0, rt[RT_ICOMP]->FldLen(0) );
             strip( name );
             if( name != "Vol" )
             {
@@ -573,13 +573,13 @@ void ElementsDialog::SetICompList()
     for( size_t ii=0; ii<aICkey2_sel.size(); ii++ )
     {
         int jj;
-        string name= string( aICkey2_sel[ii],
+        std::string name= std::string( aICkey2_sel[ii],
                              0, rt[RT_ICOMP]->FldLen(0) );
         strip( name );
         for( jj=0; jj<nmbOther; jj++ )
         {
             bb =  bgOther->button(jj);
-            string ttl = bb->text().toStdString();
+            std::string ttl = bb->text().toStdString();
             if( name == ttl )
             {
                 bb->setEnabled( false );
@@ -656,7 +656,7 @@ void ElementsDialog::SetData()
     el_data.flags[cbRes_] = false;
 
     if(gui_logger->should_log(spdlog::level::debug)) {
-        stringstream buf;
+        std::stringstream buf;
         for(int ii=0; ii<14; ii++)
             buf <<  " " <<  el_data.flags[ii];
         gui_logger->debug("el_data.flags: {}", buf.str());
@@ -695,7 +695,7 @@ void ElementsDialog::setFilesList()
         for(size_t ii=0; ii<names.size(); ii++ )
         {
             // select only DB.default files
-            if( names[ii].find( pVisor->sysDBDir())== string::npos )
+            if( names[ii].find( pVisor->sysDBDir())== std::string::npos )
                 continue;
             // get 2 colums
             pos1 = names[ii].find_first_of(" ");
@@ -814,7 +814,7 @@ void ElementsDialog::setTreeWidget()
     QList<QStandardItem *> rowItems;
 
     QString aTag, aVer;
-    string fname, tag, vers="";
+    std::string fname, tag, vers="";
     size_t pos1, pos2, pos3;
 
     for( ii=0; ii<files_data.flNames.size(); ii++ )
@@ -828,7 +828,7 @@ void ElementsDialog::setTreeWidget()
 
         // get version
         pos1 = fname.find(".ver");
-        if( pos1 != string::npos )
+        if( pos1 != std::string::npos )
         {
             vers = fname.substr(pos1+1+3);
             fname = fname.substr(0, pos1+1 );
@@ -841,13 +841,13 @@ void ElementsDialog::setTreeWidget()
         // first tag name of chain
         pos1 = fname.find(".");
         pos2 = fname.find(".", pos1+1);
-        while( pos2 != string::npos )
+        while( pos2 != std::string::npos )
         {
             tag = fname.substr(pos1+1, pos2-pos1-1);
             aTag = tag.c_str();
             pdb_child = nullptr;
             pos3 = fname.find(".", pos2+1);
-            if( pos3 != string::npos)
+            if( pos3 != std::string::npos)
                 aVer = "";
             else aVer = vers.c_str();
 
@@ -911,24 +911,24 @@ void ElementsDialog::getSelectionTreeWidget()
 {
     selNames.clear();
     // get names from FTreeWidget
-    string tag = ".";
+    std::string tag = ".";
     for(int jj=0; jj<pkern->rowCount(); jj++ )
         getTag( tag, pkern->child(jj));
 
     if(gui_logger->should_log(spdlog::level::debug)) {
-        stringstream buf;
+        std::stringstream buf;
         for(size_t ii=0; ii<selNames.size(); ii++ )
-            buf << " " << selNames[ii] << endl;
+            buf << " " << selNames[ii] << std::endl;
         gui_logger->debug("names from FTreeWidget: {}", buf.str());
     }
 }
 
-void ElementsDialog::getTag( string tag, QStandardItem* pdb)
+void ElementsDialog::getTag( std::string tag, QStandardItem* pdb)
 {
     if( !pdb )
         return;
 
-    string tag1 = pdb->text().toStdString();
+    std::string tag1 = pdb->text().toStdString();
     tag += tag1;
 
     if( pdb->checkState() == Qt::Checked)
@@ -945,7 +945,7 @@ void ElementsDialog::setSelectionTreeWidget()
 {
     // clear all check in ftreeWidget ??!!
 
-    string name;
+    std::string name;
     for(size_t ii=0; ii<selNames.size(); ii++ )
         for(int jj=0; jj<pkern->rowCount(); jj++ )
         {
@@ -954,7 +954,7 @@ void ElementsDialog::setSelectionTreeWidget()
         }
 }
 
-void ElementsDialog::setTag( string fname, QStandardItem* pdb)
+void ElementsDialog::setTag( std::string fname, QStandardItem* pdb)
 {
     if( !pdb )
         return;
@@ -963,12 +963,12 @@ void ElementsDialog::setTag( string fname, QStandardItem* pdb)
     size_t pos2 = fname.find(".", pos1+1);
     if( pos2 == pos1+1 )
         pos2 = fname.find(".", pos2+1);
-    string tag = fname.substr(pos1+1, pos2-pos1-1);
+    std::string tag = fname.substr(pos1+1, pos2-pos1-1);
     QString aTag = tag.c_str();
 
     if( aTag == pdb->text() )
     {
-        if(pos2 == string::npos )
+        if(pos2 == std::string::npos )
             pdb->setCheckState( Qt::Checked );
         else
         {
@@ -983,7 +983,7 @@ void ElementsDialog::setTag( string fname, QStandardItem* pdb)
 
 /// Returns; boolean true if a keyword was found in the file name, false otherwise
 ///    for each of open file keywords;
-int ElementsDialog::isOpenFile(string& name)
+int ElementsDialog::isOpenFile(std::string& name)
 {
     std::string fname = name;
 
@@ -992,7 +992,7 @@ int ElementsDialog::isOpenFile(string& name)
     fname = fname.substr( 0, pos1 );
     // scip version
     pos1 = fname.find(".ver");
-    if( pos1 != string::npos )
+    if( pos1 != std::string::npos )
         fname = fname.substr(0, pos1 );
 
     // first tag name of chain
@@ -1002,10 +1002,10 @@ int ElementsDialog::isOpenFile(string& name)
     gui_logger->debug("ElementsDialog::isOpenFile({})", fname);
     for(size_t ii=0; ii < selNames.size(); ii++ )
     {
-        if(  name.find( selNames[ii] ) != string::npos )
+        if(  name.find( selNames[ii] ) != std::string::npos )
             return 1;
         auto sel_with_point = selNames[ii]+".";
-        if(  sel_with_point.find(fname) != string::npos ) ///
+        if(  sel_with_point.find(fname) != std::string::npos ) ///
             return 1;
     }
     return 0;

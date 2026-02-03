@@ -36,7 +36,6 @@
 #include "LegendDialogN.h"
 #include "GraphDialogN.h"
 #include "graph_data.h"
-using namespace std;
 
 namespace jsonui {
 
@@ -156,13 +155,14 @@ void LegendDialog::setChartData()
     ui->pfYn->setValidator( new QDoubleValidator( ui->pfYn ) );
     ui->pfYn->setText( str.setNum (graph->part[3]) );
 
-    backgroundColor = graph->getBackgroundColor();
+    backgroundColor = QColor(graph->getRed(), graph->getGreen(), graph->getBlue());
+
     ui->pColor->setAutoFillBackground( true);
     QPalette pl = ui->pColor->palette();
     pl.setColor( QPalette::Window, backgroundColor );
     ui->pColor->setPalette(pl);
 
-    labelFont = graph->axisFont;
+    labelFont.fromString(graph->axisFont);
     ui->pLabelFont->setText(labelFont.toString());
 }
 
@@ -186,18 +186,18 @@ bool LegendDialog::applyToDialog()
     graph->xName = ui->pXname->text().toStdString();
     graph->yName = ui->pYname->text().toStdString();
 
-    graph->region[0] = min(x0, xn);
-    graph->region[1] = max(x0, xn);
-    graph->region[2] = min(y0, yn);
-    graph->region[3] = max(y0, yn);
+    graph->region[0] = std::min(x0, xn);
+    graph->region[1] = std::max(x0, xn);
+    graph->region[2] = std::min(y0, yn);
+    graph->region[3] = std::max(y0, yn);
 
-    graph->part[0] = min(fx0, fxn);
-    graph->part[1] = max(fx0, fxn);
-    graph->part[2] = min(fy0, fyn);
-    graph->part[3] = max(fy0, fyn);
+    graph->part[0] = std::min(fx0, fxn);
+    graph->part[1] = std::max(fx0, fxn);
+    graph->part[2] = std::min(fy0, fyn);
+    graph->part[3] = std::max(fy0, fyn);
 
-    graph->axisFont = labelFont;
-    graph->setBackgroundColor(backgroundColor);
+    graph->axisFont = labelFont.toString();
+    graph->setBackgroundColor(backgroundColor.red(), backgroundColor.green(), backgroundColor.blue());
 
     graphDlg->UpdateAll(nullptr);
     emit graphDlg->dataChanged( graph );

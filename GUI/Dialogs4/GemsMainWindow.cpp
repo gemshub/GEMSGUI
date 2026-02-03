@@ -76,7 +76,6 @@ TVisorImp::TVisorImp(int c, char** v):
     argc(c),
     argv(v),
     last_update( 0 ),
-    configAutosave(false),
     proc(nullptr),
     currentNrt(-2),
     settedCureentKeyIntotbKeys(false)
@@ -256,7 +255,6 @@ TVisorImp::TVisorImp(int c, char** v):
     }
     else
     {
-
         // Open calc mode and load last project
         if( !SetProfileMode(pVisor->lastProjectKey.c_str()))
         {
@@ -268,9 +266,10 @@ TVisorImp::TVisorImp(int c, char** v):
         {
             ui->action_calcMode->setChecked(true);
             // load last system
-            if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 )
-                CmShow( pVisor->lastSystemKey.c_str() );
-            //NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
+            if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 ) {
+            //  CmShow( pVisor->lastSystemKey.c_str() );
+                 NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
+            }
         }
     }
 
@@ -332,15 +331,15 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
 {
     size_t  kk, ln;
     int jj, ii, colsz;
-    string keyfld;
+    std::string keyfld;
     QTableWidgetItem *item, *curItem=nullptr;
     settedCureentKeyIntotbKeys = false;
 
     if( currentNrt != static_cast<int>(nRT) )
         return;
 
-    string oldKey = rt[nRT]->UnpackKey();
-    pFilterKey->setText( dynamic_cast<TCModule*>(aMod[nRT].get())->getFilter());
+    std::string oldKey = rt[nRT]->UnpackKey();
+    pFilterKey->setText(aMod[nRT]->getFilter().c_str());
 
     // define tbKeys
     tbKeys->clear();
@@ -349,7 +348,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
 
 
     // get list or record keys
-    string keyFilter = pFilterKey->text().toStdString();
+    std::string keyFilter = pFilterKey->text().toStdString();
     TCIntArray temp, colSizes;
     TCStringArray keyList;
     int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList, temp);
@@ -367,7 +366,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
         {
 
             ln = rt[nRT]->FldLen(jj);
-            keyfld = string(keyList[ii], kk, ln);
+            keyfld = std::string(keyList[ii], kk, ln);
             StripLine(keyfld);
             colsz = keyfld.length()+1;
             if( colsz > colSizes[jj])
@@ -386,7 +385,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
     {
         tbKeys->setColumnWidth(jj, wdF( ftString, colSizes[jj]+1, eNo ) );
         item = new QTableWidgetItem(tr("%1").arg( jj+1));
-        item->setToolTip( dynamic_cast<TCModule*>(aMod[nRT].get())->GetFldHelp(jj));
+        item->setToolTip( aMod[nRT]->GetFldHelp(jj).c_str());
         tbKeys->setHorizontalHeaderItem( jj, item );
     }
 
@@ -435,7 +434,7 @@ void TVisorImp::changeModulesKeys( int nRT )
     }
     else
     {
-        //pFilterKey->setText(dynamic_cast<TCModule *>(aMod[nRT].get())->getFilter());
+        //pFilterKey->setText(aMod[nRT]->getFilter());
         defineModuleKeysList( nRT );
     }
     // currentNrt = nRT;
@@ -444,7 +443,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 
 void TVisorImp::openRecordKey( int row, int    )
 {
-    string currentKey ="";
+    std::string currentKey ="";
 
     if( row >= tbKeys->rowCount())
         return;
@@ -464,8 +463,8 @@ void TVisorImp::changeKeyList()
 {
     if( currentNrt >=0 )
     {
-        string filter = pFilterKey->text().toStdString();
-        dynamic_cast<TCModule*>(aMod[currentNrt].get())->setFilter(filter.c_str());
+        std::string filter = pFilterKey->text().toStdString();
+        aMod[currentNrt]->setFilter(filter);
         defineModuleKeysList( currentNrt );
     }
 }
@@ -820,7 +819,7 @@ void TVisorImp::OpenHelp(const char* file, const char* item1, int page )
         {
             QString res = item1;
             res += QString("_%1").arg(page);
-            string txt = res.toStdString();
+            std::string txt = res.toStdString();
             HelpWindow::pDia->showDocumentation( file, txt.c_str() );
         }
         else
@@ -836,7 +835,7 @@ void TVisorImp::CmHelp2()
 {
     TCModuleImp *actwin = activeMdiChild();
     if( actwin )
-        aMod[actwin->rtNum()]->CmHelp2();
+        actwin->CmHelp2();
     else
     {
         NewSystemDialog *wn = activeNewSystem();

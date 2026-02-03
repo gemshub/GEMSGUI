@@ -49,8 +49,8 @@ class ProcessWizard : public QDialog
 
     Ui::ProcessWizardData *ui;
     char curType;
-    string calcScript;
-    string outScript;
+    std::string calcScript;
+    std::string outScript;
     EquatSetup *pageScript;
     QList<QListWidget *> pLsts;
     QButtonGroup *subTypeButtons;
@@ -92,11 +92,11 @@ public:
     void   getTable( short size[6], double dbl[24] );
     void   getFlags( char flgs[24] );
 
-    string getCalcScript() const;
-    string getOutScript() const
+    std::string getCalcScript() const;
+    std::string getOutScript() const
     { return pageScript->getScript(); }
 
-    TCStringArray getNames( string& xName, string& yName ) const
+    TCStringArray getNames( std::string& xName, std::string& yName ) const
     { return pageScript->getNames(xName, yName); }
 
 

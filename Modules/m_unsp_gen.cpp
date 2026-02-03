@@ -1,5 +1,4 @@
-//#include <cmath>
-//#include <cstdio>
+
 #include "m_unspace.h"
 #include "s_formula.h"
 #include "visor.h"
@@ -660,7 +659,7 @@ bool TUnSpace::SaveChartData( jsonui::ChartData* gr )
     //   gr->getColorList();
 
     pVisor->Update();
-    contentsChanged = true;
+    contents_changed = true;
 
     return true;
 }

@@ -180,7 +180,7 @@ SYSTEM;
 
 // Data of SYSTEM
 class TSyst :
-            public TSubModule
+            public TCModule
 {
     //RMULTS* mup;
     SYSTEM sy;
@@ -207,7 +207,7 @@ protected:
     void mark_dc_to_ic();
     void mark_ic_to_dc();
 
-    void EvPageChanged(int nPage);
+    void EvPageChanged(int nPage) override;
 
     void syIC_pr_tab( const char *key  );
     void syDC_pr_tab( const char *key  );
@@ -216,7 +216,7 @@ protected:
 public:
     static TSyst* sm;
 
-    void CellChanged( bool val = true );
+    void CellChanged( bool val = true ) override;
 
     SYSTEM* GetSY()
     {
@@ -225,17 +225,17 @@ public:
 
     TSyst( int nrt );
 
-    const char* GetName() const
+    const char* GetName() const override
     {
         return "System";
     }
 
-    void ods_link( int i=0);
-    void dyn_set( int i=0);
-    void dyn_kill( int i=0);
-    void dyn_new( int i=0);
-    void set_def( int i=0);
-    const char* GetHtml();
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
+    const char* GetHtml() override;
 
     // test data
     void ICompExit();
@@ -260,11 +260,9 @@ public:
     double MolWeight( int N, float *ICaw, double *Smline );
     double MolWeight( int N, double *ICaw, double *Smline );
 
-    const std::string& GetString()
+    const std::string& GetString() override
     {
      titler = rt[RT_SYSEQ]->PackKey();
-     //titler += " : ";
-     //titler += TSubModule::GetString();
      return titler;
     }
 
