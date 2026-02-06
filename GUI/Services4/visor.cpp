@@ -348,8 +348,6 @@ void TVisor::Setup()
     QDir userGEM(dir.c_str());
     bool firstTimeStart = !userGEM.exists(userProfDir().c_str());
 
-    option_c = true;  // all cases except -r check changes datatbase
-
     // copy default projects if first run
     if(firstTimeStart)  {
         option_d = true;
@@ -438,6 +436,7 @@ int TVisor::extract_args( int argc, char* argv[])
     // }
 
     int i=0;
+    option_c = true;
     for( i = 1; i < argc; ++i)
     {
         std::string arg = argv[i];
@@ -449,6 +448,9 @@ int TVisor::extract_args( int argc, char* argv[])
         }
         else if( (arg == "-c") || (arg == "--with-default-config")) {
             option_c = true;
+        }
+        else if( (arg == "-n") || (arg == "--no-with-default-config")) {
+            option_c = false;
         }
         else  if( (arg == "-v") || (arg == "--with-default-settings") ) {
             option_v = true;

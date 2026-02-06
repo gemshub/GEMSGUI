@@ -244,6 +244,7 @@ void show_usage(const std::string &name)
               // run mode
               << "\t-d,\t--from-ini-files        \tremake DOD and module dialog configurators (default false) \n"
               << "\t-c,\t--with-default-config   \tfile configuration if project subfolder(s) were added/removed (default true) \n"
+              << "\t-n,\t--no-with-default-config   \t use file configuration if project subfolder(s) (default false) \n"
               //              << "\t-v,\t--with-default-settings \trestore default settings (default false) \n"
               //              << "\t-f,\t--allow-db-change       \twrite access to database files in \\DB.default\\ (default false) \n\n"
               << std::endl;
