@@ -243,7 +243,7 @@ void show_usage(const std::string &name)
               << "\t-u,\t--user-dir     FOLDER   \tGEMS projects location \n\n"
               // run mode
               << "\t-d,\t--from-ini-files        \tremake DOD and module dialog configurators (default false) \n"
-              << "\t-c,\t--with-default-config   \tfile configuration if project subfolder(s) were added/removed (default false) \n"
+              << "\t-c,\t--with-default-config   \tfile configuration if project subfolder(s) were added/removed (default true) \n"
               //              << "\t-v,\t--with-default-settings \trestore default settings (default false) \n"
               //              << "\t-f,\t--allow-db-change       \twrite access to database files in \\DB.default\\ (default false) \n\n"
               << std::endl;

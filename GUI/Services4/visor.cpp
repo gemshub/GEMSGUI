@@ -348,6 +348,8 @@ void TVisor::Setup()
     QDir userGEM(dir.c_str());
     bool firstTimeStart = !userGEM.exists(userProfDir().c_str());
 
+    option_c = true;  // all cases except -r check changes datatbase
+
     // copy default projects if first run
     if(firstTimeStart)  {
         option_d = true;
@@ -386,7 +388,7 @@ void TVisor::Setup()
         toWinCFG();
     }
     else {
-        if(option_c || !fromWinCFG()) {
+        if(option_d || !fromWinCFG()) {
             toWinCFG();
         }
     }

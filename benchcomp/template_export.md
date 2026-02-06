@@ -21,7 +21,7 @@ Options:
         -u,	--user-dir     FOLDER   	GEMS projects location 
 
         -d,	--from-ini-files        	remake DOD and module dialog configurators (default false) 
-        -c,	--with-default-config   	file configuration if project subfolder(s) were added/removed (default false) 
+        -c,	--with-default-config   	file configuration if project subfolder(s) were added/removed (default true) 
 
 ```
 
