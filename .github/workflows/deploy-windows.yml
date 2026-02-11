@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - export_projecs_app
+      - LESTO_project
   release:
     types:
       - published

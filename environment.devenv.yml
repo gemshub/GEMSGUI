@@ -13,7 +13,7 @@ dependencies:
   - make  # [unix]
   - ninja
   - 7zip  # [win]
-  - gems3k>=4.4.4
+  - gems3k>=4.5.1
   #- thermofun>=0.4.3
   - cppzmq
   - mesa-libgl-devel-conda-x86_64 # [unix]
