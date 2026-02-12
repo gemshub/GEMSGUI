@@ -64,15 +64,6 @@ jobs:
           conda devenv
 
       # -------------------------
-      # System Qt installation
-      # -------------------------
-      - name: Install Qt6
-        shell: bash -l {0}
-        run: |
-          brew update
-          brew install qt
-
-      # -------------------------
       # Build & Install
       # -------------------------
       - name: Building, Testing & Installing GEMSGUI
@@ -82,7 +73,6 @@ jobs:
           mkdir .build && cd .build
           cmake -GNinja .. \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH=$(brew --prefix qt) \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
           ninja install
@@ -118,7 +108,7 @@ jobs:
         run: |
           conda activate GEMSGUI
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          $(brew --prefix qt)/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
+          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
           mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
 
       # -------------------------
