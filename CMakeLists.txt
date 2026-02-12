@@ -64,8 +64,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 include(GEMSGUIFindDeps)
 
 # Find Qt dependencies
-find_package(Qt6 6.2 COMPONENTS Core Gui Widgets Charts Concurrent PrintSupport Svg Help Sql REQUIRED)
-qt_standard_project_setup(REQUIRES 6.7)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Charts Concurrent PrintSupport Svg Help Sql)
+qt_standard_project_setup()
 
 # Versioning
 set(GEMSGUI_VERSION "${PROJECT_VERSION}")
