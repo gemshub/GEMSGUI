@@ -166,8 +166,8 @@ class TVisorImp: public QMainWindow
     char TCpoint[32];  // Step point ID for stepwise mode
 
     void closeEvent(QCloseEvent*);
-    void resizeEvent( QResizeEvent * event );
-    void showEvent( QShowEvent * event );
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent * event);
 
 public:
     DThread thdata;

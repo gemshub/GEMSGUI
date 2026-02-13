@@ -386,7 +386,7 @@ void TVisor::Setup()
         toWinCFG();
     }
     else {
-        if(option_c || !fromWinCFG()) {
+        if(option_d || !fromWinCFG()) {
             toWinCFG();
         }
     }
@@ -436,6 +436,7 @@ int TVisor::extract_args( int argc, char* argv[])
     // }
 
     int i=0;
+    option_c = true;
     for( i = 1; i < argc; ++i)
     {
         std::string arg = argv[i];
@@ -447,6 +448,9 @@ int TVisor::extract_args( int argc, char* argv[])
         }
         else if( (arg == "-c") || (arg == "--with-default-config")) {
             option_c = true;
+        }
+        else if( (arg == "-n") || (arg == "--no-with-default-config")) {
+            option_c = false;
         }
         else  if( (arg == "-v") || (arg == "--with-default-settings") ) {
             option_v = true;

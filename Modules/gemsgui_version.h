@@ -1,9 +1,9 @@
 #pragma once
 
 #define GEMSGUI_VERSION "3.11.0"
-#define GEMSGUI_VERSION_HASH "aa5a2bd8"
-#define GEMSGUI_GIT_BRANCH "export_projecs_app"
+#define GEMSGUI_VERSION_HASH "3d18f3e7"
+#define GEMSGUI_GIT_BRANCH "LESTO_project"
 #define GEMSGUI_OSX "Linux"
 #define GEMSGUI_COMPILER_ID "GNU"
 #define GEMSGUI_COMPILER_VERSION "13.3.0"
-#define GEMSGUI_QT_VERSION "6.8.2"
+#define GEMSGUI_QT_VERSION "6.10.2"

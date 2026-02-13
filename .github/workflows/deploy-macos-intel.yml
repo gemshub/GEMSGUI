@@ -1,4 +1,4 @@
-name: deploy-macos
+name: deploy-macos-intel
 
 on:
   push:
@@ -15,8 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest ]
-        conda_platform: [ osx-arm64 ]
+        os: [ macos-15-intel ]
+        conda_platform: [ osx-64 ]
         artifact_name: [ gemsgui-macos ]
 
     steps:
@@ -37,7 +37,7 @@ jobs:
       - name: Set deploy name
         id: strings
         shell: bash
-        run: echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}" >> "$GITHUB_OUTPUT"
+        run: echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}-intel" >> "$GITHUB_OUTPUT"
 
       - name: Set deploy dir
         id: strings2

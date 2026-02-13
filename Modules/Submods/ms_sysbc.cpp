@@ -45,11 +45,8 @@ void TSyst::mark_ic_to_bc( )
                         ij++;
             if( !ij )/*it is IC in this compos dont mark in RMULTS  */
             {
-                if( sy.Acl[j] != S_OFF )
-                {
-                    sy.Acl[j] = S_REM;
+                    sy.Acl[j] = S_OFF;
                     goto NEXT_BC_R;
-                }
             }
         } /* i */
         sy.Acl[j] = S_ON;
