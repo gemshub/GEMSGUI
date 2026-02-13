@@ -3,7 +3,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - LESTO_project
+      - test_arm
   release:
     types:
       - published
@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest ]
+        os: [ macos-14 ]
         conda_platform: [ osx-arm64 ]
         artifact_name: [ gemsgui-macos ]
 
