@@ -105,7 +105,7 @@ jobs:
 
           echo "Running smoke test:"
           mkdir -p "$HOME/gems-user-dir"
-          "$APP" -d --user-dir="$HOME/gems-user-dir" || {
+          "$APP" -u --user-dir "$HOME/gems-user-dir" || {
           echo "ERROR: GEMSGUI failed to run"
           exit 1
           }
