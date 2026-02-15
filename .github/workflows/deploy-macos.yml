@@ -78,6 +78,42 @@ jobs:
           ninja
           ninja install
 
+# -------------------------
+      # Verify architecture + smoke test GUI app
+      # -------------------------
+      - name: Verify runner architecture
+        run: |
+          echo "uname -m:"
+          uname -m
+          echo "RUNNER_ARCH:"
+          echo "$RUNNER_ARCH"
+          echo "CPU brand:"
+          sysctl -n machdep.cpu.brand_string
+
+          echo "Compiler target:"
+          clang -v 2>&1 | grep Target
+
+          echo "If uname -m != arm64, fail."
+          if [ "$(uname -m)" != "arm64" ]; then
+            echo "ERROR: Not running on ARM64 runner"
+            exit 1
+          fi
+
+      - name: Smoke test GEMSGUI binary
+        run: |
+          APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
+
+          echo "Checking that app binary exists:"
+          ls -l "$APP"
+
+          echo "Running smoke test:"
+          "$APP" --version || {
+            echo "ERROR: GEMSGUI failed to run"
+            exit 1
+          }
+
+          echo "Smoke test passed: GEMSGUI launches on ARM64"
+
       # -------------------------
       # Post-install adjustments
       # -------------------------
