@@ -89,6 +89,9 @@ jobs:
           cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
           cp "Resources/README-macos.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
 
+      - name: Install timeout tool
+        run: brew install coreutils
+
 # -------------------------
       # Verify architecture + smoke test GUI app
       # -------------------------
@@ -116,7 +119,7 @@ jobs:
 
           echo "Running smoke test:"
           mkdir -p "$HOME/gems-user-dir"
-          "$APP" -u "$HOME/gems-user-dir" || {
+          gtimeout 10 "$APP" -u "$HOME/gems-user-dir" || {
           echo "ERROR: GEMSGUI failed to run"
           exit 1
           }
