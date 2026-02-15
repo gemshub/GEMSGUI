@@ -117,12 +117,20 @@ jobs:
         run: |
           APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
 
-          echo "Running smoke test:"
-          mkdir -p "$HOME/gems-user-dir"
-          gtimeout 10 "$APP" -u "$HOME/gems-user-dir" || {
-          echo "ERROR: GEMSGUI failed to run"
-          exit 1
-          }
+          echo "Running smoke test with timeout:"
+          set +e
+          gtimeout 10 "$APP" -u "$HOME/gems-user-dir"
+    EXIT_CODE=$?
+          set -e
+
+          if [ "$EXIT_CODE" -eq 0 ]; then
+            echo "App exited normally (rare but OK)"
+          elif [ "$EXIT_CODE" -eq 124 ]; then
+            echo "App timed out (expected for GUI) — smoke test passed"
+          else
+            echo "App crashed with exit code $EXIT_CODE"
+            exit 1
+          fi
 
           echo "Smoke test passed"
 
