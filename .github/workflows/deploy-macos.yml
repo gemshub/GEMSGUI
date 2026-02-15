@@ -78,6 +78,17 @@ jobs:
           ninja
           ninja install
 
+
+      # -------------------------
+      # Post-install adjustments
+      # -------------------------
+      - name: Check deploy
+        run: |
+          cd ${{ github.workspace }}
+          cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
+          cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
+          cp "Resources/README-macos.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
+
 # -------------------------
       # Verify architecture + smoke test GUI app
       # -------------------------
@@ -112,15 +123,6 @@ jobs:
 
           echo "Smoke test passed"
 
-      # -------------------------
-      # Post-install adjustments
-      # -------------------------
-      - name: Check deploy
-        run: |
-          cd ${{ github.workspace }}
-          cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
-          cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
-          cp "Resources/README-macos.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
 
       # -------------------------
       # ZIP packaging
