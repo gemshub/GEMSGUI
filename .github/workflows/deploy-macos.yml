@@ -73,7 +73,7 @@ jobs:
           mkdir .build && cd .build
           cmake -GNinja .. \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_OSX_ARCHITECTURES=arm64
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
           ninja install
