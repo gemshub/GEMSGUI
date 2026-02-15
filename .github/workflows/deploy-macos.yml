@@ -79,16 +79,15 @@ jobs:
           ninja install
       - name: Smoke test GEMSGUI
         run: |
-         APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
+          APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
+          echo "Running smoke test:"
+          mkdir -p "$HOME/gems-user-dir"
+          "$APP" -d --user-dir="$HOME/gems-user-dir" || {
+          echo "ERROR: GEMSGUI failed to run"
+          exit 1
+          }
 
-         echo "Running smoke test:"
-         mkdir -p "$HOME/gems-user-dir"
-         "$APP" -d --user-dir="$HOME/gems-user-dir" || {
-         echo "ERROR: GEMSGUI failed to run"
-         exit 1
-         }
-
-         echo "Smoke test passed"
+          echo "Smoke test passed"
 # -------------------------
       # Verify architecture + smoke test GUI app
       # -------------------------
