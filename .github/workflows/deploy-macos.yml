@@ -107,7 +107,7 @@ jobs:
           ls -l "$APP"
 
           echo "Running smoke test:"
-          "$APP" -u --user-dir "$DIR" || {
+          "$APP" -u --user-dir /Users/runner/work || {
           echo "ERROR: GEMSGUI failed to run"
           exit 1
           } 
