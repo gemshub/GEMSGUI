@@ -102,7 +102,7 @@ jobs:
       - name: Smoke test GEMSGUI binary
         run: |
           APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
-          DIR="${{ steps.strings2.outputs.deploy-output-dir }}
+          DIR="${{ steps.strings2.outputs.deploy-output-dir }}" 
           echo "Checking that app binary exists:"
           ls -l "$APP"
 
