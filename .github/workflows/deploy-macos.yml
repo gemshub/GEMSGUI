@@ -107,7 +107,7 @@ jobs:
           ls -l "$APP"
 
           echo "Running smoke test:"
-          "$APP" --version || {
+          "$APP" -d || {
             echo "ERROR: GEMSGUI failed to run"
             exit 1
           }
