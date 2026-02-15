@@ -105,14 +105,16 @@ jobs:
 
           echo "Checking that app binary exists:"
           ls -l "$APP"
-    #
-    # echo "Running smoke test:"
-    # "$APP" -d || {
-    # echo "ERROR: GEMSGUI failed to run"
-    # exit 1
-    # }
+          
           echo "Smoke test passed: GEMSGUI launches on ARM64"
 
+     #
+     # echo "Running smoke test:"
+     # "$APP" -d || {
+     # echo "ERROR: GEMSGUI failed to run"
+     # exit 1
+     # }
+    
       # -------------------------
       # Post-install adjustments
       # -------------------------
