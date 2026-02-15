@@ -120,7 +120,7 @@ jobs:
           echo "Running smoke test with timeout:"
           set +e
           gtimeout 10 "$APP" -u "$HOME/gems-user-dir"
-    EXIT_CODE=$?
+          EXIT_CODE=$?
           set -e
 
           if [ "$EXIT_CODE" -eq 0 ]; then
