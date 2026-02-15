@@ -77,7 +77,18 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
           ninja install
+      - name: Smoke test GEMSGUI
+        run: |
+         APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
 
+         echo "Running smoke test:"
+         mkdir -p "$HOME/gems-user-dir"
+         "$APP" -d --user-dir="$HOME/gems-user-dir" || {
+         echo "ERROR: GEMSGUI failed to run"
+         exit 1
+         }
+
+         echo "Smoke test passed"
 # -------------------------
       # Verify architecture + smoke test GUI app
       # -------------------------
@@ -100,20 +111,7 @@ jobs:
           fi
 
       - name: Smoke test GEMSGUI binary
-        run: |
-          APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
-          DIR="${{ steps.strings2.outputs.deploy-output-dir }}" 
-          echo "Checking that app binary exists:"
-          ls -l "$APP"
 
-          echo "Running smoke test:"
-          "$APP" -u --user-dir /Users/runner/work || {
-          echo "ERROR: GEMSGUI failed to run"
-          exit 1
-          } 
-          
-          echo "Smoke test passed: GEMSGUI launches on ARM64"
-    
       # -------------------------
       # Post-install adjustments
       # -------------------------
