@@ -2,7 +2,7 @@ name: deploy-linux
 on:
   push:
     branches:
-      - process_reset_err
+      - test_arm
   release:
     types:
       - published
