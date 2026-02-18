@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-14 ]
+        os: [ macos-14 ] # arm64 runner by default 
         conda_platform: [ osx-arm64 ]
         artifact_name: [ gemsgui-macos ]
 
@@ -73,9 +73,11 @@ jobs:
           mkdir .build && cd .build
           cmake -GNinja .. \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
           ninja install
+
 
       # -------------------------
       # Post-install adjustments
@@ -86,6 +88,52 @@ jobs:
           cp -r "Resources" "${{ steps.strings.outputs.deploy-name }}/gem-selektor.app/Contents"
           cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
           cp "Resources/README-macos.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
+
+      - name: Install timeout tool
+        run: brew install coreutils
+
+# -------------------------
+      # Verify architecture + smoke test GUI app
+      # -------------------------
+      - name: Verify runner architecture
+        run: |
+          echo "uname -m:"
+          uname -m
+          echo "RUNNER_ARCH:"
+          echo "$RUNNER_ARCH"
+          echo "CPU brand:"
+          sysctl -n machdep.cpu.brand_string
+
+          echo "Compiler target:"
+          clang -v 2>&1 | grep Target
+
+          echo "If uname -m != arm64, fail."
+          if [ "$(uname -m)" != "arm64" ]; then
+            echo "ERROR: Not running on ARM64 runner"
+            exit 1
+          fi
+
+      - name: Smoke test GEMSGUI
+        run: |
+          APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
+
+          echo "Running smoke test with timeout:"
+          set +e
+          gtimeout 10 "$APP" -u "$HOME/gems-user-dir"
+          EXIT_CODE=$?
+          set -e
+
+          if [ "$EXIT_CODE" -eq 0 ]; then
+            echo "App exited normally (rare but OK)"
+          elif [ "$EXIT_CODE" -eq 124 ]; then
+            echo "App timed out (expected for GUI) — smoke test passed"
+          else
+            echo "App crashed with exit code $EXIT_CODE"
+            exit 1
+          fi
+
+          echo "Smoke test passed"
+
 
       # -------------------------
       # ZIP packaging
