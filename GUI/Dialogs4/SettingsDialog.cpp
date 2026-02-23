@@ -17,6 +17,8 @@
 //-------------------------------------------------------------------
 
 #include <QFontDialog>
+#include <QApplication>
+#include <QStyleHints>
 
 #include "ui_SettingsDialog4.h"
 #include "SettingsDialog.h"
@@ -96,6 +98,7 @@ void SettingsDialog::CmApply()
 
     pVisor->setDefaultBuiltinTDB(ui->pBuiltinTDB->text().toStdString());
 
+    qApp->styleHints()->setColorScheme(static_cast<Qt::ColorScheme>(pVisorImp->getColorScheme()));
     //pVisor->setLocalDoc(pLocalDoc->isChecked());
 
     //pVisorImp->Update(true);
