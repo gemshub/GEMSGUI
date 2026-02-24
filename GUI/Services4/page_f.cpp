@@ -116,6 +116,7 @@ CWinInfo::fromDAT(std::istream & is)
 void
 CWinInfo::toWinCFG(std::ostream & win_cfg)
 {
+
     win_cfg << "[" << rM.GetName() << "]" << std::endl;
 //    win_cfg << "init_wdith\t=\t" << init_width << endl;
 //    win_cfg << "init_height\t=\t" << init_height << endl;

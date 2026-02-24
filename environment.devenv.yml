@@ -13,7 +13,7 @@ dependencies:
   - make  # [unix]
   - ninja
   - 7zip  # [win]
-  - gems3k>=4.4.4
+  - gems3k>=4.5.1
   #- thermofun>=0.4.3
   - cppzmq
   - mesa-libgl-devel-conda-x86_64 # [unix]
@@ -21,7 +21,6 @@ dependencies:
   - qt6-charts=6.10.2 # [not win]
   - qt6-main=6.10.2 # [win]
   - qt6-charts=6.10.2 # [win]
-  #- qt-main # [win]
   #- eigen=3.4.0
   #- nlohmann_json
   #- spdlog

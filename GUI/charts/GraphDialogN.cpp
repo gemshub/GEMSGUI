@@ -222,31 +222,31 @@ void GraphDialog::CmSaveImage()
     auto fname_default = gr_data->title.substr(0, 30);
     if( fname_default.empty() )
         fname_default =  "My_plot";
-    QString  fileName  =  pVisor->filePathFromName(fname_default, "pdf").c_str();
+    QString  fileName  =  pVisor->filePathFromName(fname_default, "png").c_str();
 
     const QList<QByteArray> imageFormats =
             QImageWriter::supportedImageFormats();
 
     QStringList filter;
+    QString selectedFilter;
     filter.clear();
     filter += "PDF Documents (*.pdf)";
     filter += "SVG Documents (*.svg)";
 
-    if ( imageFormats.size() > 0 )
-    {
+    if(imageFormats.size() > 0) {
         QString imageFilter;
-        for ( int i = 0; i < imageFormats.size(); i++ )
-        {
-
+        for(int i = 0; i < imageFormats.size(); i++)  {
             imageFilter = imageFormats[i].toUpper();
-            imageFilter += "   Image (*.";
+            imageFilter += " Image (*.";
             imageFilter +=  imageFormats[i];
             imageFilter += ")";
             filter += imageFilter;
+            if(imageFilter.contains("PNG")) {
+                selectedFilter = imageFilter;
+            }
         }
     }
 
-    QString selectedFilter;
     fileName = QFileDialog::getSaveFileName(
                 this, "Saving Graphics Image", fileName,
                 filter.join( ";;" ), &selectedFilter, QFileDialog::DontConfirmOverwrite );

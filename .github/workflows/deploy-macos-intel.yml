@@ -1,14 +1,9 @@
-name: deploy-macos
+name: deploy-macos-intel
 
 on:
   push:
     branches:
-<<<<<<< HEAD
-      - fix-t-props-h2o
-      - help_generation_ci1
-=======
       - LESTO_project
->>>>>>> origin/master
   release:
     types:
       - published
@@ -20,8 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest ]
-        conda_platform: [ osx-arm64 ]
+        os: [ macos-15-intel ]
+        conda_platform: [ osx-64 ]
         artifact_name: [ gemsgui-macos ]
 
     steps:
@@ -42,7 +37,7 @@ jobs:
       - name: Set deploy name
         id: strings
         shell: bash
-        run: echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}" >> "$GITHUB_OUTPUT"
+        run: echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}-intel" >> "$GITHUB_OUTPUT"
 
       - name: Set deploy dir
         id: strings2
@@ -80,7 +75,6 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
-          ./generate_gems3help.sh
           ninja install
 
       # -------------------------

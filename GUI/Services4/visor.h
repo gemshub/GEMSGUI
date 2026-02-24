@@ -34,7 +34,7 @@ class TVisor
     char** argv;
 
     bool option_d = false;
-    bool option_c = false;
+    bool option_c = true;
     bool option_v = false;
 
     std::string lastProjectKey;

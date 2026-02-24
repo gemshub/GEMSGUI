@@ -313,7 +313,7 @@ void TVisorImp::closeEvent(QCloseEvent* e)
 }
 
 
-void TVisorImp::resizeEvent ( QResizeEvent * event )
+void TVisorImp::resizeEvent(QResizeEvent * event)
 {
     QMainWindow::resizeEvent(event);
     moveToolBar();

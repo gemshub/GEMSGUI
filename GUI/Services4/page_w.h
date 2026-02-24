@@ -123,7 +123,8 @@ class TCWindow: public QWidget
 
 protected:
     void closeEvent(QCloseEvent* evt);
-    void showEvent( QShowEvent * event );
+    void showEvent(QShowEvent * event);
+    void resizeEvent(QResizeEvent* event);
 
 public slots:
     void EvTabSelChange(QAbstractButton* button);

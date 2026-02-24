@@ -15,7 +15,7 @@ DEFINES += NDEBUG
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check
-CONFIG += c++17
+CONFIG += c++2a
 CONFIG += warn_on
 CONFIG += thread
 QT += network

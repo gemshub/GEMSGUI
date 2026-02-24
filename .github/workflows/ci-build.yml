@@ -50,16 +50,6 @@ jobs:
           conda install conda-devenv
           conda devenv
       
-      # -------------------------
-      # System Qt installation for macos
-      # -------------------------
-      - name: Install Qt6
-        if: matrix.os == 'macos-latest'
-        shell: bash -l {0}
-        run: |
-          brew update
-          brew install qt
-
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
         shell: bash -l {0}
@@ -75,6 +65,8 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
+          cp "cmake/qt.conf" "C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\bin" || goto :eof
+          rem --- Build and install ---
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build  || goto :eof
           cmake --build build --target install  --config Release  || goto :eof
 

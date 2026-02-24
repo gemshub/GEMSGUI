@@ -412,8 +412,7 @@ void PlotChartViewPrivate::updateGrid()
     auto titleFont = axis_font;
     titleFont.setPointSize(titleFont.pointSize()+2);
     chart->setTitleFont(titleFont);
-    chart->setTitle( gr_data->title.c_str() );
-
+    chart->setTitle(gr_data->title.c_str());
     if( !axisX || !axisY)
         return;
 
@@ -421,22 +420,32 @@ void PlotChartViewPrivate::updateGrid()
 
     chart->setBackgroundBrush(QColor(gr_data->getRed(), gr_data->getGreen(), gr_data->getBlue()));
 
-    axisX->setTickCount( gr_data->axisTypeX+1 );
-    //axisX->setMinorTickCount(4);
+    auto penXtic = axisX->gridLinePen();
+    penXtic.setStyle(Qt::DotLine);
+    penXtic.setColor(Qt::darkGray);
+    axisX->setGridLinePen(penXtic);
+    axisX->setTickCount(gr_data->axisTypeX+1);
+    axisX->setMinorTickCount(4);
+    axisX->setMinorGridLineVisible(false);
     axisX->setTitleFont( titleFont );
     axisX->setLabelsFont(axis_font);
-    axisX->setTitleText( gr_data->xName.c_str() );
+    axisX->setTitleText(gr_data->xName.c_str());
     auto penX = axisX->linePen();
     penX.setWidth(3);
     penX.setColor(Qt::darkGray);
     axisX->setLinePen(penX);
 
-    axisY->setTickCount( gr_data->axisTypeY+1 );
-    //axisY->setMinorTickCount(4);
+    axisY->setGridLinePen(penXtic);
+    axisY->setTickCount(gr_data->axisTypeY+1);
+    axisY->setMinorTickCount(4);
+    axisY->setMinorGridLineVisible(false);
     axisY->setTitleFont( titleFont );
     axisY->setLabelsFont(axis_font);
-    axisY->setTitleText( gr_data->yName.c_str() );
+    axisY->setTitleText(gr_data->yName.c_str());
     axisY->setLinePen(penX);
+
+    chart->setPlotAreaBackgroundPen(penX);
+    chart->setPlotAreaBackgroundVisible(true);
 
     // must be setPen(QChartPrivate::defaultPen()) for lines and points
     // and default background

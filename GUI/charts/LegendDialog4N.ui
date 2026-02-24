@@ -3,7 +3,7 @@
  <class>LegendDialogData</class>
  <widget class="QDialog" name="LegendDialogData">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::WindowModality::WindowModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -94,8 +94,11 @@
         <property name="toolTip">
          <string>Change the title of a bottom axis</string>
         </property>
+        <property name="text">
+         <string/>
+        </property>
         <property name="maxLength">
-         <number>9</number>
+         <number>1000</number>
         </property>
        </widget>
       </item>
@@ -125,7 +128,7 @@
          <string>Change the title of a left axis</string>
         </property>
         <property name="maxLength">
-         <number>9</number>
+         <number>1000</number>
         </property>
        </widget>
       </item>
@@ -315,10 +318,10 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
        </widget>
       </item>
@@ -328,7 +331,7 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Help|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>

@@ -374,8 +374,8 @@ TCWindow::~TCWindow()
 
 void TCWindow::closeEvent(QCloseEvent* evt)
 {
-    //rInfo.init_width = parentWidget()->width();
-    //rInfo.init_height = parentWidget()->height();
+    rInfo.init_width = parentWidget()->width();
+    rInfo.init_height = parentWidget()->height();
     QWidget::closeEvent(evt);
 }
 
@@ -383,6 +383,13 @@ void TCWindow::showEvent( QShowEvent * event )
 {
     QWidget::showEvent(event);
     gui_logger->debug("rInfo.init_width {} rInfo.init_height {}", rInfo.init_width, rInfo.init_height);
+}
+
+void TCWindow::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    rInfo.init_width = parentWidget()->width();
+    rInfo.init_height = parentWidget()->height();
 }
 
 //    Changes the page tab for module and calls TCModule::EvPageChanged()
