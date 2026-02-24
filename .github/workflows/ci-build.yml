@@ -2,7 +2,7 @@ name: ci-build
 on:
   push:
     branches:
-      - psinagra2020
+      - help_generation_ci
       - master
   pull_request:
     branches:
@@ -75,6 +75,7 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
+          cp "cmake/qt.conf" "C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\bin" || goto :eof
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build  || goto :eof
           cmake --build build --target install  --config Release  || goto :eof
 
