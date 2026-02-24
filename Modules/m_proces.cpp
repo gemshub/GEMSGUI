@@ -1096,7 +1096,7 @@ double TProcess::f_proc( double x )
       // PRof->CalcEqstat( &pep->kdt, pep->kst, pep->c_Tau ); // calc current SyStat
     pep->Loop = 1;
     CalcEquat();
-    gems_logger->trace("golden section {} {}", pep->c_Eh,pep->c_Nu);
+    gems_logger->trace("golden section c_Eh={} c_Nu={}", pep->c_Eh,pep->c_Nu);
     return( pep->c_Nu );
 }
 
