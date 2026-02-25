@@ -2,7 +2,7 @@ name: ci-build
 on:
   push:
     branches:
-      - help_generation_ci
+      - help_generation_ci1
       - master
   pull_request:
     branches:
@@ -58,7 +58,6 @@ jobs:
           mkdir .build && cd .build
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
           ninja
-          ninja install
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
         if: matrix.os == 'windows-latest'

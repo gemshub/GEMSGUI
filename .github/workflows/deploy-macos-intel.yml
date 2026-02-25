@@ -3,7 +3,7 @@ name: deploy-macos-intel
 on:
   push:
     branches:
-      - LESTO_project
+      - help_generation_ci
   release:
     types:
       - published
@@ -75,6 +75,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
+          ./generate_gems3help.sh
           ninja install
 
       # -------------------------
