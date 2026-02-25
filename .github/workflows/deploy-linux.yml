@@ -2,7 +2,7 @@ name: deploy-linux
 on:
   push:
     branches:
-      - test_arm
+      - test_arm1
   release:
     types:
       - published
