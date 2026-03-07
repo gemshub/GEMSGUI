@@ -3,7 +3,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - test_arm1
+      - test_arm
   release:
     types:
       - published
@@ -134,15 +134,6 @@ jobs:
 
           echo "Smoke test passed"
 
-
-      # -------------------------
-      # ZIP packaging
-      # -------------------------
-      - name: Create zip archive for GitHub release
-        run: |
-          cd ${{ github.workspace }}
-          zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
-
       # -------------------------
       # DMG packaging (system Qt)
       # -------------------------
@@ -159,6 +150,31 @@ jobs:
           /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
           mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
 
+
+      - name: Ad-hoc sign .app bundle
+        run: |
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+
+          echo "Removing quarantine flags..."
+          xattr -dr com.apple.quarantine gem-selektor.app || true
+
+          echo "Ad-hoc signing bundle..."
+          codesign --force --deep --sign - gem-selektor.app
+
+          echo "Verifying signature..."
+          codesign --verify --deep --strict gem-selektor.app
+          spctl --assess --verbose gem-selektor.app || true
+
+
+      # -------------------------
+      # ZIP packaging
+      # -------------------------
+      - name: Create zip archive for GitHub release
+        run: |
+          cd ${{ github.workspace }}
+          zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
+
+ 
       # -------------------------
       # Upload artifacts
       # -------------------------
