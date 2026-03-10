@@ -108,7 +108,7 @@ HelpWindow::HelpWindow( QWidget* parent):
 
     //End Ui form
 
-    QString collectionFile = QString( pVisor->docDir().c_str() )+ QLatin1String("gems3help.qhc");
+    QString collectionFile = QString::fromStdString(pVisor->localDocDir())+ QLatin1String("gems3help.qhc");
     // "/home/gems/gemworks/gems3/shared/doc/html/gems3help.qhc";
 
     findLine = nullptr;
