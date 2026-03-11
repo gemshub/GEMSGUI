@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-14 ] # arm64 runner by default 
+        os: [ macos-14 ]
         conda_platform: [ osx-arm64 ]
         artifact_name: [ gemsgui-macos ]
 
@@ -78,7 +78,6 @@ jobs:
           ninja
           ninja install
 
-
       # -------------------------
       # Post-install adjustments
       # -------------------------
@@ -92,22 +91,13 @@ jobs:
       - name: Install timeout tool
         run: brew install coreutils
 
-# -------------------------
+      # -------------------------
       # Verify architecture + smoke test GUI app
       # -------------------------
       - name: Verify runner architecture
         run: |
           echo "uname -m:"
           uname -m
-          echo "RUNNER_ARCH:"
-          echo "$RUNNER_ARCH"
-          echo "CPU brand:"
-          sysctl -n machdep.cpu.brand_string
-
-          echo "Compiler target:"
-          clang -v 2>&1 | grep Target
-
-          echo "If uname -m != arm64, fail."
           if [ "$(uname -m)" != "arm64" ]; then
             echo "ERROR: Not running on ARM64 runner"
             exit 1
@@ -116,55 +106,45 @@ jobs:
       - name: Smoke test GEMSGUI
         run: |
           APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
-
-          echo "Running smoke test with timeout:"
           set +e
           gtimeout 10 "$APP" -u "$HOME/gems-user-dir"
           EXIT_CODE=$?
           set -e
-
-          if [ "$EXIT_CODE" -eq 0 ]; then
-            echo "App exited normally (rare but OK)"
-          elif [ "$EXIT_CODE" -eq 124 ]; then
-            echo "App timed out (expected for GUI) — smoke test passed"
-          else
+          if [ "$EXIT_CODE" -ne 124 ] && [ "$EXIT_CODE" -ne 0 ]; then
             echo "App crashed with exit code $EXIT_CODE"
             exit 1
           fi
 
-          echo "Smoke test passed"
-
       # -------------------------
-      # DMG packaging (system Qt)
+      # macdeployqt (NO DMG)
       # -------------------------
-      - name: Clean previous DMG
-        run: |
-          hdiutil detach /Volumes/gem-selektor || true
-          rm -f gem-selektor.dmg
-
-      - name: Create DMG with macdeployqt
+      - name: Run macdeployqt (no DMG)
         shell: bash -l {0}
         run: |
           conda activate GEMSGUI
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
-          mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
+          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2
 
-
+      # -------------------------
+      # Ad-hoc signing
+      # -------------------------
       - name: Ad-hoc sign .app bundle
         run: |
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-
-          echo "Removing quarantine flags..."
           xattr -dr com.apple.quarantine gem-selektor.app || true
-
-          echo "Ad-hoc signing bundle..."
           codesign --force --deep --sign - gem-selektor.app
-
-          echo "Verifying signature..."
           codesign --verify --deep --strict gem-selektor.app
-          spctl --assess --verbose gem-selektor.app || true
 
+      # -------------------------
+      # Create DMG (signed app inside)
+      # -------------------------
+      - name: Create DMG
+        run: |
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          hdiutil create -volname gem-selektor \
+            -srcfolder gem-selektor.app \
+            -ov -format UDZO gem-selektor.dmg
+          mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
 
       # -------------------------
       # ZIP packaging
@@ -174,7 +154,6 @@ jobs:
           cd ${{ github.workspace }}
           zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
 
- 
       # -------------------------
       # Upload artifacts
       # -------------------------
