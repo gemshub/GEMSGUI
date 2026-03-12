@@ -28,9 +28,7 @@
 
 #include <QApplication>
 #include <QtWidgets>
-#include "visor.h"
 #include "GemsMainWindow.h"
-#include "GEMS3K/jsonconfig.h"
 
 class TIntegApp:  public QApplication
 {
@@ -80,7 +78,7 @@ TIntegApp::TIntegApp(int& c, char** v):
 void TIntegApp::InitMainWindow()
 {
     pVisorImp = new TVisorImp(argc, argv);
-    // styleHints()->setColorScheme(static_cast<Qt::ColorScheme>(pVisorImp->getColorScheme()));
+    styleHints()->setColorScheme(static_cast<Qt::ColorScheme>(pVisorImp->getColorScheme()));
     pVisorImp->show();
     // init Help Window
     pVisorImp->GetHelp();

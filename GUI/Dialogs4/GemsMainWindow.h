@@ -28,7 +28,6 @@
 #include <QHBoxLayout>
 #include <QTableWidget>
 #include "module_w.h"
-#include "v_vals.h"
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -162,6 +161,7 @@ class TVisorImp: public QMainWindow
     int charWidth;
     int charHeight;
     int colorScheme=0;
+    bool phaseExpandMode = false;
 
     char TCpoint[32];  // Step point ID for stepwise mode
 
@@ -213,6 +213,11 @@ public:
         if( updInterval > 0 && updInterval < 60 )
             updateTime = updInterval;
     }
+
+    void setPhaseExpandMode(bool expand_all)
+    {  phaseExpandMode = expand_all;  }
+    bool getPhaseExpandMode() const
+    {  return phaseExpandMode;   }
 
     const char* version();
     const char* getGEMTitle();

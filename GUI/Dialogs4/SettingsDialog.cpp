@@ -17,6 +17,8 @@
 //-------------------------------------------------------------------
 
 #include <QFontDialog>
+#include <QApplication>
+#include <QStyleHints>
 
 #include "ui_SettingsDialog4.h"
 #include "SettingsDialog.h"
@@ -35,20 +37,15 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     setWindowTitle( "GEM-Selektor: Settings and preferences" );
 
     ui->pUpdateInterval->setValue( pVisorImp->updateInterval() );
-
     ui->comboBox->setCurrentIndex(pVisorImp->getColorScheme());
-    ui->pLocalDocDir->setText(pVisor->localDocDir().c_str());
-    ui->pRemoteHTML->setText(pVisor->remoteHTML().c_str());
-    //pLocalDoc->setChecked(pVisor->localDoc());
-    //pRemoteDoc->setChecked(!pVisor->localDoc());
-    ui->pSysDBDir->setText(pVisor->sysGEMDir().c_str());
-    ui->pUserDBDir->setText(pVisor->userGEMDir().c_str());
-    ui->pUserDBDir->setText(pVisor->userProfDir().c_str());
+    ui->pLocalDocDir->setText(QString::fromStdString(pVisor->localDocDir()));
+    ui->pSysDBDir->setText(QString::fromStdString(pVisor->sysGEMDir()));
+    //ui->pUserDBDir->setText(pVisor->userGEMDir().c_str());
+    ui->pUserDBDir->setText(QString::fromStdString(pVisor->userProfDir()));
     ui->pFontRawName->setText(cellFont.toString());
     ui->pNumDigits->setValue(pVisor->getDoubleDigits());
     ui->pUpdateInterval->setValue(pVisorImp->updateInterval());
     ui->pConfigAutosave->setChecked(pVisor->getConfigAutosave());
-    //    pConfigAutosave->setChecked( true );
 
     if( pVisor->getElemPrMode() )
     {   ui->rbNewPrMode->setChecked( true );
@@ -84,20 +81,14 @@ void SettingsDialog::accept()
 void SettingsDialog::CmApply()
 {
     pVisorImp->setCellFont(cellFont);
-
     pVisorImp->setColorScheme(ui->comboBox->currentIndex());
     pVisor->setDoubleDigits(ui->pNumDigits->value());
     pVisorImp->setUpdateInterval( ui->pUpdateInterval->value() );
     pVisor->setConfigAutosave( ui->pConfigAutosave->isChecked() );
     pVisor->setElemPrMode(ui->rbNewPrMode->isChecked());
-
-    pVisor->setLocalDocDir(ui->pLocalDocDir->text().toStdString());
-    pVisor->setRemoteHTML(ui->pRemoteHTML->text().toStdString());
-
+    //pVisor->setLocalDocDir(ui->pLocalDocDir->text().toStdString());
     pVisor->setDefaultBuiltinTDB(ui->pBuiltinTDB->text().toStdString());
-
-    //pVisor->setLocalDoc(pLocalDoc->isChecked());
-
+    qApp->styleHints()->setColorScheme(static_cast<Qt::ColorScheme>(pVisorImp->getColorScheme()));
     //pVisorImp->Update(true);
 }
 
