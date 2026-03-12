@@ -3,7 +3,6 @@ name: deploy-macos
 on:
   push:
     branches:
-      - fix-t-props-h2o
       - help_generation_ci1
   release:
     types:
@@ -16,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest ]
+        os: [ macos-14 ]
         conda_platform: [ osx-arm64 ]
         artifact_name: [ gemsgui-macos ]
 
@@ -74,6 +73,7 @@ jobs:
           mkdir .build && cd .build
           cmake -GNinja .. \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
           ./generate_gems3help.sh
@@ -89,6 +89,64 @@ jobs:
           cp "Resources/rungems3-mac.sh" "${{ steps.strings.outputs.deploy-name }}/rungems3.sh"
           cp "Resources/README-macos.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
 
+      - name: Install timeout tool
+        run: brew install coreutils
+
+      # -------------------------
+      # Verify architecture + smoke test GUI app
+      # -------------------------
+      - name: Verify runner architecture
+        run: |
+          echo "uname -m:"
+          uname -m
+          if [ "$(uname -m)" != "arm64" ]; then
+            echo "ERROR: Not running on ARM64 runner"
+            exit 1
+          fi
+
+      - name: Smoke test GEMSGUI
+        run: |
+          APP="${{ steps.strings2.outputs.deploy-output-dir }}/gem-selektor.app/Contents/MacOS/gem-selektor"
+          set +e
+          gtimeout 10 "$APP" -u "$HOME/gems-user-dir"
+          EXIT_CODE=$?
+          set -e
+          if [ "$EXIT_CODE" -ne 124 ] && [ "$EXIT_CODE" -ne 0 ]; then
+            echo "App crashed with exit code $EXIT_CODE"
+            exit 1
+          fi
+
+      # -------------------------
+      # macdeployqt (NO DMG)
+      # -------------------------
+      - name: Run macdeployqt (no DMG)
+        shell: bash -l {0}
+        run: |
+          conda activate GEMSGUI
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2
+
+      # -------------------------
+      # Ad-hoc signing
+      # -------------------------
+      - name: Ad-hoc sign .app bundle
+        run: |
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          xattr -dr com.apple.quarantine gem-selektor.app || true
+          codesign --force --deep --sign - gem-selektor.app
+          codesign --verify --deep --strict gem-selektor.app
+
+      # -------------------------
+      # Create DMG (signed app inside)
+      # -------------------------
+      - name: Create DMG
+        run: |
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          hdiutil create -volname gem-selektor \
+            -srcfolder gem-selektor.app \
+            -ov -format UDZO gem-selektor.dmg
+          mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
+
       # -------------------------
       # ZIP packaging
       # -------------------------
@@ -96,22 +154,6 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
-
-      # -------------------------
-      # DMG packaging (system Qt)
-      # -------------------------
-      - name: Clean previous DMG
-        run: |
-          hdiutil detach /Volumes/gem-selektor || true
-          rm -f gem-selektor.dmg
-
-      - name: Create DMG with macdeployqt
-        shell: bash -l {0}
-        run: |
-          conda activate GEMSGUI
-          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
-          mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
 
       # -------------------------
       # Upload artifacts

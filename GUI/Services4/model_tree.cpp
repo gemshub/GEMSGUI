@@ -16,7 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <QtGui>
+#include <QClipboard>
 #include <QHeaderView>
 #include <QMenu>
 #include <QAction>
@@ -26,7 +26,7 @@
 #include "m_param.h"
 #include "CalcDialog.h"
 #include "CalcCheckDialog.h"
-#include "GemsMainWindow.h"
+//#include "GemsMainWindow.h"
 
 TreeLine::TreeLine(int aiPh, int aiDC, int aiDCPh):
   iPh( aiPh), iDC( aiDC), iDC_Ph( aiDCPh), UGval('J')
@@ -608,6 +608,14 @@ void TTreeView::printList( std::fstream& ff )
              }  
              ff << std::endl;
          }
+     }
+ }
+
+ void TTreeView::resetList()
+ {
+     ((TTreeModel *)(model() ))->setupModelData();
+     if(pVisorImp->getPhaseExpandMode()) {
+        expandAll();
      }
  }
 

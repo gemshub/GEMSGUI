@@ -83,6 +83,7 @@ TVisorImp::TVisorImp(int c, char** v):
     ui->setupUi(this);
     GEMS3KGenerator::default_type_f = GEMS3KGenerator::f_json;
     ui->action_Use_ThermoFUN->setChecked(GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun);
+    ui->actionExpanded_view->setChecked(getPhaseExpandMode());
 
     (void)statusBar();
     //setMinimumSize( 300, 200 );
@@ -221,6 +222,9 @@ TVisorImp::TVisorImp(int c, char** v):
         else {
             GEMS3KGenerator::default_type_f = GEMS3KGenerator::f_json;
         }
+    });
+    connect( ui->actionExpanded_view, &QAction::toggled, [&](bool checked){
+        setPhaseExpandMode(checked);
     });
     connect( ui->action_calcMode, SIGNAL( triggered()), this, SLOT(CmCalcMode()));
     connect( ui->actionDataBaseMode, SIGNAL( triggered()), this, SLOT(CmDataBaseMode()));

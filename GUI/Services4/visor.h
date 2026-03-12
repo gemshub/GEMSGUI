@@ -52,8 +52,6 @@ class TVisor
     //std::string ServerGems3Dir;
 
     std::string LocalDocDir;
-    std::string RemoteHTML;
-    bool LocalDoc;         // obsolete
     std::string ImgDir;
 
     bool isElementsProfileMode = true;
@@ -139,29 +137,8 @@ public:
         LocalDir = localDir;
     }
 
-    std::string docDir() const {
-        return LocalDocDir;
-        //	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
-    }
     const std::string& localDocDir() const {
         return LocalDocDir;
-    }
-    void setLocalDocDir(const std::string& localDir) {
-        LocalDocDir = localDir;
-    }
-
-    const std::string& remoteHTML() const {
-        return RemoteHTML;
-    }
-    void setRemoteHTML(const std::string& remoteURL) {
-        RemoteHTML = remoteURL;
-    }
-
-    bool localDoc() const { // obsolete
-        return LocalDoc;
-    }
-    void setLocalDoc(bool local) { // obsolete
-        LocalDoc = local;
     }
 
     // const std::string& serverGems3Dir() const {
