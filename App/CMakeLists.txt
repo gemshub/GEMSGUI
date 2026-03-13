@@ -49,7 +49,6 @@ install(TARGETS gem-selektor
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-
 if(DEFINED ENV{CONDA_PREFIX})
 
 message(STATUS "conda path: $ENV{CONDA_PREFIX}")
@@ -108,3 +107,5 @@ qt_generate_deploy_app_script(
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
+
+

@@ -1,4 +1,5 @@
-
+file(COPY "${CMAKE_SOURCE_DIR}/tools/gems3helpconfig.qhcp" DESTINATION "${CMAKE_BINARY_DIR}/tools")
+file(COPY "${CMAKE_SOURCE_DIR}/tools/generate_gems3help.sh" DESTINATION "${CMAKE_BINARY_DIR}")
 
 # Building convertor data/*.ini to json format
 message(STATUS "Building convertor data/*.ini to json format")

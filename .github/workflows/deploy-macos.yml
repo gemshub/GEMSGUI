@@ -3,7 +3,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - test_arm
+      - help_generation_ci
   release:
     types:
       - published
@@ -76,6 +76,7 @@ jobs:
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
+          ./generate_gems3help.sh
           ninja install
 
       # -------------------------

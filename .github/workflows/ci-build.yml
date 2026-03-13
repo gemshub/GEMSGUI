@@ -2,8 +2,7 @@ name: ci-build
 on:
   push:
     branches:
-      - psinagra2020
-      - process_reset_err
+      - help_generation_ci1
       - master
   pull_request:
     branches:
@@ -59,15 +58,15 @@ jobs:
           mkdir .build && cd .build
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
           ninja
-          ninja install
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
         if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
+          rem --- Build, no install ---
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build  || goto :eof
-          cmake --build build --target install  --config Release  || goto :eof
+          cmake --build build --config Release  || goto :eof
 
       - name: Check conda
         run: |
