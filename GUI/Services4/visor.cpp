@@ -60,7 +60,6 @@ const char *VISOR_DAT = "visor.data/visor.dat";
 const char *DEFAULT_DB_DIR = "DB.default/";
 const char *IMAGES_SRC_DIR = "img/";
 const char *HELP_DB_DIR = "help/";
-const char *HELP_SRC_DIR = "doc/html/";
 const char *RESOURCES_DIR = "/Resources/";
 const char *DEFAULT_USER_DIR= "/Library/Gems3/";
 const char *DEFAULT_PR_DIR= "projects/";
@@ -282,9 +281,6 @@ TVisor::TVisor(int c, char *v[]):
 
     //    LocalDir = userGEMDir();
     LocalDocDir = SysGEMDir + HELP_DB_DIR;
-    //RemoteDocURL = "http://gems.web.psi.ch/doc/html/";
-    RemoteHTML = SysGEMDir + HELP_SRC_DIR;
-    LocalDoc = true;
     DefaultBuiltinTDB = "psi-nagra";  // PSI-Nagra TDB update TT 03.04.2013
     //    DefaultBuiltinTDB = "kernel";   temporary for using old Nagra-PSI (2003) dataset
     //    DefaultBuiltinTDB = "psinagra";  // To be used after update to PSI-Nagra 2012
@@ -303,7 +299,6 @@ TVisor::TVisor(int c, char *v[]):
     gui_logger->info("UserGEM  : {}", UserGEMDir);
     gui_logger->debug("UserProj : {}", UserProfDir);
     gui_logger->debug("LocalDoc : {}", LocalDocDir);
-    gui_logger->debug("LocalHTML: {}", RemoteHTML);
 }
 
 TVisor::~TVisor()
@@ -704,8 +699,6 @@ void TVisor::toSettingsCFG()
     win_cfg_object["config_autosave"] = pVisor->getConfigAutosave();
     win_cfg_object["local_dir"] = QString::fromStdString(LocalDir);
     win_cfg_object["local_doc_dir"] = QString::fromStdString(LocalDocDir);
-    win_cfg_object["remote_doc_url"] = QString::fromStdString(RemoteHTML);
-    win_cfg_object["local_doc"] = LocalDoc;
     win_cfg_object["current_mode"] = ProfileMode;
     win_cfg_object["current_project"] = rt[RT_PARAM]->PackKey();
     win_cfg_object["current_system"] = rt[RT_SYSEQ]->PackKey();
@@ -750,9 +743,7 @@ void TVisor::fromSettingsCFG()
     pVisor->setDoubleDigits(visor_conf.value_or_default("double_precision", pVisor->getDoubleDigits()));
     pVisor->setConfigAutosave(visor_conf.value_or_default("config_autosave",  pVisor->getConfigAutosave()));
     setLocalDir(visor_conf.value_or_default<std::string>("local_dir", LocalDir));
-    setLocalDocDir(visor_conf.value_or_default<std::string>("local_doc_dir", LocalDocDir));
-    setRemoteHTML(visor_conf.value_or_default<std::string>("remote_doc_url", RemoteHTML));
-    setLocalDoc(visor_conf.value_or_default("local_doc",  LocalDoc));
+    //setLocalDocDir(visor_conf.value_or_default<std::string>("local_doc_dir", LocalDocDir));
     ProfileMode = visor_conf.value_or_default("current_mode",  ProfileMode);
     setDefaultBuiltinTDB(visor_conf.value_or_default<std::string>("default_built_in_TDB", DefaultBuiltinTDB));
     lastProjectKey = visor_conf.value_or_default<std::string>("current_project", lastProjectKey);

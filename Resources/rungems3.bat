@@ -1,5 +1,6 @@
 rem  Change the path to the actual location of gem-selektor executable and Resources
 cd ./Gems3-app/bin
+set PATH=%CD%
 
 rem 1. First launch with default location of modeling projects (usually done by the installer)
 rem gem-selektor.exe -d > gems3.log

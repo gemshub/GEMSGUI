@@ -114,6 +114,7 @@
     <addaction name="sactionPrecise"/>
     <addaction name="sactionStepwise"/>
     <addaction name="action_Use_ThermoFUN"/>
+    <addaction name="actionExpanded_view"/>
    </widget>
    <widget class="QMenu" name="smenu_View">
     <property name="title">
@@ -1299,6 +1300,14 @@
   <action name="actionImport_JSON_files">
    <property name="text">
     <string>Import JSON files...</string>
+   </property>
+  </action>
+  <action name="actionExpanded_view">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Expanded view</string>
    </property>
   </action>
  </widget>

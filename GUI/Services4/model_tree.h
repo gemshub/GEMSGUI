@@ -159,10 +159,7 @@ class TTreeView: public QTreeView
  public:
 	 TTreeView( QWidget * parent = 0 );
      void printList( std::fstream& ff );
-     void resetList()
-	 {
-    	 ((TTreeModel *)(model() ))->setupModelData();
-     }
+     void resetList();
 
 };
 
