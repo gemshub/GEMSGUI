@@ -29,7 +29,7 @@ BRANCH_GEMS3K=master
 #sudo rm -rf /usr/local/include/spdlog
 #sudo rm -f  /usr/local/lib/libChemicalFun.$EXTN
 #sudo rm -f  /usr/local/lib/libThermoFun.$EXTN
-#sudo rm -f  /usr/local/lib/libGEMS3K.$EXTN
+sudo rm -f  /usr/local/lib/libGEMS3K.$EXTN
 
 # spdlog
 # if no spdlog installed in /usr/local/include/spdlog (copy only headers)
@@ -163,7 +163,7 @@ test -f /usr/local/lib/libGEMS3K.$EXTN || {
         # Building thermofun library
         mkdir -p ~/code && \
         cd ~/code && \
-        git clone https://github.com/gemshub/GEMS3K -b $BRANCH_GEMS3K && \
+        git clone https://github.com/gemshub/GEMS3K --depth 1 --branch v4.5.1 && \
         cd GEMS3K && \
         mkdir -p build && \
         cd build && \

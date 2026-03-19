@@ -1815,7 +1815,7 @@ int  ProcessWizard::getNPoints( int col )
 
     if( fabs(step) < 1e-30 )
     {
-        if( fabs(from) > 1e-30 || fabs(until) > 1e-30 )
+        if( (fabs(from) > 1e-30 || fabs(until) > 1e-30) && getType()!= 'G')
             nP = 1;            // changed by DK 25.02.10
         else nP = -1;
     }
