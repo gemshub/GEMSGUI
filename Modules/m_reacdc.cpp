@@ -1720,6 +1720,9 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();
+        if(aObj[ o_resdref ]->GetN() != rc[q].Nsd) {
+            gui_logger->warn("record {} illegal Nsd {}", str_key, rc[q].Nsd);
+        }
         return;
     case UNDF_:
     case NONE_:
