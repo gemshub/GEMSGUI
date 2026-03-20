@@ -913,7 +913,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
   {
      if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
      {	  err +=" ";
-          err += std::string(CSD->DCNL[kk],0, MaxDCN);
+          err += CSD->DCNL[kk];
           if(!((++jj)%5)) err += "\n";
      }
   }
@@ -1031,7 +1031,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
   {
      if( tp_mark[TMulti::sm->GetPM()->muj[kk]]==1 )
      {	  err +=" ";
-          err += std::string(CSD->DCNL[kk],0, MaxDCN);
+          err += CSD->DCNL[kk];
           if(!((++jj)%5)) err += "\n";
      }
   }

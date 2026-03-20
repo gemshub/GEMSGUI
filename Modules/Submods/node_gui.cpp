@@ -211,24 +211,29 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
     for( i1=0; i1< CSD->nIC*CSD->nDC; i1++ )
         CSD->A[i1] = pmm->A[i1];
 
+    CSD->PHNL.resize(CSD->nPH);
     for( i1=0; i1< CSD->nPH; i1++ )
     {
         CSD->nDCinPH[i1] = pmm->L1[i1];
         CSD->ccPH[i1] = pmm->PHC[i1];
-        fillValue( CSD->PHNL[i1], ' ', MaxPHN );
-        copyValues( CSD->PHNL[i1], pmm->SF[i1]+MAXSYMB, std::min(MaxPHN,(long int)MAXPHNAME) );
+        CSD->PHNL[i1] = char_array_to_string(pmm->SF[i1]+MAXSYMB, MAXPHNAME);
+        strip(CSD->PHNL[i1]);
     }
+    CSD->ICNL.resize(CSD->nIC);
     for( i1=0; i1< CSD->nIC; i1++ )
     {
         CSD->ICmm[i1] = pmm->Awt[i1]/kg_to_g;
         CSD->ccIC[i1] = pmm->ICC[i1];
-        copyValues( CSD->ICNL[i1], pmm->SB[i1] , std::min(MaxICN,(long int)MAXICNAME) );
+        CSD->ICNL[i1] = char_array_to_string(pmm->SB[i1], MAXICNAME);
+        strip(CSD->ICNL[i1]);
     }
+    CSD->DCNL.resize(CSD->nDC);
     for( i1=0; i1< CSD->nDC; i1++ )
     {
         CSD->DCmm[i1] = pmm->MM[i1]/kg_to_g;
         CSD->ccDC[i1] = pmm->DCC[i1];
-        copyValues( CSD->DCNL[i1], pmm->SM[i1] , std::min(MaxDCN,(long int)MAXDCNAME) );
+        CSD->DCNL[i1] = char_array_to_string(pmm->SM[i1], MAXDCNAME);
+        strip(CSD->DCNL[i1]);
     }
 
     // set default data to DataBr
