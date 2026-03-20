@@ -627,219 +627,220 @@ TReacDC::RCthermo( int q, int p )
 
     // if( CE != CTM_MRB )  // Provisional for MRB model - DK on 06.08.07
     if (CE != CTM_IKZ)  // Provisional for Lagrange logK interpolation; to calculate logK if T, P are close to std - DM 17-02-2025
-    if( fabs( aW.twp->T - 298.15 ) < 0.01 && fabs(aW.twp->P-1.) < 0.01 )
-    {   // standard conditions (Tr,Pr)
-        aW.twp->K = rcp->Ks[0];
-        aW.twp->lgK = rcp->Ks[1];
-        aW.twp->dG =  rcp->Gs[0];
-        aW.twp->dS =  rcp->Ss[0];
-        aW.twp->dH =  rcp->Hs[0];
-        aW.twp->dCp = rcp->Cps[0];
-        aW.twp->dV =  rcp->Vs[0];
-        aW.twp->G =  rcp->Gs[1];
-        aW.twp->S =  rcp->Ss[1];
-        aW.twp->H =  rcp->Hs[1];
-        aW.twp->Cp = rcp->Cps[1];
-        aW.twp->V =  rcp->Vs[1];
-        return;
-    }
+        if( fabs( aW.twp->T - 298.15 ) < 0.01 && fabs(aW.twp->P-1.) < 0.01 )
+        {   // standard conditions (Tr,Pr)
+            aW.twp->K = rcp->Ks[0];
+            aW.twp->lgK = rcp->Ks[1];
+            aW.twp->dG =  rcp->Gs[0];
+            aW.twp->dS =  rcp->Ss[0];
+            aW.twp->dH =  rcp->Hs[0];
+            aW.twp->dCp = rcp->Cps[0];
+            aW.twp->dV =  rcp->Vs[0];
+            aW.twp->G =  rcp->Gs[1];
+            aW.twp->S =  rcp->Ss[1];
+            aW.twp->H =  rcp->Hs[1];
+            aW.twp->Cp = rcp->Cps[1];
+            aW.twp->V =  rcp->Vs[1];
+            return;
+        }
     if( rcp != rc+q )
         ods_link( q );
     aW.ods_link( p );
     TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
 
-    /*  memcpy( dckey, rc[q].pstate, DC_RKLEN ); */
-    //  dckey[DC_RKLEN] = 0;
+    try {
+        /*  memcpy( dckey, rc[q].pstate, DC_RKLEN ); */
+        //  dckey[DC_RKLEN] = 0;
 
-    if( CM == CTPM_HKF || CE == CTM_MRB || CE == CTM_DKR )
-    {
-        // calculate water properties from SUPCRT subroutines, if necessary
-        if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
-               /* ( aW.twp->P > 1e-4 && */ fabs( aW.twp->P - aSta.Pres ) > 0.001 ) // )
-        {  // calculate water properties from HGK EoS
-            aSta.Temp = aW.twp->TC;
-            aSta.Pres = aW.twp->P;
-            TSupcrt supCrt;
-            unsigned int triple = 1;
-            if (CF == CEM_H2O_NEA_HGK)
-                triple = 2;
-            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres, triple);
-            aW.twp->P = aSta.Pres;
-        }
-
-        // pull water properties from WATERPARAM
-        rho = aSta.Dens[aSpc.isat];
-        alp = aWp.Alphaw[aSpc.isat];
-        dal = aWp.dAldT[aSpc.isat];
-        bet = aWp.Betaw[aSpc.isat];
-        eps = aWp.Dielw[aSpc.isat];
-        xborn = aWp.XBorn[aSpc.isat];
-        yborn = aWp.YBorn[aSpc.isat];
-        //zborn = aWp.ZBorn[aSpc.isat];
-        qborn = aWp.QBorn[aSpc.isat];
-
-        // recalculate and assign water properties
-        aW.twp->P = aSta.Pres;  // pressure
-        aW.twp->wRo  = aSta.Dens[aSpc.isat];  // density (g cm-3)
-        aW.twp->wEps = aWp.Dielw[aSpc.isat];  // dielectric constant
-        aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];  // expansibility
-        aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];  // T derivative
-        aW.twp->wBet  = aWp.Betaw[aSpc.isat];  // compressibility
-        // aW.twp->wVis = aWp.Viscw[aSpc.isat];  // dynamic viscosity
-        aW.twp->wdRdT = - alp * rho;
-        aW.twp->wd2RdT2 = rho * ( pow(alp,2.) - dal );
-        aW.twp->wdRdP = bet * rho;
-        aW.twp->wdEdT = yborn * pow(eps,2.);
-        aW.twp->wd2EdT2 = (xborn + 2.*eps*pow(yborn,2.)) * pow(eps,2.);
-        aW.twp->wdEdP = qborn * pow(eps,2.);
-    }
-
-    w_dyn_new();
-
-    //aSpc.on_sat_curve = false; // 01.06.2016 - needs testing
-
-    // test the component of reaction and calculate its t/d properties
-    for( j=0; j<rc[q].nDC; j++ )
-    {
-        strncpy( dckey, rc[q].DCk[j], DC_RKLEN );  // Override off !!!
-        // !!!!!!!! except "any"=* field in data base record
-        aW.ods_link( p+1 );
-        /* clear new TPwork structure */
-        aW.set_zero( p+1 );
-        aW.twp->P = aW.WW(p).P;
-        aW.twp->Pst = aW.WW(p).Pst;
-        aW.twp->TC = aW.WW(p).TC;
-        aW.twp->T = aW.WW(p).T;
-        aW.twp->TCst = aW.WW(p).TCst;
-        aW.twp->Tst = aW.WW(p).Tst;
-        aW.twp->RT = aW.WW(p).RT;
-        aW.twp->wRo = aW.WW(p).wRo;
-        aW.twp->wEps = aW.WW(p).wEps;
-        aW.twp->wAlp  = aW.WW(p).wAlp;
-        aW.twp->wdAlpdT = aW.WW(p).wdAlpdT;
-        aW.twp->wBet  = aW.WW(p).wBet;
-        // aW.twp->wVis = aW.WW(p).wVis;
-        aW.twp->wdRdT = aW.WW(p).wdRdT;
-        aW.twp->wd2RdT2 = aW.WW(p).wd2RdT2;
-        aW.twp->wdRdP = aW.WW(p).wdRdP;
-        aW.twp->wdEdT = aW.WW(p).wdEdT;
-        aW.twp->wd2EdT2 = aW.WW(p).wd2EdT2;
-        aW.twp->wdEdP = aW.WW(p).wdEdP;
-        aW.twp->unE = aW.WW(p).unE;  /* test units of measurement */
-        aW.twp->unV = aW.WW(p).unV;
-        memcpy( aW.twp->DRkey, dckey, DC_RKLEN );
-
-        switch( rc[q].rDC[j] )
+        if( CM == CTPM_HKF || CE == CTM_MRB || CE == CTM_DKR )
         {
-        case SRC_REACDC: /* recursively load another ReacDC record */
-            ods_link( q+1 );
-            TryRecInp( dckey, tim, q+1 );
-            aW.twp->pSD = SRC_REACDC;
-            aW.twp->pTM = S_OFF;
-            aW.twp->Pst = rc[q+1].Pst;
-            aW.twp->TCst = rc[q+1].TCst;
-            aW.twp->T = aW.twp->TC + C_to_K;
-            // Recursive call of RCthermo()!
-            RCthermo( q+1, p+1 );
-            break;
-        case SRC_FICT:   /* fictive component */
-            break;
-        case SRC_DCOMP: /* thermochemical component */
-            aDC->ods_link( 0 );   /* (q+1) ??? */
-            aDC->TryRecInp( dckey, tim, 0 );
-            aW.twp->pSD = SRC_DCOMP;
-            aW.twp->pTM = S_ON;
-            aW.twp->Pst = aDC->dcp->Pst;
-            aW.twp->TCst = aDC->dcp->TCst;
-            aW.twp->T = aW.twp->TC + C_to_K;
-            aDC->DCthermo( 0, p+1 ); // calculate properties at T,P
-            aW.WW(p).P = aW.twp->P;  // !!!!!!return P on Psat curve
-            break;
-        case SRC_NEWDC: /* new component */
-            aW.twp->pSD = SRC_NEWDC;
-            aW.twp->pTM = S_REM;
-            isotop = 0;
-            goto CALCULATE_DELTA_R;
-        case SRC_NEWISO: /* new isotopic form?*/
-            aW.twp->pSD = SRC_NEWISO;
-            aW.twp->pTM = S_REM;
-            isotop = 1;
-            goto CALCULATE_DELTA_R;
-        default:
-            Error( GetName(),"E01RErun: Invalid DC code in RCthermo()");
+            // calculate water properties from SUPCRT subroutines, if necessary
+            if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
+                /* ( aW.twp->P > 1e-4 && */ fabs( aW.twp->P - aSta.Pres ) > 0.001 ) // )
+            {  // calculate water properties from HGK EoS
+                aSta.Temp = aW.twp->TC;
+                aSta.Pres = aW.twp->P;
+                TSupcrt supCrt;
+                unsigned int triple = 1;
+                if (CF == CEM_H2O_NEA_HGK)
+                    triple = 2;
+                supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres, triple);
+                aW.twp->P = aSta.Pres;
+            }
+
+            // pull water properties from WATERPARAM
+            rho = aSta.Dens[aSpc.isat];
+            alp = aWp.Alphaw[aSpc.isat];
+            dal = aWp.dAldT[aSpc.isat];
+            bet = aWp.Betaw[aSpc.isat];
+            eps = aWp.Dielw[aSpc.isat];
+            xborn = aWp.XBorn[aSpc.isat];
+            yborn = aWp.YBorn[aSpc.isat];
+            //zborn = aWp.ZBorn[aSpc.isat];
+            qborn = aWp.QBorn[aSpc.isat];
+
+            // recalculate and assign water properties
+            aW.twp->P = aSta.Pres;  // pressure
+            aW.twp->wRo  = aSta.Dens[aSpc.isat];  // density (g cm-3)
+            aW.twp->wEps = aWp.Dielw[aSpc.isat];  // dielectric constant
+            aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];  // expansibility
+            aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];  // T derivative
+            aW.twp->wBet  = aWp.Betaw[aSpc.isat];  // compressibility
+            // aW.twp->wVis = aWp.Viscw[aSpc.isat];  // dynamic viscosity
+            aW.twp->wdRdT = - alp * rho;
+            aW.twp->wd2RdT2 = rho * ( pow(alp,2.) - dal );
+            aW.twp->wdRdP = bet * rho;
+            aW.twp->wdEdT = yborn * pow(eps,2.);
+            aW.twp->wd2EdT2 = (xborn + 2.*eps*pow(yborn,2.)) * pow(eps,2.);
+            aW.twp->wdEdP = qborn * pow(eps,2.);
         }
 
-        /* Unload work structure to REACDC */
-        rc[q].ParDC[j][_Gs_] = aW.twp->G;
-        rc[q].ParDC[j][_Hs_] = aW.twp->H;
-        rc[q].ParDC[j][_Ss_] = aW.twp->S;
-        rc[q].ParDC[j][_Cps_] = aW.twp->Cp;
-        rc[q].ParDC[j][_Vs_] = aW.twp->V;
+        w_dyn_new();
 
-    } /* j */
-    /* Error? */  aW.WW(p).pTM = S_REM;
+        //aSpc.on_sat_curve = false; // 01.06.2016 - needs testing
 
-CALCULATE_DELTA_R:
-    aW.ods_link( p );
-    if( rcp != rc+q )
-        ods_link( q );
-    if( rc[q].rDC[rc[q].nDC-1] == SRC_DCOMP ||
+        // test the component of reaction and calculate its t/d properties
+        for( j=0; j<rc[q].nDC; j++ )
+        {
+            strncpy( dckey, rc[q].DCk[j], DC_RKLEN );  // Override off !!!
+            // !!!!!!!! except "any"=* field in data base record
+            aW.ods_link( p+1 );
+            /* clear new TPwork structure */
+            aW.set_zero( p+1 );
+            aW.twp->P = aW.WW(p).P;
+            aW.twp->Pst = aW.WW(p).Pst;
+            aW.twp->TC = aW.WW(p).TC;
+            aW.twp->T = aW.WW(p).T;
+            aW.twp->TCst = aW.WW(p).TCst;
+            aW.twp->Tst = aW.WW(p).Tst;
+            aW.twp->RT = aW.WW(p).RT;
+            aW.twp->wRo = aW.WW(p).wRo;
+            aW.twp->wEps = aW.WW(p).wEps;
+            aW.twp->wAlp  = aW.WW(p).wAlp;
+            aW.twp->wdAlpdT = aW.WW(p).wdAlpdT;
+            aW.twp->wBet  = aW.WW(p).wBet;
+            // aW.twp->wVis = aW.WW(p).wVis;
+            aW.twp->wdRdT = aW.WW(p).wdRdT;
+            aW.twp->wd2RdT2 = aW.WW(p).wd2RdT2;
+            aW.twp->wdRdP = aW.WW(p).wdRdP;
+            aW.twp->wdEdT = aW.WW(p).wdEdT;
+            aW.twp->wd2EdT2 = aW.WW(p).wd2EdT2;
+            aW.twp->wdEdP = aW.WW(p).wdEdP;
+            aW.twp->unE = aW.WW(p).unE;  /* test units of measurement */
+            aW.twp->unV = aW.WW(p).unV;
+            memcpy( aW.twp->DRkey, dckey, DC_RKLEN );
+
+            switch( rc[q].rDC[j] )
+            {
+            case SRC_REACDC: /* recursively load another ReacDC record */
+                ods_link( q+1 );
+                TryRecInp( dckey, tim, q+1 );
+                aW.twp->pSD = SRC_REACDC;
+                aW.twp->pTM = S_OFF;
+                aW.twp->Pst = rc[q+1].Pst;
+                aW.twp->TCst = rc[q+1].TCst;
+                aW.twp->T = aW.twp->TC + C_to_K;
+                // Recursive call of RCthermo()!
+                RCthermo( q+1, p+1 );
+                break;
+            case SRC_FICT:   /* fictive component */
+                break;
+            case SRC_DCOMP: /* thermochemical component */
+                aDC->ods_link( 0 );   /* (q+1) ??? */
+                aDC->TryRecInp( dckey, tim, 0 );
+                aW.twp->pSD = SRC_DCOMP;
+                aW.twp->pTM = S_ON;
+                aW.twp->Pst = aDC->dcp->Pst;
+                aW.twp->TCst = aDC->dcp->TCst;
+                aW.twp->T = aW.twp->TC + C_to_K;
+                aDC->DCthermo( 0, p+1 ); // calculate properties at T,P
+                aW.WW(p).P = aW.twp->P;  // !!!!!!return P on Psat curve
+                break;
+            case SRC_NEWDC: /* new component */
+                aW.twp->pSD = SRC_NEWDC;
+                aW.twp->pTM = S_REM;
+                isotop = 0;
+                goto CALCULATE_DELTA_R;
+            case SRC_NEWISO: /* new isotopic form?*/
+                aW.twp->pSD = SRC_NEWISO;
+                aW.twp->pTM = S_REM;
+                isotop = 1;
+                goto CALCULATE_DELTA_R;
+            default:
+                Error( GetName(),"E01RErun: Invalid DC code in RCthermo()");
+            }
+
+            /* Unload work structure to REACDC */
+            rc[q].ParDC[j][_Gs_] = aW.twp->G;
+            rc[q].ParDC[j][_Hs_] = aW.twp->H;
+            rc[q].ParDC[j][_Ss_] = aW.twp->S;
+            rc[q].ParDC[j][_Cps_] = aW.twp->Cp;
+            rc[q].ParDC[j][_Vs_] = aW.twp->V;
+
+        } /* j */
+        /* Error? */  aW.WW(p).pTM = S_REM;
+
+    CALCULATE_DELTA_R:
+        aW.ods_link( p );
+        if( rcp != rc+q )
+            ods_link( q );
+        if( rc[q].rDC[rc[q].nDC-1] == SRC_DCOMP ||
             rc[q].rDC[rc[q].nDC-1] == SRC_REACDC )
-    { /*Calc parameters of reaction without a new component */
-        Calc_rDCD( q, p );
-        return;
-    }
+        { /*Calc parameters of reaction without a new component */
+            Calc_rDCD( q, p );
+            return;
+        }
 
-    /* calc delta for the reaction at TP */
-    aW.WW(p).pTM = S_REM;
-    switch( CM )
-    {
-    case CTPM_HKF:   // Not used in reacDC presently !
-        switch( CE )
+        /* calc delta for the reaction at TP */
+        aW.WW(p).pTM = S_REM;
+        switch( CM )
         {
-        default:
-            Error(dckey, "E12RErun: Invalid CE method flag!");
+        case CTPM_HKF:   // Not used in reacDC presently !
+            switch( CE )
+            {
+            default:
+                Error(dckey, "E12RErun: Invalid CE method flag!");
+                break;
+            case CTM_HKF:
+                calc_tphkf_r( q, p );
+                break; /* calc aqueous species */
+            }
             break;
-        case CTM_HKF:
-            calc_tphkf_r( q, p );
-            break; /* calc aqueous species */
-        }
-        break;
-    case CTPM_CPT:
-    case CTPM_REA: /* calculate reaction properties at T,P */
-        switch( CE )
-        {
-        case CTM_LGX:
-        case CTM_LGK:
-        case CTM_EK0:
-        case CTM_EK1:
-        case CTM_EK3:
-        case CTM_EK2:
-            calc_lgk_r( q, p, CE, CV  );
-            break; /* On lgK(T) */
-        case CTM_IKZ:
-            calc_r_interp( q, p, CE, CV );
-            break;
-            /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
+        case CTPM_CPT:
+        case CTPM_REA: /* calculate reaction properties at T,P */
+            switch( CE )
+            {
+            case CTM_LGX:
+            case CTM_LGK:
+            case CTM_EK0:
+            case CTM_EK1:
+            case CTM_EK3:
+            case CTM_EK2:
+                calc_lgk_r( q, p, CE, CV  );
+                break; /* On lgK(T) */
+            case CTM_IKZ:
+                calc_r_interp( q, p, CE, CV );
+                break;
+                /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
                                break;  */
-        case CTM_DKR: // Marshall-Franck density model
-            calc_r_FMD( q, p, CE, CV );
+            case CTM_DKR: // Marshall-Franck density model
+                calc_r_FMD( q, p, CE, CV );
+                break;
+            case CTM_MRB: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
+                calc_r_MRB( q, p, CE, CV );
+                break;
+            default:
+                Error(dckey,"E13RErem: Invalid CE method flag!");
+            }
             break;
-        case CTM_MRB: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
-             calc_r_MRB( q, p, CE, CV );
+        case CTPM_ISO:
+            calc_iso_a( q, p ); // isotopic forms
+            break;
+        case CTPM_SOR: /* sorption - not used in this version */
+            calc_exion_r( q, p );
             break;
         default:
-            Error(dckey,"E13RErem: Invalid CE method flag!");
-        }
-        break;
-    case CTPM_ISO:
-        calc_iso_a( q, p ); // isotopic forms
-        break;
-    case CTPM_SOR: /* sorption - not used in this version */
-        calc_exion_r( q, p );
-        break;
-    default:
         {  /* Invalid code method of calculation?*/
             std::string msg = "W14RErun: Invalid CM method flag!";
             msg += dckey;
@@ -848,76 +849,85 @@ CALCULATE_DELTA_R:
             Error( dckey, "E14RErun: Invalid CM method flag in ReacDC!");
             //  else  RecBuild( dckey );  // !!!!!! Recalc new record?
         }
-     }
-    /* Volume */
-    switch ( CV )
+        }
+        /* Volume */
+        switch ( CV )
+        {
+        case CPM_CON:
+        case CPM_VKE:
+        case CPM_VBE:
+        case CPM_NUL:   // Added by KD on 15.07.03
+            // case CPM_VBM:
+            // case CPM_CEH: // constant volume only in this version!
+            if( (CE != CTM_MRB) && (CE != CTM_DKR) )  // if not Ryzhenko-Bryzgalin model (provisional)
+                calc_tpcv_r( q, p, CM, CV );
+        default:
+            break;
+        }
+
+        /* Calc t/d properties of new component */
+        if( !isotop )
+        { /* this is a usual reaction  */
+            double G=0.0, S=0.0, H=0.0, Cp=0.0, V=0.0;
+            for( j=0; j<rc[q].nDC-1; j++ )
+            {
+                G  += rc[q].scDC[j]*rc[q].ParDC[j][_Gs_];
+                S  += rc[q].scDC[j]*rc[q].ParDC[j][_Ss_];
+                H  += rc[q].scDC[j]*rc[q].ParDC[j][_Hs_];
+                Cp += rc[q].scDC[j]*rc[q].ParDC[j][_Cps_];
+                V  += rc[q].scDC[j]*rc[q].ParDC[j][_Vs_];
+            }
+            aW.WW(p).G =  (aW.WW(p).dG - G)/rc[q].scDC[rc[q].nDC-1];
+            aW.WW(p).S =  (aW.WW(p).dS - S)/rc[q].scDC[rc[q].nDC-1] /* -foS */ ;
+            aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
+            aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
+            if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
+            {
+                aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
+                calc_tpcv_r2( q, p, CM, CPM_CON); // apply correction to rdc assuming constant volume
+            } else
+                aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+        }
+        else
+        { /*This is an isotopic form pseudo-reaction */
+            double R_T, LNK;
+            double G=0.0, S=0.0, H=0.0, Cp=0.0, V=0.0;
+
+            R_T = aW.WW(p).T * R_CONSTANT;
+            LNK = aW.WW(p).lgK / 1000;
+
+            for( j=0; j < rc[q].nDC-1; j++ )
+            {
+                G  += rc[q].scDC[j]*(rc[q].ParDC[j][_Gs_]+rc[q].Nix[j]*R_T*LNK);
+                S  += rc[q].scDC[j]*(rc[q].ParDC[j][_Ss_]+rc[q].Nix[j]*aW.WW(p).dS);
+                H  += rc[q].scDC[j]*rc[q].ParDC[j][_Hs_];
+                Cp += rc[q].scDC[j]*rc[q].ParDC[j][_Cps_];
+                V  += rc[q].scDC[j]*rc[q].ParDC[j][_Vs_];
+            }
+            aW.WW(p).G =  -G/rc[q].scDC[rc[q].nDC-1];
+            aW.WW(p).S =  -S/rc[q].scDC[rc[q].nDC-1];
+            aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
+            aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
+            if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
+            {
+                aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
+                calc_tpcv_r2( q, p, CM, CPM_CON ); // apply correction to rdc assuming constant volume
+            } else
+                aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
+
+        }
+        //Sveta 10/09/99
+        w_dyn_kill();
+    }
+    catch( TError& xcpt )
     {
-    case CPM_CON:
-    case CPM_VKE:
-    case CPM_VBE:
-    case CPM_NUL:   // Added by KD on 15.07.03
-    // case CPM_VBM:
-    // case CPM_CEH: // constant volume only in this version!
-         if( (CE != CTM_MRB) && (CE != CTM_DKR) )  // if not Ryzhenko-Bryzgalin model (provisional)
-            calc_tpcv_r( q, p, CM, CV );
-    default:
-        break;
+        aW.ods_link( p );
+        if( rcp != rc+q )
+            ods_link( q );
+        w_dyn_kill();
+        std::string error_reacdc = char_array_to_string(rc[q].pstate, RE_RKLEN);
+        Error("RCthermo", "For record "+ error_reacdc + "\n" + xcpt.mess);
     }
-
-    /* Calc t/d properties of new component */
-    if( !isotop )
-    { /* this is a usual reaction  */
-        double G=0.0, S=0.0, H=0.0, Cp=0.0, V=0.0;
-        for( j=0; j<rc[q].nDC-1; j++ )
-        {
-            G  += rc[q].scDC[j]*rc[q].ParDC[j][_Gs_];
-            S  += rc[q].scDC[j]*rc[q].ParDC[j][_Ss_];
-            H  += rc[q].scDC[j]*rc[q].ParDC[j][_Hs_];
-            Cp += rc[q].scDC[j]*rc[q].ParDC[j][_Cps_];
-            V  += rc[q].scDC[j]*rc[q].ParDC[j][_Vs_];
-        }
-        aW.WW(p).G =  (aW.WW(p).dG - G)/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).S =  (aW.WW(p).dS - S)/rc[q].scDC[rc[q].nDC-1] /* -foS */ ;
-        aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
-        if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
-        {
-            aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
-            calc_tpcv_r2( q, p, CM, CPM_CON); // apply correction to rdc assuming constant volume
-        } else
-            aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
-    }
-    else
-    { /*This is an isotopic form pseudo-reaction */
-        double R_T, LNK;
-        double G=0.0, S=0.0, H=0.0, Cp=0.0, V=0.0;
-
-        R_T = aW.WW(p).T * R_CONSTANT;
-        LNK = aW.WW(p).lgK / 1000;
-
-        for( j=0; j < rc[q].nDC-1; j++ )
-        {
-            G  += rc[q].scDC[j]*(rc[q].ParDC[j][_Gs_]+rc[q].Nix[j]*R_T*LNK);
-            S  += rc[q].scDC[j]*(rc[q].ParDC[j][_Ss_]+rc[q].Nix[j]*aW.WW(p).dS);
-            H  += rc[q].scDC[j]*rc[q].ParDC[j][_Hs_];
-            Cp += rc[q].scDC[j]*rc[q].ParDC[j][_Cps_];
-            V  += rc[q].scDC[j]*rc[q].ParDC[j][_Vs_];
-        }
-        aW.WW(p).G =  -G/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).S =  -S/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
-        aW.WW(p).Cp = (aW.WW(p).dCp - Cp)/rc[q].scDC[rc[q].nDC-1];
-        if( rc[q].pstate[0] == CP_SOLID && CV == CPM_OFF && aW.twp->P > 0.0 ) // molar volume is set previously
-        {
-            aW.WW(p).dV = aW.WW(p).V*rc[q].scDC[rc[q].nDC-1] + V; // calculate new reaction molar volume
-            calc_tpcv_r2( q, p, CM, CPM_CON ); // apply correction to rdc assuming constant volume
-        } else
-            aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
-
-    }
-    //Sveta 10/09/99
-    w_dyn_kill();
-
 }
 
 

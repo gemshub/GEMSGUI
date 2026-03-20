@@ -104,7 +104,7 @@ OBJECTS_DIR       = obj
 #DEPENDPATH   += "/usr/local/include/GEMS3K"
 #LIBS += -lzmq -lGEMS3K
 #link sources
-GEMS3K_CPP     =  ../GEMS3K-4.5.1/GEMS3K
+GEMS3K_CPP     =  ../GEMS3K/GEMS3K
 GEMS3K_H     =  $$GEMS3K_CPP
 DEPENDPATH   += $$GEMS3K_H
 INCLUDEPATH   += $$GEMS3K_H
