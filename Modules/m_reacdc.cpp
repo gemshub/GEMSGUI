@@ -52,7 +52,9 @@ TReacDC::TReacDC( uint nrt ):
 void TReacDC::ods_link( int q)
 {
     ErrorIf( q >= nQ, GetName(), "E00RErem: Invalid link (q>=8)!" );
-
+    if( rcp != rc+q ) {
+        db->SetKey(rcp->pstate);
+    }
     // static
     //aObj[ o_repst]->SetPtr( rc[q].pstate );
     //aObj[ o_reps]->SetPtr( rc[q].psymb );
@@ -299,6 +301,10 @@ bool TReacDC::check_input( const char *key, int Level )
     bool iRet = false;
     if( Level != 1 )
         return true;
+
+    // Ask save changes before read depended records
+    MessageToSave();
+
     tre = rt[nRT]->Rtime();
     for( i=0; i<nQ; i++)
         if( rcp == &rc[i])
