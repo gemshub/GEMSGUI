@@ -1084,8 +1084,8 @@ void TSyst::unpackData()
                 sy.SCMT[ind][j] = STat->ssp->SCMT[i][j];
             if( sy.PNfsp != S_OFF )
                 sy.Nfsp[ind][j] = STat->ssp->Nfsp[i][j];
-            if( sy.PMaSdt != S_OFF )
-                sy.MaSdt[ind][j] = STat->ssp->MaSdt[i][j];
+            ///if( sy.PMaSdt != S_OFF )
+            ///    sy.MaSdt[ind][j] = STat->ssp->MaSdt[i][j];
             if( sy.PXcapA != S_OFF )
                 sy.XcapA[ind][j] = STat->ssp->XcapA[i][j];
             if( sy.PXcapB != S_OFF )

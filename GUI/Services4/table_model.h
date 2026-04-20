@@ -16,7 +16,7 @@ class KeyModel: public QAbstractTableModel
 
 public:
 
-    explicit KeyModel( QObject * parent, size_t irt, const char* akey_filter = "*" ):
+    explicit KeyModel( QObject * parent, size_t irt, const std::string& akey_filter = "*" ):
         QAbstractTableModel(parent),
         iRt(irt),
         full_list_selection( false ),
@@ -77,7 +77,7 @@ private:
       return  full_list_selection;
     }
 
-    void set_filter( const char* new_filter )
+    void set_filter( const std::string& new_filter )
     {
         beginResetModel();
         key_filter = new_filter;
@@ -110,7 +110,7 @@ class RDKeyModel: public KeyModel
 
 public:
 
-    explicit RDKeyModel( QObject * parent, const char* akey_filter = "*", short NsuT=0 );
+    explicit RDKeyModel( QObject * parent, const std::string& akey_filter = "*", short NsuT=0 );
     ~RDKeyModel() {}
 
 protected:

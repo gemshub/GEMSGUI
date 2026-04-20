@@ -53,7 +53,7 @@ void TReacDC::ods_link( int q)
 {
     ErrorIf( q >= nQ, GetName(), "E00RErem: Invalid link (q>=8)!" );
     if( rcp != rc+q ) {
-        db->SetKey(rcp->pstate);
+        db->SetKey(rc[q].pstate);
     }
     // static
     //aObj[ o_repst]->SetPtr( rc[q].pstate );

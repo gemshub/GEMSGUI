@@ -1121,9 +1121,11 @@ AGAIN_SETUP:
     {  /* Setup of default values */
         php->PphC = PH_SORPTION;
         for(int i=0; i<php->NsuT; i++ )
-        { /* if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) */
-            // php->SCMC[i] = php->sol_t[SCM_TYPE];  // fixed, 24.07.2006 (DK)
-            php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
+        {
+            if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) {
+                // php->SCMC[i] = php->sol_t[SCM_TYPE];  // fixed, 24.07.2006 (DK)
+                php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
+            }
 
             if( !php->FsiT )
                 php->FsiT[i] = 1.f/php->NsuT;
