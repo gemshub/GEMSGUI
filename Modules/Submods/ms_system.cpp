@@ -1080,12 +1080,14 @@ void TSyst::unpackData()
         if( ind < 0 ) continue;
         for( j=0; j<sy.NsTm; j++ )
         {
+            /*    Surfaces data should be updated from the database like other thermodynamic properties SD 21/04/26
             if( sy.PNfsp != S_OFF )
                 sy.SCMT[ind][j] = STat->ssp->SCMT[i][j];
             if( sy.PNfsp != S_OFF )
                 sy.Nfsp[ind][j] = STat->ssp->Nfsp[i][j];
-            ///if( sy.PMaSdt != S_OFF )
-            ///    sy.MaSdt[ind][j] = STat->ssp->MaSdt[i][j];
+            if( sy.PMaSdt != S_OFF )
+                sy.MaSdt[ind][j] = STat->ssp->MaSdt[i][j];
+            */
             if( sy.PXcapA != S_OFF )
                 sy.XcapA[ind][j] = STat->ssp->XcapA[i][j];
             if( sy.PXcapB != S_OFF )
@@ -1099,6 +1101,7 @@ void TSyst::unpackData()
         }
     }
 //   for( i=0; i<sy.Lsor; i++) dca dcomp ON adsorption ( mup->DCC[]=='X' )
+/*    Surfaces data should be updated from the database like other thermodynamic properties SD 21/04/26
     for( i=0; i<STat->ssp->DM[4]; i++)
     {
         ind = Prf->indDC( STat->ssp->dca[i] ) - ( mup->Ls - mup->Lads );
@@ -1106,11 +1109,9 @@ void TSyst::unpackData()
            continue;
         if( sy.PSATT != S_OFF )
         {
-            int mtM, msM, /* mtN,  msN, */kk;
+            int mtM, msM, kk;
             msM = aObj[o_sysatc]->GetM();
             mtM = aObj[o_sssatc]->GetM();
-//            msN = aObj[o_sysatc]->GetN();
-//            mtN = aObj[o_sssatc]->GetN();
             if(mtM >= msM)
             {
                for( kk=0; kk<MCAS; kk++ )
@@ -1120,31 +1121,25 @@ void TSyst::unpackData()
             {  char * satc_ = &STat->ssp->SATC[0][0];
                sy.SATC[ind][SA_MCA] = satc_[ i*2 + SA_MCA ];
                sy.SATC[ind][SA_EMX] = satc_[ i*2 + SA_EMX ];
-//               sy.SATC[ind][0] = STat->ssp->SATC[i][0];
-//               sy.SATC[ind][1] = STat->ssp->SATC[i][1];
             }
         }
-        if( sy.PMaSdj != S_OFF )
-// Extended by KD on 25.10.2004
+        if( sy.PMaSdj != S_OFF ) // Extended by KD on 25.10.2004
         {
-            int mtM, msM, /* mtN,  msN,*/ kk ;
+            int mtM, msM, kk ;
             msM = aObj[o_symasdj]->GetM();
             mtM = aObj[o_ssmasdj]->GetM();
-//            msN = aObj[o_symasdj]->GetN();
-//            mtN = aObj[o_ssmasdj]->GetN();
             if(mtM >= msM)
             {
                for( kk=0; kk<DFCN; kk++ )
                   sy.MaSdj[ind][kk] = STat->ssp->MaSdj[i][kk];
-//               sy.MaSdj[ind][PI_CD0] = STat->ssp->MaSdj[i][PI_CD0];
             }
             else { // For reading old SysEq records
                float *masdj_ = &STat->ssp->MaSdj[0][0];
-               sy.MaSdj[ind][PI_DEN]  = masdj_[i*mtM/*2*/];     // check if *2
-//            sy.MaSdj[ind]  = STat->ssp->MaSdj[i];
+               sy.MaSdj[ind][PI_DEN]  = masdj_[i*mtM];     // check if *2
             }
         }
     }
+*/
     if( sy.PULim != S_OFF || sy.PLLim != S_OFF )
         for( i=0; i<sy.Fik; i++) // phk  no zero in PUL/PLL
         {
