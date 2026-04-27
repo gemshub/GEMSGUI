@@ -795,6 +795,7 @@ TReacDC::RCthermo( int q, int p )
             rc[q].rDC[rc[q].nDC-1] == SRC_REACDC )
         { /*Calc parameters of reaction without a new component */
             Calc_rDCD( q, p );
+            w_dyn_kill();
             return;
         }
 

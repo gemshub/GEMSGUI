@@ -779,9 +779,9 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
     int kx, mcex;
 
     memset( dcn, 0, MAXRKEYLEN );
-    float Masdj0 = 1.;
-    if(php->MSDT) {
-       Masdj0 = php->MSDT[0][0];
+    float Masdj0 = 1.f;
+    if( php->MSDT && !approximatelyZero(php->MSDT[0][0]) ) {
+        Masdj0 = php->MSDT[0][0];
     }
     for( i=0; i<php->nDC; i++ )
     {  /*Get key */
