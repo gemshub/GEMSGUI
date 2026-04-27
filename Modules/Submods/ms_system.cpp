@@ -1074,20 +1074,19 @@ void TSyst::unpackData()
     }
 
 //  for( i=0; i<sy.Fia; i++) // pha Phase ON adsorbtion  ( mup->PHC[]=='x' )
+/*    Surfaces data should be updated from the database like other thermodynamic properties SD 21/04/26
     for( i=0; i<STat->ssp->DM[20]; i++)
     {
         ind = Prf->indPH( STat->ssp->pha[i] );
         if( ind < 0 ) continue;
         for( j=0; j<sy.NsTm; j++ )
         {
-            /*    Surfaces data should be updated from the database like other thermodynamic properties SD 21/04/26
             if( sy.PNfsp != S_OFF )
                 sy.SCMT[ind][j] = STat->ssp->SCMT[i][j];
             if( sy.PNfsp != S_OFF )
                 sy.Nfsp[ind][j] = STat->ssp->Nfsp[i][j];
             if( sy.PMaSdt != S_OFF )
                 sy.MaSdt[ind][j] = STat->ssp->MaSdt[i][j];
-            */
             if( sy.PXcapA != S_OFF )
                 sy.XcapA[ind][j] = STat->ssp->XcapA[i][j];
             if( sy.PXcapB != S_OFF )
@@ -1100,6 +1099,7 @@ void TSyst::unpackData()
                 sy.Xlam[ind][j] = STat->ssp->Xlam[i][j];
         }
     }
+*/
 //   for( i=0; i<sy.Lsor; i++) dca dcomp ON adsorption ( mup->DCC[]=='X' )
 /*    Surfaces data should be updated from the database like other thermodynamic properties SD 21/04/26
     for( i=0; i<STat->ssp->DM[4]; i++)
