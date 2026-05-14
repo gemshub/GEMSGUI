@@ -5,29 +5,24 @@ channels:
   - defaults
 
 dependencies:
-  # Cross-platform dependencies
   - cmake
   - git
+  - gcc_linux-64  # [linux] 
+  - gxx_linux-64  # [linux] 
+  - sysroot_linux-64 # [linux] 
+  - make  # [osx]
+  - make  # [linux]
   - ninja
-  - 7zip 
+  - 7zip  # [win]
   - gems3k>=4.5.2
+  #- thermofun>=0.4.3
   - cppzmq
+  - mesa-libgl-devel-conda-x86_64 # [osx]
+  - mesa-libgl-devel-conda-x86_64 # [linux]
   - qt6-main=6.10.2 
   - qt6-charts=6.10.2 
+  #- eigen=3.4.0
+  #- nlohmann_json
+  #- spdlog
   - python>=3.10
   - pytest
-
-  # Linux compilers and tools
-  - gcc_linux-64                  # [linux] 
-  - gxx_linux-64                  # [linux] 
-  - sysroot_linux-64              # [linux] 
-  - mesa-libgl-devel-conda-x86_64 # [linux]
-  - make                          # [linux]
-
-  # macOS compilers and tools (Apple Silicon)
-  - clang_osx-arm64               # [osx]
-  - clangxx_osx-arm64             # [osx]
-  - make                          # [osx]
-
-  # Windows compilers and tools
-  - compilers                     # [win]
