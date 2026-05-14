@@ -39,17 +39,12 @@ jobs:
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-activate: false
+          auto-activate: true
           activate-environment: base
           channels: conda-forge, defaults
           channel-priority: true
-
-      - name: Pin conda version
-        shell: bash -el {0}
-        run: |
-          conda install -n base conda=26.3.0
-          conda config --set auto_update_conda false
-          conda --version
+          auto-update-conda: false
+          conda-version: "26.3.0" 
 
       - name: Configuring Conda Environment
         run: |
