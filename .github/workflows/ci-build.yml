@@ -44,14 +44,14 @@ jobs:
           channels: conda-forge, defaults
           channel-priority: true
           auto-update-conda: false
-          conda-version: "26.3.0" 
+          conda-version: "26.1.0" 
 
       - name: Configuring Conda Environment
         run: |
           conda config --set always_yes yes --set changeps1 no
           conda config --add channels conda-forge
           conda install conda-devenv
-          conda-devenv
+          conda devenv
       
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
