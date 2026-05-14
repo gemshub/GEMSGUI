@@ -50,25 +50,17 @@ jobs:
       # Conda environment
       # -------------------------
       - name: Setup Conda
-        uses: conda-incubator/setup-miniconda@v4
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-activate: true
           channels: conda-forge
 
-      - name: Install conda-lock
-        shell: bash -l {0}
-        run: pip install conda-lock
-
       - name: Configuring Conda Environment
-        shell: bash -l {0}
         run: |
-          conda config --set always_yes yes
-          conda config --set changeps1 no
-          conda config --set solver libmamba
-          conda config --set path_conflict warn
-          conda clean -a -y
-          conda-lock -f environment.yml -p ${{ matrix.conda_platform }}
-          conda-lock install --name GEMSGUI conda-lock.yml
+          conda config --set always_yes yes --set changeps1 no
+          conda config --add channels conda-forge
+          conda install conda-devenv
+          $(conda info --base)/bin/conda-devenv
 
       # -------------------------
       # Build & Install

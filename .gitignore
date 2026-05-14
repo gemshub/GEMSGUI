@@ -15,4 +15,5 @@ build
 .vs
 .cache
 /gems3gui_with_gems3k_source.pro.user
+environment.yml
 
