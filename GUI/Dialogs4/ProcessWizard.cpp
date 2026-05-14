@@ -1807,7 +1807,7 @@ QStringList  ProcessWizard::getSelected( int nI )
 int  ProcessWizard::getNPoints( int col )
 {
     double from, until, step;
-    int nP = 1;
+    long int nP = 1;
 
     from = ui->tIters->item(0,col)->data(Qt::DisplayRole).toDouble();
     until = ui->tIters->item(1,col)->data(Qt::DisplayRole).toDouble();
@@ -1815,13 +1815,13 @@ int  ProcessWizard::getNPoints( int col )
 
     if( fabs(step) < 1e-30 )
     {
-        if( fabs(from) > 1e-30 || fabs(until) > 1e-30 )
+        if( (fabs(from) > 1e-30 || fabs(until) > 1e-30) && !( getType() == 'G'  && col == 6 ))
             nP = 1;            // changed by DK 25.02.10
         else nP = -1;
     }
     else {
         if( fabs(until) > 1e-30 )
-            nP  = static_cast<int>((until-from)/step+1.000001);
+            nP  = fabs(static_cast<long int>((until-from)/step+1.000001));
         else nP = -1;          // changed by DK 21.05.10
     }
     if( ( getType() == 'G'  && col == 6 ) || ( getType() == 'T' && col == 8 )) { // workaround for checking min.addition of titrant

@@ -779,6 +779,10 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
     int kx, mcex;
 
     memset( dcn, 0, MAXRKEYLEN );
+    float Masdj0 = 1.f;
+    if( php->MSDT && !approximatelyZero(php->MSDT[0][0]) ) {
+        Masdj0 = php->MSDT[0][0];
+    }
     for( i=0; i<php->nDC; i++ )
     {  /*Get key */
         memcpy( dcn, php->SM[i], DC_RKLEN );
@@ -894,17 +898,19 @@ TPhase::CalcPhaseRecord(  /*bool getDCC*/  )
                              php->DCC[i] == DC_SUR_MINAL ||
                              php->DCC[i] == DC_PEL_CARRIER) )
                        {
-                          php->MaSdj[i][PI_CD0] = a0;
-                          php->MaSdj[i][PI_CDB] = bp;
-                          php->MaSdj[i][PI_P1] = Fi;
-                          php->MaSdj[i][PI_P2] = cN;
+                           php->MaSdj[i][PI_DEN] = Masdj0;
+                           php->MaSdj[i][PI_CD0] = Z;
+                           php->MaSdj[i][PI_CDB] = Z;
+                           php->MaSdj[i][PI_P1] = Fi;
+                           php->MaSdj[i][PI_P2] = cN;
                        }
                        else
                        { //  Sorbent has no data for surface charges
-                          php->MaSdj[i][PI_CD0] = 0;
-                          php->MaSdj[i][PI_CDB] = 0;
-                          php->MaSdj[i][PI_P1] = 0;
-                          php->MaSdj[i][PI_P2] = 0;
+                           php->MaSdj[i][PI_DEN] = 0;
+                           php->MaSdj[i][PI_CD0] = 0;
+                           php->MaSdj[i][PI_CDB] = 0;
+                           php->MaSdj[i][PI_P1] = 0;
+                           php->MaSdj[i][PI_P2] = 0;
                        }
                     }
         }

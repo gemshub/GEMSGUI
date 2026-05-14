@@ -461,8 +461,7 @@ void TPhase::dyn_new(int q)
         ph[q].CapT =  static_cast<float (*)[2]>(aObj[ o_phcapt ]->Alloc( ph[q].NsuT, 2, F_));
 //        ph[q].SATC =  (char (*)[2]>(aObj[ o_phsatc ]->Alloc( ph[q].nDC, 2, A_);
         ph[q].SATC =  static_cast<char (*)[MCAS]>(aObj[ o_phsatc ]->Alloc( ph[q].nDC, MCAS, A_));
-//        ph[q].MaSdj = static_cast<float *>(aObj[ o_phmasdj ]->Alloc( ph[q].nDC, 1, F_);
-    ph[q].MaSdj = static_cast<float (*)[DFCN]>(aObj[ o_phmasdj ]->Alloc( ph[q].nDC, DFCN, F_));
+        ph[q].MaSdj = static_cast<float (*)[DFCN]>(aObj[ o_phmasdj ]->Alloc( ph[q].nDC, DFCN, F_));
     }
     else
     {
@@ -1121,9 +1120,11 @@ AGAIN_SETUP:
     {  /* Setup of default values */
         php->PphC = PH_SORPTION;
         for(int i=0; i<php->NsuT; i++ )
-        { /* if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) */
-            // php->SCMC[i] = php->sol_t[SCM_TYPE];  // fixed, 24.07.2006 (DK)
-            php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
+        {
+            if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) {
+                // php->SCMC[i] = php->sol_t[SCM_TYPE];  // fixed, 24.07.2006 (DK)
+                php->SCMC[i] = SC_BSM;  // changed, 14.07.2009 (TW)
+            }
 
             if( !php->FsiT )
                 php->FsiT[i] = 1.f/php->NsuT;

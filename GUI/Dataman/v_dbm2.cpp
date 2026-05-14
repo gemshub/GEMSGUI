@@ -625,6 +625,14 @@ std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)
         if( frstODjson!=frstOD && aObj[no]->GetDescription(0,0) == "internaldb" )
             continue;
         QString obj_key(aObj[no]->GetKeywd());
+        if( obj_key == "dSDval") {
+            auto nSd = aObj[o_dcdim]->Get(0, 2);
+            aObj[o_dcsdval]->Alloc(nSd, 1, V_SD_VALEN );
+        }
+        if( obj_key == "rSDval") {
+            auto nSd = aObj[o_redim]->Get(0, 7);
+            aObj[o_resdval]->Alloc(nSd, 1, V_SD_VALEN);
+        }
         aObj[no]->fromJsonValue(dodAll[obj_key]);
         if( obj_key == "dSDref") {
             auto nSd = aObj[no]->GetN();
