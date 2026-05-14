@@ -1,0 +1,20 @@
+name: GEMSGUI
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - cmake
+  - git
+  - gcc_linux-64       # [linux]
+  - gxx_linux-64       # [linux]
+  - sysroot_linux-64   # [linux]
+  - make               # [unix]
+  - ninja
+  - 7zip               # [win]
+  - gems3k>=4.5.2
+  - cppzmq
+  - mesa-libgl-devel-conda-x86_64  # [linux]
+  - qt6-main=6.10.2
+  - qt6-charts=6.10.2
+  - python>=3.10
+  - pytest

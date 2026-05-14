@@ -132,7 +132,7 @@ QVariant KeyModel::headerData(int section, Qt::Orientation orientation, int role
 
 
 
-RDKeyModel::RDKeyModel(QObject *parent, const char *akey_filter, short NsuT):
+RDKeyModel::RDKeyModel(QObject *parent, const std::string& akey_filter, short NsuT):
     KeyModel(parent, RT_DCOMP,  akey_filter),
     NsuT_selection( NsuT>0)
 { }

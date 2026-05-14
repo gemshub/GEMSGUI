@@ -454,7 +454,6 @@ void TMTparm::LoadMtparm( double cT, double cP )
         if( mup->DCS[j] == SRC_REACDC )
             aRC->TryRecInp( mup->SM[j], tim, 0 );
 
-
         /*calc thermodynamic data of Dependent Component*/
         aW.set_zero(0);
         aW.twp->P = tp.P;
@@ -699,7 +698,6 @@ void TMTparm::LoadMtparm( double cT, double cP )
     if( tp.PtvWr == S_REM ) tp.PtvWr = S_ON;
     if( tp.PtvFg == S_REM ) tp.PtvFg = S_ON;
     if( tp.PtvdVg == S_REM )tp.PtvdVg = S_ON;
-
 
     if( tp.mark && tp.G )
           polmod_test();

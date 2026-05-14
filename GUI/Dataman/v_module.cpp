@@ -548,7 +548,6 @@ void  TCModule::RunCalc()
     set_string("Calculation... ");
     clock_t t_start11, t_end11;
     t_start11 = clock();
-
     RecCalc( str.c_str() );
 
     // 19/02/2007 Sveta

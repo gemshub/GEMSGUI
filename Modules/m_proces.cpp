@@ -1370,7 +1370,7 @@ TProcess::internalCalc()
                                        K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
                 // proc_titr();
                 // test external functions SD 12/05/2010
-                GoldenSection gsData( pep->pXii[0], pep->pXii[1], pep->pXii[2], pep->Nui[1], ff_proc);
+                GoldenSection gsData( pep->pXii[0], pep->pXii[1], std::max(pep->pXii[2], 1e-16*fabs(pep->pXii[0])), pep->Nui[1], ff_proc);
                 pep->c_Eh = gsData.getMinimum();
                 pep->Loop = 2;
                 CalcEquat();
