@@ -7,16 +7,13 @@ channels:
 dependencies:
   - cmake
   - git
-  - gcc_linux-64  # [linux] 
-  - gxx_linux-64  # [linux] 
-  - sysroot_linux-64 # [linux] 
-  - make  # [unix]
+  - compilers
   - ninja
-  - 7zip  # [win]
+  - 7zip 
   - gems3k>=4.5.2
   #- thermofun>=0.4.3
   - cppzmq
-  - mesa-libgl-devel-conda-x86_64 # [unix]
+  - mesa-libgl-devel-conda-x86_64 # [linux]
   - qt6-main=6.10.2 
   - qt6-charts=6.10.2 
   #- eigen=3.4.0
