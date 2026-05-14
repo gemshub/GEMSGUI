@@ -39,8 +39,7 @@ jobs:
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-activate: true
-          activate-environment: base
+          auto-activate-base: false
           channels: conda-forge, defaults
           channel-priority: true
           auto-update-conda: false
