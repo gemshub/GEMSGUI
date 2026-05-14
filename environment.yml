@@ -13,7 +13,7 @@ dependencies:
   - gems3k>=4.5.2
   #- thermofun>=0.4.3
   - cppzmq
-  - mesa-libgl-devel-conda-x86_64 
+  #- mesa-libgl-devel-conda-x86_64 
   - qt6-main=6.10.2 
   - qt6-charts=6.10.2 
   #- eigen=3.4.0
