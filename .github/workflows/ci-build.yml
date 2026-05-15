@@ -50,7 +50,7 @@ jobs:
 
       - name: Run conda-devenv (Windows)
         if: runner.os == 'Windows'
-        run: conda devenv
+        run: conda-devenv
 
       - name: Run conda-devenv (Unix)
         if: runner.os != 'Windows'
