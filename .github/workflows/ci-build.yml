@@ -43,7 +43,7 @@ jobs:
           channels: conda-forge
 
       - name: Configuring Conda Environment
-        shell: bash
+        shell: bash -l {0}
         run: |
           conda config --set always_yes yes --set changeps1 no
           conda config --add channels conda-forge
