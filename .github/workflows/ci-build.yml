@@ -43,20 +43,17 @@ jobs:
           channels: conda-forge
 
       - name: Configuring Conda Environment
-        if: matrix.os != 'windows-latest'
+        shell: bash
         run: |
           conda config --set always_yes yes --set changeps1 no
           conda config --add channels conda-forge
           conda install conda-devenv
-          conda run -n base python -m conda_devenv
 
-      - name: Configuring Conda Environment
-        if: matrix.os == 'windows-latest'
-        run: |
-          conda config --set always_yes yes --set changeps1 no
-          conda config --add channels conda-forge
-          conda install conda-devenv
-          conda-devenv 
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            conda-devenv
+          else
+            conda run -n base python -m conda_devenv
+          fi
       
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'

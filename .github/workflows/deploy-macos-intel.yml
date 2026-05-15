@@ -61,6 +61,7 @@ jobs:
           conda config --add channels conda-forge
           conda install conda-devenv
           $(conda info --base)/bin/conda-devenv
+        # conda run -n base python -m conda_devenv
 
       # -------------------------
       # Build & Install
