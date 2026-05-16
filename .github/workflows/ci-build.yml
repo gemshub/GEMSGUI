@@ -39,7 +39,8 @@ jobs:
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-activate: true
+          auto-activate: false
+          activate-environment: base
           channels: conda-forge
 
       - name: Configuring Conda Environment
@@ -50,7 +51,8 @@ jobs:
 
       - name: Run conda-devenv (Windows)
         if: runner.os == 'Windows'
-        run: Get-ChildItem "$(conda info --base)" -Recurse | Where-Object { $_.Name -like "*devenv*" }
+        run: | 
+          & "$(conda info --base)\Scripts\conda-devenv.exe"
 
       - name: Run conda-devenv (Unix)
         if: runner.os != 'Windows'
