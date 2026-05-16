@@ -48,15 +48,7 @@ jobs:
           conda config --set always_yes yes --set changeps1 no
           conda config --add channels conda-forge
           conda install conda-devenv
-
-      - name: Run conda-devenv (Windows)
-        if: runner.os == 'Windows'
-        run: | 
-          & "$(conda info --base)\Scripts\conda-devenv.exe"
-
-      - name: Run conda-devenv (Unix)
-        if: runner.os != 'Windows'
-        run: $(conda info --base)/bin/conda-devenv 
+          conda-devenv
       # conda run -n base python -m conda_devenv
       
       - name: Building, Testing & Installing GEMSGUI
