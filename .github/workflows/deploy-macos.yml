@@ -52,7 +52,8 @@ jobs:
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-activate: true
+          auto-activate: false
+          activate-environment: base
           channels: conda-forge
 
       - name: Configuring Conda Environment
@@ -60,8 +61,7 @@ jobs:
           conda config --set always_yes yes --set changeps1 no
           conda config --add channels conda-forge
           conda install conda-devenv
-          $(conda info --base)/bin/conda-devenv
-      # conda run -n base python -m conda_devenv
+          conda run -n base python -m conda_devenv
       
       # -------------------------
       # Build & Install
