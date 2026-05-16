@@ -50,8 +50,7 @@ jobs:
 
       - name: Run conda-devenv (Windows)
         if: runner.os == 'Windows'
-        run: | 
-          & "$(conda info --base)\Scripts\conda-devenv.exe"
+        run: Get-ChildItem "$(conda info --base)" -Recurse | Where-Object { $_.Name -like "*devenv*" }
 
       - name: Run conda-devenv (Unix)
         if: runner.os != 'Windows'
