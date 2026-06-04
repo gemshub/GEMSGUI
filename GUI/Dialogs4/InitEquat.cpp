@@ -43,15 +43,15 @@ void GetListsnRT( int nRT, std::vector<pagesSetupData>& wnData, std::vector<page
         scalarsList.push_back(  pagesSetupData("Zz",o_dczz));  //"Formula charge of this species (Dependent Component) "
         scalarsList.push_back(  pagesSetupData("M0",o_dcmwt));  //"Molecular (gram-formula) mass, g/mol "
         scalarsList.push_back(  pagesSetupData("V0d[0]",o_dcmvs));  //"Molar volume V0 of Dependent Component at standard state (J/bar)_
-        //     scalarsList.push_back(  pagesSetupData("V0d[1]",o_dcmvs,1));  // Uncertainty of V0 (J/bar) "
+        scalarsList.push_back(  pagesSetupData("V0d[1]",o_dcmvs,1));  // Uncertainty of V0 (J/bar) "
         scalarsList.push_back(  pagesSetupData("G0d[0]",o_dcgs)); //"Standard molar (partial molal) Gibbs energy of formation of DC from IC at Tr and Pr_
-        //     scalarsList.push_back(  pagesSetupData("G0d[1]",o_dcgs,1)); // Uncertainty of standard molar (partial molal) Gibbs energy of formation G0u "
+        scalarsList.push_back(  pagesSetupData("G0d[1]",o_dcgs,1)); // Uncertainty of standard molar (partial molal) Gibbs energy of formation G0u "
         scalarsList.push_back(  pagesSetupData("H0d[0]",o_dchs)); // "Molar (partial molal) enthalpy of formation of DC from IC at standard state and Tr, Pr_
-        //     scalarsList.push_back(  pagesSetupData("H0d[1]",o_dchs,1)); // Uncertainty of standard state molar enthalpy H0 (J/mol) "
+        scalarsList.push_back(  pagesSetupData("H0d[1]",o_dchs,1)); // Uncertainty of standard state molar enthalpy H0 (J/mol) "
         scalarsList.push_back(  pagesSetupData("S0d[0]",o_dcss)); // "Absolute molar (partial molal) entropy of Dependent Component at the standard state_
-        //     scalarsList.push_back(  pagesSetupData("S0d[1]",o_dcss,1)); //  Uncertainty of standard molar (partial molal) absolute entropy of formation "
+        scalarsList.push_back(  pagesSetupData("S0d[1]",o_dcss,1)); //  Uncertainty of standard molar (partial molal) absolute entropy of formation "
         scalarsList.push_back(  pagesSetupData("Cp0d[0]",o_dccps)); // "Absolute molar (partial molal) isobaric heat capacity Cp0 of DC at standard state and reference Tr, Pr_
-        //     scalarsList.push_back(  pagesSetupData("Cp0d[1]",o_dccps,1)); //  Uncertainty of Cp0 at reference Tr, Pr "
+        scalarsList.push_back(  pagesSetupData("Cp0d[1]",o_dccps,1)); //  Uncertainty of Cp0 at reference Tr, Pr "
         //     scalarsList.push_back(  pagesSetupData("PrTr[0]",o_dcptst)); //  "Reference pressure Pr (bar)_
         //     scalarsList.push_back(  pagesSetupData("PrTr[1]",o_dcptst,1)); //  Reference temperature Tr, C "
         //     scalarsList.push_back(  pagesSetupData("LamST[0]",o_dcstlam )); // "Entropy of lambda transition (J/K/mol), minerals only_
@@ -112,22 +112,22 @@ void GetListsnRT( int nRT, std::vector<pagesSetupData>& wnData, std::vector<page
         scalarsList.push_back(  pagesSetupData("M0_",o_remwt)); // "Molecular (gram-formula) mass of the new DC (species), g/mol "
         scalarsList.push_back(  pagesSetupData("logKr[0]",o_reks)); // "Value of the equilibrium constant K of reaction at Tr,Pr_
         scalarsList.push_back(  pagesSetupData("logKr[1]",o_reks,1)); // log K of reaction at Tr, Pr (for isotopic forms: 1000 ln(alpha) )_
-        //    scalarsList.push_back(  pagesSetupData("logKr[2]",o_reks,2)); // Uncertainty of logK,  dev(logK) "
+        scalarsList.push_back(  pagesSetupData("logKr[2]",o_reks,2)); // Uncertainty of logK,  dev(logK) "
         scalarsList.push_back(  pagesSetupData("G0r[0]",o_regs)); // "dGr - standard Gibbs energy effect of the reaction at Tr, Pr (J/mol)_
         scalarsList.push_back(  pagesSetupData("G0r[1]",o_regs,1)); //  Standard molar (partial molal) Gibbs energy of formation G0 of new DC from IC at Tr and Pr (J/mol)_
-        //   scalarsList.push_back(  pagesSetupData("G0r[2]",o_regs,2)); // Uncertainty of G0,  dev(G0) (J/mol) "
+        scalarsList.push_back(  pagesSetupData("G0r[2]",o_regs,2)); // Uncertainty of G0,  dev(G0) (J/mol) "
         scalarsList.push_back(  pagesSetupData("H0r[0]",o_rehs)); // "dHr - standard enthalpy effect of the reaction at Tr, Pr (J/mol)_
         scalarsList.push_back(  pagesSetupData("H0r[1]",o_rehs,1)); //  Standard molar (partial molal) enthalpy of formation H0 of the new DC from IC at Tr and Pr (J/mol)_
-        //   scalarsList.push_back(  pagesSetupData("H0r[2]",o_rehs,2)); // Uncertainty of H0, dev(H0) (J/mol) "
+        scalarsList.push_back(  pagesSetupData("H0r[2]",o_rehs,2)); // Uncertainty of H0, dev(H0) (J/mol) "
         scalarsList.push_back(  pagesSetupData("S0r[0]",o_ress)); //  "dSr - standard entropy effect of the reaction at Tr, Pr (J/K/mol)_
         scalarsList.push_back(  pagesSetupData("S0r[1]",o_ress,1)); //  Absolute molar (partial molal) entropy S0 of  the new DC at standard state (J/K/mol)_
-        //   scalarsList.push_back(  pagesSetupData("S0r[2]",o_ress,2)); //  Uncertainty of S0, dev(S0) (J/K/mol) "
+        scalarsList.push_back(  pagesSetupData("S0r[2]",o_ress,2)); //  Uncertainty of S0, dev(S0) (J/K/mol) "
         scalarsList.push_back(  pagesSetupData("Cp0r[0]",o_recps)); //    dCpr - standard isobaric heat capacity effect of the reaction at Tr, Pr (J/K/mol)_
         scalarsList.push_back(  pagesSetupData("Cp0r[1]",o_recps,1)); //  Absolute molar (partial molal) isobaric heat capacity Cp0 of  the new DC at standard state (J/K/mol)_
-        //   scalarsList.push_back(  pagesSetupData("Cp0r[2]",o_recps,2)); //  Uncertainty of Cp0, dev(Cp0) (J/K/mol) "
+        scalarsList.push_back(  pagesSetupData("Cp0r[2]",o_recps,2)); //  Uncertainty of Cp0, dev(Cp0) (J/K/mol) "
         scalarsList.push_back(  pagesSetupData("V0r[0]",o_remvs)); //   "Molar volume effect dVr of the reaction at Tr,Pr (J/bar)_
         scalarsList.push_back(  pagesSetupData("V0r[1]",o_remvs,1)); //  Molar volume V0 of Dependent Component at standard state (J/bar)_
-        //   scalarsList.push_back(  pagesSetupData("V0r[2]",o_remvs,2)); //  Uncertainty of V0 dev(V0) (J/bar) "
+        scalarsList.push_back(  pagesSetupData("V0r[2]",o_remvs,2)); //  Uncertainty of V0 dev(V0) (J/bar) "
         //   scalarsList.push_back(  pagesSetupData("NisoX[0]",o_renix)); // "Mole fraction of counter-isotope in natural mixture (of chemical element)_
         //   scalarsList.push_back(  pagesSetupData("PrTr_[0]",o_reptst)); // "Reference pressure Pr (bar)_
         //   scalarsList.push_back(  pagesSetupData("PrTr_[1]",o_reptst,1)); // Reference temperature Tr (C) "
