@@ -38,124 +38,7 @@
        <string>Select Aqueous Electrolyte Model</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QRadioButton" name="aselD">
-            <property name="text">
-             <string>Ion-association (IA)  with Davies equation, &amp;D  (default)</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+D</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="aselH">
-            <property name="text">
-             <string>IA with extended Debye-Hueckel equation (Helgeson), common b_gamma and a0, &amp;H</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+H</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="aselY">
-            <property name="text">
-             <string>IA with extended Debye-Hueckel equation (Shvarov), common b_gamma and a0, &amp;Y</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+S</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="asel3">
-            <property name="text">
-             <string>IA with extended Debye-Hueckel equation (Karpov), common b_gamma, individual a0, &amp;3</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+3</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="asel2">
-            <property name="text">
-             <string>IA with Debye-Hueckel equation, no b_gamma, individual a0, &amp;2</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+2</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="asel1">
-            <property name="text">
-             <string>IA with Debye-Hueckel limiting law (very low ionic strength), &amp;1</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+1</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>16</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="aselU">
-            <property name="text">
-             <string>Do not generate; select a user-defined Phase record from database ( Q, S, Z ), &amp;U</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+U</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="aselNo">
-            <property name="text">
-             <string>Do not include aqueous electrolyte phase into the system definition, &amp;N</string>
-            </property>
-            <property name="shortcut">
-             <string>Alt+N</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="2" rowspan="4">
+       <item row="0" column="2" rowspan="5">
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
           <string/>
@@ -185,7 +68,7 @@ the aqueous phase model</string>
           <item>
            <widget class="QLabel" name="textLabel2_5">
             <property name="text">
-             <string>b_gamma(1,298) value:</string>
+             <string>b_gamma(1 bar, 298 K) value:</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -267,7 +150,7 @@ the aqueous phase model</string>
           <item>
            <widget class="QLabel" name="textLabel2_2_2">
             <property name="text">
-             <string>Common a0 value:</string>
+             <string>Common a0 value (Å):</string>
             </property>
             <property name="wordWrap">
              <bool>false</bool>
@@ -379,7 +262,7 @@ the aqueous phase model</string>
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <widget class="QLabel" name="textLabel1">
          <property name="text">
           <string>Phase record &amp;key:</string>
@@ -392,17 +275,13 @@ the aqueous phase model</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="apRkeyEdit">
-         <property name="toolTip">
-          <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -411,6 +290,157 @@ the aqueous phase model</string>
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>       [built-in models, automatic aqueous phase assembled from all aqueous species]</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="aselD">
+            <property name="text">
+             <string>Ion-association (IA)  with Davies equation, &amp;D  (default) </string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+D</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="aselH">
+            <property name="text">
+             <string>IA with extended Debye-Hueckel equation (Helgeson), common b_gamma and a0, &amp;H</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+H</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="aselY">
+            <property name="text">
+             <string>IA with extended Debye-Hueckel equation (Shvarov), common b_gamma and a0, &amp;Y</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+S</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="asel3">
+            <property name="text">
+             <string>IA with extended Debye-Hueckel equation (Karpov), common b_gamma, individual a0, &amp;3</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+3</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="asel2">
+            <property name="text">
+             <string>IA with Debye-Hueckel equation, no b_gamma, individual a0, &amp;2</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="asel1">
+            <property name="text">
+             <string>IA with Debye-Hueckel limiting law (very low ionic strength), &amp;1</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>16</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>       [models defined in the database with specific parameters e.g., SIT, Pitzer, eUNIQUAC, etc]</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="aselU">
+            <property name="text">
+             <string>Select a user-defined Phase record (model) from database ( Q, S, Z ), &amp;U</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+U</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>16</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="aselNo">
+            <property name="text">
+             <string>Do not include aqueous electrolyte phase into the system definition, &amp;N</string>
+            </property>
+            <property name="shortcut">
+             <string>Alt+N</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="apRkeyEdit">
+         <property name="toolTip">
+          <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -425,6 +455,13 @@ the aqueous phase model</string>
           <string/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>       [built-in models]</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QRadioButton" name="gselI">
             <property name="text">
@@ -480,6 +517,13 @@ the aqueous phase model</string>
            </spacer>
           </item>
           <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>       [models defined in the database with specific parameters]</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QRadioButton" name="gselU">
             <property name="text">
              <string>Do not generate; select a user-defined Phase record from database, &amp;U</string>
@@ -488,6 +532,19 @@ the aqueous phase model</string>
              <bool>false</bool>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>16</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <widget class="QRadioButton" name="gselNo">
