@@ -2,7 +2,7 @@ name: deploy-linux
 on:
   push:
     branches:
-      - reacdc_save
+      - test_prerelease
   release:
     types:
       - published

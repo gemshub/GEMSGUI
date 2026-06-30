@@ -3,7 +3,7 @@ name: deploy-macos-intel
 on:
   push:
     branches:
-      - reacdc_save
+      - test_prerelease
   release:
     types:
       - published

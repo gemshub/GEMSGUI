@@ -3,7 +3,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - reacdc_save
+      - test_prerelease
   release:
     types:
       - published
