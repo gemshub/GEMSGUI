@@ -916,8 +916,8 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
      }
   }
   if( !err.empty() )
-      gui_logger->warn("Not quality for TP dependencies of DC {}", err);
-      //           vfMessage(par,"Not quality for TP dependencies of DC", err.c_str());
+      gui_logger->warn("Not good quality TP dependencies in lookup table of DC {}", err);
+      //           vfMessage(par,"Not good quality TP dependencies in lookup table of DC", err.c_str());
   // free memory
   delete[] tp_mark;
 }

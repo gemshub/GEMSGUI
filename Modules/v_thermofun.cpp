@@ -463,13 +463,29 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
 {
     QJsonArray allArray;
     TCIntArray anR;
-    TCStringArray aRC1, error_reactdc;
+    TCStringArray aRC1, skipped_reactdc;
     QJsonObject temp_data;
     db->GetKeyList( "*:*:*:*:", aRC1, anR );
 
     for( size_t ii=0; ii<aRC1.size(); ii++ )
     {
         RecInput( aRC1[ii].c_str() );
+
+        QString reaction_symbol = thf_string(db->FldKey(2), db->FldLen(2)).c_str();
+        QJsonArray oreactants;
+        for( int jj=0; jj<rcp->nDC; jj++ )
+        {
+            oreactants.append(QJsonObject{{"coefficient",rcp->scDC[jj]},
+                                          {"symbol", thf_string(rcp->DCk[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME).c_str()}});
+        }
+        if( oreactants.last().toObject()["symbol"] != reaction_symbol )
+        {
+            gui_logger->warn("Skipping ReactDC {}: cannot convert to ThermoFun ({} != {})", aRC1[ii],
+                              oreactants.last().toObject()["symbol"].toString().toStdString(),
+                              reaction_symbol.toStdString());
+            skipped_reactdc.push_back(aRC1[ii]);
+            continue;
+        }
 
         // Set data to substance
         QJsonObject thermo_data;
@@ -508,7 +524,7 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
 
         // Set data to reaction
         QJsonObject reaction_data;
-        reaction_data["symbol"] = thf_string(db->FldKey(2), db->FldLen(2)).c_str();
+        reaction_data["symbol"] = reaction_symbol;
         reaction_data["Tst"] = rcp->TCst+273.15;
         reaction_data["Pst"] = rcp->Pst*1e05;
         reaction_data["logKr"] = QJsonObject( {{"values",QJsonArray({rcp->Ks[1]})},
@@ -532,22 +548,11 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
         //reaction_data["equation"] = QJsonObject();//:    r.properties.equation, \n "
         //reaction_data["limitsTP"] = QJsonObject();//:   r.properties.limitsTP, \n "
 
-        QJsonArray oreactants;
-        for( int ii=0; ii<rcp->nDC; ii++ )
-        {
-            oreactants.append(QJsonObject{{"coefficient",rcp->scDC[ii]},
-                                          {"symbol", thf_string(rcp->DCk[ii]+MAXSYMB+MAXDRGROUP, MAXDCNAME).c_str()}});
-        }
         reaction_data["reactants"] = oreactants;
-        if( oreactants.last().toObject()["symbol"] != reaction_data["symbol"] )
-        {
-            gui_logger->error("ReactDC {}: {} != {} ", aRC1[ii],
-                              oreactants.last().toObject()["symbol"].toString().toStdString(),
-                              reaction_data["symbol"].toString().toStdString());
-            error_reactdc.push_back(aRC1[ii]);
-        }
 
         QJsonArray arrTPMethods;
+        QJsonObject method0, pendingMerge;
+        bool hasPendingMerge = false;
         auto method = thf_convert_reacdc_TPMethods0(rcp->pct[0]);
         if( !method.empty() )
         {
@@ -568,13 +573,29 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
                                                         {"upperT", rcp->TCint[1]+273.15 },
                                                         {"lowerP", rcp->Pint[0]*1e05 },
                                                         {"upperP", rcp->Pint[1]*1e05 }});
-            arrTPMethods.append(oTPMethods0);
+
+            if( oTPMethods0.contains("logk_ft_coeffs") )
+                arrTPMethods.append(oTPMethods0);
+            else
+            {
+                // no logk_ft_coeffs: drop this TPMethods entry and carry its
+                // other fields forward to merge into the next TPMethods entry
+                method0 = method;
+                pendingMerge = oTPMethods0;
+                pendingMerge.remove("method");
+                hasPendingMerge = true;
+            }
         }
 
         method = thf_convert_reacdc_TPMethods1(rcp->pct[1]);
         if( !method.empty() )
         {
             QJsonObject oTPMethods1;
+            if( hasPendingMerge )
+            {
+                oTPMethods1 = pendingMerge;
+                hasPendingMerge = false;
+            }
             oTPMethods1["method"] = method;
             if( rcp->DSt )
             {
@@ -590,26 +611,39 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
         if( !method.empty() )
         {
             QJsonObject oTPMethods2;
+            if( hasPendingMerge )
+            {
+                oTPMethods2 = pendingMerge;
+                hasPendingMerge = false;
+            }
             oTPMethods2["method"] = method;
             if( rcp->DVt )
                 oTPMethods2["dr_volume_fpt_coeffs"] = thf_object( "values",rcp->DVt, MAXVTCOEF );
             arrTPMethods.append(oTPMethods2);
         }
+
+        if( hasPendingMerge )
+        {
+            // nowhere to merge into: keep the original TPMethods[0] entry as-is
+            pendingMerge["method"] = method0;
+            arrTPMethods.append(pendingMerge);
+        }
+
         if( !arrTPMethods.empty() )
             reaction_data["TPMethods"] = arrTPMethods;
 
         allArray.append(reaction_data);
     }
 
-    if( !error_reactdc.empty() )
+    if( !skipped_reactdc.empty() )
     {
-        std::string err_mess = "Error when generate ThermoFun input file."
+        std::string warn_mess = "Skipped records when generating ThermoFun input file."
                                "Need to recalculate records: \n   ";
-        for( const auto& rec_key: error_reactdc)
+        for( const auto& rec_key: skipped_reactdc)
         {
-           err_mess  += rec_key+"\n   ";
+           warn_mess  += rec_key+"\n   ";
         }
-        Error( GetName(), err_mess);
+        gui_logger->warn(warn_mess);
     }
 
     return allArray;

@@ -2,7 +2,7 @@ name: deploy-windows
 on:
   push:
     branches:
-      - reacdc_save
+      - test_prerelease
   release:
     types:
       - published
@@ -44,23 +44,16 @@ jobs:
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v4
         with:
-          auto-activate: true
+          auto-activate: false
+          activate-environment: base
           channels: conda-forge
 
-      - name: Install conda-lock
-        shell: bash -l {0}
-        run: pip install conda-lock
-
       - name: Configuring Conda Environment
-        shell: bash -l {0}
         run: |
-          conda config --set always_yes yes
-          conda config --set changeps1 no
-          conda config --set solver libmamba
-          conda config --set path_conflict warn
-          conda clean -a -y
-          conda-lock -f environment.yml -p ${{ matrix.conda_platform }}
-          conda-lock install --name GEMSGUI conda-lock.yml
+          conda config --set always_yes yes --set changeps1 no
+          conda config --add channels conda-forge
+          conda install conda-devenv
+          conda run -n base python -m conda_devenv
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
         shell: cmd
