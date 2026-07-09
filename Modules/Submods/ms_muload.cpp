@@ -392,6 +392,11 @@ void TMulti::SolModLoad( )
                               aPH->php-> OcpN[j*pmp->LsMdc[k*3+2]+ii];
               }
            } /* jj */
+           if(gui_logger->should_log(spdlog::level::debug)) {
+               auto phase_name = char_array_to_string(pmp->SF[k]+MAXSYMB, MAXPHNAME);
+               auto new_data = to_string(pmp->MoiSN+ksn, pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k]);
+               gui_logger->debug("Phase {} {} ksn {} MoiSN={} ", k, phase_name, ksn, new_data);
+           }
            // realloc memory for the collection of site fractions arrays
            if( ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2] > aObj[ o_wo_sitfr ]->GetN()
                    || pmp->SitFr == nullptr )
@@ -407,6 +412,9 @@ void TMulti::SolModLoad( )
         switch( modT[DCE_LINK] )
         {
         case SM_UNDEF:  // no script equations were specified
+
+               /// SD 06/2026 posible not change counters and overwrite data in arrays !!!
+
                if( modT[SGM_MODE] != SM_STNGAM )
                   continue;
                pmp->LsMod[k*3] = aPH->php->ncpN;  // number of interaction parameters
