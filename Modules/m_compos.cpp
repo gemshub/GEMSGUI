@@ -822,6 +822,11 @@ SPECIFY_C:
         C = new double[bcp->Nmax];
     fillValue( C, 0., bcp->Nmax );
 
+    // Set the default normalization to 100 g  to avoid hanging due to a user mistake.
+    if( fabs(bcp->Msys) < PCO_DBL_MIN ) {
+        bcp->Msys = 0.1;
+    }
+
     if( bcp->PcIC != S_OFF )
     { /*  Through IC */
         if( !CI )
