@@ -100,6 +100,7 @@ protected:
     void bc_work_dyn_new();
     void bc_work_dyn_kill();
 
+    bool check_Reduce_Conc();
 public:
 
     static TCompos* pm;

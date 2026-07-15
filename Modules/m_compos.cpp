@@ -776,11 +776,150 @@ FINISH:
     return Xincr;
 }
 
+bool TCompos::check_Reduce_Conc()
+{
+    int ii;
+    std::string err_message;
 
+    std::set<char> units_quantity;
+    // build units set
+    units_quantity.insert(bcp->PcRes);
+    if(bcp->PcDC != S_OFF) {
+        for(ii=0; ii<bcp->Ld; ++ii) {
+            units_quantity.insert(bcp->CDcl[ii]);
+        }
+    }
+    if(bcp->PcAU != S_OFF) {
+        for(ii=0; ii<bcp->La; ++ii) {
+            units_quantity.insert(bcp->AUcl[ii]);
+        }
+    }
+    if(bcp->PcIC != S_OFF) {
+        for(ii=0; ii<bcp->N; ++ii) {
+            units_quantity.insert(bcp->CIcl[ii]);
+        }
+    }
+
+    // check units
+    for(auto unitp:  units_quantity) {
+        switch(unitp)    {
+        // Quantities
+        case QUAN_MKMOL: /*'Y'*/
+        case QUAN_MMOL:  /*'h'*/
+        case QUAN_MOL:   /*'M'*/
+            break;
+        case QUAN_MGRAM: /*'y'*/
+        case QUAN_GRAM:  /*'g'*/
+        case QUAN_KILO:  /*'G'*/
+            // if( DCmw > PCO_DB/18. )
+            break;
+        // Concentrations
+        case CON_MOLFR:  /*'n'*/
+        case CON_MOLPROC:/*'N'*/
+        case CON_pMOLFR: /*'f'*/
+            if(fabs(bcp->R1) <= PCO_DB) {
+                err_message = "For '" + std::to_string(unitp)
+                + "' units, need to define Ns (input total number of IC moles in this PCO).";
+                switch(vfQuestion3( window(), "Moles after conversion",
+                                    err_message+"\n What to do?",
+                                    "&Continue", "&Set default", "Cancel") ) {
+                case VF3_2: bcp->R1=1.;
+                case VF3_1: break;
+                case VF3_3: return false;
+                }
+            }
+            break;
+        // Volumes
+        case CON_VOLFR:  /*'v'*/
+        case CON_VOLPROC:/*'V'*/
+        case CON_pVOLFR: /*'u'*/
+            if(fabs(bcp->Vsys) <= PCO_DBL_MIN) {
+                err_message = "For '" + std::to_string(unitp)
+                + "' units, need to define Vs (input normalisation volume).";
+                switch(vfQuestion3( window(), "Moles after conversion",
+                                    err_message+"\n What to do?",
+                                    "&Continue", "&Set default", "Cancel") ) {
+                case VF3_2: bcp->Vsys=1.;
+                case VF3_1: break;
+                case VF3_3: return false;
+                }
+            }
+            break;
+        // Mass fractions relative to mass of the system
+        case CON_WTFR:   /*'w'*/
+        case CON_WTPROC: /*'%'*/
+        case CON_PPM:    /*'P'*/
+            if(fabs(bcp->Msys) <= PCO_DB/20.) {
+                err_message = "For '" + std::string(1, unitp)
+                + "' units, need to define Ms (input normalization mass).";
+                switch(vfQuestion3( window(), "Moles after conversion",
+                                    err_message+"\n What to do?",
+                                    "&Continue", "&Set default", "Cancel") ) {
+                case VF3_2: bcp->Msys=1.;
+                case VF3_1: break;
+                case VF3_3: return false;
+                }
+            }
+            break;
+        // Molalities
+        case CON_MOLAL:  /*'m'*/
+        case CON_MMOLAL: /*'i'*/
+        case CON_pMOLAL: /*'p'*/
+            if(fabs(bcp->Mwat) <= PCO_DB/18.) {
+                err_message = "For '" + std::to_string(unitp)
+                + "' units, need to define Mw (input mass of water-solvent).";
+                switch(vfQuestion3( window(), "Moles after conversion",
+                                    err_message+"\n What to do?",
+                                    "&Continue", "&Set default", "Cancel") ) {
+                case VF3_2: bcp->Mwat=1.;
+                case VF3_1: break;
+                case VF3_3: return false;
+                }
+            }
+            break;
+        // Molarities
+        case CON_MOLAR:  /*'L'*/
+        case CON_MMOLAR: /*'j'*/
+        case CON_pMOLAR: /*'q'*/
+        case CON_AQGPL: /*'d'*/
+        case CON_AQMGPL: /*'e'*/
+        case CON_AQMKGPL: /*'b'*/
+            if(fabs(bcp->Vaq) <= PCO_DBL_MIN) {
+                err_message = "For '" + std::to_string(unitp)
+                + "' units, need to define Vaq (input volume of aqueous solution for molarities).";
+                switch(vfQuestion3( window(), "Moles after conversion",
+                                    err_message+"\n What to do?",
+                                    "&Continue", "&Set default", "Cancel") ) {
+                case VF3_2: bcp->Vaq=1.;
+                case VF3_1: break;
+                case VF3_3: return false;
+                }
+            }
+            break;
+        // Weight concentrations */
+        case CON_AQWFR:  /*'C'*/
+        case CON_AQWPROC:/*'c'*/
+        case CON_AQPPM:  /*'a'*/
+            if(fabs(bcp->Maq) <= PCO_DB/18.) {
+                err_message = "For '" + std::to_string(unitp)
+                + "' units, need to define Maq (input mass of aqueous solution for dissolved mass concentrations).";
+                switch(vfQuestion3( window(), "Moles after conversion",
+                                    err_message+"\n What to do?",
+                                    "&Continue", "&Set default", "Cancel") ) {
+                case VF3_2: bcp->Maq=1.;
+                case VF3_1: break;
+                case VF3_3: return false;
+                }
+            }
+            break;
+        }
+    }
+
+    return true;
+}
 
 // Calculate record
-void
-TCompos::RecCalc( const char* key )
+void TCompos::RecCalc( const char* key )
 {
     bool only_one_step=true;
     int i, im,j, Ld, La, LdLa;
@@ -801,6 +940,10 @@ TCompos::RecCalc( const char* key )
     aDC->ods_link(0);
     TReacDC* aRC= dynamic_cast<TReacDC *>( aMod[RT_REACDC].get());
     aRC->ods_link(0);
+
+    if(check_Reduce_Conc()==false) {
+        return;  // Cancel command
+    }
 
     bc_work_dyn_new();  // allocate work arrays and set bcp->Nmax
 
