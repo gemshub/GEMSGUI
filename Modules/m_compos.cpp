@@ -777,10 +777,12 @@ FINISH:
 }
 
 
+
 // Calculate record
 void
 TCompos::RecCalc( const char* key )
 {
+    bool only_one_step=true;
     int i, im,j, Ld, La, LdLa;
     short wps;
     double MsysC = 0., R1C = 0.;
@@ -801,6 +803,7 @@ TCompos::RecCalc( const char* key )
     aRC->ods_link(0);
 
     bc_work_dyn_new();  // allocate work arrays and set bcp->Nmax
+
 SPECIFY_C:
 
 	memset( pkey, 0, MAXRKEYLEN+9 );
@@ -821,11 +824,6 @@ SPECIFY_C:
     if( !C )
         C = new double[bcp->Nmax];
     fillValue( C, 0., bcp->Nmax );
-
-    // Set the default normalization to 100 g  to avoid hanging due to a user mistake.
-    if( fabs(bcp->Msys) < PCO_DBL_MIN ) {
-        bcp->Msys = 0.1;
-    }
 
     if( bcp->PcIC != S_OFF )
     { /*  Through IC */
@@ -954,7 +952,7 @@ IC_FOUND:
     /* Analyze control sum */
     if( fabs( bcp->R1 ) < PCO_DBL_MIN ) // 1e-12 )
         bcp->R1 = R1C;
-    if( fabs( bcp->R1 - (float)R1C ) <  PCO_DBL_EPSILON ) //   1e-8
+    if( fabs(R1C ) < PCO_DBL_MIN || fabs( bcp->R1 - (float)R1C ) <  PCO_DBL_EPSILON ) //   1e-8
 //            || fabs( R1C ) < PCO_DBL_MIN ) // 1e-15 )
         /*Xincr = 1.*/;
     else
@@ -978,7 +976,7 @@ IC_FOUND:
 
     if( fabs( bcp->Msys ) < PCO_DBL_MIN ) //  1e-12 )
         bcp->Msys = MsysC;
-    if( fabs( bcp->Msys - (float)MsysC ) < PCO_DBL_EPSILON ) //   1e-8
+    if( fabs(MsysC) < PCO_DBL_MIN ||  fabs( bcp->Msys - (float)MsysC ) < PCO_DBL_EPSILON ) //   1e-8
 //            || fabs( MsysC ) < PCO_DBL_MIN ) // 1e-15 )
         /*Xincr = 1.*/;
     else
@@ -1001,8 +999,10 @@ IC_FOUND:
     for( wps=0, i=0; i<bcp->Nmax; i++ )
         if( fabs( C[i] ) >= PCO_DBL_MIN ) // 1e-12 )
             wps++;
-    if( wps < 1 )
+    if( only_one_step && wps < 1 ) {
+        only_one_step = false;
         goto SPECIFY_C;
+    }
     bcp->N = wps;
     /* Realloc Compos back */
     bcp->C = (double *)aObj[ o_bccv]->Alloc( bcp->N, 1, D_ );
