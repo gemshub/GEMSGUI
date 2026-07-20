@@ -12,7 +12,7 @@ DEFINES += NDEBUG
 #DEFINES += NO_THERMOFUN
 #DEFINES += USE_THERMO_LOG
 #DEFINES += USE_GEMS3K_SERVER
-#!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
+!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG+=sdk_no_version_check
 CONFIG += c++2a

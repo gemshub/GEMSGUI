@@ -823,7 +823,7 @@ bool TCompos::check_Reduce_Conc()
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
                                     "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->R1=1.;
+                case VF3_2: bcp->R1=1.; break;
                 case VF3_1: break;
                 case VF3_3: return false;
                 }
@@ -835,11 +835,11 @@ bool TCompos::check_Reduce_Conc()
         case CON_pVOLFR: /*'u'*/
             if(fabs(bcp->Vsys) <= PCO_DBL_MIN) {
                 err_message = "For '" + std::to_string(unitp)
-                + "' units, need to define Vs (input normalisation volume).";
+                + "' units, need to define Vs (input normalisation volume L).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
                                     "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Vsys=1.;
+                case VF3_2: bcp->Vsys=1.; break;
                 case VF3_1: break;
                 case VF3_3: return false;
                 }
@@ -851,11 +851,11 @@ bool TCompos::check_Reduce_Conc()
         case CON_PPM:    /*'P'*/
             if(fabs(bcp->Msys) <= PCO_DB/20.) {
                 err_message = "For '" + std::string(1, unitp)
-                + "' units, need to define Ms (input normalization mass).";
+                + "' units, need to define Ms (input normalization mass kg).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
                                     "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Msys=1.;
+                case VF3_2: bcp->Msys=1.; break;
                 case VF3_1: break;
                 case VF3_3: return false;
                 }
@@ -867,11 +867,11 @@ bool TCompos::check_Reduce_Conc()
         case CON_pMOLAL: /*'p'*/
             if(fabs(bcp->Mwat) <= PCO_DB/18.) {
                 err_message = "For '" + std::to_string(unitp)
-                + "' units, need to define Mw (input mass of water-solvent).";
+                + "' units, need to define Mw (input mass of water-solvent kg).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
                                     "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Mwat=1.;
+                case VF3_2: bcp->Mwat=1.; break;
                 case VF3_1: break;
                 case VF3_3: return false;
                 }
@@ -886,11 +886,11 @@ bool TCompos::check_Reduce_Conc()
         case CON_AQMKGPL: /*'b'*/
             if(fabs(bcp->Vaq) <= PCO_DBL_MIN) {
                 err_message = "For '" + std::to_string(unitp)
-                + "' units, need to define Vaq (input volume of aqueous solution for molarities).";
+                + "' units, need to define Vaq (input volume of aqueous solution for molarities L).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
                                     "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Vaq=1.;
+                case VF3_2: bcp->Vaq=1.; break;
                 case VF3_1: break;
                 case VF3_3: return false;
                 }
@@ -902,11 +902,11 @@ bool TCompos::check_Reduce_Conc()
         case CON_AQPPM:  /*'a'*/
             if(fabs(bcp->Maq) <= PCO_DB/18.) {
                 err_message = "For '" + std::to_string(unitp)
-                + "' units, need to define Maq (input mass of aqueous solution for dissolved mass concentrations).";
+                + "' units, need to define Maq (input mass of aqueous solution for dissolved mass concentrations kg).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
                                     "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Maq=1.;
+                case VF3_2: bcp->Maq=1.; break;
                 case VF3_1: break;
                 case VF3_3: return false;
                 }
@@ -924,7 +924,7 @@ void TCompos::RecCalc( const char* key )
     bool only_one_step=true;
     int i, im,j, Ld, La, LdLa;
     short wps;
-    double MsysC = 0., R1C = 0.;
+    double MsysC, R1C;
     double Xincr, ICmw, DCmw;
     double *A;
     //char ICs[MAXRKEYLEN+10];
@@ -964,6 +964,9 @@ SPECIFY_C:
     }
 //   NormDoubleRound(bcp->ICw, bcp->Nmax, 8 );
 
+    // Reset accumulators before the retry
+    MsysC = 0.;
+    R1C = 0.;
     if( !C )
         C = new double[bcp->Nmax];
     fillValue( C, 0., bcp->Nmax );
