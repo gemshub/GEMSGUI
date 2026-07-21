@@ -819,13 +819,12 @@ bool TCompos::check_Reduce_Conc()
         case CON_pMOLFR: /*'f'*/
             if(fabs(bcp->R1) <= PCO_DB) {
                 err_message = "For '" + std::to_string(unitp)
-                + "' units, need to define Ns (input total number of IC moles in this PCO).";
+                + "' units, need to define R1 (input total number of IC moles in this PCO).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
-                                    "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->R1=1.; break;
-                case VF3_1: break;
-                case VF3_3: return false;
+                                    "&Use default (1)", "Cancel", "") ) {
+                case VF3_1: bcp->R1=1.; break;
+                case VF3_2: return false;
                 }
             }
             break;
@@ -838,10 +837,9 @@ bool TCompos::check_Reduce_Conc()
                 + "' units, need to define Vs (input normalisation volume L).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
-                                    "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Vsys=1.; break;
-                case VF3_1: break;
-                case VF3_3: return false;
+                                    "&Use default (1)", "Cancel", "") ) {
+                case VF3_1: bcp->Vsys=1.; break;
+                case VF3_2: return false;
                 }
             }
             break;
@@ -854,10 +852,9 @@ bool TCompos::check_Reduce_Conc()
                 + "' units, need to define Ms (input normalization mass kg).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
-                                    "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Msys=1.; break;
-                case VF3_1: break;
-                case VF3_3: return false;
+                                    "&Use default (1)", "Cancel", "") ) {
+                case VF3_1: bcp->Msys=1.; break;
+                case VF3_2: return false;
                 }
             }
             break;
@@ -870,10 +867,9 @@ bool TCompos::check_Reduce_Conc()
                 + "' units, need to define Mw (input mass of water-solvent kg).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
-                                    "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Mwat=1.; break;
-                case VF3_1: break;
-                case VF3_3: return false;
+                                    "&Use default (1)", "Cancel", "") ) {
+                case VF3_1: bcp->Mwat=1.; break;
+                case VF3_2: return false;
                 }
             }
             break;
@@ -889,10 +885,9 @@ bool TCompos::check_Reduce_Conc()
                 + "' units, need to define Vaq (input volume of aqueous solution for molarities L).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
-                                    "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Vaq=1.; break;
-                case VF3_1: break;
-                case VF3_3: return false;
+                                    "&Use default (1)", "Cancel", "") ) {
+                case VF3_1: bcp->Vaq=1.; break;
+                case VF3_2: return false;
                 }
             }
             break;
@@ -905,10 +900,9 @@ bool TCompos::check_Reduce_Conc()
                 + "' units, need to define Maq (input mass of aqueous solution for dissolved mass concentrations kg).";
                 switch(vfQuestion3( window(), "Moles after conversion",
                                     err_message+"\n What to do?",
-                                    "&Continue", "&Set default", "Cancel") ) {
-                case VF3_2: bcp->Maq=1.; break;
-                case VF3_1: break;
-                case VF3_3: return false;
+                                    "&Use default (1)", "Cancel", "") ) {
+                case VF3_1: bcp->Maq=1.; break;
+                case VF3_2: return false;
                 }
             }
             break;
