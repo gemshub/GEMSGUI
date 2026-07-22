@@ -1016,7 +1016,13 @@ o_dtwa_ap   Wa_ap D_  -3 1  N "Input: a priori interaction parameter values (cal
         wnData.push_back(  pagesSetupData("lga", o_wd_yla)); // j "Log10 of general activity (fugacity) of Dependent Components at equilibrium state "
         // wnData.push_back(  pagesSetupData("wy", o_wd_yw)); // j "Mass concentrations of DC in multi-component phases, % (ppm in aqueous phase) "
         wnData.push_back(  pagesSetupData("gamma", o_wd_gamma)); // j "Activity coefficients of DCs (external) in practical scale (molal for aqueous species) "
+        wnData.push_back(  pagesSetupData("gamFs", o_wo_gamfs)); // j "Copy of activity coefficients Gamma before the first enter in PhaseSelection()"
         wnData.push_back(  pagesSetupData("lnGam", o_wo_lngam)); // j "Calculated  ln of internal (rational) DC activity coefficients in all phases "
+        wnData.push_back(  pagesSetupData("lnDQFt", o_wi_lndqft)); // j "new: DQF terms adding to overall activity coefficients [Ls_]"
+        wnData.push_back(  pagesSetupData("lnRcpt", o_wi_lnrcpt)); // j "new: reciprocal energy terms adding to overall activity coefficients [Ls_]"
+        wnData.push_back(  pagesSetupData("lnExet", o_wi_lnexet)); // j "new: excess energy terms adding to overall activity coefficients [Ls_]"
+        wnData.push_back(  pagesSetupData("lnCnft", o_wi_lncnft)); // j "new: configurational terms adding to overall activity (coefficients) [Ls_]"
+
         //o_w_lngmo lnGmo  D_  -3 1  j "Copy of the lnGam vector from the previous IPM iteration "
         //o_wo_lnsat lnSAT D_  -3 1  s "ln of surface activity coefficient terms for surface species "
 

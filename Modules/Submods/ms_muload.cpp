@@ -392,6 +392,11 @@ void TMulti::SolModLoad( )
                               aPH->php-> OcpN[j*pmp->LsMdc[k*3+2]+ii];
               }
            } /* jj */
+           if(gui_logger->should_log(spdlog::level::debug)) {
+               auto phase_name = char_array_to_string(pmp->SF[k]+MAXSYMB, MAXPHNAME);
+               auto new_data = to_string(pmp->MoiSN+ksn, pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k]);
+               gui_logger->debug("Phase {} {} ksn {} MoiSN={} ", k, phase_name, ksn, new_data);
+           }
            // realloc memory for the collection of site fractions arrays
            if( ksf+pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2] > aObj[ o_wo_sitfr ]->GetN()
                    || pmp->SitFr == nullptr )
@@ -401,6 +406,13 @@ void TMulti::SolModLoad( )
            ErrorIf( pmp->SitFr == nullptr, "SolModLoad",
                          "Error in reallocating memory for pmp->SitFr." );
            fillValue( pmp->SitFr+ksf, 0., pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2] );
+
+           // SD 06/2026 moved here (from the end of the k-loop) so that ksn/ksf are always
+           // advanced right after MoiSN/SitFr are filled, even if the SM_UNDEF case below
+           // does an early "continue" - otherwise the next multi-site phase would reuse the
+           // same offsets and overwrite this phase's data in pmp->MoiSN / pmp->SitFr
+           ksn += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k];
+           ksf += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2];
 
        }
  // potentially an error - should be set in any DCE_LINK mode, also SM_UNDEF ?
@@ -648,8 +660,6 @@ LOAD_NIDMCOEF:
         kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
         kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
         kde += pmp->LsMdc[k*3]*pmp->L1[k];
-        ksn += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2]*pmp->L1[k];
-        ksf += pmp->LsMdc[k*3+1]*pmp->LsMdc[k*3+2];
 
 // new: load coefficients and parameters for TSorpMod here
 //    LOAD_SORPMCOEF:
