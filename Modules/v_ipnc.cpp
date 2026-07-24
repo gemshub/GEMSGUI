@@ -903,7 +903,7 @@ void IPNCalc::CalcEquat( bool use_empty )
                 case 1 :
                     ErrorIf(!is_safe_pow(StackEnd(-1), StackEnd(0)),
                              "E28MSExec", "Attempt of pow() argument out of range");
-                    StackEnd(-1) =  pow (  StackEnd(-1),  StackEnd(0) );
+                    StackEnd(-1) =  pow(StackEnd(-1),  StackEnd(0));
                     StackDel();
                     break;
                 case 2 :
@@ -1079,12 +1079,12 @@ void IPNCalc::CalcEquat( bool use_empty )
                     break;
                 case asin_f :
                     ErrorIf( fabs(StackEnd(0))>1., "E10MSExec",
-                             "Attempt of asin() |argument| < 0");
+                             "Attempt of asin() |argument| >1");
                     StackEnd(0) = asin( StackEnd(0) );
                     break;
                 case acos_f :
                     ErrorIf( fabs(StackEnd(0))>1., "E11MSExec",
-                             "Attempt of acos() |argument| < 0");
+                             "Attempt of acos() |argument| >1");
                     StackEnd(0) = acos( StackEnd(0) );
                     break;
                 case atan_f :
@@ -1109,8 +1109,9 @@ void IPNCalc::CalcEquat( bool use_empty )
                     StackDel();
                     break;
                 case pow_f  :
-                    StackEnd(-1) =
-                        pow (  StackEnd(-1),  StackEnd(0) );
+                    ErrorIf(!is_safe_pow(StackEnd(-1), StackEnd(0)),
+                            "E28MSExec", "Attempt of pow() argument out of range");
+                    StackEnd(-1) = pow(StackEnd(-1),  StackEnd(0));
                     StackDel();
                     break;
                 default:
