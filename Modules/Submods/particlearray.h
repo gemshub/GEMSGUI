@@ -92,8 +92,8 @@ class TParticleArray
     long int cpx;          // current particle index            ??
     long int cptx;         // int current particle type index   ??
 
-    long int* *NPlist;   // list of particle indexes coming into each node (at T1) size: nNodes * nPmax
-    double* *NPstat; // array of particle statistic properties in nodes (nNodes * anProps)
+    long int **NPlist;   // list of particle indexes coming into each node (at T1) size: nNodes * nPmax
+    double **NPstat; // array of particle statistic properties in nodes (nNodes * anProps)
                       // for monitoring transport
 
 //  Time variables
@@ -175,7 +175,7 @@ public:
    // stub call for coupled mass transport calculation
   long int GEMPARTRACK( long int Mode, bool ComponentMode, double t0, double t1 );
 
-  void logProfilePhMol( FILE* logfile, int inode );
+  void logProfilePhMol(spdlog::logger* logfile, int inode);
 
   long int nPTypes() const
    { return anPTypes; }    // Number of allocated particle types (< 20 ? )

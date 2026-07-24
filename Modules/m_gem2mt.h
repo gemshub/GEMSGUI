@@ -329,7 +329,7 @@ class TGEM2MT
     std::string nameVTK;
     std::string prefixVTK;
 
-    void logProfilePhMol( FILE* logfile, int inode )
+    void logProfilePhMol(spdlog::logger* logfile, int inode )
     {
         if( pa_mt )
             pa_mt->logProfilePhMol( logfile, inode );
@@ -370,7 +370,7 @@ protected:
               long int start_node = 0, long int end_node = 1000 );
 
     bool  CalcIPM( char mode, long int start_node = 0,
-         long int end_node = 1000, FILE* diffile = nullptr );
+         long int end_node = 1000, spdlog::logger* diffile = nullptr );
 
     void  MassTransAdvecStart();
     void  MassTransAdvecStep( bool ComponentMode = true );
@@ -421,9 +421,10 @@ protected:
     // returns current (possibly reduced) step value or negative value in case of error
    double INTEG( double eps, double step, double t_begin, double t_end );
 
-    double PrintPoint( long int nPoint, FILE* diffile = nullptr, FILE* logfile = nullptr, FILE* ph_file = nullptr);
-    
-public:
+    double PrintPoint( long int nPoint, spdlog::logger* diffile = nullptr, spdlog::logger* logfile = nullptr, spdlog::logger* ph_file = nullptr);
+
+   void log_vtk();
+   public:
 
     static TGEM2MT* pm;
     

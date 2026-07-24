@@ -17,6 +17,9 @@
 //
 
 #include "particlearray.h"
+//#include <spdlog/spdlog.h>
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ranges.h>
 
 static long int idum_static = -10000l;
 static double Rand = -1;
@@ -324,6 +327,7 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
             ParT1[px].xyz.x = new_x;
 //            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, -1 );
         }
+
         break;
      case NBC3sink: // =-3, Cauchy sink (constant flux)
         if( new_node == -1 )
@@ -461,15 +465,13 @@ long int TParticleArray::GEMPARTRACK( long int Mode, bool ComponentMode, double 
   return iRet;
 }
 
-void TParticleArray::logProfilePhMol( FILE* logfile, int inode )
+void TParticleArray::logProfilePhMol(spdlog::logger* logfile, int inode)
 {
-  long int npa;
-  for( long int jp=0; jp < nPTypes(); jp++ )
-       {
-            npa = getNPnum( inode, jp);   // number of particles in the node
-            fprintf( logfile, "%-8ld ", npa );
-       }
-  fprintf( logfile, "\n" );
+    std::vector<long int> values;
+    for(long int jp=0; jp<nPTypes(); ++jp) {
+        values.push_back(getNPnum(inode, jp));   // number of particles in the node
+    }
+    logfile->info("{:-8}", fmt::join(values, " "));
 }
 
 //=========================================================================
