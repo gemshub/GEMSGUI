@@ -20,6 +20,7 @@
 #include <cstdio>
 #include "v_ipnc.h"
 #include "v_object.h"
+#include "GEMS3K/v_detail.h"
 
 const char* DIGIT="0123456789.";
 const char* OPER="!^*/+-<a>b=c&|()";
@@ -73,6 +74,18 @@ static FUNCTION fun[] = {
     { "ONE", '\0', D_, 1, 0 },
 };
 
+static bool is_safe_pow(double base, double exp) {
+    // Check for domain error: negative base with non-integer exponent
+    double int_part;
+    if(base < 0.0 && noZero(std::modf(exp, &int_part))) {
+        return false;
+    }
+    // Check for division by zero: zero base with negative exponent
+    if(approximatelyZero(base) && exp < 0.0) {
+        return false;
+    }
+    return true;
+}
 
 IPNCalc::IPNCalc():
         aItm(),  aEq(),  aCon()
@@ -888,9 +901,7 @@ void IPNCalc::CalcEquat( bool use_empty )
                     else StackEnd(0) = 1.;
                     break;
                 case 1 :
-                    ErrorIf( (fabs(StackEnd(-1))<IPNC_DBL_MIN || fabs(StackEnd(-1))>IPNC_DBL_MAX
-                             || fabs(StackEnd(0)) < IPNC_DBL_MIN_10_EXP
-                             || fabs(StackEnd(0)) > IPNC_DBL_MAX_10_EXP),
+                    ErrorIf(!is_safe_pow(StackEnd(-1), StackEnd(0)),
                              "E28MSExec", "Attempt of pow() argument out of range");
                     StackEnd(-1) =  pow (  StackEnd(-1),  StackEnd(0) );
                     StackDel();
