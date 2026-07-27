@@ -452,7 +452,7 @@ AGAIN_MOD:
         rcp->name[db->FldLen(2)] = '\0';
         Nn1++;
     }
-    if( rcp->nTp < 0 || rcp->nPp < 0 || rcp->Nsd < 0 || rcp->Nsd > 8 )
+    if( rcp->nTp < 0 || rcp->nPp < 0 || rcp->Nsd < 0 || rcp->Nsd > 20 )
     {    if( vfQuestion( window(), GetName(),
            "W06RErem: Some counters (nTp, nCp, Nsd) are invalid! Remake again?" ))
             goto AGAIN_MOD;
