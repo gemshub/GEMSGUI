@@ -7,7 +7,15 @@ GEM-Selektor v.3 - the interactive package for thermodynamic modelling of aquati
 
 ## How to run GEM-Selektor
 
-    * To run GEM-Selektor application for the first time double click to execute `rungems3.bat`. After the first run you can always start GEM-Selektor using its shortcut or `gem-selektor.exe` from `Gems3-app\bin`.
+    * To run GEM-Selektor application for the first time double click to execute `rungems3.bat`. After the first run you can always start GEM-Selektor using the Start Menu/Desktop shortcut it creates.
+
+    !!! tip "If rungems3.bat doesn't work"
+        You can also run `gem-selektor.exe` directly from `Gems3-app\bin`. But if this machine already
+        has another Qt installation (Anaconda, Qt Creator, etc.) that sets a `QT_QPA_PLATFORM_PLUGIN_PATH`
+        or `QT_PLUGIN_PATH` environment variable, GEM-Selektor may fail to start that way with
+        `Could not find the Qt platform plugin "windows"`, since `rungems3.bat` and its shortcuts point
+        those variables at the plugins bundled with this installation before launching, while the raw exe
+        does not.
 
     !!! warning
 
