@@ -335,6 +335,30 @@ class TGEM2MT
             pa_mt->logProfilePhMol( logfile, inode );
     }
 
+    // new callback API
+
+    std::shared_ptr<spdlog::logger> logfile;
+    std::shared_ptr<spdlog::logger> ph_file;
+    std::shared_ptr<spdlog::logger> diff_log_file;
+
+    /// Preparations: opening output files for monitoring 1D profiles
+    void alloc_loggers();
+
+    /// Added one point to loggers
+    void point_to_loggers();
+
+    /// Log time point to VTK format file
+    void log_vtk();
+
+    /// Define the properties of each node (box, reactor) -
+    /// GUI initialization script copy
+    void exec_initialization();
+
+    /// Function for sampling and plotting the properties of nodes at next time step.
+    /// Output of the results if step accepted
+    /// @param mtp_cp - actual time index
+    bool accept_point(long int mtp_cp, std::string message);
+
 protected:
 
     void AllocNa();
@@ -369,8 +393,7 @@ protected:
     long int CheckPIAinNodes1D( char mode,
               long int start_node = 0, long int end_node = 1000 );
 
-    bool  CalcIPM( char mode, long int start_node = 0,
-         long int end_node = 1000, spdlog::logger* diffile = nullptr );
+    bool  CalcIPM(char mode, long int start_node = 0,long int end_node = 1000);
 
     void  MassTransAdvecStart();
     void  MassTransAdvecStep( bool ComponentMode = true );
@@ -421,9 +444,6 @@ protected:
     // returns current (possibly reduced) step value or negative value in case of error
    double INTEG( double eps, double step, double t_begin, double t_end );
 
-    double PrintPoint( long int nPoint, spdlog::logger* diffile = nullptr, spdlog::logger* logfile = nullptr, spdlog::logger* ph_file = nullptr);
-
-   void log_vtk();
    public:
 
     static TGEM2MT* pm;

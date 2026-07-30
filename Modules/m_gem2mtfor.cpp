@@ -139,6 +139,8 @@ bool TGEM2MT::internalCalc()
      bool iRet = 0;
      calcFinished = false;
 
+     alloc_loggers();
+
      if( mtp->PsMode == RMT_MODE_B ) // || mtp->PsMode == RMT_MODE_F  ) // Flux-box integrated model
      {
          iRet = CalcBoxFluxModel( NEED_GEM_SIA );
@@ -150,7 +152,7 @@ bool TGEM2MT::internalCalc()
      else if( mtp->PsMode == RMT_MODE_A || mtp->PsMode == RMT_MODE_C || mtp->PsMode == RMT_MODE_W
            || mtp->PsMode == RMT_MODE_F )  // 1D RMT models or simple 1D flux-box pipe sequence w/o integration
      {
-         iRet =  Trans1D( NEED_GEM_SIA );  // here A,W,D and also F modes
+         iRet =  Trans1D( NEED_GEM_SIA );  // here A,W,C, and also F modes
      }
      else
      {

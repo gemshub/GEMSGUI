@@ -22,6 +22,7 @@
 #include "visor.h"
 #include "stepwise.h"
 #include "GEMS3K/v_service.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #ifdef useOMP
 #include <omp.h>
@@ -284,13 +285,13 @@ DIFFERENT:
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, spdlog::logger* updiffile )
+bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node)
 {
     bool iRet = true;
 
     spdlog::logger* diffile = nullptr;
     if( mtp->PsMO != S_OFF )
-      diffile = updiffile;
+      diffile = diff_log_file.get();
 
     start_node = std::max( start_node, 0L );
     end_node = std::min( end_node, mtp->nC-1 );
@@ -388,7 +389,6 @@ void TGEM2MT::MassTransParticleStart()
 
 }
 
-
 // The mass transport iteration time step
 void TGEM2MT::MassTransParticleStep( bool CompMode )
 {
@@ -398,7 +398,6 @@ void TGEM2MT::MassTransParticleStep( bool CompMode )
 
    pa_mt->GEMPARTRACK( mtp->PsMode, CompMode, mtp->oTau, mtp->cTau );
 }
-
 
 // The mass transport iteration time step
 // CompMode: true: Transport via dependent components in Aq phase (except H2O)
@@ -620,7 +619,6 @@ void TGEM2MT::MassTransCraNicStep( bool CompMode )
    } // end of loop over nodes
 }
 
-
 /*
 // A very simple example of finite difference transport algorithm
 // Contributed on 22.08.2014 by Alina Yapparova, Chair of Reservoir Engineering,
@@ -694,11 +692,7 @@ double TMyTransport::OneTimeStepRun_CN( long int *ICndx, long int nICndx )
     }
     return dt;
 }
-
 */
-
-
-#include "spdlog/sinks/basic_file_sink.h"
 
 // Main call for the mass transport iterations in 1D case
 //
@@ -706,54 +700,37 @@ double TMyTransport::OneTimeStepRun_CN( long int *ICndx, long int nICndx )
 // If NEED_GEM_PIA then the program will try smart initial approximation for the nodes
 // (PIA when possible, AIA in the vicinity of fronts, pH and pe barriers).
 // returns true, if cancelled/interrupted by the user; false if finished Ok
-bool TGEM2MT::Trans1D( char mode )
+bool TGEM2MT::Trans1D(char mode)
 {
-    bool iRet = false;
+    bool iret = false;
     bool CompMode = false;   // Component transport mode: true: DC; false: IC
     long int nStart = 0, nEnd = mtp->nC;
-    // long int NodesSetToAIA;
-    // std::string Vmessage;
-
-    std::shared_ptr<spdlog::logger> logfile;
-    std::shared_ptr<spdlog::logger> ph_file;
-    //FILE* diffile = nullptr;
-    std::shared_ptr<spdlog::logger> diff_log_file;
 
     showMss = 0L;
 
-    if( mtp->PvDDc == S_ON && mtp->PvDIc == S_OFF )  // Set of DC transport using record switches
+    if(mtp->PvDDc == S_ON && mtp->PvDIc == S_OFF) { // Set of DC transport using record switches
         CompMode = true;
-    if( mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON )  // Set of IC transport using record switches
+    }
+    if(mtp->PvDDc == S_OFF && mtp->PvDIc == S_ON) { // Set of IC transport using record switches
         CompMode = false;
-
-    if( mtp->PsMO != S_OFF )
-    {
-        std::string fname;
-
-        diff_log_file = spdlog::basic_logger_mt("ic_diff_log", "ICdif-log2.dat", true);
-        diff_log_file->set_pattern("%v");
-
-        // Preparations: opening output files for monitoring 1D profiles
-        logfile = spdlog::basic_logger_mt("ic_aq_log", "ICaq-log2.dat", true);
-        logfile->set_pattern("%v");
-
-        ph_file = spdlog::basic_logger_mt("ph_log", "Ph-log2.dat", true);
-        ph_file->set_pattern("%v");
     }
 
-    // time scales testing
+// time scales testing
 #ifdef useOMP
+    double  ta0, ta1;
     double  t0 = omp_get_wtime();
 #else
     clock_t t_start, t_end;
+    clock_t t_ap0, t_ap1;
+    double clc_sec = CLOCKS_PER_SEC;
     t_start = clock();
 #endif
+
     double otime = 0.;
     mtp->TimeGEM = 0.0;
 
-    if( mtp->iStat!= AS_RUN  )
-    {  switch( mtp->PsMode )
-        {
+    if(mtp->iStat != AS_RUN) {
+        switch(mtp->PsMode)   {
         case RMT_MODE_A:   // A: 1D advection (numerical) coupled FMT finite-differences model
             MassTransAdvecStart();
             nStart = 1; nEnd = mtp->nC-1;
@@ -771,25 +748,33 @@ bool TGEM2MT::Trans1D( char mode )
         default: // more mass transport models here
             break;
         }
-        //
-        // Calculation of chemical equilibria in all nodes at the beginning
-        // with the LPP AIA
-        if( mtp->PsSIA != S_ON )
-            CalcIPM( NEED_GEM_AIA, nStart, nEnd, diff_log_file.get() );
-        else
-            CalcIPM( NEED_GEM_SIA,nStart, nEnd, diff_log_file.get() );
-        ///       CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
+
+        // Calculation of chemical equilibria in all nodes at the beginning with the LPP AIA
+        CalcIPM( (mtp->PsSIA != S_ON ? NEED_GEM_AIA : NEED_GEM_SIA), nStart, nEnd);
     }
+
     mtp->iStat = AS_READY;
 
     if( mtp->PsMode == RMT_MODE_F )
         CalcMGPdata();
 
-    if( mtp->PsMO != S_OFF )
-        otime += PrintPoint(2, diff_log_file.get(), logfile.get(), ph_file.get());
+#ifdef useOMP
+    ta0 = omp_get_wtime();
+#else
+    t_ap0 = clock();
+#endif
+    iret = accept_point(mtp->ct, "Trans1D before loop the mass transport iteratios");
+#ifdef useOMP
+    ta1 = omp_get_wtime();
+    otime +=(ta1-ta0);
+#else
+    t_ap1 = clock();
+    otime +=(t_ap1 -t_ap0)/clc_sec;
+#endif
 
-    if( mtp->PsVTK != S_OFF )
-        otime += PrintPoint( 0 );
+    if(mtp->PsVTK != S_OFF) {
+        log_vtk();
+    }
 
     bool UseGraphMonitoring = false;
     if( mtp->PsSmode == S_OFF )
@@ -801,8 +786,7 @@ bool TGEM2MT::Trans1D( char mode )
         }
 
     //  This loop contains the mass transport iteration time step
-    do {   // time iteration step
-
+    do {
         // Calculating the control script at the beginning of a new time step
         // if( mtp->ct > 0)
         //      CalcControlScript();   // should run over all nodes i.e. nC times
@@ -816,20 +800,20 @@ bool TGEM2MT::Trans1D( char mode )
             STEP_POINT2();
         }
         else
-            iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
+            iret = pVisor->Message( window(), GetName(),Vmessage.c_str(),
                                     mtp->ct, mtp->ntM, UseGraphMonitoring );
 
-        if( iRet )
+        if(iret) {  // GUI stop point
             break;
+        }
 
         //  the mass transport iteration time step
-        switch( mtp->PsMode )
-        {
-        case RMT_MODE_A: MassTransAdvecStep( CompMode );
+        switch(mtp->PsMode) {
+        case RMT_MODE_A: MassTransAdvecStep(CompMode);
             break;
-        case RMT_MODE_C: MassTransCraNicStep( CompMode );
+        case RMT_MODE_C: MassTransCraNicStep(CompMode);
             break;
-        case RMT_MODE_W: MassTransParticleStep( CompMode );
+        case RMT_MODE_W: MassTransParticleStep(CompMode);
             break;
         case RMT_MODE_F: FlowThroughBoxFluxStep();
             break;
@@ -843,137 +827,126 @@ bool TGEM2MT::Trans1D( char mode )
 
         //   Here we call a loop on GEM calculations over nodes
         //   parallelization should affect this loop only
-        CalcIPM( mode, nStart, nEnd, diff_log_file.get() );
+        CalcIPM(mode, nStart, nEnd);
 
-        if( mtp->PsMO != S_OFF )
-            otime += PrintPoint( 3, diff_log_file.get(), logfile.get(), ph_file.get());
-
-        // Here one has to compare old and new equilibrium phase assemblage
-        // and pH/pe in all nodes and decide if the time step was Ok or it
-        // should be decreased. If so then the nodes from C0 should be
-        // copied to C1 (to be implemented)
-
-        // time step accepted - Copying nodes from C1 to C0 row
-        pVisor->Update();
-        CalcGraph();
+#ifdef useOMP
+        ta0 = omp_get_wtime();
+#else
+        t_ap0 = clock();
+#endif \
+        // Show/out results after GEM calculations over nodes
+        iret = accept_point(mtp->ct, "Trans1D time step accepted");
+#ifdef useOMP
+        ta1 = omp_get_wtime();
+        otime +=(ta1-ta0);
+#else
+        t_ap1 = clock();
+        otime +=(t_ap1 -t_ap0)/clc_sec;
+#endif
 
         // copy node array T1 into node array T0
         copyNodeArrays();
 
-        if( mtp->PsMode == RMT_MODE_W ) // copy particle array ?
+        if(mtp->PsMode == RMT_MODE_W) { // copy particle array ?
             pa_mt->CopyfromT1toT0();
+        }
 
         // Calculating the control script at the end of a new time step
         if( mtp->ct > 0)
             CalcControlScript();   // should run over all nodes i.e. nC times
         gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
 
-        if( mtp->PsMode == RMT_MODE_F ) // in F mode
+        if( mtp->PsMode == RMT_MODE_F ) { // in F mode
             CalcMGPdata(); // Recalculation of MGP compositions and masses
+        }
 
-        if( mtp->PsMO != S_OFF )
-            otime += PrintPoint( 4, diff_log_file.get(), logfile.get(), ph_file.get());
+        if(mtp->PsVTK != S_OFF) {
+            log_vtk();
+        }
 
-        if( mtp->PsVTK != S_OFF )
-            otime += PrintPoint( 0 );
-
-    } while ( mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM );
+    } while(mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM);
 
 
 #ifdef useOMP
     double  t1 = omp_get_wtime();
     double dtime = ( t1- t0 );
 #else
-    double clc_sec = CLOCKS_PER_SEC;
     t_end = clock();
     double dtime = ( t_end- t_start )/clc_sec;
 #endif
 
-
-    if( mtp->PsMO != S_OFF )
-    {
+    if(mtp->PsMO != S_OFF) {
         diff_log_file->info("Total time of calculation {} s;  Time of output {} s;  Whole run time {} s;  Pure GEM run time {} s",
                             (dtime-otime), otime, dtime, mtp->TimeGEM);
     }
 
     pVisor->CloseMessage();
-    return iRet;
+    return iret;
 }
 
+//==================================================================================
 
-// plotting the record -------------------------------------------------
-//Added one point to graph
-double TGEM2MT::PrintPoint( long int nPoint, spdlog::logger* diffile, spdlog::logger* logfile, spdlog::logger* ph_file)
+// Preparations: opening output files for monitoring 1D profiles
+void TGEM2MT::alloc_loggers()
+{
+  // could be other directory
+    if(mtp->PsMO != S_OFF) {
+        diff_log_file = spdlog::basic_logger_mt("ic_diff_log", "ICdif-log2.dat", true);
+        diff_log_file->set_pattern("%v");
+
+        logfile = spdlog::basic_logger_mt("ic_aq_log", "ICaq-log2.dat", true);
+        logfile->set_pattern("%v");
+
+        ph_file = spdlog::basic_logger_mt("ph_log", "Ph-log2.dat", true);
+        ph_file->set_pattern("%v");
+    }
+}
+
+// Added one point to loggers
+void TGEM2MT::point_to_loggers()
 {
     long int evrt =10;
 
-#ifdef useOMP
-    double  t0 = omp_get_wtime();
-#else
-    clock_t t_out, t_out2;
-    t_out = clock();
-#endif
-
-
-    // from BoxEqStatesUpdate (BoxFlux ) not tested and used
-    if( nPoint == 1 )
-    {
-       if( diffile )
-       {
-           na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, 10 );
-           // logging differences after the MT iteration loop
-       }
-   }
-
-
-   // from  Trans1D
-   if( nPoint == 2 )
-   {
-     na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, 1 );
-     na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, 1 );
-     na->logProfilePhMol( ph_file, std::bind(&TGEM2MT::logProfilePhMol, this,std::placeholders::_1, std::placeholders::_2),
-                          mtp->ct, mtp->cTau, mtp->nC, 1 );
-   }
-
-   if( nPoint == 3 )
-   {
-       na->logDiffsIC( diffile, mtp->ct, mtp->cTau, mtp->nC, evrt );
-   }
-
-   if( nPoint == 4 )
-   {
-       na->logProfileAqIC( logfile, mtp->ct, mtp->cTau, mtp->nC, evrt );
-       na->logProfilePhMol( ph_file, std::bind(&TGEM2MT::logProfilePhMol, this,std::placeholders::_1, std::placeholders::_2),
-                            mtp->ct, mtp->cTau, mtp->nC, evrt );
-   }
-
-   // write to VTK
-   if(nPoint == 0) {
-       log_vtk();
-   }
-
-#ifdef useOMP
-   double  t1 = omp_get_wtime();
-   return ( t1- t0 );
-#else
-   double clc_sec = CLOCKS_PER_SEC;
-   t_out2 = clock();
-   return ( t_out2 -  t_out)/clc_sec;
-#endif
+    na->logDiffsIC(diff_log_file.get(), mtp->ct, mtp->cTau, mtp->nC, evrt);
+    na->logProfileAqIC(logfile.get(), mtp->ct, mtp->cTau, mtp->nC, evrt);
+    na->logProfilePhMol(ph_file.get(), std::bind(&TGEM2MT::logProfilePhMol, this,std::placeholders::_1, std::placeholders::_2),
+                        mtp->ct, mtp->cTau, mtp->nC, evrt);
 
 }
 
+bool TGEM2MT::accept_point(long int mtp_cp, std::string message)
+{
+    gems_logger->info("Model {} TGEM2MT accept point {} - {} ", mtp->PsMode, mtp_cp, message);
 
-// write to VTK
+    if(mtp_cp >= 0) {
+        // Here one has to compare old and new equilibrium phase assemblage
+        // and pH/pe in all nodes and decide if the time step was Ok or it
+        // should be decreased. If so then the nodes from C0 should be
+        // copied to C1 (to be implemented)
+
+        // Output of the results if step accepted
+        if(mtp->PsMO != S_OFF) {
+            point_to_loggers();
+        }
+    }
+
+    // time step accepted
+    pVisor->Update();
+    CalcGraph();
+    return false;
+}
+
 void TGEM2MT::log_vtk()
 {
-    if(mtp->PsVTK != S_OFF) {
-        std::string name = std::to_string(mtp->ct)+".vtk";
-        name = pathVTK + nameVTK + "/" + prefixVTK + name;
+    std::string fname = std::to_string(mtp->ct)+".vtk";
+    fname = pathVTK + nameVTK + "/" + prefixVTK + fname;
 
-        std::fstream out_br(name, std::ios::out);
-        ErrorIf(!out_br.good(), name, "VTK text make error");
-        na->databr_to_vtk(out_br, nameVTK, mtp->cTau, mtp->ct, mtp->nVTKfld, mtp->xVTKfld);
+    std::fstream out_vtk(fname, std::ios::out);
+    if(!out_vtk.good()) {
+        gems_logger->warn("VTK text make error {} ", fname);
+    }
+    else {
+        na->databr_to_vtk(out_vtk, nameVTK, mtp->cTau, mtp->ct, mtp->nVTKfld, mtp->xVTKfld);
     }
 }
 

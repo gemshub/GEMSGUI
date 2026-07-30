@@ -1048,7 +1048,7 @@ TGEM2MT::RecCalc( const char * key )
      ErrorIf( ret, "TGEM2MT", "Error read " + lst_f_name +": \n" + na->getCalcNode()->ipmLogError() );
 
      if( mtp->PsMode != RMT_MODE_S  )
-       CalcIPM( NEED_GEM_SIA, 0, mtp->nC, 0 );
+       CalcIPM( NEED_GEM_SIA, 0, mtp->nC);
      if( mtp->PsMode == RMT_MODE_W  )
      {
       putHydP( na->pNodT0() );
