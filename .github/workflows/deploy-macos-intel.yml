@@ -3,7 +3,7 @@ name: deploy-macos-intel
 on:
   push:
     branches:
-      - test_prerelease
+      - fix_pow_other_bugs
   release:
     types:
       - published
@@ -89,28 +89,58 @@ jobs:
           cp "Resources/README-macos.txt" "${{ steps.strings.outputs.deploy-name }}/README.txt"
 
       # -------------------------
-      # ZIP packaging
+      # macdeployqt (NO DMG)
       # -------------------------
-      - name: Create zip archive for GitHub release
+      - name: Run macdeployqt (no DMG)
+        shell: bash -l {0}
         run: |
-          cd ${{ github.workspace }}
-          zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
+          conda activate GEMSGUI
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2
 
       # -------------------------
-      # DMG packaging (system Qt)
+      # Ad-hoc signing
+      # -------------------------
+      - name: Ad-hoc sign .app bundle
+        run: |
+          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          xattr -dr com.apple.quarantine gem-selektor.app || true
+          codesign --force --deep --sign - gem-selektor.app
+          codesign --verify --deep --strict gem-selektor.app
+
+      # -------------------------
+      # Create DMG (signed app inside)
       # -------------------------
       - name: Clean previous DMG
         run: |
           hdiutil detach /Volumes/gem-selektor || true
           rm -f gem-selektor.dmg
 
-      - name: Create DMG with macdeployqt
-        shell: bash -l {0}
+      - name: Create DMG
         run: |
-          conda activate GEMSGUI
           cd "${{ steps.strings2.outputs.deploy-output-dir }}"
-          /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2 -dmg
+          hdiutil create -volname gem-selektor \
+            -srcfolder gem-selektor.app \
+            -ov -format UDZO gem-selektor.dmg
           mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
+
+      # -------------------------
+      # ZIP packaging
+      #
+      # Must use ditto, not zip: plain `zip -r` follows symlinks by default
+      # on macOS and copies their targets in place, which flattens the
+      # Versions/Current-style symlinks inside each Qt .framework. That
+      # mismatches the bundle's embedded CodeResources manifest (which
+      # records those entries as symlinks) and invalidates the deep
+      # signature applied above - Gatekeeper then reports the app as
+      # "damaged" with no "Open Anyway" override, instead of the milder
+      # unidentified-developer prompt. ditto preserves symlinks/bundle
+      # structure exactly, so the signature survives the round trip.
+      # -------------------------
+      - name: Create zip archive for GitHub release
+        run: |
+          cd ${{ github.workspace }}
+          ditto -c -k --keepParent ${{ steps.strings.outputs.deploy-name }} ${{ steps.strings2.outputs.deploy-output-name }}
 
       # -------------------------
       # Upload artifacts
