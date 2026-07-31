@@ -141,6 +141,12 @@ bool TGEM2MT::internalCalc()
 
      alloc_loggers();
 
+     if(mtp->PsSmode == S_OFF) {
+        if(mtp->PvMSg != S_OFF && vfQuestion(window(), GetName(), "Use graphic monitoring?")) {
+             RecordPlot( nullptr );
+         }
+     }
+
      if( mtp->PsMode == RMT_MODE_B ) // || mtp->PsMode == RMT_MODE_F  ) // Flux-box integrated model
      {
          iRet = CalcBoxFluxModel( NEED_GEM_SIA );

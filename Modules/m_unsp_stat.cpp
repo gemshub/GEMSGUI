@@ -116,7 +116,7 @@ void TUnSpace::buildTestedArrays()
  {
     usp->q = Ip;
 
-   pVisor->Message( window(), GetName(),
+   pVisor->Message(GetName(),
              "Generation of EqStat records\n"
                  "Please, wait...", usp->q, usp->Q);
 
@@ -993,7 +993,7 @@ void TUnSpace::Un_criteria()
 
    for( t=0; t<usp->Q; t++ )
    {
-   pVisor->Message( window(), GetName(),
+   pVisor->Message(GetName(),
              "Generation of pay off matrix\n"
                  "Please, wait...", t, usp->Q);
 

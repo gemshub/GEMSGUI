@@ -113,7 +113,7 @@ void  TGEM2MT::NewNodeArray()
         {
             mtp->qc = q;
 
-            pVisor->Message( window(), GetName(),
+            pVisor->Message(GetName(),
                              "Initial calculation of equilibria in nodes. "
                              "Please, wait...", nit, mtp->nC);
 
@@ -776,15 +776,6 @@ bool TGEM2MT::Trans1D(char mode)
         log_vtk();
     }
 
-    bool UseGraphMonitoring = false;
-    if( mtp->PsSmode == S_OFF )
-        if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
-                                               GetName(), "Use graphic monitoring?") )
-        {
-            RecordPlot( nullptr );
-            UseGraphMonitoring = true;
-        }
-
     //  This loop contains the mass transport iteration time step
     do {
         // Calculating the control script at the beginning of a new time step
@@ -800,8 +791,7 @@ bool TGEM2MT::Trans1D(char mode)
             STEP_POINT2();
         }
         else
-            iret = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                                    mtp->ct, mtp->ntM, UseGraphMonitoring );
+            iret = pVisor->Message(GetName(),Vmessage.c_str(), mtp->ct, mtp->ntM);
 
         if(iret) {  // GUI stop point
             break;

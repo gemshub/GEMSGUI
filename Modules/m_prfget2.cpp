@@ -368,7 +368,7 @@ void TProfil::TestChangeProfile()
         aMT->ods_link(0);
         for(uint i=0; i< aList.size(); i++)
         {
-            pVisor->Message( nullptr, "Loading Modelling Project",
+            pVisor->Message("Loading Modelling Project",
                              "Detecting changes in TGEM2MT", 40+(5*i/aList.size()) );
             aMT->RecInput( aList[i].c_str() );
             //Get base SysEq key from TGEM2MT key
@@ -392,7 +392,7 @@ void TProfil::TestChangeProfile()
 
     for(uint i=0; i< aList.size(); i++)
     {
-        pVisor->Message( nullptr, "Loading Modelling Project",
+        pVisor->Message("Loading Modelling Project",
                          "Detecting changes in SYSEQ", 45+(45*i/aList.size()) );
         //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
         aSE->RecInput( aList[i].c_str() );
@@ -417,7 +417,7 @@ void TProfil::TestChangeProfile()
         aDU->ods_link(0);
         for(size_t i=0; i< aList.size(); i++)
         {
-            pVisor->Message( nullptr, "Loading Modelling Project",
+            pVisor->Message("Loading Modelling Project",
                              "Detecting changes in DUALTH", 90+(5*i/aList.size()) );
             aDU->RecInput( aList[i].c_str() );
             aDU->InsertChanges( aIComp  );
@@ -440,7 +440,7 @@ void TProfil::TestChangeProfile()
     if( aList.size() > 0 )
     {  for(size_t i=0; i< aList.size(); i++)
         {
-            pVisor->Message( nullptr, "Loading Modelling Project",
+            pVisor->Message("Loading Modelling Project",
                              "Detecting changes in SYSEQ", 95+(5*i/aList.size()) );
 
             //    aPB->ods_link(0);
@@ -531,7 +531,7 @@ AGAIN:
     for(nbad =0,  i=0; i< aList.size(); i++)
     {
         sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf, i, aList.size() );
+        iRet =  pVisor->Message("Re-calculating and saving all equilibria", tbuf, i, aList.size() );
         if( iRet )
             break;
 
@@ -671,7 +671,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
 
 //    elm_data.flNames.Add(prfName);
-    pVisor->Message( nullptr, "Loading Modelling Project",
+    pVisor->Message("Loading Modelling Project",
 "Copying Kernel database records to Modelling Project. Please, wait...", 10  );
 
     // added to project file icomp.kernel.prfname
@@ -1251,7 +1251,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey, ii, aList.size() ))
+         if( pVisor->Message("Re-calculating and saving all equilibria", pkey, ii, aList.size() ))
             break;
     }
 }
@@ -1298,7 +1298,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey, ii, aList.size() ))
+         if( pVisor->Message("Generating GEMS3K for process records", pkey, ii, aList.size() ))
             break;
     }
 }

@@ -606,7 +606,7 @@ TRTParm::RecCalc( const char *key )
     for( j=0; j<rpp->NV; j++ )
     {
         rpp->jTP = j;
-        pVisor->Message( window(), GetName(),
+        pVisor->Message(GetName(),
            "Sampling the xT, xP, yF data. "
                  "Please, wait...", j, rpp->NV );
         // rpp->RT[j] = R_CONSTANT * ( rpp->T[j] + C_to_K );

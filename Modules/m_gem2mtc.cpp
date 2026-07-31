@@ -677,7 +677,7 @@ void TGEM2MT::outMulti()
     for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
     {
         mtp->qc = mtp->kv;
-        pVisor->Message( window(), GetName(),
+        pVisor->Message(GetName(),
                          "Calculation of equilibria in nodes. "
                          "Please, wait...", mtp->kv, mtp->nIV);
 

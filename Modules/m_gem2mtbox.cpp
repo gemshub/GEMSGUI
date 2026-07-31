@@ -676,7 +676,7 @@ void TGEM2MT::CalcMGPdata()
       STEP_POINT2();
     }
     else
-      iret = pVisor->Message( window(), GetName(),Vmessage.c_str(),
+      iret = pVisor->Message(GetName(),Vmessage.c_str(),
                            nstep, mtp->ntM );
 
 
@@ -844,15 +844,6 @@ bool TGEM2MT::CalcSeqReacModel(char mode)
 
         BoxFluxTransportStart();
 
-    bool UseGraphMonitoring = false;
-    if( mtp->PsSmode == S_OFF )
-      if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
-             GetName(), "Use graphic monitoring?") )
-        {
-            RecordPlot( nullptr );
-            UseGraphMonitoring = true;
-        }
-
         // na->CopyWorkNodeFromArray( 0, mtp->nC,  na->pNodT1() );
         // na->GEM_write_dbr( "node0000.dat",  0, false );
 
@@ -937,8 +928,7 @@ bool TGEM2MT::CalcSeqReacModel(char mode)
       }
       else
       {
-          iret = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                                  mtp->ct, mtp->ntM, UseGraphMonitoring );
+          iret = pVisor->Message(GetName(),Vmessage.c_str(), mtp->ct, mtp->ntM);
       }
 
       if( iret )
@@ -1035,15 +1025,6 @@ bool TGEM2MT::CalcBoxFluxModel(char /*mode*/)
         BoxFluxTransportStart();
 
     bool iRet = false;
-    bool UseGraphMonitoring = false;
-
-     if( mtp->PsSmode == S_OFF )
-          if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
-             GetName(), "Use graphic monitoring?") )
-        {
-            RecordPlot( nullptr );
-            UseGraphMonitoring = true;
-        }
 
         // Initial calculation of chemical equilibria in all nodes with AIA initial approximation
         BoxEqStatesUpdate(-1,  0, mtp->cTau/mtp->tf, mtp->dTau/mtp->tf);
@@ -1054,10 +1035,9 @@ bool TGEM2MT::CalcBoxFluxModel(char /*mode*/)
         MaxIter = mtp->ntM*cfactor;   // Need to check the multiplicator for maximum number of iterations
         double new_dTau = 0.0;
 
-      iRet = pVisor->Message( window(), GetName(),
+      iRet = pVisor->Message(GetName(),
            "Simulating Reactive Transport in a Box-Flux setup. "
-           "Please, wait (may take time)...", nstep, MaxIter, UseGraphMonitoring );
-     //      "Please, wait (may take time)...", nstep, mtp->ntM, UseGraphMonitoring );
+           "Please, wait (may take time)...", nstep, MaxIter);
        if( iRet )
         Error("GEM2MT generic box-flux model", "Cancelled by the user");
   

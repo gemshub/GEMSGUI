@@ -822,8 +822,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
       cT = CSD->TKval[it]-C_to_K;
       for(  ip=0; ip<CSD->nPp; ip++)
       {
-       if( par )
-          pVisor->Message( par, "Building lookup arrays",
+        pVisor->Message("Building lookup arrays",
               "Loading thermodynamic data", it*CSD->nPp+ip, CSD->nTp*CSD->nPp );
 
        cP = CSD->Pval[ip]/1e5; //bar_to_Pa;
@@ -939,8 +938,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
     for(  ip=0; ip<CSD->nPp; ip++)
       {
 
-       if( par )
-          pVisor->Message( par, "Building lookup arrays",
+          pVisor->Message("Building lookup arrays",
               "Loading thermodynamic data", ip, CSD->nPp );
 
        it = std::min<int>( ip, CSD->nTp-1 );

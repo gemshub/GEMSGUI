@@ -173,7 +173,7 @@ void TDualTh::build_Ub()
  for( ii=0; ii<dtp->nQ; ii++)
  {
    dtp->q = ii;
-   pVisor->Message( window(), GetName(),
+   pVisor->Message(GetName(),
              "Generation of EqStat records\n"
                  "Please, wait...", dtp->q, dtp->nQ);
    TProfil::pm->Clear_XeA_XeD_Phm_BIun();

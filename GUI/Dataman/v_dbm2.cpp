@@ -1159,7 +1159,7 @@ int TDataBase::scanfile( uint nF, int& fPos, int& fLen,
 
         nRec++;
         gui_logger->debug("restore record: {}", ind.PackKey());
-        pVisor->Message( nullptr, nullptr, "Compressing database file. "
+        pVisor->Message( nullptr, "Compressing database file. "
                 "Please, wait...", fPos, fLen);
     }
     fLen = fEnd;

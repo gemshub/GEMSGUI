@@ -865,7 +865,7 @@ void TCModule::RecordPrint(const char* key)
 // Index files of data base
 void TCModule::RebildFile()
 {
-    pVisor->Message( window(), GetName(), "Compressing database file(s). "
+    pVisor->Message(GetName(), "Compressing database file(s). "
                                          "Please, wait...", 0, 100 );
 
     db->RebildFile(SelectFileList(closef|openf));
