@@ -1,6 +1,18 @@
+@echo off
+setlocal
+
+set "scriptPath=%~dp0"
+set "exePath=%scriptPath%Gems3-app\bin\gem-selektor.exe"
+
+REM Check if required files exist before attempting to launch
+IF NOT EXIST "%exePath%" (
+    echo ERROR: Executable not found: "%exePath%"
+    exit /b
+)
+
 rem  Change the path to the actual location of gem-selektor executable and Resources
 cd ./Gems3-app/bin
-set PATH=%CD%
+set "PATH=%CD%"
 
 rem Force Qt to use the platform plugin bundled with this app (Gems3-app\lib\qt6\plugins\platforms
 rem - the same lib\qt6\plugins layout the Linux build uses). Without this, a
@@ -34,28 +46,18 @@ rem (for developers only!)
 
 rem 6. Create on desktop a shortcut
 
-@echo off
-setlocal
-set "scriptPath=%~dp0"
 rem Shortcuts target rungems3.bat itself (not gem-selektor.exe directly) so that every
 rem launch - not just the very first one - goes through the QT_QPA_PLATFORM_PLUGIN_PATH fix
 rem above. Pointing a shortcut straight at the exe would skip that fix and could reproduce
 rem the "Could not find the Qt platform plugin" crash on machines with a conflicting Qt env var.
 set "targetPath=%scriptPath%rungems3.bat"
 set "workingDir=%scriptPath%"
-set "exePath=%scriptPath%Gems3-app\bin\gem-selektor.exe"
 set "iconPath=%scriptPath%Gems3-app\bin\gem-selektor.ico"
 set "startMenuShortcut=%APPDATA%\Microsoft\Windows\Start Menu\Programs\gems-selektor.lnk"
 
 REM Write the helper VBScript to %TEMP%, not the app's own folder: the app can be installed
 REM somewhere read-only (e.g. under Program Files), and %TEMP% is always per-user writable.
 set "vbsPath=%TEMP%\gemsgui-create-shortcut.vbs"
-
-REM Check if required files exist
-IF NOT EXIST "%exePath%" (
-    echo ERROR: Executable not found: "%exePath%"
-    exit /b
-)
 
 IF NOT EXIST "%iconPath%" (
     echo ERROR: Icon file not found: "%iconPath%"
@@ -70,7 +72,7 @@ echo oLink.TargetPath = "%targetPath%" >> "%vbsPath%"
 echo oLink.WorkingDirectory = "%workingDir%" >> "%vbsPath%"
 echo oLink.IconLocation = "%iconPath%" >> "%vbsPath%"
 echo oLink.Save >> "%vbsPath%"
-cscript //nologo "%vbsPath%"
+"%SystemRoot%\System32\cscript.exe" //nologo "%vbsPath%"
 set "cscriptRC=%ERRORLEVEL%"
 del "%vbsPath%" >nul 2>&1
 IF "%cscriptRC%"=="0" (
@@ -91,7 +93,7 @@ echo oLink.TargetPath = "%targetPath%" >> "%vbsPath%"
 echo oLink.WorkingDirectory = "%workingDir%" >> "%vbsPath%"
 echo oLink.IconLocation = "%iconPath%" >> "%vbsPath%"
 echo oLink.Save >> "%vbsPath%"
-cscript //nologo "%vbsPath%"
+"%SystemRoot%\System32\cscript.exe" //nologo "%vbsPath%"
 set "cscriptRC=%ERRORLEVEL%"
 del "%vbsPath%" >nul 2>&1
 IF "%cscriptRC%"=="0" (

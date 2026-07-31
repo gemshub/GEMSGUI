@@ -161,9 +161,12 @@ jobs:
       # structure exactly, so the signature survives the round trip.
       # -------------------------
       - name: Create zip archive for GitHub release
+        env:
+          DEPLOY_NAME: ${{ steps.strings.outputs.deploy-name }}
+          DEPLOY_OUTPUT_NAME: ${{ steps.strings2.outputs.deploy-output-name }}
         run: |
           cd ${{ github.workspace }}
-          ditto -c -k --keepParent ${{ steps.strings.outputs.deploy-name }} ${{ steps.strings2.outputs.deploy-output-name }}
+          ditto -c -k --keepParent "$DEPLOY_NAME" "$DEPLOY_OUTPUT_NAME"
 
       # -------------------------
       # Upload artifacts

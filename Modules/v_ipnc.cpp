@@ -77,11 +77,11 @@ static FUNCTION fun[] = {
 static bool is_safe_pow(double base, double exp) {
     // Check for domain error: negative base with non-integer exponent
     double int_part;
-    if(base < 0.0 && noZero(std::modf(exp, &int_part))) {
+    if(base < 0.0 && std::modf(exp, &int_part) != 0.0) {
         return false;
     }
     // Check for division by zero: zero base with negative exponent
-    if(approximatelyZero(base) && exp < 0.0) {
+    if(base == 0.0 && exp < 0.0) {
         return false;
     }
     return true;

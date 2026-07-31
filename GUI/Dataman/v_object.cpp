@@ -767,7 +767,11 @@ int  TObject::ofDB( GemDataStream& f )
 
         static_cast<SPP_SETTING*>(GetPtr())->read(f);
         // ios::cur - dosen't work in BCB4 :-(
-        f.seekg( off + f.tellg(), std::ios::beg );
+        // Reposition relative to the same 758-byte baseline used to find the "^^" delimiter
+        // above, NOT relative to f.tellg() after read() - otherwise this drifts out of sync
+        // whenever SPP_SETTING/BASE_PARAM's on-disk size differs from what read() consumes
+        // (e.g. after adding/removing a field), corrupting every object read after this one.
+        f.seekg( r_pos + 758 + off, std::ios::beg );
         //ssize = 768;
     }
     else	// all object with Keyword "**plt" considered PlotLine object !!!
@@ -1077,7 +1081,10 @@ void TObject::fromJsonObject(const QJsonObject &obj)
     }
     else
     {
-        if( Otype != Type || Odim_N != N || Odim_M != M )
+        // SPP_SETTING/BASE_PARAM size can change across versions (fields added/removed);
+        // tolerate the mismatch here, same as the binary-format workaround in ofDB().
+        if( strcmp(Keywd, "SPPpar") != 0 &&
+                ( Otype != Type || Odim_N != N || Odim_M != M ) )
             Error( GetKeywd(), "TObject:E07 Invalid type/size on getting static data object");
     }
 

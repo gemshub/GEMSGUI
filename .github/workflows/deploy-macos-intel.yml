@@ -93,17 +93,21 @@ jobs:
       # -------------------------
       - name: Run macdeployqt (no DMG)
         shell: bash -l {0}
+        env:
+          DEPLOY_OUTPUT_DIR: ${{ steps.strings2.outputs.deploy-output-dir }}
         run: |
           conda activate GEMSGUI
-          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          cd "$DEPLOY_OUTPUT_DIR"
           /Users/runner/miniconda3/envs/GEMSGUI/lib/qt6/bin/macdeployqt gem-selektor.app -verbose=2
 
       # -------------------------
       # Ad-hoc signing
       # -------------------------
       - name: Ad-hoc sign .app bundle
+        env:
+          DEPLOY_OUTPUT_DIR: ${{ steps.strings2.outputs.deploy-output-dir }}
         run: |
-          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          cd "$DEPLOY_OUTPUT_DIR"
           xattr -dr com.apple.quarantine gem-selektor.app || true
           codesign --force --deep --sign - gem-selektor.app
           codesign --verify --deep --strict gem-selektor.app
@@ -111,18 +115,16 @@ jobs:
       # -------------------------
       # Create DMG (signed app inside)
       # -------------------------
-      - name: Clean previous DMG
-        run: |
-          hdiutil detach /Volumes/gem-selektor || true
-          rm -f gem-selektor.dmg
-
       - name: Create DMG
+        env:
+          DEPLOY_OUTPUT_DIR: ${{ steps.strings2.outputs.deploy-output-dir }}
+          DEPLOY_NAME: ${{ steps.strings.outputs.deploy-name }}
         run: |
-          cd "${{ steps.strings2.outputs.deploy-output-dir }}"
+          cd "$DEPLOY_OUTPUT_DIR"
           hdiutil create -volname gem-selektor \
             -srcfolder gem-selektor.app \
             -ov -format UDZO gem-selektor.dmg
-          mv gem-selektor.dmg "${{ github.workspace }}/macos-${{ steps.strings.outputs.deploy-name }}.dmg"
+          mv gem-selektor.dmg "${{ github.workspace }}/macos-$DEPLOY_NAME.dmg"
 
       # -------------------------
       # ZIP packaging
@@ -138,9 +140,12 @@ jobs:
       # structure exactly, so the signature survives the round trip.
       # -------------------------
       - name: Create zip archive for GitHub release
+        env:
+          DEPLOY_NAME: ${{ steps.strings.outputs.deploy-name }}
+          DEPLOY_OUTPUT_NAME: ${{ steps.strings2.outputs.deploy-output-name }}
         run: |
           cd ${{ github.workspace }}
-          ditto -c -k --keepParent ${{ steps.strings.outputs.deploy-name }} ${{ steps.strings2.outputs.deploy-output-name }}
+          ditto -c -k --keepParent "$DEPLOY_NAME" "$DEPLOY_OUTPUT_NAME"
 
       # -------------------------
       # Upload artifacts
