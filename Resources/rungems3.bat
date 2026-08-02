@@ -7,12 +7,21 @@ set "exePath=%scriptPath%Gems3-app\bin\gem-selektor.exe"
 REM Check if required files exist before attempting to launch
 IF NOT EXIST "%exePath%" (
     echo ERROR: Executable not found: "%exePath%"
-    exit /b
+    exit /b 1
 )
 
-rem  Change the path to the actual location of gem-selektor executable and Resources
-cd ./Gems3-app/bin
-set "PATH=%CD%"
+rem  Change the path to the actual location of gem-selektor executable and Resources.
+rem  Use /d with the absolute scriptPath (not a path relative to the caller's cwd) so this
+rem  still resolves correctly when the batch file is invoked from another directory.
+set "appDir=%scriptPath%Gems3-app\bin"
+cd /d "%appDir%"
+IF ERRORLEVEL 1 (
+    echo ERROR: Could not change to application directory: "%appDir%"
+    exit /b 1
+)
+rem  Prepend the app dir so its own DLLs take priority, while keeping the inherited PATH
+rem  so name-only lookups of Windows helper executables started by gem-selektor.exe still work.
+set "PATH=%CD%;%PATH%"
 
 rem Force Qt to use the platform plugin bundled with this app (Gems3-app\lib\qt6\plugins\platforms
 rem - the same lib\qt6\plugins layout the Linux build uses). Without this, a
@@ -34,6 +43,7 @@ rem gem-selektor.exe -s . -u C:\Users\<USER>\Library\Gems3 > gems3.log
 rem 3. New file configuration if project subfolder(s) were added/removed to/from
 rem   /projects or if /projects are not in the default location
 gem-selektor.exe -c > gems3.log
+set "overallStatus=%ERRORLEVEL%"
 rem or
 rem gem-selektor.exe -c -s <Path_to_Resources> -u G:\My_GEMS_Projects_Location\Gems3 > gems3.log
 
@@ -61,7 +71,7 @@ set "vbsPath=%TEMP%\gemsgui-create-shortcut.vbs"
 
 IF NOT EXIST "%iconPath%" (
     echo ERROR: Icon file not found: "%iconPath%"
-    exit /b
+    exit /b 1
 )
 
 REM Create Start Menu shortcut
@@ -82,6 +92,7 @@ IF "%cscriptRC%"=="0" (
     echo or blocked by policy on this machine. You can still start GEM-Selektor by running
     echo rungems3.bat directly, or by right-clicking rungems3.bat and choosing "Pin to Start"/
     echo "Pin to taskbar".
+    set "overallStatus=1"
 )
 
 REM Create Desktop shortcut
@@ -102,6 +113,7 @@ IF "%cscriptRC%"=="0" (
     echo WARNING: Could not create the Desktop shortcut - Windows Script Host may be disabled
     echo or blocked by policy on this machine. You can still start GEM-Selektor by running
     echo rungems3.bat directly.
+    set "overallStatus=1"
 )
 
-endlocal
+endlocal & exit /b %overallStatus%

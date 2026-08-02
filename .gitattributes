@@ -1,4 +1,5 @@
 * text=auto !eol
+*.bat text eol=crlf
 Docs/Descriptions/Activity-Coeffs.docx -text
 Docs/Descriptions/Kinetics-Uptake.docx -text
 Docs/Descriptions/Multisite-Mixmod.docx -text
