@@ -1,0 +1,5 @@
+See gems-eDH-aqueous-model or gems-SIT-aqueous-model screenshots for using the extended Debye-Huckel or SIT models in a project. 
+Main edta contains the updated Edta speciation Hummel et al (2022). Solubility of Radionuclides and Influence of EDTA for use in the Development of the Cement Sorption Database (SDB 2022). NAB 22-38.
+Supplemental data for B, Cr, and Co are taken from THERMOCHIMIE10a:2018 https://www.thermochimie-tdb.com/ These data are not part of the official PSI data review, but can be used for calculations at the users discretion. 
+Supplemental data for zeolites phases selected in TDB2020 NAGRA NTB 21-03:  Hummel W. Thoenen T. (2022): The PSI Chemical Thermodynamic Database 2020, Nagra NTB 21-03. These are superseded by the selection of zeolites in cemdata26 database.
+Supplemental data for reactive organic species were sourced from the SUPCRT database. These values are not included in the official PSI data review, but may be used for calculations at the user’s discretion.
