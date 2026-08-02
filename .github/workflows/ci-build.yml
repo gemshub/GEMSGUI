@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+
     strategy:
       fail-fast: false
 
@@ -49,15 +52,31 @@ jobs:
           conda config --add channels conda-forge
           conda install conda-devenv
           conda run -n base python -m conda_devenv
-      
+
+      # ccache cache is only wired up for the Ninja-generator builds below (Linux/macOS):
+      # CMAKE_CXX_COMPILER_LAUNCHER (set automatically by cmake/modules/CCache.cmake when
+      # ccache is found on PATH) isn't reliably honored by the Visual Studio generator used
+      # for the Windows build (`-A x64`), so caching it there would have no effect.
+      - name: Cache ccache (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-
+
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
         shell: bash -l {0}
         run: |
           conda activate GEMSGUI
+          mkdir -p "$CCACHE_DIR"
+          ccache --max-size=500M
           mkdir .build && cd .build
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
           ninja
+          ccache --show-stats
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
         if: matrix.os == 'windows-latest'

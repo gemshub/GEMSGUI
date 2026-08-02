@@ -11,6 +11,9 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+
     strategy:
       fail-fast: false
 
@@ -56,17 +59,28 @@ jobs:
           conda install conda-devenv
           conda run -n base python -m conda_devenv
 
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-
+
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
         shell: bash -l {0}
         run: |
           conda activate GEMSGUI
+          mkdir -p "$CCACHE_DIR"
+          ccache --max-size=500M
           mkdir .build && cd .build
           export CC=$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-gcc
           export CXX=$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-g++
           export CONDA_BUILD_SYSROOT=$CONDA_PREFIX/x86_64-conda-linux-gnu/sysroot
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX
           ninja
+          ccache --show-stats
           ./generate_gems3help.sh
           ninja install
           cd benchcomp

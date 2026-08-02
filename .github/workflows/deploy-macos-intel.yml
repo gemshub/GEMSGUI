@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+
     strategy:
       fail-fast: false
       matrix:
@@ -63,18 +66,32 @@ jobs:
           conda install conda-devenv
           conda run -n base python -m conda_devenv
 
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-
+
       # -------------------------
       # Build & Install
       # -------------------------
+      # ccache is capped smaller here (vs. 500M on the other platforms) because this
+      # runner (macos-15-intel) has previously hit "No space left on device" during
+      # DMG creation later in this workflow - see CLAUDE.md's disk-space section.
       - name: Building, Testing & Installing GEMSGUI
         shell: bash -l {0}
         run: |
           conda activate GEMSGUI
+          mkdir -p "$CCACHE_DIR"
+          ccache --max-size=300M
           mkdir .build && cd .build
           cmake -GNinja .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
+          ccache --show-stats
           ./generate_gems3help.sh
           ninja install
 
