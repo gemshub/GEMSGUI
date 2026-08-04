@@ -1220,8 +1220,6 @@ TProcess::RecCalc( const char *key )
 // Try pure calculation time - now stored in ccTau!  DK 15.01.2009
 pep->ccTime = 0.0;
 
-    TProfil::pm->outMultiTxt("TProcess_ipm_1.txt");
-
     if( pep->Istat != P_EXECUTE && pep->Istat != P_MT_EXECUTE )
     {
        // Setup data for exporting mass transport
@@ -1304,7 +1302,6 @@ pep->ccTime = 0.0;
     pe_text_analyze();  //translate equations of process
     TCModule::RecCalc(key);
     ModUpdate("Working...");
-    TProfil::pm->outMultiTxt("TProcess_ipm_2.txt");
 
      if( pep->Istat >= P_MT_MODE )
      { // use thread
