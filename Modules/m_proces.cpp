@@ -1220,6 +1220,8 @@ TProcess::RecCalc( const char *key )
 // Try pure calculation time - now stored in ccTau!  DK 15.01.2009
 pep->ccTime = 0.0;
 
+    TProfil::pm->outMultiTxt("TProcess_ipm_1.txt");
+
     if( pep->Istat != P_EXECUTE && pep->Istat != P_MT_EXECUTE )
     {
        // Setup data for exporting mass transport
@@ -1302,6 +1304,7 @@ pep->ccTime = 0.0;
     pe_text_analyze();  //translate equations of process
     TCModule::RecCalc(key);
     ModUpdate("Working...");
+    TProfil::pm->outMultiTxt("TProcess_ipm_2.txt");
 
      if( pep->Istat >= P_MT_MODE )
      { // use thread
@@ -1322,174 +1325,180 @@ pep->ccTime = 0.0;
 }
 
 //internal calc record structure
-void
-TProcess::internalCalc()
+void TProcess::internalCalc()
 {
-    int nRec;
-    bool iRet = false;
-    TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
-    calcFinished = false;
-    
-    while( pep->Loop ) // main cycle of process
-    {
-        Vmessage = "Stepwise Process simulation: ";
-        Vmessage += " step "+std::to_string(pep->c_nrk)+" ("+pep->stkey+")";
-        Vmessage += ". Please, wait (may take time)...";
+    try {
+        int nRec;
+        bool iRet = false;
+        TProfil* PRof = dynamic_cast<TProfil*>(aMod[RT_PARAM].get());
+        calcFinished = false;
 
-    if( pep->Istat >= P_MT_MODE )
-    {
-       pointShow=-1;
-       STEP_POINT2();
-    }
-    else
-    // if( pointShow==-1 )
-    iRet = pVisor->Message( window(), GetName(),
-                 Vmessage.c_str(), pep->c_nrk, pep->NR1, pointShow!=-1);
+        while(pep->Loop) { // main cycle of process
+            Vmessage = "Stepwise Process simulation: ";
+            Vmessage += " step "+std::to_string(pep->c_nrk)+" ("+pep->stkey+")";
+            Vmessage += ". Please, wait (may take time)...";
 
-         if( iRet )
-           break;   //cancel process
-
-     // calc equations of process
-        if( pep->PsPro == S_OFF )
-        {
-            pe_next();
-
-            if( pep->PsEqn != S_OFF )
-                CalcEquat();
-
-            if( !pep->Loop )
-                break;
-        }
-        else // titration
-        {
-            if(  pep->NP == 1)
-            {
-                pep->NP = 0;
-                rt[RT_SYSEQ]->MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
-                                       RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
-                                       K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
-                // proc_titr();
-                // test external functions SD 12/05/2010
-                GoldenSection gsData( pep->pXii[0], pep->pXii[1], std::max(pep->pXii[2], 1e-16*fabs(pep->pXii[0])), pep->Nui[1], ff_proc);
-                pep->c_Eh = gsData.getMinimum();
-                pep->Loop = 2;
-                CalcEquat();
-
+            if(pep->Istat >= P_MT_MODE) {
+                pointShow=-1;
+                STEP_POINT2();
             }
-            else
-                pe_next();
-        }
-        // save work parametres and make key fields
-        pe_test();
-        if( pep->PsIN != S_OFF  && !pep->Loop )
-            break;
+            else {
+                // if( pointShow==-1 )
+                iRet = pVisor->Message( window(), GetName(),
+                                       Vmessage.c_str(), pep->c_nrk, pep->NR1, pointShow!=-1);
 
-        // Sveta   /*aMod[RT_PROCES].*/ModUpdate("Pe_calc    Process simulation");
-        // Stop Process from Andy Sveta
-
-        // make system ( SyTest() always in CalcEqstat() )
-//        if( pep->PsBC != S_OFF )
-//        {
-//            if( pep->PsGT != S_OFF ) // evaporation
-//                memcpy( TSysEq::pm->ssp->PhmKey, pep->stkey, EQ_RKLEN );
-            /*       if( pep->PsUX != S_OFF) // recalc system
-                     if( pep->PsSY != S_OFF )
-                       sprintf( sy[q].notes,"pXi = %15lg, Nu = %15lg",
-                                              pep->c_pXi, pep->c_Nu);
-             */
-//        }
-
-        // new SyStat key
-        rt[RT_SYSEQ]->MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
-                               RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
-                               K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
-        // test record make before
-        nRec = rt[RT_SYSEQ]->Find(pep->stkey);
-        if( nRec >= 0 )
-            pep->syt = rt[RT_SYSEQ]->GetTime( nRec );
-
-if( pep->PsRT != S_OFF )
-{  // Time-dependent calculations
-//    pep->Ntim;     pep->NTau;    pep->Tau[];
-//    pep->Taui[];   pep->c_Tau;   pep->kst;   pep->kdt;
-    pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
-    pep->kst++;
-}
-else {
-//    double dummy;
-//    pep->ccTime += PRof->CalcEqstat( dummy ); // calc current SyStat without time
-    pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
-    if( noZero(pep->kdt) )
-        pep->kst++;
-}
-        if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
-//13/08/2009        	    if( pep->Istat < P_MT_MODE )
-                 TSysEq::pm->SaveCurrentKey();  // save results
-//        }
-
-     // set results
-        if(  pep->PsGR != S_OFF  )
-            rpn[1].CalcEquat();
-        if( pep->stl )
-            memcpy( pep->stl+pep->c_nrk, pep->stkey, EQ_RKLEN );
-
-        if( pointShow >= 0 )
-        {
-          if( pep->PsRT == S_OFF )
-          {
-              if( pep->PsPro == S_OFF || pep->NP == 0 )
-                 CalcPoint( pep->c_nrk );
-               else
-                 CalcPoint( -1 );
-          }
-          else  // masstransport show
-            {
-              if( pep->Nst >= pep->Nxi-1 )
-              {
-                // show full graph
-                if( gd_gr )
-                  gd_gr->ShowGraph();
-
-                // export script
-                if( text_fmt )
-                { std::fstream f( filename, std::ios::out|std::ios::app );
-                  ErrorIf( !f.good() , filename, "Fileopen error");
-                   // scan and print format
-                  TPrintData dat( sd_key.c_str(), nRT, f, text_fmt );
+                if(iRet) {
+                    break;   //cancel process
                 }
-                // change internal counts
-                pe_reset();
-                pep->i++;
-                pep->c_Tau += pep->Taui[STEP_];
-                if( pep->i >= pep->Ntim )
-                    pep->Loop = false;
-                continue;
-              }
-           }
-         }
-         else
-           CalcPoint( -1 );
+            }
 
-        if( !(pep->PsPro != S_OFF && pep->NP == 1 ))
-            pep->Nst++;
-     
-//     if( pep->Istat < P_MT_MODE )
-        ModUpdate("Working..."); 
-    }  /* end while() */
- 
-    calcFinished = true;
-    
-   if( pep->Istat < P_MT_MODE )
-  //  if( pointShow == -1 )
-        pVisor->CloseMessage();
+            // calc equations of process
+            if(pep->PsPro == S_OFF)  {
+                pe_next();
 
-  if( pep->Istat >=P_MT_MODE )
-      pep->Istat = P_MT_FINISHED;
-    else
-      pep->Istat = P_FINISHED;
+                if(pep->PsEqn != S_OFF) {
+                    CalcEquat();
+                }
 
-    // Get startup syseq record for fitting
-    refreshState();
+                if(!pep->Loop) {
+                    break;
+                }
+            }
+            else { // titration
+
+                if(pep->NP == 1)   {
+                    pep->NP = 0;
+                    rt[RT_SYSEQ]->MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+                                          RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
+                                          K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
+                    // proc_titr();
+                    // test external functions SD 12/05/2010
+                    GoldenSection gsData( pep->pXii[0], pep->pXii[1], std::max(pep->pXii[2], 1e-16*fabs(pep->pXii[0])), pep->Nui[1], ff_proc);
+                    pep->c_Eh = gsData.getMinimum();
+                    pep->Loop = 2;
+                    CalcEquat();
+                }
+                else {
+                    pe_next();
+                }
+            }
+            // save work parametres and make key fields
+            pe_test();
+            if(pep->PsIN != S_OFF && !pep->Loop) {
+                break;
+            }
+
+            // new SyStat key
+            rt[RT_SYSEQ]->MakeKey( RT_PROCES,  pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+                                  RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
+                                  K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
+            // test record make before
+            nRec = rt[RT_SYSEQ]->Find(pep->stkey);
+            if(nRec >= 0) {
+                pep->syt = rt[RT_SYSEQ]->GetTime(nRec);
+            }
+
+            if(pep->PsRT != S_OFF) {  // Time-dependent calculations
+                //    pep->Ntim;     pep->NTau;    pep->Tau[];
+                //    pep->Taui[];   pep->c_Tau;   pep->kst;   pep->kdt;
+                pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
+                pep->kst++;
+            }
+            else {
+                //    double dummy;
+                //    pep->ccTime += PRof->CalcEqstat( dummy ); // calc current SyStat without time
+                pep->ccTime += PRof->CalcEqstat( pep->kdt, pep->kst, pep->c_Tau );
+                if( noZero(pep->kdt) )
+                    pep->kst++;
+            }
+            if(pep->PsSY != S_OFF || pep->PsUX != S_OFF) {
+                TSysEq::pm->SaveCurrentKey();  // save results
+            }
+
+            // set results
+            if(pep->PsGR != S_OFF) {
+                rpn[1].CalcEquat();
+            }
+            if(pep->stl) {
+                memcpy(pep->stl+pep->c_nrk, pep->stkey, EQ_RKLEN);
+            }
+
+            if(pointShow >= 0) {
+                if(pep->PsRT == S_OFF) {
+                    if(pep->PsPro == S_OFF || pep->NP == 0) {
+                        CalcPoint( pep->c_nrk );
+                    }
+                    else {
+                        CalcPoint(-1);
+                    }
+                }
+                else  { // masstransport show
+                    if(pep->Nst >= pep->Nxi-1) {
+                        // show full graph
+                        if(gd_gr) {
+                            gd_gr->ShowGraph();
+                        }
+
+                        // export script
+                        if(text_fmt) {
+                            std::fstream f( filename, std::ios::out|std::ios::app );
+                            ErrorIf( !f.good() , filename, "Fileopen error");
+                                // scan and print format
+                            TPrintData dat( sd_key.c_str(), nRT, f, text_fmt );
+                        }
+                        // change internal counts
+                        pe_reset();
+                        pep->i++;
+                        pep->c_Tau += pep->Taui[STEP_];
+                        if(pep->i >= pep->Ntim) {
+                            pep->Loop = false;
+                        }
+                        continue;
+                    }
+                }
+            }
+            else {
+                CalcPoint(-1);
+            }
+
+            if(!(pep->PsPro != S_OFF && pep->NP == 1 )) {
+                pep->Nst++;
+            }
+
+            ModUpdate("Working...");
+        }  /* end while() */
+
+        calcFinished = true;
+
+        if( pep->Istat < P_MT_MODE ) {
+            pVisor->CloseMessage();
+        }
+
+        if( pep->Istat >=P_MT_MODE ) {
+            pep->Istat = P_MT_FINISHED;
+        }
+        else {
+            pep->Istat = P_FINISHED;
+        }
+        // Get startup syseq record for fitting
+        refreshState();
+    }
+    catch(TError& xcpt) {
+        calcFinished = true;
+
+        if( pep->Istat < P_MT_MODE ) {
+            pVisor->CloseMessage();
+        }
+
+        if( pep->Istat >=P_MT_MODE ) {
+            pep->Istat = P_MT_FINISHED;
+        }
+        else {
+            pep->Istat = P_FINISHED;
+        }
+        throw xcpt;
+    }
+
 }
 
 
