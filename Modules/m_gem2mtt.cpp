@@ -706,8 +706,6 @@ bool TGEM2MT::Trans1D(char mode)
     bool CompMode = false;   // Component transport mode: true: DC; false: IC
     long int nStart = 0, nEnd = mtp->nC;
 
-    showMss = 0L;
-
     if(mtp->PvDDc == S_ON && mtp->PvDIc == S_OFF) { // Set of DC transport using record switches
         CompMode = true;
     }
@@ -755,15 +753,16 @@ bool TGEM2MT::Trans1D(char mode)
 
     mtp->iStat = AS_READY;
 
-    if( mtp->PsMode == RMT_MODE_F )
+    if(mtp->PsMode == RMT_MODE_F) {
         CalcMGPdata();
+    }
 
 #ifdef useOMP
     ta0 = omp_get_wtime();
 #else
     t_ap0 = clock();
 #endif
-    iret = accept_point(mtp->ct, "Trans1D before loop the mass transport iteratios");
+    iret = accept_point(mtp->ct, "Simulating Reactive Transport: ", mtp->ct, mtp->ntM);
 #ifdef useOMP
     ta1 = omp_get_wtime();
     otime +=(ta1-ta0);
@@ -778,21 +777,6 @@ bool TGEM2MT::Trans1D(char mode)
 
     //  This loop contains the mass transport iteration time step
     do {
-        // Calculating the control script at the beginning of a new time step
-        // if( mtp->ct > 0)
-        //      CalcControlScript();   // should run over all nodes i.e. nC times
-        gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
-        Vmessage = "Simulating Reactive Transport: ";
-        Vmessage += "   time "+std::to_string(mtp->cTau)+"; step "+std::to_string(mtp->ct);
-        Vmessage += ". Please, wait (may take time)...";
-
-        if( mtp->PsSmode != S_OFF  )
-        {
-            STEP_POINT2();
-        }
-        else
-            iret = pVisor->Message(GetName(),Vmessage.c_str(), mtp->ct, mtp->ntM);
-
         if(iret) {  // GUI stop point
             break;
         }
@@ -823,9 +807,9 @@ bool TGEM2MT::Trans1D(char mode)
         ta0 = omp_get_wtime();
 #else
         t_ap0 = clock();
-#endif \
+#endif
         // Show/out results after GEM calculations over nodes
-        iret = accept_point(mtp->ct, "Trans1D time step accepted");
+        iret = accept_point(mtp->ct, "Simulating Reactive Transport: ", mtp->ct, mtp->ntM);
 #ifdef useOMP
         ta1 = omp_get_wtime();
         otime +=(ta1-ta0);
@@ -842,10 +826,9 @@ bool TGEM2MT::Trans1D(char mode)
         }
 
         // Calculating the control script at the end of a new time step
-        if( mtp->ct > 0)
-            CalcControlScript();   // should run over all nodes i.e. nC times
-        gui_logger->debug("Recalculating 1D control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
-
+        if(mtp->ct > 0)
+            CalcControlScript();
+        
         if( mtp->PsMode == RMT_MODE_F ) { // in F mode
             CalcMGPdata(); // Recalculation of MGP compositions and masses
         }
@@ -904,9 +887,14 @@ void TGEM2MT::point_to_loggers()
 
 }
 
-bool TGEM2MT::accept_point(long int mtp_cp, std::string message)
+bool TGEM2MT::accept_point(long int mtp_cp, std::string message, int prog, int total)
 {
-    gems_logger->info("Model {} TGEM2MT accept point {} - {} ", mtp->PsMode, mtp_cp, message);
+    bool iret = false;
+    auto Vmessage = message;
+    Vmessage += " step "+std::to_string(mtp->ct)+"; time "+std::to_string(mtp->cTau)+"; dtime "+std::to_string(mtp->dTau);
+    Vmessage += ". Please, wait (may take time)...";
+
+    gems_logger->info(Vmessage);
 
     if(mtp_cp >= 0) {
         // Here one has to compare old and new equilibrium phase assemblage
@@ -920,10 +908,17 @@ bool TGEM2MT::accept_point(long int mtp_cp, std::string message)
         }
     }
 
-    // time step accepted
+    // time step accepted or first
     pVisor->Update();
     CalcGraph();
-    return false;
+    if(mtp->PsSmode != S_OFF)  {
+        STEP_POINT2();
+    }
+    else {
+        iret = pVisor->Message(GetName(), Vmessage.c_str(), prog, total);
+    }
+
+    return iret;
 }
 
 void TGEM2MT::log_vtk()
@@ -937,6 +932,43 @@ void TGEM2MT::log_vtk()
     }
     else {
         na->databr_to_vtk(out_vtk, nameVTK, mtp->cTau, mtp->ct, mtp->nVTKfld, mtp->xVTKfld);
+    }
+}
+
+// Calculation of control script at time mtp->cTau (step mtp->ct) of RT simulation
+void TGEM2MT::CalcControlScript()
+{
+    gems_logger->info("Control Script runs @ ct= {}   cTau= {}", mtp->ct, mtp->cTau);
+
+    if(mtp->PvMSc == S_OFF) {  // This switch is S_ON when mtp->PvMSt is S_ON, but this may be optimized
+        return;
+    }
+
+    // scroll through the nodes (boxes)
+    for(long int ii=0; ii< mtp->nC; ++ii) {
+        mtp->jt = std::min( ii, (mtp->nC-1));
+        mtp->qc = ii;
+        LinkNode0(ii); // linking node DODs to current node with index qc
+        LinkNode1(ii);
+        mtp->qf = 0;  // index of flux should be set explicitly, explicit index of mgp taken from the flux
+        rpn[0].CalcEquat();
+    }
+
+}
+
+// Calculation of control script at RT problem initialization stage
+void TGEM2MT::CalcStartScript()
+{
+    if(mtp->PvMSt == S_OFF) {
+        return;
+    }
+
+    // generate Ti, Pi, Vi, DiCp, HydP, ... and fluxes arrays
+    for(long int ii=0; ii< std::max( mtp->nC, mtp->nFD ); ++ii) {
+        mtp->jt = std::min(ii, mtp->nC-1);
+        mtp->qc = std::min(ii, mtp->nC-1);  // index of node
+        mtp->qf = std::min(ii, mtp->nFD-1);  // index of flux
+        rpn[0].CalcEquat();
     }
 }
 

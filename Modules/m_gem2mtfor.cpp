@@ -12,6 +12,7 @@
 //-------------------------------------------------------------------
 
 #include "m_gem2mt.h"
+#include "visor.h"
 #include "GEMS3K/io_template.h"
 #include "GEMS3K/io_nlohmann.h"
 #include "GEMS3K/io_simdjson.h"
@@ -136,39 +137,45 @@ void TGEM2MT::mt_reset()
 //internal calc record structure
 bool TGEM2MT::internalCalc()
 {
-     bool iRet = 0;
-     calcFinished = false;
+    try {
 
-     alloc_loggers();
+        bool iret = false;
+        calcFinished = false;
 
-     if(mtp->PsSmode == S_OFF) {
-        if(mtp->PvMSg != S_OFF && vfQuestion(window(), GetName(), "Use graphic monitoring?")) {
-             RecordPlot( nullptr );
-         }
-     }
+        showMss = 0L; // skip multi err question for all systems
 
-     if( mtp->PsMode == RMT_MODE_B ) // || mtp->PsMode == RMT_MODE_F  ) // Flux-box integrated model
-     {
-         iRet = CalcBoxFluxModel( NEED_GEM_SIA );
-     }
-     else if( mtp->PsMode == RMT_MODE_S )
-     {
-         iRet = CalcSeqReacModel( NEED_GEM_SIA );
-     }
-     else if( mtp->PsMode == RMT_MODE_A || mtp->PsMode == RMT_MODE_C || mtp->PsMode == RMT_MODE_W
-           || mtp->PsMode == RMT_MODE_F )  // 1D RMT models or simple 1D flux-box pipe sequence w/o integration
-     {
-         iRet =  Trans1D( NEED_GEM_SIA );  // here A,W,C, and also F modes
-     }
-     else
-     {
-         ;  // Wrong model code - error message to be issued
-     }
-    calcFinished = true;
-    return iRet;
+        alloc_loggers();
+
+        if(mtp->PsSmode == S_OFF) {
+            if(mtp->PvMSg != S_OFF && vfQuestion(window(), GetName(), "Use graphic monitoring?")) {
+                RecordPlot( nullptr );
+            }
+        }
+
+        if(mtp->PsMode == RMT_MODE_B) { // || mtp->PsMode == RMT_MODE_F  ) // Flux-box integrated model
+            iret = CalcBoxFluxModel(NEED_GEM_SIA);
+        }
+        else if(mtp->PsMode == RMT_MODE_S) {
+            iret = CalcSeqReacModel(NEED_GEM_SIA);
+        }
+        else if(mtp->PsMode == RMT_MODE_A || mtp->PsMode == RMT_MODE_C || mtp->PsMode == RMT_MODE_W
+                 || mtp->PsMode == RMT_MODE_F) {  // 1D RMT models or simple 1D flux-box pipe sequence w/o integration
+            iret = Trans1D(NEED_GEM_SIA);  // here A,W,C, and also F modes
+        }
+        else {
+            ;  // Wrong model code - error message to be issued
+        }
+        calcFinished = true;
+        return iret;
+
+    }
+    catch(TError& xcpt) {
+        pVisor->CloseMessage();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+        gems_logger->error("{}  {}", xcpt.title, xcpt.mess);
+        return 1;
+    }
 }
-
-
 
 //==========================================================================================
 //set default information

@@ -332,7 +332,7 @@ class TGEM2MT
     void logProfilePhMol(spdlog::logger* logfile, int inode )
     {
         if( pa_mt )
-            pa_mt->logProfilePhMol( logfile, inode );
+            pa_mt->logProfilePhMol(logfile, inode);
     }
 
     // new callback API
@@ -357,7 +357,12 @@ class TGEM2MT
     /// Function for sampling and plotting the properties of nodes at next time step.
     /// Output of the results if step accepted
     /// @param mtp_cp - actual time index
-    bool accept_point(long int mtp_cp, std::string message);
+    bool accept_point(long int mtp_cp, std::string message, int prog, int total);
+
+    void CalcStartScript();
+    void CalcControlScript();
+    void CalcStartScript2();
+    void CalcControlScript2();
 
 protected:
 
@@ -377,8 +382,6 @@ protected:
     void make_A( long int siz_, char (*for_)[MAXFORMUNITDT] );
     void Bn_Calc();
     void gen_TPval();
-    void CalcStartScript();
-    void CalcControlScript();
 
     void  copyNodeArrays();
     void  NewNodeArray();
@@ -432,7 +435,7 @@ protected:
     void  BoxesBCupdate();  // was CalcNodeFlux()
     void  CalcMGPdata();
     // Calculate new box states for tcur = x
-    bool BoxEqStatesUpdate( long int Ni,long int pr, double x, double step );
+    bool BoxEqStatesUpdate( long int Ni, double x, double step );
     bool CalcSeqReacModel( char mode ); // Calculation of S-mode sequential reactors model
     bool CalcBoxFluxModel( char mode ); // integrate boxes with fluxes of Mobile Groups of Phases
 

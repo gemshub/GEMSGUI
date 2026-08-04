@@ -740,46 +740,6 @@ void TGEM2MT::CalcGraph()
  }
 }
 
-// Calculation of control script at time mtp->cTau (step mtp->ct) of RT simulation
-void TGEM2MT::CalcControlScript()
-{
-    gui_logger->trace("PvMSc:  {}", mtp->PvMSc);
-    if( mtp->PvMSc  == S_OFF  )  // This switch is S_ON when mtp->PvMSt is S_ON, but this may be optimized
-      return;
-    // DATABR* BR0; DATABR* BR1;
-    gui_logger->info("Control Script runs @ ct= {}   cTau= {}", mtp->ct, mtp->cTau);
-    // roll through the nodes (boxes)
-    for( long int ii=0; ii< mtp->nC; ii++)
-    {
-        // BR0 = na->pNodT0()[ii];
-        // BR1 = na->pNodT1()[ii];
-        mtp->jt = std::min( ii, (mtp->nC-1));
-        mtp->qc = ii;
-        LinkNode0(ii); // linking node DODs to current node with index qc
-        LinkNode1(ii);
-        mtp->qf = 0;  // index of flux should be set explicitly, explicit index of mgp taken from the flux
-        rpn[0].CalcEquat();
-    }
-
-}
-
-// Calculation of control script at RT problem initialization stage
-void TGEM2MT::CalcStartScript()
-{
-    if( mtp->PvMSt  == S_OFF  )
-      return;
-
-  // generate Ti, Pi, Vi, DiCp, HydP, ... and fluxes arrays
-    for( long int ii=0; ii< std::max( mtp->nC, mtp->nFD ); ii++)
-    {
-      mtp->jt = std::min(ii, mtp->nC-1);
-      mtp->qc = std::min(ii, mtp->nC-1);  // index of node
-      mtp->qf = std::min(ii, mtp->nFD-1);  // index of flux
-      rpn[0].CalcEquat();
-    }
-
-}
-
 // working with scripts --------------------------------------------
 // Translate, analyze and unpack equations (o_mttexpr or o_mtgexpr)
 
