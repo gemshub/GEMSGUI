@@ -1,0 +1,8 @@
+json2db's trimmed Resources/ install ships this placeholder so
+Resources/projects/ is non-empty: TVisor::firstTimeSetup() does a raw
+`cp -r Resources/projects/* <userdir>/projects` on first run (when the -u
+directory doesn't exist yet) and treats a source projects/ dir that doesn't
+exist -- or is completely empty, since the unmatched `*` glob then fails the
+same way -- as a fatal error. Prefer pre-creating the -u user dir yourself
+so firstTimeSetup() never runs at all; this file is a fallback for when it
+does.
