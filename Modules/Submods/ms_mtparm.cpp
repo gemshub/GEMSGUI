@@ -21,6 +21,7 @@
 #include "m_param.h"
 #include "m_reacdc.h"
 #include "m_dcomp.h"
+#include "m_phase.h"
 #include "visor.h"
 #include "s_supcrt.h"
 
@@ -400,6 +401,19 @@ void TMTparm::LoadMtparm( double cT, double cP )
     TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());    // added 07.06.05 by KD
     RMULTS* mup = TRMults::sm->GetMU();
 
+    // If the aqueous phase uses the built-in Pitzer (HMW) model, its dielectric
+    // constant of water must come from the aq-phase Bradley-Pitzer (1979) correlation
+    // (computed unconditionally below), never from the H2O DComp record's own
+    // HKF/Born-function calculation - regardless of that record's T,P-method code.
+    bool aqIsPitzer = false;
+    if( tp.La && mup->nAq >= 0 )
+    {
+        TPhase* aPhAq = dynamic_cast<TPhase *>(aMod[RT_PHASE].get());
+        time_t crtAq;
+        aPhAq->TryRecInp( mup->SF[mup->nAq], crtAq, 0 );
+        aqIsPitzer = ( aPhAq->php->sol_t[SPHAS_TYP] == SM_AQPITZ );
+    }
+
     if( tp.L != mup->L ||  tp.Ls != mup->Ls ||
             tp.Lg != mup->Pg ||  tp.La != mup->Laq )
         Error( "MTparm", "Modelling project dimension error!");
@@ -626,14 +640,18 @@ void TMTparm::LoadMtparm( double cT, double cP )
 
          // recalculate and assign water properties
          tp.RoW  = aSta.Dens[aSpc.isat];  // density (g cm-3)
-         tp.EpsW = aWp.Dielw[aSpc.isat];  // dielectric constant
          tp.VisW = aWp.Viscw[aSpc.isat];  //dynamic viscosity
          tp.dRdTW = - alpw * rhow;
          tp.d2RdT2W = rhow * ( pow(alpw,2.) - dalw );
          tp.dRdPW = betw * rhow;
-         tp.dEdTW = ybornw * pow(epsw,2.);
-         tp.d2EdT2W = (xbornw + 2.*epsw*pow(ybornw,2.)) * pow(epsw,2.);
-         tp.dEdPW = qbornw * pow(epsw,2.);
+         if( !aqIsPitzer )
+         {  // Pitzer aqueous phase keeps the Bradley-Pitzer tp.EpsW (and zero
+            // derivatives) set earlier instead of this HKF/Born-function value
+            tp.EpsW = aWp.Dielw[aSpc.isat];  // dielectric constant
+            tp.dEdTW = ybornw * pow(epsw,2.);
+            tp.d2EdT2W = (xbornw + 2.*epsw*pow(ybornw,2.)) * pow(epsw,2.);
+            tp.dEdPW = qbornw * pow(epsw,2.);
+         }
          tp.RoV  = aSta.Dens[!aSpc.isat];  // density (g cm-3)
          tp.EpsV = aWp.Dielw[!aSpc.isat];  // dielectric constant
          tp.VisV = aWp.Viscw[!aSpc.isat];  //dynamic viscosity
