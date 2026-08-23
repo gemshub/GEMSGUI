@@ -48,7 +48,7 @@ rem or
 rem gem-selektor.exe -c -s <Path_to_Resources> -u G:\My_GEMS_Projects_Location\Gems3 > gems3.log
 
 rem 4. New \data\*.ini files - remake DOD and module dialog configurators
-rem Otherwise, does the same as  gems3 -c
+rem Otherwise, does the same as gems3 -c
 rem gem-selektor.exe -d -s . -u C:\Users\<USER>\Library\Gems3 > gems3.log
 
 rem 5. Add -f after gem-selektor.exe for a write access to database files in \DB.default\
@@ -74,7 +74,7 @@ IF NOT EXIST "%iconPath%" (
     exit /b 1
 )
 
-REM Create Start Menu shortcut
+rem Create Start Menu shortcut
 echo Creating Start Menu shortcut...
 echo Set oWS = CreateObject("WScript.Shell") > "%vbsPath%"
 echo Set oLink = oWS.CreateShortcut("%startMenuShortcut%") >> "%vbsPath%"
@@ -95,7 +95,7 @@ IF "%cscriptRC%"=="0" (
     set "overallStatus=1"
 )
 
-REM Create Desktop shortcut
+rem Create Desktop shortcut
 echo Creating Desktop shortcut...
 echo Set oWS = CreateObject("WScript.Shell") > "%vbsPath%"
 echo strDesktop = oWS.SpecialFolders("Desktop") >> "%vbsPath%"
