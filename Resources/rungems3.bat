@@ -1,21 +1,49 @@
 @echo off
 setlocal
 
-rem  Change the path to the actual location of gem-selektor executable and Resources
-cd /d "%~dp0Gems3-app\bin"
-set "PATH=%PATH%;%CD%"
+set "scriptPath=%~dp0"
+set "exePath=%scriptPath%Gems3-app\bin\gem-selektor.exe"
+
+REM Check if required files exist before attempting to launch
+IF NOT EXIST "%exePath%" (
+    echo ERROR: Executable not found: "%exePath%"
+    exit /b 1
+)
+
+rem  Change the path to the actual location of gem-selektor executable and Resources.
+rem  Use /d with the absolute scriptPath (not a path relative to the caller's cwd) so this
+rem  still resolves correctly when the batch file is invoked from another directory.
+set "appDir=%scriptPath%Gems3-app\bin"
+cd /d "%appDir%"
+IF ERRORLEVEL 1 (
+    echo ERROR: Could not change to application directory: "%appDir%"
+    exit /b 1
+)
+rem  Prepend the app dir so its own DLLs take priority, while keeping the inherited PATH
+rem  so name-only lookups of Windows helper executables started by gem-selektor.exe still work.
+set "PATH=%CD%;%PATH%"
+
+rem Force Qt to use the platform plugin bundled with this app (Gems3-app\lib\qt6\plugins\platforms
+rem - the same lib\qt6\plugins layout the Linux build uses). Without this, a
+rem QT_QPA_PLATFORM_PLUGIN_PATH or QT_PLUGIN_PATH already set on this machine (e.g. left over from
+rem an unrelated Anaconda/PyQt/Qt Creator install) can override Qt's normal bundled-app lookup, and
+rem gem-selektor.exe aborts immediately with:
+rem   qt.qpa.plugin: Could not find the Qt platform plugin "windows" in ""
+set "QT_QPA_PLATFORM_PLUGIN_PATH=%CD%\..\lib\qt6\plugins\platforms"
+set "QT_PLUGIN_PATH=%CD%\..\lib\qt6\plugins"
 
 rem 1. First launch with default location of modeling projects (usually done by the installer)
 rem gem-selektor.exe -d > gems3.log
 
 rem 2. Normal runs in default locations (retains all settings from previous session)
-rem gem-selektor.exe > gems3.log
+rem gem-selektor.exe  > gems3.log
 rem or
 rem gem-selektor.exe -s . -u C:\Users\<USER>\Library\Gems3 > gems3.log
 
 rem 3. New file configuration if project subfolder(s) were added/removed to/from
 rem   /projects or if /projects are not in the default location
 gem-selektor.exe -c > gems3.log
+set "overallStatus=%ERRORLEVEL%"
 rem or
 rem gem-selektor.exe -c -s <Path_to_Resources> -u G:\My_GEMS_Projects_Location\Gems3 > gems3.log
 
@@ -28,44 +56,64 @@ rem (for developers only!)
 
 rem 6. Create on desktop a shortcut
 
-set "scriptPath=%~dp0"
-set "targetPath=%scriptPath%Gems3-app\bin\gem-selektor.exe"
+rem Shortcuts target rungems3.bat itself (not gem-selektor.exe directly) so that every
+rem launch - not just the very first one - goes through the QT_QPA_PLATFORM_PLUGIN_PATH fix
+rem above. Pointing a shortcut straight at the exe would skip that fix and could reproduce
+rem the "Could not find the Qt platform plugin" crash on machines with a conflicting Qt env var.
+set "targetPath=%scriptPath%rungems3.bat"
+set "workingDir=%scriptPath%"
 set "iconPath=%scriptPath%Gems3-app\bin\gem-selektor.ico"
 set "startMenuShortcut=%APPDATA%\Microsoft\Windows\Start Menu\Programs\gems-selektor.lnk"
-set "desktopShortcut=%USERPROFILE%\Desktop\gems-selektor.lnk"
 
-rem Check if required files exist
-IF NOT EXIST "%targetPath%" (
-    echo ERROR: Executable not found: "%targetPath%"
-    exit /b
-)
+REM Write the helper VBScript to %TEMP%, not the app's own folder: the app can be installed
+REM somewhere read-only (e.g. under Program Files), and %TEMP% is always per-user writable.
+set "vbsPath=%TEMP%\gemsgui-create-shortcut.vbs"
 
 IF NOT EXIST "%iconPath%" (
     echo ERROR: Icon file not found: "%iconPath%"
-    exit /b
+    exit /b 1
 )
 
 rem Create Start Menu shortcut
 echo Creating Start Menu shortcut...
-echo Set oWS = CreateObject("WScript.Shell") > CreateShortcut.vbs
-echo Set oLink = oWS.CreateShortcut("%startMenuShortcut%") >> CreateShortcut.vbs
-echo oLink.TargetPath = "%targetPath%" >> CreateShortcut.vbs
-echo oLink.IconLocation = "%iconPath%" >> CreateShortcut.vbs
-echo oLink.Save >> CreateShortcut.vbs
-cscript //nologo CreateShortcut.vbs
-del CreateShortcut.vbs
-echo Shortcut created successfully in Start Menu.
+echo Set oWS = CreateObject("WScript.Shell") > "%vbsPath%"
+echo Set oLink = oWS.CreateShortcut("%startMenuShortcut%") >> "%vbsPath%"
+echo oLink.TargetPath = "%targetPath%" >> "%vbsPath%"
+echo oLink.WorkingDirectory = "%workingDir%" >> "%vbsPath%"
+echo oLink.IconLocation = "%iconPath%" >> "%vbsPath%"
+echo oLink.Save >> "%vbsPath%"
+"%SystemRoot%\System32\cscript.exe" //nologo "%vbsPath%"
+set "cscriptRC=%ERRORLEVEL%"
+del "%vbsPath%" >nul 2>&1
+IF "%cscriptRC%"=="0" (
+    echo Shortcut created successfully in Start Menu.
+) ELSE (
+    echo WARNING: Could not create the Start Menu shortcut - Windows Script Host may be disabled
+    echo or blocked by policy on this machine. You can still start GEM-Selektor by running
+    echo rungems3.bat directly, or by right-clicking rungems3.bat and choosing "Pin to Start"/
+    echo "Pin to taskbar".
+    set "overallStatus=1"
+)
 
 rem Create Desktop shortcut
 echo Creating Desktop shortcut...
-echo Set oWS = CreateObject("WScript.Shell") > CreateShortcut.vbs
-echo strDesktop = oWS.SpecialFolders("Desktop") >> CreateShortcut.vbs
-echo Set oLink = oWS.CreateShortcut(strDesktop ^& "\gems-selektor.lnk") >> CreateShortcut.vbs
-echo oLink.TargetPath = "%targetPath%" >> CreateShortcut.vbs
-echo oLink.IconLocation = "%iconPath%" >> CreateShortcut.vbs
-echo oLink.Save >> CreateShortcut.vbs
-cscript //nologo CreateShortcut.vbs
-del CreateShortcut.vbs
-echo Shortcut created successfully on Desktop.
+echo Set oWS = CreateObject("WScript.Shell") > "%vbsPath%"
+echo strDesktop = oWS.SpecialFolders("Desktop") >> "%vbsPath%"
+echo Set oLink = oWS.CreateShortcut(strDesktop ^& "\gems-selektor.lnk") >> "%vbsPath%"
+echo oLink.TargetPath = "%targetPath%" >> "%vbsPath%"
+echo oLink.WorkingDirectory = "%workingDir%" >> "%vbsPath%"
+echo oLink.IconLocation = "%iconPath%" >> "%vbsPath%"
+echo oLink.Save >> "%vbsPath%"
+"%SystemRoot%\System32\cscript.exe" //nologo "%vbsPath%"
+set "cscriptRC=%ERRORLEVEL%"
+del "%vbsPath%" >nul 2>&1
+IF "%cscriptRC%"=="0" (
+    echo Shortcut created successfully on Desktop.
+) ELSE (
+    echo WARNING: Could not create the Desktop shortcut - Windows Script Host may be disabled
+    echo or blocked by policy on this machine. You can still start GEM-Selektor by running
+    echo rungems3.bat directly.
+    set "overallStatus=1"
+)
 
-endlocal
+endlocal & exit /b %overallStatus%

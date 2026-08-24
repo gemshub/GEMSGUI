@@ -3,7 +3,7 @@ name: deploy-macos
 on:
   push:
     branches:
-      - test_prerelease
+      - fix_pow_other_bugs
   release:
     types:
       - published
@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
 
     strategy:
       fail-fast: false
@@ -62,7 +65,15 @@ jobs:
           conda config --add channels conda-forge
           conda install conda-devenv
           conda run -n base python -m conda_devenv
-      
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-
+
       # -------------------------
       # Build & Install
       # -------------------------
@@ -70,12 +81,15 @@ jobs:
         shell: bash -l {0}
         run: |
           conda activate GEMSGUI
+          mkdir -p "$CCACHE_DIR"
+          ccache --max-size=500M
           mkdir .build && cd .build
           cmake -GNinja .. \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_OSX_ARCHITECTURES=arm64 \
             -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }}
           ninja
+          ccache --show-stats
           ./generate_gems3help.sh
           ninja install
 
@@ -149,11 +163,24 @@ jobs:
 
       # -------------------------
       # ZIP packaging
+      #
+      # Must use ditto, not zip: plain `zip -r` follows symlinks by default
+      # on macOS and copies their targets in place, which flattens the
+      # Versions/Current-style symlinks inside each Qt .framework. That
+      # mismatches the bundle's embedded CodeResources manifest (which
+      # records those entries as symlinks) and invalidates the deep
+      # signature applied above - Gatekeeper then reports the app as
+      # "damaged" with no "Open Anyway" override, instead of the milder
+      # unidentified-developer prompt. ditto preserves symlinks/bundle
+      # structure exactly, so the signature survives the round trip.
       # -------------------------
       - name: Create zip archive for GitHub release
+        env:
+          DEPLOY_NAME: ${{ steps.strings.outputs.deploy-name }}
+          DEPLOY_OUTPUT_NAME: ${{ steps.strings2.outputs.deploy-output-name }}
         run: |
           cd ${{ github.workspace }}
-          zip -r ${{ steps.strings2.outputs.deploy-output-name }} ${{ steps.strings.outputs.deploy-name }}
+          ditto -c -k --keepParent "$DEPLOY_NAME" "$DEPLOY_OUTPUT_NAME"
 
       # -------------------------
       # Upload artifacts

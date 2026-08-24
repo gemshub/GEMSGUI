@@ -123,7 +123,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Setup for exporting look-up arrays with standard thermodynamic data (into DCH file)</string>
+          <string>Range based setup for exporting look-up arrays with standard thermodynamic data (into DCH file)</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -309,7 +309,7 @@
                 <double>0.100000000000000</double>
                </property>
                <property name="value">
-                <double>1.000000000000000</double>
+                <double>0.500000000000000</double>
                </property>
               </widget>
              </item>
@@ -322,13 +322,13 @@
        <item>
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
-          <string>Setup of T and P values and look-up array structure for exporting thermodynamic data</string>
+          <string>Manual setup for exporting arrays with standard thermodynamic data, define table and T and P values</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0" colspan="3">
            <widget class="QCheckBox" name="checkArrays">
             <property name="text">
-             <string>Enter pressure P and temperature T values</string>
+             <string>Manually edit P and T values (opens editable table) (for GEMSFITS)</string>
             </property>
            </widget>
           </item>
@@ -338,7 +338,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Disable  Interpolation</string>
+             <string>Disable interpolation - use (T,P) pairs only (for GEMSFITS)</string>
             </property>
            </widget>
           </item>
@@ -425,6 +425,9 @@
    </item>
    <item row="1" column="1">
     <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>218</width>

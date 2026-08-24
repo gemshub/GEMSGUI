@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.16..4.2)
 
 # Set the name of the project
-project(GEMSGUI VERSION 3.11.3 LANGUAGES CXX)
+project(GEMSGUI VERSION 3.12.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -64,7 +64,11 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 include(GEMSGUIFindDeps)
 
 # Find Qt dependencies
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Charts Concurrent PrintSupport Svg Help Sql)
+if(BUILD_APP)
+  find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Charts Concurrent PrintSupport Svg Help Sql)
+else()
+  find_package(Qt6 REQUIRED COMPONENTS Core)
+endif()
 qt_standard_project_setup()
 
 # Versioning
@@ -172,8 +176,10 @@ if(BUILD_NLOHMANNJSON MATCHES ON)
   add_definitions(-DUSE_NLOHMANNJSON)
 endif()
 
-# Build libraries
-add_subdirectory(GUI)
+# Build libraries (only needed by the App target)
+if(BUILD_APP)
+   add_subdirectory(GUI)
+endif()
 
 # make application
 if(BUILD_APP)
