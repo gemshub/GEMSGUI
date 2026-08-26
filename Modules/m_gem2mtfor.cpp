@@ -619,11 +619,11 @@ void TGEM2MT::to_text_file( TIO& out_format, bool with_comments, bool brief_mode
     if( mtp->PvSFL == S_ON )
         prar.writeArray(  f__BSF, mtp->BSF,  mtp->nSFD*mtp->Nf, mtp->Nf,_comment, brief_mode);
 
-    if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
-    {
-        prar.writeArray(  f__MB, mtp->MB,  mtp->nC*mtp->Nf, mtp->Nf,_comment, brief_mode);
-        prar.writeArray(  f__dMB, mtp->dMB, mtp->nC*mtp->Nf,mtp->Nf,_comment, brief_mode);
-    }
+    // if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+    // {
+    //     prar.writeArray(  f__MB, mtp->MB,  mtp->nC*mtp->Nf, mtp->Nf,_comment, brief_mode);
+    //     prar.writeArray(  f__dMB, mtp->dMB, mtp->nC*mtp->Nf,mtp->Nf,_comment, brief_mode);
+    // }
 
     if( mtp->PvnVTK == S_ON )
         prar.writeArray(  f__xFlds, &mtp->xVTKfld[0][0],  mtp->nVTKfld*2, 2L,_comment, brief_mode);
