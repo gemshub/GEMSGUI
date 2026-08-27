@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - test_prerelease
+      - project_err
   release:
     types:
       - published
@@ -86,6 +87,7 @@ jobs:
           cd benchcomp
           ls
           ./gems3k-export -d -s . -p template_export.json -e ${{ steps.strings2.outputs.export-output-dir }}
+          ls
 
       - name: Check deploy
         run: |
