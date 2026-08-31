@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
         std::cout  << "unknown exception" << std::endl;
         gui_logger->error("unknown exception");
     }
-    pVisor->CanClose();
+    //pVisor->CanClose();
     return 1;
 }
 

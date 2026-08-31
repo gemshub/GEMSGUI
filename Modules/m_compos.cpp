@@ -59,7 +59,7 @@ TCompos::TCompos( uint nrt ):
 
 TCompos::~TCompos()
 {
-    bc_work_dyn_kill();
+  //bc_work_dyn_kill();
 }
 
 // link values to objects
@@ -114,6 +114,11 @@ void TCompos::ods_link( int q)
     aObj[ o_bccfor]->SetDim( 1, MAXCMPFORM );
     /*  aObj[ o_bctprn]->SetPtr( bc[q].tprn );  */
     /*  OBsetDim( o_bctprn, 1, SPPTPRNBUFSIZE ); */
+
+    aObj[o_bcsb1]->SetPtr(bc[q].SB1);
+    aObj[o_bcsb1]->SetDim(0, 1);
+    aObj[o_bcicw]->SetPtr(bc[q].ICw);
+    aObj[o_bcicw]->SetDim(0, 1);
     bcp=&bc[q];
 }
 
@@ -174,6 +179,7 @@ void TCompos::dyn_kill(int q)
     bc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_bcsdval ]->Free();
     bc[q].CFOR = (char *)aObj[ o_bccfor  ]->Free();
     bc[q].tprn =  (char *)aObj[ o_bctprn  ]->Free();
+    bc_work_dyn_kill();
 }
 
 // realloc dynamic memory
@@ -361,20 +367,19 @@ void TCompos::bc_work_dyn_kill()
     bcp->Nmax = 0;  // Restored by DAK 22.10.99
     bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ]->Free();
     bcp->ICw = (double *)aObj[ o_bcicw ]->Free();
-    delete[] bcp->A;
-    bcp->A =0;
-    if( C )
-    {
+    if(bcp->A) {
+        delete[] bcp->A;
+        bcp->A =0;
+    }
+    if( C ) {
         delete[] C;
         C=0;
     }
-    if( CI )
-    {
+    if( CI ) {
         delete[] CI;
         CI=0;
     }
-    if( CIcl )
-    {
+    if( CIcl ) {
         delete[] CIcl;
         CIcl=0;
     }
