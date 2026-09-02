@@ -86,8 +86,9 @@ int main(int argc, char *argv[])
             pVisor->ProfileMode = MDD_SYSTEM;
             if(!TProfil::pm->initCalcMode(project_key.c_str())) {
                 pVisor->ProfileMode = MDD_DATABASE;
-                std::cout << "Error when read project: " << project_key;
-                gui_logger->error("Error when read project: ", project_key);
+                std::cout << "Error when read project: " << project_key << std::endl;
+                gui_logger->error("Error when read project: {}", project_key);
+                pVisor->CanClose();
                 return 1;
             }
 

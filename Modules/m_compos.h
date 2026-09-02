@@ -99,6 +99,7 @@ class TCompos : public TCModule
 protected:
     void bc_work_dyn_new();
     void bc_work_dyn_kill();
+    void bc_work_free_buffers();
 
     bool check_Reduce_Conc();
 public:
