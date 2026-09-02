@@ -59,7 +59,7 @@ TCompos::TCompos( uint nrt ):
 
 TCompos::~TCompos()
 {
-  //bc_work_dyn_kill();
+  bc_work_dyn_kill();
 }
 
 // link values to objects

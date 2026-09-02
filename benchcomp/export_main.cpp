@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
 {
     std::string projects_conf;
     std::string export_dir{"gems3k"};
+    std::shared_ptr<TVisor> pvisor_sh;
 
     try {
 
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
         }
 
         // init visor data
-        auto pvisor_sh = std::make_shared<TVisor>(argc, argv);
+        pvisor_sh = std::make_shared<TVisor>(argc, argv);
         pVisor = pvisor_sh.get();
         pVisor->Setup();
 
@@ -135,16 +136,24 @@ int main(int argc, char *argv[])
     catch(TError& err) {
         std::cout  << err.title << err.mess << std::endl;
         gui_logger->error("Export error: {}", err.mess);
+        if(pvisor_sh) {
+            pvisor_sh->CanClose();
+        }
     }
     catch(std::exception& e) {
         std::cout  << "std::exception: " << e.what() << std::endl;
         gui_logger->error("std::exception: {}", e.what());
+        if(pvisor_sh) {
+            pvisor_sh->CanClose();
+        }
     }
     catch(...)  {
         std::cout  << "unknown exception" << std::endl;
         gui_logger->error("unknown exception");
+        if(pvisor_sh) {
+            pvisor_sh->CanClose();
+        }
     }
-    //pVisor->CanClose();
     return 1;
 }
 
