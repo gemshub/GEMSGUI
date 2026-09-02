@@ -806,13 +806,19 @@ void TDComp::DCthermo( int q, int p )
             aW.twp->CPg = NULL;
         }
 
+        // Each of the six fluid-EoS branches below (CPM_EMP/PRSV/SRK/PR78/CORK/STP) needs a lower
+        // temperature bound, taken from TCint. TCint is only allocated when the record carries a
+        // Cp=f(T) array (dyn_new(): PdcMK == S_OFF -> Free() -> nullptr), so until 2026-09-02 all
+        // six crashed on a DComp with a fluid-EoS volume code but no Cp(T) coefficients. They now
+        // fall back to the record's own reference temperature Tr (degC, same unit as TCint,
+        // default 25) - same bug and same fallback as ThermoFun::lowerTemperatureBound().
         else if( CV == CPM_EMP )  // calculation of fugacity at (X=1) using CG EoS
         {
             double FugProps[6];
             TCGFcalc myCGF( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myCGF.CGcalcFugPure( (aW.twp->TClow+273.15), (aW.twp->Cemp), FugProps );
 
             // increment thermodynamic properties
@@ -829,7 +835,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TPRSVcalc myPRSV( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myPRSV.PRSVCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myPRSV.~TPRSVcalc();
 
@@ -847,7 +853,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TSRKcalc mySRK( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             mySRK.SRKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // mySRK.~TSRKcalc();
 
@@ -865,7 +871,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TPR78calc myPR78( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myPR78.PR78CalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myPR78.~TPR78calc();
 
@@ -884,7 +890,7 @@ void TDComp::DCthermo( int q, int p )
             // TCORKcalc myCORK( 1, (aW.twp->P), (aW.twp->TC+273.15), dcp->PdcC /*dcp->pct[3]*/ );
             TCORKcalc myCORK( 1, (aW.twp->P), (aW.twp->TC+273.15), (dcp->pct[3]) );  // modified 05.11.2010 (TW)
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myCORK.CORKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myCORK.~TCORKcalc();
 
@@ -902,7 +908,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TSTPcalc mySTP( 1, (aW.twp->P), (aW.twp->TC+273.15), (dcp->pct[3]) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             mySTP.STPCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // mySTP.~STPcalc();
 
