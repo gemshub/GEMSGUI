@@ -513,7 +513,7 @@ void TDComp::RecCalc(const char *key )      // dcomp_test
 void TDComp::RecCalc(const char *key , double TCst, double Pst)      // dcomp_test
 {
     int st, st1, stG, stH, stS, stdG, stdH, stdS;
-    double Z, MW, foS, T, G, H, S, S_1, dG, dH, dS, Ro, nj;
+    double Z, MW, foS, T, Tr, TrfoS, G, H, S, S_1, dG, dH, dS, Ro, nj;
 
     TFormula aFo;
     //double Z, MW, foS;
@@ -577,6 +577,17 @@ NEXT:
     stdS = IsFloatEmpty( dcp->Ss[1] );
 
     T = (double)dcp->TCst + C_to_K;
+    // Tr is the reference temperature at which the standard entropies of the elements
+    // (foS, summed from the IComp records) are tabulated - always 298.15 K, regardless
+    // of the record's own reference temperature dcp->TCst. Gs[0]/Hs[0] are apparent
+    // Gibbs energy / enthalpy in the Benson-Helgeson convention (elements at Tr, Pr),
+    // Ss[0] is the absolute third-law entropy at dcp->TCst, so the consistency relation
+    // between them at any reference temperature T is
+    //     G(T) = H(T) - T*S(T) + Tr*foS
+    // i.e. the element-entropy term is a T-independent offset. For T == Tr this reduces
+    // to the classical G = H - T*(S - foS) used before. DM 02.09.2026
+    Tr = STANDARD_TC + C_to_K;
+    TrfoS = Tr * foS;
     G = (double)dcp->Gs[0];
     H = (double)dcp->Hs[0];
     S = (double)dcp->Ss[0];
@@ -588,26 +599,26 @@ NEXT:
     // test dc type
     if( !stG && stH && !stS )
     {
-        H = G + T * ( S - foS );
+        H = G + T * S - TrfoS;
         dcp->Hs[0] = H;
     }
     else if( stG && !stH && !stS )
     {
-        G = H - T * ( S - foS );
+        G = H - T * S + TrfoS;
         dcp->Gs[0] = G;
     }
     else if( !stG && !stH && stS )
     {
-        S = (H - G)/ T + foS;
+        S = (H - G + TrfoS)/ T;
         dcp->Ss[0] = S;
     }
     else if( !stG && !stH && !stS )
     {
-        S_1 = (H - G)/ T + foS;
+        S_1 = (H - G + TrfoS)/ T;
         if( fabs(S) > 1e-10 )
             if( fabs( (S_1 - S)/S ) >= DEF_REL_DEV )
             {
-                G = H - T * ( S - foS );
+                G = H - T * S + TrfoS;
                 std::string s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
                 s += std::to_string(G);
                 if( vfQuestion( window(), GetName(), s.c_str() ))
