@@ -59,7 +59,14 @@ TCompos::TCompos( uint nrt ):
 
 TCompos::~TCompos()
 {
-  bc_work_dyn_kill();
+    // Only the buffers TCompos owns directly may be released here.
+    // This destructor runs during static destruction of the global aMod list,
+    // by which time the global aObj list (a global in another translation unit,
+    // with unspecified relative destruction order) may already be gone - so
+    // bc_work_dyn_kill(), which calls aObj[...]->Free(), must not be used here.
+    // That is what crashed gems3k-export on exit. During the program's life the
+    // aObj-side cleanup is done by dyn_kill() and at the end of RecCalc().
+    bc_work_free_buffers();
 }
 
 // link values to objects
@@ -367,21 +374,29 @@ void TCompos::bc_work_dyn_kill()
     bcp->Nmax = 0;  // Restored by DAK 22.10.99
     bcp->SB1 = (char (*)[IC_RKLEN])aObj[ o_bcsb1 ]->Free();
     bcp->ICw = (double *)aObj[ o_bcicw ]->Free();
-    if(bcp->A) {
+    bc_work_free_buffers();
+}
+
+// Frees only the work buffers owned directly by TCompos (plain new[] arrays).
+// Deliberately touches nothing in aObj, so that it is also safe to call from
+// the destructor - see the comment there.
+void TCompos::bc_work_free_buffers()
+{
+    if( bcp->A ) {
         delete[] bcp->A;
-        bcp->A =0;
+        bcp->A = 0;
     }
     if( C ) {
         delete[] C;
-        C=0;
+        C = 0;
     }
     if( CI ) {
         delete[] CI;
-        CI=0;
+        CI = 0;
     }
     if( CIcl ) {
         delete[] CIcl;
-        CIcl=0;
+        CIcl = 0;
     }
 }
 
