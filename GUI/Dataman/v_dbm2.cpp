@@ -259,11 +259,16 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     // put packed key
-    len = strlen( pack_key );
-    pack_key[len] = MARKRKEY;
-    f.writeArray( pack_key, len+1 );
-    pack_key[len] = '\0';
-    StillLen -= len+1;
+    len = strlen(pack_key);
+    f.writeArray(pack_key, len);
+    char marker = MARKRKEY;
+    f.writeArray(&marker, 1);
+    StillLen -= len + 1;
+    // len = strlen( pack_key );
+    // pack_key[len] = MARKRKEY;
+    // f.writeArray( pack_key, len+1 );
+    // pack_key[len] = '\0';
+    // StillLen -= len+1;
     ErrorIf( !f.good(), GetKeywd(),
              "PDB file write error");
     for( j=0; j<nOD; j++ )    // put objects to file

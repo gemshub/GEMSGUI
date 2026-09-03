@@ -950,21 +950,21 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
    bool useLst, TCStringArray lst )
 {
 //    TProfil *aPa= dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
-    const char *part;
-    char nbuf[MAXFORMULA*2], neutbuf[16], H2Obuf[16], tempdbuf[16];
+    std::string part, nbuf, neutbuf, H2Obuf, tempdbuf;
     std::string Name = "Auto-set ";
 
 //  Setup of aqueous phase
     if( approximatelyZero(apar[2]) )
-        strcpy(neutbuf, "1.0");
-    else strcpy(neutbuf, "b_q*IS");
+        neutbuf = "1.0";
+    else neutbuf= "b_q*IS";
     if( approximatelyZero(apar[3]) )
-        strcpy(H2Obuf, "1.0");
-    else strcpy(H2Obuf, "calculate");
+        H2Obuf = "1.0";
+    else H2Obuf = "calculate";
     if( approximatelyZero(apar[4]) )
-        strcpy( tempdbuf, "0");
-    else sprintf( tempdbuf, "%c", (char)(apar[4]+'0'));
-    gui_logger->debug("newAqGasPhase: {} key {}", amod, akey);
+        tempdbuf = "0";
+    else tempdbuf = std::to_string(apar[4]); //(char)(apar[4]+'0'));
+
+    gui_logger->info("newAqGasPhase: aq {} key {}", amod, akey);
 
     switch( amod )
     {
@@ -982,7 +982,7 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
                 apar[0] = 0.0;
                 apar[1] = 0.0;
 					Name += "ion-association model, Davies equation";
-                    sprintf( nbuf, "Parameters: gam_neut= %s; gam_H2O= %s", neutbuf, H2Obuf );
+                    nbuf = "Parameters: gam_neut= " + neutbuf + "; gam_H2O= " + H2Obuf;
                 break;
        case 'H': // EDH model with common bg and common a0 (Helgeson)
                 memcpy( php->sol_t, "HNNSNN", 6 );
@@ -992,8 +992,8 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
                 php->nscM = 0;
                 php->npxM = 0;
 					Name += "ion-association model, EDH(H) equation, common ion size";
-					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
-                            apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
+                    nbuf = ": b_gamma= " + std::to_string(apar[0]) + ", T_dep= " + tempdbuf + "; a_size= " +
+                              std::to_string(apar[1]) + "; gam_neut= " + neutbuf + ", gam_H2O= " + H2Obuf;
                 break;
        case 'Y': // EDH model with common bg and common a0 (Shvarov)
                 memcpy( php->sol_t, "YNNSNN", 6 );
@@ -1003,8 +1003,8 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
                 php->nscM = 2; // correction by TW from trunk r.2443
                 php->npxM = 0;
 					Name += "ion-association model, EDH(S) equation, common ion size";
-					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
-                            apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
+                    nbuf = ": b_gamma= " + std::to_string(apar[0]) + ", T_dep= " + tempdbuf + "; a_size= " +
+                       std::to_string(apar[1]) + "; gam_neut= " + neutbuf + ", gam_H2O= " + H2Obuf;
                 break;
        case '3': // EDH model with individual (Kielland) a0 and common bg (Karpov)
                 memcpy( php->sol_t, "3NNSNN", 6 );
@@ -1015,8 +1015,8 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
                 php->npxM = 0;
                 apar[1] = 0.0;
 					Name += "ion-association model, EDH(K) equation, individual ion sizes";
-					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size=specific; gam_neut= %s; gam_H2O= %s ",
-                            apar[0], tempdbuf, neutbuf, H2Obuf );
+                    nbuf = ": b_gamma= " + std::to_string(apar[0]) + ", T_dep= " + tempdbuf +
+                           "; a_size=specific; gam_neut= " + neutbuf + ", gam_H2O= " + H2Obuf;
                 break;
        case '2': // DH model with individual (Kielland) a0 and optional bg for neutral species
                 memcpy( php->sol_t, "2NNSNN", 6 );
@@ -1028,8 +1028,7 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
                 apar[0] = 0.0;
                 apar[1] = 0.0;
 					Name += "ion-association model, DH equation, individual ion sizes";
-                    sprintf( nbuf, ": b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
-                            apar[0], neutbuf, H2Obuf );
+                nbuf = ": b_gamma= " + std::to_string(apar[0]) + "; a_size=specific; gam_neut= " + neutbuf + ", gam_H2O= " + H2Obuf;
                 break;
        case '1': // DH limiting law (no a0 and bg required)
                 memcpy( php->sol_t, "1NNSNN", 6 );
@@ -1042,22 +1041,23 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
                 apar[1] = 0.0;
                 // apar[2] = 0.0;
 					Name += "ion-association model, Debye-Hueckel limiting law";
-                    sprintf( nbuf, "Parameters: gam_H2O= %s ", H2Obuf );
+                    nbuf = "Parameters: gam_H2O= " + H2Obuf;
                 break;
        default: // Unrecognized code - error message ?
        case 'S': // SIT - under testing
                  goto MAKE_GAS_PHASE;
     }
-    memcpy( php->name, Name.c_str(), MAXFORMULA );
-    memcpy( php->notes, nbuf, MAXFORMULA );
+    strncpy( php->name, Name.c_str(), MAXFORMULA );
+    strncpy( php->notes, nbuf.c_str(), MAXFORMULA );
     part = "a:*:*:*:";
 
     // Call assembling of the aqueous phase
-    AssemblePhase( akey, part, apar, file, useLst, lst, 6 );
+    AssemblePhase( akey, part.c_str(), apar, file, useLst, lst, 6 );
+    //CurrentToJSON("new_aq_phase.json");
 
 MAKE_GAS_PHASE:
     Name = "Auto-set ";
-    gui_logger->debug("newAqGasPhase: {} key {}", gmod, gkey);
+    gui_logger->info("newAqGasPhase: gas {} key {}", gmod, gkey);
 
     switch( gmod )
     {
@@ -1143,8 +1143,10 @@ MAKE_GAS_PHASE:
         part = "f:*:*:*:";
 
     // Assembling gas phase
-    if(!gkey.empty())
-     AssemblePhase( gkey, part, nullptr, file, useLst, lst, 0 );
+    if(!gkey.empty()) {
+     AssemblePhase( gkey, part.c_str(), nullptr, file, useLst, lst, 0 );
+      //  CurrentToJSON("new_gas_phase.json");
+    }
 
     // Do sometning else here?
     DONE:
@@ -1154,15 +1156,14 @@ MAKE_GAS_PHASE:
 
 // Assembling the phase (automatically generated aq or gas/fluid)
 // Separated by KD on 31.07.03
-void
-TPhase::AssemblePhase( const std::string& key, const char* part, float* param,
+void TPhase::AssemblePhase( const std::string& key, const char* part, float* param,
     int file, bool useLst, TCStringArray lst, int Npar )
 {
 
     TProfil *aPa=dynamic_cast<TProfil *>(aMod[RT_PARAM].get());
 
 // Initializing
-memcpy( php->kin_t, "NNNNNNNN", 8 );
+strncpy( php->kin_t, "NNNNNNNN", 8 );
     php->Nsd = 0;
     php->nDC = 0;
     php->NsuT = php->nMoi = 0;
@@ -1253,12 +1254,12 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         {
             if( i < static_cast<int>(aDclist.size()) )
             {
-                memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
+                strncpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;
             }
             else
             {
-                memcpy( php->SM[i], aRclist[i-iic].c_str(), DC_RKLEN );
+                strncpy( php->SM[i], aRclist[i-iic].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_REACDC;
             }
         }
@@ -1271,7 +1272,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         {
 //            if( lst[i].c_str()[DC_RKLEN-1] == SRC_REACDC)
 //                php->NR1++;
-            memcpy( php->SM[i], lst[i].c_str(), DC_RKLEN );
+            strncpy( php->SM[i], lst[i].c_str(), DC_RKLEN );
         }
 
     for( i=0; i<php->nDC; i++ )
@@ -1321,7 +1322,13 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
     for( i=0; i < std::min(Npar,(php->ncpN * php->ncpM)); i++ )
     	php->pnc[i] = param[i];
 
-// Calculating the phase record and saving it to database
+    // set up default comments
+    char old_sol[7], old_kin[9];
+    strncpy( old_sol, php->sol_t, 6);
+    strncpy( old_kin, php->kin_t, 8);
+    set_def_comments(true, old_sol, old_kin );
+
+   // Calculating the phase record and saving it to database
     CalcPhaseRecord( /*true*/ );
 
     int  Rnum = db->Find(key.c_str());
@@ -1333,7 +1340,7 @@ memcpy( php->kin_t, "NNNNNNNN", 8 );
         std::string mess = key;
         mess += "\n";
         mess+=  "This record exists! Overwrite?";
-        if( !vfQuestion( window(), "Automatically generated aq or gas/fluid",mess.c_str()) )
+        if( !vfQuestion( window(), "Automatically generated aq or gas/fluid", mess) )
             Error( key, "Cancel automatically generated aq or gas/fluid!");
         db->Rep( Rnum );
        }

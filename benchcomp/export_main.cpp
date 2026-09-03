@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
             return 1;
         }
 
+
         // init visor data
         auto pvisor_sh = std::make_shared<TVisor>(argc, argv);
         pVisor = pvisor_sh.get();
