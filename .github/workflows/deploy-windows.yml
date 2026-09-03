@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - fix_pow_other_bugs
+      - project_err
   release:
     types:
       - published

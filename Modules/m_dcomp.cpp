@@ -513,7 +513,7 @@ void TDComp::RecCalc(const char *key )      // dcomp_test
 void TDComp::RecCalc(const char *key , double TCst, double Pst)      // dcomp_test
 {
     int st, st1, stG, stH, stS, stdG, stdH, stdS;
-    double Z, MW, foS, T, G, H, S, S_1, dG, dH, dS, Ro, nj;
+    double Z, MW, foS, T, Tr, TrfoS, G, H, S, S_1, dG, dH, dS, Ro, nj;
 
     TFormula aFo;
     //double Z, MW, foS;
@@ -577,6 +577,17 @@ NEXT:
     stdS = IsFloatEmpty( dcp->Ss[1] );
 
     T = (double)dcp->TCst + C_to_K;
+    // Tr is the reference temperature at which the standard entropies of the elements
+    // (foS, summed from the IComp records) are tabulated - always 298.15 K, regardless
+    // of the record's own reference temperature dcp->TCst. Gs[0]/Hs[0] are apparent
+    // Gibbs energy / enthalpy in the Benson-Helgeson convention (elements at Tr, Pr),
+    // Ss[0] is the absolute third-law entropy at dcp->TCst, so the consistency relation
+    // between them at any reference temperature T is
+    //     G(T) = H(T) - T*S(T) + Tr*foS
+    // i.e. the element-entropy term is a T-independent offset. For T == Tr this reduces
+    // to the classical G = H - T*(S - foS) used before. DM 02.09.2026
+    Tr = STANDARD_TC + C_to_K;
+    TrfoS = Tr * foS;
     G = (double)dcp->Gs[0];
     H = (double)dcp->Hs[0];
     S = (double)dcp->Ss[0];
@@ -588,26 +599,26 @@ NEXT:
     // test dc type
     if( !stG && stH && !stS )
     {
-        H = G + T * ( S - foS );
+        H = G + T * S - TrfoS;
         dcp->Hs[0] = H;
     }
     else if( stG && !stH && !stS )
     {
-        G = H - T * ( S - foS );
+        G = H - T * S + TrfoS;
         dcp->Gs[0] = G;
     }
     else if( !stG && !stH && stS )
     {
-        S = (H - G)/ T + foS;
+        S = (H - G + TrfoS)/ T;
         dcp->Ss[0] = S;
     }
     else if( !stG && !stH && !stS )
     {
-        S_1 = (H - G)/ T + foS;
+        S_1 = (H - G + TrfoS)/ T;
         if( fabs(S) > 1e-10 )
             if( fabs( (S_1 - S)/S ) >= DEF_REL_DEV )
             {
-                G = H - T * ( S - foS );
+                G = H - T * S + TrfoS;
                 std::string s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
                 s += std::to_string(G);
                 if( vfQuestion( window(), GetName(), s.c_str() ))
@@ -806,13 +817,19 @@ void TDComp::DCthermo( int q, int p )
             aW.twp->CPg = NULL;
         }
 
+        // Each of the six fluid-EoS branches below (CPM_EMP/PRSV/SRK/PR78/CORK/STP) needs a lower
+        // temperature bound, taken from TCint. TCint is only allocated when the record carries a
+        // Cp=f(T) array (dyn_new(): PdcMK == S_OFF -> Free() -> nullptr), so until 2026-09-02 all
+        // six crashed on a DComp with a fluid-EoS volume code but no Cp(T) coefficients. They now
+        // fall back to the record's own reference temperature Tr (degC, same unit as TCint,
+        // default 25) - same bug and same fallback as ThermoFun::lowerTemperatureBound().
         else if( CV == CPM_EMP )  // calculation of fugacity at (X=1) using CG EoS
         {
             double FugProps[6];
             TCGFcalc myCGF( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myCGF.CGcalcFugPure( (aW.twp->TClow+273.15), (aW.twp->Cemp), FugProps );
 
             // increment thermodynamic properties
@@ -829,7 +846,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TPRSVcalc myPRSV( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myPRSV.PRSVCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myPRSV.~TPRSVcalc();
 
@@ -847,7 +864,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TSRKcalc mySRK( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             mySRK.SRKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // mySRK.~TSRKcalc();
 
@@ -865,7 +882,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TPR78calc myPR78( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myPR78.PR78CalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myPR78.~TPR78calc();
 
@@ -884,7 +901,7 @@ void TDComp::DCthermo( int q, int p )
             // TCORKcalc myCORK( 1, (aW.twp->P), (aW.twp->TC+273.15), dcp->PdcC /*dcp->pct[3]*/ );
             TCORKcalc myCORK( 1, (aW.twp->P), (aW.twp->TC+273.15), (dcp->pct[3]) );  // modified 05.11.2010 (TW)
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myCORK.CORKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myCORK.~TCORKcalc();
 
@@ -902,7 +919,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TSTPcalc mySTP( 1, (aW.twp->P), (aW.twp->TC+273.15), (dcp->pct[3]) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             mySTP.STPCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // mySTP.~STPcalc();
 
