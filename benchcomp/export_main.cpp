@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-
         // init visor data
         pvisor_sh = std::make_shared<TVisor>(argc, argv);
         pVisor = pvisor_sh.get();
@@ -138,23 +137,17 @@ int main(int argc, char *argv[])
     catch(TError& err) {
         std::cout  << err.title << err.mess << std::endl;
         gui_logger->error("Export error: {}", err.mess);
-        if(pvisor_sh) {
-            pvisor_sh->CanClose();
-        }
     }
     catch(std::exception& e) {
         std::cout  << "std::exception: " << e.what() << std::endl;
         gui_logger->error("std::exception: {}", e.what());
-        if(pvisor_sh) {
-            pvisor_sh->CanClose();
-        }
     }
     catch(...)  {
         std::cout  << "unknown exception" << std::endl;
         gui_logger->error("unknown exception");
-        if(pvisor_sh) {
-            pvisor_sh->CanClose();
-        }
+    }
+    if(pvisor_sh) {
+        pvisor_sh->CanClose();
     }
     return 1;
 }

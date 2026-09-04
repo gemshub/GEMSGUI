@@ -964,7 +964,7 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
         tempdbuf = "0";
     else tempdbuf = std::to_string(apar[4]); //(char)(apar[4]+'0'));
 
-    gui_logger->info("newAqGasPhase: aq {} key {}", amod, akey);
+    gui_logger->debug("newAqGasPhase: aq {} key {}", amod, akey);
 
     switch( amod )
     {
@@ -1057,7 +1057,7 @@ void TPhase::newAqGasPhase( const std::string& akey, const std::string& gkey, in
 
 MAKE_GAS_PHASE:
     Name = "Auto-set ";
-    gui_logger->info("newAqGasPhase: gas {} key {}", gmod, gkey);
+    gui_logger->debug("newAqGasPhase: gas {} key {}", gmod, gkey);
 
     switch( gmod )
     {
