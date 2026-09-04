@@ -186,7 +186,7 @@ public:
     
     // Sets the status of the module (in the statusbar)
     void SetStatus( const char* s )
-    {  statusBar()->showMessage(s);   }
+    {  this->statusBar()->showMessage(s);   }
 
     void SetRecordKey( const char*s)
     { pLine->setText( tr(s)); }
