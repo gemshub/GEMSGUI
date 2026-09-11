@@ -131,12 +131,27 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
             Ts2 = T_Tst * T_Tst;
             TT = T / Tst;
 
-            if( j && dc[q].Nft && (double)dc[q].FtP[jf] <= Tst-dT )
+            if( j && dc[q].Nft && jf < dc[q].Nft
+                && (double)dc[q].FtP[jf] <= Tst-dT )
             {   // Adding parameters of phase transition
+                // Ttr is the transition temperature itself, not Tst: the test above
+                // is <=, so a transition need not sit exactly on the interval start.
+                double Ttr = (double)dc[q].FtP[jf] + dT;
+                double dS_tr = 0., dH_tr = 0.;
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft+jf] ))  // dS
-                    aW.twp->S += dc[q].FtP[dc[q].Nft+jf];
+                    dS_tr = (double)dc[q].FtP[dc[q].Nft+jf];
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft*2+jf] ))  // dH
-                    aW.twp->H += (double)dc[q].FtP[dc[q].Nft*2+jf];
+                    dH_tr = (double)dc[q].FtP[dc[q].Nft*2+jf];
+                aW.twp->S += dS_tr;
+                aW.twp->H += dH_tr;
+                // dG of the transition. It is zero for a thermodynamically consistent
+                // pair (dH_tr == Ttr*dS_tr) and nonzero only when the record's FtP data
+                // is inconsistent. Option to back fix G to the values of S and S.
+                // G == H - T*S + Tr*foS holds at every T (see DComp::Recalc). 
+                // If a separate DComp record is created the G value will be recalculated 
+                // and will be different than the G in the composed record with multiple transitions. The difference is the G of the transition. It is not a bug, but a feature.
+                // DM 10.09.2026 Default OFF (assuming codes don't check for inconsistency)
+                // aW.twp->G += dH_tr - Ttr * dS_tr;
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft*3+jf] ))  // dV
                     aW.twp->V += dc[q].FtP[dc[q].Nft*3+jf];
                 // More to be added ?

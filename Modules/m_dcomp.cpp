@@ -35,6 +35,11 @@ const double ZBALANCE_PREC =  1e-6,
                STANDARD_TC    = 25.,
                  STANDARD_P     = 1.,
                    DEF_REL_DEV    = 0.05,
+                     // DM 10.09.2026 Tolerance for the phase-transition consistency check
+                     // in RecCalc(). Much tighter than DEF_REL_DEV: a transition's dH and dS
+                     // are tabulated to 5-7 digits, so anything above ~0.1% is a data error,
+                     // not rounding.
+                     DEF_REL_DEV_FT = 1e-3,
                      GAS_MV_STND    = 2478.92,
                        TK_DELTA        = 273.15,
                          TEMPER_PREC     = 0.5,
@@ -500,6 +505,53 @@ AGAIN:
 #define LROUND(x)      ( static_cast<float>(static_cast<long>((x)+.5)))
 
 
+// DM 10.09.2026 Identity of the current DComp record, used to warn only once per record
+// per session from the property-calculation path.
+std::string TDComp::FtPRecKey() const
+{
+    return std::string( dcp->pstate, sizeof(dcp->pstate) )
+         + std::string( dcp->psymb,  sizeof(dcp->psymb)  )
+         + std::string( dcp->dcn,    sizeof(dcp->dcn)    );
+}
+
+// DM 10.09.2026 Consistency of the phase-transition data in FtP.
+// For a first-order transition dG_tr = dH_tr - T_tr*dS_tr must vanish, i.e. T_tr, dS_tr and
+// dH_tr are not independent - any one of them is fixed by the other two. Builds a report of
+// every entry violating that by more than DEF_REL_DEV_FT and returns true if there was any.
+bool TDComp::CheckFtP( std::string& msg )
+{
+    msg.clear();
+    if( dcp->Nft <= 0 || !dcp->FtP )
+        return false;
+
+    char buf[256];
+    for( int jf = 0; jf < (int)dcp->Nft; jf++ )
+    {
+        if( IsFloatEmpty( dcp->FtP[jf] ) ||
+            IsFloatEmpty( dcp->FtP[dcp->Nft+jf] ) ||
+            IsFloatEmpty( dcp->FtP[dcp->Nft*2+jf] ))
+            continue;                  // dS_tr or dH_tr not given - nothing to check
+        double Ttr   = (double)dcp->FtP[jf] + C_to_K;
+        double dS_tr = (double)dcp->FtP[dcp->Nft+jf];
+        double dH_tr = (double)dcp->FtP[dcp->Nft*2+jf];
+        double dG_tr = dH_tr - Ttr * dS_tr;
+        double scale = fabs( dH_tr ) > fabs( Ttr*dS_tr ) ? fabs( dH_tr ) : fabs( Ttr*dS_tr );
+        if( scale < 1e-10 || fabs( dG_tr ) / scale < DEF_REL_DEV_FT )
+            continue;
+        snprintf( buf, sizeof(buf),
+            "\n #%d at %.2f C: dG_tr = %.2f J/mol (%.3f%%)"
+            "\n     dS_tr = %.5f, but dH_tr/T_tr = %.5f"
+            "\n     dH_tr = %.2f, but T_tr*dS_tr = %.2f"
+            "\n     dH_tr/dS_tr implies T_tr = %.2f C",
+            jf, (double)dcp->FtP[jf], dG_tr, 100.*fabs( dG_tr )/scale,
+            dS_tr, dH_tr/Ttr, dH_tr, Ttr*dS_tr,
+            ( fabs( dS_tr ) > 1e-10 ? dH_tr/dS_tr - C_to_K : 0.0 ) );
+        msg += buf;
+    }
+    return !msg.empty();
+}
+
+
 //Recalculation of DComp record
 // 19/10/1999: variable _S was changed to S_1
 // DM 29.10.2024 if TCst and Pst other than standard values 25 C 1 bar, possible to be entered by the user in ReacDC
@@ -629,6 +681,18 @@ NEXT:
     }
     else
         Error( GetName(), "W10DCrun: One of values G0, H0, or S0 is missing!");
+
+    // DM 10.09.2026 Report inconsistent phase-transition data. Reports only - the record
+    // is never repaired here, so the defect stays visible (calc_tpcv() carries dG_tr into
+    // G, where it shows up as a discontinuity of G at T_tr).
+    {
+        std::string ftmsg;
+        if( CheckFtP( ftmsg ) )
+            vfMessage( window(), GetName(), std::string(
+                "W13DCrun: Inconsistent phase transition data. For a first-order transition "
+                "dG_tr = dH_tr - T_tr*dS_tr must be 0; G will be discontinuous at T_tr and "
+                "G != H - T*S + Tr*foS above it. Check T_tr, dS_tr and dH_tr in FtP:" ) + ftmsg );
+    }
 
     // test pogreshnostey
     if ((25.0 == TCst) && (1.0 == Pst) ) // DM 29.10.2024 check if different std T and P are used for record calc.
@@ -808,6 +872,16 @@ void TDComp::DCthermo( int q, int p )
     	// if( CE == CTM_CHP && CV == CPM_CHE )
     	// {  // Added for passing
     	// }
+        {   // DM 10.09.2026 Unlike RecCalc(), this is the path a project uses to compute
+            // properties from an already-stored database, so an inconsistent FtP record
+            // would otherwise be applied silently. Log it once per record per session -
+            // calc_tpcv() runs per temperature point, so a dialog is not an option here.
+            std::string ftmsg;
+            if( CheckFtP( ftmsg ) && ftp_warned.insert( FtPRecKey() ).second )
+                gui_logger->warn( "W13DCrun: DComp record {} has inconsistent phase "
+                    "transition data (dG_tr = dH_tr - T_tr*dS_tr should be 0); G is "
+                    "discontinuous at T_tr:{}", FtPRecKey(), ftmsg );
+        }
         calc_tpcv( q, p, CE, CV );
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {
