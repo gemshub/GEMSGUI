@@ -622,10 +622,14 @@ void TTreeView::printList( std::fstream& ff )
  void TTreeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
  {
      QTreeView::currentChanged(current, previous);
-     // may be called while the main window is being torn down, or on a model
-     // reset with no current row - in both cases there is nothing to show
-     if( !pVisorImp || !current.isValid() )
+     // may be called while the main window is being torn down - nothing to show
+     if( !pVisorImp )
          return;
+     if( !current.isValid() )
+     {
+         pVisorImp->SetStatus( "" );
+         return;
+     }
      std::string txt = current.data(Qt::ToolTipRole).toString().toStdString();
      pVisorImp->SetStatus( txt.c_str());
  }

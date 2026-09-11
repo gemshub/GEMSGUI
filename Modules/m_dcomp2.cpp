@@ -131,7 +131,7 @@ void TDComp::calc_tpcv( int q, int p, int CE, int CV )
             Ts2 = T_Tst * T_Tst;
             TT = T / Tst;
 
-            if( j && dc[q].Nft && jf < dc[q].Nft
+            while( j && dc[q].Nft && jf < dc[q].Nft
                 && (double)dc[q].FtP[jf] <= Tst-dT )
             {   // Adding parameters of phase transition
                 // Ttr is the transition temperature itself, not Tst: the test above
