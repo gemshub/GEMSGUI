@@ -320,6 +320,9 @@ void  TVisor::free_memory()
         aObj[ o_nldchs]->SetPtr(0);
         aObj[ o_nlphh]->SetPtr(0);
         TGEM2MT::pm->FreeNa();
+        for(size_t ii = 0; ii < aMod.size(); ++ii) {
+            aMod[ii]->dyn_kill();
+        }
     }
     catch(TError & xcpt) {
         gui_logger->info("!!! Local    : {}", LocalDir);
@@ -934,7 +937,6 @@ void TVisor::defaultCFG()
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");
     //  readPDBDir(pVisor->userProfDir().c_str());
-
     for (size_t jj = 0; jj < rt.size(); jj++) {
         int cnt = 0;
         for (size_t ii = 0; ii < aDBFiles.size(); ii++) {
@@ -1106,37 +1108,35 @@ void TVisor::makeDBDir(const char *dir)
 
 TCStringArray TVisor::readPDBDir(const char *dir, const char *filter)
 {
-    TCStringArray aFiles;
+    // filesystem use, old gets valgrind error
+    std::string all_filter = filter;
+    trim(all_filter, "*");
+    return vfFiles(dir, all_filter);
 
-    QDir thisDir(dir);
-    //    if (!thisDir.isReadable())
-    //    {
-    //#ifndef _WIN32
-    //        gui_logger->error("{} directory is not readable", dir);
-    //#endif
-    //        throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
-    //    }
-    QStringList afilt(filter);
+    // TCStringArray aFiles;
 
-    thisDir.setFilter(QDir::Files);
-    thisDir.setNameFilters(afilt);
+    // QDir thisDir(dir);
+    // QStringList afilt(filter);
 
-    QFileInfoList files = thisDir.entryInfoList();
-    if (files.empty()) {
-        return aFiles;
-    }
+    // thisDir.setFilter(QDir::Files);
+    // thisDir.setNameFilters(afilt);
 
-    QListIterator<QFileInfo> it(files);
-    QFileInfo f;
-    while( it.hasNext() ) {
-        f = it.next();;
-        if(f.isSymLink() || f.isFile()) {
-            gui_logger->trace("Adding file: {}", f.fileName().toStdString());
-            aFiles.push_back(f.fileName().toStdString());
-        }
-        // else 'special file'
-    }
-    return aFiles;
+    // QFileInfoList files = thisDir.entryInfoList();
+    // if (files.empty()) {
+    //     return aFiles;
+    // }
+
+    // QListIterator<QFileInfo> it(files);
+    // QFileInfo f;
+    // while( it.hasNext() ) {
+    //     f = it.next();
+    //     if(f.isSymLink() || f.isFile()) {
+    //         gui_logger->info("Adding file: {}", f.fileName().toStdString());
+    //         aFiles.push_back(f.fileName().toStdString());
+    //     }
+    //     // else 'special file'
+    // }
+    // return aFiles;
 }
 
 TVisor *pVisor;

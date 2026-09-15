@@ -242,6 +242,8 @@ public:
     }
     QJsonValue toJsonValue() const;
     void fromJsonValue(const QJsonValue &obj);
+
+    bool check_dynamic_sizes(int n, int m);
 };
 
 

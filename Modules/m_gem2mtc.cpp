@@ -747,7 +747,7 @@ void TGEM2MT::CalcControlScript()
     if( mtp->PvMSc  == S_OFF  )  // This switch is S_ON when mtp->PvMSt is S_ON, but this may be optimized
       return;
     // DATABR* BR0; DATABR* BR1;
-    gui_logger->info("Control Script runs @ ct= {}   cTau= {}", mtp->ct, mtp->cTau);
+    //gui_logger->info("Control Script runs @ ct= {}   cTau= {}", mtp->ct, mtp->cTau);
     // roll through the nodes (boxes)
     for( long int ii=0; ii< mtp->nC; ii++)
     {

@@ -259,11 +259,16 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     // put packed key
-    len = strlen( pack_key );
-    pack_key[len] = MARKRKEY;
-    f.writeArray( pack_key, len+1 );
-    pack_key[len] = '\0';
-    StillLen -= len+1;
+    len = strlen(pack_key);
+    f.writeArray(pack_key, len);
+    char marker = MARKRKEY;
+    f.writeArray(&marker, 1);
+    StillLen -= len + 1;
+    // len = strlen( pack_key );
+    // pack_key[len] = MARKRKEY;
+    // f.writeArray( pack_key, len+1 );
+    // pack_key[len] = '\0';
+    // StillLen -= len+1;
     ErrorIf( !f.good(), GetKeywd(),
              "PDB file write error");
     for( j=0; j<nOD; j++ )    // put objects to file
@@ -320,10 +325,12 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     //   f.read( (char *)&rh, sizeof(RecHead) );
     rh.read (f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
-            strncmp( rh.endm, MARKRECHEAD, 2 ) ||
-            (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  && 
-             (rh.Nobj+frstOD-1) != o_phsdval  && (nOD+frstOD-1) != o_sptext ) )
+        strncmp( rh.endm, MARKRECHEAD, 2 ) ||
+        (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  &&
+         (rh.Nobj+frstOD-1) != o_phsdval  && (nOD+frstOD-1) != o_sptext ) ) {
+        gui_logger->info("Record header format error {} {} {} {}", char_array_to_string(Keywd, MAXKEYWD), rh.Nobj, nOD, frstOD);
         Error( GetKeywd(),"Record header format error");
+    }
     f.getline( key, KeyLen()+KeyNumFlds(), MARKRKEY);
     ErrorIf( f.gcount()>=(KeyLen()+KeyNumFlds()), GetKeywd(),
              "Error reading database record key" );
