@@ -129,6 +129,35 @@ void TCompos::ods_link( int q)
     bcp=&bc[q];
 }
 
+bool TCompos::ods_check(int q)
+{
+    bool ret = true;
+    ret &= aObj[o_bccv]->check_dynamic_sizes( bc[q].N, 1 );
+    ret &= aObj[o_bcsb]->check_dynamic_sizes( bc[q].N, 1 );
+    ret &= aObj[o_bccicl]->check_dynamic_sizes( bc[q].N, 1 );
+    ret &= aObj[o_bcci]->check_dynamic_sizes( bc[q].N, 1 );
+    if( bc[q].PcdC != S_OFF ) {
+        ret &= aObj[o_bcdelc]->check_dynamic_sizes( bc[q].N, 1 );
+    }
+
+    ret &= aObj[o_bcsa]->check_dynamic_sizes( bc[q].La, 1 );
+    ret &= aObj[o_bccacl]->check_dynamic_sizes( bc[q].La, 1 );
+    ret &= aObj[o_bcca]->check_dynamic_sizes( bc[q].La, 1 );
+
+    ret &= aObj[o_bcsmk]->check_dynamic_sizes( bc[q].Ld, 1 );
+    ret &= aObj[o_bccdcl]->check_dynamic_sizes( bc[q].Ld, 1 );
+    ret &= aObj[o_bcdcs]->check_dynamic_sizes( bc[q].Ld, 1 );
+    ret &= aObj[o_bccd]->check_dynamic_sizes( bc[q].Ld, 1 );
+
+    ret &= aObj[o_bcsdref]->check_dynamic_sizes( bc[q].Nsd, 1 );
+    ret &= aObj[o_bcsdval]->check_dynamic_sizes( bc[q].Nsd, 1 );
+
+    if( bc[q].PcFO != S_OFF ) {
+        ret &= aObj[o_bccfor]->check_dynamic_sizes( 1, MAXCMPFORM );
+    }
+    return ret;
+}
+
 // set dynamic Objects ptr to values
 void TCompos::dyn_set(int q)
 {

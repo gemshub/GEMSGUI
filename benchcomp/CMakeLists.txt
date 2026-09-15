@@ -48,7 +48,10 @@ qt_add_executable(gems3k-export ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/ex
 # GUI/QApplication involved. See json2db_main.cpp.
 qt_add_executable(json2db ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/json2db_main.cpp)
 
-foreach(gems_tool gems3k-export json2db)
+qt_add_executable(check-db ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/check_db.cpp)
+
+
+foreach(gems_tool gems3k-export json2db check-db)
     if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
         target_link_libraries(${gems_tool} PRIVATE GEMS3K::GEMS3K-static Qt6::Core)
     else()

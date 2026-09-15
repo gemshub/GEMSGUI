@@ -135,6 +135,61 @@ void TDComp::ods_link( int q)
     dcp=&dc[q];
 }
 
+bool TDComp::ods_check(int q)
+{
+    bool ret = true;
+
+    int CM,CE,CV;
+    CM = toupper( dc[q].pct[0] );
+    CE = toupper( dc[q].pct[1] );
+    CV = toupper( dc[q].pct[2] );
+
+    if(dc[q].PdcMK != S_OFF) {
+        ret &= aObj[ o_dccpint ]->check_dynamic_sizes( 2, dc[q].NeCp );
+        ret &= aObj[ o_dccp ]->check_dynamic_sizes( MAXCPCOEF, dc[q].NeCp );
+    }
+
+    if(dc[q].PdcFT != S_OFF) {
+        ret &= aObj[ o_dcftp ]->check_dynamic_sizes( 5, dc[q].Nft );
+        ret &= aObj[ o_dcfttyp ]->check_dynamic_sizes( 1, dc[q].Nft );
+    }
+
+    if(CM == CTPM_CPT && (CE == CTM_CHP || CE == CTM_BER)) {
+        // ret &= aObj[ o_dcftpb ]->check_dynamic_sizes( 3, dc[q].Nft );  // only 1 Landau transition
+        ret &= aObj[ o_dcftpb ]->check_dynamic_sizes( 3, 1 );
+    }
+
+    if(dc[q].Nemp > 0) {
+        ret &= aObj[ o_dccemp ]->check_dynamic_sizes( dc[q].Nemp, 1 );
+    }
+
+    ret &= aObj[ o_dcsdref ]->check_dynamic_sizes( dc[q].Nsd, 1 );
+    ret &= aObj[ o_dcsdval ]->check_dynamic_sizes( dc[q].Nsd, 1 );
+
+    if(CM == CTPM_CPT && CV == CPM_AKI) {
+        ret &= aObj[ o_dccpfs ]->check_dynamic_sizes( MAXCPFSCOEF, 1 );
+    }
+
+    if(dc[q].PdcHKF != S_OFF) {
+        ret &= aObj[ o_dchkf ]->check_dynamic_sizes( MAXHKFCOEF, 1 );
+    }
+
+    if(dc[q].PdcVT != S_OFF) {
+        ret &= aObj[ o_dcvt ]->check_dynamic_sizes( MAXVTCOEF, 1 );
+    }
+
+    if(CV == CPM_GAS || CV == CPM_PRSV || CV == CPM_SRK || CV == CPM_PR78
+        || CV == CPM_CORK || CV == CPM_STP) {
+        // PRSV, SRK, PR78, CORK and STP fluid models
+        ret &= aObj[ o_dccritpg ]->check_dynamic_sizes( MAXCRITPARAM, 1 );
+    }
+
+    if(CV == CPM_VBM) {     // Birch-Murnaghan coeffs, 04.04.2003
+        ret &= aObj[ o_dcodc ]->check_dynamic_sizes( MAXODCOEF, 1 );
+    }
+    return ret;
+}
+
 
 // set dynamic Object ptrs to variables in memory
 void TDComp::dyn_set(int q)

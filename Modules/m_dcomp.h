@@ -194,6 +194,7 @@ public:
         return dcp==&dc[0];
     }
     void ods_link( int i=0) override;
+    bool ods_check(int i=0) override;
     void dyn_set( int i=0) override;
     void dyn_kill( int i=0) override;
     void dyn_new( int i=0) override;
