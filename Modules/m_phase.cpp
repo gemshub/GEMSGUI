@@ -305,12 +305,18 @@ bool TPhase::ods_check(int q)
 
     if(ph[q].Psco == S_ON)  {
         ret &= aObj[o_phscoef]->check_dynamic_sizes( ph[q].nDC, ph[q].nscM ); // changed 07.12.2006  KD
-        ret &= aObj[o_phdcpcl]->check_dynamic_sizes( 1, ph[q].nscM );
+        if(aObj[o_phdcpcl]->GetPtr()) { // only for new records
+            ret &= aObj[o_phdcpcl]->check_dynamic_sizes( 1, ph[q].nscM );
+        }
     }
     if(ph[q].Ppnc == S_ON)  {
         ret &= aObj[o_phpnc]->check_dynamic_sizes( ph[q].ncpN, ph[q].ncpM );
-        ret &= aObj[o_phipicl]->check_dynamic_sizes( ph[q].ncpN, 1 );
-        ret &= aObj[o_phipccl]->check_dynamic_sizes( 1, ph[q].ncpM );
+        if(aObj[o_phipicl]->GetPtr()) { // only for new records
+            ret &= aObj[o_phipicl]->check_dynamic_sizes( ph[q].ncpN, 1 );
+        }
+        if(aObj[o_phipccl]->GetPtr()) { // only for new records
+            ret &= aObj[o_phipccl]->check_dynamic_sizes( 1, ph[q].ncpM );
+        }
     }
 
     ret &= aObj[ o_phlphc2]->check_dynamic_sizes( ph[q].nlPh, 1 );
@@ -1727,13 +1733,15 @@ int TPhase::CompressDecomp(int , const TCIntArray &DCused)
 
       copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
       copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
-      if( php->ipicl )
+      if( php->ipicl ) {
          memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
+      }
       ncpNnew++;
     }
 
-   if(php->ipicl )
-    php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    if(php->ipicl ) {
+      php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    }
    return  ncpNnew;
 }
 
@@ -1788,11 +1796,15 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
 
         copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
         copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
-        memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
+        if(php->ipicl ) {
+           memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
+        }
         ncpNnew++;
     }
 
-    php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    if(php->ipicl) {
+       php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    }
     return  ncpNnew;
 }
 
