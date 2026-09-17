@@ -329,7 +329,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
         (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  &&
          (rh.Nobj+frstOD-1) != o_phsdval  && (nOD+frstOD-1) != o_sptext ) ) {
         gui_logger->info("Record header format error {} {} {} {}", char_array_to_string(Keywd, MAXKEYWD), rh.Nobj, nOD, frstOD);
-        Error( GetKeywd(),"Record header format error");
+        Error(GetKeywd(), "Record header format error");
     }
     f.getline( key, KeyLen()+KeyNumFlds(), MARKRKEY);
     ErrorIf( f.gcount()>=(KeyLen()+KeyNumFlds()), GetKeywd(),
