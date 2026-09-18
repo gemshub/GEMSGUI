@@ -137,7 +137,7 @@ class TTreeView: public QTreeView
 {
 	Q_OBJECT
 	
-	void keyPressEvent(QKeyEvent* e);
+    void keyPressEvent(QKeyEvent* e) override;
 	QString createString();
     QString createHeader();
 	 
@@ -161,6 +161,8 @@ class TTreeView: public QTreeView
      void printList( std::fstream& ff );
      void resetList();
 
+ protected:
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 };
 
 

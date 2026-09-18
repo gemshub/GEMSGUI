@@ -4,6 +4,20 @@ namespace fs = std::filesystem;
 #include "service.h"
 #include "visor.h"
 
+TCStringArray vfFiles(const std::string& dir_name, const std::string& ext) {
+    TCStringArray files;
+    fs::path dir_path(dir_name);
+    std::error_code ec;
+    for (fs::directory_iterator it(dir_path, ec), end; !ec && it != end; it.increment(ec)) {
+        if (it->is_regular_file(ec) && (ext.empty() || it->path().extension() == ext)) {
+            std::string file = it->path().filename().string();
+            gui_logger->trace("Adding file: {}", file);
+            files.push_back(file);
+        }
+    }
+    return files;
+}
+
 
 bool vfExist(const std::string &file_path)
 {

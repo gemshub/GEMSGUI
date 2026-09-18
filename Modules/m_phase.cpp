@@ -244,6 +244,99 @@ aObj[ o_phascp]->SetDim( 1, ph[q].nAscC );
  php=&ph[q];
 }
 
+bool TPhase::ods_check(int q)
+{
+    bool ret = true;
+
+    if(ph[q].PFsiT != S_OFF) {
+        ret &= aObj[o_phscmc]->check_dynamic_sizes( ph[q].NsuT, 1 );
+        ret &= aObj[o_phxfiec]->check_dynamic_sizes( ph[q].NsuT, 1);
+        ret &= aObj[o_phmsdt]->check_dynamic_sizes( ph[q].NsuT, 2 );
+        ret &= aObj[o_phcapt]->check_dynamic_sizes( ph[q].NsuT, 2 );
+        ret &= aObj[o_phfsit]->check_dynamic_sizes( ph[q].NsuT, 1 );
+        ret &= aObj[o_phsatc]->check_dynamic_sizes( ph[q].nDC,  MCAS );
+        ret &= aObj[o_phmasdj]->check_dynamic_sizes( ph[q].nDC, DFCN );
+    }
+    ret &= aObj[o_phpxres]->check_dynamic_sizes( ph[q].ncpN, ph[q].npxM );
+
+    ret &= aObj[o_phsm]->check_dynamic_sizes( ph[q].nDC, 1 );
+    ret &= aObj[o_phdcc]->check_dynamic_sizes( ph[q].nDC, 1 );
+    ret &= aObj[o_phdcs]->check_dynamic_sizes( ph[q].nDC, 1 );
+
+    ret &= aObj[o_phsdref]->check_dynamic_sizes( ph[q].Nsd, 1 );
+    ret &= aObj[o_phsdval]->check_dynamic_sizes( ph[q].Nsd, 1 );
+
+    ret &= aObj[o_ph_w_lsc]->check_dynamic_sizes( ph[q].nCat, 1 );
+    ret &= aObj[o_ph_w_lsa]->check_dynamic_sizes( ph[q].nAn, 1 );
+    ret &= aObj[o_ph_w_lsn]->check_dynamic_sizes( ph[q].nNs, 1 );
+    ret &= aObj[o_ph_w_nxc]->check_dynamic_sizes( ph[q].nCat, 1 );
+    ret &= aObj[o_ph_w_nxa]->check_dynamic_sizes( ph[q].nAn, 1 );
+    ret &= aObj[o_ph_w_nxn]->check_dynamic_sizes( ph[q].nNs, 1 );
+
+    if( ph[q].PsDiS == S_ON ) {
+        ret &= aObj[o_phxsmd]->check_dynamic_sizes( ph[q].nDC, ph[q].nSiT );
+        ret &= aObj[ o_phisoc]->check_dynamic_sizes( 2, ph[q].nSiT );
+    }
+    ret &= aObj[o_phocprk]->check_dynamic_sizes( ph[q].nPRk, 2 );
+
+    ret &= aObj[o_phlphc1]->check_dynamic_sizes( ph[q].nlPh, ph[q].nlPc );
+    ret &= aObj[o_phdqfc]->check_dynamic_sizes( ph[q].nDC, ph[q].ndqf );
+    if(ph[q].Prcp == S_ON) {
+        ret &= aObj[o_phrcpc]->check_dynamic_sizes( ph[q].nDC, ph[q].nrcp );
+    }
+    ret &= aObj[o_pheipc]->check_dynamic_sizes( ph[q].nEIl, ph[q].nEIp );
+    ret &= aObj[o_phcdc]->check_dynamic_sizes( ph[q].nDC, ph[q].nCDc );
+
+    ret &= aObj[o_phisop]->check_dynamic_sizes( ph[q].nDC, ph[q].nIsoC );
+    ret &= aObj[o_phisos]->check_dynamic_sizes( ph[q].nSiT, ph[q].nIsoS );
+    ret &= aObj[o_phfesar]->check_dynamic_sizes( ph[q].nPRk, 1 );
+    ret &= aObj[o_phrpcon]->check_dynamic_sizes( ph[q].nPRk, ph[q].nrpC );
+    ret &= aObj[o_phlph]->check_dynamic_sizes( ph[q].nlPh, 1 );
+    ret &= aObj[o_phldcr]->check_dynamic_sizes( ph[q].nSkr, 1 );
+    ret &= aObj[o_phldcd]->check_dynamic_sizes( ph[q].nSkr, 1 );
+
+    if(ph[q].PumpCon == S_ON)  {
+        ret &= aObj[ o_phumpcon]->check_dynamic_sizes( ph[q].nDC, ph[q].numpC );
+        ret &= aObj[o_phumpcl]->check_dynamic_sizes( 1, ph[q].numpC );
+        ret &= aObj[o_phlicu]->check_dynamic_sizes( ph[q].nDC, 1 );
+    }
+
+    ret &= aObj[o_phrpkcl]->check_dynamic_sizes( 1, ph[q].nrpC );
+    ret &= aObj[o_phrprcl]->check_dynamic_sizes( ph[q].nPRk, 1 );
+    ret &= aObj[o_phsmcdl]->check_dynamic_sizes( 1, ph[q].nIsoC );
+    ret &= aObj[ o_phsmcsl]->check_dynamic_sizes( 1, ph[q].nIsoS );
+    ret &= aObj[ o_pheimpl]->check_dynamic_sizes( 1, ph[q].nCDc );
+    ret &= aObj[ o_pheimll]->check_dynamic_sizes( 1, ph[q].nEIp );
+
+    if(ph[q].Psco == S_ON)  {
+        ret &= aObj[o_phscoef]->check_dynamic_sizes( ph[q].nDC, ph[q].nscM ); // changed 07.12.2006  KD
+        if(aObj[o_phdcpcl]->GetPtr()) { // only for new records
+            ret &= aObj[o_phdcpcl]->check_dynamic_sizes( 1, ph[q].nscM );
+        }
+    }
+    if(ph[q].Ppnc == S_ON)  {
+        ret &= aObj[o_phpnc]->check_dynamic_sizes( ph[q].ncpN, ph[q].ncpM );
+        if(aObj[o_phipicl]->GetPtr()) { // only for new records
+            ret &= aObj[o_phipicl]->check_dynamic_sizes( ph[q].ncpN, 1 );
+        }
+        if(aObj[o_phipccl]->GetPtr()) { // only for new records
+            ret &= aObj[o_phipccl]->check_dynamic_sizes( 1, ph[q].ncpM );
+        }
+    }
+
+    ret &= aObj[ o_phlphc2]->check_dynamic_sizes( ph[q].nlPh, 1 );
+
+    ret &= aObj[ o_phixsolv]->check_dynamic_sizes( 2, ph[q].nsolv );
+    ret &= aObj[ o_phixdiel]->check_dynamic_sizes( 2, ph[q].ndiel );
+    ret &= aObj[ o_phsolvc]->check_dynamic_sizes( ph[q].ncsolv, ph[q].nsolv );
+    ret &= aObj[ o_phdielc]->check_dynamic_sizes( ph[q].ncdiel, ph[q].ndiel);
+    ret &= aObj[ o_phdhc]->check_dynamic_sizes( 1, ph[q].ndh );
+    ret &= aObj[ o_phapcon]->check_dynamic_sizes( ph[q].nSkr, ph[q].nPRk * ph[q].naptC );
+    ret &= aObj[ o_phascp]->check_dynamic_sizes( 1, ph[q].nAscC );
+
+    return ret;
+}
+
 
 // set dynamic Objects ptr to values
 void TPhase::dyn_set(int q)
@@ -787,6 +880,7 @@ void TPhase::set_def( int q)
     ph[q].nCDc = 0;
     ph[q].iRes3 = 0;
     ph[q].nIsoC = 0;
+    ph[q].nSiT = 0;
     ph[q].nIsoS = 0;
     ph[q].mDe = 0;
     ph[q].nFaces = 0;
@@ -1643,13 +1737,15 @@ int TPhase::CompressDecomp(int , const TCIntArray &DCused)
 
       copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
       copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
-      if( php->ipicl )
+      if( php->ipicl ) {
          memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
+      }
       ncpNnew++;
     }
 
-   if(php->ipicl )
-    php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    if(php->ipicl ) {
+      php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    }
    return  ncpNnew;
 }
 
@@ -1704,11 +1800,15 @@ int TPhase::CompressSublattice( const TCStringArray& form_array )
 
         copyValues( php->ipxt+ncpNnew*php->npxM, php->ipxt+ii*php->npxM, php->npxM );
         copyValues( php->pnc+ncpNnew*php->ncpM, php->pnc+ii*php->ncpM, php->ncpM );
-        memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
+        if(php->ipicl ) {
+           memcpy( php->ipicl[ncpNnew], php->ipicl[ii], MAXDCNAME );
+        }
         ncpNnew++;
     }
 
-    php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    if(php->ipicl) {
+       php->ipicl =  static_cast<char (*)[MAXDCNAME]>(aObj[ o_phipicl]->Alloc( ncpNnew, 1, MAXDCNAME ));
+    }
     return  ncpNnew;
 }
 

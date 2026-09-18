@@ -259,11 +259,16 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     // put packed key
-    len = strlen( pack_key );
-    pack_key[len] = MARKRKEY;
-    f.writeArray( pack_key, len+1 );
-    pack_key[len] = '\0';
-    StillLen -= len+1;
+    len = strlen(pack_key);
+    f.writeArray(pack_key, len);
+    char marker = MARKRKEY;
+    f.writeArray(&marker, 1);
+    StillLen -= len + 1;
+    // len = strlen( pack_key );
+    // pack_key[len] = MARKRKEY;
+    // f.writeArray( pack_key, len+1 );
+    // pack_key[len] = '\0';
+    // StillLen -= len+1;
     ErrorIf( !f.good(), GetKeywd(),
              "PDB file write error");
     for( j=0; j<nOD; j++ )    // put objects to file
@@ -320,10 +325,12 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     //   f.read( (char *)&rh, sizeof(RecHead) );
     rh.read (f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
-            strncmp( rh.endm, MARKRECHEAD, 2 ) ||
-            (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  && 
-             (rh.Nobj+frstOD-1) != o_phsdval  && (nOD+frstOD-1) != o_sptext ) )
-        Error( GetKeywd(),"Record header format error");
+        strncmp( rh.endm, MARKRECHEAD, 2 ) ||
+        (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  &&
+         (rh.Nobj+frstOD-1) != o_phsdval  && (nOD+frstOD-1) != o_sptext ) ) {
+        gui_logger->info("Record header format error {} {} {} {}", char_array_to_string(Keywd, MAXKEYWD), rh.Nobj, nOD, frstOD);
+        Error(GetKeywd(), "Record header format error");
+    }
     f.getline( key, KeyLen()+KeyNumFlds(), MARKRKEY);
     ErrorIf( f.gcount()>=(KeyLen()+KeyNumFlds()), GetKeywd(),
              "Error reading database record key" );
@@ -625,6 +632,7 @@ std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)
         if( frstODjson!=frstOD && aObj[no]->GetDescription(0,0) == "internaldb" )
             continue;
         QString obj_key(aObj[no]->GetKeywd());
+        aObj[no]->fromJsonValue(dodAll[obj_key]);
         if( obj_key == "dSDval") {
             auto nSd = aObj[o_dcdim]->Get(0, 2);
             aObj[o_dcsdval]->Alloc(nSd, 1, V_SD_VALEN );
@@ -633,13 +641,12 @@ std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)
             auto nSd = aObj[o_redim]->Get(0, 7);
             aObj[o_resdval]->Alloc(nSd, 1, V_SD_VALEN);
         }
-        aObj[no]->fromJsonValue(dodAll[obj_key]);
         if( obj_key == "dSDref") {
-            auto nSd = aObj[no]->GetN();
+            auto nSd = (aObj[no]->GetM()==0 ? 0 : aObj[no]->GetN()); // in case of empty
             aObj[o_dcdim]->Put(nSd, 0, 2);
         }
         if( obj_key == "rSDref") {
-            auto nSd = aObj[no]->GetN();
+            auto nSd = (aObj[no]->GetM()==0 ? 0 : aObj[no]->GetN());
             aObj[o_redim]->Put(nSd, 0, 7);
         }
     }
