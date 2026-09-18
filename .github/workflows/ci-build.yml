@@ -78,7 +78,7 @@ jobs:
           ninja
           ccache --show-stats
           cd benchcomp
-          ./check-db -d -s .
+          ./check-db -d -s . -k
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
         if: matrix.os == 'windows-latest'
