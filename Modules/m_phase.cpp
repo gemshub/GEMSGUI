@@ -273,12 +273,17 @@ bool TPhase::ods_check(int q)
     ret &= aObj[o_ph_w_nxa]->check_dynamic_sizes( ph[q].nAn, 1 );
     ret &= aObj[o_ph_w_nxn]->check_dynamic_sizes( ph[q].nNs, 1 );
 
-    ret &= aObj[o_phxsmd]->check_dynamic_sizes( ph[q].nDC, ph[q].nSiT );
+    if( ph[q].PsDiS == S_ON ) {
+        ret &= aObj[o_phxsmd]->check_dynamic_sizes( ph[q].nDC, ph[q].nSiT );
+        ret &= aObj[ o_phisoc]->check_dynamic_sizes( 2, ph[q].nSiT );
+    }
     ret &= aObj[o_phocprk]->check_dynamic_sizes( ph[q].nPRk, 2 );
 
     ret &= aObj[o_phlphc1]->check_dynamic_sizes( ph[q].nlPh, ph[q].nlPc );
     ret &= aObj[o_phdqfc]->check_dynamic_sizes( ph[q].nDC, ph[q].ndqf );
-    ret &= aObj[o_phrcpc]->check_dynamic_sizes( ph[q].nDC, ph[q].nrcp );
+    if(ph[q].Prcp == S_ON) {
+        ret &= aObj[o_phrcpc]->check_dynamic_sizes( ph[q].nDC, ph[q].nrcp );
+    }
     ret &= aObj[o_pheipc]->check_dynamic_sizes( ph[q].nEIl, ph[q].nEIp );
     ret &= aObj[o_phcdc]->check_dynamic_sizes( ph[q].nDC, ph[q].nCDc );
 
@@ -320,7 +325,6 @@ bool TPhase::ods_check(int q)
     }
 
     ret &= aObj[ o_phlphc2]->check_dynamic_sizes( ph[q].nlPh, 1 );
-    ret &= aObj[ o_phisoc]->check_dynamic_sizes( 2, ph[q].nSiT );
 
     ret &= aObj[ o_phixsolv]->check_dynamic_sizes( 2, ph[q].nsolv );
     ret &= aObj[ o_phixdiel]->check_dynamic_sizes( 2, ph[q].ndiel );
