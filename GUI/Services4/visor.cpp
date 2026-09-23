@@ -177,8 +177,7 @@ void TVisor::ProcessProgress(QWidget*, int nRT)
     gui_logger->debug("TVisor::ProcessProgress {}", nRT);
 }
 
-bool TVisor::Message(QWidget*, const char* /*name*/,
-                     const char* msg, int prog, int total, bool)
+bool TVisor::Message(const char* name, const char* msg, int prog, int total)
 {
     gui_logger->debug("TVisor::Message {} {}/{}", msg, prog, total);
     return false;

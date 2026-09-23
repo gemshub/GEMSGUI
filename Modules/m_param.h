@@ -216,7 +216,7 @@ public:
     // Multi make functions
     void PMtest( const char *key );
 
-    void LoadFromMtparm( QWidget* par, DATACH *CSD, bool no_interpolat );
+    void LoadFromMtparm(DATACH *CSD, bool no_interpolat);
     void CalcBcc(); // Calc bulk composition
     void ShowPhaseWindow(QWidget* par, const char *objName, int nLine);
     //void ShowEqPhaseWindow();

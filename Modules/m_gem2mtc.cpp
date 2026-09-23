@@ -26,8 +26,7 @@
 
 int get_ndx_(  int i,  int nO,  int Xplace );
 
-bool
-TGEM2MT::test_sizes( )
+bool TGEM2MT::test_sizes( )
 {
   std::string err_str;
 
@@ -193,160 +192,6 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
 }
 
 
-// setup begin initalization
-void TGEM2MT::init_arrays( bool mode )
-{
-  char tbuf[100];
-
-// set data to SBM (IComp names)
-    if( mtp->SBM )
-      for(long int ii=0; ii< mtp->Nb; ii++ )
-        memcpy( mtp->SBM[ii], TRMults::sm->GetMU()->SB[ii], MAXICNAME/*+MAXSYMB*/  );
-
-// setup flags and counters
-  mtp->gStat = GS_INDEF;
-  mtp->iStat = GS_INDEF;
-  mt_reset();
-
-  if( mode )
-  {
-    long int ii;
-    double cT =  TMulti::sm->GetPM()->TCc;
-    double cP =  TMulti::sm->GetPM()->Pc;
-
-
-    mtp->Msysb = 0.;
-    mtp->Vsysb = 0.;
-    mtp->Mwatb = 1.;
-    mtp->Maqb = 1.;
-    mtp->Vaqb = 1.;
-
-    if( mtp->PvICi != S_OFF )
-      for( ii=0; ii<mtp->Nb; ii++)
-          mtp->CIclb[ii] = QUAN_MOL;
-
-    for( ii=0; ii<mtp->nIV; ii++)
-    {
-     sprintf( tbuf, "System%ld", ii );
-     strncpy( mtp->nam_i[ii], tbuf, MAXIDNAME );
-     mtp->PTVm[ii][0] = cP;
-     mtp->PTVm[ii][1] = cT;
-     mtp->PTVm[ii][2] = 0.001; // 1 dm3
-     mtp->PTVm[ii][3] = 1.;
-    }
-
-    for( ii=0; ii<mtp->nC; ii++)
-    {
-     mtp->StaP[ii][0] = cP;     // bar
-     mtp->StaP[ii][1] = cT;     // deg C
-     mtp->StaP[ii][2] = 0.001;  // initial node volumes 1 dm3
-     mtp->StaP[ii][3] = 1.;  // initial node masses 1 kg
-    }
-
-    for( ii=0; ii<mtp->Lbi; ii++)
-    {
-     mtp->AUcln[ii] = QUAN_GRAM;
-     memcpy( mtp->for_i[ii], "H2O", 4 );
-    }
-
-// set up defaults for particles
-    if( mtp->PsMode == RMT_MODE_W  )
-     for( ii=0; ii< mtp->nPTypes; ii++ )
-     {
-        mtp->NPmean[ii] = 500;
-        mtp->nPmin[ii] = 100;
-        mtp->nPmax[ii] = 1000;
-        mtp->ParTD[ii][0] = ii;
-        mtp->ParTD[ii][1] = MOBILE_C_MASS;
-        mtp->ParTD[ii][2] = DISSOLVED;
-        mtp->ParTD[ii][3] = 0;
-        mtp->ParTD[ii][4] = 0;
-        mtp->ParTD[ii][5] = 0;
-     }
-
-
- // setup default graphiks lines
-   if( mtp->PvEF != S_OFF  )
-        for(long int i=0; i<mtp->nYE; i++ )
-        {
-            sprintf( tbuf, "%s%ld", TProfil::pm->pa.GDpsc, i+1 );
-            if( !*mtp->lNamE[i] || *mtp->lNamE[i] == ' ' )
-                strncpy( mtp->lNamE[i], tbuf,  MAXGRNAME );
-        }
-   /* remake script setup
-      if( mtp->PvMSg != S_OFF  )
-         for(long int j=0; j< mtp->nYS; j++ )
-         {
-            sprintf( tbuf, "%s%d", TProfil::pm->pa.GDpsc, j+1 );
-            if( !*mtp->lNam[j]|| *mtp->lNam[j] == ' ' )
-               strncpy( mtp->lNam[j], tbuf, MAXGRNAME );
-          }
-    */
-  }
-
-  if( mtp->PsMode == RMT_MODE_S || mtp->PsMode == RMT_MODE_F || mtp->PsMode == RMT_MODE_B )
-  {
-     long int ii;
-     std::string phName = "0";
-     double xaq= 0.;
-     double xgas = 0.;
-     double xsld = 0.;
-
-     phName = "Pg1";
-     switch( mtp->PsMPh )
-     {
-      case MGP_TT_AQGF: phName = "flu"; xgas = 1.; xaq = 1.;    // '3'
-         break;
-      case MGP_TT_AQS: phName = "aq"; xaq = 1.;                 // '1'
-         break;
-      case MGP_TT_GASF: phName = "gas"; xgas = 1.;              // '2'
-         break;
-      case MGP_TT_SOLID: phName = "sld"; xsld = 1.;             // '4'
-         break;
-      default: break;
-     }
-     if( mtp->nPG > 0 && !(!*mtp->MGPid[0] || *mtp->MGPid[0] == ' '))
-       {  phName = std::string(mtp->MGPid[0], 0, MAXSYMB);
-            strip( phName );
-       }
-
-     if( mode )  // only start
-     for( ii=0; ii<mtp->nPG; ii++)
-     {
-        if( !*mtp->MGPid[ii] || *mtp->MGPid[ii] == ' ' || *mtp->MGPid[ii] == '`' )
-            strncpy( mtp->MGPid[ii], phName.c_str(), MAXSYMB );
-        for(long int k=0; k<mtp->FIf; k++ )
-        {
-             char  PHC_ = TMulti::sm->GetPM()->PHC[mtp->xPH[k]];
-
-             if( PHC_ == PH_AQUEL )
-                  mtp->PGT[ii*mtp->FIf+k] = xaq;
-               else
-                  if( PHC_ == PH_GASMIX || PHC_ == PH_FLUID || PHC_ == PH_PLASMA )
-                   mtp->PGT[ii*mtp->FIf+k] = xgas;
-                  else
-                   mtp->PGT[ii*mtp->FIf+k] = xsld;
-         }
-     }
-
-     if( mtp->UMGP)
-       for( ii=0; ii<mtp->FIf; ii++)
-         if( !mtp->UMGP[ii] || mtp->UMGP[ii] == ' '|| mtp->UMGP[ii] == '`' )
-             mtp->UMGP[ii] = QUAN_MOL;
-
-
-     if( mtp->PvFDL != S_OFF )
-       for( ii=0; ii<mtp->nFD; ii++)
-       {
-         if( !*mtp->FDLmp[ii] || *mtp->FDLmp[ii] == ' ' || *mtp->FDLmp[ii] == '`' )
-            strncpy( mtp->FDLmp[ii], phName.c_str(), MAXSYMB );
-         if( !*mtp->FDLid[ii] || *mtp->FDLid[ii] == ' ' )
-             strncpy( mtp->FDLid[ii], "qj", MAXSYMB );
-       }
-    }
-  }
-
-
 // generate Tval and Pval arrays
 void TGEM2MT::gen_TPval()
 {
@@ -488,8 +333,7 @@ void TGEM2MT::make_A( long int siz_, char (*for_)[MAXFORMUNITDT] )
 }
 
 // Calculate data for matrix Bn as Bb_Calc
-void
-TGEM2MT::Bn_Calc()
+void TGEM2MT::Bn_Calc()
 {
     long int i, j;
     double Msysb_bk, Tmolb_bk;
@@ -632,9 +476,7 @@ TGEM2MT::Bn_Calc()
   delete[]  ICw;
 }
 
-
 // Generating new System for the node
-//
 void TGEM2MT::gen_task( bool startSys )
 {
     long int i=0, kv = mtp->kv, qc = mtp->qc, Nb = mtp->Nb;
@@ -704,10 +546,6 @@ void TGEM2MT::outMulti()
                         mtp->PsSdef!=S_OFF, mtp->PsScom!=S_OFF, false, false ); // mui,muj,muk do not output
 
 }
-
-
-// ===========================================================
-
 
 // Show plots for all nodes at time mtp->cTau (time step mtp->ct)
 void TGEM2MT::CalcGraph()
@@ -861,8 +699,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
 
 // plotting the record -------------------------------------------------
 //Added one point to graph
-void
-TGEM2MT::CalcPoint( int nPoint )
+void TGEM2MT::CalcPoint( int nPoint )
 {
     if( mtp->PvMSg == S_OFF || nPoint >= mtp->nC )
      return;
@@ -872,8 +709,7 @@ TGEM2MT::CalcPoint( int nPoint )
 }
 
 // Plotting record
-void
-TGEM2MT::RecordPlot( const char* /*key*/ )
+void TGEM2MT::RecordPlot( const char* /*key*/ )
 {
 
     if( mtp->PvMSg == S_OFF )

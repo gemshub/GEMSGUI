@@ -54,7 +54,7 @@ typedef struct
    PvDDc,    //  Use diffusion coefficients for DC - DDc vector (+ -)
    PvDIc,    //  Use diffusion coefficients for IC - DIc vector (+ -)
    PvDCH,    //  Select ICs, DCs and phases to be exchanged via DATABR file (take all, if unchecked) (+ -)?
-   PvnVTK,   //  Use selected fields to VTK format (+ -)?
+   PvnVTK,   // Use selected fields to VTK format (+ -)?
    PvMSc,    // Use math script for control on time steps (+ -)?
 
      // Controls on operation (14)
@@ -89,7 +89,7 @@ typedef struct
    nSFD,   // number of elemental source flux definitions (0 or >= 1 )
    nEl,   // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
    nPTypes,     // res Number of allocated particle types (< 20 ? )
-   nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes
+   nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes (now not used in particlearray)
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -314,7 +314,7 @@ GEM2MT;
 class TGEM2MT
         : public TCModule
 {
-    GEM2MT mt[1];
+  GEM2MT mt[1];
 
     IPNCalc rpn[2];      // IPN
     jsonui::GraphDialog *gd_gr = nullptr;
@@ -337,7 +337,7 @@ class TGEM2MT
 
     // new callback API
 
-    std::shared_ptr<spdlog::logger> logfile;
+    std::shared_ptr<spdlog::logger> main_logfile;
     std::shared_ptr<spdlog::logger> ph_file;
     std::shared_ptr<spdlog::logger> diff_log_file;
 
@@ -361,9 +361,7 @@ class TGEM2MT
 
     void CalcStartScript();
     void CalcControlScript();
-    void CalcStartScript2();
-    void CalcControlScript2();
-
+ 
 protected:
 
     void AllocNa();
@@ -447,7 +445,16 @@ protected:
     // returns current (possibly reduced) step value or negative value in case of error
    double INTEG( double eps, double step, double t_begin, double t_end );
 
-   public:
+    void math_transport_defaults();
+    void defaults_DiCp();
+    void defaults_HydP();
+    void defaults_particle_setup();
+    void defaults_MGPid_PGT_FDLmp_FDLid(bool mode);
+    void defaults_FDLi_FDLf();
+    void defaults_BSF();
+    void defaults_Grid();
+
+public:
 
     static TGEM2MT* pm;
     
@@ -560,3 +567,4 @@ typedef enum {  /// Field index into outField structure
 } GEM2MT_DYNAMIC_FIELDS;
 
 #endif //_m_gem2mt_h_
+

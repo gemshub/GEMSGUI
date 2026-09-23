@@ -805,7 +805,7 @@ TMTparm::b_gamma_TP( double tk, double pb, double eps, double gsf, int mode )
 }
 
 
-void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
+void TMTparm::LoadDataToLookup(DATACH* CSD )
 {
 
     int kk, ip, it, ll, jj;
@@ -902,8 +902,8 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
        }
      } //ip
   } //it
-  if( par )
-     pVisor->CloseMessage();
+
+  pVisor->CloseMessage();
 
   std::string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
@@ -921,7 +921,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
   delete[] tp_mark;
 }
 
-void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
+void TMTparm::LoadDataToPair(DATACH* CSD)
 {
 
     int kk, ip, it, ll, jj;
@@ -1019,8 +1019,8 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
            CSD->U0[ll] = 0.;
        }
      } //ip
-  if( par )
-     pVisor->CloseMessage();
+
+  pVisor->CloseMessage();
 
   std::string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
