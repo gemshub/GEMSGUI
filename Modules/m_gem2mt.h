@@ -376,7 +376,7 @@ public:
     std::string Vmessage;
     class UserCancelException {};
     GEMS3KGenerator GEMS3k_generator();
-    bool internalCalc();
+    virtual bool internalCalc();
     void savePoint();
 
 protected:
@@ -413,51 +413,47 @@ protected:
         if( pa_mt )
             pa_mt->logProfilePhMol(logfile, inode);
     }
-
     /// Preparations: opening output files for monitoring 1D profiles
     void alloc_loggers();
     /// Added one point to loggers
     void point_to_loggers();
     /// Log time point to VTK format file
     void log_vtk();
-    /// Define the properties of each node (box, reactor) -
-    /// GUI initialization script copy
-    void exec_initialization();
+
     /// Function for sampling and plotting the properties of nodes at next time step.
     /// Output of the results if step accepted
     /// @param mtp_cp - actual time index
     bool accept_point(long int mtp_cp, std::string message, int prog, int total);
-
     void CalcStartScript();
     void CalcControlScript();
 
+    /// Define the properties of each node (box, reactor) -
+    /// GUI initialization script copy
+    void exec_initialization();
     void AllocNa();
-
     void keyTest( const char *key );
     void Expr_analyze( int obj_num );
     void CalcPoint( int nPoint );
     bool test_sizes();
     void SelectNodeStructures( bool select_all );
-    void init_arrays( bool mode );
     void calc_eqstat( bool startSys );
     void outMulti();
     void mt_next();
-    void mt_reset();
     void gen_task( bool startSys );
     void make_A( long int siz_, char (*for_)[MAXFORMUNITDT] );
     void Bn_Calc();
     void gen_TPval();
 
-    void  copyNodeArrays();
     void  NewNodeArray();
-    void  putHydP( DATABRPTR* C0 );
     void  LinkNode0(long int nNode);
     void  LinkNode1(long int nNode);
     void  LinkCSD(long int nNode);
     void  allocNodeWork();
     void  freeNodeWork();
-
     void  CalcGraph();
+
+    void  copyNodeArrays();
+    void  putHydP( DATABRPTR* C0 );
     long int CheckPIAinNodes1D(char mode, long int start_node = 0, long int end_node = 1000);
     bool  CalcIPM(char mode, long int start_node = 0,long int end_node = 1000);
 
@@ -500,14 +496,17 @@ protected:
     // returns current (possibly reduced) step value or negative value in case of error
     double INTEG( double eps, double step, double t_begin, double t_end );
 
+    void mt_reset();
+    void init_arrays(bool mode);
     void math_transport_defaults();
-    void defaults_DiCp();
-    void defaults_HydP();
-    void defaults_particle_setup();
-    void defaults_MGPid_PGT_FDLmp_FDLid(bool mode);
-    void defaults_FDLi_FDLf();
-    void defaults_BSF();
-    void defaults_Grid();
+    virtual void defaults_DiCp();
+    virtual void defaults_HydP();
+    virtual void defaults_particle_setup();
+    virtual void defaults_MGPid_PGT_FDLmp_FDLid(bool mode);
+    virtual void defaults_FDLi_FDLf();
+    virtual void defaults_BSF();
+    virtual void defaults_Grid();
+
 
 };
 
