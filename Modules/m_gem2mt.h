@@ -312,9 +312,74 @@ GEM2MT;
 
 // Current GEM2MT
 class TGEM2MT
-        : public TCModule
+    : public TCModule
 {
-  GEM2MT mt[1];
+    GEM2MT mt[1];
+
+public:
+
+    static TGEM2MT* pm;
+    GEM2MT *mtp;
+
+
+    explicit TGEM2MT(size_t nrt);
+
+    ~TGEM2MT()
+    {
+        delete gd_gr;
+    }
+
+    const char* GetName() const override
+    {
+        return "GEM2MT";
+    }
+
+    void ods_link( int i=0) override;
+    void dyn_set( int i=0) override;
+    void dyn_kill( int i=0) override;
+    void dyn_new( int i=0) override;
+    void set_def( int i=0) override;
+    bool check_input( const char *key, int level=1 ) override;
+    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
+                               int keyType ) override;
+
+    void RecInput( const char *key ) override;
+    void MakeQuery() override;
+    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
+    void RecCalc( const char *key ) override;
+    bool ImplementedPrint() const override
+    { return true; }
+    void RecordPrint( const char *key=nullptr ) override; //sddata key
+    void RecordPlot( const char *key ) override;
+
+    bool SaveChartData( jsonui::ChartData* grdata ) override;
+    void ClearGraphDialog() override
+    {  gd_gr = nullptr; }
+
+    //void CmHelp();
+    const char* GetHtml() override;
+
+    void InsertChanges( std::vector<CompItem>& aIComp,
+                       std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
+    void FreeNa();
+
+    // for separate
+    void checkAlws(io_formats::TRWArrays&  prar1, io_formats::TRWArrays&  prar) const;
+    template<typename TIO>
+    void to_text_file( TIO& out_format, bool with_comments, bool brief_mode ) const;
+    template<typename TIO>
+    void from_text_file(TIO& ff);
+
+    bool userCancel;
+    bool stepWise;
+    bool calcFinished;
+    std::string Vmessage;
+    class UserCancelException {};
+    GEMS3KGenerator GEMS3k_generator();
+    bool internalCalc();
+    void savePoint();
+
+protected:
 
     IPNCalc rpn[2];      // IPN
     jsonui::GraphDialog *gd_gr = nullptr;
@@ -322,12 +387,26 @@ class TGEM2MT
     std::string title;           // changed titler to title
     std::string error_lst_path;
 
-  std::shared_ptr<TNodeArrayGUI> na;       // pointer to nodearray class instance
-  TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
+    std::shared_ptr<TNodeArrayGUI> na;       // pointer to nodearray class instance
+    TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
+
+    // for box flux ODE integration sims with variable time step (TBD)
+    long int MaxIter,  // max number of iterations
+        nfcn,      // number of functional estimates
+        nstep,     // number of steps
+        naccept,   // number of permissible steps
+        nrejct;    // number of unpermissible steps
+    double *x = nullptr;
+    double *dx = nullptr;
+    double *tv = nullptr;
 
     std::string pathVTK;
     std::string nameVTK;
     std::string prefixVTK;
+
+    std::shared_ptr<spdlog::logger> main_logfile;
+    std::shared_ptr<spdlog::logger> ph_file;
+    std::shared_ptr<spdlog::logger> diff_log_file;
 
     void logProfilePhMol(spdlog::logger* logfile, int inode )
     {
@@ -335,25 +414,15 @@ class TGEM2MT
             pa_mt->logProfilePhMol(logfile, inode);
     }
 
-    // new callback API
-
-    std::shared_ptr<spdlog::logger> main_logfile;
-    std::shared_ptr<spdlog::logger> ph_file;
-    std::shared_ptr<spdlog::logger> diff_log_file;
-
     /// Preparations: opening output files for monitoring 1D profiles
     void alloc_loggers();
-
     /// Added one point to loggers
     void point_to_loggers();
-
     /// Log time point to VTK format file
     void log_vtk();
-
     /// Define the properties of each node (box, reactor) -
     /// GUI initialization script copy
     void exec_initialization();
-
     /// Function for sampling and plotting the properties of nodes at next time step.
     /// Output of the results if step accepted
     /// @param mtp_cp - actual time index
@@ -361,8 +430,6 @@ class TGEM2MT
 
     void CalcStartScript();
     void CalcControlScript();
- 
-protected:
 
     void AllocNa();
 
@@ -384,16 +451,14 @@ protected:
     void  copyNodeArrays();
     void  NewNodeArray();
     void  putHydP( DATABRPTR* C0 );
-    void  LinkNode0(  long int nNode );
-    void  LinkNode1(  long int nNode );
-    void  LinkCSD(  long int nNode );
+    void  LinkNode0(long int nNode);
+    void  LinkNode1(long int nNode);
+    void  LinkCSD(long int nNode);
     void  allocNodeWork();
     void  freeNodeWork();
 
     void  CalcGraph();
-    long int CheckPIAinNodes1D( char mode,
-              long int start_node = 0, long int end_node = 1000 );
-
+    long int CheckPIAinNodes1D(char mode, long int start_node = 0, long int end_node = 1000);
     bool  CalcIPM(char mode, long int start_node = 0,long int end_node = 1000);
 
     void  MassTransAdvecStart();
@@ -402,17 +467,7 @@ protected:
     void  MassTransCraNicStep( bool ComponentMode = true );
     void  MassTransParticleStart();
     void  MassTransParticleStep( bool ComponentMode = true );
-    bool Trans1D( char mode  );  // return true if canceled
-
-   // for box flux ODE integration sims with variable time step (TBD)
-    long int MaxIter,  // max number of iterations
-         nfcn,      // number of functional estimates
-         nstep,     // number of steps
-         naccept,   // number of permissible steps
-         nrejct;    // number of unpermissible steps
-    double *x = nullptr;
-    double *dx = nullptr;
-    double *tv = nullptr;
+    bool  Trans1D(char mode);  // return true if canceled
 
     // Flow-through box-flux transport simulations
     void  BoxFluxTransportStart();
@@ -420,7 +475,7 @@ protected:
 
     double BoxMasses( long int q );
     void ComposMGPinBox( long int q );
-//    void DisCoefMGPinBox( long int q );
+    //    void DisCoefMGPinBox( long int q );
     void  dMBZeroOff(  double *dm );
     double MassICinHfe( long int fe, long int i );
     double MassHfe(long int fe);
@@ -443,7 +498,7 @@ protected:
     void MIDEX( long int j, double t, double h );
     // ODE integration from t_begin to t_end with time step step (step can be reduced inside)
     // returns current (possibly reduced) step value or negative value in case of error
-   double INTEG( double eps, double step, double t_begin, double t_end );
+    double INTEG( double eps, double step, double t_begin, double t_end );
 
     void math_transport_defaults();
     void defaults_DiCp();
@@ -454,71 +509,6 @@ protected:
     void defaults_BSF();
     void defaults_Grid();
 
-public:
-
-    static TGEM2MT* pm;
-    
-    GEM2MT *mtp;
-
- 
-    explicit TGEM2MT( size_t nrt );
-
-    ~TGEM2MT()
-    {
-        delete gd_gr;
-    }
-
-    const char* GetName() const override
-    {
-        return "GEM2MT";
-    }
-
-    void ods_link( int i=0) override;
-    void dyn_set( int i=0) override;
-    void dyn_kill( int i=0) override;
-    void dyn_new( int i=0) override;
-    void set_def( int i=0) override;
-    bool check_input( const char *key, int level=1 ) override;
-    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
-                              int keyType ) override;
-
-    void RecInput( const char *key ) override;
-    void MakeQuery() override;
-    int RecBuild( const char *key, int mode = VF_UNDEF ) override;
-    void RecCalc( const char *key ) override;
-    bool ImplementedPrint() const override
-    { return true; }
-    void RecordPrint( const char *key=nullptr ) override; //sddata key
-    void RecordPlot( const char *key ) override;
-
-    bool SaveChartData( jsonui::ChartData* grdata ) override;
-    void ClearGraphDialog() override
-    {  gd_gr = nullptr; }
-
-    //void CmHelp();
-    const char* GetHtml() override;
-
-   void InsertChanges( std::vector<CompItem>& aIComp,
-          std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
-   void FreeNa();
-
-    // for separate
-    void checkAlws(io_formats::TRWArrays&  prar1, io_formats::TRWArrays&  prar) const;
-    template<typename TIO>
-    void to_text_file( TIO& out_format, bool with_comments, bool brief_mode ) const;
-    template<typename TIO>
-    void from_text_file(TIO& ff);
-
-    bool userCancel;
-    bool stepWise;
-    bool calcFinished;
-    std::string Vmessage;
-
-   class UserCancelException {};
-   bool internalCalc();
-   void savePoint();
-
-   GEMS3KGenerator GEMS3k_generator();
 };
 
 enum gem2mt_inernal {
