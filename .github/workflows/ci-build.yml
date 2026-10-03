@@ -77,6 +77,8 @@ jobs:
           cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release
           ninja
           ccache --show-stats
+          cd benchcomp
+          ./check-db -d -s . -k
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
         if: matrix.os == 'windows-latest'

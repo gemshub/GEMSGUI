@@ -35,6 +35,11 @@ const double ZBALANCE_PREC =  1e-6,
                STANDARD_TC    = 25.,
                  STANDARD_P     = 1.,
                    DEF_REL_DEV    = 0.05,
+                     // DM 10.09.2026 Tolerance for the phase-transition consistency check
+                     // in RecCalc(). Much tighter than DEF_REL_DEV: a transition's dH and dS
+                     // are tabulated to 5-7 digits, so anything above ~0.1% is a data error,
+                     // not rounding.
+                     DEF_REL_DEV_FT = 1e-3,
                      GAS_MV_STND    = 2478.92,
                        TK_DELTA        = 273.15,
                          TEMPER_PREC     = 0.5,
@@ -128,6 +133,61 @@ void TDComp::ods_link( int q)
         aObj[ o_dcsdval ]->SetDim( dc[q].Nsd, 1 );
     //}
     dcp=&dc[q];
+}
+
+bool TDComp::ods_check(int q)
+{
+    bool ret = true;
+
+    int CM,CE,CV;
+    CM = toupper( dc[q].pct[0] );
+    CE = toupper( dc[q].pct[1] );
+    CV = toupper( dc[q].pct[2] );
+
+    if(dc[q].PdcMK != S_OFF) {
+        ret &= aObj[ o_dccpint ]->check_dynamic_sizes( 2, dc[q].NeCp );
+        ret &= aObj[ o_dccp ]->check_dynamic_sizes( MAXCPCOEF, dc[q].NeCp );
+    }
+
+    if(dc[q].PdcFT != S_OFF) {
+        ret &= aObj[ o_dcftp ]->check_dynamic_sizes( 5, dc[q].Nft );
+        ret &= aObj[ o_dcfttyp ]->check_dynamic_sizes( 1, dc[q].Nft );
+    }
+
+    if(CM == CTPM_CPT && (CE == CTM_CHP || CE == CTM_BER)) {
+        // ret &= aObj[ o_dcftpb ]->check_dynamic_sizes( 3, dc[q].Nft );  // only 1 Landau transition
+        ret &= aObj[ o_dcftpb ]->check_dynamic_sizes( 3, 1 );
+    }
+
+    if(dc[q].Nemp > 0) {
+        ret &= aObj[ o_dccemp ]->check_dynamic_sizes( dc[q].Nemp, 1 );
+    }
+
+    ret &= aObj[ o_dcsdref ]->check_dynamic_sizes( dc[q].Nsd, 1 );
+    ret &= aObj[ o_dcsdval ]->check_dynamic_sizes( dc[q].Nsd, 1 );
+
+    if(CM == CTPM_CPT && CV == CPM_AKI) {
+        ret &= aObj[ o_dccpfs ]->check_dynamic_sizes( MAXCPFSCOEF, 1 );
+    }
+
+    if(dc[q].PdcHKF != S_OFF) {
+        ret &= aObj[ o_dchkf ]->check_dynamic_sizes( MAXHKFCOEF, 1 );
+    }
+
+    if(dc[q].PdcVT != S_OFF) {
+        ret &= aObj[ o_dcvt ]->check_dynamic_sizes( MAXVTCOEF, 1 );
+    }
+
+    if(CV == CPM_GAS || CV == CPM_PRSV || CV == CPM_SRK || CV == CPM_PR78
+        || CV == CPM_CORK || CV == CPM_STP) {
+        // PRSV, SRK, PR78, CORK and STP fluid models
+        ret &= aObj[ o_dccritpg ]->check_dynamic_sizes( MAXCRITPARAM, 1 );
+    }
+
+    if(CV == CPM_VBM) {     // Birch-Murnaghan coeffs, 04.04.2003
+        ret &= aObj[ o_dcodc ]->check_dynamic_sizes( MAXODCOEF, 1 );
+    }
+    return ret;
 }
 
 
@@ -500,6 +560,53 @@ AGAIN:
 #define LROUND(x)      ( static_cast<float>(static_cast<long>((x)+.5)))
 
 
+// DM 10.09.2026 Identity of the current DComp record, used to warn only once per record
+// per session from the property-calculation path.
+std::string TDComp::FtPRecKey() const
+{
+    return std::string( dcp->pstate, sizeof(dcp->pstate) )
+         + std::string( dcp->psymb,  sizeof(dcp->psymb)  )
+         + std::string( dcp->dcn,    sizeof(dcp->dcn)    );
+}
+
+// DM 10.09.2026 Consistency of the phase-transition data in FtP.
+// For a first-order transition dG_tr = dH_tr - T_tr*dS_tr must vanish, i.e. T_tr, dS_tr and
+// dH_tr are not independent - any one of them is fixed by the other two. Builds a report of
+// every entry violating that by more than DEF_REL_DEV_FT and returns true if there was any.
+bool TDComp::CheckFtP( std::string& msg )
+{
+    msg.clear();
+    if( dcp->Nft <= 0 || !dcp->FtP )
+        return false;
+
+    char buf[256];
+    for( int jf = 0; jf < (int)dcp->Nft; jf++ )
+    {
+        if( IsFloatEmpty( dcp->FtP[jf] ) ||
+            IsFloatEmpty( dcp->FtP[dcp->Nft+jf] ) ||
+            IsFloatEmpty( dcp->FtP[dcp->Nft*2+jf] ))
+            continue;                  // dS_tr or dH_tr not given - nothing to check
+        double Ttr   = (double)dcp->FtP[jf] + C_to_K;
+        double dS_tr = (double)dcp->FtP[dcp->Nft+jf];
+        double dH_tr = (double)dcp->FtP[dcp->Nft*2+jf];
+        double dG_tr = dH_tr - Ttr * dS_tr;
+        double scale = fabs( dH_tr ) > fabs( Ttr*dS_tr ) ? fabs( dH_tr ) : fabs( Ttr*dS_tr );
+        if( scale < 1e-10 || fabs( dG_tr ) / scale < DEF_REL_DEV_FT )
+            continue;
+        snprintf( buf, sizeof(buf),
+            "\n #%d at %.2f C: dG_tr = %.2f J/mol (%.3f%%)"
+            "\n     dS_tr = %.5f, but dH_tr/T_tr = %.5f"
+            "\n     dH_tr = %.2f, but T_tr*dS_tr = %.2f"
+            "\n     dH_tr/dS_tr implies T_tr = %.2f C",
+            jf, (double)dcp->FtP[jf], dG_tr, 100.*fabs( dG_tr )/scale,
+            dS_tr, dH_tr/Ttr, dH_tr, Ttr*dS_tr,
+            ( fabs( dS_tr ) > 1e-10 ? dH_tr/dS_tr - C_to_K : 0.0 ) );
+        msg += buf;
+    }
+    return !msg.empty();
+}
+
+
 //Recalculation of DComp record
 // 19/10/1999: variable _S was changed to S_1
 // DM 29.10.2024 if TCst and Pst other than standard values 25 C 1 bar, possible to be entered by the user in ReacDC
@@ -513,7 +620,7 @@ void TDComp::RecCalc(const char *key )      // dcomp_test
 void TDComp::RecCalc(const char *key , double TCst, double Pst)      // dcomp_test
 {
     int st, st1, stG, stH, stS, stdG, stdH, stdS;
-    double Z, MW, foS, T, G, H, S, S_1, dG, dH, dS, Ro, nj;
+    double Z, MW, foS, T, Tr, TrfoS, G, H, S, S_1, dG, dH, dS, Ro, nj;
 
     TFormula aFo;
     //double Z, MW, foS;
@@ -577,6 +684,17 @@ NEXT:
     stdS = IsFloatEmpty( dcp->Ss[1] );
 
     T = (double)dcp->TCst + C_to_K;
+    // Tr is the reference temperature at which the standard entropies of the elements
+    // (foS, summed from the IComp records) are tabulated - always 298.15 K, regardless
+    // of the record's own reference temperature dcp->TCst. Gs[0]/Hs[0] are apparent
+    // Gibbs energy / enthalpy in the Benson-Helgeson convention (elements at Tr, Pr),
+    // Ss[0] is the absolute third-law entropy at dcp->TCst, so the consistency relation
+    // between them at any reference temperature T is
+    //     G(T) = H(T) - T*S(T) + Tr*foS
+    // i.e. the element-entropy term is a T-independent offset. For T == Tr this reduces
+    // to the classical G = H - T*(S - foS) used before. DM 02.09.2026
+    Tr = STANDARD_TC + C_to_K;
+    TrfoS = Tr * foS;
     G = (double)dcp->Gs[0];
     H = (double)dcp->Hs[0];
     S = (double)dcp->Ss[0];
@@ -588,26 +706,26 @@ NEXT:
     // test dc type
     if( !stG && stH && !stS )
     {
-        H = G + T * ( S - foS );
+        H = G + T * S - TrfoS;
         dcp->Hs[0] = H;
     }
     else if( stG && !stH && !stS )
     {
-        G = H - T * ( S - foS );
+        G = H - T * S + TrfoS;
         dcp->Gs[0] = G;
     }
     else if( !stG && !stH && stS )
     {
-        S = (H - G)/ T + foS;
+        S = (H - G + TrfoS)/ T;
         dcp->Ss[0] = S;
     }
     else if( !stG && !stH && !stS )
     {
-        S_1 = (H - G)/ T + foS;
+        S_1 = (H - G + TrfoS)/ T;
         if( fabs(S) > 1e-10 )
             if( fabs( (S_1 - S)/S ) >= DEF_REL_DEV )
             {
-                G = H - T * ( S - foS );
+                G = H - T * S + TrfoS;
                 std::string s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
                 s += std::to_string(G);
                 if( vfQuestion( window(), GetName(), s.c_str() ))
@@ -618,6 +736,18 @@ NEXT:
     }
     else
         Error( GetName(), "W10DCrun: One of values G0, H0, or S0 is missing!");
+
+    // DM 10.09.2026 Report inconsistent phase-transition data. Reports only - the record
+    // is never repaired here, so the defect stays visible (calc_tpcv() carries dG_tr into
+    // G, where it shows up as a discontinuity of G at T_tr).
+    {
+        std::string ftmsg;
+        if( CheckFtP( ftmsg ) )
+            vfMessage( window(), GetName(), std::string(
+                "W13DCrun: Inconsistent phase transition data. For a first-order transition "
+                "dG_tr = dH_tr - T_tr*dS_tr must be 0; G will be discontinuous at T_tr and "
+                "G != H - T*S + Tr*foS above it. Check T_tr, dS_tr and dH_tr in FtP:" ) + ftmsg );
+    }
 
     // test pogreshnostey
     if ((25.0 == TCst) && (1.0 == Pst) ) // DM 29.10.2024 check if different std T and P are used for record calc.
@@ -797,6 +927,16 @@ void TDComp::DCthermo( int q, int p )
     	// if( CE == CTM_CHP && CV == CPM_CHE )
     	// {  // Added for passing
     	// }
+        {   // DM 10.09.2026 Unlike RecCalc(), this is the path a project uses to compute
+            // properties from an already-stored database, so an inconsistent FtP record
+            // would otherwise be applied silently. Log it once per record per session -
+            // calc_tpcv() runs per temperature point, so a dialog is not an option here.
+            std::string ftmsg;
+            if( CheckFtP( ftmsg ) && ftp_warned.insert( FtPRecKey() ).second )
+                gui_logger->warn( "W13DCrun: DComp record {} has inconsistent phase "
+                    "transition data (dG_tr = dH_tr - T_tr*dS_tr should be 0); G is "
+                    "discontinuous at T_tr:{}", FtPRecKey(), ftmsg );
+        }
         calc_tpcv( q, p, CE, CV );
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {
@@ -806,13 +946,19 @@ void TDComp::DCthermo( int q, int p )
             aW.twp->CPg = NULL;
         }
 
+        // Each of the six fluid-EoS branches below (CPM_EMP/PRSV/SRK/PR78/CORK/STP) needs a lower
+        // temperature bound, taken from TCint. TCint is only allocated when the record carries a
+        // Cp=f(T) array (dyn_new(): PdcMK == S_OFF -> Free() -> nullptr), so until 2026-09-02 all
+        // six crashed on a DComp with a fluid-EoS volume code but no Cp(T) coefficients. They now
+        // fall back to the record's own reference temperature Tr (degC, same unit as TCint,
+        // default 25) - same bug and same fallback as ThermoFun::lowerTemperatureBound().
         else if( CV == CPM_EMP )  // calculation of fugacity at (X=1) using CG EoS
         {
             double FugProps[6];
             TCGFcalc myCGF( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myCGF.CGcalcFugPure( (aW.twp->TClow+273.15), (aW.twp->Cemp), FugProps );
 
             // increment thermodynamic properties
@@ -829,7 +975,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TPRSVcalc myPRSV( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myPRSV.PRSVCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myPRSV.~TPRSVcalc();
 
@@ -847,7 +993,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TSRKcalc mySRK( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             mySRK.SRKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // mySRK.~TSRKcalc();
 
@@ -865,7 +1011,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TPR78calc myPR78( 1, (aW.twp->P), (aW.twp->TC+273.15) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myPR78.PR78CalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myPR78.~TPR78calc();
 
@@ -884,7 +1030,7 @@ void TDComp::DCthermo( int q, int p )
             // TCORKcalc myCORK( 1, (aW.twp->P), (aW.twp->TC+273.15), dcp->PdcC /*dcp->pct[3]*/ );
             TCORKcalc myCORK( 1, (aW.twp->P), (aW.twp->TC+273.15), (dcp->pct[3]) );  // modified 05.11.2010 (TW)
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             myCORK.CORKCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // myCORK.~TCORKcalc();
 
@@ -902,7 +1048,7 @@ void TDComp::DCthermo( int q, int p )
             double FugProps[6];
             TSTPcalc mySTP( 1, (aW.twp->P), (aW.twp->TC+273.15), (dcp->pct[3]) );
             aW.twp->CPg = dcp->CPg;
-            aW.twp->TClow = dcp->TCint[0];
+            aW.twp->TClow = ( dcp->TCint && dcp->NeCp > 0 ) ? dcp->TCint[0] : dcp->TCst;
             mySTP.STPCalcFugPure( (aW.twp->TClow+273.15), (aW.twp->CPg), FugProps );
             // mySTP.~STPcalc();
 

@@ -178,13 +178,8 @@ void
 TDBFile::vdbh_setdt()
 {
     check_dh();
-// workaround DK 28.01.2012 on ubuntu 11.04: strcpy() caused crash
-    memcpy(dh->Date, curDate().c_str(), curDate().length());
-    dh->Date[curDate().length()]='\0';
-    memcpy(dh->Time, curTime().c_str(), curTime().length());
-    dh->Time[curTime().length()]='\0';
-//    strcpy(dh->Date, curDate().c_str());
-//    strcpy(dh->Time, curTime().c_str());
+    strncpy(dh->Date, curDate().c_str(), 11/*curDate().length()*/);
+    strncpy(dh->Time, curTime().c_str(), 5/*curTime().length()*/);
 }
 
 //Clear the header of PDB file.
@@ -275,6 +270,7 @@ TDBFile::PutHead( GemDataStream& fdb, int deltRec )
     dh->nRec += deltRec;
     vdbh_setdt();
 
+    //fdb.flush();
     fdb.seekg(0L, std::ios::beg );
     // fdb.write( (char *)dh, sizeof(VDBhead) );
     dh->write (fdb);

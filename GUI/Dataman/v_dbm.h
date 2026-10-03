@@ -354,7 +354,7 @@ public:
     bool SetNewOpenFileList( const TCStringArray& aFlNames );
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
-    //  int GetNumFiles() { return aFile.size(); }
+    int numFiles() { return aFile.size(); }
     void  MakeInNewProfile( const std::string& dir,
       const char *prfName, const char * f_name=nullptr );
     void OpenOnlyFromList( TCStringArray& names );

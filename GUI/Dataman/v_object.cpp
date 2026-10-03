@@ -1299,6 +1299,15 @@ void TObject::fromJsonValue(const QJsonValue &obj)
     }
 }
 
+bool TObject::check_dynamic_sizes(int n_struct, int m_struct)
+{
+    if((N != n_struct || M != m_struct) && n_struct!=0 && m_struct!=0) {
+        gui_logger->error("Object {} size error {}x{}({}x{}) ", GetKeywd(), N, M, n_struct, m_struct);
+        return false;
+    }
+    return true;
+}
+
 // Implementation of TObjList class
 
 // Finds DOD index from a given name s

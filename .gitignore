@@ -16,5 +16,7 @@ build
 .cache
 /gems3gui_with_gems3k_source.pro.user
 environment.yml
-
+GEMSGUI.code-workspace
+/Docs/PROJECT_STATE.md
+/Docs/SESSION_LOG.md
 CLAUDE.md

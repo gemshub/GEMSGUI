@@ -125,6 +125,45 @@ void TReacDC::ods_link( int q)
     rcp=&rc[q];
 }
 
+bool TReacDC::ods_check(int q)
+{
+    bool ret = true;
+
+    ret &= aObj[o_redck]->check_dynamic_sizes(rc[q].nDC, 1);
+    ret &= aObj[o_rerdc]->check_dynamic_sizes(rc[q].nDC, 1);
+    ret &= aObj[o_rescdc]->check_dynamic_sizes(rc[q].nDC, 1);
+    //ret &= aObj[o_repardc]->check_dynamic_sizes(rc[q].nDC, 6);
+
+    if(aObj[o_retcint]->GetPtr()) {
+        ret &= aObj[o_retcint]->check_dynamic_sizes(std::max((short)2,rc[q].nTp), 1);
+    }
+    if(aObj[o_repint]->GetPtr()) {
+        ret &= aObj[o_repint]->check_dynamic_sizes(std::max((short)2,rc[q].nPp), 1);
+    }
+    ret &= aObj[o_resdref]->check_dynamic_sizes(rc[q].Nsd, 1);
+    ret &= aObj[o_resdval]->check_dynamic_sizes(rc[q].Nsd, 1);
+
+    if(rc[q].PreKP != S_OFF && rc[q].nTp >0 && rc[q].nPp>0) {
+        ret &= aObj[o_relgK]->check_dynamic_sizes(rc[q].nPp, rc[q].nTp);
+    }
+    if(rc[q].PreDC != S_OFF) {
+        ret &= aObj[o_redcp]->check_dynamic_sizes(MAXCPCOEF, 1);
+    }
+    if(rc[q].PrAki != S_OFF) {
+        ret &= aObj[o_rehkfc]->check_dynamic_sizes(MAXHKFCOEF, 1);
+    }
+    if(rc[q].PreDV != S_OFF)  {
+        ret &= aObj[o_redvt]->check_dynamic_sizes(MAXVTCOEF, 1);
+    }
+    if(rc[q].PreDS != S_OFF) {
+        ret &= aObj[o_redst]->check_dynamic_sizes(MAXCPCOEF, 1);
+    }
+    if(rc[q].PreKT != S_OFF) {
+        ret &= aObj[o_repkt]->check_dynamic_sizes(MAXCPCOEF, 1);
+    }
+    return ret;
+}
+
 // set dynamic Objects ptr to values
 void TReacDC::dyn_set(int q)
 {
