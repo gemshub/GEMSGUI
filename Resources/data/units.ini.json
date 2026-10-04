@@ -418,5 +418,11 @@
             "DHY321UN+-*",
             "IFPEUN+-*"
         ]
+    },
+    {
+        "label": "OnOff",
+        "values": [
+            "01"
+        ]
     }
 ]

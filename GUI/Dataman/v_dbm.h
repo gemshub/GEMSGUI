@@ -235,6 +235,7 @@ protected:
     int putrec( RecEntry& re, GemDataStream& f );
     int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
     int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
+    int getExtendedSettings( GemDataStream& f, int nRead );
     void opfils();
     int scanfile( uint nF, int& fPos, int& fLen,
 	    GemDataStream& inStream, GemDataStream& outStream);
@@ -255,6 +256,16 @@ public:
     void toCFG( std::fstream& f );
     void AddFile(const std::string& path);
     void DelFile(const std::string& path);
+    /// Object count written to the record header. The extended-settings objects of the project
+    /// record are not counted, so that older GEMSGUI versions still read the record.
+    unsigned char headerObjCount() const;
+    /// Sets the number of objects of the record (cached configurations may hold an older count).
+    void setObjectCount(unsigned char n)
+    {
+        if( lastODjson == frstODjson+nOD-1 )
+            lastODjson = frstODjson+n-1;
+        nOD = n;
+    }
     void updateJsonOD(int frstOD, int lastOD)
     {
         frstODjson =frstOD;

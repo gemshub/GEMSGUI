@@ -6472,6 +6472,262 @@
                         "maxM": 1,
                         "maxN": -1,
                         "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_HD1",
+                        "lenth": 72,
+                        "locus": "-b-h",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_STRING"
+                    },
+                    {
+                        "label": "Pa_STL",
+                        "lenth": "OnOff",
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
+                    },
+                    {
+                        "label": "Pa_ISW",
+                        "lenth": 7,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_MBR",
+                        "lenth": "OnOff",
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
+                    },
+                    {
+                        "label": "Pa_DTW",
+                        "lenth": 8,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_CRN",
+                        "lenth": 7,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_FOB",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_TPD",
+                        "lenth": "OnOff",
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
+                    },
+                    {
+                        "label": "Pa_KKT",
+                        "lenth": 7,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_HD2",
+                        "lenth": 72,
+                        "locus": "-b-h",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_STRING"
+                    },
+                    {
+                        "label": "Pa_OTL",
+                        "lenth": 8,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_LBT",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_PHF",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_OSW",
+                        "lenth": 7,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_OMS",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_OFH",
+                        "lenth": "OnOff",
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
+                    },
+                    {
+                        "label": "Pa_OMH",
+                        "lenth": "OnOff",
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
+                    },
+                    {
+                        "label": "Pa_OFD",
+                        "lenth": 7,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_ODF",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_OES",
+                        "lenth": 7,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_ODR",
+                        "lenth": 7,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_ODT",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_OPS",
+                        "lenth": 7,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_OZA",
+                        "lenth": 7,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_OLS",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_OLE",
+                        "lenth": 7,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_ORW",
+                        "lenth": "OnOff",
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
+                    },
+                    {
+                        "label": "Pa_OTA",
+                        "lenth": 8,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_OCS",
+                        "lenth": 8,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
+                        "label": "Pa_OCR",
+                        "lenth": 7,
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_NUM"
+                    },
+                    {
+                        "label": "Pa_OFN",
+                        "lenth": "OnOff",
+                        "locus": "+n+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
+                    },
+                    {
+                        "label": "Pa_OAR",
+                        "lenth": "OnOff",
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_CHECKBOX"
                     }
                 ],
                 "page": "&Controls"

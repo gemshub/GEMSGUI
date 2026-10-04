@@ -355,9 +355,11 @@ void TVisor::Setup()
     }
 
     // define objects
-    if( option_d || !fromObjDAT() ) {
+    // a cache from an older release lacks the extended settings objects: rebuild it from vis_od.ini.json
+    if( option_d || !fromObjDAT() || aObj.Find("Pa_OAR") != o_paxoar ) {
         std::string fname = sysGEMDir() + OBJECT_INI;
         gui_logger->debug("TVisor::load {}", fname);
+        aObj.clear();   // drop whatever a stale cache put there
         aObj.load(fname.c_str());
         toObjDAT();
     }
@@ -367,12 +369,25 @@ void TVisor::Setup()
         defaultCFG();
         toModCFG();
     }
+    else {
+        // the stored database configuration may predate objects added to a record
+        rt[RT_PARAM]->setObjectCount( 15+NUM_PAXOBJ );
+    }
 
     // init modules
     initModules();
 
     // init windows
-    if( option_d || !fromWinDAT() ) {
+#ifndef NO_GUI
+    bool win_cache_ok = !option_d && fromWinDAT() && aUnits.Find(std::string("OnOff")) >= 0;
+#else
+    bool win_cache_ok = !option_d && fromWinDAT();
+#endif
+    if( !win_cache_ok ) {
+#ifndef NO_GUI
+        aWinInfo.clear();
+#endif
+        aUnits.clear();
         std::string fname = sysGEMDir() + UNITS_INI;
         aUnits.load(fname);
 
@@ -856,7 +871,7 @@ void TVisor::defaultCFG()
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
     rt.push_back( std::make_shared<TDataBase>(rt.size(), "projec", true, true,
-                                             o_spppar, 15, 0, 2, param_rkfrm));
+                                             o_spppar, 15+NUM_PAXOBJ, 0, 2, param_rkfrm));
     // 12.12.12 added new object to Project record
 
     // RT_ICOMP default

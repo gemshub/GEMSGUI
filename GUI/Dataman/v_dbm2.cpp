@@ -23,6 +23,9 @@
 #include "v_mod.h"
 #include "visor.h"
 #include "service.h"
+#include "m_param.h"
+
+static const char MARKEXTOBJ[] = "PAX1";   // precedes the extended-settings objects of a project record
 #include "GEMS3K/gdatastream.h"
 
 //#define Change_DB_Mode   1 // Set readonly data Base mode
@@ -235,6 +238,8 @@ int TDataBase::reclen( )
     int Olen=0;
     for(uint j=0; j<nOD; j++ )
         Olen += aObj[j+frstOD]->lenDB();
+    if( headerObjCount() != nOD )
+        Olen += 4;          // marker before the extended-settings objects
     return Olen;
 }
 
@@ -251,7 +256,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     strncpy( rh.bgm, MARKRECHEAD, 2 );
     strncpy( rh.endm, MARKRECHEAD, 2 );
     rh.nRT = nRT;               //warning: compatibility
-    rh.Nobj = nOD;
+    rh.Nobj = headerObjCount();
     rh.rlen =  rep.len;
     StillLen = rep.len;
     rh.crt = time( nullptr );
@@ -272,7 +277,14 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
     ErrorIf( !f.good(), GetKeywd(),
              "PDB file write error");
     for( j=0; j<nOD; j++ )    // put objects to file
+    {
+        if( j == headerObjCount() && j != nOD )
+        {   // start of the objects an older GEMSGUI does not know (see getExtendedSettings())
+            f.writeArray( const_cast<char*>(MARKEXTOBJ), 4 );
+            StillLen -= 4;
+        }
         StillLen -= aObj[j+frstOD]->toDB( f );
+    }
     crt = rh.crt;
     return StillLen;
 }
@@ -290,7 +302,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
     strncpy( rh.bgm, MARKRECHEAD, 2*sizeof(char));
     strncpy( rh.endm, MARKRECHEAD, 2*sizeof(char) );
     rh.nRT = nRT;               //warning: compatibility
-    rh.Nobj = nOD;
+    rh.Nobj = headerObjCount();
     rh.rlen =  rep.len;
     StillLen = rep.len;
     rh.crt = rhh.crt;
@@ -306,11 +318,53 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
     ErrorIf( !f.good(), GetKeywd(),
              "PDB file write error");
     for( j=0; j<nOD; j++ )    // put objects to file
+    {
+        if( j == headerObjCount() && j != nOD )
+        {   // start of the objects an older GEMSGUI does not know (see getExtendedSettings())
+            f.writeArray( const_cast<char*>(MARKEXTOBJ), 4 );
+            StillLen -= 4;
+        }
         StillLen -= aObj[j+frstOD]->toDB( f );
+    }
     crt = rh.crt;
     return StillLen;
 }
 
+
+unsigned char TDataBase::headerObjCount() const
+{
+    return frstOD == o_spppar ? nOD-NUM_PAXOBJ : nOD;
+}
+
+// Reads the objects stored after the ones counted in the header of a project record: the extended
+// numerical settings. A record saved by an older GEMSGUI has none, and then the defaults are set.
+// An older GEMSGUI stops after its own objects and ignores this tail, so such a record stays
+// readable by it. Returns the number of bytes read.
+int TDataBase::getExtendedSettings( GemDataStream& f, int nRead )
+{
+    int len = 0;
+    char mark[4] = { 0, 0, 0, 0 };
+    if( nRead == headerObjCount() )
+    {
+        auto pos = f.tellg();
+        f.readArray( mark, 4 );
+        if( !f.good() )
+        {
+            f.clear();
+            f.seekg( pos, std::ios::beg );
+            memset( mark, 0, 4 );
+        }
+    }
+    if( memcmp( mark, MARKEXTOBJ, 4 ) == 0 )
+    {
+        len = 4;
+        for( uint j = nRead; j < nOD; j++ )
+            len += aObj[j+frstOD]->ofDB(f);
+    }
+    else if( TProfil::pm )
+        TProfil::pm->resetExtendedSettings();
+    return len;
+}
 
 // Gets a record from PDB file
 int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
@@ -327,7 +381,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
         strncmp( rh.endm, MARKRECHEAD, 2 ) ||
         (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  &&
-         (rh.Nobj+frstOD-1) != o_phsdval  && (nOD+frstOD-1) != o_sptext ) ) {
+         (rh.Nobj+frstOD-1) != o_phsdval  && !(frstOD == o_spppar && rh.Nobj <= nOD) ) ) {
         gui_logger->info("Record header format error {} {} {} {}", char_array_to_string(Keywd, MAXKEYWD), rh.Nobj, nOD, frstOD);
         Error(GetKeywd(), "Record header format error");
     }
@@ -357,6 +411,8 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
         if (j+frstOD == o_spppar )
             flag_spppar = true;
     }
+    if( frstOD == o_spppar )
+        StillLen -= getExtendedSettings( f, rh.Nobj );
     if( StillLen!=0 && rep.len!=0 && !flag_spppar)
         Error( GetKeywd(),
           "Actual record length differs from that specified in the header");
@@ -628,6 +684,8 @@ std::string TDataBase::fromJsonObjectNew(const QJsonObject &obj)
         keyStr += ":";
     }
     auto dodAll = obj["dod"].toObject();
+    if( frstOD == o_spppar && TProfil::pm )
+        TProfil::pm->resetExtendedSettings();
     for( int no=frstODjson; no<=lastODjson;  no++) {
         if( frstODjson!=frstOD && aObj[no]->GetDescription(0,0) == "internaldb" )
             continue;
@@ -671,7 +729,7 @@ time_t TDataBase::GetTime( uint i )
     //   aFile[nF]->f.read( (char *)&rh, sizeof(RecHead) );
     rh.read (aFile[nF]->f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
-            strncmp( rh.endm, MARKRECHEAD, 2 ) || rh.Nobj != nOD )
+            strncmp( rh.endm, MARKRECHEAD, 2 ) || rh.Nobj != headerObjCount() )
         Error( GetKeywd(), "PDB record header format error");
     status =  UNDF_;
     fNum = findIndex<int>( fls, nF );

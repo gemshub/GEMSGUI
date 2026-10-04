@@ -41,6 +41,10 @@ TProfil* TProfil::pm;
 
 const std::string _GEMS_version_stamp = std::string(" GEMS-GUI v.") + GEMSGUI_VERSION + " c." + GEMSGUI_VERSION_HASH;
 
+// Heading lines of the Controls page (read-only fields, not part of the record)
+static const char pa_heading_ipm[64] =    "IPM solver settings ---------------------------------------";
+static const char pa_heading_optima[64] = "Optima solver settings ------------------------------------";
+
 SPP_SETTING pa_ = {
     "Tolerances and controls: GEMSGUI v." GEMSGUI_VERSION " and GEMS3K v." GEMS3K_VERSION,
     {   // Typical default set (30.06.2025) new PSSC( logSI ) & uDD(), 0.7,   /* AG */   -0.0065,
@@ -187,6 +191,42 @@ void TProfil::ChangeSettings(int nSettings)
     pa.ver[TDBVERSION-1]='\0';
 }
 
+// Resets the BASE_PARAM fields stored in the tail of the project record to their defaults.
+// Needed before reading a project saved by an older version, whose record lacks these objects.
+void TProfil::resetExtendedSettings()
+{
+    pa.p.PSTALL = pa_.p.PSTALL;
+    pa.p.IpmStallWindow = pa_.p.IpmStallWindow;
+    pa.p.MbReproject = pa_.p.MbReproject;
+    pa.p.DeterminacyWarn = pa_.p.DeterminacyWarn;
+    pa.p.ColdRetryNudges = pa_.p.ColdRetryNudges;
+    pa.p.FilloutBudget = pa_.p.FilloutBudget;
+    pa.p.StabTPD = pa_.p.StabTPD;
+    pa.p.IpmAugmentedKKT = pa_.p.IpmAugmentedKKT;
+    pa.p.OptimaTol = pa_.p.OptimaTol;
+    pa.p.LogBarrierTau = pa_.p.LogBarrierTau;
+    pa.p.PhaseHessianFloor = pa_.p.PhaseHessianFloor;
+    pa.p.OptimaStallWindow = pa_.p.OptimaStallWindow;
+    pa.p.OptimaMaxSeconds = pa_.p.OptimaMaxSeconds;
+    pa.p.OptimaFDHessian = pa_.p.OptimaFDHessian;
+    pa.p.OptimaMoleFracHessian = pa_.p.OptimaMoleFracHessian;
+    pa.p.OptimaFDHessianDelay = pa_.p.OptimaFDHessianDelay;
+    pa.p.OptimaDcFloor = pa_.p.OptimaDcFloor;
+    pa.p.OptimaEarlyStabilityAt = pa_.p.OptimaEarlyStabilityAt;
+    pa.p.OptimaDimReduce = pa_.p.OptimaDimReduce;
+    pa.p.OptimaDimReduceTol = pa_.p.OptimaDimReduceTol;
+    pa.p.OptimaPreSolveFirstIters = pa_.p.OptimaPreSolveFirstIters;
+    pa.p.OptimaZeroAbsent = pa_.p.OptimaZeroAbsent;
+    pa.p.OptimaLineSearch = pa_.p.OptimaLineSearch;
+    pa.p.OptimaLSStallEscape = pa_.p.OptimaLSStallEscape;
+    pa.p.OptimaLSRejectWorse = pa_.p.OptimaLSRejectWorse;
+    pa.p.OptimaTpdAccept = pa_.p.OptimaTpdAccept;
+    pa.p.OptimaCgSeed = pa_.p.OptimaCgSeed;
+    pa.p.OptimaColdRetry = pa_.p.OptimaColdRetry;
+    pa.p.OptimaFinish = pa_.p.OptimaFinish;
+    pa.p.OptimaAcceptRepair = pa_.p.OptimaAcceptRepair;
+}
+
 void BASE_PARAM::write(GemDataStream& oss)
 {
     oss.writeArray( &PC, 10 );
@@ -294,6 +334,8 @@ void TProfil::ods_link( int )
      syst->ods_link();
      multi->ods_link();*/
     aObj[o_paver]->SetPtr( pa.ver );
+    aObj[o_paxhd1]->SetPtr( const_cast<char*>(pa_heading_ipm) );
+    aObj[o_paxhd2]->SetPtr( const_cast<char*>(pa_heading_optima) );
     aObj[o_papc]->SetPtr( &(pa.p.PC) );
     aObj[o_paprd]->SetPtr(&(pa.p.PD) );
     aObj[o_padpwt]->SetPtr( &(pa.p.DP));
@@ -350,6 +392,36 @@ void TProfil::ods_link( int )
     aObj[ o_pagdpgw]->SetPtr(  pa.GDpgw );
     aObj[ o_pasdref]->SetPtr(  pa.SDrefKey );
 
+    aObj[ o_paxstall]->SetPtr( &(pa.p.PSTALL));
+    aObj[ o_paxipmsw]->SetPtr( &(pa.p.IpmStallWindow));
+    aObj[ o_paxmbrep]->SetPtr( &(pa.p.MbReproject));
+    aObj[ o_paxdetw]->SetPtr( &(pa.p.DeterminacyWarn));
+    aObj[ o_paxcrn]->SetPtr( &(pa.p.ColdRetryNudges));
+    aObj[ o_paxfob]->SetPtr( &(pa.p.FilloutBudget));
+    aObj[ o_paxstpd]->SetPtr( &(pa.p.StabTPD));
+    aObj[ o_paxkkt]->SetPtr( &(pa.p.IpmAugmentedKKT));
+    aObj[ o_paxotol]->SetPtr( &(pa.p.OptimaTol));
+    aObj[ o_paxlbt]->SetPtr( &(pa.p.LogBarrierTau));
+    aObj[ o_paxphf]->SetPtr( &(pa.p.PhaseHessianFloor));
+    aObj[ o_paxosw]->SetPtr( &(pa.p.OptimaStallWindow));
+    aObj[ o_paxoms]->SetPtr( &(pa.p.OptimaMaxSeconds));
+    aObj[ o_paxofh]->SetPtr( &(pa.p.OptimaFDHessian));
+    aObj[ o_paxomh]->SetPtr( &(pa.p.OptimaMoleFracHessian));
+    aObj[ o_paxofd]->SetPtr( &(pa.p.OptimaFDHessianDelay));
+    aObj[ o_paxodf]->SetPtr( &(pa.p.OptimaDcFloor));
+    aObj[ o_paxoes]->SetPtr( &(pa.p.OptimaEarlyStabilityAt));
+    aObj[ o_paxodr]->SetPtr( &(pa.p.OptimaDimReduce));
+    aObj[ o_paxodt]->SetPtr( &(pa.p.OptimaDimReduceTol));
+    aObj[ o_paxops]->SetPtr( &(pa.p.OptimaPreSolveFirstIters));
+    aObj[ o_paxoza]->SetPtr( &(pa.p.OptimaZeroAbsent));
+    aObj[ o_paxols]->SetPtr( &(pa.p.OptimaLineSearch));
+    aObj[ o_paxole]->SetPtr( &(pa.p.OptimaLSStallEscape));
+    aObj[ o_paxorw]->SetPtr( &(pa.p.OptimaLSRejectWorse));
+    aObj[ o_paxota]->SetPtr( &(pa.p.OptimaTpdAccept));
+    aObj[ o_paxocs]->SetPtr( &(pa.p.OptimaCgSeed));
+    aObj[ o_paxocr]->SetPtr( &(pa.p.OptimaColdRetry));
+    aObj[ o_paxofn]->SetPtr( &(pa.p.OptimaFinish));
+    aObj[ o_paxoar]->SetPtr( &(pa.p.OptimaAcceptRepair));
     aObj[ o_spppar]->SetPtr(  static_cast<void *>(&pa) );
     aObj[ o_spppar]->SetM( sizeof( SPP_SETTING ) );
 aObj[ o_sptext]->SetPtr(  internalBufer );

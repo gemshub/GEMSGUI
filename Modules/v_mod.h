@@ -84,6 +84,7 @@ enum param_objects {                  // work objects
     o_pasdref,
     o_parpnptv, /*i 3*/  o_parpmode,   o_partpi, o_partti, o_partvi,
     o_padrprtr,/*f 2*/ o_papmnum, /*f 3*/
+    o_paxhd1, o_paxhd2,   // heading lines of the Controls page (not stored)
     // RMULTS
     o_muphc, o_mudcc, /*o_mudcs,*/ o_muicc,  o_mudcf,
     o_muicf, o_muidcref, o_muval, o_mupl, o_mubc,
@@ -184,8 +185,42 @@ o_ngte, o_nhte, o_nste, o_nvte, o_ncpte, o_nate, o_nute,
     o_mul1,  o_musf, o_musm,  o_musa,  o_musb,  o_mufn, o_mudcs,
     o_tpstr,                                 // MTPARM
     o_sptext,    // added 12.12.12 As internal setup of Elements Dialog
+    // GEMS3K BASE_PARAM fields after tprn, exposed as the tail of the project record
+    o_paxstall,   // PSTALL
+    o_paxipmsw,   // IpmStallWindow
+    o_paxmbrep,   // MbReproject
+    o_paxdetw,   // DeterminacyWarn
+    o_paxcrn,   // ColdRetryNudges
+    o_paxfob,   // FilloutBudget
+    o_paxstpd,   // StabTPD
+    o_paxkkt,   // IpmAugmentedKKT
+    o_paxotol,   // OptimaTol
+    o_paxlbt,   // LogBarrierTau
+    o_paxphf,   // PhaseHessianFloor
+    o_paxosw,   // OptimaStallWindow
+    o_paxoms,   // OptimaMaxSeconds
+    o_paxofh,   // OptimaFDHessian
+    o_paxomh,   // OptimaMoleFracHessian
+    o_paxofd,   // OptimaFDHessianDelay
+    o_paxodf,   // OptimaDcFloor
+    o_paxoes,   // OptimaEarlyStabilityAt
+    o_paxodr,   // OptimaDimReduce
+    o_paxodt,   // OptimaDimReduceTol
+    o_paxops,   // OptimaPreSolveFirstIters
+    o_paxoza,   // OptimaZeroAbsent
+    o_paxols,   // OptimaLineSearch
+    o_paxole,   // OptimaLSStallEscape
+    o_paxorw,   // OptimaLSRejectWorse
+    o_paxota,   // OptimaTpdAccept
+    o_paxocs,   // OptimaCgSeed
+    o_paxocr,   // OptimaColdRetry
+    o_paxofn,   // OptimaFinish
+    o_paxoar,   // OptimaAcceptRepair
     o_sppconst, o_sppdatac
 };
+
+// number of objects appended to the project record after o_sptext (o_paxstall..o_paxoar)
+const int NUM_PAXOBJ = o_paxoar - o_paxstall + 1;
 
 //---------------------------------
 // IComp

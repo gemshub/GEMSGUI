@@ -911,6 +911,26 @@
     },
     {
         "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Heading of the IPM solver settings",
+        "id": "o_paxhd1",
+        "label": "Pa_HD1",
+        "ndxs": "N",
+        "type": 64
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Heading of the Optima solver settings",
+        "id": "o_paxhd2",
+        "label": "Pa_HD2",
+        "ndxs": "N",
+        "type": 64
+    },
+    {
+        "dimM": 1,
         "dimN": 3,
         "dyna": true,
         "hint": "Class codes of phases { a g p m s l x d h } ",
@@ -4918,6 +4938,306 @@
         "label": "PrTxt",
         "ndxs": "N",
         "type": "S_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Stall detection in MassBalanceRefinement(): on = give up early when mass balance stops improving { on }",
+        "id": "o_paxstall",
+        "label": "Pa_STL",
+        "ndxs": "N",
+        "type": "I_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Window (IPM iterations) of the IPM noise-stall convergence test; 0 = off { 30 }",
+        "id": "o_paxipmsw",
+        "label": "Pa_ISW",
+        "ndxs": "N",
+        "type": "I_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Final projection that repairs an unsatisfied mass balance of the IPM answer { on }",
+        "id": "o_paxmbrep",
+        "label": "Pa_MBR",
+        "ndxs": "N",
+        "type": "I_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Relative-uncertainty threshold for the 'answer not determined by the energy' warning; 0 or negative = off { 1e-2 }",
+        "id": "o_paxdetw",
+        "label": "Pa_DTW",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Number of nudged-composition retries after a failed cold IPM call; 0 = off { 4 }",
+        "id": "o_paxcrn",
+        "label": "Pa_CRN",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Cap on how much the class fill-out may change the mass balance, as a fraction of each bulk element amount; 0 = off { 0 }",
+        "id": "o_paxfob",
+        "label": "Pa_FOB",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Tangent-plane (TPD) stability scan of absent mixed phases, reported in the native trace only { on }",
+        "id": "o_paxstpd",
+        "label": "Pa_TPD",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "IPM linear-system solver: 0 normal equations; 1 augmented system (dense LU); 2 regularised QR { 2 }",
+        "id": "o_paxkkt",
+        "label": "Pa_KKT",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: optimality-error convergence tolerance { 1e-8 }",
+        "id": "o_paxotol",
+        "label": "Pa_OTL",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: log-barrier weight keeping pure single-species phases away from zero { 1e-16 }",
+        "id": "o_paxlbt",
+        "label": "Pa_LBT",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: eigenvalue floor (fraction of largest) of the exact curvature block of non-aqueous mixed phases; 0 = off { 0.01 }",
+        "id": "o_paxphf",
+        "label": "Pa_PHF",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: abandon a solve when the best error has not fallen over this many Newton iterations; 0 = off; values below 500 not recommended { 500 }",
+        "id": "o_paxosw",
+        "label": "Pa_OSW",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: wall-clock budget in seconds for one solve incl. retries; 0 = off { 0 }",
+        "id": "o_paxoms",
+        "label": "Pa_OMS",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: compute the finite-difference PartiallyExact Hessian columns (slower, sometimes needed) { on }",
+        "id": "o_paxofh",
+        "label": "Pa_OFH",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: full ideal mole-fraction Jacobian for mixed-phase Hessian block instead of diagonal 1/X { off }",
+        "id": "o_paxomh",
+        "label": "Pa_OMH",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: iterations of the cheap Hessian to try before falling back to the finite-difference one; 0 = off { 0 }",
+        "id": "o_paxofd",
+        "label": "Pa_OFD",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: lower bound on species amounts; 0 = derive from Pa_DHB { 0 }",
+        "id": "o_paxodf",
+        "label": "Pa_ODF",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: end first attempt early at iteration N (>0) or on monotone phase decay (<0); 0 = automatic { 0 }",
+        "id": "o_paxoes",
+        "label": "Pa_OES",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: species-level dimension reduction, readmission-pass limit; 0 = automatic; <0 = off { 0 }",
+        "id": "o_paxodr",
+        "label": "Pa_ODR",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: dimension reduction initial active-set rule; >0 RT threshold, <0 rank rule (-m x N), 0 = LP seed support only { 10 }",
+        "id": "o_paxodt",
+        "label": "Pa_ODT",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: iteration budget of each dimension-reduction pre-solve pass; 0 = off { 6000 }",
+        "id": "o_paxops",
+        "label": "Pa_OPS",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: reporting of absent species: 0 floor values; 1 zero absent phases and rebalance; 2 floor values plus bounded repair { 2 }",
+        "id": "o_paxoza",
+        "label": "Pa_OZA",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: merit line-search trigger factor; 0 = off; negative = only on re-run of a failed call { 1.5 }",
+        "id": "o_paxols",
+        "label": "Pa_OLS",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: after N consecutive unchanged line searches keep the full step once; 0 = off { 10 }",
+        "id": "o_paxole",
+        "label": "Pa_OLE",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: discard a line search that ends at or above the pre-step error { off }",
+        "id": "o_paxorw",
+        "label": "Pa_ORW",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: accept a not-converged state if mass balance holds and TPD minimum >= -value; 0 = off { 1e-6 }",
+        "id": "o_paxota",
+        "label": "Pa_OTA",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: cold seed by column generation, TPD tolerance; 0 = feasibility-LP seed { 1e-6 }",
+        "id": "o_paxocs",
+        "label": "Pa_OCS",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: re-solve a failed warm call cold: 0 off; 1 after full warm budget; 2 fail fast { 2 }",
+        "id": "o_paxocr",
+        "label": "Pa_OCR",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: Newton finish on the fixed phase set when a call ends not converged { on }",
+        "id": "o_paxofn",
+        "label": "Pa_OFN",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: allow acceptance after a mass-balance repair (needs Pa_OTA > 0) { off }",
+        "id": "o_paxoar",
+        "label": "Pa_OAR",
+        "ndxs": "N",
+        "type": "L_"
     },
     {
         "dimM": 11,

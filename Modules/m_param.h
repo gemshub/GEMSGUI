@@ -191,6 +191,7 @@ public:
 
     // Setup one of 5 default IPM numerical settings
     void ChangeSettings(int nSettings);
+    void resetExtendedSettings();
 
     // work with Project
     bool initCalcMode( const char * profileKey );
