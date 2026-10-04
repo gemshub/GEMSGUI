@@ -1303,7 +1303,6 @@ work.</p>
     <tr><td style="vertical-align: top;">SOP</td><td>Smart initial approximation with OPtima</td><td>Optima solver, starting from the previous result.</td></tr>
     <tr><td style="vertical-align: top;">HOP</td><td>Hybrid with OPtima</td><td>GEMS3K IPM solver from scratch, then Optima refines and checks its answer. If the Optima part fails, the IPM answer is kept and the result is flagged, so HOP is never worse than the IPM solver alone.</td></tr>
     <tr><td style="vertical-align: top;">SHP</td><td>Smart Hybrid with oPtima</td><td>As HOP, but the IPM part starts from the previous result.</td></tr>
-    <tr><td style="vertical-align: top;">ROP</td><td>Reference with OPtima</td><td>A plain, untuned Optima run (uniform start, default Optima options), meant only for comparison.</td></tr>
   </tbody>
 </table>
 
@@ -1323,12 +1322,16 @@ work.</p>
 
 <h4><a name="SOLVER_GUI_RULES"></a>How the Calculate menu relates to the Controls page</h4>
 <ul>
-  <li>The <b>Solver mode</b> choice applies to <b>Calculate &gt; Run GEM IPM</b> (single
-  system) only. Process simulation, GEM2MT and the other modules always use the
-  GEMS3K IPM solver. The choice is not saved between sessions; each session
-  starts with AIA. It replaces the former "AIA (simplex)" check mark: SIA is the
-  old "AIA off" state.</li>
-  <li>The Optima modes (AOP, SOP, ROP, HOP, SHP) are available only when the
+  <li>The <b>Solver mode</b> choice applies to every equilibrium calculation of the
+  program: <b>Calculate &gt; Run GEM IPM</b>, and also Process simulation, GEM2MT and the
+  other modules. In the Optima modes (AOP, SOP, HOP, SHP) each calculation
+  runs exactly the chosen mode, cold (AOP, HOP) or warm (SOP, SHP), whatever
+  the Process or GEM2MT would otherwise do for that point; with AIA or SIA they
+  work as before. Choose AOP or HOP for a Process that crosses phase boundaries,
+  and mind that Optima is much slower than the IPM solver on large systems. The
+  choice is not saved between sessions; each session starts with AIA. It replaces
+  the former "AIA (simplex)" check mark: SIA is the old "AIA off" state.</li>
+  <li>The Optima modes (AOP, SOP, HOP, SHP) are available only when the
   program was built with the Optima solver (GEMS3K option USE_OPTIMA_SOLVER);
   otherwise these menu entries are disabled.</li>
   <li>The fields <tt>Pa_DK</tt>, <tt>Pa_IIM</tt>, <tt>Pa_DHB</tt>, <tt>Pa_PC</tt>, <tt>Pa_PRD</tt> and the others
@@ -1336,9 +1339,9 @@ work.</p>
   <i>IPM solver settings</i>, control the IPM solver: modes AIA and SIA, and
   the IPM leg of HOP and SHP. <tt>Pa_EPS</tt> and <tt>Pa_CRN</tt> concern only the cold start (AIA).</li>
   <li>The fields under the heading <i>Optima solver settings</i> (their GEMS3K
-  names start with <tt>pa_Optima</tt>) are used only in AOP, SOP, ROP and the Optima leg
+  names start with <tt>pa_Optima</tt>) are used only in AOP, SOP and the Optima leg
   of HOP and SHP; in AIA and SIA they have no effect. <tt>Pa_OCR</tt> concerns only the warm
-  modes (SOP, SHP). ROP ignores most of them: it runs with the Optima defaults.</li>
+  modes (SOP, SHP).</li>
   <li>Some settings apply to both solvers, for example <tt>Pa_DHB</tt>, <tt>Pa_DG</tt>
   and <tt>Pa_PE</tt>; <tt>Pa_ODF</tt> (automatic) is derived from <tt>Pa_DHB</tt>, and <tt>Pa_OAR</tt> needs
   <tt>Pa_OTA</tt> &gt; 0.</li>

@@ -88,11 +88,6 @@ public:
             QMutexLocker  loker(&pVisorImp->getMutexCalc());
             showMss = 1L;
             double dummy = -1.;
-            // the Calculate menu's solver mode applies to this run only
-            struct ModeScope {
-                ModeScope() { TProfil::pm->use_solver_mode = true; }
-                ~ModeScope() { TProfil::pm->use_solver_mode = false; }
-            } scope;
             TProfil::pm->CalcEqstat( dummy, -1, 0. );
         }
         catch( TError& err )

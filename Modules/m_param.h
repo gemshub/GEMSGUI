@@ -42,10 +42,10 @@ extern long int showMss;
 extern SPP_SETTING pa_;
 
 /// Algorithm used by Calculate > Run GEM IPM (single equilibrium).
-/// AIA/SIA: native IPM, cold/warm start. AOP/SOP/ROP: Optima solver (cold, warm, reference setup).
+/// AIA/SIA: native IPM, cold/warm start. AOP/SOP: Optima solver (cold, warm).
 /// HOP/SHP: native IPM first, then Optima (cold/warm native leg). The Optima modes need GEMS3K
 /// built with USE_OPTIMA_SOLVER.
-enum class SolverMode { AIA, SIA, AOP, SOP, ROP, HOP, SHP };
+enum class SolverMode { AIA, SIA, AOP, SOP, HOP, SHP };
 
 inline bool solverModeIsWarm( SolverMode mode )
 {
@@ -204,10 +204,9 @@ public:
     void ChangeSettings(int nSettings);
     void resetExtendedSettings();
 
-    /// Mode chosen in the Calculate menu; applied only while use_solver_mode is set, which the
-    /// Run GEM IPM thread does around its call (processes, GEM2MT and others stay native).
+    /// Mode chosen in the Calculate menu; used by every equilibrium calculation of the GUI
+    /// (single system, Process, GEM2MT, ...).
     SolverMode solver_mode = SolverMode::AIA;
-    bool use_solver_mode = false;
 
     // work with Project
     bool initCalcMode( const char * profileKey );

@@ -1123,11 +1123,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
 #ifdef USE_GEMS3K_SERVER
   CalculateEquilibriumGUI( );
 #else
-  SolverMode mode = SolverMode::AIA;
-  if( use_solver_mode )
-      mode = solver_mode;
-  else if( multi_internal->GetPM()->pNP )
-      mode = SolverMode::SIA;
+  const SolverMode mode = solver_mode;
   switch( mode )
   {
   case SolverMode::AIA:
@@ -1137,11 +1133,13 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
 #ifdef USE_OPTIMA_SOLVER
   case SolverMode::AOP:
   case SolverMode::SOP:
-  case SolverMode::ROP:
-      multi_internal->CalculateEquilibriumStateOptima( NumIterFIA, NumIterIPM, mode == SolverMode::ROP );
+      // the mode itself says cold or warm, whatever a Process or GEM2MT run set for its point
+      multi_internal->GetPM()->pNP = solverModeIsWarm( mode ) ? 1 : 0;
+      multi_internal->CalculateEquilibriumStateOptima( NumIterFIA, NumIterIPM );
       break;
   case SolverMode::HOP:
   case SolverMode::SHP:
+      multi_internal->GetPM()->pNP = solverModeIsWarm( mode ) ? 1 : 0;
       multi_internal->CalculateEquilibriumStateHOP( NumIterFIA, NumIterIPM, mode == SolverMode::SHP );
       break;
 #else

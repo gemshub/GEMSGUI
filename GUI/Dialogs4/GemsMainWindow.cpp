@@ -224,8 +224,7 @@ TVisorImp::TVisorImp(int c, char** v):
             { "AOP - Optima, cold start", "Optima interior-point solver from an automatic initial approximation", SolverMode::AOP, true },
             { "SOP - Optima, warm start", "Optima solver from the previous speciation", SolverMode::SOP, true },
             { "HOP - native, then Optima", "GEMS3K IPM selects the phases, Optima polishes the result", SolverMode::HOP, true },
-            { "SHP - native warm, then Optima", "Like HOP, with the native leg started from the previous speciation", SolverMode::SHP, true },
-            { "ROP - Optima reference setup", "Plain untuned Optima run, for comparison only", SolverMode::ROP, true } };
+            { "SHP - native warm, then Optima", "Like HOP, with the native leg started from the previous speciation", SolverMode::SHP, true } };
         ui->sactionSimplex->setVisible( false );
         auto* menu = new QMenu( "Solver &mode", ui->smenu_Calc );
         auto* group = new QActionGroup( menu );
