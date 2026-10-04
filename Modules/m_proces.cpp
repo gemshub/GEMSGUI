@@ -22,6 +22,7 @@
 #include "m_proces.h"
 #include "m_syseq.h"
 #include "visor.h"
+#include "run_loglevel.h"
 #include "t_print.h"
 #include "stepwise.h"
 #include "nodearray_gui.h"
@@ -1213,6 +1214,7 @@ TProcess::RecCalc( const char *key )
 
     if( !pVisor->ProfileMode )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
+    RunLogLevel::apply( RunLogLevel::Process );
 
 /*  char * */ text_fmt = nullptr;
 /*  std::string */ sd_key = "";

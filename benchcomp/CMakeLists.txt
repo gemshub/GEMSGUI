@@ -25,11 +25,13 @@ set(COMMON_SOURCES
       ${NUMERICS_SOURCE_FILES1}
       ${DATAMAN_SOURCE_FILES1}
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/visor.h
+      ${GEMSGUI_GUI_SOURCE_DIR}/Services4/run_loglevel.h
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/units.h
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/service.h
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/graph.h
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/graph_window.h
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/visor.cpp
+      ${GEMSGUI_GUI_SOURCE_DIR}/Services4/run_loglevel.cpp
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/units.cpp
       ${GEMSGUI_GUI_SOURCE_DIR}/Services4/graph.cpp
       ${GEMSGUI_GUI_SOURCE_DIR}/charts/chart_model.h

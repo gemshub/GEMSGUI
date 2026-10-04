@@ -219,7 +219,7 @@ TVisorImp::TVisorImp(int c, char** v):
     {
         const std::pair<const char*, RunLogLevel::Mode> modes[] = {
             { "Log level: single equilibrium", RunLogLevel::Equilibrium },
-            { "Log level: GEM2MT process", RunLogLevel::Process } };
+            { "Log level: batch (process, GEM2MT)", RunLogLevel::Process } };
         const char* names[] = { "default", "trace", "debug", "info", "warn", "err", "critical", "off" };
         ui->smenu_Calc->addSeparator();
         for( const auto& mode: modes )
