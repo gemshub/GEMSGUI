@@ -225,6 +225,7 @@ void TProfil::resetExtendedSettings()
     pa.p.OptimaColdRetry = pa_.p.OptimaColdRetry;
     pa.p.OptimaFinish = pa_.p.OptimaFinish;
     pa.p.OptimaAcceptRepair = pa_.p.OptimaAcceptRepair;
+    pa.p.MbClassRule = pa_.p.MbClassRule;
 }
 
 void BASE_PARAM::write(GemDataStream& oss)
@@ -422,6 +423,7 @@ void TProfil::ods_link( int )
     aObj[ o_paxocr]->SetPtr( &(pa.p.OptimaColdRetry));
     aObj[ o_paxofn]->SetPtr( &(pa.p.OptimaFinish));
     aObj[ o_paxoar]->SetPtr( &(pa.p.OptimaAcceptRepair));
+    aObj[ o_paxmcr]->SetPtr( &(pa.p.MbClassRule));
     aObj[ o_spppar]->SetPtr(  static_cast<void *>(&pa) );
     aObj[ o_spppar]->SetM( sizeof( SPP_SETTING ) );
 aObj[ o_sptext]->SetPtr(  internalBufer );
@@ -1121,7 +1123,33 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
 #ifdef USE_GEMS3K_SERVER
   CalculateEquilibriumGUI( );
 #else
-  multi_internal->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+  SolverMode mode = SolverMode::AIA;
+  if( use_solver_mode )
+      mode = solver_mode;
+  else if( multi_internal->GetPM()->pNP )
+      mode = SolverMode::SIA;
+  switch( mode )
+  {
+  case SolverMode::AIA:
+  case SolverMode::SIA:
+      multi_internal->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+      break;
+#ifdef USE_OPTIMA_SOLVER
+  case SolverMode::AOP:
+  case SolverMode::SOP:
+  case SolverMode::ROP:
+      multi_internal->CalculateEquilibriumStateOptima( NumIterFIA, NumIterIPM, mode == SolverMode::ROP );
+      break;
+  case SolverMode::HOP:
+  case SolverMode::SHP:
+      multi_internal->CalculateEquilibriumStateHOP( NumIterFIA, NumIterIPM, mode == SolverMode::SHP );
+      break;
+#else
+  default:
+      Error( "Solver mode", "GEMS3K was built without the Optima solver (USE_OPTIMA_SOLVER): "
+                            "choose AIA or SIA in Calculate > Solver mode." );
+#endif
+  }
 #endif
   //outMultiTxt( "Reaktoro_after.dump.txt"  );
 

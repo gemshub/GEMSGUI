@@ -216,11 +216,12 @@ o_ngte, o_nhte, o_nste, o_nvte, o_ncpte, o_nate, o_nute,
     o_paxocr,   // OptimaColdRetry
     o_paxofn,   // OptimaFinish
     o_paxoar,   // OptimaAcceptRepair
+    o_paxmcr,   // MbClassRule (last: appended after the others had been stored)
     o_sppconst, o_sppdatac
 };
 
-// number of objects appended to the project record after o_sptext (o_paxstall..o_paxoar)
-const int NUM_PAXOBJ = o_paxoar - o_paxstall + 1;
+// number of objects appended to the project record after o_sptext (o_paxstall..o_paxmcr)
+const int NUM_PAXOBJ = o_paxmcr - o_paxstall + 1;
 
 //---------------------------------
 // IComp

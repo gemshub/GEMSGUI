@@ -356,7 +356,7 @@ void TVisor::Setup()
 
     // define objects
     // a cache from an older release lacks the extended settings objects: rebuild it from vis_od.ini.json
-    if( option_d || !fromObjDAT() || aObj.Find("Pa_OAR") != o_paxoar ) {
+    if( option_d || !fromObjDAT() || aObj.Find("Pa_MCR") != o_paxmcr ) {
         std::string fname = sysGEMDir() + OBJECT_INI;
         gui_logger->debug("TVisor::load {}", fname);
         aObj.clear();   // drop whatever a stale cache put there

@@ -215,6 +215,42 @@ TVisorImp::TVisorImp(int c, char** v):
     splH->setStretchFactor(0, 3);
     splH->setStretchFactor(1, 1);
 
+    // solver mode of Calculate > Run GEM IPM, replacing the former AIA tick
+    {
+        struct ModeItem { const char* text; const char* tip; SolverMode mode; bool optima; };
+        const ModeItem items[] = {
+            { "AIA - native, cold start (simplex)", "GEMS3K IPM from an automatic initial approximation", SolverMode::AIA, false },
+            { "SIA - native, warm start", "GEMS3K IPM from the previous speciation", SolverMode::SIA, false },
+            { "AOP - Optima, cold start", "Optima interior-point solver from an automatic initial approximation", SolverMode::AOP, true },
+            { "SOP - Optima, warm start", "Optima solver from the previous speciation", SolverMode::SOP, true },
+            { "HOP - native, then Optima", "GEMS3K IPM selects the phases, Optima polishes the result", SolverMode::HOP, true },
+            { "SHP - native warm, then Optima", "Like HOP, with the native leg started from the previous speciation", SolverMode::SHP, true },
+            { "ROP - Optima reference setup", "Plain untuned Optima run, for comparison only", SolverMode::ROP, true } };
+        ui->sactionSimplex->setVisible( false );
+        auto* menu = new QMenu( "Solver &mode", ui->smenu_Calc );
+        auto* group = new QActionGroup( menu );
+        for( const auto& item: items )
+        {
+            auto* act = menu->addAction( item.text );
+            act->setToolTip( item.tip );
+            act->setCheckable( true );
+            act->setActionGroup( group );
+            act->setChecked( item.mode == SolverMode::AIA );
+#ifndef USE_OPTIMA_SOLVER
+            if( item.optima )
+            {
+                act->setEnabled( false );
+                act->setToolTip( "Needs GEMS3K built with USE_OPTIMA_SOLVER" );
+            }
+#endif
+            connect( act, &QAction::triggered, this, [item]() {
+                if( TProfil::pm )
+                    TProfil::pm->solver_mode = item.mode;
+            });
+        }
+        ui->smenu_Calc->insertMenu( ui->sactionPrecise, menu );
+    }
+
     // log level of the GEMS3K loggers for single equilibrium and for GEM2MT runs
     {
         const std::pair<const char*, RunLogLevel::Mode> modes[] = {

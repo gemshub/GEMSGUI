@@ -340,7 +340,7 @@ unsigned char TDataBase::headerObjCount() const
 // numerical settings. A record saved by an older GEMSGUI has none, and then the defaults are set.
 // An older GEMSGUI stops after its own objects and ignores this tail, so such a record stays
 // readable by it. Returns the number of bytes read.
-int TDataBase::getExtendedSettings( GemDataStream& f, int nRead )
+int TDataBase::getExtendedSettings( GemDataStream& f, int nRead, int StillLen )
 {
     int len = 0;
     char mark[4] = { 0, 0, 0, 0 };
@@ -355,14 +355,15 @@ int TDataBase::getExtendedSettings( GemDataStream& f, int nRead )
             memset( mark, 0, 4 );
         }
     }
+    if( TProfil::pm )
+        TProfil::pm->resetExtendedSettings();   // objects the record does not hold keep the defaults
     if( memcmp( mark, MARKEXTOBJ, 4 ) == 0 )
     {
         len = 4;
-        for( uint j = nRead; j < nOD; j++ )
+        // a record written when the tail had fewer objects ends early: stop there
+        for( uint j = nRead; j < nOD && StillLen-len >= aObj[j+frstOD]->lenDB(); j++ )
             len += aObj[j+frstOD]->ofDB(f);
     }
-    else if( TProfil::pm )
-        TProfil::pm->resetExtendedSettings();
     return len;
 }
 
@@ -412,7 +413,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
             flag_spppar = true;
     }
     if( frstOD == o_spppar )
-        StillLen -= getExtendedSettings( f, rh.Nobj );
+        StillLen -= getExtendedSettings( f, rh.Nobj, StillLen );
     if( StillLen!=0 && rep.len!=0 && !flag_spppar)
         Error( GetKeywd(),
           "Actual record length differs from that specified in the header");

@@ -6546,6 +6546,14 @@
                         "type": "F_NUM"
                     },
                     {
+                        "label": "Pa_MCR",
+                        "lenth": 8,
+                        "locus": "+b+i",
+                        "maxM": 1,
+                        "maxN": -1,
+                        "type": "F_FLOAT"
+                    },
+                    {
                         "label": "Pa_HD2",
                         "lenth": 72,
                         "locus": "-b-h",

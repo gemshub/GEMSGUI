@@ -36,8 +36,7 @@ void TVisorImp::CmRunIPM()
             wn->clearEditFocus();
     } */
 
-    TMulti::sm->GetPM()->pNP =
-        ( ui->sactionSimplex->isChecked())? 0: 1;
+    TMulti::sm->GetPM()->pNP = solverModeIsWarm( TProfil::pm->solver_mode ) ? 1 : 0;
     if( ui->sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
         TProfil::pm->pa.p.PRD = -5; // Changed
     TProfil::pm->pa.p.PRD =

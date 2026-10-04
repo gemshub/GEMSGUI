@@ -5240,6 +5240,16 @@
         "type": "L_"
     },
     {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Mass balance rule per element class: major elements absolute, trace elements relative; value = trace/major ratio; 0 = off { 0 }",
+        "id": "o_paxmcr",
+        "label": "Pa_MCR",
+        "ndxs": "N",
+        "type": "D_"
+    },
+    {
         "dimM": 11,
         "dimN": 1,
         "dyna": false,

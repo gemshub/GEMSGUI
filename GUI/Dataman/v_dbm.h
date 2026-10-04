@@ -235,7 +235,7 @@ protected:
     int putrec( RecEntry& re, GemDataStream& f );
     int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
     int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
-    int getExtendedSettings( GemDataStream& f, int nRead );
+    int getExtendedSettings( GemDataStream& f, int nRead, int StillLen );
     void opfils();
     int scanfile( uint nF, int& fPos, int& fLen,
 	    GemDataStream& inStream, GemDataStream& outStream);

@@ -45,6 +45,8 @@ Window</a></p>
 <p><a href="#GEMIPM3_CONTROLS">4. Numerical Settings&nbsp; to Control
 IPM-3 Kernel Operation</a> </p>
 
+<p style="margin-left: 40px;"><a href="#SOLVER_MODES">4.1. Solver Modes and Their Settings (GEMS3K 5)</a></p>
+
 <p><a href="#GEMIPM3_ERRORS">5. Warnings and Error Messages</a></p>
 
 <p><a href="#TO_STANDALONE">6. Connection with Standalone GEMS3K
@@ -1275,6 +1277,380 @@ or equal to Pa_DKI. <br>
 <br>
 </tt>
 <hr size="2" width="100%">
+<h3><a name="SOLVER_MODES"></a>4.1. Solver Modes and Their Settings (GEMS3K 5)</h3>
+
+<p>GEMS3K has two equilibrium solvers. The <b>GEMS3K IPM solver</b> is the
+solver described in this chapter: an interior-point method followed by a
+refinement of the mass balance (MBR). It is fast on almost every system and
+is the default. The <b>Optima solver</b> is a second solver, based on the
+open-source Optima optimisation library with changes made for GEMS3K. It is
+more robust for solid solutions, melts and other systems where several mixing
+phases compete, and it can also check the answer of the IPM solver.
+You choose the solver for each calculation with the
+<b>Calculate &gt; Solver mode</b> submenu; the numerical settings of the
+chosen solver are the fields of the <a href="gm_project.html#MWPAGE_2">"Controls"
+page</a> of the Project window.</p>
+
+<h4><a name="SOLVER_MODES_TABLE"></a>Calculation modes</h4>
+<p>Each mode name says how the calculation starts and which solver does the
+work.</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr><td style="vertical-align: top;"><b>Mode</b></td><td style="vertical-align: top;"><b>Stands for</b></td><td style="vertical-align: top;"><b>What it does</b></td></tr>
+    <tr><td style="vertical-align: top;">AIA</td><td>Automatic Initial Approximation</td><td>GEMS3K IPM solver. Builds its own starting point from scratch (LP simplex). Default.</td></tr>
+    <tr><td style="vertical-align: top;">SIA</td><td>Smart Initial Approximation</td><td>GEMS3K IPM solver. Starts from the previous result held in memory.</td></tr>
+    <tr><td style="vertical-align: top;">AOP</td><td>Automatic initial approximation with OPtima</td><td>Optima solver, starting from scratch.</td></tr>
+    <tr><td style="vertical-align: top;">SOP</td><td>Smart initial approximation with OPtima</td><td>Optima solver, starting from the previous result.</td></tr>
+    <tr><td style="vertical-align: top;">HOP</td><td>Hybrid with OPtima</td><td>GEMS3K IPM solver from scratch, then Optima refines and checks its answer. If the Optima part fails, the IPM answer is kept and the result is flagged, so HOP is never worse than the IPM solver alone.</td></tr>
+    <tr><td style="vertical-align: top;">SHP</td><td>Smart Hybrid with oPtima</td><td>As HOP, but the IPM part starts from the previous result.</td></tr>
+    <tr><td style="vertical-align: top;">ROP</td><td>Reference with OPtima</td><td>A plain, untuned Optima run (uniform start, default Optima options), meant only for comparison.</td></tr>
+  </tbody>
+</table>
+
+<h4><a name="SOLVER_WHICH"></a>Which mode to use</h4>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr><td style="vertical-align: top;"><b>Situation</b></td><td style="vertical-align: top;"><b>Recommended mode</b></td><td style="vertical-align: top;"><b>Why</b></td></tr>
+    <tr><td>Most systems, single calculations</td><td>AIA</td><td>The IPM solver is the fastest on almost every system it can solve, often by a large margin.</td></tr>
+    <tr><td>Systems with many species (hundreds or more)</td><td>AIA, or HOP if you want a checked answer</td><td>Optima alone is much slower on large systems; HOP gets Optima's check for little more than the IPM solver.</td></tr>
+    <tr><td>Strongly non-ideal systems: solid solutions, melts, miscibility gaps, phase diagrams</td><td>AOP or HOP</td><td>Optima finds the correct set of stable phases far more often where several mixing phases compete.</td></tr>
+    <tr><td>The IPM solver fails, or warns that its answer does not satisfy the mass balance</td><td>AOP or HOP</td><td>Optima solves most of these cases.</td></tr>
+    <tr><td>Sequences of small changes: sweeps, titrations, transport steps</td><td>SOP after a first point in AOP (or SIA after AIA)</td><td>Starting from the previous result is many times cheaper than starting from scratch.</td></tr>
+    <tr><td>Sequences that cross phase boundaries</td><td>AOP or SOP; avoid SIA</td><td>SIA can keep the phases of the previous point after they stop being stable.</td></tr>
+    <tr><td>Systems with very little water (nearly dry cement)</td><td>AIA or HOP</td><td>Optima can fail when water is close to running out. Slightly further from that point, AOP and SOP work if Pa_OAR is on and the third value of Pa_GAN (pa_GAS) is 0.002.</td></tr>
+  </tbody>
+</table>
+
+<h4><a name="SOLVER_GUI_RULES"></a>How the Calculate menu relates to the Controls page</h4>
+<ul>
+  <li>The <b>Solver mode</b> choice applies to <b>Calculate &gt; Run GEM IPM</b> (single
+  system) only. Process simulation, GEM2MT and the other modules always use the
+  GEMS3K IPM solver. The choice is not saved between sessions; each session
+  starts with AIA. It replaces the former "AIA (simplex)" check mark: SIA is the
+  old "AIA off" state.</li>
+  <li>The Optima modes (AOP, SOP, ROP, HOP, SHP) are available only when the
+  program was built with the Optima solver (GEMS3K option USE_OPTIMA_SOLVER);
+  otherwise these menu entries are disabled.</li>
+  <li>The fields <tt>Pa_DK</tt>, <tt>Pa_IIM</tt>, <tt>Pa_DHB</tt>, <tt>Pa_PC</tt>, <tt>Pa_PRD</tt> and the others
+  described in section 4 above, together with the fields under the heading
+  <i>IPM solver settings</i>, control the IPM solver: modes AIA and SIA, and
+  the IPM leg of HOP and SHP. <tt>Pa_EPS</tt> and <tt>Pa_CRN</tt> concern only the cold start (AIA).</li>
+  <li>The fields under the heading <i>Optima solver settings</i> (their GEMS3K
+  names start with <tt>pa_Optima</tt>) are used only in AOP, SOP, ROP and the Optima leg
+  of HOP and SHP; in AIA and SIA they have no effect. <tt>Pa_OCR</tt> concerns only the warm
+  modes (SOP, SHP). ROP ignores most of them: it runs with the Optima defaults.</li>
+  <li>Some settings apply to both solvers, for example <tt>Pa_DHB</tt>, <tt>Pa_DG</tt>
+  and <tt>Pa_PE</tt>; <tt>Pa_ODF</tt> (automatic) is derived from <tt>Pa_DHB</tt>, and <tt>Pa_OAR</tt> needs
+  <tt>Pa_OTA</tt> &gt; 0.</li>
+  <li>On/off settings are shown as tick boxes (ticked = on, stored as 1); the
+  others are numbers. Hold the mouse over a field to see a short description and
+  its default.</li>
+  <li>The settings are stored in the Project record and exported to the
+  GEMS3K IPM input file as <tt>pa_...</tt> entries together with the other numerical
+  settings. A project saved before these fields existed opens with the GEMS3K defaults
+  in them. An older GEMS-Selektor can open a project saved with them; it ignores them
+  and drops them when it saves the project again.</li>
+</ul>
+
+<h4><a name="SOLVER_SETTINGS_IPM"></a>IPM solver settings added in GEMS3K 5</h4>
+<p>These fields are on the Controls page under the heading <i>IPM solver
+settings</i>.</p>
+    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;"><b>Controls field</b></td>
+          <td style="vertical-align: top;"><b>GEMS3K name</b></td>
+          <td style="vertical-align: top;"><b>Default</b></td>
+          <td style="vertical-align: top;"><b>What it does</b></td>
+          <td style="vertical-align: top;"><b>When it can be useful</b></td>
+          <td style="vertical-align: top;"><b>Other values</b></td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_STL"></a><tt>Pa_STL</tt></td>
+          <td style="vertical-align: top;"><tt>pa_PSTALL</tt></td>
+          <td style="vertical-align: top;">on</td>
+          <td style="vertical-align: top;">Lets the mass-balance step give up early when it stops improving.</td>
+          <td style="vertical-align: top;">Leave on. Saves time on systems where that step stalls.</td>
+          <td style="vertical-align: top;">Off: the step keeps iterating until Pa_DPV (first value) is exhausted.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_ISW"></a><tt>Pa_ISW</tt></td>
+          <td style="vertical-align: top;"><tt>pa_IpmStallWindow</tt></td>
+          <td style="vertical-align: top;">30</td>
+          <td style="vertical-align: top;">Stops the IPM once the energy and composition have clearly stopped changing for this many iterations.</td>
+          <td style="vertical-align: top;">Leave on. Saves iterations on systems that converge slowly at the end.</td>
+          <td style="vertical-align: top;">0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_MBR"></a><tt>Pa_MBR</tt></td>
+          <td style="vertical-align: top;"><tt>pa_MbReproject</tt></td>
+          <td style="vertical-align: top;">on</td>
+          <td style="vertical-align: top;">A final touch-up that makes the element totals of the IPM answer add up exactly.</td>
+          <td style="vertical-align: top;">Leave on. Turn off only to see the raw result.</td>
+          <td style="vertical-align: top;">Off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_DTW"></a><tt>Pa_DTW</tt></td>
+          <td style="vertical-align: top;"><tt>pa_DeterminacyWarn</tt></td>
+          <td style="vertical-align: top;">0.01</td>
+          <td style="vertical-align: top;">Warns when the amount of a phase in the answer is fixed by the energy only to worse than this relative uncertainty (small amounts are then not reliable).</td>
+          <td style="vertical-align: top;">Leave on.</td>
+          <td style="vertical-align: top;">0 or negative = no warning.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_CRN"></a><tt>Pa_CRN</tt></td>
+          <td style="vertical-align: top;"><tt>pa_ColdRetryNudges</tt></td>
+          <td style="vertical-align: top;">4</td>
+          <td style="vertical-align: top;">If a calculation from scratch (AIA) fails, retry up to this many times with a microscopically changed composition, then finish at the exact one.</td>
+          <td style="vertical-align: top;">Leave on. Systems where AIA fails occasionally.</td>
+          <td style="vertical-align: top;">0 = no retry.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_FOB"></a><tt>Pa_FOB</tt></td>
+          <td style="vertical-align: top;"><tt>pa_FilloutBudget</tt></td>
+          <td style="vertical-align: top;">0 (off)</td>
+          <td style="vertical-align: top;">Limits how much the starting guess may disturb the element totals, as a fraction of each element's amount.</td>
+          <td style="vertical-align: top;">Systems with elements present only in traces.</td>
+          <td style="vertical-align: top;">A positive fraction = on.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_TPD"></a><tt>Pa_TPD</tt></td>
+          <td style="vertical-align: top;"><tt>pa_StabTPD</tt></td>
+          <td style="vertical-align: top;">on</td>
+          <td style="vertical-align: top;">Reports, in the diagnostic trace only, whether a mixed phase left out of the answer should have been present. Does not change the answer.</td>
+          <td style="vertical-align: top;">Investigating whether a solid solution or melt was wrongly left out.</td>
+          <td style="vertical-align: top;">Off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_KKT"></a><tt>Pa_KKT</tt></td>
+          <td style="vertical-align: top;"><tt>pa_IpmAugmentedKKT</tt></td>
+          <td style="vertical-align: top;">2</td>
+          <td style="vertical-align: top;">How each IPM step's equations are solved. 2 is the most accurate.</td>
+          <td style="vertical-align: top;">Leave at 2; other values only to compare with older results.</td>
+          <td style="vertical-align: top;">0 = the original method; 1 = an intermediate method.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_MCR"></a><tt>Pa_MCR</tt></td>
+          <td style="vertical-align: top;"><tt>pa_MbClassRule</tt></td>
+          <td style="vertical-align: top;">0 (off)</td>
+          <td style="vertical-align: top;">Checks the totals of major elements in absolute terms and of trace elements in relative terms; the value is the trace/major ratio.</td>
+          <td style="vertical-align: top;">Systems with trace elements at very low amounts.</td>
+          <td style="vertical-align: top;">A positive ratio = on.</td>
+        </tr>
+      </tbody>
+    </table>
+
+<h4><a name="SOLVER_SETTINGS_OPTIMA"></a>Optima solver settings</h4>
+<p>These fields are on the Controls page under the heading <i>Optima solver
+settings</i>. The defaults suit almost all systems; change them only when
+investigating a difficult case. The first ten are the ones most often worth
+adjusting.</p>
+    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;"><b>Controls field</b></td>
+          <td style="vertical-align: top;"><b>GEMS3K name</b></td>
+          <td style="vertical-align: top;"><b>Default</b></td>
+          <td style="vertical-align: top;"><b>What it does</b></td>
+          <td style="vertical-align: top;"><b>When it can be useful</b></td>
+          <td style="vertical-align: top;"><b>Other values</b></td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OTL"></a><tt>Pa_OTL</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaTol</tt></td>
+          <td style="vertical-align: top;">1e-8</td>
+          <td style="vertical-align: top;">How precisely Optima must converge.</td>
+          <td style="vertical-align: top;">Raise it slightly to trade accuracy for speed on large systems; lower it only if an answer looks insufficiently converged.</td>
+          <td style="vertical-align: top;">Any positive number; smaller is stricter.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OMS"></a><tt>Pa_OMS</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaMaxSeconds</tt></td>
+          <td style="vertical-align: top;">0 (off)</td>
+          <td style="vertical-align: top;">A time limit in seconds for one calculation, including retries. Results then depend on the speed of the computer.</td>
+          <td style="vertical-align: top;">Long batch or transport runs where one stuck calculation must not hold up the rest.</td>
+          <td style="vertical-align: top;">Any positive number of seconds.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_ODR"></a><tt>Pa_ODR</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaDimReduce</tt></td>
+          <td style="vertical-align: top;">0 (automatic)</td>
+          <td style="vertical-align: top;">For large systems, first solves with only the species that matter, then adds the rest. Automatic means on from 200 species.</td>
+          <td style="vertical-align: top;">Switch it on for a system just under 200 species that is slow; switch it off if a large system gives a different answer with it.</td>
+          <td style="vertical-align: top;">A positive number = on, with at most that many passes; a negative number = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OCR"></a><tt>Pa_OCR</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaColdRetry</tt></td>
+          <td style="vertical-align: top;">2</td>
+          <td style="vertical-align: top;">If a calculation started from the previous result (SOP, SHP) fails, start again from scratch. 2 gives up on the first attempt quickly.</td>
+          <td style="vertical-align: top;">Use 1 if the warm start usually succeeds but needs many iterations; 0 only when testing.</td>
+          <td style="vertical-align: top;">0 = no retry; 1 = retry only after the first attempt used its full budget.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OFN"></a><tt>Pa_OFN</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaFinish</tt></td>
+          <td style="vertical-align: top;">on</td>
+          <td style="vertical-align: top;">If Optima stops just short of converging, finish the job using the phases it has found.</td>
+          <td style="vertical-align: top;">Leave on. Turn off only to see what Optima alone returns.</td>
+          <td style="vertical-align: top;">Off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OTA"></a><tt>Pa_OTA</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaTpdAccept</tt></td>
+          <td style="vertical-align: top;">1e-6</td>
+          <td style="vertical-align: top;">Accepts a not-quite-converged answer when a direct check shows that no missing phase should be present (within this tolerance).</td>
+          <td style="vertical-align: top;">Leave on. Systems where Optima gets very close but does not meet its own tolerance.</td>
+          <td style="vertical-align: top;">0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OAR"></a><tt>Pa_OAR</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaAcceptRepair</tt></td>
+          <td style="vertical-align: top;">off</td>
+          <td style="vertical-align: top;">With Pa_OTA, also corrects a small error in the element totals before accepting. Needs Pa_OTA &gt; 0.</td>
+          <td style="vertical-align: top;">Systems with very little water, or other cases where Optima ends close to the answer with slightly unbalanced element totals.</td>
+          <td style="vertical-align: top;">On.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OSW"></a><tt>Pa_OSW</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaStallWindow</tt></td>
+          <td style="vertical-align: top;">500</td>
+          <td style="vertical-align: top;">Stops a calculation that has not improved for this many iterations, so a retry can start sooner.</td>
+          <td style="vertical-align: top;">Lower it to save time on systems that often get stuck; raise it if slow but steady systems are stopped too early. Values below 500 are not recommended.</td>
+          <td style="vertical-align: top;">0 = never stop early.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OZA"></a><tt>Pa_OZA</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaZeroAbsent</tt></td>
+          <td style="vertical-align: top;">2</td>
+          <td style="vertical-align: top;">How absent species are reported: as a tiny amount, with the element totals corrected if needed.</td>
+          <td style="vertical-align: top;">Use 1 if you need absent phases to read exactly zero in the output.</td>
+          <td style="vertical-align: top;">0 = tiny amounts as they are; 1 = absent phases set to exactly zero.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OLS"></a><tt>Pa_OLS</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaLineSearch</tt></td>
+          <td style="vertical-align: top;">1.5</td>
+          <td style="vertical-align: top;">When a step makes the result much worse (by more than this factor), try a shorter step.</td>
+          <td style="vertical-align: top;">Leave on. A negative value can save time on easy systems that rarely need it.</td>
+          <td style="vertical-align: top;">0 = off; a negative value = use it only when retrying a failed calculation.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OLE"></a><tt>Pa_OLE</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaLSStallEscape</tt></td>
+          <td style="vertical-align: top;">10</td>
+          <td style="vertical-align: top;">If shorter steps keep getting nowhere this many times in a row, take one full step to break out.</td>
+          <td style="vertical-align: top;">Systems where Optima gets stuck at the same error for many iterations.</td>
+          <td style="vertical-align: top;">0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_ORW"></a><tt>Pa_ORW</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaLSRejectWorse</tt></td>
+          <td style="vertical-align: top;">off</td>
+          <td style="vertical-align: top;">If a shorter step did not help, use the full step instead.</td>
+          <td style="vertical-align: top;">A few difficult systems where the shorter steps keep making tiny progress; it can slow others.</td>
+          <td style="vertical-align: top;">On.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OCS"></a><tt>Pa_OCS</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaCgSeed</tt></td>
+          <td style="vertical-align: top;">1e-6</td>
+          <td style="vertical-align: top;">A better starting point for a retry from scratch, which considers which phases are likely to be stable.</td>
+          <td style="vertical-align: top;">Leave on. Systems with many competing phases where the first start from scratch fails.</td>
+          <td style="vertical-align: top;">0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_ODT"></a><tt>Pa_ODT</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaDimReduceTol</tt></td>
+          <td style="vertical-align: top;">10</td>
+          <td style="vertical-align: top;">How generous the first guess of "species that matter" is (larger includes more).</td>
+          <td style="vertical-align: top;">Raise it if the reduced first solve misses species that end up present.</td>
+          <td style="vertical-align: top;">A negative value &minus;m = start with the m&times;N cheapest species.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OPS"></a><tt>Pa_OPS</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaPreSolveFirstIters</tt></td>
+          <td style="vertical-align: top;">6000</td>
+          <td style="vertical-align: top;">Iteration limit for each pass of the reduced first solve, so a pass that goes nowhere is abandoned.</td>
+          <td style="vertical-align: top;">Large systems where the reduced first solve takes long without converging.</td>
+          <td style="vertical-align: top;">0 = no limit.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OES"></a><tt>Pa_OES</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaEarlyStabilityAt</tt></td>
+          <td style="vertical-align: top;">0 (automatic)</td>
+          <td style="vertical-align: top;">Lets Optima notice early that a phase should disappear, instead of shrinking it slowly.</td>
+          <td style="vertical-align: top;">Systems where a phase disappears slowly over hundreds of iterations.</td>
+          <td style="vertical-align: top;">A positive number = check at that iteration; a negative number &minus;N = check after a phase has shrunk N times in a row.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_ODF"></a><tt>Pa_ODF</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaDcFloor</tt></td>
+          <td style="vertical-align: top;">0 (automatic)</td>
+          <td style="vertical-align: top;">The smallest amount Optima can represent for an absent species. Automatic derives it from the mass-balance tolerance Pa_DHB.</td>
+          <td style="vertical-align: top;">Systems with elements present only in traces, where the automatic value is too coarse.</td>
+          <td style="vertical-align: top;">Any positive amount in moles.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_PHF"></a><tt>Pa_PHF</tt></td>
+          <td style="vertical-align: top;"><tt>pa_PhaseHessianFloor</tt></td>
+          <td style="vertical-align: top;">0.01</td>
+          <td style="vertical-align: top;">Keeps the curvature of mixed phases well-behaved.</td>
+          <td style="vertical-align: top;">Solid solutions or melts that tend to split into two phases (miscibility gaps).</td>
+          <td style="vertical-align: top;">0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OFH"></a><tt>Pa_OFH</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaFDHessian</tt></td>
+          <td style="vertical-align: top;">on</td>
+          <td style="vertical-align: top;">Computes a more exact curvature for non-ideal phases, at extra cost.</td>
+          <td style="vertical-align: top;">Turn off to speed up systems with weakly non-ideal phases; keep on for strongly non-ideal ones.</td>
+          <td style="vertical-align: top;">Off = faster, sometimes less robust.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OFD"></a><tt>Pa_OFD</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaFDHessianDelay</tt></td>
+          <td style="vertical-align: top;">0</td>
+          <td style="vertical-align: top;">Uses the cheaper approximate curvature for this many iterations first.</td>
+          <td style="vertical-align: top;">Large non-ideal systems where the early iterations are expensive.</td>
+          <td style="vertical-align: top;">Any positive number of iterations.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_OMH"></a><tt>Pa_OMH</tt></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaMoleFracHessian</tt></td>
+          <td style="vertical-align: top;">off</td>
+          <td style="vertical-align: top;">A more exact curvature for ideal mixed phases.</td>
+          <td style="vertical-align: top;">Try it if a system with ideal solid solutions converges slowly; it helps some systems and slows others.</td>
+          <td style="vertical-align: top;">On.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><a name="Pa_LBT"></a><tt>Pa_LBT</tt></td>
+          <td style="vertical-align: top;"><tt>pa_LogBarrierTau</tt></td>
+          <td style="vertical-align: top;">1e-16</td>
+          <td style="vertical-align: top;">A tiny numerical push that keeps pure minerals away from exactly zero.</td>
+          <td style="vertical-align: top;">Rarely needs changing.</td>
+          <td style="vertical-align: top;">Any small positive number.</td>
+        </tr>
+      </tbody>
+    </table>
+
+<h4><a name="SOLVER_LIMITS"></a>Known limitations</h4>
+<ul>
+  <li>Optima is slower per calculation than the IPM solver, often by one to two
+  orders of magnitude on large systems. Use it where it improves the answer, not by default.</li>
+  <li>Some strongly non-ideal systems may still be difficult to solve, even with Optima.</li>
+  <li>SIA along a sequence can keep phases that are no longer stable when a phase boundary is crossed.</li>
+  <li>Close to the point where water runs out, AOP and SOP can fail and SHP can return a wrong result. Use AIA or HOP there.</li>
+  <li>Without a redox couple in the system, the energy and amounts are well defined but Eh is not, and it can differ between runs and modes. Compare solvers on energy and phases, not Eh.</li>
+  <li>In very dry systems (no free water solution) pH, Eh and ionic strength are not meaningful and can differ between solvers; the phases are still correct.</li>
+  <li>Trace elements: their mass balance can be relatively off in the Optima modes while the energy and the main elements are exact.</li>
+  <li>Solid solutions near a miscibility gap and duplicated twin phases cost many more iterations; the twin labels can swap between modes. The energy is the same.</li>
+</ul>
+<p>The steps each mode runs, and the retries made before a failure is reported,
+are described in the GEMS3K documents "SOLVER-OPTIONS-GUIDE" and "SOLVER-PATH-GRAPH" that
+come with the GEMS3K source.</p>
+<br>
+<hr size="2" width="100%">
 <h2><a name="GEMIPM3_ERRORS"></a>5. Warnings and Error Messages</h2>
 
 <p>Warnings (indicated by 'W') mean that the result of GEM IPM-3
@@ -1931,7 +2307,7 @@ Many Initial Systems to GEMS3K I/O Files from GEM2MT Module</h3>
 <tt> &nbsp; </tt> <tt><br>
 </tt>
 <hr style="width: 100%; height: 2px;"><tt><br>
-</tt>Last change: 28.09.2012&nbsp; DK<br>
+</tt>Last change: 04.10.2026&nbsp; DM (solver modes and settings, section 4.1); previous: 28.09.2012&nbsp; DK<br>
 
 <br>
 
