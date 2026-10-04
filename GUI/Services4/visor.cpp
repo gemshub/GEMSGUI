@@ -26,6 +26,7 @@
 #include <QJsonDocument>
 
 #include "GEMS3K/jsonconfig.h"
+#include "run_loglevel.h"
 #include "service.h"
 #include "visor.h"
 #include "units.h"
@@ -288,6 +289,7 @@ TVisor::TVisor(int c, char *v[]):
     GemsSettings::data_logger_directory = UserGEMDir+"logs/";
     GemsSettings::settings_file_name = SysGEMDir+"gemsgui-config.json";
     gemsSettings();
+    RunLogLevel::init();
     // spdlog levels :  trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6
     //gemsSettings().gems3k_update_loggers( true, "gems3k_gui.log", spdlog::level::info);
     //gui_logger->set_level(spdlog::level::info);

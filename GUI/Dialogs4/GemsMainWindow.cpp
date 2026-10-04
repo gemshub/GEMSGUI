@@ -26,6 +26,7 @@
 
 
 #include "visor.h"
+#include "run_loglevel.h"
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "NewSystemDialog.h"
@@ -213,6 +214,32 @@ TVisorImp::TVisorImp(int c, char** v):
     splH->addWidget(splV);
     splH->setStretchFactor(0, 3);
     splH->setStretchFactor(1, 1);
+
+    // log level of the GEMS3K loggers for single equilibrium and for GEM2MT runs
+    {
+        const std::pair<const char*, RunLogLevel::Mode> modes[] = {
+            { "Log level: single equilibrium", RunLogLevel::Equilibrium },
+            { "Log level: GEM2MT process", RunLogLevel::Process } };
+        const char* names[] = { "default", "trace", "debug", "info", "warn", "err", "critical", "off" };
+        ui->smenu_Calc->addSeparator();
+        for( const auto& mode: modes )
+        {
+            auto* menu = ui->smenu_Calc->addMenu( mode.first );
+            auto* group = new QActionGroup( menu );
+            for( const char* name: names )
+            {
+                auto* act = menu->addAction( name );
+                act->setCheckable( true );
+                act->setActionGroup( group );
+                act->setChecked( RunLogLevel::level( mode.second ) == name );
+                connect( act, &QAction::triggered, this, [this, mode, name]() {
+                    if( !RunLogLevel::setLevel( mode.second, name ) )
+                        vfMessage( this, "Log level", "The log level is applied but could not be saved to "
+                                   "gemsgui-config.json (no write access)." );
+                });
+            }
+        }
+    }
 
     // define signal/slots
     connect( ui->action_Use_ThermoFUN, &QAction::toggled, [&](bool checked){

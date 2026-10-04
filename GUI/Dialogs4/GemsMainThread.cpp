@@ -22,6 +22,7 @@
 #include "NewSystemDialog.h"
 #include "ProgressDialog.h"
 #include "LoadMessage.h"
+#include "run_loglevel.h"
 
 void TVisorImp::CmRunIPM()
 {
@@ -42,6 +43,7 @@ void TVisorImp::CmRunIPM()
     TProfil::pm->pa.p.PRD =
         ( !ui->sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
 
+    RunLogLevel::apply( RunLogLevel::Equilibrium );
     try
     {
         TProfil::pm->userCancel1 = false;
