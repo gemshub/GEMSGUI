@@ -4,6 +4,7 @@ on:
     branches:
       - test_prerelease
       - project_err1
+      - develop_gems3kv5   # TEMPORARY: branch test
   release:
     types:
       - published
@@ -38,13 +39,25 @@ jobs:
         run: >
           echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}" >> "$GITHUB_OUTPUT"
 
+      # TEMPORARY (branch develop_gems3kv5 test): the branch name goes into the package/artifact names
+      - name: Set branch suffix
+        id: branch
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "suffix=" >> "$GITHUB_OUTPUT"
+          else
+            b="${GITHUB_REF_NAME//[^A-Za-z0-9._-]/-}"
+            echo "suffix=-$b" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set deploy dir
         id: strings2
         shell: bash
         run: |
           echo "export-output-dir=${{ github.workspace }}/export-${{ steps.strings.outputs.deploy-name }}/gems3k" >> "$GITHUB_OUTPUT"
           echo "deploy-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/Gems3-app" >> "$GITHUB_OUTPUT"
-          echo "deploy-output-name=linux-${{ steps.strings.outputs.deploy-name }}.zip" >> "$GITHUB_OUTPUT"
+          echo "deploy-output-name=linux-${{ steps.strings.outputs.deploy-name }}${{ steps.branch.outputs.suffix }}.zip" >> "$GITHUB_OUTPUT"
 
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v4
@@ -59,6 +72,17 @@ jobs:
           conda config --add channels conda-forge
           conda install conda-devenv
           conda run -n base python -m conda_devenv
+
+      # TEMPORARY (branch develop_gems3kv5 test): GEMS3K and Optima are built from the gemshub repositories
+      # instead of the conda gems3k package; revert together with environment.devenv.yml before merging.
+      - name: Build Optima and GEMS3K from the gemshub repositories
+        shell: bash -el {0}
+        env:
+          OPTIMA_REF: ${{ vars.OPTIMA_REF || 'optima_develop' }}
+          GEMS3K_REF: ${{ vars.GEMS3K_REF || 'develop_optima' }}
+        run: |
+          conda activate GEMSGUI
+          bash .github/scripts/build-gems3k-optima.sh
 
       - name: Cache ccache
         uses: actions/cache@v4
@@ -87,6 +111,17 @@ jobs:
           cd benchcomp
           ls
           ./gems3k-export -d -s . -p template_export.json -e ${{ steps.strings2.outputs.export-output-dir }}
+
+      # TEMPORARY (branch develop_gems3kv5 test): what this package was built from
+      - name: Write build info
+        shell: bash
+        run: |
+          cat > "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/BUILD_INFO.txt" <<EOF
+          GEMSGUI branch: ${{ github.ref_name }}
+          GEMSGUI commit: ${{ github.sha }}
+          GEMS3K:  ${GEMS3K_REF_USED:-?} @ ${GEMS3K_COMMIT:-?}
+          Optima:  ${OPTIMA_REF_USED:-?} @ ${OPTIMA_COMMIT:-?}
+          EOF
 
       - name: Check deploy
         run: |
@@ -130,7 +165,7 @@ jobs:
       - name: Upload export gems3k archive
         uses: actions/upload-artifact@v4
         with:
-          name: gems3k-${{ steps.strings.outputs.deploy-name }}
+          name: gems3k-${{ steps.strings.outputs.deploy-name }}${{ steps.branch.outputs.suffix }}
           path: ${{ github.workspace }}/export-${{ steps.strings.outputs.deploy-name }}
 
       - name: Upload release asset
