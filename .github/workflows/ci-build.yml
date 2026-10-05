@@ -57,6 +57,7 @@ jobs:
       # TEMPORARY (branch develop_gems3kv5 test): GEMS3K and Optima are built from the gemshub repositories
       # instead of the conda gems3k package; revert together with environment.devenv.yml before merging.
       - name: Build Optima and GEMS3K from the gemshub repositories
+        if: matrix.os != 'windows-latest'
         shell: bash -el {0}
         env:
           OPTIMA_REF: ${{ vars.OPTIMA_REF || 'optima_develop' }}
@@ -64,6 +65,18 @@ jobs:
         run: |
           conda activate GEMSGUI
           bash .github/scripts/build-gems3k-optima.sh
+
+      # conda activate is not hooked into Git Bash on Windows (CONDA_PREFIX stays unset), so the
+      # environment is activated from cmd, which the Windows build step below uses as well.
+      - name: Build Optima and GEMS3K from the gemshub repositories (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        env:
+          OPTIMA_REF: ${{ vars.OPTIMA_REF || 'optima_develop' }}
+          GEMS3K_REF: ${{ vars.GEMS3K_REF || 'develop_optima' }}
+        run: |
+          call conda activate GEMSGUI || goto :eof
+          "C:\Program Files\Git\bin\bash.exe" .github/scripts/build-gems3k-optima.sh || goto :eof
 
       # ccache cache is only wired up for the Ninja-generator builds below (Linux/macOS):
       # CMAKE_CXX_COMPILER_LAUNCHER (set automatically by cmake/modules/CCache.cmake when

@@ -71,14 +71,16 @@ jobs:
 
       # TEMPORARY (branch develop_gems3kv5 test): GEMS3K and Optima are built from the gemshub repositories
       # instead of the conda gems3k package; revert together with environment.devenv.yml before merging.
+      # conda activate is not hooked into Git Bash on Windows (CONDA_PREFIX stays unset), so the
+      # environment is activated from cmd, which the build step below uses as well.
       - name: Build Optima and GEMS3K from the gemshub repositories
-        shell: bash -el {0}
+        shell: cmd
         env:
           OPTIMA_REF: ${{ vars.OPTIMA_REF || 'optima_develop' }}
           GEMS3K_REF: ${{ vars.GEMS3K_REF || 'develop_optima' }}
         run: |
-          conda activate GEMSGUI
-          bash .github/scripts/build-gems3k-optima.sh
+          call conda activate GEMSGUI || goto :eof
+          "C:\Program Files\Git\bin\bash.exe" .github/scripts/build-gems3k-optima.sh || goto :eof
 
       - name: Building, Testing & Installing GEMSGUI (Windows)
         shell: cmd

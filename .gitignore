@@ -20,3 +20,5 @@ GEMSGUI.code-workspace
 /Docs/PROJECT_STATE.md
 /Docs/SESSION_LOG.md
 CLAUDE.md
+
+/.claude/
