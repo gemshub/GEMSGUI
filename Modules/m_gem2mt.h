@@ -1,13 +1,12 @@
 //-------------------------------------------------------------------
 // $Id: m_gem2mt.h 1373 2009-07-22 12:25:22Z gems $
-// To be finalized in Version 3.10 (2021)
+//
 // Declaration of GEM2MT class, config and calculation functions
 //
-// Copyright (C) 2005,2011,2021 D.Kulik, S. Dmytriyeva
+// Copyright (C) 2005-2026 D.Kulik, S.Dmytriyeva
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
-// Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
 // This file may be distributed under the GPL v.3 license
 //

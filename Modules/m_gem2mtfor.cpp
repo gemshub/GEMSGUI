@@ -1,16 +1,19 @@
 //-------------------------------------------------------------------
-// $Id: main.cpp 792 2006-09-19 08:10:41Z gems $
+// $Id: m_gem2mtfor.cpp 968 2007-12-13 13:23:32Z gems $
 //
-// Debugging version of a finite-difference 1D advection-diffusion
-// mass transport model supplied by Dr. Frieder Enzmann (Uni Mainz)
-// coupled with GEMIPM2K module for calculation of chemical equilibria
+// Implementation of TGEM2MT class, import/export functions
 //
-// Direct access to the TNodeArray class for storing all data for nodes
+// Copyright (C) 1995-2026  S. Dmytriyeva, D.Kulik
 //
-// Copyright (C) 2005,2007, 2021 S.Dmytriyeva, F.Enzmann, D.Kulik
+// This file is part of a GEM-Selektor library for thermodynamic
+// modelling by Gibbs energy minimization
 //
+// This file may be distributed under the GPL v.3 license
+//
+// See http://gems.web.psi.ch/ for more information
+// E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
-
+//
 #include "m_gem2mt.h"
 #include "visor.h"
 #include "GEMS3K/io_template.h"
@@ -131,49 +134,6 @@ void TGEM2MT::mt_reset()
     mtp->cT = mtp->PTVm[START_][1];
     mtp->cP = mtp->PTVm[START_][0];
     mtp->ct = 0;
-}
-
-//internal calc record structure
-bool TGEM2MT::internalCalc()
-{
-    try {
-
-        bool iret = false;
-        calcFinished = false;
-
-        showMss = 0L; // skip multi err question for all systems
-
-        alloc_loggers();
-
-        if(mtp->PsSmode == S_OFF) {
-            if(mtp->PvMSg != S_OFF && vfQuestion(window(), GetName(), "Use graphic monitoring?")) {
-                RecordPlot( nullptr );
-            }
-        }
-
-        if(mtp->PsMode == RMT_MODE_B) { // || mtp->PsMode == RMT_MODE_F  ) // Flux-box integrated model
-            iret = CalcBoxFluxModel(NEED_GEM_SIA);
-        }
-        else if(mtp->PsMode == RMT_MODE_S) {
-            iret = CalcSeqReacModel(NEED_GEM_SIA);
-        }
-        else if(mtp->PsMode == RMT_MODE_A || mtp->PsMode == RMT_MODE_C || mtp->PsMode == RMT_MODE_W
-                 || mtp->PsMode == RMT_MODE_F) {  // 1D RMT models or simple 1D flux-box pipe sequence w/o integration
-            iret = Trans1D(NEED_GEM_SIA);  // here A,W,C, and also F modes
-        }
-        else {
-            ;  // Wrong model code - error message to be issued
-        }
-        calcFinished = true;
-        return iret;
-
-    }
-    catch(TError& xcpt) {
-        pVisor->CloseMessage();
-        vfMessage(window(), xcpt.title, xcpt.mess);
-        gems_logger->error("{}  {}", xcpt.title, xcpt.mess);
-        return 1;
-    }
 }
 
 //set default information

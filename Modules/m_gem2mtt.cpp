@@ -3,11 +3,10 @@
 //
 // Implementation of TGEM2MT class, mass transport functions
 //
-// Copyright (C) 2005,2007, 2018, 2021  S.Dmytriyeva, D.Kulik, F.Enzmann, A.Yapparova
+// Copyright (C) 2005-2026  S.Dmytriyeva, D.Kulik, F.Enzmann, A.Yapparova
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
-// Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
 // This file may be distributed under the GPL v.3 license
 //
@@ -28,7 +27,49 @@
 #include <omp.h>
 #endif
 
-// ===========================================================
+//internal calc record structure
+bool TGEM2MT::internalCalc()
+{
+    try {
+
+        bool iret = false;
+        calcFinished = false;
+
+        //showMss = 0L; // skip multi err question for all systems
+
+        alloc_loggers();
+
+        // if(mtp->PsSmode == S_OFF) {
+        //     if(mtp->PvMSg != S_OFF && vfQuestion(window(), GetName(), "Use graphic monitoring?")) {
+        //         RecordPlot( nullptr );
+        //     }
+        // }
+
+        if(mtp->PsMode == RMT_MODE_B) { // || mtp->PsMode == RMT_MODE_F  ) // Flux-box integrated model
+            iret = CalcBoxFluxModel(NEED_GEM_SIA);
+        }
+        else if(mtp->PsMode == RMT_MODE_S) {
+            iret = CalcSeqReacModel(NEED_GEM_SIA);
+        }
+        else if(mtp->PsMode == RMT_MODE_A || mtp->PsMode == RMT_MODE_C || mtp->PsMode == RMT_MODE_W
+                 || mtp->PsMode == RMT_MODE_F) {  // 1D RMT models or simple 1D flux-box pipe sequence w/o integration
+            iret = Trans1D(NEED_GEM_SIA);  // here A,W,C, and also F modes
+        }
+        else {
+            ;  // Wrong model code - error message to be issued
+        }
+        calcFinished = true;
+        return iret;
+
+    }
+    catch(TError& xcpt) {
+        //pVisor->CloseMessage();
+        //vfMessage(window(), xcpt.title, xcpt.mess);
+        gems_logger->error("{}  {}", xcpt.title, xcpt.mess);
+        return 1;
+    }
+}
+
 
 // Copying nodes from C1 to C0 row
 void  TGEM2MT::copyNodeArrays()
@@ -864,6 +905,9 @@ void TGEM2MT::alloc_loggers()
 {
     // could be other directory
     if(mtp->PsMO != S_OFF) {
+        spdlog::drop("ic_diff_log");
+        spdlog::drop("ic_aq_log");
+        spdlog::drop("ph_log");
         diff_log_file = spdlog::basic_logger_mt("ic_diff_log", "ICdif-log2.dat", true);
         diff_log_file->set_pattern("%v");
 
@@ -942,7 +986,7 @@ void TGEM2MT::log_vtk()
 // Calculation of control script at time mtp->cTau (step mtp->ct) of RT simulation
 void TGEM2MT::CalcControlScript()
 {
-    gems_logger->info("Control Script runs @ ct= {}   cTau= {}", mtp->ct, mtp->cTau);
+    gems_logger->debug("Control Script runs @ ct= {}   cTau= {}", mtp->ct, mtp->cTau);
 
     if(mtp->PvMSc == S_OFF) {  // This switch is S_ON when mtp->PvMSt is S_ON, but this may be optimized
         return;
@@ -1144,6 +1188,10 @@ void TGEM2MT::defaults_FDLi_FDLf()
             mtp->jt = std::min(ii, mtp->nC-1);
             mtp->qc = std::min(ii, mtp->nC-1);  // index of node
             mtp->qf = std::min(ii, mtp->nFD-1);  // index of flux
+
+            mtp->FDLf[mtp->qf][2] = 0;
+            // flux rate 1 (the whole fluid mass)
+            mtp->FDLf[mtp->qf][3] = 0;
 
             //   initialisation of tables for properties of fluxes
             if(mtp->qf == mtp->qc) {

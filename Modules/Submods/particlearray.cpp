@@ -6,10 +6,11 @@
 //
 // (C) 2006, 2019  S.Dmytriyeva, D.Kulik, W.Pfingsten
 //
-// This file is part of GEM-Selektor GUI for thermodynamic
+// This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
 //
-// This file may be distributed under the terms of GPL v.3 license
+// This file may be distributed under the terms of GEMS3 Development
+// Quality Assurance Licence (GEMS3.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -17,7 +18,6 @@
 //
 
 #include "particlearray.h"
-//#include <spdlog/spdlog.h>
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/fmt/ranges.h>
 
@@ -30,7 +30,7 @@ TParticleArray::TParticleArray( long int nPTypes, long int nProps,
            long int *anPmin, long int *anPmax,
            TNodeArray* aNodes ):
   ParT0(0), ParT1(0), anParts(0),
-  anPTypes(nPTypes), anProps(nProps), nodes(aNodes)
+  anPTypes(nPTypes), anProps1(nProps), nodes(aNodes)
 {
   long int ii;
   nNodes = nodes->nNodes();
