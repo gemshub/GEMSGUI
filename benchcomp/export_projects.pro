@@ -109,7 +109,8 @@ SOURCES += \
     ../GUI/Services4/visor.cpp \
     ../GUI/charts/chart_model.cpp \
     ../GUI/charts/graph_data.cpp \
-    export_main.cpp \
+    check_db.cpp \
+    #export_main.cpp \
     graph_window_new.cpp \
     service_new.cpp
 

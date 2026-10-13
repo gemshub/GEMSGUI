@@ -2,7 +2,8 @@ name: deploy-windows
 on:
   push:
     branches:
-      - test_prerelease
+      - fix_pow_other_bugs
+      - project_err1
   release:
     types:
       - published

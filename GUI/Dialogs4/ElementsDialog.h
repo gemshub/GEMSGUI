@@ -79,6 +79,7 @@ class ElementsDialog : public QDialog
     QButtonGroup* bgElem;
     QButtonGroup* bgOther;
     QStandardItem* pkern;
+    bool restoringSelection = false;  // true while setSelectionTreeWidget() replays saved selNames
     //FileNamesTreeModel* fileModel;
 
 protected slots:

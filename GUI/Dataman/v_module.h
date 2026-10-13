@@ -116,6 +116,7 @@ public:
     virtual const char* GetHtml();
 
     virtual void ods_link(int i=0) = 0;   // link values to objects
+    virtual bool ods_check([[maybe_unused]]int i=0) { return true; } // check sizes of objects
     virtual void dyn_set(int i=0) = 0;    // set dynamic objects ptr to values
     virtual void dyn_kill(int i=0) = 0;    // free dynamic memory in objects and values
     virtual void dyn_new(int i=0) = 0;    // realloc dynamic memory

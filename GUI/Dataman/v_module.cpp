@@ -57,7 +57,9 @@ TCModule::TCModule(size_t nrt):
 {}
 
 TCModule::~TCModule()
-{}
+{
+    //gui_logger->info("~TCModule {}", nRT);
+}
 
 
 #ifndef NO_GUI

@@ -19,6 +19,8 @@
 #ifndef _m_dcomp_h_
 #define _m_dcomp_h_
 
+#include <set>
+#include <string>
 #include "v_module.h"
 #include "s_tpwork.h"
 
@@ -37,6 +39,7 @@ extern const double ZBALANCE_PREC,
     STANDARD_TC,
     STANDARD_P,
     DEF_REL_DEV,
+    DEF_REL_DEV_FT,
     GAS_MV_STND,
     TK_DELTA,
     TEMPER_PREC,
@@ -158,6 +161,12 @@ protected:
     void omeg92(double g, double dgdP, double dgdT, double d2gdT2,
                 double wref, double ZZ, double *W, double *dwdP,
                 double *dwdT, double *d2wdT2);
+    // DM 10.09.2026 Phase-transition (FtP) consistency check, see m_dcomp.cpp.
+    // Reports only - it never repairs the record's data.
+    bool CheckFtP( std::string& msg );
+    std::set<std::string> ftp_warned;   // records already reported from DCthermo()
+    std::string FtPRecKey() const;      // identity used to warn once per record
+
     // void S_import( short Mode, fstream& imp );
     // void B_import( int Nft, fstream& imp );
     // From PRONSPREP97
@@ -185,6 +194,7 @@ public:
         return dcp==&dc[0];
     }
     void ods_link( int i=0) override;
+    bool ods_check(int i=0) override;
     void dyn_set( int i=0) override;
     void dyn_kill( int i=0) override;
     void dyn_new( int i=0) override;

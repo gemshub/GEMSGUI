@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
 {
     std::string projects_conf;
     std::string export_dir{"gems3k"};
+    std::shared_ptr<TVisor> pvisor_sh;
 
     try {
 
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
         }
 
         // init visor data
-        auto pvisor_sh = std::make_shared<TVisor>(argc, argv);
+        pvisor_sh = std::make_shared<TVisor>(argc, argv);
         pVisor = pvisor_sh.get();
         pVisor->Setup();
 
@@ -85,8 +86,9 @@ int main(int argc, char *argv[])
             pVisor->ProfileMode = MDD_SYSTEM;
             if(!TProfil::pm->initCalcMode(project_key.c_str())) {
                 pVisor->ProfileMode = MDD_DATABASE;
-                std::cout << "Error when read project: " << project_key;
-                gui_logger->error("Error when read project: ", project_key);
+                std::cout << "Error when read project: " << project_key << std::endl;
+                gui_logger->error("Error when read project: {}", project_key);
+                pVisor->CanClose();
                 return 1;
             }
 
@@ -144,7 +146,9 @@ int main(int argc, char *argv[])
         std::cout  << "unknown exception" << std::endl;
         gui_logger->error("unknown exception");
     }
-    pVisor->CanClose();
+    if(pvisor_sh) {
+        pvisor_sh->CanClose();
+    }
     return 1;
 }
 

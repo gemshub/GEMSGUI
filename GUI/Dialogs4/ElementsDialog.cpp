@@ -265,7 +265,9 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     setFilesList();
     // define FTreeWidget with DefaultDB files names  files_data.flNames
     setTreeWidget();
+    restoringSelection = true;
     setSelectionTreeWidget();  // set up selection in wiget use selNames
+    restoringSelection = false;
 
     SetICompList();
     SetAqueous();
@@ -458,6 +460,37 @@ void ElementsDialog::changeCheck( QStandardItem *pdb )
     if( pdb == pkern )
         return;
 
+    // Some tree nodes are "group headers" whose own checkbox must never be directly
+    // tickable - only the individual entries inside them are:
+    //  - "3rdparty": unrelated/experimental databases; ticking the group would
+    //    blindly select all of them at once.
+    //  - "suppl": rarely-needed supplementary data sets nested under a TDB; the
+    //    user must opt in to specific ones explicitly.
+    // Block the check and just expand the branch instead, so individual entries
+    // can be picked one by one. Distinguish a direct/cascaded click on the header
+    // (some child still unchecked) from the legitimate case of it showing Checked
+    // because every child ended up checked one by one (or was restored that way)
+    // - only block the former.
+    if( pdb->rowCount() > 0 && pdb->checkState() == Qt::Checked
+            && ( pdb->text().compare("3rdparty", Qt::CaseInsensitive) == 0
+                 || pdb->text().compare("suppl", Qt::CaseInsensitive) == 0 ) )
+    {
+        bool allChildrenChecked = true;
+        for( jj=0; jj<pdb->rowCount(); jj++ )
+            if( pdb->child(jj)->checkState() != Qt::Checked )
+            {
+                allChildrenChecked = false;
+                break;
+            }
+        if( !allChildrenChecked )
+        {
+            pdb->setCheckState(Qt::Unchecked);
+            if( !restoringSelection )
+                ui->FtreeView->setExpanded(pdb->index(), true);
+            return;
+        }
+    }
+
     QStandardItem *parent = pdb->parent();
     if( parent && parent != pkern )
     {
@@ -496,9 +529,22 @@ void ElementsDialog::changeCheck( QStandardItem *pdb )
     }
     if( pdb->checkState() != Qt::PartiallyChecked )
     {
+        // Cache the state before cascading: a "suppl" child set to Checked here
+        // re-enters this function immediately (setCheckState emits itemChanged),
+        // gets caught by the group-header guard above, and can bubble pdb's own
+        // checkState down to PartiallyChecked mid-loop - reading pdb->checkState()
+        // fresh on each iteration would then miscascade the remaining siblings.
+        Qt::CheckState newState = pdb->checkState();
         for( jj=0; jj<pdb->rowCount(); jj++ )
-            pdb->child(jj)->setCheckState(pdb->checkState());
+            pdb->child(jj)->setCheckState(newState);
     }
+    // Reveal what just got (fully or partially) checked at every depth, so a user
+    // ticking a top-level database sees the whole auto-selected branch unfold instead
+    // of hunting through collapsed nodes; anything left unchecked (e.g. "suppl" above)
+    // stays collapsed. Skip this while replaying the default/saved selection at
+    // dialog startup, so only branches the user actually clicks get auto-expanded.
+    if( !restoringSelection && pdb->checkState() != Qt::Unchecked && pdb->rowCount() > 0 )
+        ui->FtreeView->setExpanded(pdb->index(), true);
 }
 
 void ElementsDialog::SetFiles()
