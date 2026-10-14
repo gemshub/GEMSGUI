@@ -1,18 +1,17 @@
 //-------------------------------------------------------------------
 // $Id: m_gem2mtbox.cpp 968 2007-12-13 13:23:32Z gems $
 //
-// Implementation of TInteg/TGEM2MT classes, calculation functions
+// Implementation of TGEM2MT class, calculation functions
+// Debugging version of a finite-difference 1D advection-diffusion
+// mass transport model supplied by Dr. Frieder Enzmann (Uni Mainz)
+// coupled with GEMIPM2K module for calculation of chemical equilibria
 //
-// Rewritten from C to C++ by S.Dmytriyeva  
-// Revised in 2019, 2021 by D.Kulik
-// Copyright (C) 1995,2008,2011,2019,2021  S. Dmytriyeva, D.Kulik
+// Copyright (C) 2005-2026 S.Dmytriyeva, F.Enzmann, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
-// Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
 // This file may be distributed under the GPL v.3 license
-
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -23,6 +22,8 @@
 #include "m_compos.h"
 #include "visor.h"
 #include "stepwise.h"
+
+const double MAXSTEP = 1.7;  // as was initially set - 10 sec is too much for the integrator!
 
 #define dMB( q, i) ( dm[ (q)*mtp->Nf + (i)] )
 #define MB( q, i)  ( m[ (q)*mtp->Nf + (i)] )
@@ -648,81 +649,48 @@ void TGEM2MT::CalcMGPdata()
            ComposMGPinBox( q );
        }
     // Calculation of MGP masses in boxes (in kg)
-
- }
+}
 
 // Calculate new equilibrium states in the boxes for tcur = t
-//  Ni   number of independent components
-//  pr
-//  tcur - current time
-//  step - current time step
-//
-bool TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double step )
+bool TGEM2MT::BoxEqStatesUpdate(long int Ni, double tcur, double step)
 {
-  bool iRet = true;
-  FILE* diffile = nullptr;
+    bool iret = true;
 
     mtp->dTau = step*mtp->tf;     // This is a doubtful circular dependence
     mtp->cTau = tcur*mtp->tf;
     mtp->oTau = mtp->cTau;
 
-  if( Ni >= 0)
-  {
-     Vmessage = "Simulating Reactive Transport in a Box-Flux chain: ";
-     Vmessage += " step "+std::to_string(mtp->ct)+"; time "+std::to_string(mtp->cTau)+"; dtime "+std::to_string(mtp->dTau);
-     Vmessage += ". Please, wait (may take time)...";
-
-     // Calculating control script for the accepted time step
-     CalcControlScript();     // Runs nC times for all nodes
-     // Added on Dec 21, 2021 by DK
-     gui_logger->debug("Recalculated B mode control script at ct= {}  cTau= {}   dTau= {}", mtp->ct, mtp->cTau, mtp->dTau);
-
-    if( mtp->PsSmode != S_OFF  )
-    {
-      STEP_POINT2();
+    if(Ni<0) {
+        // time iteration part
+        nfcn = nstep = naccept = nrejct = 0;
+        double cfactor = (mtp->dTau/mtp->tf/MAXSTEP > 1.0? mtp->dTau/mtp->tf/MAXSTEP: 1.0);
+        MaxIter = mtp->ntM*cfactor;   // Need to check the multiplicator for maximum number of iterations
     }
-    else
-      iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                           nstep, mtp->ntM );
+    else { // Update bulk compositions in boxes at current time point
+        BoxesBCupdate();
+    }
 
+    // Calculate new box equilibrium states at current time tcur
+    CalcIPM((mtp->PsSIA != S_ON ? NEED_GEM_AIA : NEED_GEM_SIA), 0, mtp->nC-1);
 
-   if( iRet )
-         Error("GEM2MT Box-Flux model", "Cancelled by the user");
-  }
-  
- if( Ni >= 0)
- { // Update bulk compositions in boxes at current time point
-   BoxesBCupdate();
- } 
- // Calculate new box equilibrium states at current time tcur
- if( mtp->PsSIA != S_ON )
-     CalcIPM( NEED_GEM_AIA, 0, mtp->nC-1, diffile );
- else
-     CalcIPM( NEED_GEM_SIA, 0, mtp->nC-1, diffile );
- 
- if( Ni >= 0 )
- {
-   // Here one has to compare old and new equilibrium phase assemblage
-   // and pH/pe in all nodes and decide if the time step was Ok or it
-   // should be decreased. If so then the nodes from C0 should be
-   // copied to C1 (to be implemented)
+    // Show/out results after GEM calculations over nodes
+    iret = accept_point(Ni, "Simulating Reactive Transport in a Box-Flux chain: ", nstep, MaxIter);
 
-   // Output of the results if step accepted
-   if( mtp->PsMO != S_OFF  )
-      PrintPoint( 1 );
- }
+    // copy node array for T0 into node array for T1
+    mtp->oTau = mtp->cTau;
+    copyNodeArrays();
 
-   // time step accepted - Copying nodes from C1 to C0 row
-      pVisor->Update();
-      CalcGraph();
-   
-  // copy node array for T0 into node array for T1
-  mtp->oTau = mtp->cTau;
-  copyNodeArrays();
+    // Calculating the control script at the end of a new time step
+    if(mtp->ct > 0)
+        CalcControlScript();   // should run over all nodes i.e. nC times
 
-  CalcMGPdata();  // Calculation of masses, MGP compositions and part coeff tables
+    CalcMGPdata();  // Calculation of masses, MGP compositions and part coeff tables
 
-  return iRet;
+    if(mtp->PsVTK != S_OFF) {
+        log_vtk();
+    }
+
+    return iret;
 }
 
 // Initialization of box-flux transport calculations
@@ -734,75 +702,74 @@ void TGEM2MT::BoxFluxTransportStart()
     mtp->dTau = mtp->Tau[STEP_];
     mtp->oTau =  mtp->Tau[START_];
     // mtp->cTau = mtp->Tau[START_];
-//    long int ntm_old = mtp->ntM;
-//    long int ntm_new = (mtp->Tau[STOP_]-mtp->Tau[START_])/mtp->Tau[STEP_];
-//    if(ntm_old > 0)
+    //    long int ntm_old = mtp->ntM;
+    //    long int ntm_new = (mtp->Tau[STOP_]-mtp->Tau[START_])/mtp->Tau[STEP_];
+    //    if(ntm_old > 0)
     mtp->ntM = (mtp->Tau[STOP_]-mtp->Tau[START_])/(mtp->Tau[STEP_])+1;
     mtp->ct = 0;
     mtp->qf = 0;
 
     if( mtp->gfc != nullptr)
-       mtp->gfc = (double *)aObj[ o_mtgfc]->Free();
-//    else
-        mtp->gfc = (double *)aObj[ o_mtgfc]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
+        mtp->gfc = (double *)aObj[ o_mtgfc]->Free();
+    //    else
+    mtp->gfc = (double *)aObj[ o_mtgfc]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
 
     if( mtp->yfb != nullptr)
-       mtp->yfb = (double *)aObj[ o_mtyfb]->Free();
-//    else
-        mtp->yfb = (double *)aObj[ o_mtyfb]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
+        mtp->yfb = (double *)aObj[ o_mtyfb]->Free();
+    //    else
+    mtp->yfb = (double *)aObj[ o_mtyfb]->Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
 
     if( mtp->tt != nullptr)
-       mtp->tt = (double (*)[9])aObj[ o_mttt]->Free();
-//    else
-        mtp->tt  = (double (*)[9])aObj[ o_mttt]->Alloc(  mtp->nC*mtp->Nf, 9, D_);
+        mtp->tt = (double (*)[9])aObj[ o_mttt]->Free();
+    //    else
+    mtp->tt  = (double (*)[9])aObj[ o_mttt]->Alloc(  mtp->nC*mtp->Nf, 9, D_);
 
     if( mtp->BM != nullptr)
-       mtp->BM = (double *)aObj[ o_mtres1]->Free();
-//    else
+        mtp->BM = (double *)aObj[ o_mtres1]->Free();
+    //    else
     mtp->BM = (double *)aObj[o_mtres1]->Alloc( mtp->nC, 1, D_);
 
     if( mtp->BdM != nullptr)
-       mtp->BdM = (double *)aObj[ o_mtres2]->Free();
-//    else
+        mtp->BdM = (double *)aObj[ o_mtres2]->Free();
+    //    else
     mtp->BdM = (double *)aObj[o_mtres2]->Alloc( mtp->nC, 1, D_);
 
     if( mtp->BmgpM != nullptr)
-       mtp->BmgpM = (double *)aObj[ o_mtref3]->Free();
-//    else
-//    mtp->BmgpM = (double *)aObj[o_mtref3]->Alloc( mtp->nC*mtp->nPG, 1, D_);
+        mtp->BmgpM = (double *)aObj[ o_mtref3]->Free();
+    //    else
     mtp->BmgpM = (double *)aObj[o_mtref3]->Alloc( mtp->nC, mtp->nPG, D_);
 
     if( mtp->FmgpJ != nullptr)
-       mtp->FmgpJ = (double *)aObj[ o_mtref4]->Free();
-//    else
+        mtp->FmgpJ = (double *)aObj[ o_mtref4]->Free();
+    //    else
     mtp->FmgpJ = (double *)aObj[o_mtref4]->Alloc( mtp->nFD, 1, D_);
 
     long int q, f, i;
     // Cleaning work arrays
-       for( q=0; q <mtp->nC; q++ )
-       {
-            mtp->BM[q] = 0.0;
-            mtp->BdM[q] = 0.0;
+    for( q=0; q <mtp->nC; q++ )
+    {
+        mtp->BM[q] = 0.0;
+        mtp->BdM[q] = 0.0;
+        for(i=0; i<mtp->Nf; i++ )
+        {
+            Mb(q,i) = 0.;
+            dMb(q,i) = 0.0;
+        }
+    }
+    for( q=0; q <mtp->nC; q++ )
+    {
+        for(f=0; f<mtp->nPG; f++ )
+        {
+            bmgpm(q,f) = 0.0;
             for(i=0; i<mtp->Nf; i++ )
             {
-                 Mb(q,i) = 0.;
-                 dMb(q,i) = 0.0;
+                y(q,f,i) = 0.0;
+                g(q,f,i) = 0.0;
             }
-       }
-       for( q=0; q <mtp->nC; q++ )
-       {
-           for(f=0; f<mtp->nPG; f++ )
-           {
-               bmgpm(q,f) = 0.0;
-               for(i=0; i<mtp->Nf; i++ )
-               {
-                   y(q,f,i) = 0.0;
-                   g(q,f,i) = 0.0;
-               }
-           }
-       }
+        }
+    }
 
-//    CalcMGPdata(); // Initial calculation of masses, MGP compositions and part coeff tables
+    //    CalcMGPdata(); // Initial calculation of masses, MGP compositions and part coeff tables
 }
 
 void TGEM2MT::FlowThroughBoxFluxStep()
@@ -855,247 +822,185 @@ long int TGEM2MT::LookUpXMGP( const char* MGPid )
 //  Calculate sequential-reactors model (complete moving of fluid)
 // mode: SIA (0) or AIA (-1)
 // Goes through boxes one-by-one with immediate re-equilibration
-//
-bool TGEM2MT::CalcSeqReacModel( char mode )
+// returns true, if cancelled/interrupted by the user; false if finished Ok
+bool TGEM2MT::CalcSeqReacModel(char mode)
 {
-
-  try {
-    //std::string Vmessage;
     long int p, i, kk, x_aq=-1, x_gf=-1;
-    bool iRet = false;
-    clock_t outp_time = (clock_t)0;
+    bool calc_ret = true;
 
     BoxFluxTransportStart();
 
-    bool UseGraphMonitoring = false;
-    if( mtp->PsSmode == S_OFF )
-      if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
-             GetName(), "Use graphic monitoring?") )
-        {
-            RecordPlot( nullptr );
-            UseGraphMonitoring = true;
-        }
-
-// na->CopyWorkNodeFromArray( 0, mtp->nC,  na->pNodT1() );
-// na->GEM_write_dbr( "node0000.dat",  0, false );
+    // na->CopyWorkNodeFromArray( 0, mtp->nC,  na->pNodT1() );
+    // na->GEM_write_dbr( "node0000.dat",  0, false );
 
     // In this mode, only calculation of equilibria in nodes one after another!
     // Index of aq phase in DBR
-    if( na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_AQUEL )
+    if(na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_AQUEL) {
         x_aq = 0;
-    if( x_aq == 0 )
-    {   if( na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 1 )] == PH_GASMIX ||
-            na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 1 )] == PH_FLUID )
-           x_gf = 1; }
-    else if( na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_GASMIX ||
-             na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_FLUID )
-        x_gf = 0;
+    }
+    if(x_aq == 0) {
+        if( na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 1 )] == PH_GASMIX ||
+            na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 1 )] == PH_FLUID) {
+            x_gf = 1;
+        }
+        else if( na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_GASMIX ||
+                 na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_FLUID) {
+            x_gf = 0;
+        }
+    }
+
     // here a distinction is needed between transport of aqueous, gas/fluid, and solids
     // Box 0 (source of aq fluid) is special case, not equilibrated
-    switch( mtp->PsMPh )
-    {
-     case MGP_TT_AQS: // '1'
-                     for(i=0; i<mtp->Nf; i++ )
-                        node1_bPS( 0, x_aq, i ) = node1_bIC( 0, i );
-                     TNodeArray::na->pNodT1()[0]->Ms = BoxMasses( 0 );  // in kg
-                     TNodeArray::na->pNodT1()[0]->Vs = TNodeArray::na->pNodT1()[0]->Ms / 1e3; // in m3
-                     node1_vPS( 0, 0 ) = TNodeArray::na->pNodT1()[0]->Vs;
-                     node1_mPS( 0, 0 ) = TNodeArray::na->pNodT1()[0]->Ms;
-                     node1_xPH( 0, 0 ) = node1_mPS( 0, 0 )*1000./18.0153;  // assuming it consists of H2O
-                     node1_xPA( 0, 0 ) = node1_mPS( 0, 0 )*1000./18.0153;
+    switch(mtp->PsMPh) {
+    case MGP_TT_AQS: // '1'
+        ErrorIf(x_aq<0, "CalcSeqReacModel", "CalcSeqReacModel: no aqueous phase defined");
+        for(i=0; i<mtp->Nf; ++i) {
+            node1_bPS( 0, x_aq, i ) = node1_bIC( 0, i );
+        }
+        TNodeArray::na->pNodT1()[0]->Ms = BoxMasses( 0 );  // in kg
+        TNodeArray::na->pNodT1()[0]->Vs = TNodeArray::na->pNodT1()[0]->Ms / 1e3; // in m3
+        node1_vPS( 0, 0 ) = TNodeArray::na->pNodT1()[0]->Vs;
+        node1_mPS( 0, 0 ) = TNodeArray::na->pNodT1()[0]->Ms;
+        node1_xPH( 0, 0 ) = node1_mPS( 0, 0 )*1000./18.0153;  // assuming it consists of H2O
+        node1_xPA( 0, 0 ) = node1_mPS( 0, 0 )*1000./18.0153;
         break;
-     case MGP_TT_SOLID:  // '4'  TBD
-                    /*naqgf = 0;
+    case MGP_TT_SOLID:  // '4'  TBD
+        /*naqgf = 0;
                     if( (x_aq + x_gf) == 1 )
                         naqgf = 1;*/
 
         break;
-     case MGP_TT_AQGF:   // '3'  TBD
-                     for(i=0; i<mtp->Nf; i++ )
-                        node1_bPS( 0, x_aq, i ) = node1_bIC( 0, i )/2.;
-                     for(i=0; i<mtp->Nf; i++ )
-                        node1_bPS( 0, x_gf, i ) = node1_bIC( 0, i )/2.;
+    case MGP_TT_AQGF:   // '3'  TBD
+        ErrorIf(x_aq<0, "CalcSeqReacModel", "CalcSeqReacModel: no aqueous phase defined");
+        ErrorIf(x_gf<0, "CalcSeqReacModel", "CalcSeqReacModel: no gaseous phase defined");
+        for(i=0; i<mtp->Nf; ++i) {
+            node1_bPS( 0, x_aq, i ) = node1_bIC( 0, i )/2.;
+        }
+        for(i=0; i<mtp->Nf; ++i) {
+            node1_bPS( 0, x_gf, i ) = node1_bIC( 0, i )/2.;
+        }
         break;
-     case MGP_TT_GASF:   // '2'  TBD
-                    for(i=0; i<mtp->Nf; i++ )
-                        node1_bPS( 0, x_gf, i ) = node1_bIC( 0, i );
+    case MGP_TT_GASF:   // '2'  TBD
+        ErrorIf(x_gf<0, "CalcSeqReacModel", "CalcSeqReacModel: no gaseous phase defined");
+        for(i=0; i<mtp->Nf; ++i) {
+            node1_bPS( 0, x_gf, i ) = node1_bIC( 0, i );
+        }
         break;
-     default: break;
+    default: break;
     }
 
-    if( !na->CalcIPM_One( TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez ), 0, 0 ) )
-      iRet = false;  // Analysis of errors after GEM calculation?
+    if( !na->CalcIPM_One( TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez ), 0, 0)) {
+        calc_ret = false;  // Analysis of errors after GEM calculation?
+    }
+
     // Calculation of current box 0 reactive IC masses in kg
     BoxMasses( 0 );
     // Calculation of MGP bulk compositions in box 0 (in moles of ICs)
     ComposMGPinBox( 0 );
 
-//sprintf(buf, "node_0000_wave_0000_noeq_dbr.dat" );
-//na->CopyWorkNodeFromArray( 0, mtp->nC,  na->pNodT1() );
-//na->GEM_write_dbr( buf, 0, false );
+    // Status before iterations
+    auto iret = accept_point(mtp->ct, "Simulating Transport through Sequential Reactors chain: ", mtp->ct, mtp->ntM);
 
-  //  This loop contains the overall transport time step (wave)
-  do {
+    //  This loop contains the overall transport time step (wave)
+    do {
+        if(iret) {
+            return iret; // Cancel by the user
+        }
 
-//      if( mtp->ct > 0)
-//          CalcControlScript();  // runs nC times over all reactors/boxes
-      gui_logger->debug("Recalculating S control script at ct= {}   cTau= {}", mtp->ct, mtp->cTau);
-      Vmessage = "Simulating Transport through Sequential Reactors chain: ";
-      Vmessage += " step "+std::to_string(mtp->ct)+"; time "+std::to_string(mtp->cTau)+"; dtime "+std::to_string(mtp->dTau);
-      Vmessage += ". Please, wait (may take time)...";
+        // Set up new boxes states at cTau
+        for(p = 1/*0*/; p < mtp->nC; ++p) {
+            for(i =0; i< mtp->Nf; ++i) {
+                dMb( p, i) = 0.;
+            }
+            for(kk=0; kk < mtp->nFD-1; ++kk) {  // Looking through the list of fluxes
+                if(mtp->FDLi[kk][1] == p) { // this flux comes into this box
+                    if(mtp->ct > 0) { // don't remove anything at 0-th wave!
+                        // Removing all this MGP from the p box first
+                        long int oldp = mtp->FDLi[kk+1][1];
+                        mtp->FDLi[kk+1][1] = -1;
+                        dMBflux( kk+1, mtp->dMB );
+                        mtp->FDLi[kk+1][1] = oldp;
+                        // mtp->FDLf[kk+1][0] = oldo;
+                    }
+                    // Adding the incoming MGP to p-th box
+                    dMBflux( kk, mtp->dMB );
+                }
+            }  // kk
 
-      if( mtp->PsSmode != S_OFF  )
-      {
-          STEP_POINT2();
-      }
-      else
-      {
-          iRet = pVisor->Message( window(), GetName(),Vmessage.c_str(),
-                                  mtp->ct, mtp->ntM, UseGraphMonitoring );
-      }
+            // change bulk composition in the box p
+            BoxComposUpdate( p );
 
-      if( iRet )
-             return iRet;// Error("GEM2MT SeqReac model", "Cancel by the user");
+            //sprintf(buf, "node_%4.4d_wave_%4.4d_in_dbr.dat", p, mtp->ct );
+            //na->CopyWorkNodeFromArray( p, mtp->nC,  na->pNodT1() );
+            //na->GEM_write_dbr( buf,  0, false);
 
+            // calculate equilibrium state in p-th box
+            node1_Tm( p ) = mtp->cTau;
+            node1_dt( p ) = mtp->dTau;
+            if(!na->CalcIPM_One(TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez), p, 0)) {
+                calc_ret=false;  // Analysis of errors after GEM calculation?
+            }
 
-     // Set up new boxes states at cTau
-     for( p = 1/*0*/; p < mtp->nC; p++ )
-     {
-         //if( p == mtp->nC-1 )
-         //    lastp = p;  // for debugging
-         for(i =0; i< mtp->Nf; i++ )
-           dMb( p, i) = 0.;
-         for(kk=0; kk < mtp->nFD-1; kk++ )  // Looking through the list of fluxes
-         {
-             if( mtp->FDLi[kk][1] == p ) // this flux comes into this box
-             {
-               if( mtp->ct > 0 ) // don't remove anything at 0-th wave!
-               {
-                  // Removing all this MGP from the p box first
-                  long int oldp = mtp->FDLi[kk+1][1];
-                  mtp->FDLi[kk+1][1] = -1;
-                  dMBflux( kk+1, mtp->dMB );
-                  mtp->FDLi[kk+1][1] = oldp;
-                  // mtp->FDLf[kk+1][0] = oldo;
-               }
-               // Adding the incoming MGP to p-th box
-               dMBflux( kk, mtp->dMB );
-             }
-         }   // kk
+            mtp->qc = p;
+            //if(!iret) {  // Error in GEM calculation
+            //   break;
+            //}
+            // Calculation of current box reactive IC masses in kg
+            BoxMasses( p );
+            // Calculation of MGP bulk compositions in boxes (in moles of ICs)
+            ComposMGPinBox( p );
+        } // p
 
-         // change bulk composition in the box p
-         BoxComposUpdate( p );
+       // Show/out results after GEM calculations over nodes
+        iret = accept_point(mtp->ct, "Simulating Transport through Sequential Reactors chain: ", mtp->ct, mtp->ntM);
 
-//sprintf(buf, "node_%4.4d_wave_%4.4d_in_dbr.dat", p, mtp->ct );
-//na->CopyWorkNodeFromArray( p, mtp->nC,  na->pNodT1() );
-//na->GEM_write_dbr( buf,  0, false);
+        // copy node array T1 into node array T0
+        copyNodeArrays();
 
-         // calculate equilibrium state in p-th box
-         node1_Tm( p ) = mtp->cTau;
-         node1_dt( p ) = mtp->dTau;
-         if( !na->CalcIPM_One( TestModeGEMParam(mode, mtp->PsSIA, mtp->ct, mtp->cdv, mtp->cez ), p, 0 ) )
-           iRet = false;  // Analysis of errors after GEM calculation?
-         mtp->qc = p;
-            //  iRet = false;
-//         if( iRet == true )  // Error in GEM calculation
-//             break;
-//sprintf(buf, "node_%4.4d_wave_%4.4d_out_dbr.dat", p, mtp->ct );
-//na->CopyWorkNodeFromArray( p, mtp->nC,  na->pNodT1() );
-//na->GEM_write_dbr( buf,  0, false);
-         // Calculation of current box reactive IC masses in kg
-         BoxMasses( p );
-         // Calculation of MGP bulk compositions in boxes (in moles of ICs)
-         ComposMGPinBox( p );
-       } // p
-
-    // time step accepted - Copying nodes from C1 to C0 row
-    pVisor->Update();
-    CalcGraph();
-
-       // copy node array T1 into node array T0
-       copyNodeArrays();
-
-       if( mtp->ct > 0)
-           CalcControlScript();  // runs nC times over all reactors/boxes Added on Dec 21, 2021 by DK
-       gui_logger->debug("Recalculating S control script at ct= {}  cTau= {}   dTau= {}", mtp->ct, mtp->cTau, mtp->dTau);
+        if(mtp->ct > 0)
+            CalcControlScript();  // runs nC times over all reactors/boxes Added on Dec 21, 2021 by DK
 
         mtp->ct += 1;
         mtp->oTau = mtp->cTau;
         mtp->cTau += mtp->dTau;
 
-        if( mtp->PsVTK != S_OFF )
-            outp_time += PrintPoint( 0 );
+        if(mtp->PsVTK != S_OFF) {
+            log_vtk();
+        }
 
-   } while ( mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM );
+    } while(mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM);
 
     pVisor->CloseMessage();
-
-  }
-  catch( TError& xcpt )
-  {
-      vfMessage(window(), xcpt.title, xcpt.mess);
-      gems_logger->error(" {}  {}", xcpt.title, xcpt.mess);
-       return 1;
-  }
-
-  return 0;
+    return iret;
 }
 
 #undef dMb
 #undef Mb
 
-const double MAXSTEP = 1.7;  // as was initially set - 10 sec is too much for the integrator!
 //Calculate generic box megasystem of 'B' or 'F' type with MGP fluxes
 //   mode - SIA or AIA
-//
-bool TGEM2MT::CalcBoxFluxModel( char /*mode*/ )
+// returns true, if cancelled/interrupted by the user; false if finished Ok
+bool TGEM2MT::CalcBoxFluxModel(char /*mode*/)
 {
-  try
-  {	 
+    bool iret = false;
+
     BoxFluxTransportStart();
 
-    bool iRet = false;
-    bool UseGraphMonitoring = false;
+    // Initial calculation of chemical equilibria in all nodes with AIA initial approximation
+    BoxEqStatesUpdate(-1,  mtp->cTau/mtp->tf, mtp->dTau/mtp->tf);
 
-     if( mtp->PsSmode == S_OFF )
-          if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
-             GetName(), "Use graphic monitoring?") )
-        {
-            RecordPlot( nullptr );
-            UseGraphMonitoring = true;
-        }
+    // Getting into a time integration loop
+    auto new_dTau = INTEG(1e-3, /*mtp->cdv,*/ mtp->dTau/mtp->tf, mtp->Tau[START_]/mtp->tf, mtp->Tau[STOP_]/mtp->tf);
+    if(new_dTau<0) {
+        iret= true; // error or cancel by user
+    }
+    else {
+        new_dTau *= mtp->tf;
+        gems_logger->debug("GEM2MT B mode: new dTau = {} ;  old dTau = {}", new_dTau, mtp->dTau);
+    }
 
-  // Initial calculation of chemical equilibria in all nodes with AIA initial approximation
-  BoxEqStatesUpdate( -1,  0, mtp->cTau/mtp->tf, mtp->dTau/mtp->tf );
-
-  // time iteration part
-   nfcn = nstep = naccept = nrejct = 0;
-   double cfactor = (mtp->dTau/mtp->tf/MAXSTEP > 1.0? mtp->dTau/mtp->tf/MAXSTEP: 1.0);
-   MaxIter = mtp->ntM*cfactor;   // Need to check the multiplicator for maximum number of iterations
-   double new_dTau = 0.0;
-   
-   iRet = pVisor->Message( window(), GetName(),
-           "Simulating Reactive Transport in a Box-Flux setup. "
-           "Please, wait (may take time)...", nstep, MaxIter, UseGraphMonitoring );
-     //      "Please, wait (may take time)...", nstep, mtp->ntM, UseGraphMonitoring );
-       if( iRet )
-        Error("GEM2MT generic box-flux model", "Cancelled by the user");
-  // Getting into a time integration loop
-  new_dTau = INTEG( 1e-3, /*mtp->cdv,*/ mtp->dTau/mtp->tf, mtp->Tau[START_]/mtp->tf, mtp->Tau[STOP_]/mtp->tf );
-  new_dTau *= mtp->tf;
-
-  gems_logger->debug("GEM2MT B mode: new dTau = {} ;  old dTau = {}", new_dTau, mtp->dTau);
-  pVisor->CloseMessage();
-    
-  }
-  catch( TError& xcpt )
-  {
-       vfMessage(window(), xcpt.title, xcpt.mess);
-       gems_logger->error(" {}  {}", xcpt.title, xcpt.mess);
-       return 1;
-  }
-
-  return 0;
+    pVisor->CloseMessage();
+    return iret;
 }
 
 //--------------------------------------------------------------------
@@ -1220,10 +1125,9 @@ VEL:
 //     step and the precision eps (the step can be reduced inside implicitly also as mtp->dTau)
 //  Uses the implicit method of rational extrapolation (Bulirsch-Stoer)
 //
-// returns current (possibly reduced) step value or negative value in case of error
+// returns current (possibly reduced) step value or negative value in case of error or cancel
 // 
-double
-TGEM2MT::INTEG( double eps, double step, double t_begin, double t_end )
+double TGEM2MT::INTEG( double eps, double step, double t_begin, double t_end )
 {
     double  t, h1, h, v1;
     long int  j,i,reject,last,kc=0,kopt,k;
@@ -1241,7 +1145,7 @@ TGEM2MT::INTEG( double eps, double step, double t_begin, double t_end )
     h1 = t_end-t;
     v1 = std::min( MAXSTEP, h1/2. );
     h = std::min( h, v1 );
-    // BoxEqStatesUpdate( 0, k, t, h ); // 14/12/2007 ????? may be done before in calc
+    // BoxEqStatesUpdate(0, t, h ); // 14/12/2007 ????? may be done before in calc
     err = w[ 0 ] = 0.0;
     reject = last = 0;   // false
 
@@ -1298,9 +1202,10 @@ l60:
         Solut(  x, dx, t );
         naccept++;
         mtp->ct++;
-        BoxEqStatesUpdate( naccept, kc, t, h );  // here current time and step is set in mtp data structure!
-        if( mtp->PsVTK != S_OFF )
-           PrintPoint( 0 );
+        auto iret = BoxEqStatesUpdate(naccept, t, h);  // here current time and step is set in mtp data structure!
+        if(iret) { // user stop
+            return -1;
+        }
         //
         if( kc == 1 )
         {

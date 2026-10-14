@@ -230,8 +230,7 @@ void TVisorImp::Update(bool force)
         pLine->setText(tr(rt[nrt]->PackKey()));
 }
 
-bool TVisorImp::Message( QWidget* /*parent*/, const char* name,
-                         const char* msg, int prog, int total, bool /*move*/ )
+bool TVisorImp::Message(const char* name, const char* msg, int prog, int total)
 {
     if( LoadMessage::pDia )
     {

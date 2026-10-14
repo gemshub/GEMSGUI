@@ -1,13 +1,12 @@
 //-------------------------------------------------------------------
 // $Id: m_gem2mt.h 1373 2009-07-22 12:25:22Z gems $
-// To be finalized in Version 3.10 (2021)
+//
 // Declaration of GEM2MT class, config and calculation functions
 //
-// Copyright (C) 2005,2011,2021 D.Kulik, S. Dmytriyeva
+// Copyright (C) 2005-2026 D.Kulik, S.Dmytriyeva
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
-// Uses: GEM-Selektor GUI GUI DBMS library, gems/lib/gemvizor.lib
 //
 // This file may be distributed under the GPL v.3 license
 //
@@ -54,7 +53,7 @@ typedef struct
    PvDDc,    //  Use diffusion coefficients for DC - DDc vector (+ -)
    PvDIc,    //  Use diffusion coefficients for IC - DIc vector (+ -)
    PvDCH,    //  Select ICs, DCs and phases to be exchanged via DATABR file (take all, if unchecked) (+ -)?
-   PvnVTK,   //  Use selected fields to VTK format (+ -)?
+   PvnVTK,   // Use selected fields to VTK format (+ -)?
    PvMSc,    // Use math script for control on time steps (+ -)?
 
      // Controls on operation (14)
@@ -89,7 +88,7 @@ typedef struct
    nSFD,   // number of elemental source flux definitions (0 or >= 1 )
    nEl,   // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
    nPTypes,     // res Number of allocated particle types (< 20 ? )
-   nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes
+   nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes (now not used in particlearray)
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -312,125 +311,17 @@ GEM2MT;
 
 // Current GEM2MT
 class TGEM2MT
-        : public TCModule
+    : public TCModule
 {
     GEM2MT mt[1];
 
-    IPNCalc rpn[2];      // IPN
-    jsonui::GraphDialog *gd_gr = nullptr;
-    TPlotLine* plot;
-    std::string title;           // changed titler to title
-    std::string error_lst_path;
-
-  std::shared_ptr<TNodeArrayGUI> na;       // pointer to nodearray class instance
-  TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
-
-    std::string pathVTK;
-    std::string nameVTK;
-    std::string prefixVTK;
-
-    void logProfilePhMol( FILE* logfile, int inode )
-    {
-        if( pa_mt )
-            pa_mt->logProfilePhMol( logfile, inode );
-    }
-
-protected:
-
-    void AllocNa();
-
-    void keyTest( const char *key );
-    void Expr_analyze( int obj_num );
-    void CalcPoint( int nPoint );
-    bool test_sizes();
-    void SelectNodeStructures( bool select_all );
-    void init_arrays( bool mode );
-    void calc_eqstat( bool startSys );
-    void outMulti();
-    void mt_next();
-    void mt_reset();
-    void gen_task( bool startSys );
-    void make_A( long int siz_, char (*for_)[MAXFORMUNITDT] );
-    void Bn_Calc();
-    void gen_TPval();
-    void CalcStartScript();
-    void CalcControlScript();
-
-    void  copyNodeArrays();
-    void  NewNodeArray();
-    void  putHydP( DATABRPTR* C0 );
-    void  LinkNode0(  long int nNode );
-    void  LinkNode1(  long int nNode );
-    void  LinkCSD(  long int nNode );
-    void  allocNodeWork();
-    void  freeNodeWork();
-
-    void  CalcGraph();
-    long int CheckPIAinNodes1D( char mode,
-              long int start_node = 0, long int end_node = 1000 );
-
-    bool  CalcIPM( char mode, long int start_node = 0,
-         long int end_node = 1000, FILE* diffile = nullptr );
-
-    void  MassTransAdvecStart();
-    void  MassTransAdvecStep( bool ComponentMode = true );
-    void  MassTransCraNicStart();
-    void  MassTransCraNicStep( bool ComponentMode = true );
-    void  MassTransParticleStart();
-    void  MassTransParticleStep( bool ComponentMode = true );
-    bool Trans1D( char mode  );  // return true if canceled
-
-   // for box flux ODE integration sims with variable time step (TBD)
-    long int MaxIter,  // max number of iterations
-         nfcn,      // number of functional estimates
-         nstep,     // number of steps
-         naccept,   // number of permissible steps
-         nrejct;    // number of unpermissible steps
-    double *x = nullptr;
-    double *dx = nullptr;
-    double *tv = nullptr;
-
-    // Flow-through box-flux transport simulations
-    void  BoxFluxTransportStart();
-    void  FlowThroughBoxFluxStep();
-
-    double BoxMasses( long int q );
-    void ComposMGPinBox( long int q );
-//    void DisCoefMGPinBox( long int q );
-    void  dMBZeroOff(  double *dm );
-    double MassICinHfe( long int fe, long int i );
-    double MassHfe(long int fe);
-    double MassICinMGP( long int q, long int f, long int i);
-    double MassMGP(long int q, long int f  );
-    double dMBfluxDir( long int q, long int i, double *dm, double fRate, double sign = 1.);
-    long int LookUpXMGP( const char* MGPid );
-    void  dMBflux( long int kk, double *dm );
-    void  BoxComposUpdate( long int q );
-    void  BoxesBCupdate();  // was CalcNodeFlux()
-    void  CalcMGPdata();
-    // Calculate new box states for tcur = x
-    bool BoxEqStatesUpdate( long int Ni,long int pr, double x, double step );
-    bool CalcSeqReacModel( char mode ); // Calculation of S-mode sequential reactors model
-    bool CalcBoxFluxModel( char mode ); // integrate boxes with fluxes of Mobile Groups of Phases
-
-    // calculate 1-step for the system of ODEs
-    void Solut( double *m, double *dm, double t );
-    // internal point j calculation
-    void MIDEX( long int j, double t, double h );
-    // ODE integration from t_begin to t_end with time step step (step can be reduced inside)
-    // returns current (possibly reduced) step value or negative value in case of error
-   double INTEG( double eps, double step, double t_begin, double t_end );
-
-    double PrintPoint( long int nPoint, FILE* diffile = nullptr, FILE* logfile = nullptr, FILE* ph_file = nullptr);
-    
 public:
 
     static TGEM2MT* pm;
-    
     GEM2MT *mtp;
 
- 
-    explicit TGEM2MT( size_t nrt );
+
+    explicit TGEM2MT(size_t nrt);
 
     ~TGEM2MT()
     {
@@ -449,7 +340,7 @@ public:
     void set_def( int i=0) override;
     bool check_input( const char *key, int level=1 ) override;
     std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
-                              int keyType ) override;
+                               int keyType ) override;
 
     void RecInput( const char *key ) override;
     void MakeQuery() override;
@@ -467,9 +358,9 @@ public:
     //void CmHelp();
     const char* GetHtml() override;
 
-   void InsertChanges( std::vector<CompItem>& aIComp,
-          std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
-   void FreeNa();
+    void InsertChanges( std::vector<CompItem>& aIComp,
+                       std::vector<CompItem>& aPhase,  std::vector<CompItem>&aDComp );
+    void FreeNa();
 
     // for separate
     void checkAlws(io_formats::TRWArrays&  prar1, io_formats::TRWArrays&  prar) const;
@@ -482,12 +373,140 @@ public:
     bool stepWise;
     bool calcFinished;
     std::string Vmessage;
+    class UserCancelException {};
+    GEMS3KGenerator GEMS3k_generator();
+    virtual bool internalCalc();
+    void savePoint();
 
-   class UserCancelException {};
-   bool internalCalc();
-   void savePoint();
+protected:
 
-   GEMS3KGenerator GEMS3k_generator();
+    IPNCalc rpn[2];      // IPN
+    jsonui::GraphDialog *gd_gr = nullptr;
+    TPlotLine* plot;
+    std::string title;           // changed titler to title
+    std::string error_lst_path;
+
+    std::shared_ptr<TNodeArrayGUI> na;       // pointer to nodearray class instance
+    TParticleArray* pa_mt = nullptr;       // pointer to TParticleArray class instance
+
+    // for box flux ODE integration sims with variable time step (TBD)
+    long int MaxIter,  // max number of iterations
+        nfcn,      // number of functional estimates
+        nstep,     // number of steps
+        naccept,   // number of permissible steps
+        nrejct;    // number of unpermissible steps
+    double *x = nullptr;
+    double *dx = nullptr;
+    double *tv = nullptr;
+
+    std::string pathVTK;
+    std::string nameVTK;
+    std::string prefixVTK;
+
+    std::shared_ptr<spdlog::logger> main_logfile;
+    std::shared_ptr<spdlog::logger> ph_file;
+    std::shared_ptr<spdlog::logger> diff_log_file;
+
+    void logProfilePhMol(spdlog::logger* logfile, int inode )
+    {
+        if( pa_mt )
+            pa_mt->logProfilePhMol(logfile, inode);
+    }
+    /// Preparations: opening output files for monitoring 1D profiles
+    void alloc_loggers();
+    /// Added one point to loggers
+    void point_to_loggers();
+    /// Log time point to VTK format file
+    void log_vtk();
+
+    /// Function for sampling and plotting the properties of nodes at next time step.
+    /// Output of the results if step accepted
+    /// @param mtp_cp - actual time index
+    bool accept_point(long int mtp_cp, std::string message, int prog, int total);
+    void CalcStartScript();
+    void CalcControlScript();
+
+    /// Define the properties of each node (box, reactor) -
+    /// GUI initialization script copy
+    void exec_initialization();
+    void AllocNa();
+    void keyTest( const char *key );
+    void Expr_analyze( int obj_num );
+    void CalcPoint( int nPoint );
+    bool test_sizes();
+    void SelectNodeStructures( bool select_all );
+    void calc_eqstat( bool startSys );
+    void outMulti();
+    void mt_next();
+    void gen_task( bool startSys );
+    void make_A( long int siz_, char (*for_)[MAXFORMUNITDT] );
+    void Bn_Calc();
+    void gen_TPval();
+
+    void  NewNodeArray();
+    void  LinkNode0(long int nNode);
+    void  LinkNode1(long int nNode);
+    void  LinkCSD(long int nNode);
+    void  allocNodeWork();
+    void  freeNodeWork();
+    void  CalcGraph();
+
+    void  copyNodeArrays();
+    void  putHydP( DATABRPTR* C0 );
+    long int CheckPIAinNodes1D(char mode, long int start_node = 0, long int end_node = 1000);
+    bool  CalcIPM(char mode, long int start_node = 0,long int end_node = 1000);
+
+    void  MassTransAdvecStart();
+    void  MassTransAdvecStep( bool ComponentMode = true );
+    void  MassTransCraNicStart();
+    void  MassTransCraNicStep( bool ComponentMode = true );
+    void  MassTransParticleStart();
+    void  MassTransParticleStep( bool ComponentMode = true );
+    bool  Trans1D(char mode);  // return true if canceled
+
+    // Flow-through box-flux transport simulations
+    void  BoxFluxTransportStart();
+    void  FlowThroughBoxFluxStep();
+
+    double BoxMasses( long int q );
+    void ComposMGPinBox( long int q );
+    //    void DisCoefMGPinBox( long int q );
+    void  dMBZeroOff(  double *dm );
+    double MassICinHfe( long int fe, long int i );
+    double MassHfe(long int fe);
+    double MassICinMGP( long int q, long int f, long int i);
+    double MassMGP(long int q, long int f  );
+    double dMBfluxDir( long int q, long int i, double *dm, double fRate, double sign = 1.);
+    long int LookUpXMGP( const char* MGPid );
+    void  dMBflux( long int kk, double *dm );
+    void  BoxComposUpdate( long int q );
+    void  BoxesBCupdate();  // was CalcNodeFlux()
+    void  CalcMGPdata();
+    // Calculate new box states for tcur = x
+    bool BoxEqStatesUpdate( long int Ni, double x, double step );
+    bool CalcSeqReacModel( char mode ); // Calculation of S-mode sequential reactors model
+    bool CalcBoxFluxModel( char mode ); // integrate boxes with fluxes of Mobile Groups of Phases
+
+    // calculate 1-step for the system of ODEs
+    void Solut( double *m, double *dm, double t );
+    // internal point j calculation
+    void MIDEX( long int j, double t, double h );
+    // ODE integration from t_begin to t_end with time step step (step can be reduced inside)
+    // returns current (possibly reduced) step value or negative value in case of error
+    double INTEG( double eps, double step, double t_begin, double t_end );
+
+    void mt_reset();
+    void init_arrays(bool mode);
+    void math_transport_defaults();
+    virtual void defaults_DiCp();
+    virtual void defaults_HydP();
+    virtual void defaults_particle_setup();
+    virtual void defaults_MGPid_PGT_FDLmp_FDLid(bool mode);
+    virtual void defaults_FDLi_FDLf();
+    virtual void defaults_BSF();
+    virtual void defaults_Grid();
+
+
 };
 
 enum gem2mt_inernal {
@@ -536,3 +555,4 @@ typedef enum {  /// Field index into outField structure
 } GEM2MT_DYNAMIC_FIELDS;
 
 #endif //_m_gem2mt_h_
+

@@ -69,8 +69,8 @@ AGAIN:
             return path;
         }
 
-    ProcessProgressFunction messageF = [nIV, par](const std::string& message, long point){
-        return  pVisor->Message( par, "GEM2MT node array",  message.c_str() , point, nIV );
+    ProcessProgressFunction messageF = [nIV](const std::string& message, long point){
+        return  pVisor->Message("GEM2MT node array",  message.c_str() , point, nIV );
     };
     genGEMS3KInputFiles(  path, messageF, nIV, type_f, brief_mode, with_comments,
                         putNodT1, addMui );
@@ -236,7 +236,7 @@ void TNodeArrayGUI::pVisor_Message(bool toclose, long int ndx, long int size1 )
     if( toclose )
         pVisor->CloseMessage();
     else
-        pVisor->Message( nullptr, "GEM2MT node array",
+        pVisor->Message("GEM2MT node array",
                          "Reading from disk a set of node array files to resume an interrupted RMT task. "
                          "Please, wait...", ndx, size1 );
 }

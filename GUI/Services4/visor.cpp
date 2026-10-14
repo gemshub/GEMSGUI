@@ -132,10 +132,9 @@ void TVisor::ProcessProgress( QWidget* parent, int nRT )
 }
 
 // return true if canceled
-bool TVisor::Message( QWidget* parent, const char* name,
-                     const char* msg, int prog, int total, bool move)
+bool TVisor::Message(const char* name, const char* msg, int prog, int total)
 {
-    return pVisorImp->Message( parent, name, msg, prog, total, move);
+    return pVisorImp->Message(name, msg, prog, total);
 }
 
 void TVisor::CloseMessage()
@@ -178,8 +177,7 @@ void TVisor::ProcessProgress(QWidget*, int nRT)
     gui_logger->debug("TVisor::ProcessProgress {}", nRT);
 }
 
-bool TVisor::Message(QWidget*, const char* /*name*/,
-                     const char* msg, int prog, int total, bool)
+bool TVisor::Message(const char* name, const char* msg, int prog, int total)
 {
     gui_logger->debug("TVisor::Message {} {}/{}", msg, prog, total);
     return false;
