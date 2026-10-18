@@ -35,15 +35,15 @@ bool TGEM2MT::internalCalc()
         bool iret = false;
         calcFinished = false;
 
-        //showMss = 0L; // skip multi err question for all systems
+        showMss = 0L; // skip multi err question for all systems
 
         alloc_loggers();
 
-        // if(mtp->PsSmode == S_OFF) {
-        //     if(mtp->PvMSg != S_OFF && vfQuestion(window(), GetName(), "Use graphic monitoring?")) {
-        //         RecordPlot( nullptr );
-        //     }
-        // }
+        if(mtp->PsSmode == S_OFF) {
+            if(mtp->PvMSg != S_OFF && vfQuestion(window(), GetName(), "Use graphic monitoring?")) {
+                RecordPlot( nullptr );
+            }
+        }
 
         if(mtp->PsMode == RMT_MODE_B) { // || mtp->PsMode == RMT_MODE_F  ) // Flux-box integrated model
             iret = CalcBoxFluxModel(NEED_GEM_SIA);
@@ -63,8 +63,8 @@ bool TGEM2MT::internalCalc()
 
     }
     catch(TError& xcpt) {
-        //pVisor->CloseMessage();
-        //vfMessage(window(), xcpt.title, xcpt.mess);
+        pVisor->CloseMessage();
+        vfMessage(window(), xcpt.title, xcpt.mess);
         gems_logger->error("{}  {}", xcpt.title, xcpt.mess);
         return 1;
     }

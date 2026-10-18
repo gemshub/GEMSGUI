@@ -391,15 +391,15 @@ void TGEM2MT::to_text_file( TIO& out_format, bool with_comments, bool brief_mode
     if( _comment )
         prar1.writeComment( _comment, "\n## (4) Input for compositions of initial systems");
 
-    //prar1.writeField(f_InpSys, mtp->Msysb, _comment, brief_mode  );
-    //prar1.writeField(f_Vsysb, mtp->Vsysb, _comment, brief_mode  );
-    //prar1.writeField(f_Mwatb, mtp->Mwatb, _comment, brief_mode  );
-    //prar1.writeField(f_Maqb, mtp->Maqb, _comment, brief_mode  );
-    //prar1.writeField(f_Vaqb, mtp->Vaqb, _comment, brief_mode  );
-    //prar1.writeField(f_Pgb, mtp->Pgb, _comment, brief_mode  );
-    //prar1.writeField(f_Tmolb, mtp->Tmolb, _comment, brief_mode  );
-    //prar1.writeField(f_WmCb, mtp->WmCb, _comment, brief_mode  );
-    //prar1.writeField(f_Asur, mtp->Asur, _comment, brief_mode  );
+    // prar1.writeField(f_InpSys, mtp->Msysb, _comment, brief_mode  );
+    // prar1.writeField(f_Vsysb, mtp->Vsysb, _comment, brief_mode  );
+    // prar1.writeField(f_Mwatb, mtp->Mwatb, _comment, brief_mode  );
+    // prar1.writeField(f_Maqb, mtp->Maqb, _comment, brief_mode  );
+    // prar1.writeField(f_Vaqb, mtp->Vaqb, _comment, brief_mode  );
+    // prar1.writeField(f_Pgb, mtp->Pgb, _comment, brief_mode  );
+    // prar1.writeField(f_Tmolb, mtp->Tmolb, _comment, brief_mode  );
+    // prar1.writeField(f_WmCb, mtp->WmCb, _comment, brief_mode  );
+    // prar1.writeField(f_Asur, mtp->Asur, _comment, brief_mode  );
     prar1.writeField(ff_tf, mtp->tf, _comment, brief_mode  );
     prar1.writeField(ff_Vt, mtp->vol_in, _comment, brief_mode  );
     prar1.writeField(ff_vp, mtp->fVel, _comment, brief_mode  );
