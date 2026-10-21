@@ -843,10 +843,10 @@ bool TGEM2MT::CalcSeqReacModel(char mode)
             na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 1 )] == PH_FLUID) {
             x_gf = 1;
         }
-        else if( na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_GASMIX ||
-                 na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_FLUID) {
-            x_gf = 0;
-        }
+    }
+    else if( na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_GASMIX ||
+             na->pCSD()->ccPH[na->Ph_xDB_to_xCH( 0 )] == PH_FLUID) {
+        x_gf = 0;
     }
 
     // here a distinction is needed between transport of aqueous, gas/fluid, and solids
