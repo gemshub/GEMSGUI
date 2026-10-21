@@ -1,7 +1,7 @@
 #pragma once
 
 #define GEMSGUI_VERSION "3.12.1"
-#define GEMSGUI_VERSION_HASH "537eca4d"
+#define GEMSGUI_VERSION_HASH "70075aff"
 #define GEMSGUI_GIT_BRANCH "change_gem2mt"
 #define GEMSGUI_OSX "Linux"
 #define GEMSGUI_COMPILER_ID "GNU"

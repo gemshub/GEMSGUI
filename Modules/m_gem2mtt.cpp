@@ -1142,7 +1142,7 @@ void TGEM2MT::defaults_MGPid_PGT_FDLmp_FDLid(bool mode)
                 strncpy(mtp->MGPid[ii], phName.c_str(), MAXSYMB );
             }
             for(long int k=0; k<mtp->FIf; ++k) {
-                char PHC_ = na->pCSD()->ccPH[k];
+                 char  PHC_ = TMulti::sm->GetPM()->PHC[mtp->xPH[k]];
 
                 if(PHC_ == PH_AQUEL) {
                     mtp->PGT[ii*mtp->FIf+k] = xaq;
