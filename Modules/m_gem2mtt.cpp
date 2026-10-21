@@ -369,7 +369,7 @@ bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node)
 #else
     double clc_sec = CLOCKS_PER_SEC;
     t_end = clock();
-    mtp->TimeGEM = ( t_end- t_start )/clc_sec;
+    mtp->TimeGEM += ( t_end- t_start )/clc_sec;
 #endif
 
     // Here dt can be analyzed over nodes - if changed anywhere by TKinMet
