@@ -904,7 +904,7 @@ bool TGEM2MT::CalcSeqReacModel(char mode)
     //  This loop contains the overall transport time step (wave)
     do {
         if(iret) {
-            return iret; // Cancel by the user
+            break; // Cancel by the user
         }
 
         // Set up new boxes states at cTau
