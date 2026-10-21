@@ -63,10 +63,11 @@ bool TGEM2MT::internalCalc()
 
     }
     catch(TError& xcpt) {
+        calcFinished = true;
         pVisor->CloseMessage();
         vfMessage(window(), xcpt.title, xcpt.mess);
         gems_logger->error("{}  {}", xcpt.title, xcpt.mess);
-        return 1;
+        throw;
     }
 }
 
