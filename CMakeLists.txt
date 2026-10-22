@@ -156,6 +156,7 @@ include_directories(${GEMSGUI_GUI_SOURCE_DIR}/charts)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Services4)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dialogs4)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dataman)
+include_directories("/usr/local/include/eigen3")
 #include_directories("/usr/local/include/GEMS3K")
 
 # Set some necessary definitions

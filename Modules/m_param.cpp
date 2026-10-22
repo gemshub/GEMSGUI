@@ -972,12 +972,12 @@ void TProfil::Clear_XeA_XeD_Phm_BIun()
 }
 
 
-void TProfil::LoadFromMtparm( QWidget* par, DATACH *CSD , bool no_interpolat)
+void TProfil::LoadFromMtparm(DATACH *CSD , bool no_interpolat)
 {
     if( no_interpolat )
-       mtparm->LoadDataToPair( par, CSD );
+       mtparm->LoadDataToPair(CSD);
     else
-       mtparm->LoadDataToLookup( par, CSD );
+       mtparm->LoadDataToLookup(CSD);
 }
 
 //=========================================================================================

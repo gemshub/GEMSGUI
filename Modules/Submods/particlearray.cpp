@@ -6,10 +6,11 @@
 //
 // (C) 2006, 2019  S.Dmytriyeva, D.Kulik, W.Pfingsten
 //
-// This file is part of GEM-Selektor GUI for thermodynamic
+// This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
 //
-// This file may be distributed under the terms of GPL v.3 license
+// This file may be distributed under the terms of GEMS3 Development
+// Quality Assurance Licence (GEMS3.QAL)
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
@@ -17,6 +18,8 @@
 //
 
 #include "particlearray.h"
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ranges.h>
 
 static long int idum_static = -10000l;
 static double Rand = -1;
@@ -27,7 +30,7 @@ TParticleArray::TParticleArray( long int nPTypes, long int nProps,
            long int *anPmin, long int *anPmax,
            TNodeArray* aNodes ):
   ParT0(0), ParT1(0), anParts(0),
-  anPTypes(nPTypes), anProps(nProps), nodes(aNodes)
+  anPTypes(nPTypes), anProps1(nProps), nodes(aNodes)
 {
   long int ii;
   nNodes = nodes->nNodes();
@@ -324,6 +327,7 @@ long int TParticleArray::MoveParticleBetweenNodes( long int px, bool CompMode, d
             ParT1[px].xyz.x = new_x;
 //            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, -1 );
         }
+
         break;
      case NBC3sink: // =-3, Cauchy sink (constant flux)
         if( new_node == -1 )
@@ -461,15 +465,13 @@ long int TParticleArray::GEMPARTRACK( long int Mode, bool ComponentMode, double 
   return iRet;
 }
 
-void TParticleArray::logProfilePhMol( FILE* logfile, int inode )
+void TParticleArray::logProfilePhMol(spdlog::logger* logfile, int inode)
 {
-  long int npa;
-  for( long int jp=0; jp < nPTypes(); jp++ )
-       {
-            npa = getNPnum( inode, jp);   // number of particles in the node
-            fprintf( logfile, "%-8ld ", npa );
-       }
-  fprintf( logfile, "\n" );
+    std::vector<long int> values;
+    for(long int jp=0; jp<nPTypes(); ++jp) {
+        values.push_back(getNPnum(inode, jp));   // number of particles in the node
+    }
+    logfile->info("{:-8}", fmt::join(values, " "));
 }
 
 //=========================================================================

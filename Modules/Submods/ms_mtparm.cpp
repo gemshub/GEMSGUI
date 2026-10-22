@@ -823,7 +823,7 @@ TMTparm::b_gamma_TP( double tk, double pb, double eps, double gsf, int mode )
 }
 
 
-void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
+void TMTparm::LoadDataToLookup(DATACH* CSD )
 {
 
     int kk, ip, it, ll, jj;
@@ -840,8 +840,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
       cT = CSD->TKval[it]-C_to_K;
       for(  ip=0; ip<CSD->nPp; ip++)
       {
-       if( par )
-          pVisor->Message( par, "Building lookup arrays",
+        pVisor->Message("Building lookup arrays",
               "Loading thermodynamic data", it*CSD->nPp+ip, CSD->nTp*CSD->nPp );
 
        cP = CSD->Pval[ip]/1e5; //bar_to_Pa;
@@ -921,8 +920,8 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
        }
      } //ip
   } //it
-  if( par )
-     pVisor->CloseMessage();
+
+  pVisor->CloseMessage();
 
   std::string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)
@@ -940,7 +939,7 @@ void TMTparm::LoadDataToLookup( QWidget* par, DATACH* CSD )
   delete[] tp_mark;
 }
 
-void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
+void TMTparm::LoadDataToPair(DATACH* CSD)
 {
 
     int kk, ip, it, ll, jj;
@@ -957,8 +956,7 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
     for(  ip=0; ip<CSD->nPp; ip++)
       {
 
-       if( par )
-          pVisor->Message( par, "Building lookup arrays",
+          pVisor->Message("Building lookup arrays",
               "Loading thermodynamic data", ip, CSD->nPp );
 
        it = std::min<int>( ip, CSD->nTp-1 );
@@ -1039,8 +1037,8 @@ void TMTparm::LoadDataToPair( QWidget* par, DATACH* CSD )
            CSD->U0[ll] = 0.;
        }
      } //ip
-  if( par )
-     pVisor->CloseMessage();
+
+  pVisor->CloseMessage();
 
   std::string err = "";
   for( jj=0, kk=0; kk<CSD->nDC; kk++)

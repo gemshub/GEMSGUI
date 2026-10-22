@@ -200,8 +200,7 @@ public:
     void defineModuleKeysList( size_t nRT );
     void GetHelp();
     void OpenHelp(const char* file, const char* item=nullptr, int page =-1);
-    bool Message( QWidget* parent, const char* name,
-                  const char* msg, int prog, int total, bool move);
+    bool Message(const char* name, const char* msg, int prog, int total);
     void CloseMessage();
     void ProcessProgress( QWidget* parent, int nRT );
 
