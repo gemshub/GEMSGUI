@@ -624,6 +624,19 @@ scripts are copied into the modeling project as SDRef records and can be
         </tr>
         <tr>
           <td style="vertical-align: top;">
+            <p>Targets</p>
+          </td>
+          <td style="vertical-align: top;">
+            <p><a href="#TARGETS">tg_</a></p>
+          </td>
+          <td style="vertical-align: top;">
+            <p>pH and Eh (V) that the calculation must reach. Only the
+              Optima modes use them.<br>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">
             <p>Other inputs</p>
           </td>
           <td style="vertical-align: top;">
@@ -735,6 +748,45 @@ scripts are copied into the modeling project as SDRef records and can be
       for adjusting thermodynamic properties of some chemical species
       without making changes in DComp or ReacDC records that would
       influence all systems created in the project.&nbsp; &nbsp; </p>
+
+    
+<h5><a name="TARGETS"></a>Targets (tg_, optional)<br>
+    </h5>
+
+<p>Selecting the "Targets (tg_)" entry shows two entries: "pH" and
+      "Eh, V". Click on an entry to add its row to the "Recipe Input" table.
+      Then enter the value that the calculation must reach.</p>
+
+<p>The solver adds or removes H+ to reach the pH target. It adds or
+      removes electrons to reach the Eh target. The bulk composition of the
+      result includes this change. The calculation log gives the amount
+      and tells if a target was not reached.</p>
+
+<p>Only the Optima modes (AOP, SOP, HOP, SHP) use the targets. If the
+      Calculate menu is set to AIA or SIA, the targets are not used: the system is
+      calculated without them, and a warning is written to the log. The recipe dialog
+      also shows a warning when you set a target in these modes. Remove the row to remove the target. A
+      Process can change the target values through tg_[0] (pH) and
+      tg_[1] (Eh). Set the target in the recipe first: the Process
+      changes only the value. In the Process wizard (step 2, a titration), select "pH" or
+      "Eh, V" in the "Targets" list: the wizard writes <tt>tg_[0] =: cNu;</tt> or
+      <tt>tg_[1] =: cNu;</tt> into the script.</p>
+
+<p>The added H+ or electrons change the bulk composition of the result.
+      You can see this change in the <a href="gems_sys.html#b"><tt>b</tt></a> vector
+      of the equilibrium state. A pH target changes the amounts of H and of the
+      charge Zz, both by the amount of H+ added. An Eh target changes only Zz. The saved SysEq
+      record keeps this <tt>b</tt>. The mass balance residuals
+      <a href="gems_sys.html#Cb"><tt>Cb</tt></a> stay near zero, because the result
+      agrees with the changed <tt>b</tt>.</p>
+
+<p>When you export the system to GEMS3K files, the DBR file keeps the targets in the
+      fields <tt>pHtarget</tt> and <tt>Ehtarget</tt>. GEMS3K and xGEMS then use the same targets
+      in the Optima modes. Files without these fields have no targets.</p>
+
+<p>The <a href="#B_"><tt>B_</tt></a> vector of the recipe does not change. It is the
+      input: the targets add their change again at each calculation. If you remove a
+      target, the next calculation starts from <tt>B_</tt> without that change.</p>
 
     
 <h5><a name="OTHER_INPUTS"></a>Other inputs (optional)<br>
@@ -2230,6 +2282,9 @@ field and selecting from the appearing menu. </p>
         vectors where the user should have entered data to define the
         system
         bulk chemical composition.&nbsp;</dd>
+      <dd>A pH or Eh target (<a href="#TARGETS">Targets</a>) does not change
+        <tt>B_</tt>. The H+ or electrons that a target adds show only in the
+        <a href="gems_sys.html#b"><tt>b</tt></a> vector of the result.</dd>
       
       <dd>All Independent Components, for which zeros were calculated in
         the<tt>

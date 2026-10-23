@@ -93,7 +93,7 @@ InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
         for(size_t  jj=0; jj<lst.size(); jj++ )
         {
             item1 = new QListWidgetItem( lst[jj].c_str(), lstIndexes1);
-            char sw = aObj[ awnData[ii].nSwitch]->GetString(jj,0)[0];
+            char sw = awnData[ii].nSwitch >= 0 ? aObj[ awnData[ii].nSwitch]->GetString(jj,0)[0] : S_ON;
             if( sw == S_OFF)
                 str = QString("%1 - ").arg(jj);
             else

@@ -17,6 +17,8 @@
 //
 
 #include "particlearray.h"
+#include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ranges.h>
 
 static long int idum_static = -10000l;
 static double Rand = -1;
@@ -461,15 +463,12 @@ long int TParticleArray::GEMPARTRACK( long int Mode, bool ComponentMode, double 
   return iRet;
 }
 
-void TParticleArray::logProfilePhMol( FILE* logfile, int inode )
+void TParticleArray::logProfilePhMol( spdlog::logger* logfile, int inode )
 {
-  long int npa;
+  std::vector<long int> values;
   for( long int jp=0; jp < nPTypes(); jp++ )
-       {
-            npa = getNPnum( inode, jp);   // number of particles in the node
-            fprintf( logfile, "%-8ld ", npa );
-       }
-  fprintf( logfile, "\n" );
+       values.push_back( getNPnum( inode, jp) );   // number of particles in the node
+  logfile->info( "{:-8}", fmt::join( values, " " ) );
 }
 
 //=========================================================================

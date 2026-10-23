@@ -50,14 +50,14 @@ public:
     explicit TNodeGUI(TMultiBase* apm);
     TNodeGUI( const TNodeGUI& otherNode ) = delete;
 
-    void packDataBr() override   ///<  Packs GEMIPM calculation results into work node structure
-    {
-        //   CNode->NodeHandle = 0;
-        //   CNode->NodeTypeHY = normal;
-           CNode->NodeTypeMT = normal;
-           CNode->NodeStatusFMT = Initial_RUN;
-           TNode::packDataBr();
-    }
+    /// Packs GEMIPM calculation results into work node structure, with the pH and Eh targets of the system recipe
+    void packDataBr() override;
+
+    /// Puts the pH and Eh targets of the current system recipe (Targets, tg_) into the DBR, or clears them
+    void setTargetsFromSystem();
+
+    /// True for a node that writes GEMS3K files: with a target, its DBR gets the recipe bulk, not the result bulk
+    bool exportRecipeBulk = false;
 
     // These calls are used only inside the GEMS-PSI GEM2MT module
 

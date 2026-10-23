@@ -86,7 +86,7 @@ void TSyst::ods_link( int /*q*/)
     aObj[ o_symsolids]->SetPtr(  &sy.Msolids ); /*f 1*/
     aObj[ o_symass]->SetPtr( &sy.Mbel ); /*f 6*/
     aObj[ o_syvol]->SetPtr(  &sy.Vsys ); /*f 2*/
-    aObj[ o_syproc]->SetPtr( &sy.Time ); /*f 3*/
+    aObj[ o_syproc]->SetPtr( &sy.pHtg ); /*f 3: pH target, Eh target, reserved */
     aObj[ o_syl1]->SetPtr(    sy.Ll );
     aObj[ o_syl1]->SetDim( mup->Fi, 1 );
     aObj[ o_syrlc]->SetPtr(   sy.RLC );

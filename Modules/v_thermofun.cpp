@@ -2,6 +2,12 @@
 #include "m_icomp.h"
 #include "m_dcomp.h"
 #include "m_reacdc.h"
+#include "Submods/ms_rmults.h"
+#include "Submods/ms_system.h"
+#include <map>
+#include <set>
+#include <cmath>
+#include <algorithm>
 
 static QJsonObject thf_convert_dcomp_aggregate_state(char type);
 static QJsonObject thf_convert_dcomp_TPMethods0(char type);
@@ -69,6 +75,12 @@ QJsonObject thf_convert_dcomp_aggregate_state( char type )
     case 'l':   converted["1"] ="AS_LIQUID";
         break;
     case 'p':   converted["8"] ="AS_PLASMA";
+        break;
+    case 'z':   converted["5"] ="AS_SURFACE";   // sorbed species
+        break;
+    case 'i':   converted["6"] ="AS_IONEX";     // ion exchange species
+        break;
+    default:    converted["101"] ="AS_OTHER";   // not a state of ThermoFun
         break;
     }
     return converted;
@@ -270,6 +282,287 @@ QJsonObject thf_convert_reacdc_TPMethods2( char type )
     return converted;
 }
 
+
+static std::string thf_rtrim(std::string str)
+{
+    while( !str.empty() && (str.back()==' ' || str.back()==':' || str.back()=='\0') )
+        str.pop_back();
+    return str;
+}
+
+/// Records written to the file by the last export: "DC" or "RC", the key and the symbol in the file, separated by tabs
+/// (the checks of the export read it)
+std::vector<std::string> thf_exported_keys;
+
+/// The key of a record as a text without the blanks at the end
+static std::string thf_key_symbol( const std::string& raw )
+{
+    std::string r = raw;
+    if( r.size() < size_t(DC_RKLEN) )
+        r.resize( DC_RKLEN, ' ' );
+    return thf_string( r.c_str()+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+}
+
+/// The part of the key after the symbol (the codes of the record)
+static std::string thf_key_variant( const std::string& raw )
+{
+    const size_t pos = MAXSYMB+MAXDRGROUP+MAXDCNAME;
+    return raw.size() > pos ? thf_rtrim( raw.substr(pos) ) : std::string();
+}
+
+/// The records that the project, or the system that is loaded, uses and their symbols.
+/// In a system the records with the switch '+' are the records of the system.
+struct ThfProjectRecords
+{
+    std::set<std::string> dcomp_keys, reacdc_keys, symbols;
+    bool system = false;
+    bool known() const { return !symbols.empty(); }
+
+    /// The key of the project may have '_' (any code) where the key of the record has a code, or the other way round
+    static bool same_key( const std::string& a, const std::string& b )
+    {
+        for( size_t i=0; i<std::max(a.size(), b.size()); i++ )
+        {
+            const char ca = i<a.size() ? a[i] : ' ', cb = i<b.size() ? b[i] : ' ';
+            if( ca != cb && ca != '_' && cb != '_' )
+                return false;
+        }
+        return true;
+    }
+    /// The record keys of the database that are the records of the project: the same key, or else the first
+    /// key that differs only where one of them has '_'
+    static std::set<std::string> resolve( const std::set<std::string>& project_keys, const std::set<std::string>& db )
+    {
+        std::set<std::string> found;
+        for( const auto& pk: project_keys )
+        {
+            if( db.count(pk) )
+            {
+                found.insert(pk);
+                continue;
+            }
+            for( const auto& k: db )
+                if( same_key( pk, k ) )
+                {
+                    found.insert(k);
+                    break;
+                }
+        }
+        return found;
+    }
+};
+
+static ThfProjectRecords thf_project_records()
+{
+    ThfProjectRecords used;
+    RMULTS* mup = TRMults::sm->GetMU();
+    if( !mup || !mup->SM || !mup->DCS )
+        return used;
+    // a system is loaded: only its records with the switch '+' (or '*', which becomes '+') are exported
+    const SYSTEM* syp = TSyst::sm->GetSY();
+    used.system = syp && syp->Dcl && syp->L > 0;
+    for( long j=0; j<mup->L; j++ )
+    {
+        if( used.system && syp->Dcl[j] == S_OFF )
+            continue;
+        std::string key = thf_rtrim( std::string( mup->SM[j], DC_RKLEN ) );
+        if( mup->DCS[j] == 'd' )
+            used.dcomp_keys.insert(key);
+        else if( mup->DCS[j] == 'r' )
+            used.reacdc_keys.insert(key);
+        else
+            continue;
+        used.symbols.insert( thf_string( mup->SM[j]+MAXSYMB+MAXDRGROUP, MAXDCNAME ) );
+        gui_logger->debug("ThermoFun export: project record '{}' ({})", key, mup->DCS[j]);
+    }
+    return used;
+}
+
+/// What is written to the file: the records of the project or system, the other records of the database whose symbol is
+/// free, and the records that a reaction needs as reactant and that are not written under their symbol. These
+/// records are written with another symbol: symbol#codes.
+struct ThfPlan
+{
+    std::vector<std::string> dc_order, rc_order;                // keys of the database (without blanks at the end)
+    std::map<std::string, std::string> dc_symbol, rc_symbol;    // key -> symbol in the file
+    std::map<std::string, std::string> dc_raw, rc_raw;          // key -> key as the database gives it
+    std::set<std::string> dc_db, rc_db;
+    std::map<std::string, std::string> aliased;                 // key -> symbol, for the records written with another symbol
+
+    /// The record of the database for the key of a reactant: the same key, or the key that differs where one has '_'
+    bool find( const std::string& raw, bool& reacdc, std::string& key ) const
+    {
+        const std::string k = thf_rtrim(raw);
+        if( dc_db.count(k) ) { reacdc = false; key = k; return true; }
+        if( rc_db.count(k) ) { reacdc = true; key = k; return true; }
+        for( const auto& d: dc_db )
+            if( ThfProjectRecords::same_key( k, d ) ) { reacdc = false; key = d; return true; }
+        for( const auto& r: rc_db )
+            if( ThfProjectRecords::same_key( k, r ) ) { reacdc = true; key = r; return true; }
+        return false;
+    }
+    /// The symbol in the file of the record that a reactant key names
+    std::string reactant_symbol( const std::string& raw ) const
+    {
+        bool reacdc; std::string key;
+        if( find( raw, reacdc, key ) )
+        {
+            const auto& m = reacdc ? rc_symbol : dc_symbol;
+            const auto it = m.find(key);
+            if( it != m.end() )
+                return it->second;
+        }
+        return thf_key_symbol(raw);
+    }
+};
+static ThfPlan thf_plan;
+
+/// Reads the keys of the records and of the reactions and makes the plan of the export
+static void thf_make_plan( const TCStringArray& dcKeys, const TCStringArray& rcKeys )
+{
+    thf_plan = ThfPlan();
+    for( const auto& k: dcKeys ) { thf_plan.dc_db.insert( thf_rtrim(k) ); thf_plan.dc_raw[thf_rtrim(k)] = k; }
+    for( const auto& k: rcKeys ) { thf_plan.rc_db.insert( thf_rtrim(k) ); thf_plan.rc_raw[thf_rtrim(k)] = k; }
+
+    // the symbol of a reaction-defined species is the last reactant of its reaction; its reactants
+    std::map<std::string, std::string> rc_product;
+    std::map<std::string, std::vector<std::string>> rc_reactants;
+    for( const auto& k: rcKeys )
+    {
+        TReacDC::pm->RecInput( k.c_str() );
+        const auto* rc = TReacDC::pm->rcp;
+        std::vector<std::string> reactants;
+        for( int j=0; j<rc->nDC; j++ )
+            reactants.push_back( std::string( rc->DCk[j], DC_RKLEN ) );
+        rc_reactants[thf_rtrim(k)] = reactants;
+        rc_product[thf_rtrim(k)] = reactants.empty() ? thf_key_symbol(k) : thf_key_symbol(reactants.back());
+        if( !reactants.empty() && rc_product[thf_rtrim(k)] != thf_key_symbol(k) )
+            gui_logger->warn("ThermoFun export: ReacDC {} is written with the symbol {} of its last reactant", k, rc_product[thf_rtrim(k)]);
+    }
+
+    const auto used = thf_project_records();
+    const auto usedDc = ThfProjectRecords::resolve( used.dcomp_keys, thf_plan.dc_db );
+    const auto usedRc = ThfProjectRecords::resolve( used.reacdc_keys, thf_plan.rc_db );
+
+    std::set<std::string> taken;                 // symbols in the file
+    std::set<std::string> in_dc, in_rc;
+    for( const auto& k: usedDc ) { in_dc.insert(k); taken.insert( thf_key_symbol(thf_plan.dc_raw[k]) ); }
+    for( const auto& k: usedRc ) { in_rc.insert(k); taken.insert( rc_product[k] ); }
+    if( !used.system )
+    {   // the other records of the database, if their symbol is free
+        for( const auto& k: dcKeys )
+            if( !in_dc.count(thf_rtrim(k)) && taken.insert( thf_key_symbol(k) ).second )
+                in_dc.insert( thf_rtrim(k) );
+        for( const auto& k: rcKeys )
+            if( !in_rc.count(thf_rtrim(k)) && taken.insert( rc_product[thf_rtrim(k)] ).second )
+                in_rc.insert( thf_rtrim(k) );
+    }
+    for( const auto& k: dcKeys ) if( in_dc.count(thf_rtrim(k)) ) thf_plan.dc_symbol[thf_rtrim(k)] = thf_key_symbol(k);
+    for( const auto& k: rcKeys ) if( in_rc.count(thf_rtrim(k)) ) thf_plan.rc_symbol[thf_rtrim(k)] = rc_product[thf_rtrim(k)];
+
+    // records that the reactions need and that are not in the file
+    std::vector<std::string> queue;
+    for( const auto& k: in_rc ) queue.push_back(k);
+    while( !queue.empty() )
+    {
+        const std::string rk = queue.back();
+        queue.pop_back();
+        for( const auto& raw: rc_reactants[rk] )
+        {
+            bool reacdc; std::string key;
+            if( !thf_plan.find( raw, reacdc, key ) )
+            {
+                gui_logger->warn("ThermoFun export: the reactant {} of the reaction {} is not a record of the database", thf_rtrim(raw), rk);
+                continue;
+            }
+            auto& syms = reacdc ? thf_plan.rc_symbol : thf_plan.dc_symbol;
+            if( syms.count(key) )
+                continue;
+            const std::string base = reacdc ? rc_product[key] : thf_key_symbol( thf_plan.dc_raw[key] );
+            std::string alias = base + "#" + thf_key_variant( reacdc ? thf_plan.rc_raw[key] : thf_plan.dc_raw[key] );
+            for( int n=2; taken.count(alias); n++ )
+                alias = base + "#" + thf_key_variant( reacdc ? thf_plan.rc_raw[key] : thf_plan.dc_raw[key] ) + std::to_string(n);
+            taken.insert(alias);
+            syms[key] = alias;
+            thf_plan.aliased[key] = alias;
+            gui_logger->info("ThermoFun export: {} {} is a reactant of a reaction and is not the record of the project: written as {}",
+                             reacdc ? "ReacDC" : "DComp", key, alias);
+            if( reacdc )
+                queue.push_back(key);
+        }
+    }
+    for( const auto& k: dcKeys ) if( thf_plan.dc_symbol.count(thf_rtrim(k)) ) thf_plan.dc_order.push_back( thf_rtrim(k) );
+    for( const auto& k: rcKeys ) if( thf_plan.rc_symbol.count(thf_rtrim(k)) ) thf_plan.rc_order.push_back( thf_rtrim(k) );
+}
+
+/// Comparison of the stored values of a reaction-defined species with the values that follow from its reaction
+/// (the stored values of the reactants): G, H, S, Cp, V
+static void thf_check_reaction( const std::string& key, const std::string& symbol )
+{
+    const auto* rc = TReacDC::pm->rcp;
+    const int n = rc->nDC;
+    if( n < 2 || rc->scDC[n-1] == 0.0 )
+        return;
+    double reac[5] = { rc->Gs[0], rc->Hs[0], rc->Ss[0], rc->Cps[0], rc->Vs[0] };
+    double stored[5] = { rc->Gs[1], rc->Hs[1], rc->Ss[1], rc->Cps[1], rc->Vs[1] };
+    double nu = rc->scDC[n-1];
+    std::vector<double> coef;
+    std::vector<std::string> raws;
+    for( int j=0; j<n-1; j++ ) { coef.push_back(rc->scDC[j]); raws.push_back( std::string(rc->DCk[j], DC_RKLEN) ); }
+    double sum[5] = { 0, 0, 0, 0, 0 };
+    for( size_t j=0; j<raws.size(); j++ )
+    {
+        bool reacdc; std::string rk;
+        if( !thf_plan.find( raws[j], reacdc, rk ) )
+        {
+            gui_logger->warn("ThermoFun export: ReacDC {} ({}) is not checked: its reactant {} is not a record of the database", key, symbol, thf_rtrim(raws[j]));
+            return;
+        }
+        double v[5];
+        if( reacdc )
+        {
+            TReacDC::pm->RecInput( thf_plan.rc_raw[rk].c_str() );
+            const auto* r2 = TReacDC::pm->rcp;
+            v[0] = r2->Gs[1]; v[1] = r2->Hs[1]; v[2] = r2->Ss[1]; v[3] = r2->Cps[1]; v[4] = r2->Vs[1];
+        }
+        else
+        {
+            TDComp::pm->RecInput( thf_plan.dc_raw[rk].c_str() );
+            const auto* d2 = TDComp::pm->dcp;
+            v[0] = d2->Gs[0]; v[1] = d2->Hs[0]; v[2] = d2->Ss[0]; v[3] = d2->Cps[0]; v[4] = d2->mVs[0];
+        }
+        for( int q=0; q<5; q++ )
+        {
+            if( IsDoubleEmpty(v[q]) || IsFloatEmpty(float(v[q])) ) sum[q] = std::nan("");
+            else sum[q] += coef[j]*v[q];
+        }
+    }
+    TReacDC::pm->RecInput( thf_plan.rc_raw[key].c_str() );   // the reaction again
+    static const char* names[5] = { "G", "H", "S", "Cp", "V" };
+    static const double tol[5] = { 10.0, 100.0, 1.0, 1.0, 0.01 };   // J/mol, J/mol, J/(mol K), J/(mol K), J/bar
+    for( int q=0; q<5; q++ )
+    {
+        if( IsDoubleEmpty(reac[q]) || IsFloatEmpty(float(reac[q])) || IsDoubleEmpty(stored[q]) || IsFloatEmpty(float(stored[q])) || std::isnan(sum[q]) )
+            continue;
+        const double derived = (reac[q] - sum[q]) / nu;
+        if( std::fabs(derived - stored[q]) > tol[q] )
+            gui_logger->warn("ThermoFun export: ReacDC {} ({}): the stored {} is {}, the reaction gives {} (difference {})",
+                             key, symbol, names[q], stored[q], derived, stored[q]-derived);
+    }
+}
+
+void TDComp::thf_keys( TCStringArray& keys )
+{
+    TCIntArray anR;
+    db->GetKeyList( "*:*:*:*:", keys, anR );
+}
+
+void TReacDC::thf_keys( TCStringArray& keys )
+{
+    TCIntArray anR;
+    db->GetKeyList( "*:*:*:*:", keys, anR );
+}
+
 QJsonArray TIComp::all_to_thermofun()
 {
     QJsonArray allArray;
@@ -299,18 +592,21 @@ QJsonArray TIComp::all_to_thermofun()
 QJsonArray TDComp::all_to_thermofun()
 {
     QJsonArray allArray;
-    TCIntArray anR;
-    TCStringArray aDC1;
+    TCStringArray aDC1, aRC1;
     QJsonObject temp_data;
-    db->GetKeyList( "*:*:*:*:", aDC1, anR );
+    thf_keys( aDC1 );
+    TReacDC::pm->thf_keys( aRC1 );
 
-    for( size_t ii=0; ii<aDC1.size(); ii++ )
+    thf_exported_keys.clear();
+    thf_make_plan( aDC1, aRC1 );
+    for( const auto& plan_key: thf_plan.dc_order )
     {
-        RecInput( aDC1[ii].c_str() );
+        RecInput( thf_plan.dc_raw[plan_key].c_str() );
+        const std::string symbol = thf_plan.dc_symbol[plan_key];
         QJsonObject thermo_data;
 
         thermo_data["name"] = thf_string(dcp->name, MAXFORMULA).c_str();
-        thermo_data["symbol"] = thf_string(db->FldKey(2), db->FldLen(2)).c_str();
+        thermo_data["symbol"] = symbol.c_str();
         thermo_data["formula"] = thf_string(dcp->form, MAXFORMULA).c_str();
         thermo_data["formula_charge"] = dcp->Zz;
         thermo_data["mass_per_mole"] = QJsonObject({{"values", QJsonArray({dcp->mwt})}, {"units",QJsonArray({"g/mol"})}});
@@ -443,12 +739,15 @@ QJsonArray TDComp::all_to_thermofun()
             }
             if( dcp->Cemp )
                 oTPMethods2["eos_churakov_gottschalk_coeffs"] = thf_object( "values", dcp->Cemp, dcp->Nemp );
+            if( dcp->ODc )
+                oTPMethods2["eos_birch_murnaghan_coeffs"] = thf_object( "values", dcp->ODc, MAXODCOEF );
 
             arrTPMethods.append(oTPMethods2);
         }
         if( !arrTPMethods.empty() )
             thermo_data["TPMethods"] = arrTPMethods;
         allArray.append(thermo_data);
+        thf_exported_keys.push_back( "DC\t" + plan_key + "\t" + symbol );
     }
     return allArray;
     //o_dccpint, /*17 */  o_dccp,  /*18 */ o_dccpfs,  /*19 */
@@ -462,36 +761,32 @@ QJsonArray TDComp::all_to_thermofun()
 QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
 {
     QJsonArray allArray;
-    TCIntArray anR;
-    TCStringArray aRC1, skipped_reactdc;
+    TCStringArray skipped_reactdc;
     QJsonObject temp_data;
-    db->GetKeyList( "*:*:*:*:", aRC1, anR );
 
-    for( size_t ii=0; ii<aRC1.size(); ii++ )
+    // the plan of the export was made with the records of DComp (TDComp::all_to_thermofun)
+    for( const auto& plan_key: thf_plan.rc_order )
     {
-        RecInput( aRC1[ii].c_str() );
+        RecInput( thf_plan.rc_raw[plan_key].c_str() );
+        const std::string species_symbol = thf_plan.rc_symbol[plan_key];
+        QString reaction_symbol = species_symbol.c_str();
+        thf_check_reaction( plan_key, species_symbol );
 
-        QString reaction_symbol = thf_string(db->FldKey(2), db->FldLen(2)).c_str();
+        // the last reactant is the species of the record; the reactants are the records of the plan
         QJsonArray oreactants;
         for( int jj=0; jj<rcp->nDC; jj++ )
         {
+            const std::string raw( rcp->DCk[jj], DC_RKLEN );
+            const std::string reactant = (jj == rcp->nDC-1) ? species_symbol : thf_plan.reactant_symbol( raw );
             oreactants.append(QJsonObject{{"coefficient",rcp->scDC[jj]},
-                                          {"symbol", thf_string(rcp->DCk[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME).c_str()}});
-        }
-        if( oreactants.last().toObject()["symbol"] != reaction_symbol )
-        {
-            gui_logger->warn("Skipping ReactDC {}: cannot convert to ThermoFun ({} != {})", aRC1[ii],
-                              oreactants.last().toObject()["symbol"].toString().toStdString(),
-                              reaction_symbol.toStdString());
-            skipped_reactdc.push_back(aRC1[ii]);
-            continue;
+                                          {"symbol", reactant.c_str()}});
         }
 
         // Set data to substance
         QJsonObject thermo_data;
         thermo_data["name"] = (std::string("_rdc_")+ thf_string(rcp->name, MAXFORMULA)).c_str();
-        thermo_data["symbol"] = thf_string(db->FldKey(2), db->FldLen(2)).c_str();
-        thermo_data["reaction"] = thf_string(db->FldKey(2), db->FldLen(2)).c_str();
+        thermo_data["symbol"] = species_symbol.c_str();
+        thermo_data["reaction"] = species_symbol.c_str();
         thermo_data["formula"] = thf_string(rcp->form, MAXFORMULA).c_str();
         thermo_data["formula_charge"] = rcp->Zz;
         thermo_data["mass_per_mole"] = QJsonObject({{"values", QJsonArray({rcp->mwt})}, {"units",QJsonArray({"g/mol"})}});
@@ -521,6 +816,7 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
         //     thermo_data["reaction"] = QJsonObject(); // reaction_symbol[0]  not in DComp ?
         //     thermo_data["limitsTP"] = QJsonObject(); //   s.properties.limitsTP only into TPMethods ?
         subsArray.append(thermo_data);
+        thf_exported_keys.push_back( "RC\t" + plan_key + "\t" + species_symbol );
 
         // Set data to reaction
         QJsonObject reaction_data;

@@ -60,6 +60,11 @@ void helpWin( const std::string& name, const std::string& item )
 
 namespace jsonui {
 
+void GraphDialog::setWarning( const QString& text )
+{
+    pVisorImp->SetWarning( text );   // shown in the status bar of the main window
+}
+
 /// The constructor
 GraphDialog::GraphDialog( TCModule *pmodule, const std::shared_ptr<jsonui::ChartData>& data1,
                           const std::vector<std::shared_ptr<PlotModel>>& aplotModels,
@@ -139,6 +144,7 @@ void GraphDialog::resetGraphDialog(const std::shared_ptr<ChartData> &data1,
 void GraphDialog::closeEvent(QCloseEvent *ev)
 {
     pModule->ClearGraphDialog();
+    pVisorImp->SetWarning( QString() );
     pVisorImp->closeMdiChild( this );
     ev->accept();
 }

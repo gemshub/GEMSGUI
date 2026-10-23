@@ -42,8 +42,8 @@ typedef struct
     PVfst, // V state variable  { + - } (reserved)
     PTfst, // T state variable  { + - }
     PSfst, // S state variable  { + - } (reserved)
-    PHfst, // H state variable  { + - } (reserved)
-    PUfst, // U state variable  { + - } (reserved)
+    PpHtg, // pH target tg_[0] on for the Optima modes { + - } (was the reserved H state variable)
+    PEhtg, // Eh target tg_[1] on for the Optima modes { + - } (was the reserved U state variable)
     PGmax, // Maximize or minimize G(X) { - } (reserved)
     PBeq,  // Account for electrostatic sorption models (DDLM,CCM,TLM) { +- }
     // Flags of arrays to be included into CSD: (+-*)
@@ -115,8 +115,8 @@ typedef struct
     R1,  //NMS-total number of IC moles in the system (for mole %% calculations)
     Vsys, // Anticipated volume of the system (L), for volume concentrations
     Vaq,  // Anticipated volume Vaq  of aqueous phase (L) for molarities
-    Time, // Tau - physical time (for PROCES) reserved
-    KSI,  // Xi - current value of process extent variable (reserved)
+    pHtg, // tg_[0] pH target for the Optima modes, used when PpHtg is '+' (was the reserved Tau)
+    Ehtg, // tg_[1] Eh target (V) for the Optima modes, used when PEhtg is '+' (was the reserved Xi)
     NU,   // Nu - current value of process extent variable (reserved)
     Msolids; // Total mass of solids (g) from another equilibrium (bXs object) to add to the recipe (B_)
 

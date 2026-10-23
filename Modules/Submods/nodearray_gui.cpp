@@ -87,7 +87,7 @@ AGAIN:
 //                 false  Error in GEMipm calculation part
 //
 bool TNodeArrayGUI::CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node,
-                                  long int end_node, FILE* adiffile )
+                                  long int end_node, spdlog::logger* adiffile )
 {
     mode_param = modeParam;
     diffile = adiffile;
@@ -118,7 +118,7 @@ bool TNodeArrayGUI::CalcIPM_List( const TestModeGEMParam& modeParam, long int st
 //                 false  Error in GEMipm calculation part
 //
 bool TNodeArrayGUI::CalcIPM_Node( const TestModeGEMParam& modeParam, TNode* ,
-                                  long int ii, DATABRPTR* , DATABRPTR* , bool*, FILE* adiffile )
+                                  long int ii, DATABRPTR* , DATABRPTR* , bool*, spdlog::logger* adiffile )
 {
     mode_param = modeParam;
     sended_requests = ii;
@@ -213,8 +213,7 @@ bool TNodeArrayGUI::set_resv_msg( std::vector<string> &&recv_message )
         if( diffile )
         {
             // write to file here
-            fprintf( diffile, "\nError reported from GEMS3K module\n%s\n",
-                     err_msg.c_str() );
+            diffile->info( "Error reported from GEMS3K module\n{}", err_msg );
         }
         else
         {

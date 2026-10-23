@@ -71,6 +71,56 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
 //--------------------------------------------------------------------------
 
 //   The constructor
+/// One line of text with a yellow warning symbol, cut at the right with "..." when it is too long.
+/// Its height is fixed, so showing or clearing a text does not change the window.
+class StatusWarning : public QLabel
+{
+public:
+    explicit StatusWarning( QWidget* parent ) : QLabel( parent )
+    {
+        setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+        setFixedHeight( fontMetrics().height() + 4 );
+        window()->installEventFilter( this );   // the width follows the window
+        fitWidth();
+    }
+    // the right 58% of the window: the left part stays for the field help
+    void fitWidth() { setFixedWidth( window()->width() * 58 / 100 ); }
+    bool eventFilter( QObject* o, QEvent* e ) override
+    {
+        if( o == window() && ( e->type() == QEvent::Resize || e->type() == QEvent::Show ) )
+            fitWidth();
+        return QLabel::eventFilter( o, e );
+    }
+    void setWarning( const QString& text )
+    {
+        full = text;
+        setToolTip( text );
+        update();
+    }
+protected:
+    void paintEvent( QPaintEvent* ) override
+    {
+        if( full.isEmpty() )
+            return;
+        QPainter p( this );
+        const QString symbol = QString( QChar( 0x26A0 ) ) + " ";
+        p.setPen( QColor( "#e6a100" ) );
+        p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, symbol );
+        const int w = fontMetrics().horizontalAdvance( symbol );
+        p.setPen( palette().color( QPalette::WindowText ) );
+        p.drawText( rect().adjusted( w, 0, 0, 0 ), Qt::AlignLeft | Qt::AlignVCenter,
+                    fontMetrics().elidedText( full, Qt::ElideRight, width() - w ) );
+    }
+private:
+    QString full;
+};
+
+void TVisorImp::SetWarning( const QString& text )
+{
+    if( statusWarning )
+        statusWarning->setWarning( text );
+}
+
 TVisorImp::TVisorImp(int c, char** v):
     QMainWindow(nullptr),
     ui(new Ui::GemsMainWindowData),
@@ -86,7 +136,8 @@ TVisorImp::TVisorImp(int c, char** v):
     ui->action_Use_ThermoFUN->setChecked(GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun);
     ui->actionExpanded_view->setChecked(getPhaseExpandMode());
 
-    (void)statusBar();
+    statusWarning = new StatusWarning( this );
+    statusBar()->addPermanentWidget( statusWarning );
     //setMinimumSize( 300, 200 );
 
     // from visor_w.cpp (old TVisorImp)
@@ -234,7 +285,7 @@ TVisorImp::TVisorImp(int c, char** v):
             act->setToolTip( item.tip );
             act->setCheckable( true );
             act->setActionGroup( group );
-            act->setChecked( item.mode == SolverMode::AIA );
+            act->setChecked( item.mode == SolverMode::SIA );
 #ifndef USE_OPTIMA_SOLVER
             if( item.optima )
             {
@@ -245,6 +296,8 @@ TVisorImp::TVisorImp(int c, char** v):
             connect( act, &QAction::triggered, this, [item]() {
                 if( TProfil::pm )
                     TProfil::pm->solver_mode = item.mode;
+                if( NewSystemDialog::pDia )
+                    NewSystemDialog::pDia->updateWarning();
             });
         }
         ui->smenu_Calc->insertMenu( ui->sactionPrecise, menu );

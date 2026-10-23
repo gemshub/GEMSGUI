@@ -31,7 +31,31 @@
 #include "visor.h"
 #include "service.h"
 #include "m_param.h"
+#include "ms_system.h"
 #include "GEMS3K/num_methods.h"
+
+void TNodeGUI::packDataBr()
+{
+    //   CNode->NodeHandle = 0;
+    //   CNode->NodeTypeHY = normal;
+    CNode->NodeTypeMT = normal;
+    CNode->NodeStatusFMT = Initial_RUN;
+    TNode::packDataBr();
+    setTargetsFromSystem();
+    // in an export with a pH or Eh target the result bulk holds the added H+ or electrons: write the recipe
+    // bulk B_, so that GEMS3K adds the same amount again from the target
+    const SYSTEM* syp = TSyst::sm ? TSyst::sm->GetSY() : nullptr;
+    if( exportRecipeBulk && syp && ( syp->PpHtg == S_ON || syp->PEhtg == S_ON ) && syp->B && pmm->mui )
+        for( long int i = 0; i < CSD->nICb; i++ )
+            CNode->bIC[i] = syp->B[ pmm->mui[ CSD->xic[i] ] ];
+}
+
+void TNodeGUI::setTargetsFromSystem()
+{
+    const SYSTEM* syp = TSyst::sm ? TSyst::sm->GetSY() : nullptr;
+    CNode->pHtarget = ( syp && syp->PpHtg == S_ON ) ? double( syp->pHtg ) : DOUBLE_EMPTY;
+    CNode->Ehtarget = ( syp && syp->PEhtg == S_ON ) ? double( syp->Ehtg ) : DOUBLE_EMPTY;
+}
 
 TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
 {
@@ -158,6 +182,9 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
     // set sizes for DataCh
     uint ii;
     long int i1;
+    // the mixing model parameters go into the IPM file, so they must be loaded first
+    if( TMulti* gm = dynamic_cast<TMulti*>( multi_base ) )
+        gm->LoadMixingModels();
     // reallocates memory for     DATACH  *CSD;  and  DATABR  *CNode;
     if( !CSD )
         CSD = new DATACH;

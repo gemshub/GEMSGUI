@@ -260,8 +260,8 @@ NEXT:
             aW.twp->G += ( smq - T*Smax*pow(Q298,2.) + ivdp + Smax*((T-Tcr)*pow(Qq,2.) + Tcr*pow(Qq,6.)/3.) );
             aW.twp->S += ( Smax * ( pow(Q298,2.) - pow(Qq,2.) ) - idvdtdp );
             aW.twp->H += ( smq - Smax*Tcr*( pow(Qq,2.) - pow(Qq,6.)/3.) + ivdp - T*idvdtdp );
-            aW.twp->V = ( v_bis + 2.*Smax*(T-Tcr)*Qq*dQq - Smax*pow(Qq,2.)*Vmax/Smax + Tcr*pow(Qq,2.)*dQq
-                            + Vmax/Smax*pow(Qq,3.)/3. );  // in J/bar
+            // excess volume of the Landau ordering (Holland and Powell, 1998): V = d(G_excess)/dP
+            aW.twp->V = ( v_bis * pow(1.+4.*pp/kT, -0.25) + Vmax*(pow(Qq,6.)/3. - pow(Qq,2.)) );  // in J/bar
             if( T<Tcr )  // Cp is corrected at subcritical T only
                 aW.twp->Cp += ( T*Smax/(2.*sqrt(Tcr)*sqrt(Tcr-T)) );
         }
@@ -370,7 +370,7 @@ void TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
         for( i=0; i<5; i++ )
         {
             a1 = dc[q].Vt[i];
-            if( IsFloatEmpty( a1 ) || approximatelyZero(a1) )
+            if( IsFloatEmpty( a1 ) || approximatelyZero(a1, (float)1e-14) )   // not the float epsilon: the P**2 term is 4e-8
                 vc[i] = 0.0;
             else
                 vc[i] = a1;

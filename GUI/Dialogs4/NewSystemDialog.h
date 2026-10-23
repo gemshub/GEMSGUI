@@ -62,6 +62,9 @@ public:
 
     void setCurrentTab( int ii );
 
+    /// Shows a warning in the main status bar when a pH or Eh target is set but the solver mode does not use it
+    void updateWarning();
+
     QSize sizeHint() const;
     void clearEditFocus();  // commit last editor if exist
 

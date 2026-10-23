@@ -660,7 +660,7 @@ void TGEM2MT::CalcMGPdata()
 bool TGEM2MT::BoxEqStatesUpdate(  long int Ni, long int /*pr*/, double tcur, double step )
 {
   bool iRet = true;
-  FILE* diffile = nullptr;
+  spdlog::logger* diffile = nullptr;
 
     mtp->dTau = step*mtp->tf;     // This is a doubtful circular dependence
     mtp->cTau = tcur*mtp->tf;

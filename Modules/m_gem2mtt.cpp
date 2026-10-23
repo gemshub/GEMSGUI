@@ -18,6 +18,7 @@
 //
 
 #include <fstream>
+#include "spdlog/sinks/basic_file_sink.h"
 #include "m_gem2mt.h"
 #include "visor.h"
 #include "stepwise.h"
@@ -284,11 +285,11 @@ DIFFERENT:
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, FILE* updiffile )
+bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, spdlog::logger* updiffile )
 {
     bool iRet = true;
 
-    FILE* diffile = nullptr;
+    spdlog::logger* diffile = nullptr;
     if( mtp->PsMO != S_OFF )
       diffile = updiffile;
 
@@ -711,9 +712,9 @@ bool TGEM2MT::Trans1D( char mode )
     // long int NodesSetToAIA;
     // std::string Vmessage;
 
-    FILE* logfile = nullptr;
-    FILE* ph_file = nullptr;
-    FILE* diffile = nullptr;
+    std::shared_ptr<spdlog::logger> logfile;
+    std::shared_ptr<spdlog::logger> ph_file;
+    std::shared_ptr<spdlog::logger> diff_log_file;
 
     showMss = 0L;
 
@@ -728,15 +729,23 @@ bool TGEM2MT::Trans1D( char mode )
         fname = pVisor->userGEMDir();
 
         // Preparations: opening output files for monitoring 1D profiles
-        logfile = fopen( ( fname + "ICaq-log.dat").c_str(), "w+" );    // Total dissolved element molarities
-        if( !logfile)
+        auto open_log = [&fname]( const std::string& name, const std::string& file )
+        {
+            spdlog::drop( name );   // a logger of an earlier run may still be registered
+            auto lg = spdlog::basic_logger_mt( name, fname + file, true );
+            lg->set_pattern( "%v" );
+            return lg;
+        };
+        try
+        {
+            logfile = open_log( "ic_aq_log", "ICaq-log.dat" );        // Total dissolved element molarities
+            ph_file = open_log( "ph_log", "Ph-log.dat" );             // Mole amounts of phases
+            diff_log_file = open_log( "ic_diff_log", "ICdif-log.dat" );   // Element amount diffs for t and t-1
+        }
+        catch( const spdlog::spdlog_ex& )
+        {
             return iRet;
-        ph_file = fopen( ( fname + "Ph-log.dat" ).c_str(), "w+" );   // Mole amounts of phases
-        if( !ph_file)
-            return iRet;
-        diffile = fopen( ( fname + "ICdif-log.dat").c_str(), "w+" );   //  Element amount diffs for t and t-1
-        if( !diffile)
-            return iRet;
+        }
     }
 
     // time scales testing
@@ -773,10 +782,10 @@ bool TGEM2MT::Trans1D( char mode )
         // Calculation of chemical equilibria in all nodes at the beginning
         // with the LPP AIA
         if( mtp->PsSIA != S_ON )
-            CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
+            CalcIPM( NEED_GEM_AIA, nStart, nEnd, diff_log_file.get() );
         else
-            CalcIPM( NEED_GEM_SIA,nStart, nEnd, diffile );
-        ///       CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
+            CalcIPM( NEED_GEM_SIA,nStart, nEnd, diff_log_file.get() );
+        ///       CalcIPM( NEED_GEM_AIA, nStart, nEnd, diff_log_file.get() );
     }
     mtp->iStat = AS_READY;
 
@@ -784,7 +793,7 @@ bool TGEM2MT::Trans1D( char mode )
         CalcMGPdata();
 
     if( mtp->PsMO != S_OFF )
-        otime += PrintPoint( 2, diffile, logfile, ph_file );
+        otime += PrintPoint( 2, diff_log_file.get(), logfile.get(), ph_file.get() );
 
     if( mtp->PsVTK != S_OFF )
         otime += PrintPoint( 0 );
@@ -841,10 +850,10 @@ bool TGEM2MT::Trans1D( char mode )
 
         //   Here we call a loop on GEM calculations over nodes
         //   parallelization should affect this loop only
-        CalcIPM( mode, nStart, nEnd, diffile );
+        CalcIPM( mode, nStart, nEnd, diff_log_file.get() );
 
         if( mtp->PsMO != S_OFF )
-            otime += PrintPoint( 3, diffile, logfile, ph_file );
+            otime += PrintPoint( 3, diff_log_file.get(), logfile.get(), ph_file.get() );
 
         // Here one has to compare old and new equilibrium phase assemblage
         // and pH/pe in all nodes and decide if the time step was Ok or it
@@ -870,7 +879,7 @@ bool TGEM2MT::Trans1D( char mode )
             CalcMGPdata(); // Recalculation of MGP compositions and masses
 
         if( mtp->PsMO != S_OFF )
-            otime += PrintPoint( 4, diffile, logfile, ph_file );
+            otime += PrintPoint( 4, diff_log_file.get(), logfile.get(), ph_file.get() );
 
         if( mtp->PsVTK != S_OFF )
             otime += PrintPoint( 0 );
@@ -890,12 +899,11 @@ bool TGEM2MT::Trans1D( char mode )
 
     if( mtp->PsMO != S_OFF )
     {
-        fprintf( diffile,
-                 "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s;  Pure GEM run time %lg s\n",
-                 (dtime-otime),  otime, dtime, mtp->TimeGEM );
-        fclose( logfile );
-        fclose( ph_file );
-        fclose( diffile );
+        diff_log_file->info( "Total time of calculation {} s;  Time of output {} s;  Whole run time {} s;  Pure GEM run time {} s",
+                             (dtime-otime), otime, dtime, mtp->TimeGEM );
+        diff_log_file->flush();
+        logfile->flush();
+        ph_file->flush();
     }
 
     pVisor->CloseMessage();
@@ -905,7 +913,7 @@ bool TGEM2MT::Trans1D( char mode )
 
 // plotting the record -------------------------------------------------
 //Added one point to graph
-double TGEM2MT::PrintPoint( long int nPoint, FILE* diffile, FILE* logfile, FILE* ph_file )
+double TGEM2MT::PrintPoint( long int nPoint, spdlog::logger* diffile, spdlog::logger* logfile, spdlog::logger* ph_file )
 {
     long int evrt =10;
 

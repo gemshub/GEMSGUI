@@ -23,6 +23,7 @@
 #include "v_module.h"
 #include "v_ipnc.h"
 #include "graph_window.h"
+#include <QJsonObject>
 
 const int PE_RKLEN = 80;
 
@@ -198,6 +199,13 @@ protected:
     void set_type_flags( char type);
 
     void refreshState();
+
+    /// Start System record of a run with kinetics. The steps overwrite it; it is put back after the run,
+    /// so that each run starts from the same state.
+    QJsonObject startSysEq;
+    std::string startSysEqKey;
+    void keepStartSysEq();
+    void restoreStartSysEq();
 
 public:
 

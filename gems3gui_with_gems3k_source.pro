@@ -110,7 +110,7 @@ contains(DEFINES, USE_GEMS3K_SOURCE) {
     # Optima solver (calculation modes AOP, SOP, HOP, SHP, ROP): off unless OPTIMA_PREFIX names an
     # install of the Optima library (the one GEMS3K is built against), e.g. in Qt Creator under
     # Projects > Build > qmake > Additional arguments:
-    #     OPTIMA_PREFIX=/home/dmiron/git/hub/optima/install-sys
+    #     OPTIMA_PREFIX=/path/to/optima/install
     # Optima must be built with the same compiler as this program (the system g++ of the Qt kit):
     # a libOptima built with a newer conda g++ fails to link (GLIBCXX_3.4.32 undefined).
     # (or set the environment variable OPTIMA_PREFIX). EIGEN_INCLUDE overrides the Eigen location.
@@ -140,6 +140,18 @@ include($$NUMERICS_CPP/Numerics.pri)
 include($$SERVICES4_CPP/Services4.pri)
 include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$CHARTS_CPP/charts.pri)
+
+# After each link, bring the page definitions in the run folder up to date and delete the
+# object cache, which the program rebuilds
+!macx {
+    GUI_RES_DATA = $$shell_path($$OUT_PWD/Resources/data)
+    GUI_RES_FILES = vis_od.ini.json vis_cn.ini.json units.ini.json
+    QMAKE_POST_LINK += $$QMAKE_MKDIR $$shell_quote($$GUI_RES_DATA) $$escape_expand(\n\t)
+    for(f, GUI_RES_FILES) {
+        QMAKE_POST_LINK += $$QMAKE_COPY $$shell_quote($$shell_path($$PWD/Resources/data/$$f)) $$shell_quote($$GUI_RES_DATA) $$escape_expand(\n\t)
+    }
+    QMAKE_POST_LINK += $$QMAKE_DEL_FILE $$shell_quote($$shell_path($$OUT_PWD/Resources/visor.data/visobj.dat))
+}
 
 #message("Defines: $$DEFINES")
 

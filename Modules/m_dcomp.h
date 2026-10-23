@@ -216,6 +216,8 @@ public:
      elmWindowData el_data, dcSetupData st_data, std::set<std::string>& SDlist );
 
     QJsonArray all_to_thermofun();
+    /// Keys of all the records, for the export to ThermoFun
+    void thf_keys( TCStringArray& keys );
 };
 
 #endif     // _m_dcomp.h

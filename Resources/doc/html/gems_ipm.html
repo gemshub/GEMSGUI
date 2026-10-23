@@ -1297,8 +1297,8 @@ work.</p>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr><td style="vertical-align: top;"><b>Mode</b></td><td style="vertical-align: top;"><b>Stands for</b></td><td style="vertical-align: top;"><b>What it does</b></td></tr>
-    <tr><td style="vertical-align: top;">AIA</td><td>Automatic Initial Approximation</td><td>GEMS3K IPM solver. Builds its own starting point from scratch (LP simplex). Default.</td></tr>
-    <tr><td style="vertical-align: top;">SIA</td><td>Smart Initial Approximation</td><td>GEMS3K IPM solver. Starts from the previous result held in memory.</td></tr>
+    <tr><td style="vertical-align: top;">AIA</td><td>Automatic Initial Approximation</td><td>GEMS3K IPM solver. Builds its own starting point from scratch (LP simplex).</td></tr>
+    <tr><td style="vertical-align: top;">SIA</td><td>Smart Initial Approximation</td><td>GEMS3K IPM solver. Starts from the previous result held in memory. If there is no previous result, it starts as AIA. Default.</td></tr>
     <tr><td style="vertical-align: top;">AOP</td><td>Automatic initial approximation with OPtima</td><td>Optima solver, starting from scratch.</td></tr>
     <tr><td style="vertical-align: top;">SOP</td><td>Smart initial approximation with OPtima</td><td>Optima solver, starting from the previous result.</td></tr>
     <tr><td style="vertical-align: top;">HOP</td><td>Hybrid with OPtima</td><td>GEMS3K IPM solver from scratch, then Optima refines and checks its answer. If the Optima part fails, the IPM answer is kept and the result is flagged, so HOP is never worse than the IPM solver alone.</td></tr>
@@ -1323,11 +1323,14 @@ work.</p>
 <h4><a name="SOLVER_GUI_RULES"></a>How the Calculate menu relates to the Controls page</h4>
 <ul>
   <li>The <b>Solver mode</b> choice applies to every equilibrium calculation of the
-  program: <b>Calculate &gt; Run GEM IPM</b>, and also Process simulation, GEM2MT and the
-  other modules. In the Optima modes (AOP, SOP, HOP, SHP) each calculation
-  runs exactly the chosen mode, cold (AOP, HOP) or warm (SOP, SHP), whatever
-  the Process or GEM2MT would otherwise do for that point; with AIA or SIA they
-  work as before. Choose AOP or HOP for a Process that crosses phase boundaries,
+  program: <b>Calculate &gt; Run GEM IPM</b>, and also Process simulation and the
+  other modules. Each calculation runs exactly the chosen mode, cold (AIA, AOP, HOP)
+  or warm (SIA, SOP, SHP), whatever the Process would otherwise do for that
+  point. A warm mode needs an earlier result in memory; without one, the
+  calculation starts cold. Each calculation also gets the quick first try and the
+  retries of GEMS3K, as in coupled codes. Kinetic calculations and the
+  step-by-step mode do not use them. A GEM2MT run with a node array
+  uses AIA or SIA, as set in the GEM2MT record. Choose AOP or HOP for a Process that crosses phase boundaries,
   and mind that Optima is much slower than the IPM solver on large systems. The
   choice is not saved between sessions; each session starts with AIA. It replaces
   the former "AIA (simplex)" check mark: SIA is the old "AIA off" state.</li>
@@ -1343,8 +1346,7 @@ work.</p>
   of HOP and SHP; in AIA and SIA they have no effect. <tt>Pa_OCR</tt> concerns only the warm
   modes (SOP, SHP).</li>
   <li>Some settings apply to both solvers, for example <tt>Pa_DHB</tt>, <tt>Pa_DG</tt>
-  and <tt>Pa_PE</tt>; <tt>Pa_ODF</tt> (automatic) is derived from <tt>Pa_DHB</tt>, and <tt>Pa_OAR</tt> needs
-  <tt>Pa_OTA</tt> &gt; 0.</li>
+  and <tt>Pa_PE</tt>; <tt>Pa_ODF</tt> (automatic) is derived from <tt>Pa_DHB</tt>.</li>
   <li>On/off settings are shown as tick boxes (ticked = on, stored as 1); the
   others are numbers. Hold the mouse over a field to see a short description and
   its default.</li>
@@ -1356,8 +1358,8 @@ work.</p>
 </ul>
 
 <h4><a name="SOLVER_SETTINGS_IPM"></a>IPM solver settings added in GEMS3K 5</h4>
-<p>These fields are on the Controls page under the heading <i>IPM solver
-settings</i>.</p>
+<p>The fields without a note are on the Controls page under the heading <i>IPM solver
+settings</i>. The fields marked "not on the Controls page" keep the value stored in the project (the default in a new project). An exported system gives this value to GEMS3K in its IPM file.</p>
     <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
       <tbody>
         <tr>
@@ -1369,7 +1371,7 @@ settings</i>.</p>
           <td style="vertical-align: top;"><b>Other values</b></td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_STL"></a><tt>Pa_STL</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_STL"></a><tt>Pa_STL</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_PSTALL</tt></td>
           <td style="vertical-align: top;">on</td>
           <td style="vertical-align: top;">Lets the mass-balance step give up early when it stops improving.</td>
@@ -1377,7 +1379,7 @@ settings</i>.</p>
           <td style="vertical-align: top;">Off: the step keeps iterating until Pa_DPV (first value) is exhausted.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_ISW"></a><tt>Pa_ISW</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_ISW"></a><tt>Pa_ISW</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_IpmStallWindow</tt></td>
           <td style="vertical-align: top;">30</td>
           <td style="vertical-align: top;">Stops the IPM once the energy and composition have clearly stopped changing for this many iterations.</td>
@@ -1385,7 +1387,7 @@ settings</i>.</p>
           <td style="vertical-align: top;">0 = off.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_MBR"></a><tt>Pa_MBR</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_MBR"></a><tt>Pa_MBR</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_MbReproject</tt></td>
           <td style="vertical-align: top;">on</td>
           <td style="vertical-align: top;">A final touch-up that makes the element totals of the IPM answer add up exactly.</td>
@@ -1401,7 +1403,7 @@ settings</i>.</p>
           <td style="vertical-align: top;">0 or negative = no warning.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_CRN"></a><tt>Pa_CRN</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_CRN"></a><tt>Pa_CRN</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_ColdRetryNudges</tt></td>
           <td style="vertical-align: top;">4</td>
           <td style="vertical-align: top;">If a calculation from scratch (AIA) fails, retry up to this many times with a microscopically changed composition, then finish at the exact one.</td>
@@ -1409,7 +1411,7 @@ settings</i>.</p>
           <td style="vertical-align: top;">0 = no retry.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_FOB"></a><tt>Pa_FOB</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_FOB"></a><tt>Pa_FOB</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_FilloutBudget</tt></td>
           <td style="vertical-align: top;">0 (off)</td>
           <td style="vertical-align: top;">Limits how much the starting guess may disturb the element totals, as a fraction of each element's amount.</td>
@@ -1417,7 +1419,7 @@ settings</i>.</p>
           <td style="vertical-align: top;">A positive fraction = on.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_TPD"></a><tt>Pa_TPD</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_TPD"></a><tt>Pa_TPD</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_StabTPD</tt></td>
           <td style="vertical-align: top;">on</td>
           <td style="vertical-align: top;">Reports, in the diagnostic trace only, whether a mixed phase left out of the answer should have been present. Does not change the answer.</td>
@@ -1425,7 +1427,7 @@ settings</i>.</p>
           <td style="vertical-align: top;">Off.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_KKT"></a><tt>Pa_KKT</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_KKT"></a><tt>Pa_KKT</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_IpmAugmentedKKT</tt></td>
           <td style="vertical-align: top;">2</td>
           <td style="vertical-align: top;">How each IPM step's equations are solved. 2 is the most accurate.</td>
@@ -1433,7 +1435,7 @@ settings</i>.</p>
           <td style="vertical-align: top;">0 = the original method; 1 = an intermediate method.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_MCR"></a><tt>Pa_MCR</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_MCR"></a><tt>Pa_MCR</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_MbClassRule</tt></td>
           <td style="vertical-align: top;">0 (off)</td>
           <td style="vertical-align: top;">Checks the totals of major elements in absolute terms and of trace elements in relative terms; the value is the trace/major ratio.</td>
@@ -1444,10 +1446,9 @@ settings</i>.</p>
     </table>
 
 <h4><a name="SOLVER_SETTINGS_OPTIMA"></a>Optima solver settings</h4>
-<p>These fields are on the Controls page under the heading <i>Optima solver
-settings</i>. The defaults suit almost all systems; change them only when
-investigating a difficult case. The first ten are the ones most often worth
-adjusting.</p>
+<p>The fields without a note are on the Controls page under the heading <i>Optima solver
+settings</i>. The fields marked "not on the Controls page" keep the value stored in the project (the default in a new project). An exported system gives this value to GEMS3K in its IPM file. The defaults suit almost all systems; change them only when
+investigating a difficult case.</p>
     <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
       <tbody>
         <tr>
@@ -1491,7 +1492,7 @@ adjusting.</p>
           <td style="vertical-align: top;">0 = no retry; 1 = retry only after the first attempt used its full budget.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OFN"></a><tt>Pa_OFN</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OFN"></a><tt>Pa_OFN</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaFinish</tt></td>
           <td style="vertical-align: top;">on</td>
           <td style="vertical-align: top;">If Optima stops just short of converging, finish the job using the phases it has found.</td>
@@ -1499,7 +1500,7 @@ adjusting.</p>
           <td style="vertical-align: top;">Off.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OTA"></a><tt>Pa_OTA</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OTA"></a><tt>Pa_OTA</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaTpdAccept</tt></td>
           <td style="vertical-align: top;">1e-6</td>
           <td style="vertical-align: top;">Accepts a not-quite-converged answer when a direct check shows that no missing phase should be present (within this tolerance).</td>
@@ -1510,12 +1511,12 @@ adjusting.</p>
           <td style="vertical-align: top;"><a name="Pa_OAR"></a><tt>Pa_OAR</tt></td>
           <td style="vertical-align: top;"><tt>pa_OptimaAcceptRepair</tt></td>
           <td style="vertical-align: top;">off</td>
-          <td style="vertical-align: top;">With Pa_OTA, also corrects a small error in the element totals before accepting. Needs Pa_OTA &gt; 0.</td>
+          <td style="vertical-align: top;">A result that is not fully converged can be accepted after the direct phase check (on by default). With this setting, the solver also corrects a small error in the element totals before it accepts the result.</td>
           <td style="vertical-align: top;">Systems with very little water, or other cases where Optima ends close to the answer with slightly unbalanced element totals.</td>
           <td style="vertical-align: top;">On.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OSW"></a><tt>Pa_OSW</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OSW"></a><tt>Pa_OSW</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaStallWindow</tt></td>
           <td style="vertical-align: top;">500</td>
           <td style="vertical-align: top;">Stops a calculation that has not improved for this many iterations, so a retry can start sooner.</td>
@@ -1525,13 +1526,13 @@ adjusting.</p>
         <tr>
           <td style="vertical-align: top;"><a name="Pa_OZA"></a><tt>Pa_OZA</tt></td>
           <td style="vertical-align: top;"><tt>pa_OptimaZeroAbsent</tt></td>
-          <td style="vertical-align: top;">2</td>
-          <td style="vertical-align: top;">How absent species are reported: as a tiny amount, with the element totals corrected if needed.</td>
-          <td style="vertical-align: top;">Use 1 if you need absent phases to read exactly zero in the output.</td>
-          <td style="vertical-align: top;">0 = tiny amounts as they are; 1 = absent phases set to exactly zero.</td>
+          <td style="vertical-align: top;">3</td>
+          <td style="vertical-align: top;">How absent phases are shown. With 3, Optima uses the same rule as the IPM solver and shows an absent phase as 0 mol. If 0 mol would break the balance of an element, the phase keeps a very small amount.</td>
+          <td style="vertical-align: top;">Keep the default. A project saved with an older version keeps its saved value: set 3 to get the new behaviour.</td>
+          <td style="vertical-align: top;">0 = very small amounts without a change; 1 = absent phases set to 0 mol by an older rule; 2 = very small amounts, element totals corrected.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OLS"></a><tt>Pa_OLS</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OLS"></a><tt>Pa_OLS</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaLineSearch</tt></td>
           <td style="vertical-align: top;">1.5</td>
           <td style="vertical-align: top;">When a step makes the result much worse (by more than this factor), try a shorter step.</td>
@@ -1539,7 +1540,7 @@ adjusting.</p>
           <td style="vertical-align: top;">0 = off; a negative value = use it only when retrying a failed calculation.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OLE"></a><tt>Pa_OLE</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OLE"></a><tt>Pa_OLE</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaLSStallEscape</tt></td>
           <td style="vertical-align: top;">10</td>
           <td style="vertical-align: top;">If shorter steps keep getting nowhere this many times in a row, take one full step to break out.</td>
@@ -1547,7 +1548,7 @@ adjusting.</p>
           <td style="vertical-align: top;">0 = off.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_ORW"></a><tt>Pa_ORW</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_ORW"></a><tt>Pa_ORW</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaLSRejectWorse</tt></td>
           <td style="vertical-align: top;">off</td>
           <td style="vertical-align: top;">If a shorter step did not help, use the full step instead.</td>
@@ -1555,7 +1556,7 @@ adjusting.</p>
           <td style="vertical-align: top;">On.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OCS"></a><tt>Pa_OCS</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OCS"></a><tt>Pa_OCS</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaCgSeed</tt></td>
           <td style="vertical-align: top;">1e-6</td>
           <td style="vertical-align: top;">A better starting point for a retry from scratch, which considers which phases are likely to be stable.</td>
@@ -1563,7 +1564,7 @@ adjusting.</p>
           <td style="vertical-align: top;">0 = off.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_ODT"></a><tt>Pa_ODT</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_ODT"></a><tt>Pa_ODT</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaDimReduceTol</tt></td>
           <td style="vertical-align: top;">10</td>
           <td style="vertical-align: top;">How generous the first guess of "species that matter" is (larger includes more).</td>
@@ -1571,7 +1572,7 @@ adjusting.</p>
           <td style="vertical-align: top;">A negative value &minus;m = start with the m&times;N cheapest species.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OPS"></a><tt>Pa_OPS</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OPS"></a><tt>Pa_OPS</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaPreSolveFirstIters</tt></td>
           <td style="vertical-align: top;">6000</td>
           <td style="vertical-align: top;">Iteration limit for each pass of the reduced first solve, so a pass that goes nowhere is abandoned.</td>
@@ -1579,7 +1580,7 @@ adjusting.</p>
           <td style="vertical-align: top;">0 = no limit.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OES"></a><tt>Pa_OES</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OES"></a><tt>Pa_OES</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaEarlyStabilityAt</tt></td>
           <td style="vertical-align: top;">0 (automatic)</td>
           <td style="vertical-align: top;">Lets Optima notice early that a phase should disappear, instead of shrinking it slowly.</td>
@@ -1587,7 +1588,7 @@ adjusting.</p>
           <td style="vertical-align: top;">A positive number = check at that iteration; a negative number &minus;N = check after a phase has shrunk N times in a row.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_ODF"></a><tt>Pa_ODF</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_ODF"></a><tt>Pa_ODF</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaDcFloor</tt></td>
           <td style="vertical-align: top;">0 (automatic)</td>
           <td style="vertical-align: top;">The smallest amount Optima can represent for an absent species. Automatic derives it from the mass-balance tolerance Pa_DHB.</td>
@@ -1595,7 +1596,7 @@ adjusting.</p>
           <td style="vertical-align: top;">Any positive amount in moles.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_PHF"></a><tt>Pa_PHF</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_PHF"></a><tt>Pa_PHF</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_PhaseHessianFloor</tt></td>
           <td style="vertical-align: top;">0.01</td>
           <td style="vertical-align: top;">Keeps the curvature of mixed phases well-behaved.</td>
@@ -1603,7 +1604,7 @@ adjusting.</p>
           <td style="vertical-align: top;">0 = off.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OFH"></a><tt>Pa_OFH</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OFH"></a><tt>Pa_OFH</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaFDHessian</tt></td>
           <td style="vertical-align: top;">on</td>
           <td style="vertical-align: top;">Computes a more exact curvature for non-ideal phases, at extra cost.</td>
@@ -1611,7 +1612,7 @@ adjusting.</p>
           <td style="vertical-align: top;">Off = faster, sometimes less robust.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OFD"></a><tt>Pa_OFD</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OFD"></a><tt>Pa_OFD</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaFDHessianDelay</tt></td>
           <td style="vertical-align: top;">0</td>
           <td style="vertical-align: top;">Uses the cheaper approximate curvature for this many iterations first.</td>
@@ -1619,7 +1620,7 @@ adjusting.</p>
           <td style="vertical-align: top;">Any positive number of iterations.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_OMH"></a><tt>Pa_OMH</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_OMH"></a><tt>Pa_OMH</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_OptimaMoleFracHessian</tt></td>
           <td style="vertical-align: top;">off</td>
           <td style="vertical-align: top;">A more exact curvature for ideal mixed phases.</td>
@@ -1627,7 +1628,7 @@ adjusting.</p>
           <td style="vertical-align: top;">On.</td>
         </tr>
         <tr>
-          <td style="vertical-align: top;"><a name="Pa_LBT"></a><tt>Pa_LBT</tt></td>
+          <td style="vertical-align: top;"><a name="Pa_LBT"></a><tt>Pa_LBT</tt><br><small>not on the Controls page</small></td>
           <td style="vertical-align: top;"><tt>pa_LogBarrierTau</tt></td>
           <td style="vertical-align: top;">1e-16</td>
           <td style="vertical-align: top;">A tiny numerical push that keeps pure minerals away from exactly zero.</td>
