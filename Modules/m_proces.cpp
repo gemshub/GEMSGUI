@@ -1344,8 +1344,7 @@ void TProcess::internalCalc()
             }
             else {
                 // if( pointShow==-1 )
-                iRet = pVisor->Message( window(), GetName(),
-                                       Vmessage.c_str(), pep->c_nrk, pep->NR1, pointShow!=-1);
+                iRet = pVisor->Message(GetName(), Vmessage.c_str(), pep->c_nrk, pep->NR1);
 
                 if(iRet) {
                     break;   //cancel process

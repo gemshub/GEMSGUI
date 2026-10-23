@@ -105,12 +105,11 @@ protected:
 
     // Integration in GEMS-PSI GUI environment
     // Prepares and writes DCH and DBR files for reading into the coupled code
-    void makeStartDataChBR( QWidget* par, bool no_interpolat,
+    void makeStartDataChBR(bool no_interpolat,
                             TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
                             long int nTp_, long int nPp_, double Ttol_, double Ptol_,
                             double *Tai, double *Pai );
-    void makeStartDataChBR( QWidget* par,
-                            TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+    void makeStartDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
                             double Tai[4], double Pai[4] );
 
     // Building internal dataCH and DataBR structures from Multi

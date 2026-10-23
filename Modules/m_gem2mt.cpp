@@ -897,32 +897,13 @@ void TGEM2MT::MakeQuery()
 }
 
 //Rebild record structure before calc
-int
-TGEM2MT::RecBuild( const char *key, int mode )
+int TGEM2MT::RecBuild( const char *key, int mode )
 {
     if( !pVisor->ProfileMode )
       Error( GetName(), "E09DTrem: Please, do it in the Project mode!" );
 
     bool setdef = false;
 
-    /* set up for mathscripts
-    double Tai[4], Pai[4];
-
-    FreeNa();
-    na = new TNodeArray( 1, TMulti::sm->GetPM() );
-    // realloc and setup data for dataCH and DataBr structures
-    na->MakeNodeStructures( 0, true , Tai, Pai  );
-
-    // setup dataBR and NodeT0 data
-    //na->packDataBr();
-    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
-    na->CopyNodeFromTo( 0, 1, na->pNodT0(), na->pNodT1() );
-
-    allocNodeWork();
-    LinkCSD(0);
-    LinkNode0(0);
-    LinkNode1(0);
- */
 AGAIN:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
@@ -957,8 +938,7 @@ void TGEM2MT::AllocNa()
   TNodeArray::na = na.get();
 
   // use particles
-  if( mtp->PsMode == RMT_MODE_W  )
-  {
+  if( mtp->PsMode == RMT_MODE_W ) {
      na->SetGrid( mtp->sizeLc, mtp->grid );   // set up grid structure
      pa_mt = new TParticleArray( mtp->nPTypes, mtp->nProps,
            mtp->NPmean, mtp->ParTD, mtp->nPmin, mtp->nPmax, na.get() );
@@ -967,8 +947,7 @@ void TGEM2MT::AllocNa()
 
 void TGEM2MT::FreeNa()
 {
-  if( pa_mt )
-  {
+  if( pa_mt ) {
     delete pa_mt;
     pa_mt = nullptr;
   }
@@ -980,11 +959,9 @@ void TGEM2MT::FreeNa()
 
 
 //Calculate record
-void
-TGEM2MT::RecCalc( const char * key )
+void TGEM2MT::RecCalc( const char * key )
 {
- try
- {
+ try {
     bool iRet;
 
      if( !pVisor->ProfileMode  )
@@ -1050,7 +1027,7 @@ TGEM2MT::RecCalc( const char * key )
      ErrorIf( ret, "TGEM2MT", "Error read " + lst_f_name +": \n" + na->getCalcNode()->ipmLogError() );
 
      if( mtp->PsMode != RMT_MODE_S  )
-       CalcIPM( NEED_GEM_SIA, 0, mtp->nC, 0 );
+       CalcIPM( NEED_GEM_SIA, 0, mtp->nC);
      if( mtp->PsMode == RMT_MODE_W  )
      {
       putHydP( na->pNodT0() );
@@ -1167,8 +1144,6 @@ GEMS3KGenerator TGEM2MT::GEMS3k_generator()
     }
     return GEMS3KGenerator( error_lst_path, mtp->nC, type_f );
 }
-
-
 
 void TGEM2MT::RecordPrint( const char* key )
 {
