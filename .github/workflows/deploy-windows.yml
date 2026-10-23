@@ -13,6 +13,9 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+
     strategy:
       fail-fast: false
 
@@ -82,14 +85,35 @@ jobs:
           call conda activate GEMSGUI || goto :eof
           "C:\Program Files\Git\bin\bash.exe" .github/scripts/build-gems3k-optima.sh || goto :eof
 
+      # The Visual Studio generator ignores CMAKE_CXX_COMPILER_LAUNCHER, so ccache runs under the name
+      # cl.exe and wraps the real cl.exe (same setup as ci-build.yml).
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-
+
       - name: Building, Testing & Installing GEMSGUI (Windows)
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
           cp "cmake/qt.conf" "C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\bin" || goto :eof
-          rem --- Build and install ---
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
           setlocal EnableDelayedExpansion
+          if not exist "%CCACHE_DIR%" mkdir "%CCACHE_DIR%"
+          ccache --max-size=500M
+          mkdir ccache-bin
+          copy /y "%CONDA_PREFIX%\Library\bin\ccache.exe" ccache-bin\cl.exe > nul
+          for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "CCACHE_COMPILER=%%d\bin\Hostx64\x64\cl.exe"
+          echo ccache compiler: !CCACHE_COMPILER!
+          rem --- Build and install ---
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build -DCMAKE_VS_GLOBALS="CLToolExe=cl.exe;CLToolPath=%CD%\ccache-bin;TrackFileAccess=false;UseMultiToolTask=true;EnforceProcessCountAcrossBuilds=true"
+          if errorlevel 1 (
+            echo ccache setup failed, configuring without ccache
+            rmdir /s /q build
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build || exit /b 1
+          )
           cmake --build build --target install --config Release -- /m
           if errorlevel 1 (
             for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "MSLINK=%%d\bin\Hostx64\x64\link.exe"
@@ -100,6 +124,7 @@ jobs:
             cmake --build build --config Release --target process-run -- /v:d | findstr /I /C:"GEMS3K" /C:"link.exe"
             exit /b 1
           )
+          ccache --show-stats
           D:\a\GEMSGUI\GEMSGUI\build\Release\gems3helpconfig-qhp-generator.exe || goto :eof
 
       - name: Check deploy
