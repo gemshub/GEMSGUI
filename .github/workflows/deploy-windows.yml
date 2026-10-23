@@ -92,7 +92,7 @@ jobs:
           setlocal EnableDelayedExpansion
           cmake --build build --target install --config Release -- /m
           if errorlevel 1 (
-            for /f "delims=" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -find "VC\Tools\MSVC\**\bin\Hostx64\x64\link.exe"') do set MSLINK=%%i
+            for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "MSLINK=%%d\bin\Hostx64\x64\link.exe"
             echo --- DIAGNOSTIC: symbols DEFINED in the installed libraries ---
             "!MSLINK!" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K-static.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
             "!MSLINK!" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
