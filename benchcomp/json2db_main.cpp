@@ -27,6 +27,7 @@ const std::map<std::string, int> kKeywordToRT = {
     {"phase",  RT_PHASE},
     {"reacdc", RT_REACDC},
     {"sdref",  RT_SDATA},
+    {"compos", RT_COMPOS},
 };
 
 void show_usage(const std::string& name)
@@ -36,7 +37,7 @@ void show_usage(const std::string& name)
               << "from a JSON array of records, with no GUI involved.\n\n"
               << "Options:\n"
               << "  -j, --json FILE      JSON file with an array of records (required)\n"
-              << "  -k, --keyword NAME   Target keyword: icomp, dcomp, phase, reacdc, sdref (required)\n"
+              << "  -k, --keyword NAME   Target keyword: icomp, dcomp, compos, phase, reacdc, sdref (required)\n"
               << "  -o, --output DIR     Output directory for the new .pdb/.ndx pair (default: ./out)\n"
               << "  -t, --tag TAG        Everything the real GEM-Selektor DB files put between the\n"
               << "                       keyword and the extension, dot(s) and all -- e.g. for\n"

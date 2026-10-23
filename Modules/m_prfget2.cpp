@@ -368,7 +368,7 @@ void TProfil::TestChangeProfile()
         aMT->ods_link(0);
         for(uint i=0; i< aList.size(); i++)
         {
-            pVisor->Message( nullptr, "Loading Modelling Project",
+            pVisor->Message("Loading Modelling Project",
                              "Detecting changes in TGEM2MT", 40+(5*i/aList.size()) );
             aMT->RecInput( aList[i].c_str() );
             //Get base SysEq key from TGEM2MT key
@@ -392,7 +392,7 @@ void TProfil::TestChangeProfile()
 
     for(uint i=0; i< aList.size(); i++)
     {
-        pVisor->Message( nullptr, "Loading Modelling Project",
+        pVisor->Message("Loading Modelling Project",
                          "Detecting changes in SYSEQ", 45+(45*i/aList.size()) );
         //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
         aSE->RecInput( aList[i].c_str() );
@@ -417,7 +417,7 @@ void TProfil::TestChangeProfile()
         aDU->ods_link(0);
         for(size_t i=0; i< aList.size(); i++)
         {
-            pVisor->Message( nullptr, "Loading Modelling Project",
+            pVisor->Message("Loading Modelling Project",
                              "Detecting changes in DUALTH", 90+(5*i/aList.size()) );
             aDU->RecInput( aList[i].c_str() );
             aDU->InsertChanges( aIComp  );
@@ -440,7 +440,7 @@ void TProfil::TestChangeProfile()
     if( aList.size() > 0 )
     {  for(size_t i=0; i< aList.size(); i++)
         {
-            pVisor->Message( nullptr, "Loading Modelling Project",
+            pVisor->Message("Loading Modelling Project",
                              "Detecting changes in SYSEQ", 95+(5*i/aList.size()) );
 
             //    aPB->ods_link(0);
@@ -531,7 +531,7 @@ AGAIN:
     for(nbad =0,  i=0; i< aList.size(); i++)
     {
         sprintf( tbuf, "Project: %s; Systems: %d; Errors: %d", ProfName.c_str(), i, nbad );
-        iRet =  pVisor->Message( nullptr, "Re-calculating and saving all equilibria", tbuf, i, aList.size() );
+        iRet =  pVisor->Message("Re-calculating and saving all equilibria", tbuf, i, aList.size() );
         if( iRet )
             break;
 
@@ -671,7 +671,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
 
 //    elm_data.flNames.Add(prfName);
-    pVisor->Message( nullptr, "Loading Modelling Project",
+    pVisor->Message("Loading Modelling Project",
 "Copying Kernel database records to Modelling Project. Please, wait...", 10  );
 
     // added to project file icomp.kernel.prfname
@@ -856,6 +856,15 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
       }
     }
 
+    // pH and Eh targets for the Optima modes
+    wnData.push_back(  windowSetupData( "Targets", o_syproc, 0, -1, -1, 0.,'_' ) );
+    if( syp->PpHtg == S_ON )
+        tbData.push_back(  tableSetupData( wnData.size()-1, o_syproc,
+              aObj[o_syproc]->GetKeywd(), 0, "",  syp->pHtg, '_' ));
+    if( syp->PEhtg == S_ON )
+        tbData.push_back(  tableSetupData( wnData.size()-1, o_syproc,
+              aObj[o_syproc]->GetKeywd(), 1, "",  syp->Ehtg, '_' ));
+
     // add static list
     wnData.push_back(  windowSetupData( "Other Inputs", -1, 0, -1, -1, 0.,'_' ) );
     // build scalar list
@@ -976,6 +985,8 @@ if(  !approximatelyEqual( fabs( syp->Vaq),  1.f)  )
     syp->Tmin = 0.;
     syp->Tmax = 0.;
     syp->Tinc = 0.;
+    syp->PpHtg = S_OFF;
+    syp->PEhtg = S_OFF;
 
     // inset data from tbData
     for(size_t ii=0; ii< tbData.size() ; ii++)
@@ -992,8 +1003,11 @@ if(  !approximatelyEqual( fabs( syp->Vaq),  1.f)  )
      int nOswitch = wnData[ tbData[ii].nWin].nSwitch;
      if(nOswitch >=0 )
         aObj[ nOswitch ]->SetString("+",tbData[ii].nIdx, 0);
+     if( nO == o_syproc )   // a listed target is on
+        ( tbData[ii].nIdx == 0 ? syp->PpHtg : syp->PEhtg ) = S_ON;
     }
 
+    // a target used only in the Optima modes is shown as a warning row in the system window (updateWarning())
     TSysEq::pm->CellChanged();
 }
 
@@ -1170,6 +1184,7 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
     Tai[3] = Pai[3] = 0.1;
 
     auto na = TNodeArrayGUI::create(1, TMulti::sm);
+    na->setExportNode();
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
@@ -1251,7 +1266,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Re-calculating and saving all equilibria", pkey, ii, aList.size() ))
+         if( pVisor->Message("Re-calculating and saving all equilibria", pkey, ii, aList.size() ))
             break;
     }
 }
@@ -1298,7 +1313,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
         }
 
         // stop point
-         if( pVisor->Message( nullptr, "Generating GEMS3K for process records", pkey, ii, aList.size() ))
+         if( pVisor->Message("Generating GEMS3K for process records", pkey, ii, aList.size() ))
             break;
     }
 }

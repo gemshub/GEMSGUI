@@ -43,7 +43,7 @@ class TNodeArrayGUI : public TNodeArray
     TNodeGUI* calcNodeGUI;
 
     TestModeGEMParam mode_param;
-    FILE* diffile = nullptr;
+    spdlog::logger* diffile = nullptr;
 
 #ifdef USE_GEMS3K_SERVER
     size_t requests_number=0;
@@ -52,7 +52,7 @@ class TNodeArrayGUI : public TNodeArray
 
     ///  Here we do a GEM calculation in box ii (implementation thread-safe)
     bool CalcIPM_Node(  const TestModeGEMParam& modeParam, TNode* wrkNode,
-                        long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* iaN, FILE* diffile  ) override;
+                        long int ii, DATABRPTR* C0, DATABRPTR* C1, bool* iaN, spdlog::logger* diffile  ) override;
 #endif
 
     void pVisor_Message( bool toclose, long int ndx = 0, long int size = 0 ) override;
@@ -109,6 +109,10 @@ public:
     /// interaction variant. The user must select ICs, DCs and phases to be included
     /// in DATABR lists
     /// Lookup arays from iterators
+    /// Marks the work node as a node that writes GEMS3K files (see TNodeGUI::exportRecipeBulk); call before MakeNodeStructuresOne()
+    void setExportNode( bool on = true )
+    { calcNodeGUI->exportRecipeBulk = on; }
+
     void MakeNodeStructuresOne( QWidget* par, bool select_all,
                                 double Tai[4], double Pai[4]  )
     {
@@ -170,7 +174,7 @@ public:
 
 #ifdef USE_GEMS3K_SERVER
     ///  Here we do a GEM calculation in boxes from  start_node to end_node
-    bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, FILE* diffile ) override;
+    bool CalcIPM_List( const TestModeGEMParam& modeParam, long int start_node, long int end_node, spdlog::logger* diffile ) override;
 
     /// False if all subtasks were calculated
     bool wait_next()  const

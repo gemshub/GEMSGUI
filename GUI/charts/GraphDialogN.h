@@ -97,6 +97,9 @@ public:
     /// Update all graphic lines with new title
     void UpdatePlots( const char *title );
 
+    /// Shows a warning in the status bar of the main window; an empty text clears it
+    void setWarning( const QString& text );
+
     std::string moduleName() const
     {  return  (std::string("gr")+pModule->GetName());   }
 

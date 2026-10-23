@@ -1633,9 +1633,9 @@
         "dimM": 3,
         "dimN": 1,
         "dyna": false,
-        "hint": "Tau - physical time (for kinetic Process simulators) reserved_\n Xi - current value of process extent variable (reserved)_\n Nu - current value of process extent variable (reserved)_",
+        "hint": "pH target for the Optima modes (AOP, SOP, HOP, SHP); the solver adds or removes H+ to reach it_\n Eh target (V) for the Optima modes; the solver adds or removes electrons to reach it_\n Reserved_",
         "id": "o_syproc",
-        "label": "Procs",
+        "label": "tg_",
         "ndxs": "N",
         "type": "F_"
     },
@@ -5153,7 +5153,7 @@
         "dimM": 1,
         "dimN": 1,
         "dyna": false,
-        "hint": "Optima: reporting of absent species: 0 floor values; 1 zero absent phases and rebalance; 2 floor values plus bounded repair { 2 }",
+        "hint": "Optima: reporting of absent phases: 3 = 0 mol by the same rule as the IPM solver; 2 = floor amounts, element totals corrected; 1 = 0 mol by an older rule; 0 = floor amounts as they are { 3 }",
         "id": "o_paxoza",
         "label": "Pa_OZA",
         "ndxs": "N",
@@ -5233,7 +5233,7 @@
         "dimM": 1,
         "dimN": 1,
         "dyna": false,
-        "hint": "Optima: allow acceptance after a mass-balance repair (needs Pa_OTA > 0) { off }",
+        "hint": "Optima: a result that is not fully converged is accepted also after a small mass-balance repair { off }",
         "id": "o_paxoar",
         "label": "Pa_OAR",
         "ndxs": "N",
@@ -5248,6 +5248,46 @@
         "label": "Pa_MCR",
         "ndxs": "N",
         "type": "D_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Rescue of a failed call: 0 off; 1 retry steps; 2 retry steps and return the best balanced attempt as a bad result { 2 }",
+        "id": "o_paxfrs",
+        "label": "Pa_FRS",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: when nothing fixes the redox level: 0 off; 1 write to the log; 2 also aim at pe 4 { 1 }",
+        "id": "o_paxorf",
+        "label": "Pa_ORF",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: when the water runs out, solve the solids alone and keep the lower energy { off }",
+        "id": "o_paxodo",
+        "label": "Pa_ODO",
+        "ndxs": "N",
+        "type": "L_"
+    },
+    {
+        "dimM": 1,
+        "dimN": 1,
+        "dyna": false,
+        "hint": "Optima: most iterations of one call before a retry at nudged compositions; 0 no cap; -1 by system size { 0 }",
+        "id": "o_paxocc",
+        "label": "Pa_OCC",
+        "ndxs": "N",
+        "type": "L_"
     },
     {
         "dimM": 11,

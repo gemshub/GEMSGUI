@@ -31,7 +31,31 @@
 #include "visor.h"
 #include "service.h"
 #include "m_param.h"
+#include "ms_system.h"
 #include "GEMS3K/num_methods.h"
+
+void TNodeGUI::packDataBr()
+{
+    //   CNode->NodeHandle = 0;
+    //   CNode->NodeTypeHY = normal;
+    CNode->NodeTypeMT = normal;
+    CNode->NodeStatusFMT = Initial_RUN;
+    TNode::packDataBr();
+    setTargetsFromSystem();
+    // in an export with a pH or Eh target the result bulk holds the added H+ or electrons: write the recipe
+    // bulk B_, so that GEMS3K adds the same amount again from the target
+    const SYSTEM* syp = TSyst::sm ? TSyst::sm->GetSY() : nullptr;
+    if( exportRecipeBulk && syp && ( syp->PpHtg == S_ON || syp->PEhtg == S_ON ) && syp->B && pmm->mui )
+        for( long int i = 0; i < CSD->nICb; i++ )
+            CNode->bIC[i] = syp->B[ pmm->mui[ CSD->xic[i] ] ];
+}
+
+void TNodeGUI::setTargetsFromSystem()
+{
+    const SYSTEM* syp = TSyst::sm ? TSyst::sm->GetSY() : nullptr;
+    CNode->pHtarget = ( syp && syp->PpHtg == S_ON ) ? double( syp->pHtg ) : DOUBLE_EMPTY;
+    CNode->Ehtarget = ( syp && syp->PEhtg == S_ON ) ? double( syp->Ehtg ) : DOUBLE_EMPTY;
+}
 
 TNodeGUI::TNodeGUI(TMultiBase *apm):TNode()
 {
@@ -71,7 +95,7 @@ void TNodeGUI::MakeNodeStructures(
         aSelPH.push_back( axPH[ii] );
 
     // set default data and realloc arrays
-    makeStartDataChBR( 0, no_interpolat, aSelIC, aSelDC, aSelPH,
+    makeStartDataChBR(no_interpolat, aSelIC, aSelDC, aSelPH,
                        nTp_, nPp_, Ttol_, Ptol_, Tai, Pai );
 }
 
@@ -89,7 +113,7 @@ void TNodeGUI::MakeNodeStructures( QWidget* par, bool select_all,bool no_interpo
     getDataBridgeNames( par, select_all, aSelIC, aSelDC, aSelPH  );
 
     // set default data and realloc arrays
-    makeStartDataChBR( par, no_interpolat, aSelIC, aSelDC, aSelPH,
+    makeStartDataChBR(no_interpolat, aSelIC, aSelDC, aSelPH,
                        nTp_, nPp_, Ttol_, Ptol_, Tai, Pai );
 }
 
@@ -106,7 +130,7 @@ void TNodeGUI::MakeNodeStructures( QWidget* par, bool select_all,
     getDataBridgeNames( par, select_all, aSelIC, aSelDC, aSelPH  );
 
     // set default data and realloc arrays
-    makeStartDataChBR( par, aSelIC, aSelDC, aSelPH, Tai, Pai );
+    makeStartDataChBR(aSelIC, aSelDC, aSelPH, Tai, Pai );
 }
 
 
@@ -158,6 +182,9 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
     // set sizes for DataCh
     uint ii;
     long int i1;
+    // the mixing model parameters go into the IPM file, so they must be loaded first
+    if( TMulti* gm = dynamic_cast<TMulti*>( multi_base ) )
+        gm->LoadMixingModels();
     // reallocates memory for     DATACH  *CSD;  and  DATABR  *CNode;
     if( !CSD )
         CSD = new DATACH;
@@ -278,7 +305,7 @@ void TNodeGUI::setupDataChBR( TCIntArray& selIC, TCIntArray& selDC, TCIntArray& 
 }
 
 /// Prepares and writes DCH and DBR files for reading into the coupled code
-void TNodeGUI::makeStartDataChBR( QWidget* par, bool no_interpolat,
+void TNodeGUI::makeStartDataChBR(bool no_interpolat,
                                TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
                                long int  nTp_, long int  nPp_, double Ttol_, double Ptol_,
                                double *Tai, double *Pai )
@@ -297,7 +324,7 @@ void TNodeGUI::makeStartDataChBR( QWidget* par, bool no_interpolat,
     for( i1=0; i1<CSD->nPp; i1++ )
         CSD->Pval[i1] = Pai[i1]*bar_to_Pa;
 
-    TProfil::pm->LoadFromMtparm( par, CSD, no_interpolat );
+    TProfil::pm->LoadFromMtparm(CSD, no_interpolat );
 
     //for( i1=0; i1<CSD->nPp; i1++ )
     // CSD->Pval[i1] = Pai[i1]*bar_to_Pa;
@@ -305,8 +332,7 @@ void TNodeGUI::makeStartDataChBR( QWidget* par, bool no_interpolat,
 }
 
 /// Prepares and writes DCH and DBR files for reading into the coupled code
-void TNodeGUI::makeStartDataChBR( QWidget* par,
-                               TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+void TNodeGUI::makeStartDataChBR(TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
                                double Tai[4], double Pai[4] )
 {
     long int nT, nP, i1;
@@ -334,7 +360,7 @@ void TNodeGUI::makeStartDataChBR( QWidget* par,
         cP+= Pai[2];
     }
 
-    TProfil::pm->LoadFromMtparm( par, CSD, false ); // only grid
+    TProfil::pm->LoadFromMtparm(CSD, false ); // only grid
 
     //cP = Pai[START_];
     //for( i1=0; i1<CSD->nPp; i1++ )

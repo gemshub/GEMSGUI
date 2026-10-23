@@ -472,6 +472,16 @@ void TMulti::GEM_IPM_Init_gui1()
     pm.pIPN = 1;
 }
 
+void TMulti::LoadMixingModels()
+{
+    bool multiComponent = false;
+    for( long int k = 0; k < pm.FI; k++ )
+        if( pm.L1[k] > 1 )
+            multiComponent = true;
+    if( pm.FIs && multiComponent )
+        GEM_IPM_Init_gui1();
+}
+
 void TMulti::GEM_IPM_Init_gui2()
 {
     // dynamic work arrays - loading initial data

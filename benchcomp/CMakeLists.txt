@@ -52,8 +52,11 @@ qt_add_executable(json2db ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/json2db_
 
 qt_add_executable(check-db ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/check_db.cpp)
 
+# process-run: runs one Process record without the window, in a chosen solver mode (process_run_main.cpp).
+qt_add_executable(process-run ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/process_run_main.cpp)
 
-foreach(gems_tool gems3k-export json2db check-db)
+
+foreach(gems_tool gems3k-export json2db check-db process-run)
     if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
         target_link_libraries(${gems_tool} PRIVATE GEMS3K::GEMS3K-static Qt6::Core)
     else()

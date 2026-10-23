@@ -1283,11 +1283,13 @@ pep->ccTime = 0.0;
              RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
                K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
 
+    try {
         nRec = rt[RT_SYSEQ]->Find(pep->stkey);
         if( nRec >= 0)
         {
             PRof->loadSystat( pep->stkey );   // read SysEq record and unpack data
             pep->syt = rt[RT_SYSEQ]->Rtime(); // test changes in system after process calc
+            keepStartSysEq();
         }
         //       if( nRec < 0 || pep->syt < pep->pet )
         { // current key in base set before
@@ -1301,8 +1303,14 @@ pep->ccTime = 0.0;
         }
 
 //    }
-    pe_text_analyze();  //translate equations of process
-    TCModule::RecCalc(key);
+        pe_text_analyze();  //translate equations of process
+        TCModule::RecCalc(key);
+    }
+    catch( TError& ) {
+        try { restoreStartSysEq(); }
+        catch( TError& ) { }   // keep the error of the setup
+        throw;
+    }
     ModUpdate("Working...");
 
      if( pep->Istat >= P_MT_MODE )
@@ -1343,8 +1351,7 @@ void TProcess::internalCalc()
             }
             else {
                 // if( pointShow==-1 )
-                iRet = pVisor->Message( window(), GetName(),
-                                       Vmessage.c_str(), pep->c_nrk, pep->NR1, pointShow!=-1);
+                iRet = pVisor->Message(GetName(), Vmessage.c_str(), pep->c_nrk, pep->NR1);
 
                 if(iRet) {
                     break;   //cancel process
@@ -1479,10 +1486,13 @@ void TProcess::internalCalc()
         else {
             pep->Istat = P_FINISHED;
         }
+        restoreStartSysEq();
         // Get startup syseq record for fitting
         refreshState();
     }
     catch(TError& xcpt) {
+        try { restoreStartSysEq(); }
+        catch(TError&) { }   // keep the error of the run
         calcFinished = true;
 
         if( pep->Istat < P_MT_MODE ) {
@@ -1500,6 +1510,35 @@ void TProcess::internalCalc()
 
 }
 
+
+// Keeps a copy of the start System record of a run with kinetics (time step above 0)
+void TProcess::keepStartSysEq()
+{
+    startSysEq = QJsonObject();
+    startSysEqKey.clear();
+    if( !( pep->Taui[2] > 0. ) )
+        return;
+    rt[RT_SYSEQ]->toJsonObjectNew( startSysEq, "" );
+    startSysEqKey = char_array_to_string( pep->stkey, EQ_RKLEN );
+}
+
+// Puts the start System record back, so that the next run starts from the same state
+void TProcess::restoreStartSysEq()
+{
+    if( startSysEqKey.empty() )
+        return;
+    const std::string key = startSysEqKey;
+    startSysEqKey.clear();
+    TSysEq::pm->dyn_kill();
+    TSysEq::pm->set_def();
+    rt[RT_SYSEQ]->fromJsonObjectNew( startSysEq );
+    TSysEq::pm->dyn_set();
+    auto nRec = rt[RT_SYSEQ]->Find( key.c_str() );
+    if( nRec >= 0 ) {
+        rt[RT_SYSEQ]->SetKey( key.c_str() );
+        rt[RT_SYSEQ]->Rep( nRec );
+    }
+}
 
 void TProcess::refreshState()
 {
@@ -1608,6 +1647,8 @@ TProcess::RecordPlot( const char* /*key*/ )
         gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
                                    pep->size[0], pep->size[1], plot,
                 pep->axisType, pep->xNames, pep->yNames);
+        if( gd_gr )
+            gd_gr->setWarning( QString::fromStdString( TProfil::pm->targetsIgnoredReason( true ) ) );
     }
     else
     {
@@ -1622,6 +1663,8 @@ TProcess::RecordPlot( const char* /*key*/ )
             lnames.push_back( char_array_to_string( pep->lNamE[ii], MAXGRNAME ));
         gd_gr = updateGraphWindow( gd_gr, this, plt, pep->name,
                                    pep->xNames, pep->yNames, lnames, def_plt_lines );
+        if( gd_gr )
+            gd_gr->setWarning( QString::fromStdString( TProfil::pm->targetsIgnoredReason( true ) ) );
     }
 }
 
@@ -1689,6 +1732,7 @@ void TProcess::genGEM3K( const std::string& filepath, TCStringArray& savedSystem
     Tai[3] = Pai[3] = 0.1;
 
     auto na = TNodeArrayGUI::create(1, TMulti::sm);
+    na->setExportNode();
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 

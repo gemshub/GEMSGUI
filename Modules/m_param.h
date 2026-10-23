@@ -36,6 +36,7 @@
 
 class GemDataStream;
 class QWidget;
+class TNodeGUI;
 
 extern long int showMss;
 
@@ -46,6 +47,32 @@ extern SPP_SETTING pa_;
 /// HOP/SHP: native IPM first, then Optima (cold/warm native leg). The Optima modes need GEMS3K
 /// built with USE_OPTIMA_SOLVER.
 enum class SolverMode { AIA, SIA, AOP, SOP, HOP, SHP };
+
+/// True when the mode uses the pH and Eh targets of the system recipe (the Optima modes, built with Optima)
+inline bool targetsUsedBy( SolverMode mode )
+{
+#ifdef USE_OPTIMA_SOLVER
+    return mode == SolverMode::AOP || mode == SolverMode::SOP || mode == SolverMode::HOP || mode == SolverMode::SHP;
+#else
+    (void)mode;
+    return false;
+#endif
+}
+
+/// Short name of the mode, as in the Calculate menu
+inline const char* solverModeName( SolverMode mode )
+{
+    switch( mode )
+    {
+    case SolverMode::AIA: return "AIA";
+    case SolverMode::SIA: return "SIA";
+    case SolverMode::AOP: return "AOP";
+    case SolverMode::SOP: return "SOP";
+    case SolverMode::HOP: return "HOP";
+    case SolverMode::SHP: return "SHP";
+    }
+    return "?";
+}
 
 inline bool solverModeIsWarm( SolverMode mode )
 {
@@ -205,8 +232,14 @@ public:
     void resetExtendedSettings();
 
     /// Mode chosen in the Calculate menu; used by every equilibrium calculation of the GUI
-    /// (single system, Process, GEM2MT, ...).
-    SolverMode solver_mode = SolverMode::AIA;
+    /// (single system, Process, GEM2MT, ...). SIA starts from the previous result, or as AIA when there is none.
+    SolverMode solver_mode = SolverMode::SIA;
+
+    /// The node through which every GUI calculation runs TNode::GEM_run(), on the GUI's MULTI; made again when
+    /// the system changes (calc_node_key).
+    std::shared_ptr<TNodeGUI> calc_node;
+    std::string calc_node_key;
+    TNodeGUI& calcNode();
 
     // work with Project
     bool initCalcMode( const char * profileKey );
@@ -217,6 +250,12 @@ public:
     //    double CalcEqstat( bool show_progress=true );
     double CalcEqstat(double &kdTime, const long kTimeStep = 0, const double kTime = 0.  );
     double ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& NumIterFIA, long int& NumIterIPM );
+    /// True when the current Process finds its own titration amount (golden section, inverse titration).
+    /// runningOnly: true only while that Process runs.
+    bool processTitrates( bool runningOnly ) const;
+    /// Why the pH and Eh targets of the system are not used; empty when they are used or not set.
+    /// withProcess: also gives the reason that the Process does its own titration.
+    std::string targetsIgnoredReason( bool withProcess ) const;
 /// Run process of calculate equilibria into the GEMSGUI shell
     void CalculateEquilibriumGUI();
     int  indDC( int );
@@ -232,7 +271,7 @@ public:
     // Multi make functions
     void PMtest( const char *key );
 
-    void LoadFromMtparm( QWidget* par, DATACH *CSD, bool no_interpolat );
+    void LoadFromMtparm(DATACH *CSD, bool no_interpolat);
     void CalcBcc(); // Calc bulk composition
     void ShowPhaseWindow(QWidget* par, const char *objName, int nLine);
     //void ShowEqPhaseWindow();

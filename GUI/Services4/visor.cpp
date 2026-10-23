@@ -62,6 +62,11 @@ const char *DEFAULT_DB_DIR = "DB.default/";
 const char *IMAGES_SRC_DIR = "img/";
 const char *HELP_DB_DIR = "help/";
 const char *RESOURCES_DIR = "/Resources/";
+// Testing aid: back up Library/Gems3/projects to project_backup on first start. Set to 0 (or -DGEMS_BACKUP_PROJECTS=0) to disable.
+#ifndef GEMS_BACKUP_PROJECTS
+#define GEMS_BACKUP_PROJECTS 1
+#endif
+
 const char *DEFAULT_USER_DIR= "/Library/Gems3/";
 const char *DEFAULT_PR_DIR= "projects/";
 const char *GEM_CONF = "gemsdbf.conf";
@@ -133,10 +138,9 @@ void TVisor::ProcessProgress( QWidget* parent, int nRT )
 }
 
 // return true if canceled
-bool TVisor::Message( QWidget* parent, const char* name,
-                     const char* msg, int prog, int total, bool move)
+bool TVisor::Message(const char* name, const char* msg, int prog, int total)
 {
-    return pVisorImp->Message( parent, name, msg, prog, total, move);
+    return pVisorImp->Message(name, msg, prog, total);
 }
 
 void TVisor::CloseMessage()
@@ -179,8 +183,7 @@ void TVisor::ProcessProgress(QWidget*, int nRT)
     gui_logger->debug("TVisor::ProcessProgress {}", nRT);
 }
 
-bool TVisor::Message(QWidget*, const char* /*name*/,
-                     const char* msg, int prog, int total, bool)
+bool TVisor::Message(const char* name, const char* msg, int prog, int total)
 {
     gui_logger->debug("TVisor::Message {} {}/{}", msg, prog, total);
     return false;
@@ -332,6 +335,42 @@ void  TVisor::free_memory()
     }
 }
 
+#if GEMS_BACKUP_PROJECTS
+// Recursively copies src into dst (created if absent); returns false on the first failure.
+static bool copyDirRecursive(const QString& src, const QString& dst)
+{
+    QDir srcDir(src);
+    if(!QDir().mkpath(dst))
+        return false;
+    for(const QFileInfo& fi : srcDir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden)) {
+        QString to = dst + "/" + fi.fileName();
+        if(fi.isDir()) {
+            if(!copyDirRecursive(fi.absoluteFilePath(), to))
+                return false;
+        }
+        else if(!QFile::copy(fi.absoluteFilePath(), to))
+            return false;
+    }
+    return true;
+}
+
+// Copies <userDir>/<projDir> into <userDir>/project_backup unless that folder already holds files.
+static void backupProjectsOnce(const std::string& userDir, const std::string& projDir)
+{
+    QDir user(QString::fromStdString(userDir));
+    QString src = user.absoluteFilePath(QString::fromStdString(projDir));
+    QString dst = user.absoluteFilePath("project_backup");
+    if(!QDir(src).exists())
+        return;
+    if(!QDir(dst).isEmpty(QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden))
+        return;
+    if(copyDirRecursive(src, dst))
+        gui_logger->info("Projects backed up to {}", dst.toStdString());
+    else
+        gui_logger->warn("Could not back up projects to {}", dst.toStdString());
+}
+#endif
+
 void TVisor::Setup()
 {
 #ifdef __APPLE__
@@ -353,10 +392,13 @@ void TVisor::Setup()
         option_d = true;
         firstTimeSetup();
     }
+#if GEMS_BACKUP_PROJECTS
+    backupProjectsOnce(userGEMDir(), userProfDir());
+#endif
 
     // define objects
     // a cache from an older release lacks the extended settings objects: rebuild it from vis_od.ini.json
-    if( option_d || !fromObjDAT() || aObj.Find("Pa_MCR") != o_paxmcr ) {
+    if( option_d || !fromObjDAT() || aObj.Find("Pa_OCC") != o_paxocc ) {
         std::string fname = sysGEMDir() + OBJECT_INI;
         gui_logger->debug("TVisor::load {}", fname);
         aObj.clear();   // drop whatever a stale cache put there

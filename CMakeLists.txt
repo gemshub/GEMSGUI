@@ -156,6 +156,7 @@ include_directories(${GEMSGUI_GUI_SOURCE_DIR}/charts)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Services4)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dialogs4)
 include_directories(${GEMSGUI_GUI_SOURCE_DIR}/Dataman)
+include_directories("/usr/local/include/eigen3")
 #include_directories("/usr/local/include/GEMS3K")
 
 # Set some necessary definitions
@@ -204,6 +205,32 @@ if(BUILD_TOOLS)
    # Copy Resources folder
    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
            DESTINATION ${CMAKE_BINARY_DIR}/tools)
+endif()
+
+# The copies of Resources above are made when CMake configures. At every build, bring the page
+# definitions in each copy up to date and delete the object cache, which the program rebuilds.
+set(GUI_RESOURCE_COPIES "")
+if(BUILD_APP)
+   list(APPEND GUI_RESOURCE_COPIES ${CMAKE_BINARY_DIR}/App/Resources)
+endif()
+if(BUILD_EXPORT)
+   list(APPEND GUI_RESOURCE_COPIES ${CMAKE_BINARY_DIR}/benchcomp/Resources)
+endif()
+if(BUILD_TOOLS)
+   list(APPEND GUI_RESOURCE_COPIES ${CMAKE_BINARY_DIR}/tools/Resources)
+endif()
+if(GUI_RESOURCE_COPIES)
+   add_custom_target(sync-gui-resources ALL)
+   foreach(res_copy ${GUI_RESOURCE_COPIES})
+      add_custom_command(TARGET sync-gui-resources POST_BUILD
+         COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                 ${CMAKE_CURRENT_SOURCE_DIR}/Resources/data/vis_od.ini.json
+                 ${CMAKE_CURRENT_SOURCE_DIR}/Resources/data/vis_cn.ini.json
+                 ${CMAKE_CURRENT_SOURCE_DIR}/Resources/data/units.ini.json
+                 ${res_copy}/data
+         COMMAND ${CMAKE_COMMAND} -E remove -f ${res_copy}/visor.data/visobj.dat
+         VERBATIM)
+   endforeach()
 endif()
 
 # Install the cmake config files that permit users to use find_package(ThermoFunGui)
