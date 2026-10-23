@@ -25,6 +25,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
+// GEMS3K headers come first, so the define below does not change their access levels
+// (Visual C++ puts the access level into the linker name)
+#include "GEMS3K/nodearray.h"
 // the thermofun module reads the record lists of the modules, which are protected members
 #define protected public
 #include "visor.h"
