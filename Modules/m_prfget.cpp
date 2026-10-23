@@ -290,12 +290,12 @@ AGAIN:
         rt[RT_PARAM]->SetKey( key_str.c_str() );
 
         if( templ_key == false  )
-            InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
+            InitFN( fstKeyFld, ""); // make Project directory
         else  // using existing Project
         {
             rt[RT_PARAM]->SetKey( templ_str.c_str() );
             std::string fstKeyFld_t = projectName();
-            InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
+            InitFN(fstKeyFld, fstKeyFld_t); // make Project directory
             RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
         }
 
@@ -412,12 +412,12 @@ AGAIN:
         rt[RT_PARAM]->SetKey( key_str.c_str() );
 
         if( templ_key == false  )
-            InitFN( fstKeyFld.c_str(), nullptr  ); // make Project directory
+            InitFN(fstKeyFld, ""); // make Project directory
         else  // using existing Project
         {
             rt[RT_PARAM]->SetKey( templ_str.c_str() );
             std::string fstKeyFld_t = projectName();
-            InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
+            InitFN(fstKeyFld, fstKeyFld_t); // make Project directory
             RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
         }
         rt[RT_PARAM]->SetKey( key_str.c_str() );
@@ -702,7 +702,7 @@ double TProfil::CalcEqstat( double &kdTime, const long kTimeStep, const double k
 
 //add new Project structure
 // Save file configuration to Project structure
-void TProfil::InitFN( const char * prfName, const char* prfTemplate )
+void TProfil::InitFN(const std::string& prfName, const std::string& prfTemplate)
 {
 
     std::string Path = pVisor->userProfDir();
@@ -711,13 +711,13 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
     // make directory Path (find system function)
     pVisor->makeDBDir(Path.c_str());
 
-    if( prfTemplate == nullptr )
+    if( prfTemplate.empty() )
     { // creating empty files
         for(size_t i=0; i<aMod.size(); i++)
         {
             if( aMod[i]->IsSubModule() )
                 continue;
-            rt[aMod[i]->rtNum()]->MakeInNewProfile( Path.c_str(), prfName );
+            rt[aMod[i]->rtNum()]->MakeInNewProfile(Path, prfName);
         }
     }
     else // copy records from template project
@@ -779,7 +779,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
                     if (std::string(aFiles[ii], 0, aFiles[ii].find(".")) == rt[jj]->GetKeywd())
                     {
                         std::string f_new = aFiles[ii];
-                        rt[jj]->MakeInNewProfile( Path.c_str(), prfName, f_new.c_str() );
+                        rt[jj]->MakeInNewProfile(Path, prfName, f_new);
                     }
 
                 }

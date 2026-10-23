@@ -98,7 +98,7 @@ class TProfil : public TCModule
 
 protected:
 
-    void InitFN( const char * prfName, const char* prfTemplate );
+    void InitFN(const std::string& prfName, const std::string& prfTemplate);
     void RenameFN( const char * prfName, const char* prfTemplate );
     bool GetFN( const char * prfName, bool show_dlg=true );
     void SetFN();

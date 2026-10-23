@@ -161,7 +161,7 @@ public:
     void delndx(uint i);
     int  findx( const char *key );
     size_t  xlist( const char *pattern );
-    void PutKeyList( uint nF, GemDataStream& f);
+    void PutKeyList( uint nF, GemDataStream& f) const;
     void GetKeyList_i( uint nF,int nRec, GemDataStream& f, const std::string& file_name );
     void delfile( uint nF );
 
@@ -209,6 +209,8 @@ enum modeList { openf = 0x01, closef = 0x02, oldself = 0x04 };
 
 class TDataBase
 {
+    friend TDBFile;
+
     char Keywd[MAXKEYWD];
     unsigned char nRT;
     RecStatus status;
@@ -242,6 +244,8 @@ protected:
     void fromCFG(std::fstream& f);
     bool dbChangeAllowed( uint nf, bool ifRep=false );
 
+    std::string gen_new_project_file_name(const std::string& dir,
+                                          const std::string& project_name, const std::string& f_name) const;
 public:
     int specialFilesNum;
     int fNum;
@@ -366,8 +370,8 @@ public:
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
     int numFiles() { return aFile.size(); }
-    void  MakeInNewProfile( const std::string& dir,
-      const char *prfName, const char * f_name=nullptr );
+    void  MakeInNewProfile(const std::string& dir,
+                          const std::string& prfName, const std::string& f_name={});
     void OpenOnlyFromList( TCStringArray& names );
     void GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey );
     bool ifDefaultOpen() const;

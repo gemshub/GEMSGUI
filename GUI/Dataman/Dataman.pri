@@ -18,6 +18,7 @@
                     $$DATAMAN_CPP/v_dbm2.cpp \
                     $$DATAMAN_CPP/t_print.cpp \
                     $$DATAMAN_CPP/t_read.cpp \
-                    $$DATAMAN_CPP/v_module.cpp
+                    $$DATAMAN_CPP/v_module.cpp \
+    $$PWD/v_dbfile.cpp
 
 

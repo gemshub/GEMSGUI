@@ -100,22 +100,24 @@ OBJECTS_DIR       = obj
 
 
 # link lib
-INCLUDEPATH   += "/usr/local/include/GEMS3K"
-DEPENDPATH   += "/usr/local/include/GEMS3K"
-LIBS += -lzmq -lGEMS3K
+#INCLUDEPATH   += "/usr/local/include/GEMS3K"
+#DEPENDPATH   += "/usr/local/include/GEMS3K"
+#LIBS += -lzmq -lGEMS3K
 #link sources
-#GEMS3K_CPP     =  ../GEMS3K/GEMS3K
-#GEMS3K_H     =  $$GEMS3K_CPP
-#DEPENDPATH   += $$GEMS3K_H
-#INCLUDEPATH   += $$GEMS3K_H
-#LIBS += -lzmq
-#include($$GEMS3K_CPP/gems3k.pri)
+INCLUDEPATH   += "/usr/local/include/eigen3"
+DEPENDPATH   += "/usr/local/include/eigen3"
+GEMS3K_CPP     =  ../GEMS3K_optima/GEMS3K
+GEMS3K_H     =  $$GEMS3K_CPP
+DEPENDPATH   += $$GEMS3K_H
+INCLUDEPATH   += $$GEMS3K_H
+LIBS += -lzmq
+include($$GEMS3K_CPP/gems3k.pri)
 #end link
 
+include($$DATAMAN_CPP/Dataman.pri)
 include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
 include($$NUMERICS_CPP/Numerics.pri)
-include($$DATAMAN_CPP/Dataman.pri)
 include($$SERVICES4_CPP/Services4.pri)
 include($$DIALOGS4_CPP/Dialogs4.pri)
 include($$CHARTS_CPP/charts.pri)

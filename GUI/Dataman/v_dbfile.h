@@ -29,6 +29,9 @@ extern const char* MARKRECHEAD;
 extern const char MARKRKEY;
 extern const char* ALLKEY;
 
+class TDBKeyList;
+class TDataBase;
+
 struct VDBhead
 {       // header of PDB file
     char VerP[8];
@@ -39,7 +42,7 @@ struct VDBhead
     int nRec;                // number records in file
     int  stacOver,FPosTRT;
     char isDel;
-// Sveta 64   long MinDrLen, MaxDrLen; // min and max size of deleted block
+    // Sveta 64   long MinDrLen, MaxDrLen; // min and max size of deleted block
     int MinDrLen, MaxDrLen; // min and max size of deleted block
     int curDr;               // number of deleted blocks
 
@@ -51,7 +54,7 @@ struct VDBhead
         return sizeof(char[8])*2
                + sizeof(char[11]) + sizeof(char[5])
                + sizeof(int)*4
-// Sveta 64    + sizeof(char) + sizeof(long)*2
+               // Sveta 64    + sizeof(char) + sizeof(long)*2
                + sizeof(char) + sizeof(int)*2
                + sizeof(int);
     }
@@ -59,7 +62,7 @@ struct VDBhead
 
 struct DBentry
 {   // position and size of deleted block
-// Sveta 64    long pos, len;
+    // Sveta 64    long pos, len;
     int pos, len;
 
     void read(GemDataStream& is);
@@ -67,14 +70,14 @@ struct DBentry
 
     static size_t data_size()
     {
-// Sveta 64  return sizeof(long)*2;
-     return sizeof(int)*2;
+        // Sveta 64  return sizeof(long)*2;
+        return sizeof(int)*2;
     }
 };
 
 struct RecEntry
 {   //position, size and file number of record
-// Sveta 64    long pos, len;
+    // Sveta 64    long pos, len;
     int     pos, len;
     unsigned char nFile;
 
@@ -85,9 +88,9 @@ struct RecEntry
 
 // This is file of Data Base
 class TDBFile:
-            public TFile
+                public TFile
 {
-// Sveta 64    long FPosFree;  // len of file
+    // Sveta 64    long FPosFree;  // len of file
     int     FPosFree;  // len of file
     VDBhead *dh;    // header of file
     DBentry *sfe;   // stack of deleted record
@@ -136,7 +139,7 @@ public:
     void SetDh( int fLen, int nRec, int nRT, char isDel );
 
     //---  Manipulation files ---
-    void Create( unsigned char nRT, bool isDel );
+    void Create(int nRT, bool isDel );
     virtual void Open( FileStatus mode );
     virtual void Close();
     void PutHead( GemDataStream& fdb, int deltRec=0 );
@@ -145,6 +148,22 @@ public:
     //---  Manipulation deleted blocks ---
     void AddSfe( RecEntry& re );
     void FindSfe( RecEntry& re );
+
+
+    std::string index_file_name() const;
+    void put_ndx(size_t nF, const TDBKeyList &ind);
+    void get_ndx(size_t nF, TDBKeyList &ind);
+    time_t get_time(bool rclose, RecEntry *ree);
+    void create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyList& ind);
+
+    /// Open file and read indexes
+    /// return true if Stack of deleted records overflow and need compress
+    bool open_file(FileStatus mode, bool rclose, size_t nF, TDBKeyList &ind);
+
+    void save_record_to_file(bool new_record, bool rclose, RecEntry *rh, TDataBase* database);
+    void delete_record_from_file(bool rclose, RecEntry *rh, TDataBase *database);
+    void read_record_from_file(bool rclose, RecEntry *rh, TDataBase *database);
+    void rebuild_file(size_t nF, TDataBase *database);
 };
 
 
