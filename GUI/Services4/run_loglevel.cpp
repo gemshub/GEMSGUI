@@ -31,13 +31,14 @@ QJsonObject readConfig()
     return QJsonDocument::fromJson(file.readAll()).object();
 }
 
-// "default" or a spdlog level name; spdlog::level::from_str maps anything else to "off"
+// "default" or a spdlog level name, including the short names "warn" and "err" that the menu saves;
+// spdlog::level::from_str maps anything else to "off"
 bool valid(const std::string& name)
 {
     if(name == "default") {
         return true;
     }
-    static const std::array<const char*, 7> names = {"trace", "debug", "info", "warning", "error", "critical", "off"};
+    static const std::array<const char*, 9> names = {"trace", "debug", "info", "warning", "warn", "error", "err", "critical", "off"};
     for(const auto* lname : names) {
         if(name == lname) {
             return true;
