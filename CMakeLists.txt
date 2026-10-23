@@ -126,11 +126,14 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     add_compile_options(
         /D_SCL_SECURE_NO_WARNINGS
         /D_CRT_SECURE_NO_WARNINGS=1
-        /MP4
         /EHsc
         /D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
         /DNOMINMAX
     )
+    # ccache needs one source file per compiler call, so /MP is left out when it wraps cl.exe
+    if(NOT CMAKE_VS_GLOBALS MATCHES "CLToolExe")
+        add_compile_options(/MP4)
+    endif()
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
