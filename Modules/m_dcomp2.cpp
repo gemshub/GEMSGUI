@@ -194,7 +194,7 @@ NEXT:
     // need to insert check for code of Murnaghan EoS
     if( CE == CTM_CHP )  // Corrected 02.04.2011 (TW)
     {
-        double Qq, dQq, Tcr, Tcr0, Smax, Vmax, k298, kT, a0, p1, pp, ivdp, idvdtdp,
+        double Qq, Tcr, Tcr0, Smax, Vmax, k298, kT, a0, p1, pp, ivdp, idvdtdp,
                Q298, v_bis, smq;
         // Parameters of lambda-transition
         if( dc[q].FtBer ) // bugfix of crash by reading records with CTM_CHP older than 2011
@@ -239,12 +239,10 @@ NEXT:
             if( T<Tcr )
             {
                Qq = pow( 1.- T/Tcr, 0.25 );
-               dQq = - T*Vmax/(4.*pow((1.+T/Tcr),0.75)*pow(Tcr,2.)*Smax);               
             }
             else
             {
                Qq = 0.;
-               dQq = 0.;
             }
 
             kT = k298 * (1. - (1.5e-4) * ( T-Tst ));

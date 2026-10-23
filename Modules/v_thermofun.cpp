@@ -516,6 +516,7 @@ static void thf_check_reaction( const std::string& key, const std::string& symbo
         if( !thf_plan.find( raws[j], reacdc, rk ) )
         {
             gui_logger->warn("ThermoFun export: ReacDC {} ({}) is not checked: its reactant {} is not a record of the database", key, symbol, thf_rtrim(raws[j]));
+            TReacDC::pm->RecInput( thf_plan.rc_raw[key].c_str() );   // the reaction again, an earlier reactant may have replaced it
             return;
         }
         double v[5];

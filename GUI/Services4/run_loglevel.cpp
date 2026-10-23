@@ -3,6 +3,7 @@
 #include <array>
 #include <map>
 #include <QFile>
+#include <QSaveFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <spdlog/spdlog.h>
@@ -30,6 +31,21 @@ QJsonObject readConfig()
     return QJsonDocument::fromJson(file.readAll()).object();
 }
 
+// "default" or a spdlog level name; spdlog::level::from_str maps anything else to "off"
+bool valid(const std::string& name)
+{
+    if(name == "default") {
+        return true;
+    }
+    static const std::array<const char*, 7> names = {"trace", "debug", "info", "warning", "error", "critical", "off"};
+    for(const auto* lname : names) {
+        if(name == lname) {
+            return true;
+        }
+    }
+    return false;
+}
+
 } // namespace
 
 void init()
@@ -37,7 +53,7 @@ void init()
     auto log_section = readConfig().value("log").toObject();
     for(size_t ii = 0; ii < keys.size(); ++ii) {
         auto name = log_section.value(keys[ii]).toString("default").toStdString();
-        levels[ii] = name.empty() ? "default" : name;
+        levels[ii] = valid(name) ? name : "default";
     }
     baseline.clear();
     for(const auto* name : gems3k_loggers) {
@@ -76,12 +92,12 @@ bool setLevel(Mode mode, const std::string& name)
     log_section[keys[mode]] = QString::fromStdString(name);
     root["log"] = log_section;
 
-    QFile file(QString::fromStdString(GemsSettings::settings_file_name));
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    QSaveFile file(QString::fromStdString(GemsSettings::settings_file_name));
+    if(!file.open(QIODevice::WriteOnly) ||
+       file.write(QJsonDocument(root).toJson(QJsonDocument::Indented)) < 0 || !file.commit()) {
         gui_logger->warn("Unable to save log level to {}", GemsSettings::settings_file_name);
         return false;
     }
-    file.write(QJsonDocument(root).toJson(QJsonDocument::Indented));
     return true;
 }
 

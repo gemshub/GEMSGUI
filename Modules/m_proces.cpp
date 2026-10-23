@@ -1283,6 +1283,7 @@ pep->ccTime = 0.0;
              RT_PROCES, 2, K_IMM, pep->timep, K_IMM, pep->Bnamep,
                K_IMM, pep->Pp, K_IMM, pep->TCp, K_IMM, pep->NVp, K_END );
 
+    try {
         nRec = rt[RT_SYSEQ]->Find(pep->stkey);
         if( nRec >= 0)
         {
@@ -1302,8 +1303,14 @@ pep->ccTime = 0.0;
         }
 
 //    }
-    pe_text_analyze();  //translate equations of process
-    TCModule::RecCalc(key);
+        pe_text_analyze();  //translate equations of process
+        TCModule::RecCalc(key);
+    }
+    catch( TError& ) {
+        try { restoreStartSysEq(); }
+        catch( TError& ) { }   // keep the error of the setup
+        throw;
+    }
     ModUpdate("Working...");
 
      if( pep->Istat >= P_MT_MODE )

@@ -16,6 +16,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
+#include <stdexcept>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -57,14 +58,21 @@ int main(int argc, char* argv[])
         pVisor->ProfileMode = MDD_SYSTEM;
         if (!TProfil::pm->initCalcMode(project.c_str())) {
             std::cerr << "cannot open project " << project << "\n";
+            pVisor->CanClose();
             return 1;
         }
         SolverMode m = SolverMode::AIA;
-        if (mode == "sia") m = SolverMode::SIA;
+        if (mode == "aia") m = SolverMode::AIA;
+        else if (mode == "sia") m = SolverMode::SIA;
         else if (mode == "aop") m = SolverMode::AOP;
         else if (mode == "sop") m = SolverMode::SOP;
         else if (mode == "hop") m = SolverMode::HOP;
         else if (mode == "shp") m = SolverMode::SHP;
+        else {
+            std::cerr << "unknown solver mode '" << mode << "' (aia|sia|aop|sop|hop|shp)\n";
+            pVisor->CanClose();
+            return 2;
+        }
         TProfil::pm->solver_mode = m;
 
         if (std::getenv("PROCESS_RUN_DEBUG"))
@@ -76,6 +84,7 @@ int main(int argc, char* argv[])
             auto dumpGt = [&](const std::string& name) {
                 const long nr = aObj[o_gdx0]->GetN(), nx = aObj[o_gdx0]->GetM(), ny = aObj[o_gdy0]->GetM();
                 std::ofstream f(name);
+                if (!f) throw std::runtime_error("cannot write " + name);
                 f << std::setprecision(10);
                 for (long i = 0; i < nr; ++i) {
                     for (long j = 0; j < nx; ++j) f << aObj[o_gdx0]->Get(i, j) << '\t';
@@ -95,7 +104,11 @@ int main(int argc, char* argv[])
                 TProfil::pm->loadSystat(sk);
             std::stringstream js;
             TProfil::pm->generate_ThermoFun_input_file_stream(js, false);
-            { std::ofstream f(out); f << js.str(); }
+            {
+                std::ofstream f(out);
+                if (!f) throw std::runtime_error("cannot write " + out);
+                f << js.str();
+            }
             std::vector<std::pair<double, double>> points;
             {
                 std::string spec = std::getenv("PROCESS_RUN_TP") ? std::getenv("PROCESS_RUN_TP") : "25;1,50;1,100;1,200;200,25;1000";
@@ -131,6 +144,7 @@ int main(int argc, char* argv[])
                 exported[e.substr(0, t)] = e.substr(t + 1);
             }
             std::ofstream g(out + ".gems");
+            if (!g) throw std::runtime_error("cannot write " + out + ".gems");
             g << std::setprecision(17) << "kind\tkey\tsymbol\tpct\tTC\tP\tstatus\tG\tH\tS\tCp\tV\n";
             auto sym = [](TCModule* m) { return std::string(m->db->FldKey(2), m->db->FldLen(2)); };
             for (int kind = 0; kind < 2; ++kind) {
@@ -243,6 +257,7 @@ int main(int argc, char* argv[])
         {
             const long nr = aObj[o_pcx0]->GetN(), nx = aObj[o_pcx0]->GetM(), ny = aObj[o_pcy0]->GetM();
             std::ofstream f(out + ".stored");
+            if (!f) throw std::runtime_error("cannot write " + out + ".stored");
             f << std::setprecision(10);
             for (long i = 0; i < nr; ++i) {
                 for (long j = 0; j < nx; ++j) f << aObj[o_pcx0]->Get(i, j) << '\t';
@@ -254,6 +269,7 @@ int main(int argc, char* argv[])
         // the process result table: one row per step, x0 = abscissa columns, y0 = sampled values
         const long nr = aObj[o_pcx0]->GetN(), nx = aObj[o_pcx0]->GetM(), ny = aObj[o_pcy0]->GetM();
         std::ofstream f(out);
+        if (!f) throw std::runtime_error("cannot write " + out);
         f << std::setprecision(10);
         for (long i = 0; i < nr; ++i) {
             for (long j = 0; j < nx; ++j) f << aObj[o_pcx0]->Get(i, j) << '\t';
@@ -275,6 +291,11 @@ int main(int argc, char* argv[])
     catch (TError& e) {
         std::cerr << "error: " << e.title << ": " << e.mess << "\n";
         if (visor) pVisor->CanClose();   // close the modules, also after an error, or the exit frees memory twice
+        return 1;
+    }
+    catch (std::exception& e) {
+        std::cerr << "error: " << e.what() << "\n";
+        if (visor) pVisor->CanClose();
         return 1;
     }
     return 0;
