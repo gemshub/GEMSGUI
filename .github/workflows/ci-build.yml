@@ -108,11 +108,21 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
-          rem --- Build, no install ---
-          if not exist "%CCACHE_DIR%" mkdir "%CCACHE_DIR%"
-          ccache --max-size=500M || goto :eof
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build -DCMAKE_VS_GLOBALS="CLToolExe=ccache.exe;CLToolPath=%CONDA_PREFIX%\Library\bin;TrackFileAccess=false;UseMultiToolTask=true;EnforceProcessCountAcrossBuilds=true" || goto :eof
           setlocal EnableDelayedExpansion
+          rem --- ccache runs under the name cl.exe and wraps the real cl.exe ---
+          if not exist "%CCACHE_DIR%" mkdir "%CCACHE_DIR%"
+          ccache --max-size=500M
+          mkdir ccache-bin
+          copy /y "%CONDA_PREFIX%\Library\bin\ccache.exe" ccache-bin\cl.exe > nul
+          for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "CCACHE_COMPILER=%%d\bin\Hostx64\x64\cl.exe"
+          echo ccache compiler: !CCACHE_COMPILER!
+          rem --- Build, no install ---
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build -DCMAKE_VS_GLOBALS="CLToolExe=cl.exe;CLToolPath=%CD%\ccache-bin;TrackFileAccess=false;UseMultiToolTask=true;EnforceProcessCountAcrossBuilds=true"
+          if errorlevel 1 (
+            echo ccache setup failed, configuring without ccache
+            rmdir /s /q build
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build || exit /b 1
+          )
           cmake --build build --config Release -- /m
           if errorlevel 1 (
             for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "MSLINK=%%d\bin\Hostx64\x64\link.exe"
