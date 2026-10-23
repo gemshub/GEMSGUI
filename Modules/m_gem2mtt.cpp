@@ -17,7 +17,6 @@
 //
 
 #include <fstream>
-#include "spdlog/sinks/basic_file_sink.h"
 #include "m_gem2mt.h"
 #include "visor.h"
 #include "stepwise.h"
@@ -327,7 +326,7 @@ long int TGEM2MT::CheckPIAinNodes1D( char IAmode, long int start_node, long int 
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node, spdlog::logger* updiffile )
+bool TGEM2MT::CalcIPM( char mode, long int start_node, long int end_node)
 {
     bool iRet = true;
 
@@ -747,14 +746,6 @@ bool TGEM2MT::Trans1D(char mode)
     bool iret = false;
     bool CompMode = false;   // Component transport mode: true: DC; false: IC
     long int nStart = 0, nEnd = mtp->nC;
-    // long int NodesSetToAIA;
-    // std::string Vmessage;
-
-    std::shared_ptr<spdlog::logger> logfile;
-    std::shared_ptr<spdlog::logger> ph_file;
-    std::shared_ptr<spdlog::logger> diff_log_file;
-
-    showMss = 0L;
 
     if(mtp->PvDDc == S_ON && mtp->PvDIc == S_OFF) { // Set of DC transport using record switches
         CompMode = true;
@@ -763,32 +754,7 @@ bool TGEM2MT::Trans1D(char mode)
         CompMode = false;
     }
 
-    if( mtp->PsMO != S_OFF )
-    {
-        std::string fname;
-        fname = pVisor->userGEMDir();
-
-        // Preparations: opening output files for monitoring 1D profiles
-        auto open_log = [&fname]( const std::string& name, const std::string& file )
-        {
-            spdlog::drop( name );   // a logger of an earlier run may still be registered
-            auto lg = spdlog::basic_logger_mt( name, fname + file, true );
-            lg->set_pattern( "%v" );
-            return lg;
-        };
-        try
-        {
-            logfile = open_log( "ic_aq_log", "ICaq-log.dat" );        // Total dissolved element molarities
-            ph_file = open_log( "ph_log", "Ph-log.dat" );             // Mole amounts of phases
-            diff_log_file = open_log( "ic_diff_log", "ICdif-log.dat" );   // Element amount diffs for t and t-1
-        }
-        catch( const spdlog::spdlog_ex& )
-        {
-            return iRet;
-        }
-    }
-
-    // time scales testing
+// time scales testing
 #ifdef useOMP
     double  ta0, ta1;
     double  t0 = omp_get_wtime();
@@ -821,14 +787,9 @@ bool TGEM2MT::Trans1D(char mode)
         default: // more mass transport models here
             break;
         }
-        //
-        // Calculation of chemical equilibria in all nodes at the beginning
-        // with the LPP AIA
-        if( mtp->PsSIA != S_ON )
-            CalcIPM( NEED_GEM_AIA, nStart, nEnd, diff_log_file.get() );
-        else
-            CalcIPM( NEED_GEM_SIA,nStart, nEnd, diff_log_file.get() );
-        ///       CalcIPM( NEED_GEM_AIA, nStart, nEnd, diff_log_file.get() );
+
+        // Calculation of chemical equilibria in all nodes at the beginning with the LPP AIA
+        CalcIPM( (mtp->PsSIA != S_ON ? NEED_GEM_AIA : NEED_GEM_SIA), nStart, nEnd);
     }
 
     mtp->iStat = AS_READY;
@@ -837,11 +798,19 @@ bool TGEM2MT::Trans1D(char mode)
         CalcMGPdata();
     }
 
-    if( mtp->PsMO != S_OFF )
-        otime += PrintPoint( 2, diff_log_file.get(), logfile.get(), ph_file.get() );
-
-    if( mtp->PsVTK != S_OFF )
-        otime += PrintPoint( 0 );
+#ifdef useOMP
+    ta0 = omp_get_wtime();
+#else
+    t_ap0 = clock();
+#endif
+    iret = accept_point(mtp->ct, "Simulating Reactive Transport: ", mtp->ct, mtp->ntM);
+#ifdef useOMP
+    ta1 = omp_get_wtime();
+    otime +=(ta1-ta0);
+#else
+    t_ap1 = clock();
+    otime +=(t_ap1 -t_ap0)/clc_sec;
+#endif
 
     if(mtp->PsVTK != S_OFF) {
         log_vtk();
@@ -873,19 +842,22 @@ bool TGEM2MT::Trans1D(char mode)
 
         //   Here we call a loop on GEM calculations over nodes
         //   parallelization should affect this loop only
-        CalcIPM( mode, nStart, nEnd, diff_log_file.get() );
+        CalcIPM(mode, nStart, nEnd);
 
-        if( mtp->PsMO != S_OFF )
-            otime += PrintPoint( 3, diff_log_file.get(), logfile.get(), ph_file.get() );
-
-        // Here one has to compare old and new equilibrium phase assemblage
-        // and pH/pe in all nodes and decide if the time step was Ok or it
-        // should be decreased. If so then the nodes from C0 should be
-        // copied to C1 (to be implemented)
-
-        // time step accepted - Copying nodes from C1 to C0 row
-        pVisor->Update();
-        CalcGraph();
+#ifdef useOMP
+        ta0 = omp_get_wtime();
+#else
+        t_ap0 = clock();
+#endif \
+    // Show/out results after GEM calculations over nodes
+        iret = accept_point(mtp->ct, "Simulating Reactive Transport: ", mtp->ct, mtp->ntM);
+#ifdef useOMP
+        ta1 = omp_get_wtime();
+        otime +=(ta1-ta0);
+#else
+        t_ap1 = clock();
+        otime +=(t_ap1 -t_ap0)/clc_sec;
+#endif
 
         // copy node array T1 into node array T0
         copyNodeArrays();
@@ -903,11 +875,9 @@ bool TGEM2MT::Trans1D(char mode)
             CalcMGPdata(); // Recalculation of MGP compositions and masses
         }
 
-        if( mtp->PsMO != S_OFF )
-            otime += PrintPoint( 4, diff_log_file.get(), logfile.get(), ph_file.get() );
-
-        if( mtp->PsVTK != S_OFF )
-            otime += PrintPoint( 0 );
+        if(mtp->PsVTK != S_OFF) {
+            log_vtk();
+        }
 
     } while(mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM);
 
@@ -920,14 +890,9 @@ bool TGEM2MT::Trans1D(char mode)
     double dtime = (t_end-t_start)/clc_sec;
 #endif
 
-
-    if( mtp->PsMO != S_OFF )
-    {
-        diff_log_file->info( "Total time of calculation {} s;  Time of output {} s;  Whole run time {} s;  Pure GEM run time {} s",
-                             (dtime-otime), otime, dtime, mtp->TimeGEM );
-        diff_log_file->flush();
-        logfile->flush();
-        ph_file->flush();
+    if(mtp->PsMO != S_OFF) {
+        diff_log_file->info("Total time of calculation {} s;  Time of output {} s;  Whole run time {} s;  Pure GEM run time {} s",
+                            (dtime-otime), otime, dtime, mtp->TimeGEM);
     }
 
     pVisor->CloseMessage();
@@ -955,9 +920,8 @@ void TGEM2MT::alloc_loggers()
     }
 }
 
-// plotting the record -------------------------------------------------
-//Added one point to graph
-double TGEM2MT::PrintPoint( long int nPoint, spdlog::logger* diffile, spdlog::logger* logfile, spdlog::logger* ph_file )
+// Added one point to loggers
+void TGEM2MT::point_to_loggers()
 {
     long int evrt =10;
 

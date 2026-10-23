@@ -403,7 +403,11 @@ protected:
     std::string nameVTK;
     std::string prefixVTK;
 
-    void logProfilePhMol( spdlog::logger* logfile, int inode )
+    std::shared_ptr<spdlog::logger> main_logfile;
+    std::shared_ptr<spdlog::logger> ph_file;
+    std::shared_ptr<spdlog::logger> diff_log_file;
+
+    void logProfilePhMol(spdlog::logger* logfile, int inode )
     {
         if( pa_mt )
             pa_mt->logProfilePhMol(logfile, inode);
@@ -447,8 +451,10 @@ protected:
     void  freeNodeWork();
     void  CalcGraph();
 
-    bool  CalcIPM( char mode, long int start_node = 0,
-         long int end_node = 1000, spdlog::logger* diffile = nullptr );
+    void  copyNodeArrays();
+    void  putHydP( DATABRPTR* C0 );
+    long int CheckPIAinNodes1D(char mode, long int start_node = 0, long int end_node = 1000);
+    bool  CalcIPM(char mode, long int start_node = 0,long int end_node = 1000);
 
     void  MassTransAdvecStart();
     void  MassTransAdvecStep( bool ComponentMode = true );
@@ -487,18 +493,7 @@ protected:
     void MIDEX( long int j, double t, double h );
     // ODE integration from t_begin to t_end with time step step (step can be reduced inside)
     // returns current (possibly reduced) step value or negative value in case of error
-   double INTEG( double eps, double step, double t_begin, double t_end );
-
-    double PrintPoint( long int nPoint, spdlog::logger* diffile = nullptr, spdlog::logger* logfile = nullptr, spdlog::logger* ph_file = nullptr);
-    
-public:
-
-    static TGEM2MT* pm;
-    
-    GEM2MT *mtp;
-
- 
-    explicit TGEM2MT( size_t nrt );
+    double INTEG( double eps, double step, double t_begin, double t_end );
 
     void mt_reset();
     void init_arrays(bool mode);

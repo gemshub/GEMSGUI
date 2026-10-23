@@ -654,8 +654,7 @@ void TGEM2MT::CalcMGPdata()
 // Calculate new equilibrium states in the boxes for tcur = t
 bool TGEM2MT::BoxEqStatesUpdate(long int Ni, double tcur, double step)
 {
-  bool iRet = true;
-  spdlog::logger* diffile = nullptr;
+    bool iret = true;
 
     mtp->dTau = step*mtp->tf;     // This is a doubtful circular dependence
     mtp->cTau = tcur*mtp->tf;

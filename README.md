@@ -81,7 +81,7 @@ Now you can run the [GEMSGUI](#how-to-run-gem-selektor) application
 
 The Optima solver (calculation modes AOP, SOP, HOP, SHP) needs GEMS3K built with Optima (`USE_OPTIMA_SOLVER`).
 
-* **CMake / conda (default build):** GEMSGUI itself has no Optima setting: it links the GEMS3K that `find_package(GEMS3K)` finds, and that GEMS3K must have been built with `-DUSE_OPTIMA_SOLVER=ON`. It also needs the **gemshub Optima** (`github.com/gemshub/optima`, branch `optima_develop`), which differs from the Optima package on conda and is not interchangeable with it; GEMS3K only does `find_dependency(Optima)`, so any Optima in the prefix would be accepted silently. Do not install the conda `optima` package in this environment. Build the gemshub Optima and GEMS3K into the environment once, before the `cmake` commands above:
+* **CMake / conda (default build):** GEMSGUI itself has no Optima setting: it links the GEMS3K that `find_package(GEMS3K)` finds, and that GEMS3K must have been built with `-DUSE_OPTIMA_SOLVER=ON`. It also needs the **gemshub Optima** (`github.com/gemshub/optima`, branch `optima_develop`), which differs from the Optima package on conda and is not interchangeable with it; GEMS3K only does `find_dependency(Optima)`, so any Optima in the prefix would be accepted silently. Do not install the conda `optima` package in this environment. Build the gemshub Optima and GEMS3K (branch `develop_optima`) into the environment once, before the `cmake` commands above:
 
 ```sh
 conda activate GEMSGUI
