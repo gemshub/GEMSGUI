@@ -115,8 +115,10 @@ jobs:
           cmake --build build --config Release
           if errorlevel 1 (
             echo --- DIAGNOSTIC: is the symbol in the installed static library? ---
-            findstr /C:"MoveWorkNodeToArray" "%CONDA_PREFIX%\Library\lib\GEMS3K-static.lib" > nul && echo FOUND in GEMS3K-static.lib || echo MISSING from GEMS3K-static.lib
-            findstr /C:"MoveWorkNodeToArray" "%CONDA_PREFIX%\Library\lib\GEMS3K.lib" > nul && echo FOUND in GEMS3K.lib || echo MISSING from GEMS3K.lib
+            for /f "delims=" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -find "VC\Tools\MSVC\**\bin\Hostx64\x64\link.exe"') do set MSLINK=%%i
+            echo --- DIAGNOSTIC: symbols DEFINED in the installed libraries ---
+            "%MSLINK%" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K-static.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
+            "%MSLINK%" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
             echo --- DIAGNOSTIC: libraries given to the linker for process-run ---
             cmake --build build --config Release --target process-run -- /v:d | findstr /I /C:"GEMS3K" /C:"link.exe"
             exit /b 1

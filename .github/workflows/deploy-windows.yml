@@ -89,7 +89,16 @@ jobs:
           cp "cmake/qt.conf" "C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\bin" || goto :eof
           rem --- Build and install ---
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
-          cmake --build build --target install --config Release || goto :eof
+          cmake --build build --target install --config Release
+          if errorlevel 1 (
+            for /f "delims=" %%i in ('"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -find "VC\Tools\MSVC\**\bin\Hostx64\x64\link.exe"') do set MSLINK=%%i
+            echo --- DIAGNOSTIC: symbols DEFINED in the installed libraries ---
+            "%MSLINK%" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K-static.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
+            "%MSLINK%" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
+            echo --- DIAGNOSTIC: libraries given to the linker for process-run ---
+            cmake --build build --config Release --target process-run -- /v:d | findstr /I /C:"GEMS3K" /C:"link.exe"
+            exit /b 1
+          )
           D:\a\GEMSGUI\GEMSGUI\build\Release\gems3helpconfig-qhp-generator.exe || goto :eof
 
       - name: Check deploy
