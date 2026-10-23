@@ -43,25 +43,29 @@ set(COMMON_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/graph_window_new.cpp
     )
 
-qt_add_executable(gems3k-export ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/export_main.cpp)
+# The shared sources are compiled once here and reused by every tool below.
+add_library(gems_tool_common OBJECT ${COMMON_SOURCES})
+set_target_properties(gems_tool_common PROPERTIES AUTOMOC ON)
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+    target_link_libraries(gems_tool_common PUBLIC GEMS3K::GEMS3K-static Qt6::Core)
+else()
+    target_link_libraries(gems_tool_common PUBLIC GEMS3K::GEMS3K Qt6::Core)
+endif()
+
+qt_add_executable(gems3k-export ${CMAKE_CURRENT_SOURCE_DIR}/export_main.cpp)
 
 # json2db: proof-of-concept CLI that creates a new <keyword>.pdb/.ndx pair
 # (icomp/dcomp/phase/reacdc/sdref) from a JSON records file, with no
 # GUI/QApplication involved. See json2db_main.cpp.
-qt_add_executable(json2db ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/json2db_main.cpp)
+qt_add_executable(json2db ${CMAKE_CURRENT_SOURCE_DIR}/json2db_main.cpp)
 
-qt_add_executable(check-db ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/check_db.cpp)
+qt_add_executable(check-db ${CMAKE_CURRENT_SOURCE_DIR}/check_db.cpp)
 
 # process-run: runs one Process record without the window, in a chosen solver mode (process_run_main.cpp).
-qt_add_executable(process-run ${COMMON_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/process_run_main.cpp)
-
+qt_add_executable(process-run ${CMAKE_CURRENT_SOURCE_DIR}/process_run_main.cpp)
 
 foreach(gems_tool gems3k-export json2db check-db process-run)
-    if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
-        target_link_libraries(${gems_tool} PRIVATE GEMS3K::GEMS3K-static Qt6::Core)
-    else()
-        target_link_libraries(${gems_tool} PRIVATE GEMS3K::GEMS3K Qt6::Core)
-    endif()
+    target_link_libraries(${gems_tool} PRIVATE gems_tool_common)
 endforeach()
 
 #install(TARGETS gems3k-export
