@@ -112,7 +112,15 @@ jobs:
           call conda activate GEMSGUI || goto :eof
           rem --- Build, no install ---
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build  || goto :eof
-          cmake --build build --config Release  || goto :eof
+          cmake --build build --config Release
+          if errorlevel 1 (
+            echo --- DIAGNOSTIC: is the symbol in the installed static library? ---
+            findstr /C:"MoveWorkNodeToArray" "%CONDA_PREFIX%\Library\lib\GEMS3K-static.lib" > nul && echo FOUND in GEMS3K-static.lib || echo MISSING from GEMS3K-static.lib
+            findstr /C:"MoveWorkNodeToArray" "%CONDA_PREFIX%\Library\lib\GEMS3K.lib" > nul && echo FOUND in GEMS3K.lib || echo MISSING from GEMS3K.lib
+            echo --- DIAGNOSTIC: libraries given to the linker for process-run ---
+            cmake --build build --config Release --target process-run -- /v:d | findstr /I /C:"GEMS3K" /C:"link.exe"
+            exit /b 1
+          )
 
       - name: Check conda
         run: |
