@@ -325,17 +325,28 @@ dialog into a text file, row-per-row, space-separated. <br>
 
 In each case, the new text file name and path must be entered or
 selected in the "File open/save" dialog that appears afterwards.&nbsp;
-<p>After using the AIA (automatic initial approximation, default) mode,
-it could be of interest to check whether the GEM task results will
-change or not if the SIA (smart initial approximation) mode of GEM IPM
-has been used. To do so, open the "Calculate" and toggle off the "AIA
-(simplex)" entry, then repeat the GEM IPM calculation. Normally, it
-does about one iteration on the same system, and the GEM results do not
-change. If they do change or GEM IPM does many iterations, then the
-numerical settings and/or CSD and BCC must be revised (<a href="gems_ipm.html">more...</a>). Note that any next GEM calculation,
-also for any new (cloned) system, will be done in the SIA mode without
-the simplex LP step, until the "AIA (simplex)" menu entry will be
-toggled back, or the project session will be closed. <br>
+<p>The default mode is SIA (smart initial approximation). It starts
+from the previous result. If there is no previous result, it starts
+from scratch, as AIA (automatic initial approximation) does. To check
+whether the GEM task results change with a start from scratch, open the
+"Calculate" menu, choose "Solver mode" and select "AIA - native, cold
+start (simplex)", then repeat the GEM IPM calculation. Normally, the GEM
+results do not change. If they do change or GEM IPM does
+many iterations, then the numerical settings and/or CSD and BCC must be
+revised (<a href="gems_ipm.html">more...</a>). Note that the selected
+mode stays in force for any next GEM calculation started with "Run GEM IPM",
+also for any new (cloned) system, until another mode is selected or the
+project session is closed. <br>
+</p>
+
+<p>The same submenu offers the Optima solver modes AOP and SOP (Optima from
+scratch or from the previous result), HOP and SHP (the GEM IPM solver first,
+then Optima refines and checks its answer). They help for solid solutions, melts and other systems where
+several mixing phases compete, and when the GEM IPM solver does not converge.
+They are available only in programs built with the Optima solver. Which mode to
+choose, and how the modes relate to the fields of the Project window "Controls"
+page, is described in <a href="gems_ipm.html#SOLVER_MODES">the numerical settings
+chapter</a>.<br>
 </p>
 
 <p>When the GEM IPM algorithm cannot converge and error messages appear
@@ -1154,6 +1165,11 @@ Components) - main input in GEM task<br>
   </dd>
   <dd>This vector defines stoichiometry of the whole system and sets
 the mass balance constraint equations Ax = b (see more in <a href="theory_gem.html"><tt>theory_gem.html</tt></a> manual).&nbsp; <br>
+  </dd>
+  <dd>With a pH or Eh target in the system recipe (<a href="gems_bcc.html#TARGETS">Targets</a>),
+the solver adds or removes H+ or electrons to reach the target. After the calculation, <tt>b</tt>
+contains this change. A pH target changes H and the charge Zz; an Eh target changes only Zz.
+The other amounts are the same as in the recipe vector <a href="gems_bcc.html#B_"><tt>B_</tt></a>. The calculation log gives the amount added.<br>
   </dd>
   <dd><br>
   </dd>
@@ -2512,7 +2528,7 @@ document<br>
 
 <hr size="2" width="100%"><br>
 
-Last changed: DK 13 Mar. 2012&nbsp; <br>
+Last changed: DM 04.10.2026 (solver mode menu); previous: DK 13 Mar. 2012&nbsp; <br>
 
 <br>
 

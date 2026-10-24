@@ -229,8 +229,15 @@ void NewSystemDialog::defineResultList()
     // end of setup ListView2
 }
 
+void NewSystemDialog::updateWarning()
+{
+    // shown at the right of the status bar of the main window
+    pVisorImp->SetWarning( QString::fromStdString( TProfil::pm->targetsIgnoredReason( false ) ) );
+}
+
 void NewSystemDialog::Update()
 {
+    updateWarning();
     MULTI* pData = TMulti::sm->GetPM();
 
     if( !ListViewResult  && aObj[ o_wi_l1 ]->GetPtr() )

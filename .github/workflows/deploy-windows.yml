@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+
     strategy:
       fail-fast: false
 
@@ -35,12 +38,24 @@ jobs:
         run: >
           echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}" >> "$GITHUB_OUTPUT"
 
+      # TEMPORARY (branch develop_gems3kv5 test): the branch name goes into the package/artifact names
+      - name: Set branch suffix
+        id: branch
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "suffix=" >> "$GITHUB_OUTPUT"
+          else
+            b="${GITHUB_REF_NAME//[^A-Za-z0-9._-]/-}"
+            echo "suffix=-$b" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set deploy dir
         id: strings2
         shell: bash
         run: |
           echo "deploy-output-dir=${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/Gems3-app" >> "$GITHUB_OUTPUT"
-          echo "deploy-output-name=windows-${{ steps.strings.outputs.deploy-name }}.zip" >> "$GITHUB_OUTPUT"
+          echo "deploy-output-name=windows-${{ steps.strings.outputs.deploy-name }}${{ steps.branch.outputs.suffix }}.zip" >> "$GITHUB_OUTPUT"
 
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v4
@@ -56,14 +71,51 @@ jobs:
           conda install conda-devenv
           conda run -n base python -m conda_devenv
 
+      # The Visual Studio generator ignores CMAKE_CXX_COMPILER_LAUNCHER, so ccache runs under the name
+      # cl.exe and wraps the real cl.exe (same setup as ci-build.yml).
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-
+
+      # TEMPORARY (branch develop_gems3kv5 test): GEMS3K and Optima are built from the gemshub repositories
+      # instead of the conda gems3k package; revert together with environment.devenv.yml before merging.
+      # conda activate is not hooked into Git Bash on Windows (CONDA_PREFIX stays unset), so the
+      # environment is activated from cmd, which the build step below uses as well.
+      - name: Build Optima and GEMS3K from the gemshub repositories
+        shell: cmd
+        env:
+          OPTIMA_REF: ${{ vars.OPTIMA_REF || 'optima_develop' }}
+          GEMS3K_REF: ${{ vars.GEMS3K_REF || 'develop_optima' }}
+        run: |
+          call conda activate GEMSGUI || goto :eof
+          "C:\Program Files\Git\bin\bash.exe" .github/scripts/build-gems3k-optima.sh || goto :eof
+
       - name: Building, Testing & Installing GEMSGUI (Windows)
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
           cp "cmake/qt.conf" "C:\Miniconda\envs\GEMSGUI\Library\lib\qt6\bin" || goto :eof
+          setlocal EnableDelayedExpansion
+          if not exist "%CCACHE_DIR%" mkdir "%CCACHE_DIR%"
+          ccache --max-size=500M
+          mkdir ccache-bin
+          copy /y "%CONDA_PREFIX%\Library\bin\ccache.exe" ccache-bin\cl.exe > nul
+          for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "CCACHE_COMPILER=%%d\bin\Hostx64\x64\cl.exe"
+          echo ccache compiler: !CCACHE_COMPILER!
           rem --- Build and install ---
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build  || goto :eof
-          cmake --build build --target install --config Release || goto :eof
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build -DCMAKE_VS_GLOBALS="CLToolExe=cl.exe;CLToolPath=%CD%\ccache-bin;TrackFileAccess=false;UseMultiToolTask=true;EnforceProcessCountAcrossBuilds=true"
+          if errorlevel 1 (
+            echo ccache setup failed, configuring without ccache
+            rmdir /s /q build
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ steps.strings2.outputs.deploy-output-dir }} -A x64 -S . -B build || exit /b 1
+          )
+          cmake --build build --target install --config Release -- /m
+          if errorlevel 1 exit /b 1
+          ccache --show-stats
           D:\a\GEMSGUI\GEMSGUI\build\Release\gems3helpconfig-qhp-generator.exe || goto :eof
 
       - name: Check deploy
@@ -79,6 +131,19 @@ jobs:
           cp "${{ github.workspace }}/Resources/rungems3.bat" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}"
           cp "${{ github.workspace }}/Resources/README-windows.txt" "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/README.txt"
 
+      # TEMPORARY (branch develop_gems3kv5 test): what this package was built from
+      - name: Write build info
+        shell: bash
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          cat > "${{ github.workspace }}/${{ steps.strings.outputs.deploy-name }}/BUILD_INFO.txt" <<EOF
+          GEMSGUI branch: $REF_NAME
+          GEMSGUI commit: ${{ github.sha }}
+          GEMS3K:  ${GEMS3K_REF_USED:-?} @ ${GEMS3K_COMMIT:-?}
+          Optima:  ${OPTIMA_REF_USED:-?} @ ${OPTIMA_COMMIT:-?}
+          EOF
+
       - name: Create zip archive (Windows)
         shell: pwsh
         run: |
@@ -87,7 +152,7 @@ jobs:
       - name: Upload zip archive
         uses: actions/upload-artifact@v4
         with:
-          name: windows-${{ steps.strings.outputs.deploy-name }}
+          name: windows-${{ steps.strings.outputs.deploy-name }}${{ steps.branch.outputs.suffix }}
           path: ${{ github.workspace }}/${{ steps.strings2.outputs.deploy-output-name }}
 
       - name: Upload release asset

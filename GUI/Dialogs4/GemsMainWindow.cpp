@@ -26,6 +26,7 @@
 
 
 #include "visor.h"
+#include "run_loglevel.h"
 #include "HelpWindow.h"
 #include "GemsMainWindow.h"
 #include "NewSystemDialog.h"
@@ -70,6 +71,56 @@ void TKeyTable::keyPressEvent(QKeyEvent* e)
 //--------------------------------------------------------------------------
 
 //   The constructor
+/// One line of text with a yellow warning symbol, cut at the right with "..." when it is too long.
+/// Its height is fixed, so showing or clearing a text does not change the window.
+class StatusWarning : public QLabel
+{
+public:
+    explicit StatusWarning( QWidget* parent ) : QLabel( parent )
+    {
+        setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+        setFixedHeight( fontMetrics().height() + 4 );
+        window()->installEventFilter( this );   // the width follows the window
+        fitWidth();
+    }
+    // the right 58% of the window: the left part stays for the field help
+    void fitWidth() { setFixedWidth( window()->width() * 58 / 100 ); }
+    bool eventFilter( QObject* o, QEvent* e ) override
+    {
+        if( o == window() && ( e->type() == QEvent::Resize || e->type() == QEvent::Show ) )
+            fitWidth();
+        return QLabel::eventFilter( o, e );
+    }
+    void setWarning( const QString& text )
+    {
+        full = text;
+        setToolTip( text );
+        update();
+    }
+protected:
+    void paintEvent( QPaintEvent* ) override
+    {
+        if( full.isEmpty() )
+            return;
+        QPainter p( this );
+        const QString symbol = QString( QChar( 0x26A0 ) ) + " ";
+        p.setPen( QColor( "#e6a100" ) );
+        p.drawText( rect(), Qt::AlignLeft | Qt::AlignVCenter, symbol );
+        const int w = fontMetrics().horizontalAdvance( symbol );
+        p.setPen( palette().color( QPalette::WindowText ) );
+        p.drawText( rect().adjusted( w, 0, 0, 0 ), Qt::AlignLeft | Qt::AlignVCenter,
+                    fontMetrics().elidedText( full, Qt::ElideRight, width() - w ) );
+    }
+private:
+    QString full;
+};
+
+void TVisorImp::SetWarning( const QString& text )
+{
+    if( statusWarning )
+        statusWarning->setWarning( text );
+}
+
 TVisorImp::TVisorImp(int c, char** v):
     QMainWindow(nullptr),
     ui(new Ui::GemsMainWindowData),
@@ -85,7 +136,8 @@ TVisorImp::TVisorImp(int c, char** v):
     ui->action_Use_ThermoFUN->setChecked(GEMS3KGenerator::default_type_f>=GEMS3KGenerator::f_thermofun);
     ui->actionExpanded_view->setChecked(getPhaseExpandMode());
 
-    (void)statusBar();
+    statusWarning = new StatusWarning( this );
+    statusBar()->addPermanentWidget( statusWarning );
     //setMinimumSize( 300, 200 );
 
     // from visor_w.cpp (old TVisorImp)
@@ -213,6 +265,69 @@ TVisorImp::TVisorImp(int c, char** v):
     splH->addWidget(splV);
     splH->setStretchFactor(0, 3);
     splH->setStretchFactor(1, 1);
+
+    // solver mode of Calculate > Run GEM IPM, replacing the former AIA tick
+    {
+        struct ModeItem { const char* text; const char* tip; SolverMode mode; bool optima; };
+        const ModeItem items[] = {
+            { "AIA - native, cold start (simplex)", "GEMS3K IPM from an automatic initial approximation", SolverMode::AIA, false },
+            { "SIA - native, warm start", "GEMS3K IPM from the previous speciation", SolverMode::SIA, false },
+            { "AOP - Optima, cold start", "Optima interior-point solver from an automatic initial approximation", SolverMode::AOP, true },
+            { "SOP - Optima, warm start", "Optima solver from the previous speciation", SolverMode::SOP, true },
+            { "HOP - native, then Optima", "GEMS3K IPM selects the phases, Optima polishes the result", SolverMode::HOP, true },
+            { "SHP - native warm, then Optima", "Like HOP, with the native leg started from the previous speciation", SolverMode::SHP, true } };
+        ui->sactionSimplex->setVisible( false );
+        auto* menu = new QMenu( "Solver &mode", ui->smenu_Calc );
+        auto* group = new QActionGroup( menu );
+        for( const auto& item: items )
+        {
+            auto* act = menu->addAction( item.text );
+            act->setToolTip( item.tip );
+            act->setCheckable( true );
+            act->setActionGroup( group );
+            act->setChecked( item.mode == SolverMode::SIA );
+#ifndef USE_OPTIMA_SOLVER
+            if( item.optima )
+            {
+                act->setEnabled( false );
+                act->setToolTip( "Needs GEMS3K built with USE_OPTIMA_SOLVER" );
+            }
+#endif
+            connect( act, &QAction::triggered, this, [item]() {
+                if( TProfil::pm )
+                    TProfil::pm->solver_mode = item.mode;
+                if( NewSystemDialog::pDia )
+                    NewSystemDialog::pDia->updateWarning();
+            });
+        }
+        ui->smenu_Calc->insertMenu( ui->sactionPrecise, menu );
+    }
+
+    // log level of the GEMS3K loggers for single equilibrium and for GEM2MT runs
+    {
+        const std::pair<const char*, RunLogLevel::Mode> modes[] = {
+            { "Log level: single equilibrium", RunLogLevel::Equilibrium },
+            { "Log level: batch (process, GEM2MT)", RunLogLevel::Process } };
+        const char* names[] = { "default", "trace", "debug", "info", "warn", "err", "critical", "off" };
+        ui->smenu_Calc->addSeparator();
+        for( const auto& mode: modes )
+        {
+            auto* menu = ui->smenu_Calc->addMenu( mode.first );
+            auto* group = new QActionGroup( menu );
+            for( const char* name: names )
+            {
+                auto* act = menu->addAction( name );
+                act->setCheckable( true );
+                act->setActionGroup( group );
+                act->setChecked( RunLogLevel::level( mode.second ) == name );
+                connect( act, &QAction::triggered, this, [this, mode, name]() {
+                    if( !RunLogLevel::setLevel( mode.second, name ) )
+                        vfMessage( this, "Log level", "The log level is applied but could not be saved to "
+                                   "gemsgui-config.json (no write access)." );
+                });
+            }
+        }
+    }
 
     // define signal/slots
     connect( ui->action_Use_ThermoFUN, &QAction::toggled, [&](bool checked){

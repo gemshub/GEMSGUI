@@ -174,7 +174,7 @@ public:
    // stub call for coupled mass transport calculation
   long int GEMPARTRACK( long int Mode, bool ComponentMode, double t0, double t1 );
 
-  void logProfilePhMol(spdlog::logger* logfile, int inode);
+  void logProfilePhMol( spdlog::logger* logfile, int inode );
 
   long int nPTypes() const
    { return anPTypes; }    // Number of allocated particle types (< 20 ? )

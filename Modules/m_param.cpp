@@ -18,6 +18,7 @@
 //-------------------------------------------------------------------
 //
 
+#include <cstdint>
 #include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_syseq.h"
@@ -40,6 +41,10 @@
 TProfil* TProfil::pm;
 
 const std::string _GEMS_version_stamp = std::string(" GEMS-GUI v.") + GEMSGUI_VERSION + " c." + GEMSGUI_VERSION_HASH;
+
+// Heading lines of the Controls page (read-only fields, not part of the record)
+static const char pa_heading_ipm[64] =    "IPM solver settings ---------------------------------------";
+static const char pa_heading_optima[64] = "Optima solver settings ------------------------------------";
 
 SPP_SETTING pa_ = {
     "Tolerances and controls: GEMSGUI v." GEMSGUI_VERSION " and GEMS3K v." GEMS3K_VERSION,
@@ -187,6 +192,47 @@ void TProfil::ChangeSettings(int nSettings)
     pa.ver[TDBVERSION-1]='\0';
 }
 
+// Resets the BASE_PARAM fields stored in the tail of the project record to their defaults.
+// Needed before reading a project saved by an older version, whose record lacks these objects.
+void TProfil::resetExtendedSettings()
+{
+    pa.p.PSTALL = pa_.p.PSTALL;
+    pa.p.IpmStallWindow = pa_.p.IpmStallWindow;
+    pa.p.MbReproject = pa_.p.MbReproject;
+    pa.p.DeterminacyWarn = pa_.p.DeterminacyWarn;
+    pa.p.ColdRetryNudges = pa_.p.ColdRetryNudges;
+    pa.p.FilloutBudget = pa_.p.FilloutBudget;
+    pa.p.StabTPD = pa_.p.StabTPD;
+    pa.p.IpmAugmentedKKT = pa_.p.IpmAugmentedKKT;
+    pa.p.OptimaTol = pa_.p.OptimaTol;
+    pa.p.LogBarrierTau = pa_.p.LogBarrierTau;
+    pa.p.PhaseHessianFloor = pa_.p.PhaseHessianFloor;
+    pa.p.OptimaStallWindow = pa_.p.OptimaStallWindow;
+    pa.p.OptimaMaxSeconds = pa_.p.OptimaMaxSeconds;
+    pa.p.OptimaFDHessian = pa_.p.OptimaFDHessian;
+    pa.p.OptimaMoleFracHessian = pa_.p.OptimaMoleFracHessian;
+    pa.p.OptimaFDHessianDelay = pa_.p.OptimaFDHessianDelay;
+    pa.p.OptimaDcFloor = pa_.p.OptimaDcFloor;
+    pa.p.OptimaEarlyStabilityAt = pa_.p.OptimaEarlyStabilityAt;
+    pa.p.OptimaDimReduce = pa_.p.OptimaDimReduce;
+    pa.p.OptimaDimReduceTol = pa_.p.OptimaDimReduceTol;
+    pa.p.OptimaPreSolveFirstIters = pa_.p.OptimaPreSolveFirstIters;
+    pa.p.OptimaZeroAbsent = pa_.p.OptimaZeroAbsent;
+    pa.p.OptimaLineSearch = pa_.p.OptimaLineSearch;
+    pa.p.OptimaLSStallEscape = pa_.p.OptimaLSStallEscape;
+    pa.p.OptimaLSRejectWorse = pa_.p.OptimaLSRejectWorse;
+    pa.p.OptimaTpdAccept = pa_.p.OptimaTpdAccept;
+    pa.p.OptimaCgSeed = pa_.p.OptimaCgSeed;
+    pa.p.OptimaColdRetry = pa_.p.OptimaColdRetry;
+    pa.p.OptimaFinish = pa_.p.OptimaFinish;
+    pa.p.OptimaAcceptRepair = pa_.p.OptimaAcceptRepair;
+    pa.p.MbClassRule = pa_.p.MbClassRule;
+    pa.p.FailRescue = pa_.p.FailRescue;
+    pa.p.OptimaRedoxFree = pa_.p.OptimaRedoxFree;
+    pa.p.OptimaDryOut = pa_.p.OptimaDryOut;
+    pa.p.OptimaCallCap = pa_.p.OptimaCallCap;
+}
+
 void BASE_PARAM::write(GemDataStream& oss)
 {
     oss.writeArray( &PC, 10 );
@@ -294,6 +340,8 @@ void TProfil::ods_link( int )
      syst->ods_link();
      multi->ods_link();*/
     aObj[o_paver]->SetPtr( pa.ver );
+    aObj[o_paxhd1]->SetPtr( const_cast<char*>(pa_heading_ipm) );
+    aObj[o_paxhd2]->SetPtr( const_cast<char*>(pa_heading_optima) );
     aObj[o_papc]->SetPtr( &(pa.p.PC) );
     aObj[o_paprd]->SetPtr(&(pa.p.PD) );
     aObj[o_padpwt]->SetPtr( &(pa.p.DP));
@@ -350,6 +398,41 @@ void TProfil::ods_link( int )
     aObj[ o_pagdpgw]->SetPtr(  pa.GDpgw );
     aObj[ o_pasdref]->SetPtr(  pa.SDrefKey );
 
+    aObj[ o_paxstall]->SetPtr( &(pa.p.PSTALL));
+    aObj[ o_paxipmsw]->SetPtr( &(pa.p.IpmStallWindow));
+    aObj[ o_paxmbrep]->SetPtr( &(pa.p.MbReproject));
+    aObj[ o_paxdetw]->SetPtr( &(pa.p.DeterminacyWarn));
+    aObj[ o_paxcrn]->SetPtr( &(pa.p.ColdRetryNudges));
+    aObj[ o_paxfob]->SetPtr( &(pa.p.FilloutBudget));
+    aObj[ o_paxstpd]->SetPtr( &(pa.p.StabTPD));
+    aObj[ o_paxkkt]->SetPtr( &(pa.p.IpmAugmentedKKT));
+    aObj[ o_paxotol]->SetPtr( &(pa.p.OptimaTol));
+    aObj[ o_paxlbt]->SetPtr( &(pa.p.LogBarrierTau));
+    aObj[ o_paxphf]->SetPtr( &(pa.p.PhaseHessianFloor));
+    aObj[ o_paxosw]->SetPtr( &(pa.p.OptimaStallWindow));
+    aObj[ o_paxoms]->SetPtr( &(pa.p.OptimaMaxSeconds));
+    aObj[ o_paxofh]->SetPtr( &(pa.p.OptimaFDHessian));
+    aObj[ o_paxomh]->SetPtr( &(pa.p.OptimaMoleFracHessian));
+    aObj[ o_paxofd]->SetPtr( &(pa.p.OptimaFDHessianDelay));
+    aObj[ o_paxodf]->SetPtr( &(pa.p.OptimaDcFloor));
+    aObj[ o_paxoes]->SetPtr( &(pa.p.OptimaEarlyStabilityAt));
+    aObj[ o_paxodr]->SetPtr( &(pa.p.OptimaDimReduce));
+    aObj[ o_paxodt]->SetPtr( &(pa.p.OptimaDimReduceTol));
+    aObj[ o_paxops]->SetPtr( &(pa.p.OptimaPreSolveFirstIters));
+    aObj[ o_paxoza]->SetPtr( &(pa.p.OptimaZeroAbsent));
+    aObj[ o_paxols]->SetPtr( &(pa.p.OptimaLineSearch));
+    aObj[ o_paxole]->SetPtr( &(pa.p.OptimaLSStallEscape));
+    aObj[ o_paxorw]->SetPtr( &(pa.p.OptimaLSRejectWorse));
+    aObj[ o_paxota]->SetPtr( &(pa.p.OptimaTpdAccept));
+    aObj[ o_paxocs]->SetPtr( &(pa.p.OptimaCgSeed));
+    aObj[ o_paxocr]->SetPtr( &(pa.p.OptimaColdRetry));
+    aObj[ o_paxofn]->SetPtr( &(pa.p.OptimaFinish));
+    aObj[ o_paxoar]->SetPtr( &(pa.p.OptimaAcceptRepair));
+    aObj[ o_paxmcr]->SetPtr( &(pa.p.MbClassRule));
+    aObj[ o_paxfrs]->SetPtr( &(pa.p.FailRescue));
+    aObj[ o_paxorf]->SetPtr( &(pa.p.OptimaRedoxFree));
+    aObj[ o_paxodo]->SetPtr( &(pa.p.OptimaDryOut));
+    aObj[ o_paxocc]->SetPtr( &(pa.p.OptimaCallCap));
     aObj[ o_spppar]->SetPtr(  static_cast<void *>(&pa) );
     aObj[ o_spppar]->SetM( sizeof( SPP_SETTING ) );
 aObj[ o_sptext]->SetPtr(  internalBufer );
@@ -467,6 +550,7 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
       nPp_ = aObj[ o_w_pval]->GetN();
 
       auto na = TNodeArrayGUI::create(1, multi_internal);
+      na->setExportNode();
 
       // realloc and setup data for dataCH and DataBr structures
       na->MakeNodeStructuresOne( par, ( flags[0] == S_OFF ),( flags[4] == S_ON ),
@@ -1036,6 +1120,135 @@ void  TProfil::CalculateEquilibriumGUI()
 
 #endif
 
+namespace {
+// FNV-1a hash of a block of memory.
+void hashBytes( uint64_t& h, const void* data, size_t n )
+{
+    if( !data )
+        return;
+    const unsigned char* c = static_cast<const unsigned char*>( data );
+    for( size_t i = 0; i < n; i++ ) { h ^= c[i]; h *= 1099511628211ULL; }
+}
+
+// True when the system has a phase with a kinetic model.
+bool hasKineticPhases( const MULTI* pmp )
+{
+    if( !pmp->kMod )
+        return false;
+    for( long int k = 0; k < pmp->FI; k++ )
+        if( pmp->kMod[k][0] != KM_UNDEF )
+            return true;
+    return false;
+}
+
+// True when TNode::unpackDataBr() would stop on the input: an element amount below pa_DB, or an upper
+// species limit below the lower one. The direct solver call warns about these and continues.
+bool inputRejectedByNode( const MULTI* pmp, double DB )
+{
+    for( long int i = 0; i < pmp->N - 1; i++ )
+        if( pmp->B[i] < DB )
+            return true;
+    for( long int j = 0; j < pmp->L; j++ )
+        if( pmp->DUL[j] < pmp->DLL[j] )
+            return true;
+    return false;
+}
+
+#ifdef USE_OPTIMA_SOLVER
+// One kinetics step in AOP or SOP. If Optima fails, the step is solved again by the GEMS3K IPM solver
+// from a cold start. The kinetic limits of the step are already set, so the retry does not run the kinetics again.
+void optimaKineticsStep( TMulti* multi, long int& NumIterFIA, long int& NumIterIPM )
+{
+    MULTI* pmp = multi->GetPM();
+    try {
+        multi->CalculateEquilibriumStateOptima( NumIterFIA, NumIterIPM );
+        return;
+    }
+    catch( TError& err ) {
+        gui_logger->warn( "Kinetics time {}: Optima failed ({}); this step is solved by the GEMS3K IPM solver.",
+                          pmp->kTau, err.mess );
+    }
+    // GEMSGUI_KINFAIL_EXPORT=<path>: writes the first failed step as GEMS3K files <path>-dat.lst (for a test case)
+    static bool exported = false;
+    if( const char* ex = std::getenv( "GEMSGUI_KINFAIL_EXPORT" ); ex && !exported )
+    {
+        exported = true;
+        double Tai[4] = { pmp->TCc, pmp->TCc, 0., 0.1 }, Pai[4] = { pmp->Pc, pmp->Pc, 0., 0.1 };
+        auto na = TNodeArrayGUI::create( 1, multi );
+        na->setExportNode();
+        na->MakeNodeStructuresOne( nullptr, true, Tai, Pai );
+        ProcessProgressFunction msg = []( const std::string&, long ) { return false; };
+        na->genGEMS3KInputFiles( std::string( ex ) + "-dat.lst", msg, 1, GEMS3KGenerator::default_type_f,
+                                 false, false, false, false );
+    }
+    pmp->pNP = 0;
+    multi->CalculateEquilibriumState( NumIterFIA, NumIterIPM, false );
+}
+#endif
+} // namespace
+
+// The node for GUI calculations: all species, phases and elements of the current system, one T and P point.
+// It is made again when the names, the stoichiometry or the phase setup of the system change.
+TNodeGUI& TProfil::calcNode()
+{
+    MULTI* pmp = multi_internal->GetPM();
+    uint64_t h = 1469598103934665603ULL;
+    const long int dims[4] = { pmp->N, pmp->L, pmp->FI, pmp->FIs };
+    hashBytes( h, dims, sizeof( dims ) );
+    hashBytes( h, pmp->SB, (size_t)pmp->N * ( MAXICNAME + MAXSYMB ) );
+    hashBytes( h, pmp->SM, (size_t)pmp->L * MAXDCNAME );
+    hashBytes( h, pmp->SF, (size_t)pmp->FI * ( MAXPHNAME + MAXSYMB ) );
+    hashBytes( h, pmp->A, (size_t)pmp->N * pmp->L * sizeof( double ) );
+    hashBytes( h, pmp->L1, (size_t)pmp->FI * sizeof( long int ) );
+    hashBytes( h, pmp->PHC, (size_t)pmp->FI );
+    hashBytes( h, pmp->DCC, (size_t)pmp->L );
+    hashBytes( h, pmp->ICC, (size_t)pmp->N );
+    hashBytes( h, pmp->MM, (size_t)pmp->L * sizeof( double ) );
+    hashBytes( h, pmp->Awt, (size_t)pmp->N * sizeof( double ) );
+    const char aalp = pmp->Aalp ? 1 : 0;
+    hashBytes( h, &aalp, 1 );
+    const std::string key = std::to_string( h );
+    if( !calc_node || key != calc_node_key )
+    {
+        calc_node = std::make_shared<TNodeGUI>( multi_internal );
+        // a wide T and P tolerance: the thermodynamic data come from the GUI, not from this one-point table
+        double Tai[4] = { pmp->TCc, pmp->TCc, 0., 1e4 }, Pai[4] = { pmp->Pc, pmp->Pc, 0., 1e6 };
+        const double fx = pmp->FX;
+        if( pmp->FX == kTotalGibbsEnergyUnset )
+            pmp->FX = 0.;   // packDataBr() would report the "not computed" marker as an error
+        calc_node->MakeNodeStructures( nullptr, true, Tai, Pai );
+        pmp->FX = fx;
+        calc_node_key = key;
+    }
+    return *calc_node;
+}
+
+bool TProfil::processTitrates( bool runningOnly ) const
+{
+    const TProcess* proc = TProcess::pm;
+    if( !proc || !proc->pep )
+        return false;
+    if( proc->pep->PsPro == S_OFF )   // only the inverse titration ('G') runs the golden section
+        return false;
+    if( runningOnly )
+        return proc->pep->Istat == P_EXECUTE || proc->pep->Istat == P_MT_EXECUTE;
+    return true;
+}
+
+std::string TProfil::targetsIgnoredReason( bool withProcess ) const
+{
+    const SYSTEM* syp = TSyst::sm->GetSY();
+    if( syp->PpHtg != S_ON && syp->PEhtg != S_ON )
+        return "";
+    // a Process that titrates by itself does not use the targets in any solver mode: nothing to warn about
+    if( withProcess && processTitrates( false ) )
+        return "";
+    if( !targetsUsedBy( solver_mode ) )
+        return std::string( "The solver mode is " ) + solverModeName( solver_mode ) +
+               ": the pH and Eh targets are not used. Select AOP, SOP, HOP or SHP in Calculate > Solver mode to use them.";
+    return "";
+}
+
 // GEM IPM calculation of equilibrium state in MULTI
 // without testing changes in the system
 //
@@ -1043,24 +1256,185 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
 {
   TSysEq* STat = dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
   calcFinished = false;
+  double calcTime = 0.;
 
   //multi->Access_GEM_IMP_init();
   //outMultiTxt( "Reaktoro_before.dump.txt"  );
 #ifdef USE_GEMS3K_SERVER
   CalculateEquilibriumGUI( );
+  calcTime = multi_internal->GetPM()->t_elap_sec;
 #else
-  multi_internal->CalculateEquilibriumState( /*0,*/ NumIterFIA, NumIterIPM );
+  // The Calculate menu sets the mode, cold or warm, for every calculation, also in a Process run.
+  // A warm mode needs an earlier solution in memory.
+  const SolverMode mode = solver_mode;
+  MULTI* pmp = multi_internal->GetPM();
+  // pH and Eh targets of the system recipe (Targets, tg_). Only the Optima modes use them: in AIA and
+  // SIA, and in a build without Optima, a target is not used and a warning is written.
+  const SYSTEM* syp = TSyst::sm->GetSY();
+  const bool targetSet = syp->PpHtg == S_ON || syp->PEhtg == S_ON;
+  // A Process that does its own titration (golden section) sets the amount itself: no target is used then.
+  const bool processOwnTitration = processTitrates( true );
+  const bool useTargets = targetSet && targetsUsedBy( mode ) && !processOwnTitration;
+  const bool pHtarget = useTargets && syp->PpHtg == S_ON, Ehtarget = useTargets && syp->PEhtg == S_ON;
+  {
+      // warn once, and again only after the mode or the target setting changes
+      static int lastWarned = -1;
+      const std::string reason = processOwnTitration ? std::string() : targetsIgnoredReason( false );
+      const int state = reason.empty() ? -1 : int( mode );
+      if( state >= 0 && state != lastWarned )
+          gui_logger->warn( "{}", reason );
+      lastWarned = state;
+  }
+  struct TargetsOff {   // removes the targets after the calculation, also after an error
+      TMulti* m;
+      ~TargetsOff() { m->ClearControlConditions(); }
+  } targetsOff{ multi_internal };
+  multi_internal->ClearControlConditions();
+  if( pHtarget || Ehtarget )
+  {
+#ifdef USE_OPTIMA_SOLVER
+      // the target setters find the H, charge and H+ indices through the node
+      TNodeGUI& tnode = calcNode();
+      multi_internal->node1 = &tnode;
+      try {
+          if( pHtarget )
+              multi_internal->SetControlCondition_pH( syp->pHtg );
+          if( Ehtarget )
+              multi_internal->SetControlCondition_Eh( syp->Ehtg );
+      }
+      catch( ... ) { multi_internal->node1 = nullptr; throw; }
+      multi_internal->node1 = nullptr;
+#endif
+  }
+  const bool warm = solverModeIsWarm( mode ) && pmp->pESU != 0;
+#ifndef USE_OPTIMA_SOLVER
+  if( mode != SolverMode::AIA && mode != SolverMode::SIA )
+      Error( "Solver mode", "GEMS3K was built without the Optima solver (USE_OPTIMA_SOLVER): "
+                            "choose AIA or SIA in Calculate > Solver mode." );
+#endif
+  // Kinetics, the step-by-step mode and an input that the node rejects use the direct solver call.
+  const bool kinetics = pmp->kdT > 0. && hasKineticPhases( pmp );
+  const bool rejected = inputRejectedByNode( pmp, multi_internal->base_param()->DB );
+  if( kinetics || stepWise1 || rejected )
+  {
+      gui_logger->debug( "Direct solver call: kinetics {}, step-by-step {}, input rejected by the node {}",
+                         kinetics, stepWise1, rejected );
+      TMultiBase::BeginCalculation();
+      pmp->pNP = warm ? 1 : 0;
+      switch( mode )
+      {
+      case SolverMode::AIA: case SolverMode::SIA:
+          multi_internal->CalculateEquilibriumState( NumIterFIA, NumIterIPM );
+          break;
+#ifdef USE_OPTIMA_SOLVER
+      case SolverMode::AOP: case SolverMode::SOP:
+          if( kinetics )
+              optimaKineticsStep( multi_internal, NumIterFIA, NumIterIPM );
+          else
+              multi_internal->CalculateEquilibriumStateOptima( NumIterFIA, NumIterIPM );
+          break;
+      case SolverMode::HOP: case SolverMode::SHP:
+          multi_internal->CalculateEquilibriumStateHOP( NumIterFIA, NumIterIPM, warm );
+          break;
+#endif
+      default:
+          break;
+      }
+      multi_internal->ReportAbsentPhaseIndexes();   // a real saturation index for a missing mixed phase
+      calcTime = pmp->t_elap_sec;
+  }
+  else
+  {
+      // All other calculations run through TNode::GEM_run(), with the quick first try and the retries of GEMS3K.
+      long int need = NEED_GEM_AIA;
+      switch( mode )
+      {
+      case SolverMode::AIA: case SolverMode::SIA: need = warm ? NEED_GEM_SIA : NEED_GEM_AIA; break;
+#ifdef USE_OPTIMA_SOLVER
+      case SolverMode::AOP: case SolverMode::SOP: need = warm ? NEED_GEM_SOP : NEED_GEM_AOP; break;
+      case SolverMode::HOP: case SolverMode::SHP: need = warm ? NEED_GEM_SHP : NEED_GEM_HOP; break;
+#endif
+      default: break;
+      }
+      TNodeGUI& node = calcNode();
+      DATABR* dbr = node.pCNode();
+      const DATACH* dch = node.pCSD();
+      // GEM_run() writes these from the node; they are put back after, so the GUI keeps its own values
+      const double TCc = pmp->TCc, Tc = pmp->Tc, Pc = pmp->Pc, VXc = pmp->VXc, kTau = pmp->kTau, kdT = pmp->kdT;
+      // the inputs, from MULTI; the node keeps its own last answer, which a retry can start from
+      dbr->TK = pmp->TCc + C_to_K;
+      dbr->P = pmp->Pc * bar_to_Pa;
+      dbr->Vs = pmp->VXc * 1e-6;
+      for( long int i = 0; i < dch->nICb; i++ )
+          dbr->bIC[i] = pmp->B[ dch->xic[i] ];
+      for( long int j = 0; j < dch->nDCb; j++ )
+      {
+          dbr->dul[j] = pmp->DUL[ dch->xdc[j] ];
+          dbr->dll[j] = pmp->DLL[ dch->xdc[j] ];
+      }
+      for( long int k = 0; k < dch->nPHb; k++ )
+      {
+          if( dch->nAalp > 0 )
+              dbr->aPH[k] = pmp->Aalp[ dch->xph[k] ] * kg_to_g;
+          dbr->omPH[k] = pmp->Falp[ dch->xph[k] ];
+          dbr->xPH[k] = pmp->XF[ dch->xph[k] ];
+      }
+      node.setTargetsFromSystem();   // GEM_run() registers these again from the DBR
+      if( !useTargets )
+          dbr->pHtarget = dbr->Ehtarget = DOUBLE_EMPTY;   // not used in this mode
+      dbr->Tm = 0.;   // no kinetic phases: the time step stays with the Process only
+      dbr->dt = 0.;
+      dbr->NodeStatusCH = need;
+      // the retries must not ask questions; one question is asked at the end
+      const long int showMss0 = showMss;
+      showMss = 0L;
+      const long int st = node.GEM_run( false );
+      showMss = showMss0;
+      node.SyncMultiWithDataBr();   // a retry can return an earlier attempt, kept only in the node
+      pmp->TCc = TCc; pmp->Tc = Tc; pmp->Pc = Pc; pmp->VXc = VXc; pmp->kTau = kTau; pmp->kdT = kdT;
+      long int numK2 = 0;
+      calcTime = node.GEM_CalcTime( numK2, NumIterFIA, NumIterIPM );
+      pmp->t_elap_sec = calcTime;
+      gui_logger->debug( "Node solver call: mode {}, status {}, G {}", need, st, pmp->FX );
+      if( st == T_ERROR_GEM && userCancel1 )
+          throw TMulti::UserCancelException();
+      if( st == T_ERROR_GEM || st == ERR_GEM_AIA || st == ERR_GEM_SIA
+#ifdef USE_OPTIMA_SOLVER
+          || st == ERR_GEM_AOP || st == ERR_GEM_SOP || st == ERR_GEM_HOP || st == ERR_GEM_SHP
+#endif
+         )
+          Error( "GEM IPM calculation", node.ipmLogError().empty() ? std::string( "no result" ) : node.ipmLogError() );
+      if( st == BAD_GEM_AIA || st == BAD_GEM_SIA
+#ifdef USE_OPTIMA_SOLVER
+          || st == BAD_GEM_AOP || st == BAD_GEM_SOP || st == BAD_GEM_HOP || st == BAD_GEM_SHP
+#endif
+         )
+          multi_internal->testMulti();   // logs the warning and asks "Continue?" as the direct call does
+  }
+#ifdef USE_OPTIMA_SOLVER
+  // what each target needed: the H+ (pH) or electrons (Eh) added to or removed from the bulk composition
+  for( const auto& c : multi_internal->GetControlConditions() )
+  {
+      const double added = -c.titrantAmount;   // H+ (pH) or electrons (Eh) added to the bulk composition
+      if( c.targetMet )
+          gui_logger->info( "Target {} = {}: reached {}; {} {} mol {}", c.name, c.target, c.achievedValue,
+                            added >= 0. ? "added" : "removed", std::fabs( added ), c.name == "pH" ? "H+" : "electrons" );
+      else
+          gui_logger->warn( "Target {} = {} not reached: {} (tolerance {})", c.name, c.target, c.achievedValue, c.tolerance );
+  }
+#endif
 #endif
   //outMultiTxt( "Reaktoro_after.dump.txt"  );
 
   calcFinished = true;
   STat->setCalcFlag( true );
   // STat->CellChanged(); // SD 28/11/2011 to protect MessageToSave()
-  return multi_internal->GetPM()->t_elap_sec;
+  return calcTime;
 }
 
 
 // ------------------ End of m_param.cpp -----------------------
+
 
 
 

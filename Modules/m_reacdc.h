@@ -199,6 +199,8 @@ public:
     elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist );
 
     QJsonArray all_to_thermofun(QJsonArray &subsArray);
+    /// Keys of all the records, for the export to ThermoFun
+    void thf_keys( TCStringArray& keys );
 };
 
 enum pardc_ndx {  /* indexes of work arrays?*/

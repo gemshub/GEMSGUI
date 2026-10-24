@@ -465,13 +465,12 @@ long int TParticleArray::GEMPARTRACK( long int Mode, bool ComponentMode, double 
   return iRet;
 }
 
-void TParticleArray::logProfilePhMol(spdlog::logger* logfile, int inode)
+void TParticleArray::logProfilePhMol( spdlog::logger* logfile, int inode )
 {
-    std::vector<long int> values;
-    for(long int jp=0; jp<nPTypes(); ++jp) {
-        values.push_back(getNPnum(inode, jp));   // number of particles in the node
-    }
-    logfile->info("{:-8}", fmt::join(values, " "));
+  std::vector<long int> values;
+  for( long int jp=0; jp < nPTypes(); jp++ )
+       values.push_back( getNPnum( inode, jp) );   // number of particles in the node
+  logfile->info( "{:-8}", fmt::join( values, " " ) );
 }
 
 //=========================================================================

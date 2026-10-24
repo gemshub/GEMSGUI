@@ -1498,6 +1498,13 @@ void TMulti::getNamesList( int nO, TCStringArray& lst )
 
    long int nOsz = aObj[nO]->GetN();
 
+   if( nO == o_syproc )   // pH and Eh targets of the system recipe
+   {
+       lst.push_back( "pH" );
+       lst.push_back( "Eh, V" );
+       return;
+   }
+
     // Getting new indexation code
    switch( iCode )
    {  // analyze indexation code

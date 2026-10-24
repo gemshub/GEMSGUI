@@ -21,6 +21,7 @@
 #include <cstdio>
 #include "m_gem2mt.h"
 #include "visor.h"
+#include "run_loglevel.h"
 #include "m_syseq.h"
 #include "GEMS3K/io_keyvalue.h"
 #include "GEMS3K/io_simdjson.h"
@@ -967,6 +968,7 @@ void TGEM2MT::RecCalc( const char * key )
        Error( GetName(), "E02GTexec: Please, do it in the Equilibria Calculation mode" );
 
      error_lst_path.clear();
+     RunLogLevel::apply( RunLogLevel::Process );
 
    if( mtp->PsVTK != S_OFF )
    {

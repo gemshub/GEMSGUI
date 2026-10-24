@@ -210,6 +210,13 @@ QString TObjectModel::getHorizontalLabel(TObject *pObj, int iM) const
 
 }
 
+// True for an F_CHECKBOX field whose character set is the two-state "01" (OnOff in units.ini):
+// shown as a tick box instead of a drop-down.
+static bool isTickField( const FieldInfo& fld, int iM )
+{
+    return fld.fType == ftCheckBox && fld.nO >= 0 && aUnits[fld.npos].getVals(iM) == "01";
+}
+
 QVariant TObjectModel::data( const QModelIndex& index, int role ) const
 {
     int nO, iN, iM;
@@ -219,11 +226,20 @@ QVariant TObjectModel::data( const QModelIndex& index, int role ) const
 
     int ii = getObjFromModel( index.row(), index.column(), nO, iN, iM);
 
+    if( role == Qt::CheckStateRole )
+    {
+        if( ii >= 0 && isTickField( flds[ii], iM ) )
+            return aObj[nO]->GetStringEmpty( iN, iM ) == "1" ? Qt::Checked : Qt::Unchecked;
+        return QVariant();
+    }
+
     switch( role )
     {
     case Qt::DisplayRole:
     case Qt::EditRole:
         if( nO == -1 )
+            return  QString("");
+        if( ii >= 0 && isTickField( flds[ii], iM ) )
             return  QString("");
         return  QString::fromLatin1( visualizeEmpty( aObj[nO]->GetStringEmpty( iN, iM ) ).c_str() );
     case Qt::ToolTipRole:
@@ -255,6 +271,18 @@ bool TObjectModel::setData( const QModelIndex &index, const QVariant &value, int
 {
     int nO, iN, iM;
 
+    if( index.isValid() && role == Qt::CheckStateRole )
+    {
+        int iifld = getObjFromModel( index.row(), index.column(), nO, iN, iM);
+        if( nO >= 0 && flds[iifld].edit == eYes && isTickField( flds[iifld], iM ) )
+        {
+            aObj[nO]->SetString( value.toInt() == Qt::Checked ? "1" : "0", iN, iM );
+            emit dataChanged(index, index);
+            return true;
+        }
+        return false;
+    }
+
     if( index.isValid() && ( role == Qt::EditRole ) )
     {
         int iifld = getObjFromModel( index.row(), index.column(), nO, iN, iM);
@@ -280,7 +308,10 @@ Qt::ItemFlags TObjectModel::flags( const QModelIndex & index ) const
     int ii = getObjFromModel( index.row(), index.column(), nO, iN, iM);
     if(ii >= 0 )
         if( flds[ii].edit == eYes )
-        {  flags |= Qt::ItemIsEditable;
+        {
+            if( isTickField( flds[ii], iM ) )
+                return ( flags & ~Qt::ItemIsEditable ) | Qt::ItemIsUserCheckable;
+            flags |= Qt::ItemIsEditable;
             return flags;
         }
     return (flags & ~Qt::ItemIsEditable);
