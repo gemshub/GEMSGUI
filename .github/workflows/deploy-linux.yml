@@ -4,7 +4,6 @@ on:
     branches:
       - test_prerelease
       - project_err1
-      - develop_gems3kv5   # TEMPORARY: branch test
   release:
     types:
       - published

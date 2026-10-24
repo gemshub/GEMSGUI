@@ -54,6 +54,17 @@ jobs:
           conda install conda-devenv
           conda run -n base python -m conda_devenv
 
+      # Linux/macOS use ccache through CMAKE_CXX_COMPILER_LAUNCHER (cmake/modules/CCache.cmake).
+      # The Visual Studio generator ignores that launcher, so the Windows build below
+      # runs ccache.exe in place of cl.exe through CMAKE_VS_GLOBALS.
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-
+
       # TEMPORARY (branch develop_gems3kv5 test): GEMS3K and Optima are built from the gemshub repositories
       # instead of the conda gems3k package; revert together with environment.devenv.yml before merging.
       - name: Build Optima and GEMS3K from the gemshub repositories
@@ -77,17 +88,6 @@ jobs:
         run: |
           call conda activate GEMSGUI || goto :eof
           "C:\Program Files\Git\bin\bash.exe" .github/scripts/build-gems3k-optima.sh || goto :eof
-
-      # Linux/macOS use ccache through CMAKE_CXX_COMPILER_LAUNCHER (cmake/modules/CCache.cmake).
-      # The Visual Studio generator ignores that launcher, so the Windows build below
-      # runs ccache.exe in place of cl.exe through CMAKE_VS_GLOBALS.
-      - name: Cache ccache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ccache-${{ matrix.os }}-${{ github.sha }}
-          restore-keys: |
-            ccache-${{ matrix.os }}-
 
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
@@ -124,15 +124,7 @@ jobs:
             cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build || exit /b 1
           )
           cmake --build build --config Release -- /m
-          if errorlevel 1 (
-            for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "MSLINK=%%d\bin\Hostx64\x64\link.exe"
-            echo --- DIAGNOSTIC: symbols DEFINED in the installed libraries ---
-            "!MSLINK!" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K-static.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
-            "!MSLINK!" /dump /linkermember:1 "%CONDA_PREFIX%\Library\lib\GEMS3K.lib" | findstr /C:"MoveWorkNodeToArray" /C:"CopyWorkNodeFromArray"
-            echo --- DIAGNOSTIC: libraries given to the linker for process-run ---
-            cmake --build build --config Release --target process-run -- /v:d | findstr /I /C:"GEMS3K" /C:"link.exe"
-            exit /b 1
-          )
+          if errorlevel 1 exit /b 1
           ccache --show-stats
 
       - name: Check conda

@@ -48,9 +48,37 @@ rm -rf "$WORK"
 mkdir -p "$WORK"
 cd "$WORK"
 
+# Windows: the Visual Studio generator ignores CMAKE_CXX_COMPILER_LAUNCHER, so ccache runs under the
+# name cl.exe and wraps the real cl.exe. Without ccache, or if this setup fails, the build runs as before.
+VS_CCACHE=()
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*)
+    if command -v ccache > /dev/null; then
+      REAL_CL="$(ls -d "/c/Program Files/Microsoft Visual Studio/"*/*/VC/Tools/MSVC/* 2> /dev/null | tail -1)/bin/Hostx64/x64/cl.exe"
+      if [ -f "$REAL_CL" ]; then
+        mkdir -p "$WORK/ccache-bin"
+        cp "$(command -v ccache)" "$WORK/ccache-bin/cl.exe"
+        export CCACHE_COMPILER="$(cygpath -w "$REAL_CL")"
+        VS_CCACHE=("-DCMAKE_VS_GLOBALS=CLToolExe=cl.exe;CLToolPath=$(cygpath -w "$WORK/ccache-bin");TrackFileAccess=false;UseMultiToolTask=true;EnforceProcessCountAcrossBuilds=true")
+        echo "ccache compiler: $CCACHE_COMPILER"
+      fi
+    fi
+    ;;
+esac
+
+# configure SOURCE BUILD [options]: with ccache if set up, a plain configure if that fails
+configure() {
+  local src="$1" bld="$2"; shift 2
+  if ! cmake -S "$src" -B "$bld" ${VS_CCACHE[@]+"${VS_CCACHE[@]}"} "$@"; then
+    echo "ccache setup failed, configuring without ccache"
+    rm -rf "$bld"
+    cmake -S "$src" -B "$bld" "$@"
+  fi
+}
+
 echo "::group::Optima ($OPTIMA_REPO @ $OPTIMA_REF)"
 git clone --depth 1 --branch "$OPTIMA_REF" "$OPTIMA_REPO" optima
-cmake -S optima -B optima/build "${GENERATOR[@]}" \
+configure optima optima/build "${GENERATOR[@]}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX="$PREFIX" \
   -DCMAKE_PREFIX_PATH="$PREFIX" \
@@ -62,7 +90,7 @@ echo "::endgroup::"
 
 echo "::group::GEMS3K ($GEMS3K_REPO @ $GEMS3K_REF)"
 git clone --depth 1 --branch "$GEMS3K_REF" "$GEMS3K_REPO" GEMS3K
-cmake -S GEMS3K -B GEMS3K/build "${GENERATOR[@]}" \
+configure GEMS3K GEMS3K/build "${GENERATOR[@]}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX="$PREFIX" \
   -DCMAKE_PREFIX_PATH="$PREFIX" \
@@ -70,6 +98,8 @@ cmake -S GEMS3K -B GEMS3K/build "${GENERATOR[@]}" \
   -DBUILD_TOOLS=OFF -DBUILD_SOLMOD=OFF -DBUILD_SOLMOD_PYTHON=OFF
 cmake --build GEMS3K/build --config Release --target install
 echo "::endgroup::"
+
+if [ ${#VS_CCACHE[@]} -gt 0 ]; then ccache --show-stats; fi
 
 OPTIMA_COMMIT="$(git -C optima rev-parse --short HEAD)"
 GEMS3K_COMMIT="$(git -C GEMS3K rev-parse --short HEAD)"

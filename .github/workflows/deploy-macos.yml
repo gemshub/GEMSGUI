@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - fix_pow_other_bugs
-      - develop_gems3kv5   # TEMPORARY: branch test
   release:
     types:
       - published
