@@ -1340,6 +1340,7 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
       default:
           break;
       }
+      multi_internal->ReportAbsentPhaseIndexes();   // a real saturation index for a missing mixed phase
       calcTime = pmp->t_elap_sec;
   }
   else
