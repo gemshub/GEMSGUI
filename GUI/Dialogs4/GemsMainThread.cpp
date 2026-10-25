@@ -233,6 +233,9 @@ void TVisorImp::Update(bool force)
 
 bool TVisorImp::Message(const char* name, const char* msg, int prog, int total)
 {
+    // A widget must not be made in the calculation thread: the message is skipped there
+    if( pThread != QThread::currentThreadId() )
+        return false;
     if( LoadMessage::pDia )
     {
 
@@ -264,6 +267,8 @@ bool TVisorImp::Message(const char* name, const char* msg, int prog, int total)
 
 void TVisorImp::CloseMessage()
 {
+    if( pThread != QThread::currentThreadId() )
+        return;
     if( LoadMessage::pDia )
     {
         LoadMessage::pDia->setValue(LoadMessage::pDia->maximum());
