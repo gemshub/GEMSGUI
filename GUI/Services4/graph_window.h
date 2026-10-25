@@ -14,6 +14,8 @@ class GraphDialog {
 public:
     void AddPoint(size_t nPlot, int nPoint);
     void ShowGraph(const char * capAdd = nullptr);
+    /// No window without the GUI, so there is no status bar for the warning
+    template <class Text> void setWarning( const Text& ) {}
 };
 
 }

@@ -107,6 +107,7 @@ SOURCES += \
     ../GUI/Services4/graph.cpp \
     ../GUI/Services4/units.cpp \
     ../GUI/Services4/visor.cpp \
+    ../GUI/Services4/run_loglevel.cpp \
     ../GUI/charts/chart_model.cpp \
     ../GUI/charts/graph_data.cpp \
     check_db.cpp \
@@ -120,6 +121,7 @@ HEADERS += \
     ../GUI/Services4/service.h \
     ../GUI/Services4/units.h \
     ../GUI/Services4/visor.h \
+    ../GUI/Services4/run_loglevel.h \
     ../GUI/charts/chart_model.h \
     ../GUI/charts/graph_data.h \
 

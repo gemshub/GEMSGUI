@@ -43,6 +43,7 @@ QT_END_NAMESPACE
 class IPNCalcObject;
 class TCModule;
 class NewSystemDialog;
+class StatusWarning;
 
 namespace jsonui {
 class GraphDialog;
@@ -188,8 +189,15 @@ public:
     void SetStatus( const char* s )
     {  this->statusBar()->showMessage(s);   }
 
+    /// Shows a warning at the right of the status bar; an empty text clears it. The block keeps its size.
+    void SetWarning( const QString& text );
+
     void SetRecordKey( const char*s)
     { pLine->setText( tr(s)); }
+
+private:
+    StatusWarning* statusWarning = nullptr;   // warning block in the status bar, made in the constructor
+public:
 
     // must be done
     bool MakeQuery(TCModule& m);

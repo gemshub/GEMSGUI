@@ -430,17 +430,29 @@ void ProgressDialog::Update(bool force)
     ht_l = noZero(all) ? int(ceil(l * ht / all)) :0;
     ht_s = noZero(all) ? int(ceil(s * ht / all)) :0;
 
-    int progr = 24;
-    ui->pProgress->setMaximum(progr);
-    double dist = progr/6.;
-    if( pData->PCI >0. && pData->DXM >0.)
-        dist = log10( pData->PCI/ pData->DXM );
-    progr -= int(floor(dist*6.));
-    if(progr < 0 )
-        progr = 0;
-    if(progr > 24 )
-        progr = 24;
-    ui->pProgress->setValue(progr);//pProgress->setProgress(progr);
+    // The bar follows the native IPM's convergence measure (PCI/DXM); the Optima modes do not
+    // update it, so they show a busy indicator while running and a full bar when done.
+    const SolverMode mode = TProfil::pm->solver_mode;
+    if( mode != SolverMode::AIA && mode != SolverMode::SIA )
+    {
+        const bool done = TProfil::pm->calcFinished;
+        ui->pProgress->setMaximum( done ? 24 : 0 );
+        ui->pProgress->setValue( done ? 24 : 0 );
+    }
+    else
+    {
+        int progr = 24;
+        ui->pProgress->setMaximum(progr);
+        double dist = progr/6.;
+        if( pData->PCI >0. && pData->DXM >0.)
+            dist = log10( pData->PCI/ pData->DXM );
+        progr -= int(floor(dist*6.));
+        if(progr < 0 )
+            progr = 0;
+        if(progr > 24 )
+            progr = 24;
+        ui->pProgress->setValue(progr);//pProgress->setProgress(progr);
+    }
 
     //    clock_t t_end = clock();
     //    clock_t dtime = ( t_end- t_start );

@@ -22,6 +22,7 @@
 #include "NewSystemDialog.h"
 #include "ProgressDialog.h"
 #include "LoadMessage.h"
+#include "run_loglevel.h"
 
 void TVisorImp::CmRunIPM()
 {
@@ -35,13 +36,13 @@ void TVisorImp::CmRunIPM()
             wn->clearEditFocus();
     } */
 
-    TMulti::sm->GetPM()->pNP =
-        ( ui->sactionSimplex->isChecked())? 0: 1;
+    TMulti::sm->GetPM()->pNP = solverModeIsWarm( TProfil::pm->solver_mode ) ? 1 : 0;
     if( ui->sactionPrecise->isChecked() && !TProfil::pm->pa.p.PRD )
         TProfil::pm->pa.p.PRD = -5; // Changed
     TProfil::pm->pa.p.PRD =
         ( !ui->sactionPrecise->isChecked())? 0: TProfil::pm->pa.p.PRD;
 
+    RunLogLevel::apply( RunLogLevel::Equilibrium );
     try
     {
         TProfil::pm->userCancel1 = false;
@@ -232,6 +233,9 @@ void TVisorImp::Update(bool force)
 
 bool TVisorImp::Message(const char* name, const char* msg, int prog, int total)
 {
+    // A widget must not be made in the calculation thread: the message is skipped there
+    if( pThread != QThread::currentThreadId() )
+        return false;
     if( LoadMessage::pDia )
     {
 
@@ -263,6 +267,8 @@ bool TVisorImp::Message(const char* name, const char* msg, int prog, int total)
 
 void TVisorImp::CloseMessage()
 {
+    if( pThread != QThread::currentThreadId() )
+        return;
     if( LoadMessage::pDia )
     {
         LoadMessage::pDia->setValue(LoadMessage::pDia->maximum());

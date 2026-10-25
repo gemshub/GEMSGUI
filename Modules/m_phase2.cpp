@@ -1073,7 +1073,7 @@ MAKE_GAS_PHASE:
               php->npxM = 0;
               Name += "Ideal mixture of ideal or real gases";
               strncpy( php->name, Name.c_str(), MAXFORMULA );
-              memcpy( php->notes, "Applicable only at low P and elevated T", MAXFORMULA );
+              strncpy( php->notes, "Applicable only at low P and elevated T", MAXFORMULA );
               break;
       case 'F':  // CG fluid EoS model
               memcpy( php->sol_t, "FNNSNN", 6 );
@@ -1084,7 +1084,7 @@ MAKE_GAS_PHASE:
               php->npxM = 0;
               Name += "Churakov-Gottschalk (CG) EoS model";
               strncpy( php->name, Name.c_str(), MAXFORMULA );
-              memcpy( php->notes,
+              strncpy( php->notes,
                           "Applicable at high P and moderate T", MAXFORMULA );
               break;
       case 'P':  // PRSV fluid EoS model
@@ -1100,7 +1100,7 @@ MAKE_GAS_PHASE:
               php->npxM = 2;
               Name += "Peng-Robinson-Stryjek-Vera (PRSV) EoS model";
               strncpy( php->name, Name.c_str(), MAXFORMULA );
-              memcpy( php->notes,
+              strncpy( php->notes,
                           "Applicable at moderate P and moderate T" , MAXFORMULA);
               break;
       case 'E':  // SRK fluid EoS model
@@ -1116,7 +1116,7 @@ MAKE_GAS_PHASE:
               php->npxM = 2;
               Name += "Soave-Redlich-Kwong (SRK) EoS model";
               strncpy( php->name, Name.c_str(), MAXFORMULA );
-              memcpy( php->notes,
+              strncpy( php->notes,
                           "Applicable at moderate P and moderate T", MAXFORMULA );
               break;
       case '7':  // PR78 fluid EoS model
@@ -1132,7 +1132,7 @@ MAKE_GAS_PHASE:
               php->npxM = 2;
               Name += "Peng-Rosinson (PR78) EoS model";
               strncpy( php->name, Name.c_str(), MAXFORMULA );
-              memcpy( php->notes,
+              strncpy( php->notes,
                           "Applicable at moderate P and moderate T", MAXFORMULA );
               break;
       default:  // unrecognized code
@@ -1430,7 +1430,6 @@ void TPhase::set_def_comments( bool clearall,
                   strncpy( php->dcpcl[4], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[5], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[6], "fi", MAXDCNAME );
-                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
                   //             php->nscM = 7;
                         //     php->ncpM = 2;  // NPcoef
                              break;
@@ -1442,7 +1441,6 @@ void TPhase::set_def_comments( bool clearall,
                   strncpy( php->dcpcl[4], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[5], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[6], "fi", MAXDCNAME );
-                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
                   //              php->nscM = 7;
                         //       php->ncpM = 2;  // NPcoef
                              break;
@@ -1454,7 +1452,6 @@ void TPhase::set_def_comments( bool clearall,
                   strncpy( php->dcpcl[4], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[5], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[6], "fi", MAXDCNAME );
-                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
                   //              php->nscM = 7;
                         //     php->ncpM = 2;  // NPcoef
                              break;
@@ -1466,7 +1463,6 @@ void TPhase::set_def_comments( bool clearall,
                   strncpy( php->dcpcl[4], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[5], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[6], "fi", MAXDCNAME );
-                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
 //               php->nscM = 7;
                //     php->ncpM = 1;  // NPcoef
                              break;
@@ -1478,7 +1474,6 @@ void TPhase::set_def_comments( bool clearall,
                   strncpy( php->dcpcl[4], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[5], "fi", MAXDCNAME );
                   strncpy( php->dcpcl[6], "fi", MAXDCNAME );
-                  strncpy( php->dcpcl[7], "fi", MAXDCNAME );
                   //              php->nscM = 7;
                              //    php->ncpM = 1;  // NPcoef
                              break;

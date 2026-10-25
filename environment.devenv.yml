@@ -14,16 +14,17 @@ dependencies:
   - make  # [unix]
   - ninja
   - 7zip  # [win]
-  - gems3k>=4.5.2
-  #- thermofun>=0.4.3
+  # GEMS3K and Optima are built from the gemshub repositories (.github/scripts/build-gems3k-optima.sh);
+  # only what they need is installed here
+  - thermofun>=0.5.4
+  - spdlog
+  - nlohmann_json
+  - eigen>=3.4
   - cppzmq
   - mesa-libgl-devel-conda-x86_64 # [unix]
   - qt6-main=6.10.2 # [not win]
   - qt6-charts=6.10.2 # [not win]
   - qt6-main=6.10.2 # [win]
   - qt6-charts=6.10.2 # [win]
-  #- eigen=3.4.0
-  #- nlohmann_json
-  #- spdlog
   - python>=3.10
   - pytest

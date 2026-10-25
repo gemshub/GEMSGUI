@@ -998,10 +998,12 @@ TDBKeyList::delndx( uint i )
     uint j;
 
     check_i(i);
+    // only the records after the i-th one are moved
+    const uint nAfter = ( i < recInDB ) ? recInDB - i - 1 : 0;
     for( j=0; j<KeyNumFlds(); j++)
         memmove( RecKeyFld(i,j), RecKeyFld(i+1,j),
-                 FldLen(j)*(recInDB-i)*sizeof(char) );
-    memmove( re+i, re+i+1, (recInDB-i)*sizeof(RecEntry) );
+                 FldLen(j)*nAfter*sizeof(char) );
+    memmove( re+i, re+i+1, nAfter*sizeof(RecEntry) );
     recInDB--;
     if( i == recInDB )  i--;
     nI = i;

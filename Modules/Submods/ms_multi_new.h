@@ -138,6 +138,8 @@ public:
 
     void MultiKeyInit( const char*key );
     void EqstatExpand( /*const char *key,*/  bool calcActivityModels/*, bool calcKineticModels*/ );
+    /// Loads the parameters of the mixing models from the phase records, if they are not loaded yet.
+    void LoadMixingModels();
     void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                        tget_ndx *get_ndx = nullptr );
     void getNamesList( int nO, TCStringArray& lst );

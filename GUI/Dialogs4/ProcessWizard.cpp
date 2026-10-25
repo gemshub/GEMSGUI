@@ -536,6 +536,7 @@ void ProcessWizard::defineWindow(char type)
         pgData.push_back(  pagesSetupData("Phases", o_syphm)); // xp_
         pgData.push_back(  pagesSetupData("DC-lower", o_sydll)); // dll_
         pgData.push_back(  pagesSetupData("DC-upper", o_sydul)); // dul_
+        pgData.push_back(  pagesSetupData("Targets", o_syproc)); // tg_ pH and Eh targets
         pgData.push_back(  pagesSetupData("Molality",o_wd_ym ));
         pgData.push_back(  pagesSetupData("Sorbed", o_wo_bfc));
         break;
@@ -597,7 +598,8 @@ void ProcessWizard::defineWindow(char type)
         ui->lAbout->setText(
                     "Linear titration and logD diagrams use the iNu iterator; logarithmic titration and logKd digrams use ipXi. "
    "Titrations: select required titrants as items from 'Compos', 'DComp', 'IComp' or 'Phase' lists,"
-   " optionally also select items from 'DC-lower' or 'DC-upper' to change metastability constraints.\n\n"
+   " optionally also select items from 'DC-lower' or 'DC-upper' to change metastability constraints."
+   " To step a pH or Eh target, select it from 'Targets' (set the target on in the system recipe; Optima modes only).\n\n"
    "To plot logD vs linear x (mole fraction) scale: (i) select minor then host end member from the 'DComp' list,"
    " (ii) select trace then host ion from the 'Molality' list. "
    "To plot logKd and isotherms vs log(molality) scale: (i) select trace then host compositions from the"
@@ -608,7 +610,7 @@ void ProcessWizard::defineWindow(char type)
         ui->sub3->setText("Titration cpXi logarithmic");
         ui->sub4->setText("Diagram logKd vs log(m)");
 
-        for(int jj=0; jj<6; jj++ )
+        for(int jj=0; jj<7; jj++ )   // titrant pages, Targets included
             QObject::connect( pLsts[jj], SIGNAL(itemSelectionChanged()),
                               this, SLOT(CmSetMode()));
     }
@@ -1036,14 +1038,18 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         {
             ret = QString("modC[J] =: cNu;\n");
 
-            for(int jj=0; jj<6; jj++ )
+            for(int jj=0; jj<7; jj++ )
             {
                 lst = getSelected( jj );
                 std::string oName = aObj[pgData[jj].nObj]->GetKeywd();
                 for(ii=0; ii<lst.count();ii++)
                 {
                     lst[ii] = lst[ii].trimmed();
-                    ret  += QString("%1[{%2}] =: cNu * 1;\n").arg(oName.c_str(), lst[ii]);
+                    if( pgData[jj].nObj == o_syproc )   // tg_[0] pH, tg_[1] Eh (V); set the target on in the recipe
+                        ret  += QString("$ the target must be on in the system recipe (Targets)\n"
+                                        "%1[%2] =: cNu;\n").arg(oName.c_str(), lst[ii].startsWith("pH") ? "0" : "1");
+                    else
+                        ret  += QString("%1[{%2}] =: cNu * 1;\n").arg(oName.c_str(), lst[ii]);
                 }
 
             }
@@ -1063,14 +1069,18 @@ void  ProcessWizard::setCalcScript( char type, int subtype )   // get process sc
         {
             ret = QString("modC[J] =: cpXi;\n");
 
-            for(int jj=0; jj<6; jj++ )
+            for(int jj=0; jj<7; jj++ )
             {
                 lst = getSelected( jj );
                 std::string oName = aObj[pgData[jj].nObj]->GetKeywd();
                 for(ii=0; ii<lst.count();ii++)
                 {
                     lst[ii] = lst[ii].trimmed();
-                    ret  += QString("%1[{%2}] =: cXi * 1;\n").arg(oName.c_str(), lst[ii]);
+                    if( pgData[jj].nObj == o_syproc )   // tg_[0] pH, tg_[1] Eh (V); set the target on in the recipe
+                        ret  += QString("$ the target must be on in the system recipe (Targets)\n"
+                                        "%1[%2] =: cXi;\n").arg(oName.c_str(), lst[ii].startsWith("pH") ? "0" : "1");
+                    else
+                        ret  += QString("%1[{%2}] =: cXi * 1;\n").arg(oName.c_str(), lst[ii]);
                 }
 
             }

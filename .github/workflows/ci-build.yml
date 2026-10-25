@@ -4,6 +4,7 @@ on:
     branches:
       - help_generation_ci1
       - master
+      - develop_gems3kv5   # TEMPORARY: branch test
   pull_request:
     branches:
       - main
@@ -53,18 +54,40 @@ jobs:
           conda install conda-devenv
           conda run -n base python -m conda_devenv
 
-      # ccache cache is only wired up for the Ninja-generator builds below (Linux/macOS):
-      # CMAKE_CXX_COMPILER_LAUNCHER (set automatically by cmake/modules/CCache.cmake when
-      # ccache is found on PATH) isn't reliably honored by the Visual Studio generator used
-      # for the Windows build (`-A x64`), so caching it there would have no effect.
-      - name: Cache ccache (Linux/macOS)
-        if: matrix.os != 'windows-latest'
+      # Linux/macOS use ccache through CMAKE_CXX_COMPILER_LAUNCHER (cmake/modules/CCache.cmake).
+      # The Visual Studio generator ignores that launcher, so the Windows build below
+      # runs ccache.exe in place of cl.exe through CMAKE_VS_GLOBALS.
+      - name: Cache ccache
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ matrix.os }}-${{ github.sha }}
           restore-keys: |
             ccache-${{ matrix.os }}-
+
+      # TEMPORARY (branch develop_gems3kv5 test): GEMS3K and Optima are built from the gemshub repositories
+      # instead of the conda gems3k package; revert together with environment.devenv.yml before merging.
+      - name: Build Optima and GEMS3K from the gemshub repositories
+        if: matrix.os != 'windows-latest'
+        shell: bash -el {0}
+        env:
+          OPTIMA_REF: ${{ vars.OPTIMA_REF || 'optima_develop' }}
+          GEMS3K_REF: ${{ vars.GEMS3K_REF || 'develop_optima' }}
+        run: |
+          conda activate GEMSGUI
+          bash .github/scripts/build-gems3k-optima.sh
+
+      # conda activate is not hooked into Git Bash on Windows (CONDA_PREFIX stays unset), so the
+      # environment is activated from cmd, which the Windows build step below uses as well.
+      - name: Build Optima and GEMS3K from the gemshub repositories (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        env:
+          OPTIMA_REF: ${{ vars.OPTIMA_REF || 'optima_develop' }}
+          GEMS3K_REF: ${{ vars.GEMS3K_REF || 'develop_optima' }}
+        run: |
+          call conda activate GEMSGUI || goto :eof
+          "C:\Program Files\Git\bin\bash.exe" .github/scripts/build-gems3k-optima.sh || goto :eof
 
       - name: Building, Testing & Installing GEMSGUI
         if: matrix.os != 'windows-latest'
@@ -85,9 +108,24 @@ jobs:
         shell: cmd
         run: |
           call conda activate GEMSGUI || goto :eof
+          setlocal EnableDelayedExpansion
+          rem --- ccache runs under the name cl.exe and wraps the real cl.exe ---
+          if not exist "%CCACHE_DIR%" mkdir "%CCACHE_DIR%"
+          ccache --max-size=500M
+          mkdir ccache-bin
+          copy /y "%CONDA_PREFIX%\Library\bin\ccache.exe" ccache-bin\cl.exe > nul
+          for /d %%d in ("C:\Program Files\Microsoft Visual Studio\18\Enterprise\VC\Tools\MSVC\*") do set "CCACHE_COMPILER=%%d\bin\Hostx64\x64\cl.exe"
+          echo ccache compiler: !CCACHE_COMPILER!
           rem --- Build, no install ---
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build  || goto :eof
-          cmake --build build --config Release  || goto :eof
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build -DCMAKE_VS_GLOBALS="CLToolExe=cl.exe;CLToolPath=%CD%\ccache-bin;TrackFileAccess=false;UseMultiToolTask=true;EnforceProcessCountAcrossBuilds=true"
+          if errorlevel 1 (
+            echo ccache setup failed, configuring without ccache
+            rmdir /s /q build
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH="%CONDA_PREFIX%\Library" -A x64 -S . -B build || exit /b 1
+          )
+          cmake --build build --config Release -- /m
+          if errorlevel 1 exit /b 1
+          ccache --show-stats
 
       - name: Check conda
         run: |

@@ -55,10 +55,10 @@ TDComp::TDComp( uint nrt ):
     aFldKeysHelp.push_back("Name of this Dependent Component (chemical species)");
     aFldKeysHelp.push_back("Thermodynamic data subset (TDS) code (e.g. database ID)");
     dcp=&dc[1];
-    memcpy( dcp->pstate, "a", MAXSYMB );
+    strncpy( dcp->pstate, "a", MAXSYMB );
     set_def(1);
     dcp=&dc[0];
-    memcpy( dcp->pstate, "a", MAXSYMB );
+    strncpy( dcp->pstate, "a", MAXSYMB );
     set_def();
     start_title = " Thermochemical/EoS data format for Dependent Components ";
 }

@@ -856,6 +856,15 @@ void TProfil::systbcInput( QWidget* par, const char * p_key )
       }
     }
 
+    // pH and Eh targets for the Optima modes
+    wnData.push_back(  windowSetupData( "Targets", o_syproc, 0, -1, -1, 0.,'_' ) );
+    if( syp->PpHtg == S_ON )
+        tbData.push_back(  tableSetupData( wnData.size()-1, o_syproc,
+              aObj[o_syproc]->GetKeywd(), 0, "",  syp->pHtg, '_' ));
+    if( syp->PEhtg == S_ON )
+        tbData.push_back(  tableSetupData( wnData.size()-1, o_syproc,
+              aObj[o_syproc]->GetKeywd(), 1, "",  syp->Ehtg, '_' ));
+
     // add static list
     wnData.push_back(  windowSetupData( "Other Inputs", -1, 0, -1, -1, 0.,'_' ) );
     // build scalar list
@@ -976,6 +985,8 @@ if(  !approximatelyEqual( fabs( syp->Vaq),  1.f)  )
     syp->Tmin = 0.;
     syp->Tmax = 0.;
     syp->Tinc = 0.;
+    syp->PpHtg = S_OFF;
+    syp->PEhtg = S_OFF;
 
     // inset data from tbData
     for(size_t ii=0; ii< tbData.size() ; ii++)
@@ -992,8 +1003,11 @@ if(  !approximatelyEqual( fabs( syp->Vaq),  1.f)  )
      int nOswitch = wnData[ tbData[ii].nWin].nSwitch;
      if(nOswitch >=0 )
         aObj[ nOswitch ]->SetString("+",tbData[ii].nIdx, 0);
+     if( nO == o_syproc )   // a listed target is on
+        ( tbData[ii].nIdx == 0 ? syp->PpHtg : syp->PEhtg ) = S_ON;
     }
 
+    // a target used only in the Optima modes is shown as a warning row in the system window (updateWarning())
     TSysEq::pm->CellChanged();
 }
 
@@ -1170,6 +1184,7 @@ void TProfil::CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode
     Tai[3] = Pai[3] = 0.1;
 
     auto na = TNodeArrayGUI::create(1, TMulti::sm);
+    na->setExportNode();
     // realloc and setup data for dataCH and DataBr structures
     na->MakeNodeStructuresOne( nullptr, true , Tai, Pai  );
 
