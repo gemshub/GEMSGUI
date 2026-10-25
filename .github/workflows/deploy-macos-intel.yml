@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - fix_pow_other_bugs
+      - develop_gems3kv5
   release:
     types:
       - published
@@ -42,17 +43,12 @@ jobs:
         shell: bash
         run: echo "deploy-name=GEMS${{ steps.get_version.outputs.version }}-intel" >> "$GITHUB_OUTPUT"
 
-      # TEMPORARY (branch develop_gems3kv5 test): the branch name goes into the package/artifact names
+      # the package names carry the version only
       - name: Set branch suffix
         id: branch
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            echo "suffix=" >> "$GITHUB_OUTPUT"
-          else
-            b="${GITHUB_REF_NAME//[^A-Za-z0-9._-]/-}"
-            echo "suffix=-$b" >> "$GITHUB_OUTPUT"
-          fi
+          echo "suffix=" >> "$GITHUB_OUTPUT"
 
       - name: Set deploy dir
         id: strings2
