@@ -20,7 +20,11 @@
 #ifndef V_DBFILE_H_
 #define V_DBFILE_H_
 
+#include <vector>
+#include <set>
+#include <memory>
 #include "v_file.h"
+#include "GEMS3K/verror.h"
 
 const int MAXFESTACK = 200; // size array deleted record
 
@@ -31,6 +35,7 @@ extern const char* ALLKEY;
 
 class TDBKeyList;
 class TDataBase;
+class QWidget;
 
 struct VDBhead
 {       // header of PDB file
@@ -166,5 +171,128 @@ public:
     void rebuild_file(size_t nF, TDataBase *database);
 };
 
+
+class DBFileList: public std::vector<std::shared_ptr<TDBFile>>
+{
+    friend class TDataBase;
+
+public:
+    static bool dbChangeMode;
+
+    DBFileList(size_t nrt, bool need_close, bool isdel):
+        std::vector<std::shared_ptr<TDBFile>>(),
+        nRT(nrt),
+        isDelete(isdel),
+        rclose(need_close)
+    { }
+
+    virtual ~DBFileList();
+
+    void from_cfg(std::fstream& f);
+    void to_cfg(std::fstream& f);
+
+    /// Check legal file index
+    bool check_index(size_t file_ndx) const
+    {
+        return file_ndx<size();
+    }
+
+    /// Check file is readonly (from DB.defaults)
+    bool check_readonly(size_t file_ndx) const
+    {
+        return false;//!dbChangeMode && file_ndx<special_files_num;
+    }
+
+    /// Check file is open
+    bool check_open(size_t file_ndx) const
+    {
+        return opened_files.find(file_ndx)!=opened_files.end();
+    }
+
+    void check_file(size_t file_ndx)
+    {
+        if(!check_index(file_ndx)) {
+            std::string max_valid = (size() > 0) ? std::to_string(size() - 1) : "0";
+            Error("check_file", "Illegal DB file index: " + std::to_string(file_ndx) +
+                                    ". Valid range is 0 to " + max_valid + ".");
+        }
+        else if(!check_open(file_ndx)) {
+            Error("check_file", "Attempted to access a database file that is not open. File path: " +
+                                    at(file_ndx)->GetPath());
+        }
+        last_used_file = file_ndx;
+    }
+
+     bool check_writable(size_t nF, const std::string& operation) const
+    {
+        if(check_readonly(nF)) {
+            std::string error_msg = "Cannot " + operation +
+                                    ": modifying a system database file is not allowed (read-only mode enabled).";
+            Error(at(nF)->Name(), error_msg);
+            return false;
+        }
+        return true;
+    }
+
+    void finish_dbdefaults()
+    {
+        special_files_num = size();
+    }
+
+    void add_file(const std::string &path);
+
+    std::vector<int> open_files(FileStatus mode, const std::vector<int> &nff, TDBKeyList &ind);
+    std::vector<int> add_open_files(const std::vector<int> &nff, TDBKeyList &ind);
+    size_t open_new_file(const std::string &path, TDBKeyList &ind);
+    void remove_file(const std::string &path, TDBKeyList &ind);
+
+
+    /// Generate file list for using in GUI
+    void files_list(int mode, std::vector<std::string> &names,
+                    std::vector<int> &indeces, std::vector<int> &sel) const;
+
+    std::vector<int> all_files(bool only_kernel) const;
+    /// indexes all files contained names
+    std::vector<int> files_with_name(const std::vector<std::string> &names) const;
+    std::vector<int> files_with_keywds(const std::vector<std::string> &keywds, bool &all_found) const;
+    std::vector<int> opened_special_files() const;
+    /// Index file with name (search only from open files)
+    size_t file_name_index(const std::string &file_name) const;
+    /// get list of files keywds, that contained name
+    std::vector<std::string> file_keywds_according_name(const std::string &file_name_part) const;
+    /// true if opened some files from default data base
+    bool check_special_open() const;
+
+    // >= 0 selected file
+    // -1 cancell
+    int file_to_add_record(QWidget *window, const std::string &record_key, bool multy, bool& ok_to_all);
+protected:
+
+    unsigned char nRT;
+    bool isDelete;
+
+    /// Close file after any read/write
+    bool rclose;
+
+
+    FileStatus open_mode;
+
+    /// Indexes of opened files
+    std::set<size_t> opened_files;
+
+    /// Number files from DB.defaults
+    size_t special_files_num;
+
+    /// Current record file index
+    size_t fNum = 0;
+    size_t last_used_file=0;
+
+    /// List of opened files
+    std::vector<std::string> opened_files_list;
+
+    void close_all();
+    void reset_open_list();
+    void reset_index_list(TDBKeyList &ind);
+};
 
 #endif  // V_DBFILE_H_

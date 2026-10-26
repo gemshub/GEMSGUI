@@ -221,35 +221,34 @@ class TDataBase
     int frstODjson;
     int lastODjson;
     TDBKeyList ind;
-    std::vector< std::shared_ptr<TDBFile>> aFile;  // list of add files
-    TCIntArray fls;
+    ///std::vector< std::shared_ptr<TDBFile>> aFile;  // list of add files
+    ///TCIntArray fls;
 
     //work param
     time_t crt;
 
+    DBFileList dbfiles_list;
+
 protected:
 
     //--- check
-    void check_file( uint nF );
-    void putndx( uint nF );
-    void getndx( uint nF );
     int reclen( );
-    int putrec( RecEntry& re, GemDataStream& f );
-    int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
+    int putrec( RecEntry& re, GemDataStream& f, int crt );
+    //int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
     int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
     int getExtendedSettings( GemDataStream& f, int nRead, int StillLen );
     void opfils();
     int scanfile( uint nF, int& fPos, int& fLen,
 	    GemDataStream& inStream, GemDataStream& outStream);
     void fromCFG(std::fstream& f);
-    bool dbChangeAllowed( uint nf, bool ifRep=false );
 
     std::string gen_new_project_file_name(const std::string& dir,
                                           const std::string& project_name, const std::string& f_name) const;
+    void check_record_key(const char *pkey);
 public:
-    int specialFilesNum;
-    int fNum;
-    TCStringArray fOpenNameBuf;
+    ///int specialFilesNum;
+    ///int fNum;
+    ///TCStringArray fOpenNameBuf;
 
     //  TDateBase();
     TDataBase( size_t nrt, const char* name, bool Rclose, bool isDel,
@@ -257,6 +256,7 @@ public:
                unsigned char nRkflds, const unsigned char* rkfrm );
     TDataBase( std::fstream& f );
     ~TDataBase();
+    //put state to cfg file
     void toCFG( std::fstream& f );
     void AddFile(const std::string& path);
     void DelFile(const std::string& path);
@@ -314,7 +314,7 @@ public:
     {
         return crt;
     }  // time current record
-    time_t GetTime( uint i );               // time record number i
+    time_t GetTime(size_t record_ndx);               // time record number i
     char *FldKey( uint i ) const
     {
         return ind.FldKey(i);
@@ -332,14 +332,14 @@ public:
     {
         return ind;
     }
-    const TCStringArray& GetOpenFiles() const
-    {
-        return fOpenNameBuf;
-    }
-    int GetWorkFileName() const
-    {
-        return fNum;
-    }
+    // const TCStringArray& GetOpenFiles() const
+    // {
+    //     return fOpenNameBuf;
+    // }
+    // int GetWorkFileName() const
+    // {
+    //     return fNum;
+    // }
     void SetKey( const char *key )
     {
         ind.SetKey(key);
@@ -367,9 +367,10 @@ public:
     //--- Information about of open file list
     uint GetOpenFileNum( const char *secondName  );
     bool SetNewOpenFileList( const TCStringArray& aFlNames );
-    void GetFileList( int mode, TCStringArray& names,
-                      TCIntArray& indx,  TCIntArray& sel );
-    int numFiles() { return aFile.size(); }
+    void GetFileList(int mode, std::vector<std::string>& names,
+                     std::vector<int>& indeces,
+                     std::vector<int>& sel);
+    int numFiles() { return dbfiles_list.size(); }
     void  MakeInNewProfile(const std::string& dir,
                           const std::string& prfName, const std::string& f_name={});
     void OpenOnlyFromList( TCStringArray& names );
@@ -384,8 +385,7 @@ public:
 
     //--- Manipulation files of Data Base
     void RebildFile(const TCIntArray& indx);
-    int AddFileToList(TDBFile* file);
-    // int GetFileNum(const char* substr_name);
+    void AddFileToList(const std::string &path);
     void AddOpenFile(const TCIntArray& indx);
 
     //--- Manipulation records
@@ -416,6 +416,16 @@ public:
     std::string fromJsonObject( const QJsonObject& obj );
     void toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const;
     std::string fromJsonObjectNew( const QJsonObject& obj );
+
+    std::string make_key_template(const std::vector<std::string>& first_fields) const;
+    size_t fileToAdd(QWidget *window, const std::string &record_key);
+    void addRecord(QWidget *window, const char *pkey);
+    void addRecord(QWidget *window, const char *pkey, int &fnum);
+
+    size_t activeFileIndex() const
+    {
+        return dbfiles_list.last_used_file;
+    }
 };
 
 // Data Base container : rt
@@ -441,3 +451,4 @@ public:
 extern DataBaseList rt;
 
 #endif	// V_DBM_H_
+

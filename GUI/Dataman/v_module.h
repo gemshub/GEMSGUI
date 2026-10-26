@@ -128,10 +128,10 @@ public:
 
     //-- Module manipulation
 
-    size_t NumberOpenFils() const
-    {
-        return (db ? db->GetOpenFiles().size(): 0);
-    }
+    // size_t NumberOpenFils() const
+    // {
+    //     return (db ? db->GetOpenFiles().size(): 0);
+    // }
     std::string GetFldHelp(size_t ni) const
     {
         return ( ni<aFldKeysHelp.size() ? aFldKeysHelp[ni] : "");

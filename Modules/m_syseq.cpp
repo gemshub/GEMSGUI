@@ -817,7 +817,7 @@ void TSysEq::RenameList( const char* newName,
          replace( tPhkey, oldName, newName );
          memcpy( ssp->PhmKey, tPhkey.c_str(), EQ_RKLEN );
         }
-        db->AddRecordToFile( str.c_str(), db->fNum );
+        db->AddRecordToFile( str.c_str(), db->activeFileIndex() );
     }
 }
 

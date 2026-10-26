@@ -1287,9 +1287,9 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
   }
   struct TargetsOff {   // removes the targets after the calculation, also after an error
       TMulti* m;
-      ~TargetsOff() { m->ClearControlConditions(); }
+      ~TargetsOff() { /*m->ClearControlConditions();*/ }
   } targetsOff{ multi_internal };
-  multi_internal->ClearControlConditions();
+  /*multi_internal->ClearControlConditions();*/
   if( pHtarget || Ehtarget )
   {
 #ifdef USE_OPTIMA_SOLVER

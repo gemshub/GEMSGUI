@@ -902,10 +902,7 @@ void TCModule::AddFileToList()
         name = db->GetKeywd()+ name;
     }
     filename = u_makepath( dir, name, ext );
-
-    TDBFile* file = new TDBFile(filename.c_str());
-    /////////
-    db->AddFileToList(file);
+    db->AddFileToList(filename);
     db->SetKey( ALLKEY );
     //        SetString("Command finished OK");
 }
@@ -940,66 +937,17 @@ void TCModule::ReOpenFileList()
 // Adds the record
 void TCModule::AddRecord(const char* key )
 {
-    if(db==nullptr) {
-        return;
+    if(db) {
+      db->addRecord(window(), key);
     }
-
-    int file = db->fNum;
-
-    ErrorIf(!key, "TCModule::AddRecord()", "empty record key!");
-
-    if( strpbrk(key,"*?/")!=nullptr )
-        Error( GetName(), "Attempt to insert record with template key!");
-
-    ErrorIf( db->fOpenNameBuf.size()<1, GetName(), "No database file choosen");
-    if( db->fOpenNameBuf.size()>1 )
-    {
-        std::string s="Choose a database file to put a record: "+ std::string(key);
-        file = db->fOpenNameBuf.size() - 1;  // 04.04.01 KD
-        file = vfChoice(window(), db->fOpenNameBuf, s.c_str(), file );
-    }
-    else
-        file = 0;
-    if( file >= 0)
-        db->AddRecordToFile(key, file);
 }
 
 // Adds the record, or all records to file Sveta 15/06/01
-void TCModule::AddRecord(const char* key, int& fnum )
+void TCModule::AddRecord(const char* key, int& fnum)
 {
-    if(db==nullptr) {
-        return;
+    if(db) {
+        db->addRecord(window(), key, fnum);
     }
-
-    int file = db->fNum;
-
-    ErrorIf(!key, "TCModule::AddRecord()", "empty record key!");
-
-    if( strpbrk(key,"*?/") != nullptr )
-        Error( GetName(), "Attempt to insert record with template key!");
-    if( fnum >= 0 )
-        file = fnum;
-    else
-    {
-        ErrorIf( db->fOpenNameBuf.size()<1, GetName(),
-                "No database file choosen");
-        if( db->fOpenNameBuf.size()>1 )
-        {
-            bool ok_to_all = false;
-            std::string s="Choose a database file to put a record: "
-                            + std::string(key);
-            file = db->fOpenNameBuf.size() - 1;  // 04.04.01 KD
-            file = vfChoice2(window(), db->fOpenNameBuf, s.c_str(), file, ok_to_all );
-            if( ok_to_all == true && file >= 0 )
-                fnum = file;
-        }
-        else
-            file = 0;
-    }
-    if( file >= 0 )
-        db->AddRecordToFile(key, file);
-    else
-        fnum = - 2;
 }
 
 void TCModule::ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply)
@@ -1426,8 +1374,7 @@ void TCModule::Transfer()
     {
         nrec = db->Find( aKey[i].c_str() );
         db->Get( nrec );
-        /// !!!
-        auto oldfile = db->fNum;
+        auto oldfile = db->activeFileIndex();
         db->Del( nrec );
         AddRecord( aKey[i].c_str(), fnum );
         if( fnum == -2 )
@@ -1515,7 +1462,7 @@ void TCModule::CopyRecordsList(bool if_rename)
         }
         if( if_rename )
         {
-            fnum = db->fNum;
+            fnum = db->activeFileIndex();
             db->Del( nrec );
             //Point SaveRecord
             if( !AddRecordTest( str.c_str(), fnum ))
