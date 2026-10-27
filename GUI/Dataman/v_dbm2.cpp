@@ -124,12 +124,6 @@ TDataBase::~TDataBase()
     dbfiles_list.close_all();
 }
 
-// add new file to database chain
-void TDataBase::AddFile(const std::string& path)
-{
-    dbfiles_list.add_file(path);
-}
-
 // get record length in the PDB file
 int TDataBase::reclen()
 {
@@ -167,7 +161,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, int crt)
     char marker = MARKRKEY;
     f.writeArray(&marker, 1);
     StillLen -= len + 1;
-    ErrorIf(!f.good(), GetKeywd(), "PDB file write error");
+    ErrorIf(!f.good(), getKeywd(), "PDB file write error");
     for(uint j=0; j<nOD; ++j)  {   // put objects to file
         if(j==headerObjCount() && j!=nOD)  {   // start of the objects an older GEMSGUI does not know (see getExtendedSettings())
             f.writeArray( const_cast<char*>(MARKEXTOBJ), 4 );
@@ -229,10 +223,10 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
         (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  &&
          (rh.Nobj+frstOD-1) != o_phsdval  && !(frstOD == o_spppar && rh.Nobj <= nOD) ) ) {
         gui_logger->info("Record header format error {} {} {} {}", char_array_to_string(Keywd, MAXKEYWD), rh.Nobj, nOD, frstOD);
-        Error(GetKeywd(), "Record header format error");
+        Error(getKeywd(), "Record header format error");
     }
     f.getline(key, KeyLen()+KeyNumFlds(), MARKRKEY);
-    ErrorIf(f.gcount()>=(KeyLen()+KeyNumFlds()), GetKeywd(), "Error reading database record key" );
+    ErrorIf(f.gcount()>=(KeyLen()+KeyNumFlds()), getKeywd(), "Error reading database record key" );
     StillLen -= f.gcount();
 
     bool flag_spppar = false;
@@ -264,7 +258,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
         StillLen -= getExtendedSettings(f, rh.Nobj, StillLen);
     }
     if(StillLen!=0 && rep.len!=0 && !flag_spppar) {
-        Error(GetKeywd(), "Actual record length differs from that specified in the header");
+        Error(getKeywd(), "Actual record length differs from that specified in the header");
     }
     crt = rh.crt;
     return StillLen;
@@ -274,7 +268,7 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
 /*!
     Add new record with key pkey to file in DB files list
 */
-uint TDataBase::AddRecordToFile(const char *pkey, int file_ndx)
+uint TDataBase::AddRecordToFile1(const char *pkey, int file_ndx)
 {
     dbfiles_list.check_file(file_ndx);
     if(!dbfiles_list.check_writable(file_ndx, "add record")) {
@@ -384,7 +378,7 @@ void TDataBase::RenameList(const char* newName, const char *oldName)
         record_key = ind.PackKey();
         Del(rec_ndx);
         replace(record_key, oldName, newName);
-        AddRecordToFile(record_key.c_str(), dbfiles_list.last_used_file);
+        AddRecordToFile1(record_key.c_str(), dbfiles_list.last_used_file);
     }
 }
 
@@ -661,12 +655,40 @@ void TDataBase::AddFileToList(const std::string &path)
     dbfiles_list.open_new_file(path, ind);
 }
 
-// delete a file from DBfile list
-void TDataBase::DelFile(const std::string& path)
+bool TDataBase::check_rt_name(const std::string &file_name) const
 {
-    dbfiles_list.remove_file(path, ind);
+    auto head_name = getKeywd()+".";
+    if(file_name.find(head_name) != std::string::npos ||
+        (nRT == RT_UNSPACE && file_name.find("probe.") != std::string::npos) ||   //check old names
+        (nRT == RT_DUALTH && file_name.find("duterm.") != std::string::npos)) {
+        return true;
+    }
+    return false;
 }
 
+void TDataBase::removeFiles(const std::vector<std::string> &path_list)
+{
+    std::set<std::string> target_names;
+    for (const auto& path : path_list) {
+        if(check_rt_name(path)) {
+            target_names.insert(TDBFile(path).Name());
+        }
+    }
+    dbfiles_list.remove_files(target_names, ind);
+}
+
+void TDataBase::addFiles(const std::string &folder, const std::vector<std::string> &path_list)
+{
+    for (const auto& path : path_list) {
+        if (check_rt_name(path)) {
+            dbfiles_list.add_file(folder, path);
+        }
+    }
+    // Check if the current folder matches the system database environment directory
+    if (folder == pVisor->sysDBDir()) {
+        dbfiles_list.finish_dbdefaults();
+    }
+}
 
 // add open PDB files
 void TDataBase::AddOpenFile(const TCIntArray& nff)
@@ -796,7 +818,7 @@ std::string TDataBase::gen_new_project_file_name(const std::string& dir,
     name += "/";
 
     if(f_name.empty()) {
-        name += GetKeywd();
+        name += getKeywd();
         name += ".";
         name += project_name;
         name += ".";
@@ -825,8 +847,14 @@ void TDataBase::MakeInNewProfile(const std::string& dir, const std::string& prfN
 // get open file number by name (0 if not found )
 uint TDataBase::GetOpenFileNum(const char* secondName)
 {
-    std::string name = std::string(GetKeywd())+"."+secondName;
+    std::string name = std::string(getKeywd())+"."+secondName;
     return dbfiles_list.file_name_index(name);
+}
+
+const std::vector<std::string>& TDataBase::getOpenFiles(std::string &active) const
+{
+    active = activeFileName();
+    return dbfiles_list.opened_files_list;
 }
 
 // get list of files keywds, that contained name
@@ -863,7 +891,7 @@ void TDataBase::addRecord(QWidget* window, const char *pkey)
 
     int file_ndx = dbfiles_list.file_to_add_record(window, pkey, false, ok_to_all);
     if(file_ndx>=0) {
-        AddRecordToFile(pkey, file_ndx);
+        AddRecordToFile1(pkey, file_ndx);
     }
 }
 
@@ -886,7 +914,7 @@ void TDataBase::addRecord(QWidget* window, const char* pkey, int& fnum)
         }
     }
     if(file_ndx>=0) {
-        AddRecordToFile(pkey, file_ndx);
+        AddRecordToFile1(pkey, file_ndx);
     }
     else {
         fnum = -2;   // User pressed 'Cancel' or closed the dialog window
@@ -897,16 +925,6 @@ void TDataBase::addRecord(QWidget* window, const char* pkey, int& fnum)
 //-------------------------------------------------------------
 // DataBaseList
 //-------------------------------------------------------------
-
-int DataBaseList::Find(const char* s)
-{
-    for(size_t ii=0; ii<size(); ii++) {
-        if(strcmp(s, at(ii)->GetKeywd())) {
-            return static_cast<int>(ii);
-        }
-    }
-    return -1;
-}
 
 // default configuration
 void DataBaseList::Init()

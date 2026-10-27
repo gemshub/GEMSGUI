@@ -81,8 +81,6 @@ const char SigBEG[lnWINSIG + 1] = "Vs";
 const char SigEND[lnWINSIG + 1] = "sX";
 
 
-TCStringArray readDirs(const char *dir);
-
 //----------------------------------------------------------------
 // TVisor  class implementation
 //----------------------------------------------------------------
@@ -994,208 +992,19 @@ void TVisor::defaultCFG()
                                              o_mtname, 67, 0, 10, gem2mt_rkfrm));
 
     // read default database
-    TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");
-    //  readPDBDir(pVisor->userProfDir().c_str());
-    for (size_t jj = 0; jj < rt.size(); jj++) {
-        int cnt = 0;
-        for (size_t ii = 0; ii < aDBFiles.size(); ii++) {
-            std::string flnm = std::string(aDBFiles[ii], 0, aDBFiles[ii].find("."));
-            if ( flnm == rt[jj]->GetKeywd() ||
-                ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
-                ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
-            {
-                std::string path = pVisor->sysDBDir();
-                path += aDBFiles[ii];
-                rt[jj]->AddFile(path.c_str());
-                cnt++;
-            }
-        }
-        rt[jj]->specialFilesNum = cnt;
-    }
-
-    // reading project dirs
-    TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
-    for (size_t ii = 0; ii < aDBDirs.size(); ii++) {
-        std::string dir(pVisor->userProfDir());
-        dir += aDBDirs[ii];
-        aDBFiles = readPDBDir(dir.c_str(), "*.pdb");
-
-        for (size_t jj = 0; jj < rt.size(); jj++)  {
-            for (size_t kk = 0; kk < aDBFiles.size(); kk++)  {
-                std::string flnm = std::string(aDBFiles[kk], 0, aDBFiles[kk].find("."));
-                if ( flnm == rt[jj]->GetKeywd() ||
-                    ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
-                    ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
-                {
-                    std::string path(dir);
-                    path += "/";
-                    path += aDBFiles[kk];
-                    rt[jj]->AddFile(path.c_str());
-                }
-            }
+    auto default_dbfiles = folderFiles(pVisor->sysDBDir(), ".pdb");
+    for(auto& module : rt) {
+        if(module) {
+            module->addFiles(pVisor->sysDBDir(), default_dbfiles);
         }
     }
-}
-
-TCStringArray readDirs(const char *dir)
-{
-    TCStringArray aFiles;
-    gui_logger->debug("GEMS DB dir: {}", dir);
-    QDir thisDir(dir);
-    //    if (!thisDir.isReadable())
-    //        throw TFatalError("GEMS Init", std::string(dir) + ": GEMS DB directory is not readable");
-
-    thisDir.setFilter(QDir::Dirs);
-    //    thisDir.setNameFilter("*.pdb");
-
-    QFileInfoList files = thisDir.entryInfoList();
-    if(files.empty()) {
-        return aFiles;
-    }
-
-    QListIterator<QFileInfo> it(files);
-    QFileInfo f;
-    while(it.hasNext())  {
-        f = it.next();
-        if (f.isDir() && f.fileName() != "." && f.fileName() != "..") {
-            gui_logger->debug("Adding dir: {}", f.fileName().toStdString());
-            aFiles.push_back( f.fileName().toStdString());
+    // read projects database
+    auto projects_dbfiles = folderFiles(pVisor->userProfDir(), ".pdb");
+    for(auto& module : rt) {
+        if(module) {
+            module->addFiles(pVisor->userProfDir(), projects_dbfiles);
         }
-        // else 'special file'
     }
-    return aFiles;
-}
-
-void TVisor::deleteDBDir(const char *dir)
-{
-    TCStringArray aFiles;
-
-    QDir thisDir(dir);
-    if(!thisDir.exists()) {
-        return;
-    }
-
-    //--QDir::setCurrent(dir);
-    thisDir.setFilter(QDir::Files);
-
-    QFileInfoList files = thisDir.entryInfoList();
-    if (files.empty()) {
-        return;
-    }
-
-    QListIterator<QFileInfo> it(files);
-    QFileInfo f;
-    while( it.hasNext() ) {
-        f = it.next();;
-        if(f.isSymLink() || f.isFile()) {
-            gui_logger->trace("Adding file: {}", f.fileName().toStdString());
-            aFiles.push_back(f.fileName().toStdString());
-        }
-        // else 'special file'
-    }
-
-    //--QDir::setCurrent(dir);
-    // delete files in module list
-    std::string path;
-    for(size_t ii = 0; ii < aFiles.size(); ii++) {
-        if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb") {
-            for(size_t jj = 0; jj < rt.size(); jj++) {
-                if(std::string(aFiles[ii], 0, aFiles[ii].find(".")) == rt[jj]->GetKeywd()) {
-                    path = dir;
-                    path += "/";
-                    path += aFiles[ii];
-                    gui_logger->debug("DelFile: {}", path);
-                    rt[jj]->Close();
-                    rt[jj]->DelFile(path);
-                    rt[jj]->Open(true, UPDATE_DBV, {});
-                }
-            }
-        }
-        path = dir;
-        path += "/";
-        path += aFiles[ii].c_str();
-        gui_logger->debug("remove: {}", path);
-        QFile ff(path.c_str()/*aFiles[ii].c_str()*/);
-        ff.remove();
-    }
-
-    thisDir.rmdir(dir);
-}
-
-// copy file
-void TVisor::CopyF( const char * fName, const char* fTempl )
-{
-    QFile ff_tmp(fTempl);
-    if(!ff_tmp.open(QIODevice::ReadOnly)) {
-        Error(fTempl, "File copy error" );
-    }
-    ff_tmp.flush();
-    QFile ff_new(fName);
-    if(!ff_new.open(QIODevice::WriteOnly)) {
-        Error(fName, "File copy error" );
-    }
-
-    char *p = new char[ff_tmp.size()+2];
-    ff_tmp.read(p, ff_tmp.size());
-    ff_new.write(p, ff_tmp.size());
-    delete[] p;
-    ff_tmp.close();
-    ff_new.close();
-}
-
-void TVisor::makeDBDir(const char *dir)
-{
-    // make directory dir (find system function)
-    QDir d(dir);
-    if( d.exists() ) {
-        if( d.count()>2 ) {
-            QStringList filters = (QStringList() << "*.ndx" << "*.pdb");
-            QStringList lst = d.entryList( filters, QDir::Files );
-            if (lst.count()<=0) {
-                vfMessage(0, dir, "This directory is not empty.");
-            }
-            else {
-                Error(dir, "Error creating Modelling Project directory!");
-            }
-        }
-        return;
-    }
-    if(!d.mkdir( dir )) {
-        Error( dir, "Error creating Modelling Project directory!");
-    }
-}
-
-TCStringArray TVisor::readPDBDir(const char *dir, const char *filter)
-{
-    // filesystem use, old gets valgrind error
-    std::string all_filter = filter;
-    trim(all_filter, "*");
-    return vfFiles(dir, all_filter);
-
-    // TCStringArray aFiles;
-
-    // QDir thisDir(dir);
-    // QStringList afilt(filter);
-
-    // thisDir.setFilter(QDir::Files);
-    // thisDir.setNameFilters(afilt);
-
-    // QFileInfoList files = thisDir.entryInfoList();
-    // if (files.empty()) {
-    //     return aFiles;
-    // }
-
-    // QListIterator<QFileInfo> it(files);
-    // QFileInfo f;
-    // while( it.hasNext() ) {
-    //     f = it.next();
-    //     if(f.isSymLink() || f.isFile()) {
-    //         gui_logger->info("Adding file: {}", f.fileName().toStdString());
-    //         aFiles.push_back(f.fileName().toStdString());
-    //     }
-    //     // else 'special file'
-    // }
-    // return aFiles;
 }
 
 TVisor *pVisor;

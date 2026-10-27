@@ -198,7 +198,7 @@ public:
     std::string CurrentKey();
     std::string DBKeywd() const
     {
-        return (db ? db->GetKeywd() :"");
+        return (db ? db->getKeywd() :"");
     }
     void SetString(const std::string s)
     {

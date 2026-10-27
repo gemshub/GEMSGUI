@@ -19,6 +19,8 @@
 #ifndef _v_file_h_
 #define _v_file_h_
 
+#include <vector>
+#include <string>
 #include <fstream>
 class GemDataStream;
 
@@ -27,17 +29,55 @@ typedef std::ios::openmode FileStatus;
 const int 	MAX_FILENAME_LEN = 20;
 
 static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
-    RDONLY_T = std::ios::in/*|std::ios::nocreate*/,               //0x01, !
-    RDONLY_B = std::ios::in/*|std::ios::nocreate*/|std::ios::binary,   //0x81,
-    WRITE_T =  std::ios::out,                            //0x02,
-    WRITE_B =  std::ios::out|std::ios::binary,                //0x82,
-    UPDATE_T = std::ios::in|std::ios::out,                    //0x03,
-    UPDATE_B = std::ios::in|std::ios::out|std::ios::binary,        //0x83,
-    APPEND_T = /*std::ios::in|*/std::ios::out|std::ios::app,           //0x09, !
-    APPEND_B = /*std::ios::in|*/std::ios::out|std::ios::app|std::ios::binary, //0x84,
-    RDONLY_DBV = std::ios::in/*|std::ios::nocreate*/|std::ios::binary, //0x05, !
-    UPDATE_DBV = std::ios::in|std::ios::out|std::ios::binary;       // 0x83 !
+    RDONLY_B = std::ios::in|std::ios::binary,
+    WRITE_B =  std::ios::out|std::ios::binary,
+    APPEND_B =   std::ios::out|std::ios::app|std::ios::binary,
+    RDONLY_DBV = std::ios::in|std::ios::binary,
+    UPDATE_DBV = std::ios::in|std::ios::out|std::ios::binary;
 
+
+/**
+ * @brief Recursively finds all files in a folder, optionally filtered by extension.
+ *
+ * @param folder The root directory path to scan.
+ * @param ext The target file extension (e.g., ".txt"). If empty, returns all files.
+ * @return A vector of strings containing full paths to the discovered files.
+*/
+std::vector<std::string> folderFiles(const std::string& folder, const std::string& ext);
+
+/**
+ * @brief Checks if a file or directory exists at the given path safely.
+ * @param file_path The path to the file or directory.
+ * @return true if the path exists, false if it doesn't or if an OS error occurs.
+ */
+bool fileExist(const std::string &file_path);
+
+/**
+ * @brief Deletes a directory and all of its contents recursively.
+ * @param folder The path to the folder to be removed.
+ * @return true if the folder was successfully deleted or didn't exist; false if an error occurred.
+ */
+bool removeFolder(const std::string &folder);
+
+/**
+ * @brief Prepares or creates a database directory, ensuring no conflicting files exist.
+ * @param folder The target directory path.
+ */
+void makeDBDirectory(const std::string& folder);
+
+/**
+ * @brief Safely clears external references and deletes the entire database directory.
+ * @param folder The path to the database directory.
+ */
+void deleteDBDirectory(const std::string& folder);
+
+/**
+ * @brief Copies a binary file from source to destination using std::filesystem.
+ * @param source The path to the source file.
+ * @param destination The path to the destination file or target directory.
+ * @return true if successfully copied, false if an OS error occurs.
+ */
+bool copyBinaryFile(const std::string& source, const std::string& destination);
 
 class TFile
 {
@@ -117,7 +157,7 @@ public:
 
 // file names constants
 
-extern const char * PDB_EXT;
-extern const char * NDX_EXT;
+extern const char *PDB_EXT;
+extern const char *NDX_EXT;
 
 #endif // _v_file_h

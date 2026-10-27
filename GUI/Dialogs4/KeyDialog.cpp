@@ -196,7 +196,7 @@ std::string KeyDialog::getKey()
 void KeyDialog::CmFilter()
 {
     std::string str_name = "Template for ";
-    str_name +=  rt[iRt]->GetKeywd();
+    str_name +=  rt[iRt]->getKeywd();
     str_name += " record key";
     KeyFilter dbFilter(this, iRt, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )
@@ -358,9 +358,9 @@ void RDKeyDialog::SetList()
 void RDKeyDialog::CmFilter()
 {
     std::string str_name = "Template for ";
-    str_name +=  rt[RT_REACDC]->GetKeywd();
+    str_name +=  rt[RT_REACDC]->getKeywd();
     str_name +=  "&";
-    str_name +=  rt[RT_DCOMP]->GetKeywd();
+    str_name +=  rt[RT_DCOMP]->getKeywd();
     str_name += " record key";
     KeyFilter dbFilter(this, RT_DCOMP, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )

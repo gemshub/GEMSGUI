@@ -25,7 +25,7 @@ TPrintData::TPrintData(const char *sd_key,
                        unsigned int nrt, std::fstream& fout, const char *fmt_text ):
   key_format( sd_key ), nRT(nrt)
 {
-  ErrorIf( !fout.good() , rt[nRT]->GetKeywd(), "Fileopen error");
+  ErrorIf( !fout.good() , rt[nRT]->getKeywd(), "Fileopen error");
   input = const_cast<char*>(fmt_text);
 
   prr = 1;

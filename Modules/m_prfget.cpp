@@ -341,7 +341,7 @@ AGAIN:
         //delete projct directory, if Project record create error
         std::string Path = pVisor->userProfDir();
         Path += new_project_dir_name;
-        pVisor->deleteDBDir(Path.c_str());
+        deleteDBDirectory(Path);
         throw;
     }
     return true;
@@ -466,7 +466,7 @@ AGAIN:
         //delete project directory, if Project record create error
         std::string Path = pVisor->userProfDir();
         Path +=   new_project_dir_name;
-        pVisor->deleteDBDir(Path.c_str());
+        deleteDBDirectory(Path);
         throw;
     }
     return true;
@@ -709,7 +709,7 @@ void TProfil::InitFN(const std::string& prfName, const std::string& prfTemplate)
     Path += prfName;
 
     // make directory Path (find system function)
-    pVisor->makeDBDir(Path.c_str());
+    makeDBDirectory(Path);
 
     if( prfTemplate.empty() )
     { // creating empty files
@@ -724,7 +724,7 @@ void TProfil::InitFN(const std::string& prfName, const std::string& prfTemplate)
     {
         std::string tmpDirPath = pVisor->userProfDir();
         tmpDirPath += prfTemplate;
-        TCStringArray all_files = pVisor->readPDBDir(tmpDirPath.c_str(), "*" );
+        TCStringArray all_files = folderFiles(tmpDirPath, "");
 
         // make list of opened files
         std::set<std::string> open_files_keywds;
@@ -767,8 +767,8 @@ void TProfil::InitFN(const std::string& prfName, const std::string& prfTemplate)
             replace( aFiles[ii], prfTemplate, prfName);
             f_new += aFiles[ii];
 
-            if ( !(std::string( aFiles[ii], 0, aFiles[ii].find(".")) ==  db->GetKeywd() ))
-                pVisor->CopyF( f_new.c_str(), f_tmp.c_str() );
+            if ( !(std::string( aFiles[ii], 0, aFiles[ii].find(".")) ==  db->getKeywd() ))
+                copyBinaryFile(f_tmp, f_new);
         }
 
         // add files to module list
@@ -776,7 +776,7 @@ void TProfil::InitFN(const std::string& prfName, const std::string& prfTemplate)
         {
             if (std::string(aFiles[ii], aFiles[ii].rfind(".") + 1) == "pdb") {
                 for (size_t jj = 0; jj < rt.size(); jj++) {
-                    if (std::string(aFiles[ii], 0, aFiles[ii].find(".")) == rt[jj]->GetKeywd())
+                    if (std::string(aFiles[ii], 0, aFiles[ii].find(".")) == rt[jj]->getKeywd())
                     {
                         std::string f_new = aFiles[ii];
                         rt[jj]->MakeInNewProfile(Path, prfName, f_new);

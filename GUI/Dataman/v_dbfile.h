@@ -239,12 +239,10 @@ public:
         special_files_num = size();
     }
 
-    void add_file(const std::string &path);
-
     std::vector<int> open_files(FileStatus mode, const std::vector<int> &nff, TDBKeyList &ind);
     std::vector<int> add_open_files(const std::vector<int> &nff, TDBKeyList &ind);
     size_t open_new_file(const std::string &path, TDBKeyList &ind);
-    void remove_file(const std::string &path, TDBKeyList &ind);
+    void remove_files(const std::set<std::string>& target_names, TDBKeyList& ind);
 
 
     /// Generate file list for using in GUI
@@ -266,6 +264,7 @@ public:
     // >= 0 selected file
     // -1 cancell
     int file_to_add_record(QWidget *window, const std::string &record_key, bool multy, bool& ok_to_all);
+    void add_file(const std::string &folder, const std::string &path);
 protected:
 
     unsigned char nRT;

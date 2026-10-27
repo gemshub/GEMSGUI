@@ -59,7 +59,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pkern );
-        pMod->setText(0, rt[i]->GetKeywd());
+        pMod->setText(0, QString::fromStdString(rt[i]->getKeywd()));
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
@@ -85,7 +85,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         if( aMod[i]->IsSubModule() )
             continue;
         pMod = new QTreeWidgetItem( pprf);
-        pMod->setText(0, rt[i]->GetKeywd());
+        pMod->setText(0, QString::fromStdString(rt[i]->getKeywd()));
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;

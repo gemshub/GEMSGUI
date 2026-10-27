@@ -187,9 +187,9 @@ void ReacDCWizard::ChangeFilter()
 {
     std::string keyFilter = ui->lineFilter->text().toStdString();
     std::string str_name = "Template for ";
-    str_name +=  rt[RT_REACDC]->GetKeywd();
+    str_name +=  rt[RT_REACDC]->getKeywd();
     str_name +=  "&";
-    str_name +=  rt[RT_DCOMP]->GetKeywd();
+    str_name +=  rt[RT_DCOMP]->getKeywd();
     str_name += " record key";
     KeyFilter dbFilter(this, RT_DCOMP, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )

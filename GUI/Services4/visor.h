@@ -171,10 +171,6 @@ public:
 
     /// Generate full path to current directory from filename and extension
     std::string filePathFromName(const std::string& filename, const std::string& extension);
-    void deleteDBDir(const char * dir);
-    void CopyF( const char * fName, const char* fTempl );
-    void makeDBDir(const char *dir);
-    TCStringArray readPDBDir(const char *dir, const char *filter );
 
     // GUI
     QWidget* window();

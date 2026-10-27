@@ -26,6 +26,9 @@
 #include "service.h"
 #include "GEMS3K/gdatastream.h"
 
+#include <filesystem>
+
+namespace fs = std::filesystem;
 static int rlencomp( const void *ie_1, const void *ie_2 );
 
 // Reading header of DB file
@@ -639,9 +642,10 @@ void DBFileList::from_cfg(std::fstream& in_stream)
 }
 
 // add new file to database chain
-void DBFileList::add_file(const std::string& path)
+void DBFileList::add_file(const std::string &folder, const std::string &path)
 {
-    push_back(std::make_shared<TDBFile>(path));
+    fs::path combined_path = fs::path(folder)/path;
+    push_back(std::make_shared<TDBFile>(combined_path.string()));
 }
 
 void DBFileList::reset_open_list()
@@ -716,7 +720,7 @@ size_t DBFileList::open_new_file(const std::string &path, TDBKeyList& ind)
     auto ndx = size();
 
     try {
-        add_file(path);
+        add_file(path, "");
         at(ndx)->create_with_ndx(nRT, isDelete, ndx, ind);
         if(at(ndx)->open_file(open_mode, rclose, ndx, ind)) {
             // logging to rebuld;
@@ -742,33 +746,37 @@ std::vector<int> DBFileList::add_open_files(const std::vector<int>& nff, TDBKeyL
     return open_files(open_mode, files_to_open, ind);
 }
 
-// delete a file from DBfile list
-void DBFileList::remove_file(const std::string& path, TDBKeyList& ind)
+void DBFileList::remove_files(const std::set<std::string>& target_names, TDBKeyList& ind)
 {
-    TDBFile fl(path);
-    std::set<size_t> new_opened_files;
+    try {
+        for(size_t ii = size(); ii > 0; --ii)  {
+            size_t nF = ii - 1;
+            if(target_names.count(at(nF)->Name())) {
 
-    for(size_t ii=0; ii<size(); ++ii)  {
-        if(fl.Name() == at(ii)->Name()) {
-            auto  nF = ii;
+                if(check_writable(nF, "remove file")) {
+                    continue; // Skip deletion in db default
+                }
 
-            if(check_readonly(nF)) {
-                // logging read only file
-                break;
-            }
-            for(auto& ndx: opened_files) {
-                if(ndx>nF) {
-                    new_opened_files.insert(ndx-1);
+                std::set<size_t> new_opened_files;
+                for(auto const& ndx : opened_files) {
+                    if(ndx > nF) {
+                        new_opened_files.insert(ndx - 1);
+                    }
+                    else if(ndx < nF) {
+                        new_opened_files.insert(ndx);
+                    }
                 }
-                else if(ndx<nF) {
-                    new_opened_files.insert(ndx);
-                }
+                opened_files = std::move(new_opened_files);
+                erase(begin() + nF);
             }
-            opened_files = new_opened_files;
-            erase(begin()+nF);
-            reset_index_list(ind);
-            break;
         }
+        // Re-sync indexing layout after successful removal sequence
+        reset_index_list(ind);
+    }
+    catch (const TError& e) {
+        // Ensure index integrity even if an operation fails midway
+        reset_index_list(ind);
+        throw;
     }
 }
 
@@ -865,7 +873,7 @@ size_t DBFileList::file_name_index(const std::string& file_name) const
     for(auto it = opened_files.rbegin(); it != opened_files.rend(); ++it) {
         size_t ndx = *it;
         if(at(ndx)->Name() == file_name) {
-            return static_cast<int>(ndx);
+            return ndx;
         }
     }
     return 0; // in old implementation (posible throw error)

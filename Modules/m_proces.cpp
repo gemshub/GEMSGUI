@@ -1229,7 +1229,7 @@ pep->ccTime = 0.0;
        {
            // read sdref record with format prn
            sd_key = "pscript*:*:";
-           sd_key += db->GetKeywd();
+           sd_key += db->getKeywd();
            sd_key += "*";
            sd_key += ":";
            sd_key = dynamic_cast<TCModule *>(aMod[RT_SDATA].get())->GetKeyofRecord(

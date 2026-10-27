@@ -976,12 +976,15 @@ TFileList::TFileList(QWidget* win, size_t iRt, const char* caption ):
 {
     setWindowTitle(caption);
 
+    std::string sel_item;
     pFileList = new QListWidget(this);
-    const TCStringArray& s = rt[iRt]->GetOpenFiles();
-    for( size_t ii=0; ii<s.size(); ii++ )
-        pFileList->addItem(s[ii].c_str());
-
-    pFileList->item(rt[iRt]->GetWorkFileName())->setSelected(true);
+    const TCStringArray& s = rt[iRt]->getOpenFiles(sel_item);
+    for(size_t ii=0; ii<s.size(); ii++) {
+        pFileList->addItem(QString::fromStdString(s[ii]));
+        if(sel_item == s[ii])  {
+            pFileList->item(pFileList->count()-1)->setSelected(true);
+        }
+    }
 
     QPushButton* btn;
     btn = new QPushButton(this);

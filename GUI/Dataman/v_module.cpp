@@ -839,7 +839,7 @@ void TCModule::RecordPrint(const char* key)
     {
         // read sdref record with format prn
         sd_key = "pscript*:*:";
-        sd_key += db->GetKeywd();
+        sd_key += db->getKeywd();
         sd_key += "*";
         sd_key += ":";
     }
@@ -880,7 +880,7 @@ void TCModule::RebildFile()
 void TCModule::AddFileToList()
 {
 
-    std::string filename = db->GetKeywd();
+    std::string filename = db->getKeywd();
     filename += ".newname.";
     filename +=  PDB_EXT;
     std::string filter = "*.";
@@ -896,10 +896,11 @@ void TCModule::AddFileToList()
     std::string ext;
     u_splitpath( filename, dir, name, ext);
     ext = PDB_EXT;
-    size_t pos = name.find( db->GetKeywd() );
+    size_t pos = name.find( db->getKeywd() );
     if( pos != 0 )
-    {  name = "." + name;
-        name = db->GetKeywd()+ name;
+    {
+        name = "." + name;
+        name = db->getKeywd()+ name;
     }
     filename = u_makepath( dir, name, ext );
     db->AddFileToList(filename);
@@ -1115,7 +1116,7 @@ void TCModule::RecExport()
 {
     // read sdref record with format prn
     std::string sd_key = "escript*:*:";
-    sd_key += db->GetKeywd();
+    sd_key += db->getKeywd();
     sd_key += "*";
     sd_key += ":";
     sd_key = aMod[RT_SDATA]->GetKeyofRecord(
@@ -1177,7 +1178,7 @@ void TCModule::RecImport()
 
     // read sdref record with format read
     std::string sd_key = "iscript*:*:";
-    sd_key += db->GetKeywd();
+    sd_key += db->getKeywd();
     sd_key += "*";
     sd_key += ":";
     sd_key = aMod[RT_SDATA]->GetKeyofRecord(
@@ -1379,7 +1380,7 @@ void TCModule::Transfer()
         AddRecord( aKey[i].c_str(), fnum );
         if( fnum == -2 )
         {
-            db->AddRecordToFile( aKey[i].c_str(), oldfile );
+            db->AddRecordToFile1( aKey[i].c_str(), oldfile );
             break;
         }
     }
@@ -1466,7 +1467,7 @@ void TCModule::CopyRecordsList(bool if_rename)
             db->Del( nrec );
             //Point SaveRecord
             if( !AddRecordTest( str.c_str(), fnum ))
-                db->AddRecordToFile( aKey[i].c_str(), fnum );
+                db->AddRecordToFile1(aKey[i].c_str(), fnum );
             //db->AddRecordToFile( str.c_str(), fnum );
         }
         else

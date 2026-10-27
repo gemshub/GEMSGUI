@@ -245,6 +245,7 @@ protected:
     std::string gen_new_project_file_name(const std::string& dir,
                                           const std::string& project_name, const std::string& f_name) const;
     void check_record_key(const char *pkey);
+    bool check_rt_name(const std::string &file_name) const;
 public:
     ///int specialFilesNum;
     ///int fNum;
@@ -258,8 +259,7 @@ public:
     ~TDataBase();
     //put state to cfg file
     void toCFG( std::fstream& f );
-    void AddFile(const std::string& path);
-    void DelFile(const std::string& path);
+    void removeFiles(const std::vector<std::string>& path_list);
     /// Object count written to the record header. The extended-settings objects of the project
     /// record are not counted, so that older GEMSGUI versions still read the record.
     unsigned char headerObjCount() const;
@@ -287,9 +287,9 @@ public:
       status = stt;
     }
 
-    const char* GetKeywd() const
+    std::string getKeywd() const
     {
-        return Keywd;
+        return char_array_to_string(Keywd, MAXKEYWD);
     }
     uint KeyLen() const
     {
@@ -332,14 +332,7 @@ public:
     {
         return ind;
     }
-    // const TCStringArray& GetOpenFiles() const
-    // {
-    //     return fOpenNameBuf;
-    // }
-    // int GetWorkFileName() const
-    // {
-    //     return fNum;
-    // }
+    const std::vector<std::string>& getOpenFiles(std::string &active) const;
     void SetKey( const char *key )
     {
         ind.SetKey(key);
@@ -378,7 +371,7 @@ public:
     bool ifDefaultOpen() const;
 
     //--- Manipulation Data Base
-    void Create( uint nF );
+    void Create1( uint nF );
     void Open( bool type, FileStatus mode, const TCIntArray& indx);
     void OpenAllFiles( bool only_kernel = false );
     void Close();
@@ -389,7 +382,7 @@ public:
     void AddOpenFile(const TCIntArray& indx);
 
     //--- Manipulation records
-    uint AddRecordToFile(const char *key, int file);
+    uint AddRecordToFile1(const char *key, int file);
     void Rep( int i);
     void Del( int i);
     void Get( int i);
@@ -418,7 +411,6 @@ public:
     std::string fromJsonObjectNew( const QJsonObject& obj );
 
     std::string make_key_template(const std::vector<std::string>& first_fields) const;
-    size_t fileToAdd(QWidget *window, const std::string &record_key);
     void addRecord(QWidget *window, const char *pkey);
     void addRecord(QWidget *window, const char *pkey, int &fnum);
 
@@ -426,6 +418,13 @@ public:
     {
         return dbfiles_list.last_used_file;
     }
+
+    std::string activeFileName() const
+    {
+        return dbfiles_list.last_used_file<dbfiles_list.size() ?
+                   dbfiles_list[dbfiles_list.last_used_file]->Name() : "";
+    }
+    void addFiles(const std::string &folder, const std::vector<std::string> &path_list);
 };
 
 // Data Base container : rt
@@ -444,11 +443,10 @@ public:
     void fromCFG( std::fstream& f );
     void toCFG(std::fstream& f);
 
-    //--- Selectors
-    int Find(const char* keywd);
 };
 
 extern DataBaseList rt;
 
 #endif	// V_DBM_H_
+
 

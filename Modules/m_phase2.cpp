@@ -1334,7 +1334,7 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
     int  Rnum = db->Find(key.c_str());
 
     if( Rnum<0 )
-        db->AddRecordToFile(key.c_str(), file);
+        db->AddRecordToFile1(key.c_str(), file);
     else
       {
         std::string mess = key;

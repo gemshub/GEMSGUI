@@ -23,8 +23,105 @@
 #endif
 
 #include "v_file.h"
+#include "v_dbm.h"
 #include "GEMS3K/v_service.h"
 #include "GEMS3K/gdatastream.h"
+#include <filesystem>
+namespace fs = std::filesystem;
+
+extern std::shared_ptr<spdlog::logger> gui_logger;
+
+std::vector<std::string> folderFiles(const std::string& folder, const std::string& ext) {
+    std::vector<std::string> files;
+    fs::path dir_path(folder);
+    std::error_code ec;
+
+    auto it = fs::recursive_directory_iterator(dir_path, fs::directory_options::skip_permission_denied, ec);
+    if(ec) {
+        gui_logger->error("The {} folder cannot be opened/accessed.", dir_path.string());
+        return files;
+    }
+
+    // Traverse through all files and subdirectories recursively
+    for(auto const& dir_entry : it) {
+        if (dir_entry.is_regular_file(ec) && !ec) {
+            if (ext.empty() || dir_entry.path().extension() == ext) {
+                std::string file = dir_entry.path().string();
+                gui_logger->debug("Adding file: {}", file);
+                files.emplace_back(std::move(file));
+            }
+        }
+    }
+    return files;
+}
+
+bool fileExist(const std::string &file_path)
+{
+    std::error_code ec;
+    return fs::exists(file_path, ec);
+}
+
+bool removeFolder(const std::string &folder)
+{
+    std::error_code ec;
+    std::uintmax_t removed_count = fs::remove_all(folder, ec);
+    if (ec) {
+        gui_logger->error("The {} folder cannot be removed.", folder);
+        return false;
+    }
+    gui_logger->debug("Deletes a directory {} and all of its contents {} recursively", folder, removed_count);
+    return true;
+}
+
+void makeDBDirectory(const std::string& folder)
+{
+    if(fileExist(folder)) {
+        auto files_into = folderFiles(folder, ".pdb");
+        if(!files_into.empty()) {
+            Error(folder, "Error creating Modelling Project directory! (Contains existing .pdb files)");
+            return;
+        }
+        gui_logger->warn("Directory {} already exists but contains no .pdb files.", folder);
+        return;
+    }
+    if(!u_create_directory(folder)) {
+        Error(folder, "Error creating Modelling Project directory! (OS creation failed)");
+    }
+}
+
+void deleteDBDirectory(const std::string& folder)
+{
+    if(!fileExist(folder)) {
+        return;
+    }
+    auto files_to_remove = folderFiles(folder, ".pdb");
+    for(auto& module : rt) {
+        if(module) {
+            module->removeFiles(files_to_remove);
+        }
+    }
+    if (!removeFolder(folder)) {
+        gui_logger->warn("Failed to fully delete DB directory: {}", folder);
+    }
+}
+
+bool copyBinaryFile(const std::string& source, const std::string& destination) {
+    std::error_code ec;
+
+    fs::path src_path(source);
+    fs::path dst_path(destination);
+
+    if(fs::is_directory(dst_path, ec) && !ec) {
+        dst_path /= src_path.filename();
+    }
+    fs::copy_options options = fs::copy_options::overwrite_existing;
+    fs::copy_file(src_path, dst_path, options, ec);
+    if(ec) {
+        gui_logger->warn("Error copying from {} to {}. Reason: {}", source, dst_path.string(), ec.message());
+        return false;
+    }
+    return true;
+}
 
 //----------------------------------------------------------
 // TFile
@@ -174,8 +271,7 @@ void TFile::Open( FileStatus mode )
         Close();
     if( mode == NOT_OPEN )
         return;
-    if( !Exist() && !(mode == WRITE_T || mode == WRITE_B ||
-                      mode == APPEND_T || mode == APPEND_B) )
+    if( !Exist() && !(mode == WRITE_B || mode == APPEND_B) )
         Error( GetPath(),"File not found.");
 #ifndef _WIN32
     if( mode== UPDATE_DBV && access( Path.c_str(), W_OK ) != 0)
