@@ -422,7 +422,7 @@ public:
     std::string activeFileName() const
     {
         return dbfiles_list.last_used_file<dbfiles_list.size() ?
-                   dbfiles_list[dbfiles_list.last_used_file]->Name() : "";
+                   dbfiles_list[dbfiles_list.last_used_file]->relativePath() : "";
     }
     void addFiles(const std::string &folder, const std::vector<std::string> &path_list);
 };

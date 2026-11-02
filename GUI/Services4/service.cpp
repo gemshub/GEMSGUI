@@ -57,32 +57,8 @@
 #include "InputSystemDialog.h"
 #include "PhaseInfoDialog.h"
 
-#include <filesystem>
-namespace fs = std::filesystem;
 
-
-TCStringArray vfFiles(const std::string& dir_name, const std::string& ext) {
-    TCStringArray files;
-    fs::path dir_path(dir_name);
-    std::error_code ec;
-    for (fs::directory_iterator it(dir_path, ec), end; !ec && it != end; it.increment(ec)) {
-        if (it->is_regular_file(ec) && (ext.empty() || it->path().extension() == ext)) {
-            std::string file = it->path().filename().string();
-            gui_logger->trace("Adding file: {}", file);
-            files.push_back(file);
-        }
-    }
-    return files;
-}
-
-bool vfExist(const std::string &file_path)
-{
-    return !(::access(file_path.c_str(), 0 ));
-}
-
-
-void deleteDirectory(QString dir);
-void vfObjToFile(QWidget* par, TObject* obj);
+//void vfObjToFile(QWidget* par, TObject* obj);
 QMutex qmutex;
 
 //----------------------------------------------------------------
@@ -641,81 +617,35 @@ bool vfChooseDirectory(QWidget* par, std::string& path_,
     }
 }
 
-void deleteDirectory(QString dir)
-{
-    QDir data_dir(dir);
-
-    //First delete any files in the current directory
-    QFileInfoList files = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files);
-    for(int file = 0; file < files.count(); file++)
-    {
-        data_dir.remove(files.at(file).fileName());
-    }
-
-    //Now recursively delete any child directories
-    QFileInfoList dirs = data_dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs);
-    for(int dr = 0; dr < dirs.count(); dr++)
-    {
-        deleteDirectory(dirs.at(dr).absoluteFilePath());
-        data_dir.rmdir(dirs.at(dr).absoluteFilePath());
-    }
-}
-
-
-void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite )
-{
-    // make directory dir (find system function)
-    QDir d(dir);
-    if ( d.exists() )
-    {
-        if( askOverwrite )
-        {
-            std::string mess = dir;
-            mess += "\n";
-            mess+=  "This directory exists! Overwrite?";
-            if( !vfQuestion( par, "Create new directory",mess) )
-                Error( dir, "Error creating directory!");
-
-            if( askOverwrite == 2)
-            {
-              deleteDirectory(dir);
-            }
-        }
-        return;
-    }
-    if( !d.mkdir( dir ))
-        Error( dir, "Error creating directory!");
-}
-
-// exports obect to TXT file
-//
-// @param par - parent widget
-// @param obj - object to export
-void vfObjToFile(QWidget* par, TObject* obj)
-{
-    std::string filename;
-AGAIN:
-    if( vfChooseFileSave(par, filename, "Please, provide name of TXT-file") )
-    {
-        std::ios::openmode mod = std::ios::out;
-        if( vfExist(filename) )
-            switch( vfQuestion3( par, filename, "This file exists! What to do?",
-                                 "&Append", "&Overwrite", "&Cancel") )
-            {
-            case VF3_2:
-                mod = std::ios::out;
-                break;
-            case VF3_1:
-                mod = std::ios::out|std::ios::app;
-                break;
-            case VF3_3:
-                goto AGAIN;
-            }
-        std::fstream f( filename.c_str(), mod );
-        /// errors
-        obj->toTXT( f );
-    }
-}
+// // exports obect to TXT file
+// //
+// // @param par - parent widget
+// // @param obj - object to export
+// void vfObjToFile(QWidget* par, TObject* obj)
+// {
+//     std::string filename;
+// AGAIN:
+//     if( vfChooseFileSave(par, filename, "Please, provide name of TXT-file") )
+//     {
+//         std::ios::openmode mod = std::ios::out;
+//         if( vfExist(filename) )
+//             switch( vfQuestion3( par, filename, "This file exists! What to do?",
+//                                  "&Append", "&Overwrite", "&Cancel") )
+//             {
+//             case VF3_2:
+//                 mod = std::ios::out;
+//                 break;
+//             case VF3_1:
+//                 mod = std::ios::out|std::ios::app;
+//                 break;
+//             case VF3_3:
+//                 goto AGAIN;
+//             }
+//         std::fstream f( filename.c_str(), mod );
+//         /// errors
+//         obj->toTXT( f );
+//     }
+// }
 
 //=============================================
 // Ones used Dialogs

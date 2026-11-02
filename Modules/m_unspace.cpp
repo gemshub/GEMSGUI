@@ -1198,7 +1198,7 @@ TUnSpace::RecordPrint( const char* key )
 		if( vfChooseFileSave(window(), filename,
 				   "Please, enter the Unspace work structure file name", "*.unc" ) )
 		{
-            if( vfExist(filename) )
+            if( fileExist(filename) )
                 if( !vfQuestion( window(), filename,
 		        		"This file exists! Overwrite?") )
                    return;

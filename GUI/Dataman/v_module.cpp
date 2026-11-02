@@ -799,7 +799,7 @@ void TCModule::PrintSDref( const char* sd_key, const char* text_fmt )
     {
         std::ios::openmode mod = std::ios::out;
 
-        if(vfExist(filename))
+        if(fileExist(filename))
             switch( vfQuestion3( window(), filename,
                                 "This file exists! What to do?",
                                 "&Append", "&Overwrite", "&Cancel") )
@@ -1140,7 +1140,7 @@ void TCModule::RecExport()
     if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
     std::ios::openmode mod = std::ios::out;
-    if(vfExist(filename))
+    if(fileExist(filename))
         switch( vfQuestion3( window(), filename,
                             "This file exists! What to do?",
                             "&Append", "&Overwrite", "&Cancel") )

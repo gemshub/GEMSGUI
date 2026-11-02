@@ -1577,8 +1577,6 @@ void TProcess::RecordPrint(const char *key)
         std::string process_name = rt[RT_PROCES]->PackKey();
         strip(process_name);
         KeyToName(process_name);
-        //std::string recordPath = files_dir + process_name + "/";
-        //vfMakeDirectory( nullptr, recordPath.c_str(), 1 );
 
         std::string filename1 = process_name;
         filename1 += "-dat.lst";
@@ -1586,7 +1584,7 @@ void TProcess::RecordPrint(const char *key)
         if( vfChooseFileSave(window(), filename1,
                              "Please, enter the Process work structure file name", "*.lst" ) )
         {
-            if( vfExist(filename1) )
+            if( fileExist(filename1) )
                 if( !vfQuestion( window(), filename1,
                                  "This file exists! Overwrite?") )
                     return;

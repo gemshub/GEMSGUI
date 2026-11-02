@@ -376,7 +376,7 @@ void TVisor::Setup()
 #endif
     // check exist Resources
     std::string fname = sysGEMDir();
-    if(!vfExist(fname)) {
+    if(!fileExist(fname)) {
         Error("Setup", fname + "- The Resource directory does not exist.");
     }
 
@@ -625,7 +625,7 @@ bool TVisor::fromObjDAT()
 {
     std::string fname = sysGEMDir() + VISOBJ_DAT;
 
-    if(!vfExist(fname)) {
+    if(!fileExist(fname)) {
         gui_logger->info("Used ini file, file {} does not exist.", fname);
         return false;
     }
@@ -677,7 +677,7 @@ bool TVisor::fromWinDAT()
     // loading static info for visor (DAT files)
     std::string fname = sysGEMDir() + VISOR_DAT;
 
-    if(!vfExist(fname)) {
+    if(!fileExist(fname)) {
         gui_logger->info("Used ini files, file {} does not exist.", fname);
         return false;
     }
@@ -729,7 +729,7 @@ bool TVisor::fromModCFG()
 {
     std::string fname = userProfDir()+GEM_CONF;
 
-    if(!vfExist(fname)) {
+    if(!fileExist(fname)) {
         gui_logger->info("Used default configuration, file {} does not exist.", fname);
         return false;
     }
@@ -775,7 +775,7 @@ void TVisor::fromSettingsCFG()
 {
     std::string fname_ini = userProfDir() + VIS_CONF + ".json";
 
-    if(!vfExist(fname_ini)) {
+    if(!fileExist(fname_ini)) {
         gui_logger->info("Used default settings, file {} does not exist.", fname_ini);
         return;
     }
@@ -830,7 +830,7 @@ bool TVisor::fromWinCFG()
 #ifndef NO_GUI
     std::string fwin_ini_name = userProfDir() + WIN_CONF;
 
-    if(!vfExist(fwin_ini_name)) {
+    if(!fileExist(fwin_ini_name)) {
         gui_logger->info("Used default data, file {} does not exist.", fwin_ini_name);
         return false;
     }

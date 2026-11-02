@@ -277,7 +277,7 @@ uint TDataBase::AddRecordToFile1(const char *pkey, int file_ndx)
 
     auto record_ndx = ind.addndx(file_ndx, 0, pkey);
     RecEntry* rh = ind.RecPosit(record_ndx);
-    dbfiles_list[file_ndx]->save_record_to_file(true, rclose, rh, this);
+    dbfiles_list[file_ndx]->save_record_to_file(true, rh, this);
     status = ONEF_;
     return record_ndx;
 }
@@ -295,7 +295,7 @@ void TDataBase::Rep(int record_ndx)
         return;
     }
 
-    dbfiles_list[file_ndx]->save_record_to_file(false, rclose, rh, this);
+    dbfiles_list[file_ndx]->save_record_to_file(false, rh, this);
     status = ONEF_;
 }
 
@@ -312,7 +312,7 @@ void TDataBase::Del(int record_ndx)
     }
     RecEntry copy_rh = *rh;
     ind.delndx(record_ndx);
-    dbfiles_list[file_ndx]->delete_record_from_file(rclose, &copy_rh, this);
+    dbfiles_list[file_ndx]->delete_record_from_file(&copy_rh, this);
     status = UNDF_;
 }
 
@@ -324,7 +324,7 @@ void TDataBase::Get(int record_ndx)
 
     auto file_ndx = rh->nFile;
     dbfiles_list.check_file(file_ndx);
-    dbfiles_list[file_ndx]->read_record_from_file(rclose, rh, this);
+    dbfiles_list[file_ndx]->read_record_from_file(rh, this);
     ind.PutKey(record_ndx);
     status = ONEF_;
 }
@@ -337,7 +337,7 @@ time_t TDataBase::GetTime(size_t record_ndx)
 
     auto file_ndx = ree->nFile;
     dbfiles_list.check_file(file_ndx);
-    auto time = dbfiles_list[file_ndx]->get_time(rclose, ree);
+    auto time = dbfiles_list[file_ndx]->get_time(ree);
     status =  UNDF_;
     return time;
 }
@@ -671,7 +671,7 @@ void TDataBase::removeFiles(const std::vector<std::string> &path_list)
     std::set<std::string> target_names;
     for (const auto& path : path_list) {
         if(check_rt_name(path)) {
-            target_names.insert(TDBFile(path).Name());
+            target_names.insert(TDBFile(path).relativePath());
         }
     }
     dbfiles_list.remove_files(target_names, ind);

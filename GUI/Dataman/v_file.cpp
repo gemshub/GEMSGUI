@@ -1,33 +1,34 @@
 //-------------------------------------------------------------------
-// $Id: v_file.cpp 968 2007-12-13 13:23:32Z gems $
+// $Id$
 //
-// Implementation of TFile class
+// Implementation of TBinaryFile class and some file-related constants and functions
 //
-// Copyright (C) 1996-2001 S.Dmytriyeva
+// Copyright (C) 1996-2026 S.Dmytriyeva, D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
-// Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
+// Qt v.6 cross-platform App & UI framework (https://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
-
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <io.h>
-#endif
-
-#include "v_file.h"
-#include "v_dbm.h"
-#include "GEMS3K/v_service.h"
-#include "GEMS3K/gdatastream.h"
 #include <filesystem>
 namespace fs = std::filesystem;
+
+#include "v_dbm.h"
+#include "service.h"
+#include "GEMS3K/v_service.h"
+#include "GEMS3K/gdatastream.h"
+
+//char TBinaryFile::vv[9]="GEMBASE1";
+//char TBinaryFile::pa[9]="01041999";
+char TBinaryFile::vv[9]="GEMBASE2";
+char TBinaryFile::pa[9]="01112026";
+const char * PDB_EXT = "pdb";
+const char * NDX_EXT = "ndx";
 
 extern std::shared_ptr<spdlog::logger> gui_logger;
 
@@ -123,213 +124,187 @@ bool copyBinaryFile(const std::string& source, const std::string& destination) {
     return true;
 }
 
+void makeDirectory(QWidget* window, const std::string& folder, int ask_overwrite)
+{
+    if(fileExist(folder)) {
+        if(ask_overwrite > 0) {
+            std::string mess = folder + "\nThis directory exists! Overwrite?";
+
+            // If the user clicks "No", cancel the operation safely
+            if(!vfQuestion(window, "Create new directory", mess)) {
+                gui_logger->info("Directory creation cancelled by user: {}", folder);
+                return; // Safely exit without triggering a fatal Error state
+            }
+
+            if(ask_overwrite == 2) {
+                gui_logger->info("Wiping existing directory as requested: {}", folder);
+                removeFolder(folder);
+            }
+            else {
+                gui_logger->warn("Directory {} already exists. Proceeding with existing contents.", folder);
+                return;
+            }
+        }
+        else {
+            gui_logger->warn("Directory {} already exists. Silent skip.", folder);
+            return;
+        }
+    }
+    if(!u_create_directory(folder)) {
+        Error(folder, "Error creating directory! (OS creation failed)");
+    }
+}
+
+/// Deterministic FNV-1a 64-bit hashing algorithm
+static uint64_t fnv1a_64(const std::string& str) {
+    uint64_t hash = 14695981039346656037ULL;
+    const uint64_t fnv_prime = 1099511628211ULL;
+    for(char c : str) {
+        hash ^= static_cast<uint8_t>(c);
+        hash *= fnv_prime;
+    }
+    return hash;
+}
+
+/// Cross-platform path normalization (handles slashes and case-insensitivity)
+static std::string normalizePath(const fs::path& path) {
+    std::string target = path.generic_string();
+    std::transform(target.begin(), target.end(), target.begin(), [](unsigned char c) {
+        return std::tolower(c);
+    });
+    return target;
+}
+
 //----------------------------------------------------------
-// TFile
+// TBinaryFile
 //----------------------------------------------------------
 
-char TFile::vv[9]="GEMBASE1";
-char TFile::pa[9]="01041999";
-
-void
-TFile::write( std::fstream& out_stream )
+TBinaryFile::TBinaryFile(const std::string& path):
+    full_path(path),
+    status(NOT_OPEN),
+    fstream(std::make_unique<GemDataStream>())
 {
-    out_stream << Keywd << "  "; // endl;
-    int ln = Path.length() + 1;
-    out_stream << ln << ' '; // endl;
-    out_stream << Path.c_str() << std::endl;
-
-    ErrorIf( out_stream.bad(), GetKeywd(),
-             "Error writing TFile to configurator.");
+    split_path();
+    make_keyword();
+    std::string normalized = normalizePath(relative_path);
+    fnv1a_64_hash = fnv1a_64(normalized);
 }
 
-void *
-TFile::read( std::fstream& in_stream )
+TBinaryFile::~TBinaryFile()
 {
-    //    is.read( Keywd, MAX_FILENAME_LEN );
-    // we should put length here !!
-    in_stream >> Keywd;
-    int ln;
-    in_stream >> ln;
-    std::string sss;
-    in_stream >> sss;
-
-    Path = sss;
-    u_splitpath(Path, dir, name, ext);
-
-    ErrorIf( in_stream.bad(), GetKeywd(),
-             "Error reading TFile from configurator.");
-    return this;
+    if(status != NOT_OPEN) {
+        closeFile();
+    }
 }
 
-// configuration to file
-void TFile::toCFG(std::fstream& fcfg)
+GemDataStream &TBinaryFile::stream()
 {
-    write(fcfg);
+    return *fstream;
 }
 
-TFile::TFile(std::fstream& fcfg):
-        status( NOT_OPEN ),
-	f(*new GemDataStream())
+bool TBinaryFile::exist()
 {
-    read(fcfg);
-    Makepath();
+    return fileExist(full_path);
 }
 
-TFile::TFile(const std::string& fName,
-             const std::string& fExt, const std::string& fDir):
-        status( NOT_OPEN ),
-	f(*new GemDataStream())
+void TBinaryFile::openFile(FileStatus ios_mode)
 {
-    newFile( fName, fExt, fDir );
-    makeKeyword();
+    if(ios_mode == status) {
+        return;
+    }
+    if(status != NOT_OPEN) {
+        closeFile();
+    }
+    if(ios_mode == NOT_OPEN) {
+        return;
+    }
+    bool is_readonly = (ios_mode & std::ios::in) &&
+                       !(ios_mode & (std::ios::out | std::ios::app | std::ios::trunc));
+
+    if (!exist() && is_readonly) {
+        Error(full_path, "File not found.");
+        return;
+    }
+
+    fstream->clear();
+    fstream->open(full_path.c_str(), ios_mode);
+
+    ErrorIf(!fstream->good(), full_path, "File open error.");
+
+    if ((ios_mode & std::ios::out) && !(ios_mode & std::ios::app))  {
+        fstream->seekp(0, std::ios::beg);
+    }
+    if (ios_mode & std::ios::in) {
+        fstream->seekg(0, std::ios::beg);
+    }
+    status = ios_mode;
 }
 
-TFile::TFile(const std::string& path):
-        status( NOT_OPEN ),
-        Path(path),
-	f(*new GemDataStream())
+void TBinaryFile::closeFile()
 {
-    u_splitpath(Path, dir, name, ext);
-    makeKeyword();
+    if(status != NOT_OPEN) {
+        fstream->close();
+    }
+    status = NOT_OPEN;
 }
 
-TFile::~TFile()
+void TBinaryFile::from_cfg(std::fstream &config_stream)
 {
-    if( status != NOT_OPEN )
-        Close();
-    delete &f;
+    size_t ln;
+    config_stream >> Keywd;
+    //config_stream >> fnv1a_64_hash;
+    config_stream >> ln;
+    config_stream >> full_path;
+
+    split_path();
+    //check make_keyword();
+    std::string normalized = normalizePath(relative_path);
+    fnv1a_64_hash = fnv1a_64(normalized);
 }
 
-void
-TFile::makeKeyword()
+void TBinaryFile::to_cfg(std::fstream &config_stream)
+{
+    config_stream << Keywd << "  ";
+    config_stream << fnv1a_64_hash << "  ";
+    //config_stream << full_path.length() << ' ';
+    config_stream << full_path << std::endl;
+}
+
+void TBinaryFile::split_path()
+{
+    fs::path path(full_path);
+    relative_path = file_name = path.filename().stem().string();
+    ext = path.extension().string();
+    if(!ext.empty() && ext[0] == '.') {
+        ext.erase(0, 1);
+    }
+}
+
+void TBinaryFile::make_keyword()
 {
     std::string key;
-    if( name.empty() )
+    if(file_name.empty()) {
         return;
+    }
 
     // ignoring version and after
-    // get version
-    std::string fname = name;
+    std::string fname = file_name;
     size_t pos1 = fname.find(".ver");
-    if( pos1 != std::string::npos )
-       fname = fname.substr(0, pos1 );
-
+    if(pos1 != std::string::npos) {
+        fname = fname.substr(0, pos1);
+    }
     key = std::string(fname, 0, 2);
     size_t npos = 0;
     size_t npos2 = fname.find(".", npos);
-    while( npos2 != std::string::npos )
-    {   npos = npos2+1;
+    while(npos2 != std::string::npos) {
+        npos = npos2+1;
         key += std::string(fname, npos, 2);
         npos2 = fname.find(".", npos);
     }
     key += std::string(fname, npos+2);
-
-    strncpy( Keywd, key.c_str(), MAX_FILENAME_LEN);
+    strncpy(Keywd, key.c_str(), MAX_FILENAME_LEN);
     Keywd[MAX_FILENAME_LEN]='\0';
 }
-
-
-// Set new full file name. Old file closed.
-void TFile::newFile( const std::string& newName, const std::string& newExt,
-                     const std::string& newDir )
-{
-    if( status != NOT_OPEN )
-        Close();
-
-    dir = newDir;
-    ext = newExt;
-    name = newName;
-
-    Makepath();
-}
-
-//Get full name of file
-void TFile::Makepath()
-{
-    Path = u_makepath( dir, name, ext );
-}
-
-//Check for existence of file
-bool TFile::Exist()
-{
-    if( Test() )
-        return true;  // file alredy open
-    if( Path.empty() )
-        Makepath();
-
-    if( access( Path.c_str(), 0 ) )
-        return false;
-    else  return true;
-}
-
-// Open file in special mode
-void TFile::Open( FileStatus mode )
-{
-    if( mode == status )
-        return;
-    if( status != NOT_OPEN )
-        Close();
-    if( mode == NOT_OPEN )
-        return;
-    if( !Exist() && !(mode == WRITE_B || mode == APPEND_B) )
-        Error( GetPath(),"File not found.");
-#ifndef _WIN32
-    if( mode== UPDATE_DBV && access( Path.c_str(), W_OK ) != 0)
-        mode = RDONLY_DBV;
-#else
-if( mode== UPDATE_DBV && access( Path.c_str(), 02 ) != 0)
-    mode = RDONLY_DBV;
-#endif
-
-    /*   if( mode == WRITE_T  || mode == WRITE_B )
-          if( !vfQuestion( "Question", "Write over previous file (Y) or skip (N)?" ) )
-                 Error( GetKeywd(),"Cansel of open file.");
-    */
-// it seems like latest libstdc++ specs does not enforce
-// state and pointer reset :(
-// we have to do it on our own
-    f.clear();
-    f.open( Path.c_str(), mode );
-
-    ErrorIf( !f.good(), GetPath(), "File open error.");
-
-    if( (mode & std::ios::out) || (mode & std::ios::app) )
-    f.seekp(0, std::ios::beg);
-    if( mode & std::ios::in )
-    f.seekg(0, std::ios::beg);
-
-    status = mode;
-}
-
-void TFile::OpenFromFileName( const std::string& filename, FileStatus mode )
-{
-    Close();
-    remove(GetPath().c_str());
-    rename(filename.c_str(), GetPath().c_str());
-    Open(mode);
-}
-
-/*
-// check file in special mode
-bool TFile::CheckOverwrite( FileStatus mode )
-{
-    if( Exist() && (mode == WRITE_T || mode == WRITE_B) )
-        return true;
-    return false;
-}
-*/
-
-//Close file
-void TFile::Close()
-{
-    f.close();
-    status = NOT_OPEN;
-}
-
-// file names constants
-
-const char * PDB_EXT = "pdb";
-const char * NDX_EXT = "ndx";
 
 //--------------------- End of v_file.cpp ---------------------------
 

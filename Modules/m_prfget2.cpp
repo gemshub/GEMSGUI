@@ -505,7 +505,7 @@ AGAIN:
         if( vfChooseFileSave(nullptr/*window()*/, str_file,
                              "Please, enter output file name", "*.out" ) == false )
             return;
-        if( vfExist(str_file) )
+        if( fileExist(str_file) )
             switch( vfQuestion3( nullptr/*window()*/, str_file,
                                  "This set of files exists!",
                                  "&Overwrite", "&Rename", "&Cancel") )
@@ -1255,7 +1255,7 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
         systemname = packkey.c_str();
         KeyToName(systemname);
         std::string recordPath = files_dir + systemname + "/";
-        vfMakeDirectory( nullptr, recordPath.c_str(), 0 );
+        makeDirectory(nullptr, recordPath, 0);
 
         recordPath += systemname+ "-dat.lst";
         try {
@@ -1287,7 +1287,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
 
 
     if( aList.size() > 0 )
-        vfMakeDirectory( nullptr, files_dir.c_str(), 2 );
+      makeDirectory( nullptr, files_dir, 2 );
 
     for( size_t ii=0; ii< aList.size(); ii++)
     {
@@ -1303,7 +1303,7 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
         strip( process_name );
         KeyToName(process_name);
         std::string recordPath = files_dir + process_name + "/";
-        vfMakeDirectory( nullptr, recordPath.c_str(), 0 );
+        makeDirectory(nullptr, recordPath.c_str(), 0);
 
         recordPath += process_name+ "-dat.lst";
         try {
@@ -1330,12 +1330,12 @@ void TProfil::GEMS3KallSystems( int makeCalc, bool brief_mode, bool add_mui )
         // Generate data from process
         TCStringArray savedSystems;
         std::string processPath = dir + "/Processes/";
-        //vfMakeDirectory( nullptr, processPath.c_str(), 2 );
+        //makeDirectory( nullptr, processPath, 0);
         allProcess2GEMS3K( savedSystems, processPath, brief_mode, add_mui );
 
         // Save systems
         std::string systemsPath = dir + "/Standalone/";
-        vfMakeDirectory( nullptr, systemsPath.c_str(), 2 );
+        makeDirectory(nullptr, systemsPath, 0);
         allSystems2GEMS3K( savedSystems, makeCalc, systemsPath, brief_mode, add_mui );
     }
     catch( TError& xcpt )

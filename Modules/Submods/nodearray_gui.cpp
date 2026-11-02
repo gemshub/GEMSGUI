@@ -57,7 +57,7 @@ AGAIN:
     if( vfChooseFileSave(par, path, "Please, enter IPM work structure file name", "*.lst" ) == false )
         return "";
 
-    if( vfExist(path))
+    if( fileExist(path))
         switch( vfQuestion3( par, path, "This set of files exists!",
                             "&Overwrite", "&Rename", "&Cancel") )
         {

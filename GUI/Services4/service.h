@@ -34,8 +34,8 @@ const int VF_YES_ALL =8;
 const int VF_NO_ALL = 9;
 const int VF_CANCEL = 2;
 
-TCStringArray vfFiles(const std::string& dir_name, const std::string& ext);
-bool vfExist(const std::string& file_path);
+//TCStringArray vfFiles(const std::string& dir_name, const std::string& ext);
+//bool vfExist(const std::string& file_path);
 
 int vfQuestYesNoCancel(QWidget* par, const std::string& title, const std::string& mess);
 
@@ -112,10 +112,6 @@ bool vfChooseFileSave(QWidget* par, std::string& path,
 bool vfChooseDirectory(QWidget* par, std::string& path_,
        const char* title );
 
-// askOverwrite = 0 - not ask
-// askOverwrite = 1 - ask and cancel
-// askOverwrite = 2 - ask and clear
-void vfMakeDirectory(QWidget* par, const char *dir, int askOverwrite = 0 );
 double vfGetDouble( QWidget * par, const char* title, const char* label,
   double value = 0, double min = -1e8, double max = 1e8, int decimals = 4 );
 

@@ -35,19 +35,19 @@ extern const char* ALLKEY;
 
 class TDBKeyList;
 class TDataBase;
-class QWidget;
 
+// header of PDB file
 struct VDBhead
-{       // header of PDB file
+{
     char VerP[8];
     char PassWd[8];
     char Date[11];
     char Time[5];
     int nRT;                 // type of PDB chain
     int nRec;                // number records in file
-    int  stacOver,FPosTRT;
+    int stacOver;
+    int FPosTRT;
     char isDel;
-    // Sveta 64   long MinDrLen, MaxDrLen; // min and max size of deleted block
     int MinDrLen, MaxDrLen; // min and max size of deleted block
     int curDr;               // number of deleted blocks
 
@@ -59,116 +59,239 @@ struct VDBhead
         return sizeof(char[8])*2
                + sizeof(char[11]) + sizeof(char[5])
                + sizeof(int)*4
-               // Sveta 64    + sizeof(char) + sizeof(long)*2
                + sizeof(char) + sizeof(int)*2
                + sizeof(int);
     }
 };
 
+// position and size of deleted block
 struct DBentry
-{   // position and size of deleted block
-    // Sveta 64    long pos, len;
+{
     int pos, len;
-
     void read(GemDataStream& is);
     void write(GemDataStream& is);
-
     static size_t data_size()
     {
-        // Sveta 64  return sizeof(long)*2;
         return sizeof(int)*2;
     }
 };
 
+// Record entry  position, size and file number of record
 struct RecEntry
-{   //position, size and file number of record
-    // Sveta 64    long pos, len;
+{
     int     pos, len;
     unsigned char nFile;
-
     void read(GemDataStream& is);
     void write(GemDataStream& is);
 };
 
 
-// This is file of Data Base
-class TDBFile:
-                public TFile
+/**
+ * @class TDBFile
+ * @brief Manages low-level binary database file structure operations (.pdb) coupled with index tables (.ndx).
+ *
+ * Implements core database engine operations including creation, transactional I/O, file synchronization,
+ * defragmentation, and deleted blocks recycling (sfe tracking mechanism).
+ */
+class TDBFile : public TBinaryFile
 {
-    // Sveta 64    long FPosFree;  // len of file
-    int     FPosFree;  // len of file
-    VDBhead *dh;    // header of file
-    DBentry *sfe;   // stack of deleted record
-
-    TDBFile(const TDBFile&);
-    const TDBFile& operator=(const TDBFile&);
-
-protected:
-    void check_sfe();
-    void v_PDBtry(GemDataStream& fdb);
-    void getHead(GemDataStream& fdb);
-    void vdbh_new( const char *VerP, const char *passwd, int nRT, bool ifDel );
-    void clrh();
 
 public:
-    //  TDBFile();
-    TDBFile(const std::string& fName,
-            const std::string& fExt, const std::string& fDir );
-    TDBFile(const std::string& path);
-    TDBFile(std::fstream& f);
+    /**
+     * @brief Constructs a TDBFile manager instance.
+     * @param path Optional physical or relative path to the database file.
+     */
+    explicit TDBFile(const std::string& path = "", const std::string& the_relative="");
 
-    void check_dh();
+    TDBFile(const TDBFile&) = delete;
+    const TDBFile& operator=(const TDBFile&) = delete;
 
-    //--- Selectors
-    VDBhead* Dh() const
-    {
-        return dh;
-    }    // header of file
+    /**
+     * @brief Creates a new database file on the disk.
+     *
+     * If a file with the same name already exists at the target path, it will be
+     * overwritten (deleted and re-created). Initializes a fresh control structure
+     * in memory and flushes the initial file header and empty deleted records stack to disk.
+     *
+     * @param nRT    Recort type.
+     * @param isDel  Flag to enable or disable the deleted records tracking system (sfe).
+     */
+    void createFile(int nRT, bool isDel);
 
-    int FLen() const
-    {
-        return FPosFree;
-    }
+    /**
+     * @brief Opens the database file in a special operational mode.
+     *
+     * Manages the transition of file states. If the file is already open in a different
+     * mode, it closes the file first. After a successful low-level open operation,
+     * it automatically reads and restores the database control structures (file header).
+     *
+     * @param mode The target file status/mode to switch to (e.g., UPDATE_DBV, RDONLY_DBV).
+     */
+    void openFile(FileStatus mode) override;
 
-    void FNewLen( int dlt )
-    {
-        FPosFree -= dlt;
-    }
-    void SetnRec( int n )
-    {
-        check_dh();
-        dh->nRec = n;
-    }
-    void GetDh( int& fPos, int& fLen, int& nRT, char& isDel );
-    bool GetDhOver();
-    void SetDh( int fLen, int nRec, int nRT, char isDel );
+    /**
+     * @brief Closes the database file and releases all allocated memory resources.
+     *
+     * Safely deallocates the dynamic memory holding the database file header and
+     * the deleted records stack to prevent memory leaks. Resets the free position
+     * tracker and delegates the final file closure to the base binary file class.
+     */
+    void closeFile() override;
 
-    //---  Manipulation files ---
-    void Create(int nRT, bool isDel );
-    virtual void Open( FileStatus mode );
-    virtual void Close();
-    void PutHead( GemDataStream& fdb, int deltRec=0 );
-    void vdbh_setdt();
-
-    //---  Manipulation deleted blocks ---
-    void AddSfe( RecEntry& re );
-    void FindSfe( RecEntry& re );
-
-
-    std::string index_file_name() const;
-    void put_ndx(size_t nF, const TDBKeyList &ind);
-    void get_ndx(size_t nF, TDBKeyList &ind);
-    time_t get_time(bool rclose, RecEntry *ree);
+    /**
+     * @brief Creates a new database file along with its corresponding index file if it does not exist.
+     *
+     * Checks for the physical existence of the file. If absent, it triggers the creation of
+     * the main database file (.pdb) and immediately initializes and writes the associated
+     * index key list file (.ndx).
+     *
+     * @param nRT    Records type.
+     * @param isDel  Flag to enable or disable the deleted records tracking system (sfe).
+     * @param nF     Database file index within the global file list.
+     * @param ind    Reference to the constant TDBKeyList containing the index structure to be saved.
+     */
     void create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyList& ind);
 
-    /// Open file and read indexes
-    /// return true if Stack of deleted records overflow and need compress
+    /**
+     * @brief High-level method to open a database file, load its indexes, and handle stack overflow.
+     *
+     * Configures connection parameters and automatically restores the key index list.
+     * If a stack overflow is detected in the deleted records system, it prompts the user for compression.
+     *
+     * @param mode     The operational file status/mode to connect with (e.g., UPDATE_DBV, RDONLY_DBV).
+     * @param rclose   If true, automatically closes the physical file immediately after loading indexes.
+     * @param nF       Database file index within the global file list.
+     * @param ind      Output reference to populate with the loaded TDBKeyList.
+     *
+     * @return true If the database index/file structure requires a rebuild/compression.
+     * @return false If the database file is healthy and ready for operations.
+     */
     bool open_file(FileStatus mode, bool rclose, size_t nF, TDBKeyList &ind);
 
-    void save_record_to_file(bool new_record, bool rclose, RecEntry *rh, TDataBase* database);
-    void delete_record_from_file(bool rclose, RecEntry *rh, TDataBase *database);
-    void read_record_from_file(bool rclose, RecEntry *rh, TDataBase *database);
+    /**
+     * @brief Saves or updates a database record, manages deleted blocks allocation, and synchronizes indexes.
+     *
+     * If updating an existing record, the old physical space is moved to the deleted blocks stack (sfe).
+     * Calculates the new required length (payload + key data + record header), allocates space
+     * via find_sfe, writes the record, updates the file header counter, and flushes index tables (.ndx).
+     *
+     * @param new_record True if this is a completely new insertion; false if it overwrites an existing record.
+     * @param rh         Pointer to the RecEntry structure holding the record geometry and file placement.
+     * @param database   Pointer to the TDataBase context handling record packing and writing logic.
+     */
+    void save_record_to_file(bool new_record, RecEntry *rh, TDataBase* database);
+
+    /**
+     * @brief Deletes a record from the database file physically and updates index tables.
+     *
+     * Creates a safe local copy of the record entry, factors in the record header size,
+     * and pushes the freed block into the deleted records stack (sfe) for future recycling.
+     * Decrements the total record counter in the file header, updates the index file (.ndx),
+     * and handles the auto-close (rclose) transaction lifecycle.
+     *
+     * @param rh       Pointer to the RecEntry structure representing the record to be deleted.
+     * @param database Pointer to the active TDataBase context containing the index tables.
+     */
+    void delete_record_from_file(RecEntry *rh, TDataBase *database);
+
+    /**
+     * @brief Reads a record payload from the physical database file and unpacks it into memory.
+     *
+     * Automatically ensures the database file stream is active, positions the stream pointer,
+     * reads the record header along with the data via the TDataBase context, and handles
+     * the transaction lifecycle according to the auto-close (rclose) flag.
+     *
+     * @param rh       Pointer to the RecEntry structure holding the record's physical file position and geometry.
+     * @param database Pointer to the active TDataBase context that executes the record unpacking logic.
+     */
+    void read_record_from_file(RecEntry *rh, TDataBase *database);
+
+    /**
+     * @brief Reads the last update/creation timestamp of a specific record from the database file.
+     *
+     * Positions the stream pointer at the record's physical address, verifies the formatting
+     * markers of the record header, and extracts the time_t value. Respects the auto-close (rclose) flag.
+     *
+     * @param ree Pointer to the RecEntry containing the physical file position of the target record.
+     * @return time_t The timestamp (crt) stored inside the record header.
+     */
+    time_t get_time(RecEntry *ree);
+
+    /**
+     * @brief Rebuilds (compresses/defragments) the database file by removing all deleted records.
+     *
+     * Scans the active database file, copies healthy records into a temporary file (.tmp),
+     * physically replaces the original file with the defragmented one using cross-platform filesystem utilities,
+     * updates the compressed file structures, and refreshes the indexes.
+     *
+     * @param nF       Database file index within the global file list.
+     * @param database Pointer to the active TDataBase context executing the physical file scanning.
+     */
     void rebuild_file(size_t nF, TDataBase *database);
+
+protected:
+    /// Current length of the physical file on the disk (free position append offset)
+    int FPosFree;
+
+    /// Pointer to the allocated database file header structure
+    VDBhead *dh;
+
+    /// Pointer to the allocated deleted records stack array (reusable blocks list)
+    DBentry *sfe;
+
+    /**
+     * @brief Current operational mode/status for the active database connection.
+     *
+     * Stores the file status (such as UPDATE_DBV, RDONLY_DBV, or NOT_OPEN) reflecting
+     * how the physical database file was opened.
+     */
+    FileStatus connect_db_mode = UPDATE_DBV;
+
+    /**
+     * @brief Flag to automatically close the database file after a read or write operation.
+     *
+     * If set to true, the file stream will be immediately closed upon completing the current
+     * transaction to ensure data persistence and release system resource locks.
+     */
+    bool rclose = true;
+
+    // --- Internal Sanity Checks ---
+    /// Validates if the sfe array memory is correctly allocated.
+    void check_sfe();
+    /// Validates if the file header structure memory is correctly allocated.
+    void check_dh();
+
+    // --- Header & Memory Synchronization ---
+    /// Stamps the current system date and time into the file header structure.
+    void vdbh_setdt();
+    /// Resets header properties and fills the sfe stack array with clean zero blocks.
+    void clear_dh_sfe();
+    /// Prepares a fresh header layout in the memory before file initialization.
+    void initialize_header(int nRT, bool if_del);
+    /// Forces truncation/expansion and synchronizes memory structures directly to disk.
+    void force_update_header(int fLen, int nRec, int nRT, char is_del);
+
+    // --- Manipulation of Deleted Blocks (Space Recycling System) ---
+    /// Adds a freed record's spatial metrics to the sfe stack and marks it as deleted in the stream.
+    void add_sfe(RecEntry& re);
+    /// Searches for a reusable block matching the required payload size using an optimized strategy.
+    void find_sfe(RecEntry& re);
+    /// Fallback strategy to allocate new storage space at the physical end of the file.
+    void allocate_new_block(RecEntry &re);
+
+    // --- Low-Level Stream Manipulation ---
+    /// Flushes the active header to disk and modifies the total active record count by a delta.
+    void put_head(int delta_rec);
+    /// Parses the file stream from position zero to reconstruct header and sfe metadata arrays.
+    void get_head();
+
+    // --- Indexing and File Extensions System (.ndx) ---
+    /// Cross-platform utility that returns the active file path with its extension changed to .ndx
+    std::string index_file_name() const;
+    /// Serializes and writes the complete active key indexing list table to the .ndx file.
+    void put_ndx(size_t nF, const TDBKeyList &ind);
+    /// De-serializes and reads the complete key indexing list table from the .ndx file.
+    void get_ndx(size_t nF, TDBKeyList &ind);
 };
 
 
@@ -218,7 +341,7 @@ public:
         }
         else if(!check_open(file_ndx)) {
             Error("check_file", "Attempted to access a database file that is not open. File path: " +
-                                    at(file_ndx)->GetPath());
+                                    at(file_ndx)->relativePath());
         }
         last_used_file = file_ndx;
     }
@@ -228,7 +351,7 @@ public:
         if(check_readonly(nF)) {
             std::string error_msg = "Cannot " + operation +
                                     ": modifying a system database file is not allowed (read-only mode enabled).";
-            Error(at(nF)->Name(), error_msg);
+            Error(at(nF)->relativePath(), error_msg);
             return false;
         }
         return true;
@@ -283,10 +406,9 @@ protected:
     size_t special_files_num;
 
     /// Current record file index
-    size_t fNum = 0;
     size_t last_used_file=0;
 
-    /// List of opened files
+    /// List of opened files names
     std::vector<std::string> opened_files_list;
 
     void close_all();
@@ -294,4 +416,8 @@ protected:
     void reset_index_list(TDBKeyList &ind);
 };
 
+// Crucial fix: Returns path relative to the database/project root-path
+// Example: If root is "C:/Projects" and file is "C:/Projects/Data/report.pdf",
+// this extracts the relative part: "Data/report.pdf"
+//fs::path relative_path = fs::relative(file_path, root_path);
 #endif  // V_DBFILE_H_

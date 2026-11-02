@@ -746,7 +746,7 @@ void TProfil::InitFN(const std::string& prfName, const std::string& prfTemplate)
                 if (ext == "pdb" || ext == "ndx") {
                     TDBFile db_link(all_files[ii]);
                     //std::cout << db_link.GetKeywd() << "  ";
-                    if( open_files_keywds.find(db_link.GetKeywd()) == open_files_keywds.end() ) {
+                    if( open_files_keywds.find(db_link.getFKeywd()) == open_files_keywds.end() ) {
                         //std::cout << " " << std::endl;
                         continue;
                     }

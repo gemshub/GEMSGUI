@@ -985,7 +985,7 @@ void TGEM2MT::RecCalc( const char * key )
           "Please, browse or enter the GEM2MT VTK output directory name" ) )
      {
          pathVTK += "/";
-         vfMakeDirectory(window(), (pathVTK + nameVTK + "/").c_str(), 1 );
+         makeDirectory(window(), (pathVTK + nameVTK + "/"), 1);
      }
    }
 
@@ -1170,7 +1170,7 @@ void TGEM2MT::RecordPrint( const char* key )
         if( vfChooseFileSave(window(), filename,
                              "Please, enter the TGEM2MT work structure file name", std::string("*."+f_ext).c_str() ) )
         {
-            if( vfExist(filename) )
+            if( fileExist(filename) )
                 if( !vfQuestion( window(), filename.c_str(), "This file exists! Overwrite?") )
                     return;
             //mtp->PsScom=S_OFF;

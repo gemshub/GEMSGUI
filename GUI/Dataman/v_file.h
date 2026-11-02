@@ -1,16 +1,15 @@
 //-------------------------------------------------------------------
-// $Id: v_file.h 968 2007-12-13 13:23:32Z gems $
+// $Id$
 //
-// Declaration of TFile class and some filename related constants
+// Declaration of TBinaryFile class and some file-related constants and functions
 //
-// Copyright (C) 1996-2000 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1996-2026 S.Dmytriyeva, D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
-// Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
+// Qt v.6 cross-platform application & UI framework (https://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
-
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
@@ -19,14 +18,23 @@
 #ifndef _v_file_h_
 #define _v_file_h_
 
+#include <cstdint>
 #include <vector>
 #include <string>
 #include <fstream>
+#include <memory>
+#include "GEMS3K/v_service.h"
+
 class GemDataStream;
+class QWidget;
 
 typedef std::ios::openmode FileStatus;
 
 const int 	MAX_FILENAME_LEN = 20;
+
+// file names constants
+extern const char *PDB_EXT;
+extern const char *NDX_EXT;
 
 static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
     RDONLY_B = std::ios::in|std::ios::binary,
@@ -34,7 +42,6 @@ static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
     APPEND_B =   std::ios::out|std::ios::app|std::ios::binary,
     RDONLY_DBV = std::ios::in|std::ios::binary,
     UPDATE_DBV = std::ios::in|std::ios::out|std::ios::binary;
-
 
 /**
  * @brief Recursively finds all files in a folder, optionally filtered by extension.
@@ -79,71 +86,82 @@ void deleteDBDirectory(const std::string& folder);
  */
 bool copyBinaryFile(const std::string& source, const std::string& destination);
 
-class TFile
+/**
+ * @brief Prepares a directory, handling overwrites via UI prompts.
+ * @param window Parent Qt window for modal dialogs.
+ * @param folder Target directory path.
+ * @param ask_overwrite 0 = skip check, 1 = keep existing files, 2 = wipe directory clean if it exists.
+ */
+void makeDirectory(QWidget* window, const std::string& folder, int ask_overwrite);
+
+
+/// @class TBinaryFile
+/// @brief Represents a cross-platform binary file handler managed within a database or project structure.
+/// @details This class handles file paths (both absolute and relative to the project root),
+///          manages low-level data streams, and supports unique file identification using both
+///          legacy keywords and modern deterministic 64-bit FNV-1a hashes.
+class TBinaryFile
 {
-    static  char vv[9];
-    static  char pa[9];
-
-    char Keywd[MAX_FILENAME_LEN+1];
-    FileStatus  status;
-    std::string dir;
-    std::string name;
-    std::string ext;
-    std::string Path;
-
-    void makeKeyword();
-
-protected:
-    virtual void write( std::fstream& );
-    virtual void *read( std::fstream& );
+    static char vv[9];
+    static char pa[9];
 
 public:
-    GemDataStream& f;
+    /// @brief Constructor that initializes the file object with a given path.
+    /// @param path The initial filesystem path to the target binary file.
+    explicit TBinaryFile(const std::string& path="");
 
-    //  TFile();
-    TFile(const std::string& fName,
-          const std::string& fExt, const std::string& fDir );
-    TFile(const std::string& path);
-    TFile(std::fstream& fcfg);
-    virtual ~TFile();
-    void toCFG(std::fstream& fcfg);
+    /// @brief Virtual destructor to ensure proper cleanup of resources in derived classes.
+    virtual ~TBinaryFile();
 
-    //--- Selectors
-    const char* GetKeywd() const
+    /// @brief Gets the legacy keyword identifier for backward compatibility.
+    /// @return The character array Keywd converted to a safe std::string.
+    std::string getFKeywd() const
     {
-        return Keywd;
-    }
-    FileStatus Test() const
-    {
-        return status;
-    }
-    const std::string& Name() const
-    {
-        return name;
-    }
-    const std::string& Ext() const
-    {
-        return ext;
-    }
-    const std::string& Dir() const
-    {
-        return dir;
-    }
-    const std::string& GetPath() const
-    {
-        return Path;
+        return char_array_to_string(Keywd, MAX_FILENAME_LEN);
     }
 
-    //--- Manipulation
-    void newFile( const std::string& newName, const std::string& newExt,
-                  const std::string& newDir );
-    void Makepath();
-    bool Exist();
-//    bool CheckOverwrite(FileStatus mode);
-    virtual void Open( FileStatus mode );
-    virtual void Close();
-    void OpenFromFileName( const std::string& filename, FileStatus mode );
-    //  void Reopen(const char* file, FileStatus mode);
+    /// @brief Gets the modern deterministic 64-bit FNV-1a hash of the file.
+    /// @return The precomputed uint64_t hash of the normalized relative path.
+    uint64_t getHash() const
+    {
+        return fnv1a_64_hash;
+    }
+
+    /// @brief Gets the clean filename without path and extensions.
+    /// @return A const reference to the internal file_name string.
+    const std::string& name() const
+    {
+        return file_name;
+    }
+
+    /// @brief Gets the standardized path relative to the project/database root.
+    /// @return A const reference to the cross-platform relative_path string.
+    const std::string& relativePath() const
+    {
+        return relative_path;
+    }
+
+    /// @brief Gets the absolute (full) path to the file on disk.
+    /// @return A const reference to the full_path string.
+    const std::string& fullPath() const
+    {
+        return full_path;
+    }
+
+    /// @brief Checks if the binary file actually exists on the physical storage.
+    /// @return True if the file exists on disk, false otherwise.
+    bool exist();
+
+    /// @brief Opens the binary file using the specified mode.
+    /// @param mode The access/open mode (e.g., Read, Write) to apply to the file stream.
+    virtual void openFile(FileStatus mode);
+
+    /// @brief Safely closes the active file stream and flushes any pending data.
+    virtual void closeFile();
+
+    GemDataStream& stream();
+    virtual void from_cfg(std::fstream& config_stream);
+    virtual void to_cfg(std::fstream& config_stream);
 
     static const char* VV()
     {
@@ -153,11 +171,36 @@ public:
     {
         return pa;
     }
+
+protected:
+    /// Legacy unique key generated from file_name (kept for backward compatibility)
+    char Keywd[MAX_FILENAME_LEN + 1];
+
+    /// Modern deterministic FNV-1a 64-bit hash computed from the normalized relative_path
+    uint64_t fnv1a_64_hash;
+
+    /// The absolute (full) path to the binary file on disk
+    std::string full_path;
+
+    /// The path relative to the database (default or projects) root-path
+    std::string relative_path;
+
+    /// The clean filename without the directory path and without the final extension
+    std::string file_name;
+
+    /// The final file extension (e.g., ".dat" or "bin")
+    std::string ext;
+
+    /// Internal file open/error status
+    FileStatus status;
+
+    /// Reference to the underlying low-level data stream
+    std::unique_ptr<GemDataStream> fstream;
+
+    /// Generates the legacy keyword (or updates the new FNV-1a hash)
+    void make_keyword();
+    void split_path();
 };
 
-// file names constants
 
-extern const char *PDB_EXT;
-extern const char *NDX_EXT;
-
-#endif // _v_file_h
+#endif // v_file_h
