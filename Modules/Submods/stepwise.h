@@ -28,13 +28,15 @@ class ThreadControl {
 #else
 
 #define STEP_POINT1( sp ) { \
-if( TProfil::pm->stepWise1 ) { \
+    if( TProfil::pm->userCancel1 ) \
+        throw UserCancelException(); \
+    if( TProfil::pm->stepWise1 ) { \
         ThreadControl::SetPoint( sp ); \
         ThreadControl::wakeOne(); \
         ThreadControl::wait(); \
-} \
-    if( TProfil::pm->userCancel1 ) \
-    throw UserCancelException(); \
+        if( TProfil::pm->userCancel1 ) \
+            throw UserCancelException(); \
+    } \
 }
 
 #endif

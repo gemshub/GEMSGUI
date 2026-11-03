@@ -173,6 +173,12 @@ void  TGEM2MT::NewNodeArray()
                     data_BR->P = TMulti::sm->GetPM()->Pc*bar_to_Pa; //1
                     for(long int i1=0; i1<mtp->nICb; i1++ )
                         data_BR->bIC[i1] = TMulti::sm->GetPM()->B[ mtp->xIC[i1] ];
+                    // phases and species keep the metastability limits of the start system
+                    for(long int j1=0; j1<mtp->nDCb; j1++ )
+                    {
+                        data_BR->dul[j1] = TMulti::sm->GetPM()->DUL[ mtp->xDC[j1] ];
+                        data_BR->dll[j1] = TMulti::sm->GetPM()->DLL[ mtp->xDC[j1] ];
+                    }
                 }
                 else // Save databr
                 {

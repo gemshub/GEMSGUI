@@ -64,7 +64,10 @@ qt_add_executable(check-db ${CMAKE_CURRENT_SOURCE_DIR}/check_db.cpp)
 # process-run: runs one Process record without the window, in a chosen solver mode (process_run_main.cpp).
 qt_add_executable(process-run ${CMAKE_CURRENT_SOURCE_DIR}/process_run_main.cpp)
 
-foreach(gems_tool gems3k-export json2db check-db process-run)
+# gems-project: creates a Modelling Project and copies equilibria and processes into it (gems_project_main.cpp).
+qt_add_executable(gems-project ${CMAKE_CURRENT_SOURCE_DIR}/gems_project_main.cpp)
+
+foreach(gems_tool gems3k-export json2db check-db process-run gems-project)
     target_link_libraries(${gems_tool} PRIVATE gems_tool_common)
 endforeach()
 

@@ -1396,7 +1396,14 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
       calcTime = node.GEM_CalcTime( numK2, NumIterFIA, NumIterIPM );
       pmp->t_elap_sec = calcTime;
       gui_logger->debug( "Node solver call: mode {}, status {}, G {}", need, st, pmp->FX );
-      if( st == T_ERROR_GEM && userCancel1 )
+      // a cancelled call ends as a failure of any kind: it is a cancel, not an error to show
+      const bool failed = st == T_ERROR_GEM || st == ERR_GEM_AIA || st == ERR_GEM_SIA || st == BAD_GEM_AIA || st == BAD_GEM_SIA
+#ifdef USE_OPTIMA_SOLVER
+          || st == ERR_GEM_AOP || st == ERR_GEM_SOP || st == ERR_GEM_HOP || st == ERR_GEM_SHP
+          || st == BAD_GEM_AOP || st == BAD_GEM_SOP || st == BAD_GEM_HOP || st == BAD_GEM_SHP
+#endif
+          ;
+      if( userCancel1 && failed )
           throw TMulti::UserCancelException();
       if( st == T_ERROR_GEM || st == ERR_GEM_AIA || st == ERR_GEM_SIA
 #ifdef USE_OPTIMA_SOLVER

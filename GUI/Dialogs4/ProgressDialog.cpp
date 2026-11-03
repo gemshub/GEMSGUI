@@ -17,6 +17,7 @@
 //-------------------------------------------------------------------
 
 #include <QMutex>
+#include <algorithm>
 #include "ProgressDialog.h"
 #include "ui_ProgressDialog4.h"
 #include "NewSystemDialog.h"
@@ -70,7 +71,7 @@ void ProgressDialog::switchToAccept(bool isAccept, bool stepwise)
         ui->pStepAccept->disconnect();
 #ifndef USE_GEMS3K_SERVER
         ui->pResume->disconnect();
-        ui->pResume->show();
+        ui->pResume->show();   // hidden below for the modes without step points
         if(stepwise) {
             connect( ui->pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
             ui->pStepAccept->setText("&Step");
@@ -87,6 +88,9 @@ void ProgressDialog::switchToAccept(bool isAccept, bool stepwise)
             connect( ui->pResume, SIGNAL(clicked()), this, SLOT(CmStop()) );
             ui->pResume->setText("&Stop");
             ui->pResume->setToolTip(tr("Switch to Stepwise IPM calculation mode"));
+            // only the GEMS3K IPM solver has step points; the Optima modes run to the end
+            const SolverMode mode = TProfil::pm->solver_mode;
+            ui->pResume->setVisible( mode == SolverMode::AIA || mode == SolverMode::SIA );
         }
 #else
         ui->pStepAccept->hide();
@@ -122,6 +126,7 @@ ProgressDialog::~ProgressDialog()
 void ProgressDialog::startThread(bool step)
 {
     TProfil::pm->userCancel1 = false;
+    SetCalculationCancel( false );
     TProfil::pm->stepWise1 = step;
 
 #ifndef USE_GEMS3K_SERVER
@@ -132,6 +137,7 @@ void ProgressDialog::startThread(bool step)
 
     calcThread = new CalcThread(this);
     timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(Run()));
 
     switchToAccept(false, step);
     if( step ) {
@@ -141,7 +147,6 @@ void ProgressDialog::startThread(bool step)
     else {
         setWindowTitle( "Running..." );
         //timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(Run()));
         calcThread->start();
         timer->start(pVisorImp->updateInterval()*100);
     }
@@ -212,7 +217,7 @@ void ProgressDialog::CmStop()
 {
     try
     {
-        timer->stop();
+        // the timer keeps running: a call that has no step points ends without a Step click, and Run() must see it
         TProfil::pm->stepWise1 = true;
         switchToAccept(false, true);
 
@@ -233,9 +238,8 @@ void ProgressDialog::CmResume()
         ui->pStepAccept->hide();
         ThreadControl::wakeOne();	// let's calc
 
-        timer = new QTimer( this );
-        connect( timer, SIGNAL(timeout()),	this, SLOT(Run()) );
-        timer->start( pVisorImp->updateInterval()*100/* qt3to4, TRUE*/ );
+        if( !timer->isActive() )
+            timer->start( pVisorImp->updateInterval()*100 );
 
         if( TProfil::pm->calcFinished ) {
             CalcFinished();
@@ -290,7 +294,9 @@ void ProgressDialog::Run()
 void ProgressDialog::CalcFinished()
 {
     switchToAccept(true, false);
-    QString str = QString("Converged at DK=%1").arg(TMulti::sm->GetPM()->PCI);
+    const MULTI* pm = TMulti::sm->GetPM();
+    // a finished run is at DXM by definition; PCI can still hold its start value (1)
+    QString str = QString("Converged at DK=%1").arg(std::min(pm->PCI, pm->DXM));
     setWindowTitle(str);
     Update(true);
 }
@@ -318,22 +324,45 @@ void ProgressDialog::CmAccept()
 //
 void ProgressDialog::CmClose()
 {
-#ifndef USE_GEMS3K_SERVER
-    // we have to cancel calculation here
-    // or discard changes
-    if( calcThread->isRunning() ) {
-        TProfil::pm->userCancel1 = true;
-        ThreadControl::wakeOne();	// let's tell the calc that all is over
-        calcThread->wait();
-    }
-
-    //    calcTread->clean_up(); // will be called in closeEvent()
-#endif
+    if( requestCancel() )
+        return;   // the dialog closes when the calculation thread has ended
     close();
+}
+
+// Asks a running calculation to stop and returns true; false if no calculation is running.
+// The GUI thread must not wait for the thread here: the thread may be waiting for it (a question
+// dialog), and a step-wise thread must be woken to see the request.
+bool ProgressDialog::requestCancel()
+{
+#ifndef USE_GEMS3K_SERVER
+    if( !calcThread || !calcThread->isRunning() )
+        return false;
+    TProfil::pm->userCancel1 = true;
+    SetCalculationCancel( true );   // the solver stops inside a long call, not only between iterations
+    TProfil::pm->stepWise1 = false;
+    setWindowTitle( "Cancelling..." );
+    ui->pClose->setEnabled( false );
+    ui->pStepAccept->hide();
+    ui->pResume->hide();
+    connect( calcThread, &QThread::finished, this, [this]() {
+        calcThread->wait();
+        ui->pClose->setEnabled( true );
+        close();
+    }, Qt::UniqueConnection );
+    ThreadControl::wakeAll();
+    return true;
+#else
+    return false;
+#endif
 }
 
 void ProgressDialog::closeEvent(QCloseEvent* ev)
 {
+    if( requestCancel() ) {
+        ev->ignore();
+        return;
+    }
+
     if( NewSystemDialog::pDia )
         NewSystemDialog::pDia->resetList();
     // pDia = nullptr;
@@ -444,7 +473,9 @@ void ProgressDialog::Update(bool force)
         int progr = 24;
         ui->pProgress->setMaximum(progr);
         double dist = progr/6.;
-        if( pData->PCI >0. && pData->DXM >0.)
+        if( TProfil::pm->calcFinished )
+            dist = 0.;   // PCI is left at its start value (1) when the IPM exits as conditionally converged
+        else if( pData->PCI >0. && pData->DXM >0.)
             dist = log10( pData->PCI/ pData->DXM );
         progr -= int(floor(dist*6.));
         if(progr < 0 )

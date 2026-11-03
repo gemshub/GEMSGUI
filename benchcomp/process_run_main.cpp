@@ -20,6 +20,8 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <thread>
+#include <chrono>
 #include <map>
 #include <set>
 #include <sstream>
@@ -206,17 +208,43 @@ int main(int argc, char* argv[])
             return 0;
         }
         if (const char* mod = std::getenv("PROCESS_RUN_MODULE"); mod && std::string(mod) == "syseq") {
+            // PROCESS_RUN_EXPORT_ONLY=<path>-dat.lst: the Data > Export to GEMS3K command for this record, no calculation
+            if (const char* ex = std::getenv("PROCESS_RUN_EXPORT_ONLY")) {
+                TProfil::pm->System2GEMS3K(key, 0, ex, false);
+                pVisor->CanClose();
+                return 0;
+            }
             TProfil::pm->loadSystat(key.c_str());
             SYSTEM* syp = TSyst::sm->GetSY();
             if (const char* v = std::getenv("PROCESS_RUN_PH")) { syp->PpHtg = S_ON; syp->pHtg = std::atof(v); }
             if (const char* v = std::getenv("PROCESS_RUN_EH")) { syp->PEhtg = S_ON; syp->Ehtg = std::atof(v); }
             double kdt = 0.;
-            TProfil::pm->CalcEqstat(kdt, -1, 0.);
+            // PROCESS_RUN_CANCEL_AFTER=<seconds>: another thread asks the running calculation to stop, as the Cancel button does
+            std::thread canceller;
+            const auto t0 = std::chrono::steady_clock::now();
+            if (const char* c = std::getenv("PROCESS_RUN_CANCEL_AFTER")) {
+                canceller = std::thread([sec = std::atof(c)] {
+                    std::this_thread::sleep_for(std::chrono::duration<double>(sec));
+                    TProfil::pm->userCancel1 = true;
+                    SetCalculationCancel(true);
+                });
+            }
+            auto cancelReport = [&](const char* how) {
+                if (!canceller.joinable()) return;
+                canceller.join();
+                std::cout << "syseq: " << how << " after " << std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count() << " s\n";
+            };
+            try { TProfil::pm->CalcEqstat(kdt, -1, 0.); }
+            catch (TMulti::UserCancelException&) { cancelReport("calculation cancelled"); pVisor->CanClose(); return 3; }
+            catch (...) { cancelReport("calculation ended with an error"); throw; }
+            cancelReport("calculation ended");
             const MULTI* pm = TMulti::sm->GetPM();
             std::cout << std::setprecision(10) << "syseq: pH " << pm->pH << " Eh " << pm->Eh << " G " << pm->FX
                       << " IC";
             for (long i = 0; i < pm->N; ++i) std::cout << " " << std::string(pm->SB[i], MAXICNAME).substr(0, 2) << "=" << pm->B[i];
             std::cout << "\n";
+            std::cout << "syseq: PCI " << pm->PCI << " DXM " << pm->DXM << " ITF " << pm->ITF << " ITG " << pm->ITG
+                      << " mode " << static_cast<int>(TProfil::pm->solver_mode) << "\n";
             for (long k = 0; k < pm->FI; ++k)
                 if (pm->XF[k] > 0.) std::cout << "  " << std::string(pm->SF[k], MAXPHNAME + MAXSYMB) << " XF " << pm->XF[k] << "\n";
             // the b tables: recipe input B_ (o_syb), result b (o_wi_b), residuals Cb (o_wo_c); then saved, reloaded

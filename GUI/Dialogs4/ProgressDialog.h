@@ -71,6 +71,7 @@ class ProgressDialog : public QDialog
 #endif
 
     void switchToAccept(bool isAccept, bool stepwise);
+    bool requestCancel();
 
 public slots:
     virtual void CmClose();

@@ -1,8 +1,24 @@
+#include <algorithm>
+#include <map>
+#include <cctype>
 #include <filesystem>
 namespace fs = std::filesystem;
 
 #include "service.h"
 #include "visor.h"
+#include "headless_script.h"
+#include "v_mod.h"
+#include "m_icomp.h"
+#include "m_param.h"
+#include "ms_rmults.h"
+#include "filters_data.h"
+#include "s_formula.h"
+
+HeadlessScript& HeadlessScript::get()
+{
+    static HeadlessScript script;
+    return script;
+}
 
 TCStringArray vfFiles(const std::string& dir_name, const std::string& ext) {
     TCStringArray files;
@@ -49,6 +65,8 @@ int vfQuestion3(QWidget*, const std::string& title, const std::string& mess,
 int vfQuestionYesNoAll(QWidget*, const std::string& title, const std::string& mess, const std::string&)
 {
     gui_logger->info("vfQuestionYesNoAll {} {}", title, mess);
+    if (HeadlessScript::get().replaceExisting)
+        return VF_YES_ALL;
     return 0;
 }
 
@@ -107,11 +125,37 @@ TCStringArray vfRDMultiKeysSet(QWidget*, const char* caption,
     return {};
 }
 
+// Without the dialog (show_dlg false) the selection is what the dialog shows first: the files that are open now,
+// built-in files before project files in each module. Only a new project from the scripted element dialog uses it.
 bool vfListFiles(QWidget*, bool show_dlg, const char* prfName,
-                 TCStringArray&, TCIntArray&)
+                 TCStringArray& fls, TCIntArray& cnt)
 {
     gui_logger->info("vfListFiles {} {}", prfName, show_dlg);
-    return false;
+    if (show_dlg || HeadlessScript::get().projectKey.empty())
+        return false;
+    fls.clear();
+    cnt.clear();
+    for (size_t i = 0; i < aMod.size(); i++) {
+        if (aMod[i]->IsSubModule())
+            continue;
+        TCStringArray names;
+        TCIntArray indx, sel;
+        rt[i]->GetFileList(closef | openf | oldself, names, indx, sel);
+        int n = 0;
+        for (int kernel = 1; kernel >= 0; kernel--)
+            for (size_t ii = 0; ii < names.size(); ii++) {
+                const bool inKernel = names[ii].find(pVisor->sysDBDir()) != std::string::npos;
+                const bool inProject = names[ii].find(prfName) != std::string::npos;
+                if (kernel ? !inKernel : !inProject)
+                    continue;
+                if (std::find(sel.begin(), sel.end(), indx[ii]) == sel.end())
+                    continue;
+                fls.push_back(names[ii].substr(0, names[ii].find_first_of(' ')));
+                n++;
+            }
+        cnt.push_back(n);
+    }
+    return true;
 }
 
 std::string vfKeyEdit(QWidget*, const char* title, unsigned int iRt, const char* key)
@@ -124,6 +168,9 @@ std::string vfKeyProfile(QWidget*, const char* caption, int iRt,
                          bool&, bool&, bool&, std::string&, int&, int&, int&)
 {
     gui_logger->info("vfKeyProfile {} {}", caption, iRt);
+
+    if (!HeadlessScript::get().projectKey.empty())
+        return ALLKEY;   // new project
     return "";
 }
 
@@ -131,6 +178,14 @@ std::string vfKeyProfile(QWidget*, const char* caption, int iRt,
 std::string vfKeyTemplEdit(QWidget*, const char* title, unsigned int iRt, const char* key, bool)
 {
     gui_logger->info("vfKeyTemplEdit {} {} {}", title, iRt, key);
+    HeadlessScript& hs = HeadlessScript::get();
+    if (iRt == RT_PARAM && !hs.projectKey.empty())
+        return hs.projectKey;
+    if (!hs.nextKey.empty()) {
+        std::string k = hs.nextKey;
+        hs.nextKey.clear();
+        return k;
+    }
     return "";
 }
 
@@ -146,31 +201,282 @@ bool vfExcludeFillEdit(QWidget*, const char* caption, TCStringArray& aICkeys, st
     return false;
 }
 
-bool vfElements(QWidget*, const char* prfName, elmWindowData&, setFiltersData&)
+// The element dialog with the answers of HeadlessScript: the built-in database files named <type>.<tdbFilter>.*
+// (the SDref and Const files of that database too), the listed elements, the default phase-type filters.
+bool vfElements(QWidget*, const char* prfName, elmWindowData& elm_data, setFiltersData& sf_data)
 {
     gui_logger->info("vfElements {}", prfName);
-    return false;
+    HeadlessScript& hs = HeadlessScript::get();
+    if (hs.projectKey.empty() || hs.tdbFilter.empty())
+        return false;
+
+    // files of the built-in database that are selected (the dialog's openFilesSelection())
+    const std::string prefix = hs.tdbFilter.front() == '.' ? hs.tdbFilter.substr(1) : hs.tdbFilter;
+    for (size_t i = RT_SDATA; i <= RT_PHASE; i++) {
+        if (aMod[i]->IsSubModule())
+            continue;
+        TCStringArray names, selKeywds;
+        TCIntArray indx, sel;
+        rt[i]->GetFileList(closef | openf | oldself, names, indx, sel);
+        for (const auto& nm : names) {
+            if (nm.find(pVisor->sysDBDir()) == std::string::npos)
+                continue;
+            const auto sp = nm.find_first_of(' ');
+            const auto sl = nm.rfind('/');
+            const std::string fname = nm.substr(sl + 1);
+            const std::string kw = nm.substr(0, sp);
+            const std::string tag = std::string(rt[i]->GetKeywd()) + "." + prefix;
+            if (fname.compare(0, tag.size(), tag) == 0)
+                selKeywds.push_back(kw);
+        }
+        rt[i]->GetProfileFileKeywds(prfName, selKeywds);
+        rt[i]->SetNewOpenFileList(selKeywds);
+        gui_logger->info("vfElements {}: {} files open", rt[i]->GetKeywd(), selKeywds.size());
+    }
+
+    // elements and additional components
+    TCIntArray aIndMT;
+    TCStringArray aIC;
+    TIComp* aICdata = dynamic_cast<TIComp*>(aMod[RT_ICOMP].get());
+    aICdata->GetElements(false, aIC, aIndMT);
+    elm_data.ICrds.clear();
+    std::vector<bool> found(hs.elements.size(), false);
+    for (const auto& key : aIC) {
+        std::string name(key, 0, rt[RT_ICOMP]->FldLen(0));
+        strip(name);
+        for (size_t k = 0; k < hs.elements.size(); k++)
+            if (name == hs.elements[k]) {
+                elm_data.ICrds.push_back(key);
+                found[k] = true;
+            }
+    }
+    for (size_t k = 0; k < found.size(); k++)
+        if (!found[k])
+            gui_logger->warn("vfElements: component {} is not in the selected database files", hs.elements[k]);
+
+    sf_data = setFiltersData();
+    sf_data.ic_d.newIComps = elm_data.ICrds;
+    elm_data.aSelNames = elm_data.getFlags();
+    elm_data.aSelNames += "<TDBfilters> = " + hs.tdbFilter + ";\n";
+    TProfil::pm->useAqPhase = elm_data.flags[cbAqueous_];
+    TProfil::pm->useGasPhase = elm_data.flags[cbGaseous_];
+    return true;
 }
 
-bool vfSystemInput(QWidget*, const char* p_key, std::vector<windowSetupData>&,
-                   std::vector<tableSetupData>&, std::vector<pagesSetupData>&)
+namespace {
+
+// the record key text (blanks stripped) of entry idx of a window page of the bulk composition dialog
+std::string pageEntryKey(const std::string& page, int idx)
+{
+    RMULTS* mup = TRMults::sm->GetMU();
+    const char* key = nullptr;
+    size_t len = 0;
+    if (page == "IComp" && idx < mup->N) { key = mup->SB[idx]; len = IC_RKLEN; }
+    else if (page == "Compos" && idx < mup->La) { key = mup->SA[idx]; len = BC_RKLEN; }
+    else if (page == "Phase" && idx < mup->Fi) { key = mup->SF[idx]; len = PH_RKLEN; }
+    else if ((page == "DComp" || page == "Kin.lower" || page == "Kin.upper" || page == "G0 shift") && idx < mup->L) {
+        key = mup->SM[idx]; len = DC_RKLEN;
+    }
+    if (!key) return "";
+    return std::string(key, len);
+}
+
+// index of the entry of a page whose record key starts with the first three fields of `name`
+// (type, group or symbol, name; the data-source tail of the key may differ between database versions)
+int pageEntryIndex(const std::string& page, const std::string& name)
+{
+    RMULTS* mup = TRMults::sm->GetMU();
+    size_t n = 0, head = 0;
+    if (page == "IComp") { n = mup->N; head = MAXICNAME + MAXSYMB; }
+    else if (page == "Compos") { n = mup->La; head = MAXCMPNAME; }
+    else if (page == "Phase") { n = mup->Fi; head = MAXSYMB + MAXPHSYMB + MAXPHNAME; }
+    else { n = mup->L; head = MAXSYMB + MAXDRGROUP + MAXDCNAME; }
+    for (size_t i = 0; i < n; i++)
+        if (pageEntryKey(page, i).compare(0, head, name, 0, head) == 0)
+            return int(i);
+    if (page == "IComp" || page == "Compos")
+        return -1;
+    if (page == "Phase") {
+        // the same phase has another group code in another database version (Na2Ca(SO4)2: NaCaSO or CaNaSO): type and name
+        const size_t nm = MAXSYMB + MAXPHSYMB, len = MAXPHNAME;
+        for (size_t i = 0; i < n; i++) {
+            const std::string key = pageEntryKey(page, i);
+            if (key.compare(0, MAXSYMB, name, 0, MAXSYMB) == 0 && key.compare(nm, len, name, nm, len) == 0)
+                return int(i);
+        }
+        return -1;
+    }
+    // THEREDA 2022 writes charges as "Ca<2+>", "Cl<->", "H4SiO4<0>"; the 2026 files as "Ca+2", "Cl-", "Si(OH)4@" for species;
+    // a phase or species name that differs only in this notation is the same one
+    const size_t nameAt = page == "Phase" ? MAXSYMB + MAXPHSYMB : MAXSYMB + MAXDRGROUP;
+    const size_t nameLen = head - nameAt;
+    auto translate = [](std::string nm) {
+        strip(nm);
+        const auto lt = nm.rfind('<'), gt = nm.rfind('>');
+        if (lt == std::string::npos || gt != nm.size() - 1)
+            return nm;
+        const std::string ch = nm.substr(lt + 1, gt - lt - 1);   // "2+", "+", "0", "3-"
+        std::string out = nm.substr(0, lt);
+        if (ch == "0") return out + "@";
+        if (ch.size() == 1) return out + ch;                      // "+" or "-"
+        return out + ch.substr(1) + ch.substr(0, 1);              // "2+" -> "+2"
+    };
+    // formulas of the 2026 files have no brackets round a group that is used once: Ca(SO4)<0> is CaSO4@, Mg(OH)<+> is MgOH+
+    auto unbracket = [](const std::string& nm) {
+        std::string out;
+        for (size_t i = 0; i < nm.size(); i++) {
+            if (nm[i] == '(') {
+                const auto close = nm.find(')', i);
+                if (close != std::string::npos && (close + 1 >= nm.size() || !std::isdigit((unsigned char)nm[close + 1]))) {
+                    out += nm.substr(i + 1, close - i - 1);
+                    i = close;
+                    continue;
+                }
+            }
+            out += nm[i];
+        }
+        return out;
+    };
+    const std::string want = translate(name.substr(nameAt, nameLen));
+    const std::string want2 = unbracket(want);
+    for (size_t i = 0; i < n; i++) {
+        const std::string key = pageEntryKey(page, i);
+        if (key.compare(0, nameAt, name, 0, nameAt) != 0)
+            continue;
+        std::string have = key.substr(nameAt, nameLen);
+        strip(have);
+        if (have == want || have == want2)
+            return int(i);
+    }
+    if (std::getenv("GEMS_PROJECT_DEBUG")) {
+        std::string cand;
+        for (size_t i = 0; i < n; i++) {
+            const std::string key = pageEntryKey(page, i);
+            if (key.compare(0, nameAt, name, 0, nameAt) == 0) cand += "[" + key.substr(0, head) + "]";
+        }
+        gui_logger->info("no match for [{}] want [{}] nameAt {} candidates {}", name.substr(0, head), want, nameAt, cand);
+        if (n > 0) gui_logger->info("first keys [{}] [{}] [{}]", pageEntryKey(page, 0), pageEntryKey(page, n / 2), pageEntryKey(page, n - 1));
+    }
+    return -1;
+}
+
+}
+
+// Stoichiometry of DC j of the open project as text over its independent components: "Ca:1,Na:2,O:8,S:2,Zz:0". Equal text
+// is the same chemical species whatever the name (THEREDA 2022 "Na2Ca(SO4)2(cr)" and 2026 "Gla").
+std::string headlessDcComposition(int j)
+{
+    RMULTS* mup = TRMults::sm->GetMU();
+    try {
+        TFormula aFo;
+        const std::string form = aFo.form_extr(j, mup->L, mup->DCF);
+        aFo.SetFormula(form.c_str());
+        std::vector<double> sml(mup->N, 0.);
+        aFo.Stm_line(mup->N, sml.data(), reinterpret_cast<char*>(mup->SB), mup->Val);
+        std::map<std::string, double> byName;
+        for (short i = 0; i < mup->N; i++) {
+            if (sml[i] == 0.) continue;
+            std::string nm(mup->SB[i], MAXICNAME);
+            strip(nm);
+            byName[nm] = sml[i];
+        }
+        std::string out;
+        char buf[32];
+        for (const auto& [nm, v] : byName) {
+            snprintf(buf, sizeof buf, "%.6g", v);
+            out += nm + ":" + buf + ",";
+        }
+        return out;
+    }
+    catch (...) { return ""; }
+}
+
+int headlessPageEntryIndex(const std::string& page, const std::string& name)
+{
+    return pageEntryIndex(page, name);
+}
+
+// Bulk composition dialog: in capture mode the table is recorded, with the record keys of its entries; with rows it
+// is replaced by them. A row that has no entry in this project is skipped and reported.
+bool vfSystemInput(QWidget*, const char* p_key, std::vector<windowSetupData>& wnData,
+                   std::vector<tableSetupData>& tbData, std::vector<pagesSetupData>&)
 {
     gui_logger->info("vfSystemInput {}", p_key);
-    return false;
+    HeadlessScript& hs = HeadlessScript::get();
+    if (hs.capture) {
+        hs.captured.clear();
+        for (const auto& t : tbData) {
+            const std::string& page = wnData[t.nWin].pageName;
+            const bool listed = page == "IComp" || page == "Compos" || page == "Phase" || page == "DComp" ||
+                                page == "Kin.lower" || page == "Kin.upper" || page == "G0 shift";
+            hs.captured.push_back({ page, listed ? pageEntryKey(page, t.nIdx) : "", t.nObj, t.nIdx, t.val, t.unit });
+        }
+        return false;
+    }
+    if (!hs.useRows)
+        return false;
+    tbData.clear();
+    hs.skipped.clear();
+    for (const auto& r : hs.rows) {
+        size_t win = 0;
+        while (win < wnData.size() && wnData[win].pageName != r.page) win++;
+        if (win == wnData.size()) { hs.skipped.push_back(r.page + " (no such page) " + r.name); gui_logger->warn("bulk composition dialog has no page {} (pages: {})", r.page, wnData.size()); continue; }
+        int nObj = r.nObj, nIdx = r.nIdx;
+        if (!r.name.empty()) {
+            nIdx = pageEntryIndex(r.page, r.name);
+            if (nIdx < 0) { hs.skipped.push_back(r.page + " " + r.name); gui_logger->warn("bulk composition row not found: {} {}", r.page, r.name); continue; }
+            nObj = wnData[win].nObj;
+        }
+        if (r.page == "Compos") gui_logger->info("compos row {} idx {} obj {} {} val {} unit {}", r.name, nIdx, nObj, aObj[nObj]->GetKeywd(), r.val, r.unit);
+        tbData.push_back(tableSetupData(win, nObj, aObj[nObj]->GetKeywd(), nIdx, "", r.val, r.unit));
+    }
+    return true;
 }
 
-bool vfProcessSet(QWidget*, const char* p_key, char [24], int [8], short [6], double [24],
-                  std::string&, std::string&, TCStringArray&,  std::string&, std::string&)
+bool vfProcessSet(QWidget*, const char* p_key, char flgs[24], int size[8], short tabInt[6], double tab[24],
+                  std::string& calcScript, std::string& outScript, TCStringArray& names, std::string& xName, std::string& yName)
 {
     gui_logger->info("vfProcessSet {}", p_key);
-    return false;
+    HeadlessScript& hs = HeadlessScript::get();
+    if (!hs.useProc)
+        return false;
+    for (size_t i = 0; i < 24 && i < hs.procFlags.size(); i++)
+        if (hs.procFlags[i] != ' ') flgs[i] = hs.procFlags[i];
+    for (size_t i = 0; i < 7 && i < hs.procSize.size(); i++)
+        if (hs.procSize[i] >= 0) size[i] = hs.procSize[i];
+    for (size_t i = 0; i < 6 && i < hs.procTabInt.size(); i++)
+        if (hs.procTabInt[i] >= 0) tabInt[i] = short(hs.procTabInt[i]);
+    for (size_t i = 0; i < 24 && i < hs.procTable.size(); i++)
+        if (hs.procTable[i] == hs.procTable[i]) tab[i] = hs.procTable[i];
+    calcScript = hs.procCalc;
+    outScript = hs.procOut;
+    names = hs.procNames;
+    xName = hs.procX;
+    yName = hs.procY;
+    return true;
 }
 
-bool vfGEM2MTSet(QWidget*, const char* p_key, char [32], int [20], double [4], double [4], double [3],
-                 std::string&, std::string&, TCStringArray&, std::string&, std::string&, TCIntArray&, TCIntArray&)
+bool vfGEM2MTSet(QWidget*, const char* p_key, char flgs[32], int size[20], double Tai[4], double Pai[4], double Tau[3],
+                 std::string& calcScript, std::string& outScript, TCStringArray& names, std::string& xName, std::string& yName,
+                 TCIntArray&, TCIntArray&)
 {
     gui_logger->info("vfGEM2MTSet {}", p_key);
-    return false;
+    HeadlessScript& hs = HeadlessScript::get();
+    if (!hs.useG2m)
+        return false;
+    for (size_t i = 0; i < 32 && i < hs.g2mFlags.size(); i++)
+        if (hs.g2mFlags[i] != ' ') flgs[i] = hs.g2mFlags[i];
+    for (size_t i = 0; i < 20 && i < hs.g2mSize.size(); i++)
+        if (hs.g2mSize[i] >= 0) size[i] = hs.g2mSize[i];
+    for (size_t i = 0; i < 4 && i < hs.g2mTai.size(); i++) Tai[i] = hs.g2mTai[i];
+    for (size_t i = 0; i < 4 && i < hs.g2mPai.size(); i++) Pai[i] = hs.g2mPai[i];
+    for (size_t i = 0; i < 3 && i < hs.g2mTau.size(); i++) Tau[i] = hs.g2mTau[i];
+    calcScript = hs.g2mCalc;
+    outScript = hs.g2mOut;
+    names = hs.g2mNames;
+    xName = hs.g2mX;
+    yName = hs.g2mY;
+    return true;
 }
 
 bool vfUnSpaceSet(QWidget*, const char* p_key, char [38], int [10])
@@ -236,11 +542,18 @@ bool vfSystemSet(QWidget*, const char* p_key, char [40], std::string&, std::stri
     return false;
 }
 
+// For a scripted new project: the aqueous phase is the one of the database files (chosen from the list), the gas phase is the
+// generated ideal gas mixture.
 bool vfAutoPhaseSet(QWidget*, const char* pr_key, std::string& a_key,
-                    std::string& g_key, char&, char&, float [8])
+                    std::string& g_key, char& acode, char& gcode, float [8])
 {
     gui_logger->info("vfAutoPhaseSet {} {} {}", pr_key, a_key, g_key);
-    return false;
+    if (HeadlessScript::get().projectKey.empty())
+        return false;
+    acode = 'U';   // the aqueous phase of the selected database files
+    gcode = 'I';
+    g_key = "g   GASMXID gas_gen         gm  Ideal           ";   // as AutoPhaseDialog
+    return true;
 }
 
 bool vfLookupDialogSet(QWidget*, char flags[6], double [4], double [4])
