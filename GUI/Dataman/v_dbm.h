@@ -212,22 +212,20 @@ class TDataBase
     friend TDBFile;
 
     char Keywd[MAXKEYWD];
-    unsigned char nRT;
+    unsigned char nRT2;
     RecStatus status;
-    bool rclose;
-    bool isDelete;
+    //bool rclose2;
+    //bool isDelete2;
     int frstOD;
     unsigned char nOD;
     int frstODjson;
     int lastODjson;
     TDBKeyList ind;
-    ///std::vector< std::shared_ptr<TDBFile>> aFile;  // list of add files
-    ///TCIntArray fls;
+    TDBFileList dbfiles_list;
 
     //work param
     time_t crt;
 
-    DBFileList dbfiles_list;
 
 protected:
 
@@ -363,7 +361,7 @@ public:
     void GetFileList(int mode, std::vector<std::string>& names,
                      std::vector<int>& indeces,
                      std::vector<int>& sel);
-    int numFiles() { return dbfiles_list.size(); }
+    int numFiles() { return dbfiles_list.all_dbfiles.size(); }
     void  MakeInNewProfile(const std::string& dir,
                           const std::string& prfName, const std::string& f_name={});
     void OpenOnlyFromList( TCStringArray& names );
@@ -421,7 +419,7 @@ public:
 
     std::string activeFileName() const
     {
-        return dbfiles_list.last_used_file<dbfiles_list.size() ?
+        return dbfiles_list.check_index(dbfiles_list.last_used_file) ?
                    dbfiles_list[dbfiles_list.last_used_file]->relativePath() : "";
     }
     void addFiles(const std::string &folder, const std::vector<std::string> &path_list);

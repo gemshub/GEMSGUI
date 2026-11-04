@@ -101,7 +101,7 @@ void deleteDBDirectory(const std::string& folder)
             module->removeFiles(files_to_remove);
         }
     }
-    if (!removeFolder(folder)) {
+    if(!removeFolder(folder)) {
         gui_logger->warn("Failed to fully delete DB directory: {}", folder);
     }
 }
@@ -197,10 +197,10 @@ TBinaryFile::~TBinaryFile()
     }
 }
 
-GemDataStream &TBinaryFile::stream()
-{
-    return *fstream;
-}
+// GemDataStream &TBinaryFile::stream()
+// {
+//     return *fstream;
+// }
 
 bool TBinaryFile::exist()
 {

@@ -1,33 +1,31 @@
 //-------------------------------------------------------------------
-// $Id: v_dbm1.cpp 1032 2008-02-13 10:15:07Z gems $
+// $Id$
 //
-// Implementation of TDBFile, TDBKey and TDBKeyList classes
+// Implementation of TDBFile and TDBFileList classes
 //
-// Copyright (C) 1996-2001 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1996-2026 S.Dmytriyeva, D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
 // Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
-
 //
 // See http://gems.web.psi.ch/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-
-#include <cstdlib>
-#include <cstdarg>
-#include <ctime>
-#include "v_dbfile.h"
-#include "v_user.h"
-#include "v_dbm.h"
-#include "service.h"
-#include "GEMS3K/gdatastream.h"
-
 #include <filesystem>
 namespace fs = std::filesystem;
+
+#include "v_dbm.h"
+#include "service.h"
+#include "visor.h"
+#include "GEMS3K/gdatastream.h"
+
+bool TDBFileList::dbChangeMode = false;
+
+extern std::shared_ptr<spdlog::logger> gui_logger;
 
 // Reading header of DB file
 void VDBhead::read(GemDataStream& is)
@@ -203,7 +201,7 @@ void TDBFile::force_update_header(int fLen, int nRec, int nRT, char is_del)
     try {
         // resize file
         std::filesystem::path file_path(fullPath());
-        if (std::filesystem::exists(file_path)) {
+        if(std::filesystem::exists(file_path)) {
             std::filesystem::resize_file(file_path, static_cast<uint64_t>(fLen));
         }
     }
@@ -302,7 +300,7 @@ void TDBFile::find_sfe(RecEntry& re)
 // Read the control structure of the database file (file header and deleted records stack)
 void TDBFile::get_head()
 {
-    if (dh == nullptr) {
+    if(dh == nullptr) {
         dh = new VDBhead;
     } else {
         *dh = VDBhead{};
@@ -437,7 +435,6 @@ void TDBFile::create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyList& 
         createFile(nRT, isDel);
         put_ndx(nF, ind);
     }
-
 }
 
 bool TDBFile::open_file(FileStatus mode, bool is_close, size_t nF, TDBKeyList& ind)
@@ -452,20 +449,20 @@ bool TDBFile::open_file(FileStatus mode, bool is_close, size_t nF, TDBKeyList& i
         check_dh();
         if (dh->stacOver < 0) {
             std::string prompt = "Stack of deleted records has overflowed.\nWould you like to compress the database?";
-            if (vfQuestion(nullptr, relativePath(), prompt.c_str())) {
+            if (vfQuestion(nullptr, relativePath(), prompt)) {
                 need_rebuilding = true;
             }
         }
         get_ndx(nF, ind);
     }
-    catch (...) {
+    catch(...) {
         if (rclose) {
             closeFile();
         }
         throw;
     }
 
-    if (rclose) {
+    if(rclose) {
         closeFile();
     }
     return need_rebuilding;
@@ -473,7 +470,7 @@ bool TDBFile::open_file(FileStatus mode, bool is_close, size_t nF, TDBKeyList& i
 
 time_t TDBFile::get_time(RecEntry* ree)
 {
-    if (status == NOT_OPEN) {
+    if(status == NOT_OPEN) {
         openFile(connect_db_mode);
     }
 
@@ -487,14 +484,14 @@ time_t TDBFile::get_time(RecEntry* ree)
             Error(relativePath(), "Database record header format error. Integrity check failed.");
         }
     }
-    catch (...) {
+    catch(...) {
         if (rclose) {
             closeFile();
         }
         throw;
     }
 
-    if (rclose) {
+    if(rclose) {
         closeFile();
     }
 
@@ -504,17 +501,12 @@ time_t TDBFile::get_time(RecEntry* ree)
 
 void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* database)
 {
-    if (rh == nullptr || database == nullptr) {
-        Error(relativePath(), "Failed to save record: Invalid RecEntry or TDataBase pointer.");
-        return;
-    }
-
-    if (status == NOT_OPEN) {
+    if(status == NOT_OPEN) {
         openFile(connect_db_mode);
     }
 
     try {
-        if (!new_record) {
+        if(!new_record) {
             RecEntry old_block = *rh;
             old_block.len += RecHead::data_size();
             add_sfe(old_block);
@@ -531,7 +523,7 @@ void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* data
         time_t current_time = std::time(nullptr);
 
         long int still_len = database->putrec(*rh, *fstream, current_time);
-        if (still_len != 0) {
+        if(still_len != 0) {
             if (FPosFree != old_flen) {
                 FPosFree -= still_len;
             }
@@ -541,21 +533,21 @@ void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* data
         put_head(new_record ? 1 : 0);
         put_ndx(rh->nFile, database->ind);
     }
-    catch (...) {
-        if (rclose) {
+    catch(...) {
+        if(rclose) {
             closeFile();
         }
         throw;
     }
 
-    if (rclose) {
+    if(rclose) {
         closeFile();
     }
 }
 
 void TDBFile::delete_record_from_file(RecEntry* rh, TDataBase* database)
 {
-    if (status == NOT_OPEN) {
+    if(status == NOT_OPEN) {
         openFile(connect_db_mode);
     }
 
@@ -565,27 +557,27 @@ void TDBFile::delete_record_from_file(RecEntry* rh, TDataBase* database)
         put_head(-1);
         put_ndx(rh->nFile, database->ind);
     }
-    catch (...) {
-        if (rclose) {
+    catch(...) {
+        if(rclose) {
             closeFile();
         }
         throw;
     }
-    if (rclose) {
+    if(rclose) {
         closeFile();
     }
 }
 
 void TDBFile::read_record_from_file(RecEntry* rh, TDataBase* database)
 {
-    if (status == NOT_OPEN) {
+    if(status == NOT_OPEN) {
         openFile(connect_db_mode);
     }
     RecHead rhh;
     try {
         database->getrec(*rh, *fstream, rhh);
     }
-    catch (...) {
+    catch(...) {
         if (rclose) {
             closeFile();
         }
@@ -619,14 +611,14 @@ void TDBFile::rebuild_file(size_t nF, TDataBase* database)
         std::filesystem::path orig_path(full_path);
         std::filesystem::path temp_path(tmp_file_name);
 
-        if (std::filesystem::exists(temp_path)) {
+        if(std::filesystem::exists(temp_path)) {
             std::filesystem::rename(temp_path, orig_path);
         } else {
             Error(relativePath(), "Database rebuild failed: Temporary file was not created successfully.");
             return;
         }
     }
-    catch (const std::filesystem::filesystem_error& e) {
+    catch(const std::filesystem::filesystem_error& e) {
         Error(relativePath(), "Database file replacement error during rebuild: " + std::string(e.what()));
         return;
     }
@@ -638,7 +630,7 @@ void TDBFile::rebuild_file(size_t nF, TDataBase* database)
         force_update_header(new_physical_len, nRec, nRT1, isDel);
         put_ndx(nF, database->ind);
     }
-    catch (...) {
+    catch(...) {
             closeFile();
         throw;
     }
@@ -647,37 +639,36 @@ void TDBFile::rebuild_file(size_t nF, TDataBase* database)
 
 //-----------------------------------------------------------------
 
-DBFileList::~DBFileList()
+TDBFileList::~TDBFileList()
 {
     close_all();
 }
 
-void DBFileList::close_all()
+void TDBFileList::close_all()
 {
     for(auto ndx: opened_files) {
-        at(ndx)->closeFile();
+        all_dbfiles[ndx]->closeFile();
     }
     opened_files.clear();
     opened_files_list.clear();
 }
 
-
 //put state to cfg file
-void DBFileList::to_cfg(std::fstream& out_stream)
+void TDBFileList::to_cfg(std::fstream& out_stream)
 {
     out_stream << special_files_num <<  "  ";
     out_stream << opened_files.size() << "  ";
     for(const auto& fl: opened_files) {
         out_stream << fl << " ";
     }
-    out_stream << "  " << size() << std::endl;
-    for(const auto& dbfile: *this) {
+    out_stream << "  " << all_dbfiles.size() << std::endl;
+    for(const auto& dbfile: all_dbfiles) {
         dbfile->to_cfg(out_stream);
     }
 }
 
 //get state from cfg file
-void DBFileList::from_cfg(std::fstream& in_stream)
+void TDBFileList::from_cfg(std::fstream& in_stream)
 {
     size_t ii, tmp_size = 0;
     in_stream >> special_files_num;
@@ -692,52 +683,75 @@ void DBFileList::from_cfg(std::fstream& in_stream)
     for(ii=0; ii<tmp_size; ++ii) {
         auto dbfile = std::make_shared<TDBFile>();
         dbfile->from_cfg(in_stream);
-        push_back(dbfile);
+        all_dbfiles.push_back(dbfile);
     }
 }
 
-// add new file to database chain
-void DBFileList::add_file(const std::string &folder, const std::string &path)
-{
-    fs::path combined_path = fs::path(folder)/path;
-    push_back(std::make_shared<TDBFile>(combined_path.string(), path));
-}
-
-void DBFileList::reset_open_list()
+void TDBFileList::reset_open_list()
 {
     opened_files_list.clear();
     for(auto ndx: opened_files) {
-        opened_files_list.push_back(at(ndx)->relativePath());
+        opened_files_list.push_back(all_dbfiles[ndx]->relativePath());
     }
     last_used_file = !opened_files.empty() ? *opened_files.rbegin() : 0;
 }
 
 // reload records list from settings
-void DBFileList::reset_index_list(TDBKeyList& ind)
+void TDBFileList::reset_index_list(TDBKeyList& ind)
 {
     ind.initnew(); // clear loaded
     for(auto ndx: opened_files) {
-        if(at(ndx)->open_file(open_mode, rclose, ndx, ind)) {
-            // warning logging need to rebuld;
+        if(all_dbfiles[ndx]->open_file(open_mode, auto_close, ndx, ind)) {
+            gui_logger->warn("The database index/file {} requires a rebuild/compression.",
+                             all_dbfiles[ndx]->relativePath());
         }
     }
     reset_open_list();
 }
 
+// add new file to database chain
+void TDBFileList::add_file(const std::string &path, const std::string &folder)
+{
+    fs::path combined_path{path};
+    fs::path relative_path{};
+    std::string rpath;
+    if(path.find(pVisor->sysDBDir()) != std::string::npos) {
+        relative_path = fs::relative(path, pVisor->sysDBDir());
+        rpath = "DB.default/"+relative_path.string();
+    }
+    else if(path.find(pVisor->userProfDir()) != std::string::npos) {
+        relative_path = fs::relative(path, pVisor->userProfDir());
+        rpath = "projects/"+relative_path.string();
+    }
+    gui_logger->info("Adding file: {} {}", combined_path.string(), rpath);
+    all_dbfiles.push_back(std::make_shared<TDBFile>(combined_path.string(), rpath));
+}
+
+void TDBFileList::add_files(const std::string &folder, const std::vector<std::string> &path_list)
+{
+    for(const auto& path : path_list) {
+        add_file(path, folder);
+    }
+    // Check if the current folder matches the system database environment directory
+    if(folder == pVisor->sysDBDir()) {
+        special_files_num = all_dbfiles.size();
+    }
+}
+
 // open files in PDB
-std::vector<int> DBFileList::open_files(FileStatus mode, const std::vector<int>& nff, TDBKeyList& ind)
+std::vector<int> TDBFileList::open_files(int nRT1, FileStatus mode, const std::vector<int>& nff, TDBKeyList& ind)
 {
     std::vector<int> list_to_rebuld;
     size_t current_ndx;
 
     open_mode = mode;
-    if(size() == 0) {
+    if(all_dbfiles.size() == 0) {
         return list_to_rebuld;
     }
 
-    if(opened_files.empty() || !nff.empty()) { //no config
+    if(!nff.empty()) { //no config
         for(auto fndx: nff) {
-            if(fndx<size()) {  // check_index
+            if(check_index(fndx)) {
                 opened_files.insert(fndx);
             }
         }
@@ -750,8 +764,8 @@ std::vector<int> DBFileList::open_files(FileStatus mode, const std::vector<int>&
         ind.initnew(); // clear old loaded
         for(auto ndx: opened_files) {
             current_ndx = ndx;
-            at(ndx)->create_with_ndx(nRT, isDelete, ndx, ind);
-            if(at(ndx)->open_file(open_mode, rclose, ndx, ind)) {
+            all_dbfiles[ndx]->create_with_ndx(nRT1, reuse_deleted, ndx, ind);
+            if(all_dbfiles[ndx]->open_file(open_mode, auto_close, ndx, ind)) {
                 list_to_rebuld.push_back(ndx);
             }
         }
@@ -760,7 +774,7 @@ std::vector<int> DBFileList::open_files(FileStatus mode, const std::vector<int>&
     }
     catch(TError& xcpt)  {
         if( xcpt.mess == "Two records with the same key (OpenFiles).") {
-            xcpt.mess += "\n 2nd record in file: "+at(current_ndx)->relativePath();
+            xcpt.mess += "\n 2nd record in file: "+all_dbfiles[current_ndx]->relativePath();
             // left all before error
             opened_files.erase(opened_files.find(current_ndx), opened_files.end());
             reset_index_list(ind);
@@ -769,22 +783,23 @@ std::vector<int> DBFileList::open_files(FileStatus mode, const std::vector<int>&
     }
 }
 
-size_t DBFileList::open_new_file(const std::string &path, TDBKeyList& ind)
+size_t TDBFileList::open_new_file(int nRT1, const std::string &path, TDBKeyList& ind)
 {
-    auto ndx = size();
+    auto ndx = all_dbfiles.size();
 
     try {
         add_file(path, "");
-        at(ndx)->create_with_ndx(nRT, isDelete, ndx, ind);
-        if(at(ndx)->open_file(open_mode, rclose, ndx, ind)) {
-            // logging to rebuld;
+        all_dbfiles[ndx]->create_with_ndx(nRT1, reuse_deleted, ndx, ind);
+        if(all_dbfiles[ndx]->open_file(open_mode, auto_close, ndx, ind)) {
+            gui_logger->warn("The database index/file {} requires a rebuild/compression.",
+                             all_dbfiles[ndx]->relativePath());
         }
         opened_files.insert(ndx);
         reset_open_list();
     }
     catch(TError& xcpt)  {
         if(xcpt.mess == "Two records with the same key (AddFileToList).") {
-            xcpt.mess += "\n 2nd record in file: "+at(ndx)->relativePath();
+            xcpt.mess += "\n 2nd record in file: "+all_dbfiles[ndx]->relativePath();
             reset_index_list(ind);
         }
         Error( xcpt.title, xcpt.mess);
@@ -793,19 +808,19 @@ size_t DBFileList::open_new_file(const std::string &path, TDBKeyList& ind)
 }
 
 // add open PDB files
-std::vector<int> DBFileList::add_open_files(const std::vector<int>& nff, TDBKeyList& ind)
+std::vector<int> TDBFileList::add_open_files(int nRT1, const std::vector<int>& nff, TDBKeyList& ind)
 {
     auto files_to_open = nff;
     files_to_open.insert(files_to_open.end(), opened_files.begin(), opened_files.end());
-    return open_files(open_mode, files_to_open, ind);
+    return open_files(nRT1, open_mode, files_to_open, ind);
 }
 
-void DBFileList::remove_files(const std::set<std::string>& target_names, TDBKeyList& ind)
+void TDBFileList::remove_files(const std::set<std::string>& target_names, TDBKeyList& ind)
 {
     try {
-        for(size_t ii = size(); ii > 0; --ii)  {
+        for(size_t ii = all_dbfiles.size(); ii > 0; --ii)  {
             size_t nF = ii - 1;
-            if(target_names.count(at(nF)->relativePath())) {
+            if(target_names.count(all_dbfiles[nF]->relativePath())) {
 
                 if(check_writable(nF, "remove file")) {
                     continue; // Skip deletion in db default
@@ -821,7 +836,7 @@ void DBFileList::remove_files(const std::set<std::string>& target_names, TDBKeyL
                     }
                 }
                 opened_files = std::move(new_opened_files);
-                erase(begin() + nF);
+                all_dbfiles.erase(all_dbfiles.begin() + nF);
             }
         }
         // Re-sync indexing layout after successful removal sequence
@@ -835,7 +850,7 @@ void DBFileList::remove_files(const std::set<std::string>& target_names, TDBKeyL
 }
 
 // Selection in the list of full file names
-void DBFileList::files_list(int mode, std::vector<std::string>& names,
+void TDBFileList::files_list(int mode, std::vector<std::string>& names,
                             std::vector<int>& indeces,
                             std::vector<int>& sel) const
 {
@@ -843,12 +858,11 @@ void DBFileList::files_list(int mode, std::vector<std::string>& names,
     indeces.clear();
     sel.clear();
 
-    for(size_t ii=0; ii<size(); ++ii)  {
+    for(size_t ii=0; ii<all_dbfiles.size(); ++ii)  {
         bool isopened = check_open(ii);
 
         if( (!isopened&&(mode&closef)) || (isopened&&(mode&openf)) )  {
-            //at(ii)->Makepath();
-            names.push_back(std::string(at(ii)->getFKeywd())+std::string(" ")+at(ii)->relativePath());
+            names.push_back(std::string(all_dbfiles[ii]->getFKeywd())+std::string(" ")+all_dbfiles[ii]->relativePath());
             indeces.push_back(ii);
             if((mode&oldself) && isopened) { //select already open files
                 sel.push_back(indeces.size()-1);
@@ -858,10 +872,10 @@ void DBFileList::files_list(int mode, std::vector<std::string>& names,
 }
 
 // indexes all files in PDB chain
-std::vector<int> DBFileList::all_files(bool only_kernel) const
+std::vector<int> TDBFileList::all_files(bool only_kernel) const
 {
     std::vector<int> file_ndxs;
-    for(size_t ii=0; ii<size(); ++ii) {
+    for(size_t ii=0; ii<all_dbfiles.size(); ++ii) {
         if(only_kernel && ii>=special_files_num) {
             break;
         }
@@ -870,48 +884,7 @@ std::vector<int> DBFileList::all_files(bool only_kernel) const
     return file_ndxs;
 }
 
-std::vector<int> DBFileList::files_with_name(const std::vector<std::string>& names) const
-{
-    std::vector<int> file_ndxs;
-    for(size_t ii=0; ii<size(); ++ii) {
-        for(const auto& name: names) {
-            auto all_name =  std::string("."+name+".");
-            if(at(ii)->relativePath().find(all_name) != std::string::npos) {
-                file_ndxs.push_back(ii);
-                break;
-            }
-        }
-    }
-    return file_ndxs;
-}
-
-std::vector<int> DBFileList::files_with_keywds(const std::vector<std::string>& keywds, bool& all_found) const
-{
-    size_t ii;
-    all_found = true;
-    std::vector<int> file_ndxs;
-
-    for(const auto& keywd: keywds) {
-        for(ii=0; ii<size(); ++ii) {
-            if(keywd == at(ii)->getFKeywd()) {
-                file_ndxs.push_back(ii);
-                break;
-            }
-        }
-        if(ii>=size()) {
-            if(!vfQuestion(nullptr, keywd,
-                            "This database file was not found in the project or default database.\n"
-                            " Continue without this file (Y) or cancel(N)?" )) {
-                Error(keywd, "Please, provide this database file and try opening the project again!");
-            }
-            all_found = false;
-        }
-    }
-
-    return file_ndxs;
-}
-
-std::vector<int> DBFileList::opened_special_files() const
+std::vector<int> TDBFileList::opened_special_files() const
 {
     std::vector<int> file_ndxs;
     for(auto& ndx: opened_files) {
@@ -922,30 +895,82 @@ std::vector<int> DBFileList::opened_special_files() const
     return file_ndxs;
 }
 
-size_t DBFileList::file_name_index(const std::string& file_name) const
+std::vector<int> TDBFileList::files_with_name(const std::vector<std::string>& names) const
+{
+    std::vector<int> file_ndxs;
+    for(size_t ii=0; ii<all_dbfiles.size(); ++ii) {
+        for(const auto& name: names) {
+            auto all_name =  std::string("."+name+".");
+            if(all_dbfiles[ii]->relativePath().find(all_name) != std::string::npos) {
+                file_ndxs.push_back(ii);
+                break;
+            }
+        }
+    }
+    return file_ndxs;
+}
+
+std::vector<std::string> TDBFileList::file_keywds_according_name(const std::string& file_name_part) const
+{
+    std::vector<std::string> keywds;
+    std::string all_name = "." +file_name_part +".";
+    for(size_t ii=0; ii<all_dbfiles.size(); ++ii) {
+        if(all_dbfiles[ii]->relativePath().find(all_name) != std::string::npos) {
+            keywds.push_back(all_dbfiles[ii]->getFKeywd());
+        }
+    }
+    return keywds;
+}
+
+std::vector<int> TDBFileList::files_with_keywds(const std::vector<std::string>& keywds, bool& all_found) const
+{
+    size_t ii;
+    all_found = true;
+    std::vector<int> file_ndxs;
+
+    for(const auto& keywd: keywds) {
+        for(ii=0; ii<all_dbfiles.size(); ++ii) {
+            if(keywd == all_dbfiles[ii]->getFKeywd()) {
+                file_ndxs.push_back(ii);
+                break;
+            }
+        }
+        if(ii>=all_dbfiles.size()) {
+            if(!vfQuestion(nullptr, keywd,
+                            "This database file was not found in the project or default database.\n"
+                            " Continue without this file (Y) or cancel(N)?" )) {
+                Error(keywd, "Please, provide this database file and try opening the project again!");
+            }
+            all_found = false;
+        }
+    }
+    return file_ndxs;
+}
+
+
+size_t TDBFileList::file_name_index(const std::string& file_name) const
 {
     for(auto it = opened_files.rbegin(); it != opened_files.rend(); ++it) {
         size_t ndx = *it;
-        if(at(ndx)->relativePath() == file_name) {
+        if(all_dbfiles[ndx]->name() == file_name) {
             return ndx;
         }
     }
     return 0; // in old implementation (posible throw error)
 }
 
-std::vector<std::string> DBFileList::file_keywds_according_name(const std::string& file_name_part) const
+size_t TDBFileList::file_path_index(const std::string& file_name) const
 {
-    std::vector<std::string> keywds;
-    std::string all_name = "." +file_name_part +".";
-    for(size_t ii=0; ii<size(); ++ii) {
-        if(at(ii)->relativePath().find(all_name) != std::string::npos) {
-            keywds.push_back(at(ii)->getFKeywd());
+    for(auto it = opened_files.rbegin(); it != opened_files.rend(); ++it) {
+        size_t ndx = *it;
+        if(all_dbfiles[ndx]->relativePath() == file_name) {
+            return ndx;
         }
     }
-    return keywds;
+    return 0; // in old implementation (posible throw error)
 }
 
-bool DBFileList::check_special_open() const
+bool TDBFileList::check_special_open() const
 {
     for(auto ndx: opened_files) {
         if(ndx<special_files_num) {
@@ -955,31 +980,17 @@ bool DBFileList::check_special_open() const
     return false;
 }
 
-/**
- * @brief Determines the target database file index for adding a new record.
- *
- * If only one file is open, it is selected automatically. If multiple files are open,
- * it displays a graphical dialog (vfChoice/vfChoice2) prompting the user to choose
- * the destination file. Supports bulk processing via 'multy' and 'ok_to_all' flags.
- *
- * @param window     Pointer to the parent QWidget for displaying the choice dialog.
- * @param record_key The unique key of the record being added, used in the prompt message.
- * @param multy      Flag indicating bulk operations (enables the "Apply to all" option).
- * @param ok_to_all  Output reference flag that becomes true if the user chooses "Apply to all".
- *
- * @return int The valid file index (>= 0) if selected, or -1 if the operation was cancelled.
- */
-int DBFileList::file_to_add_record(QWidget *window, const std::string &record_key, bool multy, bool& ok_to_all)
+int TDBFileList::file_to_add_record(QWidget *window, const std::string &record_key, bool multy, bool& ok_to_all)
 {
     // Guard clause: if no database files are open, immediately cancel the operation
-    if (opened_files.empty()) {
+    if(opened_files.empty()) {
         return -1;
     }
 
     int ndx = -1;
     int file = last_used_file;
 
-    if (opened_files.size() == 1) {
+    if(opened_files.size() == 1) {
         file = *opened_files.begin();
     }
     else {
@@ -993,7 +1004,7 @@ int DBFileList::file_to_add_record(QWidget *window, const std::string &record_ke
         }
 
         if(ndx >= 0 && static_cast<size_t>(ndx) < opened_files_list.size()) {
-            file = file_name_index(opened_files_list[ndx]);
+            file = file_path_index(opened_files_list[ndx]);
         }
         else {
             file = -1; // User pressed 'Cancel' or closed the dialog window

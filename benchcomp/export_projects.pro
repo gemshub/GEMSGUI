@@ -91,9 +91,19 @@ win32:LIBS += -LC:\usr\local\bin -lThermoFun -lChemicalFun
 OBJECTS_DIR       = obj
 
 # link lib
-INCLUDEPATH   += "/usr/local/include/GEMS3K"
-DEPENDPATH   += "/usr/local/include/GEMS3K"
-LIBS += -lzmq -lGEMS3K
+#INCLUDEPATH   += "/usr/local/include/GEMS3K"
+#DEPENDPATH   += "/usr/local/include/GEMS3K"
+#LIBS += -lzmq -lGEMS3K
+#link sources
+INCLUDEPATH   += "/usr/local/include/eigen3"
+DEPENDPATH   += "/usr/local/include/eigen3"
+GEMS3K_CPP     =  ../../GEMS3K_optima/GEMS3K
+GEMS3K_H     =  $$GEMS3K_CPP
+DEPENDPATH   += $$GEMS3K_H
+INCLUDEPATH   += $$GEMS3K_H
+LIBS += -lzmq
+include($$GEMS3K_CPP/gems3k.pri)
+#end link
 
 include($$MODULES_CPP/Modules.pri)
 include($$SUBMODS_CPP/Submods.pri)
@@ -110,8 +120,8 @@ SOURCES += \
     ../GUI/Services4/run_loglevel.cpp \
     ../GUI/charts/chart_model.cpp \
     ../GUI/charts/graph_data.cpp \
-    check_db.cpp \
-    #export_main.cpp \
+    #check_db.cpp \
+    export_main.cpp \
     graph_window_new.cpp \
     service_new.cpp
 

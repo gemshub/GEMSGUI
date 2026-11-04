@@ -159,7 +159,7 @@ public:
     /// @brief Safely closes the active file stream and flushes any pending data.
     virtual void closeFile();
 
-    GemDataStream& stream();
+    //GemDataStream& stream();
     virtual void from_cfg(std::fstream& config_stream);
     virtual void to_cfg(std::fstream& config_stream);
 

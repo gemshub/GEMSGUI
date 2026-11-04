@@ -1,13 +1,12 @@
 //-------------------------------------------------------------------
-// $Id: v_dbfile.h 968 2007-12-13 13:23:32Z gems $
+// $Id$
 //
-// Declaration of TDBFile, TDBKey, TDBKeyList, TDataBase and
-//	DataBaseList classes
+// Declaration of TDBFile and TDBFileList classes
 //
-// Copyright (C) 1996-2001  S.Dmytriyeva, D.Kulik
+// Copyright (C) 1996-2026  S.Dmytriyeva, D.Kulik
 //
 // This file is part of the GEM-Selektor GUI library which uses the
-// Qt v.4 cross-platform App & UI framework (https://qt.io/download-open-source)
+// Qt v.6 cross-platform App & UI framework (https://qt.io/download-open-source)
 // under LGPL v.2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
 //
 // This file may be distributed under the GPL v.3 license
@@ -20,9 +19,7 @@
 #ifndef V_DBFILE_H_
 #define V_DBFILE_H_
 
-#include <vector>
 #include <set>
-#include <memory>
 #include "v_file.h"
 #include "GEMS3K/verror.h"
 
@@ -294,130 +291,223 @@ protected:
     void get_ndx(size_t nF, TDBKeyList &ind);
 };
 
-
-class DBFileList: public std::vector<std::shared_ptr<TDBFile>>
+/**
+ * @class TDBFileList
+ * @brief Manages the list of low-level binary database file structure operations (.pdb) coupled with index tables (.ndx).
+ *
+ * Supports managing an open file set.
+ */
+class TDBFileList
 {
     friend class TDataBase;
 
 public:
+
+    /**
+     * @brief If set to true, allows write access to system database files in DB.default (for developers only).
+     */
     static bool dbChangeMode;
 
-    DBFileList(size_t nrt, bool need_close, bool isdel):
-        std::vector<std::shared_ptr<TDBFile>>(),
-        nRT(nrt),
-        isDelete(isdel),
-        rclose(need_close)
+    /**
+     * @brief Constructor initializing the database file list configuration.
+     * @param need_close Sets the auto_close flag to manage aggressive resource unlocking.
+     * @param isdel Sets the reuse_deleted flag to enable/disable the sfe tracking mechanism.
+     */
+    explicit TDBFileList(bool need_close, bool isdel):
+        all_dbfiles(),
+        reuse_deleted(isdel),
+        auto_close(need_close)
     { }
 
-    virtual ~DBFileList();
+    virtual ~TDBFileList();
 
+    /// Fast elements access (No bounds checking, strict performance)
+    const std::shared_ptr<TDBFile>& operator[](size_t index) const { return all_dbfiles[index]; }
+    std::shared_ptr<TDBFile>& operator[](size_t index) { return all_dbfiles[index]; }
+
+    /**
+     * @brief Reads and loads configuration from a file stream.
+     * @param f Input file stream.
+     */
     void from_cfg(std::fstream& f);
+    /**
+     * @brief Saves and writes current configuration to a file stream.
+     * @param f Output file stream.
+     */
     void to_cfg(std::fstream& f);
 
-    /// Check legal file index
+    /// Check if the file index is within the valid vector range
     bool check_index(size_t file_ndx) const
     {
-        return file_ndx<size();
+        return file_ndx<all_dbfiles.size();
     }
 
-    /// Check file is readonly (from DB.defaults)
+    /// Check if the file is system-protected/readonly
     bool check_readonly(size_t file_ndx) const
     {
-        return false;//!dbChangeMode && file_ndx<special_files_num;
+        return !dbChangeMode && file_ndx<special_files_num;
     }
 
-    /// Check file is open
+    /// Check if the file is currently marked as open
     bool check_open(size_t file_ndx) const
     {
         return opened_files.find(file_ndx)!=opened_files.end();
     }
 
+    /// Validates file index and open status. Throws/logs errors on failure.
     void check_file(size_t file_ndx)
     {
         if(!check_index(file_ndx)) {
-            std::string max_valid = (size() > 0) ? std::to_string(size() - 1) : "0";
+            std::string max_valid = (all_dbfiles.size() > 0) ? std::to_string(all_dbfiles.size() - 1) : "0";
             Error("check_file", "Illegal DB file index: " + std::to_string(file_ndx) +
                                     ". Valid range is 0 to " + max_valid + ".");
         }
         else if(!check_open(file_ndx)) {
             Error("check_file", "Attempted to access a database file that is not open. File path: " +
-                                    at(file_ndx)->relativePath());
+                                    all_dbfiles[file_ndx]->relativePath());
         }
         last_used_file = file_ndx;
     }
 
-     bool check_writable(size_t nF, const std::string& operation) const
+    /// Check if the file can be modified for a specific operation
+    bool check_writable(size_t nF, const std::string& operation) const
     {
         if(check_readonly(nF)) {
             std::string error_msg = "Cannot " + operation +
                                     ": modifying a system database file is not allowed (read-only mode enabled).";
-            Error(at(nF)->relativePath(), error_msg);
+            Error(all_dbfiles[nF]->relativePath(), error_msg);
             return false;
         }
         return true;
     }
 
-    void finish_dbdefaults()
-    {
-        special_files_num = size();
-    }
+    // --- (File Registration) ---
 
-    std::vector<int> open_files(FileStatus mode, const std::vector<int> &nff, TDBKeyList &ind);
-    std::vector<int> add_open_files(const std::vector<int> &nff, TDBKeyList &ind);
-    size_t open_new_file(const std::string &path, TDBKeyList &ind);
+    /// Register a database file in the system.
+    void add_file(const std::string &folder, const std::string &path);
+
+    /// Register multiple database files in the system.
+    void add_files(const std::string &folder, const std::vector<std::string> &path_list);
+
+    // --- (Open File Management) ---
+
+    /**
+     * @brief Open database files with specified indices for a specific record type.
+     *
+     * @param record_type   The identifier representing the specific type of database records (Record Type ID).
+     * @param mode          The file access status mode (UPDATE_DBV, RDONLY_DBV).
+     * @param nff           A list of file indices target files to be opened.
+     * @param ind           Reference to the active key/index table structure to load records into.
+     * @return std::vector<size_t> A list of indices of the files that requires a rebuild/compression.
+     */
+    std::vector<int> open_files(int record_type, FileStatus mode, const std::vector<int> &nff, TDBKeyList &ind);
+
+    /**
+     * @brief Add files with specified indices to the set of open files for a specific record type.
+     *
+     * @param record_type   The identifier representing the specific type of database records (Record Type ID).
+     * @param nff           A list of file indices to safely add to the opened set.
+     * @param ind           Reference to the key list structure for synchronization.
+     * @return std::vector<size_t> A list of indices of the files that requires a rebuild/compression.
+     */
+    std::vector<int> add_open_files(int record_type, const std::vector<int> &nff, TDBKeyList &ind);
+
+    /**
+     * @brief Add a completely new database file to the system and open it for the specified record type.
+     *
+     * @param record_type   The identifier representing the specific type of database records (Record Type ID).
+     * @param path          The absolute file system path for the new database file.
+     * @param ind           Reference to the active key list to initialize new index allocations.
+     * @return size_t       The newly allocated file index within the file manager.
+     */
+    size_t open_new_file(int record_type, const std::string &path, TDBKeyList &ind);
+
+    /// Remove specified files from the system and update indices.
     void remove_files(const std::set<std::string>& target_names, TDBKeyList& ind);
 
+    /// Close all currently open database files.
+    void close_all();
 
-    /// Generate file list for using in GUI
-    void files_list(int mode, std::vector<std::string> &names,
-                    std::vector<int> &indeces, std::vector<int> &sel) const;
+    // --- (Index Lookups) ---
 
-    std::vector<int> all_files(bool only_kernel) const;
-    /// indexes all files contained names
-    std::vector<int> files_with_name(const std::vector<std::string> &names) const;
-    std::vector<int> files_with_keywds(const std::vector<std::string> &keywds, bool &all_found) const;
-    std::vector<int> opened_special_files() const;
-    /// Index file with name (search only from open files)
+    /**
+     * @brief Find the index of a file by its name (searches only among open files).
+     * @return The file index, or static_cast<size_t>(-1) / npos if not found.
+     */
     size_t file_name_index(const std::string &file_name) const;
-    /// get list of files keywds, that contained name
-    std::vector<std::string> file_keywds_according_name(const std::string &file_name_part) const;
-    /// true if opened some files from default data base
+
+    /**
+     * @brief Find the index of a file by its relative path (searches only among open files).
+     * @return The file index, or static_cast<size_t>(-1) / npos if not found.
+     */
+    size_t file_path_index(const std::string &file_path) const;
+
+    /// Returns true if any system/default database files are currently open.
     bool check_special_open() const;
 
-    // >= 0 selected file
-    // -1 cancell
-    int file_to_add_record(QWidget *window, const std::string &record_key, bool multy, bool& ok_to_all);
-    void add_file(const std::string &folder, const std::string &path);
+    // --- (GUI Helpers & Search Queries) ---
+
+    /// Generate file paths and status data for GUI representation.
+    void files_list(int mode, std::vector<std::string> &names,
+                    std::vector<int> &indices, std::vector<int> &sel) const;
+
+    /// Generate a list of all existing file indices (optionally filtering for core/kernel files only).
+    std::vector<int> all_files(bool only_kernel) const;
+
+    /// Generate a list of indices for opened system/special files (from db.default).
+    std::vector<int> opened_special_files() const;
+
+    /// Find indices of all files whose names match the pattern '.<name>.'.
+    std::vector<int> files_with_name(const std::vector<std::string> &names) const;
+
+    /// Get a list of file keywords that contain the specified name pattern '.<name>.'.
+    std::vector<std::string> file_keywds_according_name(const std::string &name) const;
+
+    /// Find indices of all files matching the given keywords.
+    std::vector<int> files_with_keywds(const std::vector<std::string> &keywds, bool &all_found) const;
+
+    /**
+    * @brief Determines the target database file for adding a new record.
+    *
+    * If only one file is open, it is selected automatically. If multiple files are open,
+    * it displays a graphical dialog prompting the user to choose the destination file.
+    *
+    * @param window     Pointer to the parent QWidget for displaying the choice dialog.
+    * @param record_key The unique key of the record being added.
+    * @param multi      Flag indicating bulk operations (enables the "Apply to all" option).
+    * @param ok_to_all  Output reference flag that becomes true if the user chooses "Apply to all".
+    *
+    * @return int The valid file index (>= 0) if selected, or -1 if the operation was cancelled.
+    * @note Uses 'int' to allow returning -1 as a cancel signal. Ensure to check for -1 before casting to size_t.
+    */
+    int file_to_add_record(QWidget *window, const std::string &record_key, bool multi, bool& ok_to_all);
+
 protected:
 
-    unsigned char nRT;
-    bool isDelete;
+    std::vector<std::shared_ptr<TDBFile>> all_dbfiles;
 
-    /// Close file after any read/write
-    bool rclose;
+    /// Number of protected system files loaded from DB.defaults
+    size_t special_files_num;
 
+    /// Flag to enable or disable the deleted records tracking system (sfe).
+    bool reuse_deleted;
+
+    /// Flag to automatically close the database file after a read or write operation.
+    bool auto_close;
 
     FileStatus open_mode;
 
     /// Indexes of opened files
     std::set<size_t> opened_files;
 
-    /// Number files from DB.defaults
-    size_t special_files_num;
-
-    /// Current record file index
-    size_t last_used_file=0;
-
     /// List of opened files names
     std::vector<std::string> opened_files_list;
 
-    void close_all();
+    /// Current (last accessed) database file index
+    size_t last_used_file=0;
+
     void reset_open_list();
     void reset_index_list(TDBKeyList &ind);
 };
 
-// Crucial fix: Returns path relative to the database/project root-path
-// Example: If root is "C:/Projects" and file is "C:/Projects/Data/report.pdf",
-// this extracts the relative part: "Data/report.pdf"
-//fs::path relative_path = fs::relative(file_path, root_path);
 #endif  // V_DBFILE_H_

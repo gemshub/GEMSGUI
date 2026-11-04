@@ -208,7 +208,7 @@ TVisor::TVisor(int c, char *v[]):
 #endif
 
     ProfileMode = MDD_DATABASE;
-    dbChangeMode = false;
+    TDBFileList::dbChangeMode = false;
     isElementsProfileMode = true;
 
 // get default path
@@ -499,7 +499,7 @@ int TVisor::extract_args( int argc, char* argv[])
             option_d = true;
         }
         else  if( (arg == "-f") || (arg == "--allow-db-change") ) {
-            dbChangeMode = true;
+            TDBFileList::dbChangeMode = true;
         }
         else if( (arg == "-c") || (arg == "--with-default-config")) {
             option_c = true;

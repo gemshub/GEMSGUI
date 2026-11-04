@@ -56,20 +56,18 @@ class TVisor
 
     bool isElementsProfileMode = true;
     std::string DefaultBuiltinTDB;
-    bool dbChangeMode = false;
+    //bool dbChangeMode = false;
     bool configAutosave = true;
 
     template <class T>
-    void addModule(T* pm, bool selectFiles=false)
+    void addModule(T* pm)
     {
         aMod.push_back( std::shared_ptr<T>(pm));
         pm->ods_link();
         //  pm->dyn_set();
 
         TCIntArray arr;
-        if (selectFiles)
-            arr = pm->SelectFileList(openf | closef);
-        rt[pm->rtNum()]->Open(selectFiles, UPDATE_DBV, arr);
+        rt[pm->rtNum()]->Open(false, UPDATE_DBV, arr);
         rt[pm->rtNum()]->SetKey(ALLKEY);
     }
 
@@ -102,9 +100,9 @@ public:
     void Setup();
     bool CanClose();
 
-    bool isDBChangeMode() const {
-        return dbChangeMode;
-    }
+    // bool isDBChangeMode() const {
+    //     return dbChangeMode;
+    // }
 
     std::string sysGEMDir() const {
         return SysGEMDir;

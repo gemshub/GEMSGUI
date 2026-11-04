@@ -63,9 +63,9 @@ void TDataBase::toCFG(std::fstream& out_stream)
     }
     out_stream << "  ";
     out_stream << Keywd << ' ';
-    out_stream << uint(nRT) << "  ";
-    out_stream << rclose << ' ';
-    out_stream << isDelete << "  ";
+    out_stream << uint(nRT2) << "  ";
+    out_stream << dbfiles_list.auto_close << ' ';
+    out_stream << dbfiles_list.reuse_deleted << "  ";
     out_stream << frstOD << ' ';
     out_stream << uint(nOD) << "  ";
     out_stream << frstODjson << "  ";
@@ -81,29 +81,25 @@ void TDataBase::fromCFG(std::fstream& in_stream)
 
     in_stream >> Keywd;
     in_stream >> tmp;
-    nRT = tmp;
-    in_stream >> rclose;
-    in_stream >> isDelete;
+    nRT2 = tmp;
+    in_stream >> dbfiles_list.auto_close;
+    in_stream >> dbfiles_list.reuse_deleted;
     in_stream >> frstOD;
     in_stream >> tmp;
     nOD = tmp;
     in_stream >> frstODjson;
     in_stream >> lastODjson;
     dbfiles_list.from_cfg(in_stream);
-    // to do `find place`
-    dbfiles_list.rclose = rclose;
-    dbfiles_list.isDelete = isDelete;
-    dbfiles_list.nRT = nRT;
 }
 
 //default configuration of the database
 TDataBase::TDataBase( size_t nrt, const char* name,
                      bool Rclose, bool isDel, int nOf, unsigned char Nobj,
                      int filesNum, unsigned char nRkflds, const unsigned char* rkfrm ):
-    nRT(nrt), status(UNDF_), rclose(Rclose), isDelete(isDel),
+    nRT2(nrt), status(UNDF_),
     frstOD(nOf), nOD(Nobj), frstODjson(frstOD), lastODjson(frstOD+nOD-1),
     ind(nRkflds, rkfrm),
-    dbfiles_list(nRT, rclose, isDelete)
+    dbfiles_list(Rclose, isDel)
 {
     strncpy(Keywd, name, MAXKEYWD-1);
     Keywd[MAXKEYWD-1] = 0;
@@ -113,7 +109,7 @@ TDataBase::TDataBase( size_t nrt, const char* name,
 //configuration from cfg file
 TDataBase::TDataBase(std::fstream& f):
         status(UNDF_), ind(f),
-        dbfiles_list(0, true, true)
+        dbfiles_list(true, true)
 {
     fromCFG(f);
     crt = time(nullptr);
@@ -148,7 +144,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, int crt)
     // header of the record
     strncpy( rh.bgm, MARKRECHEAD, 2 );
     strncpy( rh.endm, MARKRECHEAD, 2 );
-    rh.nRT = nRT;               //warning: compatibility
+    rh.nRT = nRT2;               //warning: compatibility
     rh.Nobj = headerObjCount();
     rh.rlen =  rep.len;
     StillLen = rep.len;
@@ -613,7 +609,7 @@ void TDataBase::GetFileList(int mode, std::vector<std::string>& names,
 // open files in PDB
 void  TDataBase::Open(bool type, FileStatus mode, const TCIntArray& nff)
 {
-    auto files_to_rebuild = dbfiles_list.open_files(mode, nff, ind);
+    auto files_to_rebuild = dbfiles_list.open_files(nRT2, mode, nff, ind);
     if(!files_to_rebuild.empty()) {
         RebildFile(files_to_rebuild);
     }
@@ -622,7 +618,7 @@ void  TDataBase::Open(bool type, FileStatus mode, const TCIntArray& nff)
 // open all files in PDB chain
 void TDataBase::OpenAllFiles(bool only_kernel)
 {
-    if(dbfiles_list.size() == 0) {
+    if(dbfiles_list.all_dbfiles.size() == 0) {
         return;
     }
     Close();
@@ -641,7 +637,7 @@ void TDataBase::Close()
 //close files in PDB
 void TDataBase::OpenOnlyFromList(TCStringArray& names)
 {
-    if(dbfiles_list.size() == 0) {
+    if(dbfiles_list.all_dbfiles.size() == 0) {
         return;
     }
     Close();
@@ -652,15 +648,15 @@ void TDataBase::OpenOnlyFromList(TCStringArray& names)
 // add new file to DBfile list
 void TDataBase::AddFileToList(const std::string &path)
 {
-    dbfiles_list.open_new_file(path, ind);
+    dbfiles_list.open_new_file(nRT2, path, ind);
 }
 
 bool TDataBase::check_rt_name(const std::string &file_name) const
 {
     auto head_name = getKeywd()+".";
     if(file_name.find(head_name) != std::string::npos ||
-        (nRT == RT_UNSPACE && file_name.find("probe.") != std::string::npos) ||   //check old names
-        (nRT == RT_DUALTH && file_name.find("duterm.") != std::string::npos)) {
+        (nRT2 == RT_UNSPACE && file_name.find("probe.") != std::string::npos) ||   //check old names
+        (nRT2 == RT_DUALTH && file_name.find("duterm.") != std::string::npos)) {
         return true;
     }
     return false;
@@ -679,21 +675,19 @@ void TDataBase::removeFiles(const std::vector<std::string> &path_list)
 
 void TDataBase::addFiles(const std::string &folder, const std::vector<std::string> &path_list)
 {
-    for (const auto& path : path_list) {
-        if (check_rt_name(path)) {
-            dbfiles_list.add_file(folder, path);
+    std::vector<std::string> rt_file_list;
+    for(const auto& path : path_list) {
+        if(check_rt_name(path)) {
+            rt_file_list.push_back(path);
         }
     }
-    // Check if the current folder matches the system database environment directory
-    if (folder == pVisor->sysDBDir()) {
-        dbfiles_list.finish_dbdefaults();
-    }
+    dbfiles_list.add_files(folder, rt_file_list);
 }
 
 // add open PDB files
 void TDataBase::AddOpenFile(const TCIntArray& nff)
 {
-    auto files_to_rebuild = dbfiles_list.add_open_files(nff, ind);
+    auto files_to_rebuild = dbfiles_list.add_open_files(nRT2, nff, ind);
     if(!files_to_rebuild.empty()) {
         RebildFile(files_to_rebuild);
     }
@@ -751,7 +745,7 @@ int TDataBase::scanfile(uint nF, int& fPos, int& fLen,
         int  Rnum = Find(ind.PackKey());
         if( Rnum>=0 ) { // name of exist record
             str=PackKey();
-            str = aMod[nRT]->GetKeyofRecord(str.c_str(),
+            str = aMod[nRT2]->GetKeyofRecord(str.c_str(),
                                             "This key record already exists! Replace please?", KEY_NEW);
             if(str.empty()) {
                 continue;
@@ -800,7 +794,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
 {
     bool allOpend = true;
-    if(dbfiles_list.size() == 0) {
+    if(dbfiles_list.all_dbfiles.size() == 0) {
         return allOpend;
     }
     Close();

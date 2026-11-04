@@ -53,7 +53,7 @@ void System2GEMS3K(const std::string& key, const std::string& files_dir, const E
 int main(int argc, char *argv[])
 {
     std::string projects_conf;
-    std::string export_dir{"gems3k"};
+    std::string export_dir{"gems3k1"};
     std::shared_ptr<TVisor> pvisor_sh;
 
     try {
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
             else {
                 // Save all systems
                 TCStringArray saved_systems;
-                vfMakeDirectory(nullptr, export_dir.c_str(), 2);
+                makeDirectory(nullptr, export_dir, 2);
                 TProfil::pm->allSystems2GEMS3K(saved_systems, true, export_dir, top_settings.brief_mode, false);
             }
         }
@@ -217,7 +217,7 @@ void System2GEMS3K(const std::string& key, const std::string& files_dir, const E
     KeyToName(systemname);
     systemname = settings.io_mode.back()+std::string("_")+systemname;
     std::string record_path = files_dir + systemname + "/";
-    vfMakeDirectory( nullptr, record_path.c_str(), 0 );
+    makeDirectory( nullptr, record_path, 0 );
     record_path += systemname+ "-dat.lst";
 
     TProfil::pm->loadSystat(packkey.c_str());
@@ -286,7 +286,7 @@ int extract_args(int argc, char* argv[], std::string& projects_conf, std::string
         std::cerr << "Undefined projects config JSON file path" << std::endl;
         return 1;
     }
-    if(!vfExist(projects_conf)) {
+    if(!fileExist(projects_conf)) {
         std::cerr << "Do not exist config JSON file: " << projects_conf << std::endl;
         return 1;
     }

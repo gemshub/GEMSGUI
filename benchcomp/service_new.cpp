@@ -1,30 +1,30 @@
-#include <filesystem>
-namespace fs = std::filesystem;
+// #include <filesystem>
+// namespace fs = std::filesystem;
 
 #include "service.h"
 #include "visor.h"
 
-TCStringArray vfFiles(const std::string& dir_name, const std::string& ext) {
-    TCStringArray files;
-    fs::path dir_path(dir_name);
-    std::error_code ec;
-    for (fs::directory_iterator it(dir_path, ec), end; !ec && it != end; it.increment(ec)) {
-        if (it->is_regular_file(ec) && (ext.empty() || it->path().extension() == ext)) {
-            std::string file = it->path().filename().string();
-            gui_logger->trace("Adding file: {}", file);
-            files.push_back(file);
-        }
-    }
-    return files;
-}
+// TCStringArray vfFiles(const std::string& dir_name, const std::string& ext) {
+//     TCStringArray files;
+//     fs::path dir_path(dir_name);
+//     std::error_code ec;
+//     for (fs::directory_iterator it(dir_path, ec), end; !ec && it != end; it.increment(ec)) {
+//         if (it->is_regular_file(ec) && (ext.empty() || it->path().extension() == ext)) {
+//             std::string file = it->path().filename().string();
+//             gui_logger->trace("Adding file: {}", file);
+//             files.push_back(file);
+//         }
+//     }
+//     return files;
+// }
 
 
-bool vfExist(const std::string &file_path)
-{
-    // return !(::access(file_path.c_str(), 0 ));
-    fs::path ps(file_path);
-    return fs::exists(ps);
-}
+// bool vfExist(const std::string &file_path)
+// {
+//     // return !(::access(file_path.c_str(), 0 ));
+//     fs::path ps(file_path);
+//     return fs::exists(ps);
+// }
 
 int vfQuestYesNoCancel(QWidget*, const std::string& title, const std::string& mess)
 {
@@ -274,16 +274,16 @@ bool vfChooseDirectory(QWidget*, std::string&, const char* title)
     return false;
 }
 
-void vfMakeDirectory(QWidget* , const char *dir, int askOverwrite)
-{
-    fs::path ps(dir);
-    if (fs::exists(ps))  {
-        if(askOverwrite)  {
-            fs::remove_all(ps);
-        }
-    }
-    fs::create_directories(ps);
-}
+// void vfMakeDirectory(QWidget* , const char *dir, int askOverwrite)
+// {
+//     fs::path ps(dir);
+//     if (fs::exists(ps))  {
+//         if(askOverwrite)  {
+//             fs::remove_all(ps);
+//         }
+//     }
+//     fs::create_directories(ps);
+// }
 
 const char * dfAqKeyD =  "a   AQELIA  aq_gen          aq  Davies          ";
 const char * dfAqKeyH =  "a   AQELIA  aq_gen          aq  EDH_H           ";
