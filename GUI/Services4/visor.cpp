@@ -518,8 +518,9 @@ int TVisor::extract_args( int argc, char* argv[])
         else if ((arg == "-s") || (arg == "--system-dir"))  {
             if (i + 1 < argc) {
                 SysGEMDir = argv[++i];
-                if (SysGEMDir[SysGEMDir.length() - 1] == '/') {
-                    SysGEMDir += '\0';
+                // RESOURCES_DIR starts with '/': drop trailing slashes of the given path
+                while (!SysGEMDir.empty() && SysGEMDir.back() == '/') {
+                    SysGEMDir.pop_back();
                 }
                 SysGEMDir += RESOURCES_DIR;
             }
