@@ -77,7 +77,7 @@ void TConst::CopyRecords( const char *prfName )
     // close all no project files
     TCStringArray names1;
     names1.push_back(prfName);
-    db->OpenOnlyFromList(names1);
+    db->openOnlyWith(names1);
 }
 
 // Help on Compos module  ( ? button )

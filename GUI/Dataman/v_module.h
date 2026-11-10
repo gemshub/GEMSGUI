@@ -209,7 +209,6 @@ public:
     void AddFileToList();
     void ReOpenFileList();
     void AddOpenFile();
-    void ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply);
 
     //--- Manipulation show current record
     bool  CheckEqText( const char *erscan, const char *msg=nullptr );

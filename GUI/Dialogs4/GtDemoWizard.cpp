@@ -276,8 +276,7 @@ void GtDemoWizard::reset_page_list( int newRT,const char* aXname, const char* aY
         if(  rt[RT_SYSEQ]->GetStatus() != ONEF_)
         {
             TCStringArray aRklist;
-            TCIntArray anRk;
-            auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist, anRk );
+            auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist);
             if( Nr > 0 )
                 TProfil::pm->loadSystat( aRklist[0].c_str() );
         }

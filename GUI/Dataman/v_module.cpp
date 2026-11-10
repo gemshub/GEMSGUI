@@ -307,15 +307,15 @@ void TCModule::RecSave( const char *key, bool onOld )
         return;
     }
 
-    int  Rnum = db->Find( key );
-    if( Rnum<0 )
+    bool  rexist = db->existsRecord(key);
+    if(!rexist)
     {
-        AddRecord( key );
+        AddRecord(key);
         pVisor->defineModuleKeysList(nRT);
     }
     else
         if( onOld == true || vfQuestion(window(), key, replace_question) )
-            db->Rep( Rnum );
+            db->updateRecord(key);
     contents_changed = false;
 
     if( pVisor->ProfileMode && ( nRT < RT_SYSEQ &&  nRT != RT_PARAM && nRT != RT_SDATA ) )
@@ -389,18 +389,7 @@ void TCModule::DeleteRecord(const char *key, bool errifNo)
     if(db==nullptr) {
         return;
     }
-
-    int  Rnum = db->Find( key );
-    if( Rnum < 0 )
-    {
-        if( !errifNo )
-            return;
-        std::string str = " Record ";
-        str += key;
-        str += "\n not found to delete!";
-        Error( GetName(), str );
-    }
-    db->Del( Rnum );
+    db->deleteRecord(key, errifNo);
     contents_changed = false;
 }
 
@@ -429,15 +418,7 @@ void TCModule::RecInput(const char *key)
         return;
     }
 
-    int Rnum = db->Find( key );
-    if( Rnum<0 )
-    {
-        std::string msg = "Record ";
-        msg += std::string(key, 0, db->KeyLen());
-        msg += " not found!" ;
-        Error( GetName(), msg );
-    }
-    db->Get( Rnum );
+    db->readRecord(key);
     dyn_set();
     contents_changed = false;
     //  pVisor->Update();
@@ -453,8 +434,7 @@ void TCModule::RunFilter()
         return;
 
     TCStringArray aKey;
-    TCIntArray anR;
-    auto Nrec = db->GetKeyList( Filter.c_str(), aKey, anR );
+    auto Nrec = db->GetKeyList( Filter.c_str(), aKey);
     if( Nrec >= 1 )
     {
         if( pVisor->ProfileMode )
@@ -870,7 +850,7 @@ void TCModule::RebildFile()
     pVisor->Message(GetName(), "Compressing database file(s). "
                                          "Please, wait...", 0, 100 );
 
-    db->RebildFile(SelectFileList(closef|openf));
+    db->rebuildsFiles(SelectFileList(closef|openf));
     // pVisorImp->CloseMessage();
     dyn_set();
     //        SetString("Compression finished OK");
@@ -903,7 +883,7 @@ void TCModule::AddFileToList()
         name = db->getKeywd()+ name;
     }
     filename = u_makepath( dir, name, ext );
-    db->AddFileToList(filename);
+    db->addNewFile(filename);
     db->SetKey( ALLKEY );
     //        SetString("Command finished OK");
 }
@@ -911,7 +891,7 @@ void TCModule::AddFileToList()
 // Open new files from the list of closed files in the data base
 void TCModule::AddOpenFile()
 {
-    db->AddOpenFile(SelectFileList(closef));
+    db->openAdditionalFiles(SelectFileList(closef));
     db->SetKey( ALLKEY );
     dyn_set();
     //        SetString("Command finished OK");
@@ -948,25 +928,6 @@ void TCModule::AddRecord(const char* key, int& fnum)
 {
     if(db) {
         db->addRecord(window(), key, fnum);
-    }
-}
-
-void TCModule::ReplaceRecordwithQuestion(int Rnum, const char *key, int &quest_reply)
-{
-    if(quest_reply == VF_YES_ALL)
-    {
-        db->Rep(Rnum);
-    }
-    else if(quest_reply != VF_NO_ALL)
-    {
-        quest_reply = vfQuestionYesNoAll(window(), key, replace_question);
-        switch(quest_reply)
-        {
-        case VF_YES_ALL:
-        case VF_YES:
-            db->Rep(Rnum);
-            break;
-        }
     }
 }
 
@@ -1040,9 +1001,7 @@ void TCModule::RecToTXT()
 
     for(size_t i=0; i<aKey.size(); i++ )
     {
-        int Rnum = db->Find( aKey[i].c_str() );
-        db->Get( Rnum );
-
+        db->readRecord(aKey[i]);
         aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())) );
         aObj[o_reckey]->toTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
@@ -1058,8 +1017,6 @@ void TCModule::RecToTXT()
 void TCModule::RecOfTXT()
 {
     char buf[150];
-    int Rnum;
-    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
     std::string s = std::string( GetName() )+" : Please, select file with unloaded records";
     std::string filename;
@@ -1068,6 +1025,7 @@ void TCModule::RecOfTXT()
     std::fstream f(filename.c_str(), std::ios::in);
     ErrorIf( !f.good() , GetName(), "Fileread error...");
 
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
     int quest_reply = VF_UNDEF;
     while( !f.eof() )
     {
@@ -1077,18 +1035,8 @@ void TCModule::RecOfTXT()
             aObj[no]->ofTXT(f);
         buf[db->KeyLen()] = '\0';
 
-        Rnum = db->Find( buf );
-        if( Rnum >= 0 )
-        {
-            ReplaceRecordwithQuestion(Rnum, buf, quest_reply);
-            if( quest_reply == VF_CANCEL )
-                break;
-        }
-        else
-        {
-            AddRecord( buf, fnum );
-            if( fnum == -2 )
-                break;
+        if(db->saveRecordQuestion(window(), std::string(buf), quest_reply, fnum)) {
+            break; // VF_CANCEL
         }
         s = std::string( buf );
         do
@@ -1159,8 +1107,7 @@ void TCModule::RecExport()
 
     for(size_t i=0; i<aKey.size(); i++ )
     {
-        int Rnum = db->Find( aKey[i].c_str() );
-        db->Get( Rnum );
+        db->readRecord(aKey[i]);
         TPrintData dat( sd_key.c_str(), nRT, f, text_fmt );
     }
 
@@ -1171,9 +1118,6 @@ void TCModule::RecExport()
 // Loads Data Records from user format
 void TCModule::RecImport()
 {
-    //char buf[150];
-    int Rnum;
-    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
     char ch;
 
     // read sdref record with format read
@@ -1201,24 +1145,15 @@ void TCModule::RecImport()
     ErrorIf( !f.good() , GetName(), "Fileread error...");
 
     int iter = 0;
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
     int quest_reply = VF_UNDEF;
     while( !f.eof() )
     {
         dat.readRecord( iter, f );
         std::string keyp = db->UnpackKey();
-        Rnum = db->Find( keyp.c_str() );
 
-        if( Rnum >= 0 )
-        {
-            ReplaceRecordwithQuestion(Rnum, keyp.c_str(), quest_reply);
-            if( quest_reply == VF_CANCEL )
-                break;
-        }
-        else
-        {
-            AddRecord( keyp.c_str(), fnum );
-            if( fnum == -2 )
-                break;
+        if(db->saveRecordQuestion(window(), keyp, quest_reply, fnum)) {
+            break; // VF_CANCEL
         }
         s = keyp;
         do
@@ -1247,8 +1182,7 @@ void TCModule::RecListToJSON(const char *pattern, const std::string& filename, b
 {
     TCStringArray aKey;
     if( all_records ) {
-        TCIntArray anR;
-        db->GetKeyList(pattern, aKey, anR);
+        db->GetKeyList(pattern, aKey);
     }
     else {
         aKey = vfMultiKeys(window(), "Please, mark records to be unloaded to JSON", nRT, pattern);
@@ -1269,8 +1203,7 @@ void TCModule::RecListToJSON(const char *pattern, const std::string& filename, b
 
     QJsonArray allArray;
     for( size_t i=0; i<aKey.size(); i++ ) {
-        int Rnum = db->Find(aKey[i].c_str());
-        db->Get(Rnum);
+        db->readRecord(aKey[i]);
         db->SetKey(aKey[i].c_str());
         QJsonObject recObject;
         db->toJsonObjectNew(recObject, project_name);
@@ -1300,29 +1233,21 @@ void TCModule::CurrentToJSON(const std::string& filename)
 
 void TCModule::RecListFromJSON(const std::string& filename)
 {
-    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
-
     QFile CurrentFile(filename.c_str());
     if(!CurrentFile.open(QIODevice::ReadOnly)) return;
     QByteArray json_data = CurrentFile.readAll();
 
     QJsonDocument readDoc = QJsonDocument::fromJson(json_data);
     QJsonArray allArray = readDoc.array();
+
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
     int quest_reply = VF_UNDEF;
     for( const auto& val : allArray) {
         dyn_kill();
         set_def(); // set default data or zero if necessary
         std::string keyp = db->fromJsonObjectNew( val.toObject() );
-        auto Rnum = db->Find( keyp.c_str() );
-        if( Rnum >= 0 ) {
-            ReplaceRecordwithQuestion(Rnum, keyp.c_str(), quest_reply);
-            if( quest_reply == VF_CANCEL )
-                break;
-        }
-        else {
-            AddRecord(keyp.c_str(), fnum);
-            if(fnum == -2)
-                break;
+        if(db->saveRecordQuestion(window(), keyp, quest_reply, fnum)) {
+            break; // VF_CANCEL
         }
     }
     dyn_set();
@@ -1373,14 +1298,12 @@ void TCModule::Transfer()
 
     for(size_t i=0; i<aKey.size(); i++ )
     {
-        nrec = db->Find( aKey[i].c_str() );
-        db->Get( nrec );
+        db->readRecord(aKey[i]);
         auto oldfile = db->activeFileIndex();
-        db->Del( nrec );
+        db->deleteRecord(aKey[i]);
         AddRecord( aKey[i].c_str(), fnum );
-        if( fnum == -2 )
-        {
-            db->AddRecordToFile1( aKey[i].c_str(), oldfile );
+        if( fnum == -2 ) {
+            db->addRecord(aKey[i], oldfile);
             break;
         }
     }
@@ -1434,8 +1357,7 @@ void TCModule::CopyRecordsList(bool if_rename)
 
     for(size_t i=0; i<aKey.size(); i++ )
     {
-        nrec = db->Find( aKey[i].c_str() );
-        db->Get( nrec );
+        db->readRecord(aKey[i]);
         /// !!! changing record key
         if( rn_type ==  1)
         {
@@ -1464,10 +1386,10 @@ void TCModule::CopyRecordsList(bool if_rename)
         if( if_rename )
         {
             fnum = db->activeFileIndex();
-            db->Del( nrec );
+            db->deleteRecord(aKey[i]);
             //Point SaveRecord
             if( !AddRecordTest( str.c_str(), fnum ))
-                db->AddRecordToFile1(aKey[i].c_str(), fnum );
+                db->addRecord(aKey[i], fnum );
             //db->AddRecordToFile( str.c_str(), fnum );
         }
         else
@@ -1491,7 +1413,7 @@ TCIntArray TCModule::SelectFileList(int mode)
         return sel;
     }
 
-    db->GetFileList(mode, names, indx, sel);
+    db->selectionFilesList(mode, names, indx, sel);
 
     TCIntArray aSel = vfMultiChoiceSet(window(), names,
                                        "Selection of files", sel);

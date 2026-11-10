@@ -348,10 +348,10 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
 
     // Get all records of PHase
     TCStringArray aPhaseList;
-    TCIntArray anRPhase;
+    //TCIntArray anRPhase;
     if( useLst == false )
     {
-        rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
+        rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", aPhaseList);
         uint ii=0;
         while( ii < aPhaseList.size() )
         {
@@ -366,7 +366,6 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                 if( jj>=AqKey.size() )
                 {
                   aPhaseList.erase(aPhaseList.begin() +ii);
-                  anRPhase.erase( anRPhase.begin()+ii);
                 }
                else ii++;
             }
@@ -382,7 +381,6 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                     if( jj>=GasKey.size() )
                     {
                       aPhaseList.erase(aPhaseList.begin() +ii);
-                      anRPhase.erase( anRPhase.begin()+ii);
                     }
                    else ii++;
                 }
@@ -395,7 +393,6 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
                                      aPhaseList[ii].c_str(), PH_RKLEN-MAXPHGROUP  ))
                         {
                             aPhaseList.erase(aPhaseList.begin() +ii);
-                            anRPhase.erase( anRPhase.begin()+ii);
                         }
                         else ii++;
                     }
@@ -471,8 +468,8 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
     uint i;
     // Get all records of IComp
     TCStringArray aICList;
-    TCIntArray anRIC;
-    rt[RT_ICOMP]->GetKeyList( "*:*:*:", aICList, anRIC );
+    //TCIntArray anRIC;
+    rt[RT_ICOMP]->GetKeyList( "*:*:*:", aICList);
     if( aICList.size()<1 )
         Error("RMULT", "No records of Independent component!");
     mu.N  = aICList.size();
@@ -483,8 +480,8 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
 
     // Get all records of Compos
     TCStringArray aCompList;
-    TCIntArray anRComp;
-    rt[RT_COMPOS]->GetKeyList( "*:*:*:", aCompList, anRComp );
+    //TCIntArray anRComp;
+    rt[RT_COMPOS]->GetKeyList( "*:*:*:", aCompList);
     mu.La = aCompList.size();
     if( mu.La<1 )
         mu.PmvSA = S_OFF;
@@ -802,7 +799,7 @@ NEW_PHASE_AGAIN:
 
     }
 
-    file =rt[RT_PHASE]->GetOpenFileNum( prfName.c_str() );
+    file =rt[RT_PHASE]->indexOfName(prfName);
 
     // Creating automatic aq and/or gas phases (automatic phase only one )
     TPhase::pm->newAqGasPhase( ( AqKey.size()>0 ? AqKey[0]: ""),
@@ -854,7 +851,6 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
     TCStringArray aPhaseType;
     TCStringArray aKeysList;
     TCStringArray aPhaseList;
-    TCIntArray anRPhase;
 
     if( AqGasType == 0 )
      {
@@ -871,7 +867,7 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
      // Get all records of Phase for type
     for(ii=0; ii<aPhaseType.size(); ii++ )
     {
-        rt[RT_PHASE]->GetKeyList( aPhaseType[ii].c_str(), aPhaseList, anRPhase );
+        rt[RT_PHASE]->GetKeyList( aPhaseType[ii].c_str(), aPhaseList);
         for( jj=0; jj<aPhaseList.size(); jj++ )
             aKeysList.push_back( aPhaseList[jj]);
     }
@@ -906,7 +902,7 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
     }
     else
     {
-       anRPhase.clear();
+       TCIntArray anRPhase;
        // get selected phase  added Sveta 18/06/04
        for(ii=0; ii <aKeysList.size(); ii++)
        {

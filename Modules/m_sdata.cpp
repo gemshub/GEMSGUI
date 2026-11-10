@@ -152,12 +152,12 @@ void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
     uint ii;
 
     // open selected kernel files
-    int fnum_ = db->GetOpenFileNum( prfName );
+    int fnum_ = db->indexOfName( prfName );
 
     // add scripts for list to copy
-    TCIntArray anR;
+    //TCIntArray anR;
     TCStringArray aScripts;
-    db->GetKeyList( "?script*:*:*:", aScripts, anR );
+    db->GetKeyList( "?script*:*:*:", aScripts);
     for(ii=0; ii<aScripts.size(); ii++ )
        SDlist.insert(aScripts[ii]);
 
@@ -191,17 +191,15 @@ void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
     }
 
     // close all no project files
-    TCStringArray names1;
-    names1.push_back(prfName);
-    db->OpenOnlyFromList(names1);
+    //TCStringArray names1;
+    //names1.push_back(prfName);
+    db->openOnlyWith({prfName});
 }
 
 // Test record with key
 void TSData::TryRecInp( const char *key_, time_t& time_s, int q, bool )
 {
     TCStringArray aSDlist;
-    TCIntArray anRDc;
-
     if( ! MessageToSave() )
         return;
 
@@ -219,8 +217,8 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q, bool )
     switch( iRet )
     {
     case MANY_:    // Get Key list
-        db->GetKeyList(  str_key.c_str(), aSDlist, anRDc );
-        db->Get(anRDc[0]);
+        db->GetKeyList(str_key.c_str(), aSDlist);
+        db->readRecord(aSDlist[0]);
         [[fallthrough]];
     case ONEF_:
         dyn_set(q);

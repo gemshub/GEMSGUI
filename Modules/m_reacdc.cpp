@@ -1004,7 +1004,7 @@ void TReacDC::PronsPrep( const char *key )
     DELVR1, DELVR2, DELVR3, DELVR4, GZ, CSC, LSC, DZ, scC;
     int i, iL=0, iC=0, scL,  b1, b2, b3, b4;
     char dcn[MAXRKEYLEN+5];
-    int Rfind;
+    //int Rfind;
 
     /* Finding index of cation and anion */
     for( i=0; i<2; i++ )
@@ -1314,8 +1314,8 @@ void TReacDC::PronsPrep( const char *key )
     strncpy( dcn, key, MAXRKEYLEN );
     TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    Rfind = rt[RT_DCOMP]->Find( dcn );
-    if(Rfind <0 )
+    bool rexists = rt[RT_DCOMP]->existsRecord( dcn );
+    if(!rexists)
     { /* There is no such record - copying data */
         aDC->dcp->Zz = rcp->Zz;
         aDC->dcp->mwt = rcp->mwt;
@@ -1333,7 +1333,7 @@ void TReacDC::PronsPrep( const char *key )
     }
     else
     {  /* The record is found */
-        rt[RT_DCOMP]->Get(Rfind);
+        rt[RT_DCOMP]->readRecord(dcn);
         aDC->dyn_set();
     }
     aDC->dcp->Gs[0] = rcp->Gs[1];
@@ -1345,13 +1345,12 @@ void TReacDC::PronsPrep( const char *key )
     aDC->dcp->Hs[1] = rcp->Hs[2];
     aDC->dcp->Ss[1] = rcp->Ss[2];
     /* Creating/saving DCOMP record */
-    if( Rfind>=0 )
+    if(rexists)
     {
         if( !vfQuestion( window(), "DComp",
              "The DComp record already exists! Modify it (Y) or skip (N)?" ))
             return;
-        //Rnum = rt[RT_DCOMP].Find(dcn);
-        rt[RT_DCOMP]->Rep(Rfind/*Rnum*/);
+        rt[RT_DCOMP]->updateRecord(dcn);
     }
     else TDComp::pm->AddRecord(dcn);
     /* A reminder */
@@ -1379,7 +1378,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     CSC, LSC, /*DZ,*/ scC, LOGKR, Sw, Hw;//, Gw, Cpw, Vw;
     int i, iL=0, iC=0, scL, NC, ZZ;
     char dcn[MAXRKEYLEN+5];
-    int Rfind;
+    //int Rfind;
 
     Sw = 69.923/cal_to_J;
     Hw = (-285881)/cal_to_J;
@@ -1683,8 +1682,8 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     strncpy( dcn, key, MAXRKEYLEN );
     TDComp* aDC= dynamic_cast<TDComp *>( aMod[RT_DCOMP].get());
     aDC->ods_link(0);
-    Rfind = rt[RT_DCOMP]->Find( dcn );
-    if(Rfind <0 )
+    bool rexist = rt[RT_DCOMP]->existsRecord(dcn);
+    if(!rexist)
     { // There is no such record - copying data
         aDC->dcp->Zz = rcp->Zz;
         aDC->dcp->mwt = rcp->mwt;
@@ -1702,7 +1701,7 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     }
     else
     {  // The record is found
-        rt[RT_DCOMP]->Get(Rfind);
+        rt[RT_DCOMP]->readRecord(dcn);
         aDC->dyn_set();
     }
     aDC->dcp->Gs[0] = rcp->Gs[1];
@@ -1714,13 +1713,12 @@ void TReacDC::PronsPrepOH( const char *key, int /*nIC*/, short *lAN )
     aDC->dcp->Hs[1] = rcp->Hs[2];
     aDC->dcp->Ss[1] = rcp->Ss[2];
     // Creating/saving DCOMP record
-    if( Rfind>=0 )
+    if(rexist)
     {
         if( !vfQuestion( window(), "DComp",
              "The DComp record already exists! Modify it (Y) or skip (N)?" ))
             return;
-        //Rnum = rt[RT_DCOMP].Find(dcn);
-        rt[RT_DCOMP]->Rep(Rfind/*Rnum*/);
+        rt[RT_DCOMP]->updateRecord(dcn);
     }
     else TDComp::pm->AddRecord(dcn);
     // A reminder
@@ -1743,8 +1741,6 @@ void
 TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
 {
     TCStringArray aDclist;
-    TCIntArray anRDc;
-
     if(save) {
        if(!MessageToSave())
           return;
@@ -1760,8 +1756,8 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
     switch( iRet )
     {
     case MANY_:    // Get Key list
-        db->GetKeyList( str_key.c_str(), aDclist, anRDc );
-        db->Get(anRDc[0]);
+        db->GetKeyList( str_key.c_str(), aDclist);
+        db->readRecord(aDclist[0]);
         [[fallthrough]];
     case ONEF_:
         dyn_set(q);
@@ -1819,19 +1815,19 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
 void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
  elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist)
 {
-    TCIntArray anR;
+    //TCIntArray anR;
     TCStringArray aDCkey;
 
     // open selected kernel files
-    // db->OpenOnlyFromList(el_data.flNames);
-    int fnum_ = db->GetOpenFileNum( prfName );
+    // db->openOnlyWith(el_data.flNames);
+    int fnum_ = db->indexOfName( prfName );
 
     // delete the equvalent keys
     TCStringArray aICkey_new;         // 30/11/2006
     aICkey_new.clear();
 
     // get list of records
-    db->GetKeyList( "*:*:*:*:", aDCkey, anR );
+    db->GetKeyList( "*:*:*:*:", aDCkey);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
@@ -1940,7 +1936,7 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
     // close all no project files
     TCStringArray names1;
     names1.push_back(prfName);
-    db->OpenOnlyFromList(names1);
+    db->openOnlyWith(names1);
 }
 
 // ------------------ End of m_reacdc.cpp --------------------------

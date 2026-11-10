@@ -155,13 +155,13 @@ const char* TIComp::GetHtml()
 void TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
 {
 
- TCIntArray anR;
+ //TCIntArray anR;
  TCStringArray aIC1;
 
  //open selected files in kernel database
- //db->OpenOnlyFromList(names);
+ //db->openOnlyWith(names);
  //db->OpenAllFiles(true);
- db->GetKeyList( "*:*:*:", aIC1, anR );
+ db->GetKeyList( "*:*:*:", aIC1);
 
  for( uint ii=0; ii<aIC1.size(); ii++ )
  {
@@ -182,8 +182,8 @@ void TIComp::CopyElements( const char * prfName,
          elmWindowData el_data, icSetupData st_data )
 {
     // open selected kernel files
-   //db->OpenOnlyFromList(el_data.flNames);
-    int fnum_ = db->GetOpenFileNum(prfName);
+   //db->openOnlyWith(el_data.flNames);
+    int fnum_ = db->indexOfName(prfName);
 
   // delete the equvalent keys
    TCStringArray aICkey_new;         // 30/11/2006
@@ -191,7 +191,6 @@ void TIComp::CopyElements( const char * prfName,
 
     //  copy to it selected records
     // ( add to last key field first symbol from prfname )
-    int nrec;
     for(uint j, i=0; i<el_data.ICrds.size(); i++ )
     {
        for( j=0; j<el_data.oldIComps.size(); j++ )
@@ -210,8 +209,7 @@ void TIComp::CopyElements( const char * prfName,
       if( j<aICkey_new.size() )
         continue;
 
-       nrec = db->Find( el_data.ICrds[i].c_str() );
-       db->Get( nrec );
+       db->readRecord(el_data.ICrds[i]);
         /// !!! changing record key
        std::string str= std::string(db->FldKey( 2 ), 0, db->FldLen( 2 ));
        ChangeforTempl( str, st_data.from_templ,
@@ -231,7 +229,7 @@ void TIComp::CopyElements( const char * prfName,
     // close all no project files
     TCStringArray names1;
     names1.push_back(prfName);
-    db->OpenOnlyFromList(names1);
+    db->openOnlyWith(names1);
 
 }
 

@@ -1533,10 +1533,8 @@ void TProcess::restoreStartSysEq()
     TSysEq::pm->set_def();
     rt[RT_SYSEQ]->fromJsonObjectNew( startSysEq );
     TSysEq::pm->dyn_set();
-    auto nRec = rt[RT_SYSEQ]->Find( key.c_str() );
-    if( nRec >= 0 ) {
-        rt[RT_SYSEQ]->SetKey( key.c_str() );
-        rt[RT_SYSEQ]->Rep( nRec );
+    if(rt[RT_SYSEQ]->existsRecord(key)) {
+        rt[RT_SYSEQ]->updateRecord(key);
     }
 }
 

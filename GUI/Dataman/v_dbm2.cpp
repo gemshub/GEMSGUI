@@ -134,7 +134,7 @@ int TDataBase::reclen()
 }
 
 // put record in DB file
-int TDataBase::putrec( RecEntry& rep, GemDataStream& f, int crt)
+int TDataBase::putrec(RecEntry& rep, GemDataStream& f, uint32_t tcrt)
 {
     size_t len;
     int StillLen;
@@ -148,7 +148,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, int crt)
     rh.Nobj = headerObjCount();
     rh.rlen =  rep.len;
     StillLen = rep.len;
-    rh.crt = crt;
+    rh.time_crt = tcrt;
     f.seekg(rep.pos, std::ios::beg);
     rh.write(f);
     // put packed key
@@ -165,7 +165,7 @@ int TDataBase::putrec( RecEntry& rep, GemDataStream& f, int crt)
         }
         StillLen -= aObj[j+frstOD]->toDB(f);
     }
-    crt = rh.crt;
+    crt = static_cast<time_t>(rh.time_crt);
     return StillLen;
 }
 
@@ -256,26 +256,23 @@ int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     if(StillLen!=0 && rep.len!=0 && !flag_spppar) {
         Error(getKeywd(), "Actual record length differs from that specified in the header");
     }
-    crt = rh.crt;
+    crt = static_cast<time_t>(rh.time_crt);
     return StillLen;
 }
 
 
-/*!
-    Add new record with key pkey to file in DB files list
-*/
-uint TDataBase::AddRecordToFile1(const char *pkey, int file_ndx)
+std::string TDataBase::addRecord(const std::string& key, size_t file_ndx)
 {
     dbfiles_list.check_file(file_ndx);
     if(!dbfiles_list.check_writable(file_ndx, "add record")) {
-        return -1;
+        return "";
     }
 
-    auto record_ndx = ind.addndx(file_ndx, 0, pkey);
+    auto record_ndx = ind.addndx(file_ndx, 0, key.c_str());
     RecEntry* rh = ind.RecPosit(record_ndx);
     dbfiles_list[file_ndx]->save_record_to_file(true, rh, this);
     status = ONEF_;
-    return record_ndx;
+    return key;
 }
 
 // Replace i-th record in Database
@@ -348,14 +345,6 @@ int TDataBase::Find(const char *pkey)
     return ind.findx(pkey);
 }
 
-//Seach record index with key pkey.
-// Returns -1 no record.
-// No change status of record
-int TDataBase::FindCurrent(const char *pkey)
-{
-    return ind.findx(pkey);
-}
-
 //Rename record (Change first field: for SYSEQ, and >)
 void TDataBase::RenameList(const char* newName, const char *oldName)
 {
@@ -365,16 +354,14 @@ void TDataBase::RenameList(const char* newName, const char *oldName)
     std::string str_old_template = make_key_template({oldName});
     auto Nrec = ind.xlist(str_old_template.c_str());
     auto keys_list = ind.KeyList();
-    int rec_ndx;
     std::string record_key;
 
     for(size_t i=0; i<Nrec; ++i) {
-        rec_ndx = Find(keys_list[i].c_str());
-        Get(rec_ndx);
+        readRecord(keys_list[i]);
         record_key = ind.PackKey();
-        Del(rec_ndx);
+        deleteRecord(keys_list[i]);
         replace(record_key, oldName, newName);
-        AddRecordToFile1(record_key.c_str(), dbfiles_list.last_used_file);
+        addRecord(record_key, dbfiles_list.active_file_index());
     }
 }
 
@@ -582,24 +569,8 @@ bool TDataBase::KeyTest(const char* key)
 }
 
 
-// //Create new PDB file.
-// void TDataBase::Create( uint nF )
-// {
-//     check_file( nF );
-//     aFile[nF]->create_with_ndx(nRT, isDelete, nF, ind);
-// }
-
-// // Makes a list of open file names
-// void TDataBase::opfils()
-// {
-//     fNum = 0;
-//     fOpenNameBuf.clear();
-//     for(size_t i=0; i<fls.size(); i++)
-//         fOpenNameBuf.push_back( aFile[fls[i]]->Name().c_str() );
-// }
-
 // Selection in the list of full file names
-void TDataBase::GetFileList(int mode, std::vector<std::string>& names,
+void TDataBase::selectionFilesList(int mode, std::vector<std::string>& names,
                             std::vector<int>& indeces,
                             std::vector<int>& sel)
 {
@@ -611,14 +582,14 @@ void  TDataBase::Open(bool type, FileStatus mode, const TCIntArray& nff)
 {
     auto files_to_rebuild = dbfiles_list.open_files(nRT2, mode, nff, ind);
     if(!files_to_rebuild.empty()) {
-        RebildFile(files_to_rebuild);
+        rebuildsFiles(files_to_rebuild);
     }
 }
 
 // open all files in PDB chain
-void TDataBase::OpenAllFiles(bool only_kernel)
+void TDataBase::openAllFiles(bool only_kernel)
 {
-    if(dbfiles_list.all_dbfiles.size() == 0) {
+    if(dbfiles_list.empty_files_list()) {
         return;
     }
     Close();
@@ -635,20 +606,14 @@ void TDataBase::Close()
 
 
 //close files in PDB
-void TDataBase::OpenOnlyFromList(TCStringArray& names)
+void TDataBase::openOnlyWith(const std::vector<std::string>& names)
 {
-    if(dbfiles_list.all_dbfiles.size() == 0) {
+    if(dbfiles_list.empty_files_list()) {
         return;
     }
     Close();
     auto files_list = dbfiles_list.files_with_name(names);
     Open(true, UPDATE_DBV, files_list);
-}
-
-// add new file to DBfile list
-void TDataBase::AddFileToList(const std::string &path)
-{
-    dbfiles_list.open_new_file(nRT2, path, ind);
 }
 
 bool TDataBase::check_rt_name(const std::string &file_name) const
@@ -685,20 +650,20 @@ void TDataBase::addFiles(const std::string &folder, const std::vector<std::strin
 }
 
 // add open PDB files
-void TDataBase::AddOpenFile(const TCIntArray& nff)
+void TDataBase::openAdditionalFiles(const std::vector<int>& indx)
 {
-    auto files_to_rebuild = dbfiles_list.add_open_files(nRT2, nff, ind);
+    auto files_to_rebuild = dbfiles_list.add_open_files(nRT2, indx, ind);
     if(!files_to_rebuild.empty()) {
-        RebildFile(files_to_rebuild);
+        rebuildsFiles(files_to_rebuild);
     }
 }
 
 //Get new lists of keys and indexes
-size_t TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& anR)
+size_t TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey)
 {
     auto l = ind.xlist( keypat );
     aKey = ind.KeyList();
-    anR =ind.RnList();
+    //anR =ind.RnList();
     return l;
 }
 
@@ -756,7 +721,7 @@ int TDataBase::scanfile(uint nF, int& fPos, int& fLen,
         auto ni = ind.addndx( nF, len, ind.PackKey() );
         ind.RecPosit(ni)->pos = fEnd;
         fEnd += len + RecHead::data_size();
-        putrec(*ind.RecPosit(ni), outStream, recordHead.crt);
+        putrec(*ind.RecPosit(ni), outStream, recordHead.time_crt);
 
         nRec++;
         gui_logger->debug("restore record: {}", ind.PackKey());
@@ -768,11 +733,11 @@ int TDataBase::scanfile(uint nF, int& fPos, int& fLen,
 }
 
 //Get new index file and physically deleted records
-void TDataBase::RebildFile(const TCIntArray& nff)
+void TDataBase::rebuildsFiles(const std::vector<int>& indx)
 {
     std::vector<int> old_sel(dbfiles_list.opened_files.begin(), dbfiles_list.opened_files.end());
     Close();
-    for(auto file_ndx: nff) {
+    for(auto file_ndx: indx) {
         try {
             dbfiles_list.check_file(file_ndx);
             if(!dbfiles_list.check_writable(file_ndx, "rebuild PDB file")) {
@@ -791,14 +756,14 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 }
 
 //Set new open Files list  (Reopen by list)
-bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
+bool TDataBase::openOnlyWithKeywords(const std::vector<std::string>& keywords)
 {
     bool allOpend = true;
-    if(dbfiles_list.all_dbfiles.size() == 0) {
+    if(dbfiles_list.empty_files_list()) {
         return allOpend;
     }
     Close();
-    auto files_list = dbfiles_list.files_with_keywds(aFlKeywd, allOpend);
+    auto files_list = dbfiles_list.files_with_keywds(keywords, allOpend);
     Open(true, UPDATE_DBV, files_list);
     return allOpend;
 }
@@ -826,7 +791,7 @@ std::string TDataBase::gen_new_project_file_name(const std::string& dir,
 
 
 //Make new project-file and close another project files (make new Project)
-void TDataBase::MakeInNewProfile(const std::string& dir, const std::string& prfName,
+void TDataBase::addProjectFile(const std::string& dir, const std::string& prfName,
                                  const std::string& f_name)
 {
     auto files_list = dbfiles_list.opened_special_files();
@@ -835,33 +800,9 @@ void TDataBase::MakeInNewProfile(const std::string& dir, const std::string& prfN
 
     // add new project files
     std::string name = gen_new_project_file_name(dir, prfName, f_name);
-    AddFileToList(name);
+    addNewFile(name);
 }
 
-// get open file number by name (0 if not found )
-uint TDataBase::GetOpenFileNum(const char* secondName)
-{
-    std::string name = std::string(getKeywd())+"."+secondName;
-    return dbfiles_list.file_name_index(name);
-}
-
-const std::vector<std::string>& TDataBase::getOpenFiles(std::string &active) const
-{
-    active = activeFileName();
-    return dbfiles_list.opened_files_list;
-}
-
-// get list of files keywds, that contained name
-void TDataBase::GetProfileFileKeywds(const char *name, TCStringArray& aFlkey)
-{
-    aFlkey = dbfiles_list.file_keywds_according_name(name);
-}
-
-// true if opened some files from default data base
-bool TDataBase::ifDefaultOpen() const
-{
-    return dbfiles_list.check_special_open();
-}
 
 void TDataBase::check_record_key(const char *pkey)
 {
@@ -875,46 +816,98 @@ void TDataBase::check_record_key(const char *pkey)
     }
 }
 
-void TDataBase::addRecord(QWidget* window, const char *pkey)
+/**
+ * @brief Validates the record key for emptiness and restricted wildcard characters.
+ *
+ * Ensures the key is not empty and does not contain illegal search mask
+ * characters (*, ?, /) that could corrupt database index lookups.
+ *
+ * @param key The record key string to be validated.
+ */
+void TDataBase::check_record_key(const std::string& key)
+{
+    ErrorIf(key.empty(), getKeywd(), "The record key cannot be empty.");
+    if (key.find_first_of("*?/") != std::string::npos) {
+        Error(getKeywd(),
+              "Attempted to insert a record with a wildcard key. Special characters (*, ?, /) are not allowed.");
+    }
+}
+
+void TDataBase::addRecord(QWidget* window, const std::string& key)
 {
     bool ok_to_all = false;
-    check_record_key(pkey);
-    ErrorIf(dbfiles_list.opened_files.empty(),
-            char_array_to_string(Keywd, MAXKEYWD),
+    check_record_key(key);
+    ErrorIf(dbfiles_list.empty_files_list(), char_array_to_string(Keywd, MAXKEYWD),
             "No database file chosen to save the record.");
 
-    int file_ndx = dbfiles_list.file_to_add_record(window, pkey, false, ok_to_all);
+    int file_ndx = dbfiles_list.file_to_add_record(window, key, false, ok_to_all);
     if(file_ndx>=0) {
-        AddRecordToFile1(pkey, file_ndx);
+        addRecord(key, file_ndx);
     }
 }
 
 // Adds the record, or all records to file Sveta 15/06/01
-void TDataBase::addRecord(QWidget* window, const char* pkey, int& fnum)
+void TDataBase::addRecord(QWidget* window, const std::string& key, int& fnum)
 {
     bool ok_to_all = false;
-    check_record_key(pkey);
-    ErrorIf(dbfiles_list.opened_files.empty(),
-            char_array_to_string(Keywd, MAXKEYWD),
+    check_record_key(key);
+    ErrorIf(dbfiles_list.empty_files_list(), char_array_to_string(Keywd, MAXKEYWD),
             "No database file chosen to save the record.");
     int file_ndx;
     if(fnum >= 0) {
         file_ndx = fnum;
     }
     else {
-        file_ndx = dbfiles_list.file_to_add_record(window, pkey, true, ok_to_all);
+        file_ndx = dbfiles_list.file_to_add_record(window, key, true, ok_to_all);
         if(ok_to_all && file_ndx >= 0) {
             fnum = file_ndx;
         }
     }
     if(file_ndx>=0) {
-        AddRecordToFile1(pkey, file_ndx);
+        addRecord(key, file_ndx);
     }
     else {
         fnum = -2;   // User pressed 'Cancel' or closed the dialog window
     }
 }
 
+bool TDataBase::saveRecordQuestion(QWidget *window, const std::string &key, int &quest_reply, int &fnum)
+{
+    auto Rnum = Find(key.c_str() );
+
+    if(Rnum >= 0)   {
+        ReplaceRecordwithQuestion(window, key, quest_reply);
+        if( quest_reply == VF_CANCEL )
+            return false;
+    }
+    else
+    {
+        addRecord(window, key.c_str(), fnum);
+        if( fnum == -2 )
+            return false;
+    }
+    return true;
+}
+
+inline void TDataBase::ReplaceRecordwithQuestion(QWidget *window, const std::string &key, int &quest_reply)
+{
+    if(quest_reply == VF_YES_ALL)
+    {
+        updateRecord(key);
+    }
+    else if(quest_reply != VF_NO_ALL)
+    {
+        std::string replace_question = "Data record with this key already exists! Replace?";
+        quest_reply = vfQuestionYesNoAll(window, key, replace_question);
+        switch(quest_reply)
+        {
+        case VF_YES_ALL:
+        case VF_YES:
+            updateRecord(key);
+            break;
+        }
+    }
+}
 
 //-------------------------------------------------------------
 // DataBaseList
@@ -959,4 +952,5 @@ DataBaseList::~DataBaseList()
 DataBaseList rt;
 
 //--------------------- End of v_dbm2.cpp ---------------------------
+
 

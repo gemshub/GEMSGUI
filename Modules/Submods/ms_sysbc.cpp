@@ -600,9 +600,8 @@ void TSyst::systbc_calc( int mode )
            aSE->ods_link(1);
            try
            {
-                  int Rnum = rt[RT_SYSEQ]->Find( skey.c_str() );
-
-                  if( Rnum<0 )    // Here call dialog for selection of the SysEq key
+                  bool rec_exist = rt[RT_SYSEQ]->existsRecord(skey);
+                  if(!rec_exist)    // Here call dialog for selection of the SysEq key
                   {
                     skey = vfKeyEdit( window(),
                         "Please, select one SysEq record",  RT_SYSEQ,  skey.c_str() );
@@ -614,13 +613,12 @@ void TSyst::systbc_calc( int mode )
                          Error( GetName(), msg );
                     }
                     else {  // record selected
-                        Rnum = rt[RT_SYSEQ]->Find( skey.c_str() );
                         NewRkey = true;
                     }
                   }
 //                  sy.PbPH = syPbPH;
 //                  sy.PPHk = syPPHk;
-                  rt[RT_SYSEQ]->Get( Rnum );  // Read record
+                  rt[RT_SYSEQ]->readRecord(skey);  // Read record
                   aSE->dyn_set(1);
                   PHbcalcSysEq( &MsysC, &MaqC, &R1C, &VaqC, &VsysC );  // Calculation
             }

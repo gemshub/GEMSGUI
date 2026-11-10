@@ -635,8 +635,8 @@ void NewSystemDialog::CmSave()
         if( TSysEq::pm->ifCalcFlag()== false )
         {
             std::string key_s = rt[RT_SYSEQ]->PackKey();
-            if( rt[RT_SYSEQ]->Find( key_s.c_str()  ) < 0) // FindCurrent
-            { vfMessage( this, key_s.c_str(),
+            if(!rt[RT_SYSEQ]->existsRecord(key_s)) {
+                vfMessage(this, key_s.c_str(),
                          "Please, calculate the equilibrium state before saving this record!");
                 return;
             }
@@ -691,8 +691,7 @@ void NewSystemDialog::CmNext()
         std::string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
-        TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ]->GetKeyList(TSysEq::pm->getFilter().c_str(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList(TSysEq::pm->getFilter().c_str(), aKey);
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
@@ -733,8 +732,7 @@ void NewSystemDialog::CmPrevious()
         std::string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
-        TCIntArray anR;
-        auto Nrec = rt[RT_SYSEQ]->GetKeyList( TSysEq::pm->getFilter().c_str(), aKey, anR );
+        auto Nrec = rt[RT_SYSEQ]->GetKeyList( TSysEq::pm->getFilter().c_str(), aKey);
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key

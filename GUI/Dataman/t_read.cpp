@@ -313,7 +313,8 @@ TReadData::readData( std::fstream& fin, RFormat& fmt, RData& dt )
 
   }
   if(  dt.objNum== -2 )
-  { if( dt.i < rt[nRT]->KeyNumFlds() )
+  {
+      if( dt.i < rt[nRT]->KeyNumFlds() )
       {
           memset( rt[nRT]->FldKey( dt.i ), ' ', rt[nRT]->FldLen( dt.i ));
           strncpy( rt[nRT]->FldKey( dt.i ), dat_str.c_str(),

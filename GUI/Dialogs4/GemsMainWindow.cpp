@@ -468,9 +468,9 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
 
     // get list or record keys
     std::string keyFilter = pFilterKey->text().toStdString();
-    TCIntArray temp, colSizes;
+    TCIntArray colSizes;
     TCStringArray keyList;
-    int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList, temp);
+    int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList);
 
     for(jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
         colSizes.push_back( 0/*rt[nRT]->FldLen(jj)*/ );

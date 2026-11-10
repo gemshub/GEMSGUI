@@ -604,8 +604,7 @@ AGAIN:
     str = TSysEq::pm->GetKeyofRecord( str.c_str(),capName.c_str(), KEY_NEW );
     if( str.empty() )
          Error( GetName(), "Record creation rejected!");
-    if( rt[RT_SYSEQ]->FindCurrent( str.c_str() ) >= 0 )
-    {
+    if(rt[RT_SYSEQ]->existsRecord(str))  {
         capName = "This record already exists! Please, enter another name.";
         goto AGAIN;
     }
@@ -776,59 +775,52 @@ void
 TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 {
     TCStringArray aList;
-    TCIntArray anR;
+    //TCIntArray anR;
     char pkey[81];
     uint i;
 
-    int  Rnum = rt[nRT]->Find( key );
-    ErrorIf( Rnum<0, GetName(), "Record to delete not found!");
-    rt[RT_PARAM]->Get( Rnum ); // read record
+    rt[RT_PARAM]->readRecord(key); // read record
     dyn_set();
     SetFN();                  // reopen files of data base
     rt[nRT]->SetKey( key);
 
     // Delete all records connected to project
     aList.clear();    //SYSEQ
-    anR.clear();
     rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TSysEq::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //PROCES
-    anR.clear();
     rt[RT_PROCES]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROCES]->GetKeyList( pkey, aList, anR );
+    rt[RT_PROCES]->GetKeyList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TProcess::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //UNSPACE
-    anR.clear();
     rt[RT_UNSPACE]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_UNSPACE]->GetKeyList( pkey, aList, anR );
+    rt[RT_UNSPACE]->GetKeyList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TUnSpace::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //GTDEMO
-    anR.clear();
     rt[RT_GTDEMO]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_GTDEMO]->GetKeyList( pkey, aList, anR );
+    rt[RT_GTDEMO]->GetKeyList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TGtDemo::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //DUALTH
-    anR.clear();
     rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_DUALTH]->GetKeyList( pkey, aList, anR );
+    rt[RT_DUALTH]->GetKeyList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TDualTh::pm->DeleteRecord(aList[i].c_str());
 
-    rt[nRT]->Del( Rnum );
+    rt[nRT]->deleteRecord(key);
 }
 
 

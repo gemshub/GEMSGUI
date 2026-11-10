@@ -1052,7 +1052,7 @@ int TPhase::RecBuild( const char *key, int mode  )
     }
 
     php->Pinternal1 = S_OFF;
-    if( db->FindCurrent(key) < 0 )
+    if(!db->existsRecord(key))
        php->Pinternal1 = S_ON;      // refresh DC codes if new record
 
     strncpy( old_sol, php->sol_t, 6);
@@ -1362,21 +1362,21 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
                           TCStringArray& aPHtmp, elmWindowData el_data,
                           phSetupData st_data, std::set<std::string>& SDlist )
 {
-    TCIntArray anR;
+    //TCIntArray anR;
     TCIntArray aDCused;
     TCStringArray aPHkey;
     aPHnoused.clear();
 
     // open selected kernel files
-    //db->OpenOnlyFromList(el_data.flNames);
-    int fnum_ = db->GetOpenFileNum(prfName);
+    //db->openOnlyWith(el_data.flNames);
+    int fnum_ = db->indexOfName(prfName);
 
     // delete the equvalent keys
     TCStringArray aICkey_new;         // 30/11/2006
     aICkey_new.clear();
 
     // get list of records
-    db->GetKeyList( "*:*:*:*:*:", aPHkey, anR );
+    db->GetKeyList( "*:*:*:*:*:", aPHkey);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
@@ -1588,7 +1588,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     // close all no project files
     TCStringArray names1;
     names1.push_back(prfName);
-    db->OpenOnlyFromList(names1);
+    db->openOnlyWith(names1);
 }
 
 bool TPhase::CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArray& sys_form_array, bool onlyIPX )

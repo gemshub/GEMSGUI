@@ -27,8 +27,8 @@ namespace fs = std::filesystem;
 //char TBinaryFile::pa[9]="01041999";
 char TBinaryFile::vv[9]="GEMBASE2";
 char TBinaryFile::pa[9]="01112026";
-const char * PDB_EXT = "pdb";
-const char * NDX_EXT = "ndx";
+const char *PDB_EXT = "pdb";
+const char *NDX_EXT = "ndx";
 
 extern std::shared_ptr<spdlog::logger> gui_logger;
 
@@ -130,7 +130,6 @@ void makeDirectory(QWidget* window, const std::string& folder, int ask_overwrite
         if(ask_overwrite > 0) {
             std::string mess = folder + "\nThis directory exists! Overwrite?";
 
-            // If the user clicks "No", cancel the operation safely
             if(!vfQuestion(window, "Create new directory", mess)) {
                 gui_logger->info("Directory creation cancelled by user: {}", folder);
                 return; // Safely exit without triggering a fatal Error state
@@ -197,11 +196,6 @@ TBinaryFile::~TBinaryFile()
     }
 }
 
-// GemDataStream &TBinaryFile::stream()
-// {
-//     return *fstream;
-// }
-
 bool TBinaryFile::exist()
 {
     return fileExist(full_path);
@@ -250,10 +244,10 @@ void TBinaryFile::closeFile()
 
 void TBinaryFile::from_cfg(std::fstream &config_stream)
 {
-    size_t ln;
+    //size_t ln;
     config_stream >> Keywd;
-    //config_stream >> fnv1a_64_hash;
-    config_stream >> ln;
+    config_stream >> fnv1a_64_hash;
+    //config_stream >> ln;
     config_stream >> full_path;
 
     split_path();

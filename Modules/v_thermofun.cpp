@@ -554,23 +554,20 @@ static void thf_check_reaction( const std::string& key, const std::string& symbo
 
 void TDComp::thf_keys( TCStringArray& keys )
 {
-    TCIntArray anR;
-    db->GetKeyList( "*:*:*:*:", keys, anR );
+   db->GetKeyList( "*:*:*:*:", keys);
 }
 
 void TReacDC::thf_keys( TCStringArray& keys )
 {
-    TCIntArray anR;
-    db->GetKeyList( "*:*:*:*:", keys, anR );
+    db->GetKeyList( "*:*:*:*:", keys);
 }
 
 QJsonArray TIComp::all_to_thermofun()
 {
     QJsonArray allArray;
-    TCIntArray anR;
     TCStringArray aIC1;
     std::string fld_key;
-    db->GetKeyList( "*:*:*:", aIC1, anR );
+    db->GetKeyList( "*:*:*:", aIC1);
     QJsonArray datasources( {"GEMS3gui"} );
 
     for( size_t ii=0; ii<aIC1.size(); ii++ )

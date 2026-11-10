@@ -359,8 +359,8 @@ void TCompos::bc_work_dyn_new()
     // if( bcp->Nmax )
     {
         TCStringArray aKey;
-        TCIntArray anR;
-        auto Nic = rt[RT_ICOMP]->GetKeyList( "*:*:*:", aKey, anR );
+        //TCIntArray anR;
+        auto Nic = rt[RT_ICOMP]->GetKeyList( "*:*:*:", aKey);
         ErrorIf( Nic<1, GetName(),
                  "W05BCrem: ICOMP data record keys are not selected \n"
                  "(maybe, some PDB chain files are not linked)");
@@ -1232,20 +1232,20 @@ const char* TCompos::GetHtml()
 void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
             elmWindowData el_data, cmSetupData st_data, std::set<std::string>& SDlist )
 {
-    TCIntArray anR;
+    //TCIntArray anR;
     TCStringArray aComp;
     aCMnoused.clear();
 
     // open selected kernel files
-    // db->OpenOnlyFromList(el_data.flNames);
-    int fnum_ = db->GetOpenFileNum( prfName );
+    // db->openOnlyWith(el_data.flNames);
+    int fnum_ = db->indexOfName( prfName );
 
    // delete the equvalent keys
    TCStringArray aICkey_new;         // 30/11/2006
    aICkey_new.clear();
 
     // get list of records
-    db->GetKeyList( "*:*:*:", aComp, anR );
+    db->GetKeyList( "*:*:*:", aComp);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
@@ -1320,7 +1320,7 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
     // close all no project files
     TCStringArray names1;
     names1.push_back(prfName);
-    db->OpenOnlyFromList(names1);
+    db->openOnlyWith(names1);
 }
 
 //Calculate molar mass from the stoichiometry line and atomic masses

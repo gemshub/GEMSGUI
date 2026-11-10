@@ -735,7 +735,7 @@ void ElementsDialog::setFilesList()
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
-        rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
+        rt[i]->selectionFilesList(closef|openf|oldself, names, indx, sel);
         cnt = 0;
         cnt_sel = 0;
         for(size_t ii=0; ii<names.size(); ii++ )
@@ -814,9 +814,9 @@ void ElementsDialog::openFilesSelection()
             newSelKeywds.push_back(files_data.selKeywds[cnt+ii]);
         cnt += files_data.selCnt[i];
         // add project files keywds
-        rt[i]->GetProfileFileKeywds( prf_name.c_str(), newSelKeywds );
+        rt[i]->getProjectFilesKeywds( prf_name.c_str(), newSelKeywds );
         //open all files
-        rt[i]->SetNewOpenFileList( newSelKeywds );
+        rt[i]->openOnlyWithKeywords( newSelKeywds );
     }
 }
 
@@ -833,7 +833,7 @@ void ElementsDialog::openFilesICOMP()
         {  newSelKeywds.clear();
             for(int ii=0; ii<files_data.selCnt[i]; ii++ )
                 newSelKeywds.push_back(files_data.selKeywds[cnt+ii]);
-            rt[i]->SetNewOpenFileList( newSelKeywds );
+            rt[i]->openOnlyWithKeywords( newSelKeywds );
             break;
         }
         cnt += files_data.selCnt[i];

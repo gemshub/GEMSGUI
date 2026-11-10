@@ -34,15 +34,14 @@ void VDBhead::read(GemDataStream& is)
     is.readArray (PassWd, 8);
     is.readArray (Date, 11);
     is.readArray (Time, 5);
-    is >> nRT;                 // type of PDB chain
-    is >> nRec;                // number records in file
+    is >> nRT;
+    is >> nRec;
     is >> stacOver;
     is >> FPosTRT;
     is >> isDel;
     is >> MinDrLen;
-    is >> MaxDrLen; // min and max size of deleted block
-    is >> curDr;
-    ;               // number of deleted blocks
+    is >> MaxDrLen;
+    is >> curDr;            
 }
 
 // Writing header of DB file
@@ -52,15 +51,14 @@ void VDBhead::write(GemDataStream& is)
     is.writeArray (PassWd, 8);
     is.writeArray (Date, 11);
     is.writeArray (Time, 5);
-    is << nRT;                 // type of PDB chain
-    is << nRec;                // number records in file
+    is << nRT;
+    is << nRec;
     is << stacOver;
     is << FPosTRT;
     is << isDel;
     is << MinDrLen;
-    is << MaxDrLen; // min and max size of deleted block
-    is << curDr;
-    ;               // number of deleted blocks
+    is << MaxDrLen;
+    is << curDr;           
 }
 
 
@@ -92,6 +90,28 @@ void RecEntry::write(GemDataStream& is)
     is << pos;
     is << len;
     is << nFile;
+}
+
+// read DB record head
+void RecHead::read(GemDataStream& is)
+{
+    is.readArray (bgm, 2);
+    is >> nRT;
+    is >> Nobj;
+    is >> rlen;
+    is >> time_crt;
+    is.readArray (endm, 2);
+}
+
+// write DB record head
+void RecHead::write(GemDataStream& is)
+{
+    is.writeArray (bgm, 2);
+    is << nRT;
+    is << Nobj;
+    is << rlen;
+    is << time_crt;
+    is.writeArray (endm, 2);
 }
 
 //-------------------------------------------------------------
@@ -496,7 +516,7 @@ time_t TDBFile::get_time(RecEntry* ree)
     }
 
     // creation/modification time
-    return rh.crt;
+    return static_cast<time_t>(rh.time_crt);
 }
 
 void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* database)
@@ -522,7 +542,7 @@ void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* data
         long int old_flen = FPosFree;
         time_t current_time = std::time(nullptr);
 
-        long int still_len = database->putrec(*rh, *fstream, current_time);
+        long int still_len = database->putrec(*rh, *fstream, static_cast<uint32_t>(current_time));
         if(still_len != 0) {
             if (FPosFree != old_flen) {
                 FPosFree -= still_len;
@@ -723,7 +743,7 @@ void TDBFileList::add_file(const std::string &path, const std::string &folder)
         relative_path = fs::relative(path, pVisor->userProfDir());
         rpath = "projects/"+relative_path.string();
     }
-    gui_logger->info("Adding file: {} {}", combined_path.string(), rpath);
+    gui_logger->debug("Adding file: {} {}", combined_path.string(), rpath);
     all_dbfiles.push_back(std::make_shared<TDBFile>(combined_path.string(), rpath));
 }
 
@@ -755,9 +775,9 @@ std::vector<int> TDBFileList::open_files(int nRT1, FileStatus mode, const std::v
                 opened_files.insert(fndx);
             }
         }
-        if(opened_files.size()<1) {
-            opened_files.insert(0);
-        }
+    }
+    if(opened_files.size()<1 && all_dbfiles.size()>0) {
+        opened_files.insert(0);
     }
 
     try {
@@ -773,13 +793,10 @@ std::vector<int> TDBFileList::open_files(int nRT1, FileStatus mode, const std::v
         return list_to_rebuld;
     }
     catch(TError& xcpt)  {
-        if( xcpt.mess == "Two records with the same key (OpenFiles).") {
-            xcpt.mess += "\n 2nd record in file: "+all_dbfiles[current_ndx]->relativePath();
-            // left all before error
-            opened_files.erase(opened_files.find(current_ndx), opened_files.end());
-            reset_index_list(ind);
-        }
-        Error(xcpt.title, xcpt.mess);
+        // left all before error
+        opened_files.erase(opened_files.find(current_ndx), opened_files.end());
+        reset_index_list(ind);
+        throw;
     }
 }
 
@@ -798,11 +815,8 @@ size_t TDBFileList::open_new_file(int nRT1, const std::string &path, TDBKeyList&
         reset_open_list();
     }
     catch(TError& xcpt)  {
-        if(xcpt.mess == "Two records with the same key (AddFileToList).") {
-            xcpt.mess += "\n 2nd record in file: "+all_dbfiles[ndx]->relativePath();
-            reset_index_list(ind);
-        }
-        Error( xcpt.title, xcpt.mess);
+        reset_index_list(ind);
+        throw;
     }
     return ndx;
 }
@@ -956,7 +970,7 @@ size_t TDBFileList::file_name_index(const std::string& file_name) const
             return ndx;
         }
     }
-    return 0; // in old implementation (posible throw error)
+    return std::string::npos; // in old implementation (posible throw error)
 }
 
 size_t TDBFileList::file_path_index(const std::string& file_name) const

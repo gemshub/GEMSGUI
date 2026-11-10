@@ -465,70 +465,111 @@ public:
     void Open( bool type, FileStatus mode, const TCIntArray& indx);
     void Close();
 
-    //--- Manipulation records
-    /// Checks whether a document exists.
+    // =========================================================================
+    // --- Database Records Manipulation Methods ---
+    // =========================================================================
+
+    /**
+     * @brief Checks whether a specific record exists in the database.
+     * @param key The unique key index identifier of the record.
+     * @return true If the record is located, false otherwise.
+     */
     bool existsRecord(const std::string& key)
     {
-        auto Rfind = Find(key.c_str());
-        if(Rfind <0 )
-            return false;
-        return true;
+        return Find(key.c_str()) >= 0;
     }
 
-    /// Creates a new document in the collection from the current data.
-    /// \param key      - key of document
-    std::string addRecord(const std::string& key, size_t file_ndx)
-    {
-        std::string rid = key;
+    /**
+     * @brief Creates and appends a new record to the specified collection storage file.
+     *
+     * @param key      The unique key string identifier for the new record.
+     * @param file_ndx Target physical database file tracking slot index.
+     * @return std::string A detailed verification string or record ID generated upon success.
+     */
+    std::string addRecord(const std::string& key, size_t file_ndx);
 
-        return rid;
-    }
-
-    /// Retrive one document from the collection
-    ///  \param key      - key of document
+    /**
+     * @brief Retrieves a single record payload from the collection and loads it into active memory.
+     *
+     * @param key The unique key string identifier of the target record.
+     * @throws Critical exception/Error if the record is non-existent.
+     */
     void readRecord(const std::string& key)
     {
         int Rnum = Find(key.c_str());
-        if(Rnum<0)  {
-            std::string msg = "Record ";
-            msg += std::string(key, 0, KeyLen());
-            msg += " not found!" ;
-            Error( getKeywd(), msg );
+        if(Rnum < 0) {
+            std::string msg = "Database access error: Record '" + key + "' was not found!";
+            Error(getKeywd(), msg);
+            return;
         }
-        Get( Rnum );
+        Get(Rnum);
     }
 
-    /// Updates an existing document described by the key.
-    ///  \param key      - key of document
+    /**
+     * @brief Updates the payload content of an existing record matched by its key.
+     *
+     * @param key The unique key identifier the record to be modified.
+     * @return std::string The validated record identifier string.
+     */
     std::string updateRecord(const std::string& key)
     {
-        std::string rid = key;
-        auto Rnum = Find(key.c_str());
+        int Rnum = Find(key.c_str());
+        if(Rnum < 0) {
+            Error(getKeywd(), "Failed to update record: '" + key + "' does not exist.");
+            return key;
+        }
+
         Rep(Rnum);
-        return rid;
+        return key;
     }
 
-    /// Removes document from the collection
-    /// \param key      - key of document
-    void deleteRecord(const std::string& key, bool err_if_no=true)
+    /**
+     * @brief Removes a specific record from the database collection physically or marks it as recycled.
+     *
+     * @param key       The unique key identifier string of the record earmarked for deletion.
+     * @param err_if_no If true, triggers a system Error diagnostic if the target record was missing.
+     */
+    void deleteRecord(const std::string& key, bool err_if_no = true)
     {
         int Rnum = Find(key.c_str());
-        if(Rnum>=0)  {
+        if(Rnum >= 0) {
             Del(Rnum);
         }
         else if(err_if_no) {
-            std::string msg = "Record ";
-            msg += std::string(key, 0, KeyLen());
-            msg += " not found!" ;
-            Error( getKeywd(), msg );
+            std::string msg = "Database access error: Record '" + key + "' not found for deletion!";
+            Error(getKeywd(), msg);
         }
     }
 
+    /**
+     * @brief Prompts the user via a graphical interface dialog to confirm saving or overriding a record.
+     *
+     * Generates context-aware confirmation messaging and coordinates bulk transaction responses.
+     *
+     * @param[in]  window      Pointer to the parent QWidget UI component for modal rendering (Qt 6).
+     * @param[in]  key         The unique record index lookup key being reviewed.
+     * @param[out] quest_reply Reference populated with the chosen interactive option code.
+     * @param[out] fnum        Reference populated with the selected target database file identifier.
+     * @return true If the transaction is approved for execution, false if it was aborted or cancelled.
+     */
+    bool saveRecordQuestion(QWidget *window, const std::string& key, int &quest_reply, int &fnum);
 
-    uint AddRecordToFile1(const char *key, int file);
-    void Rep( int i);
+    /**
+     * @brief Interactively appends a new record using the provided key.
+     * @param window Pointer to the parent QWidget interface context window.
+     * @param key    The unique key string identifier for the new record.
+     */
+    void addRecord(QWidget *window, const std::string& key);
+
+    /**
+     * @brief Interactively appends a new record to a specific file tracking slot location.
+     * @param window Pointer to the parent QWidget interface context window.
+     * @param key    The unique key string identifier for the new record.
+     * @param fnum   Reference to the integer variable containing or receiving the targeted file tracking number.
+     */
+    void addRecord(QWidget *window, const std::string& key, int &fnum);
+
     int Find( const char *key);
-    int FindCurrent( const char *key);
     RecStatus Rtest( const char *key, int mode = 1);
     bool FindPart( const char *key_, uint field );
     time_t GetTime(size_t record_ndx);               // time record number i
@@ -538,66 +579,168 @@ public:
     }  // time current record
 
     size_t GetKeyList(const char *keypat, TCStringArray& aKey);
-    size_t GetKeyListOld( const char *keypat,TCStringArray& aKey,TCIntArray& anR);
-    void addRecord(QWidget *window, const char *pkey);
-    void addRecord(QWidget *window, const char *pkey, int &fnum);
+    void RenameList( const char* newName,
+                    const char *oldName );
 
-    //--- Manipulation files of Data Base
-    const std::vector<std::string>& getOpenFiles(std::string &active) const
+
+    // =========================================================================
+    // --- Database File Manipulation Methods ---
+    // =========================================================================
+
+    /**
+     * @brief Registers multiple database files in the system framework.
+     * @param folder    The root directory path where the files are located.
+     * @param path_list Collection of database file names or relative paths.
+     */
+    void addFiles(const std::string &folder, const std::vector<std::string> &path_list);
+
+    /**
+     * @brief Adds a completely new database file to the system and opens it.
+     * @param path The absolute or relative file system path for the new database file.
+     */
+    void addNewFile(const std::string &path)
     {
-        active = activeFileName();
-        return dbfiles_list.opened_files_list;
+        try {
+            dbfiles_list.open_new_file(nRT2, path, ind);
+        }
+        catch (...) {
+            Error(path, "Failed to initialize and open new database file structure.");
+            throw;
+        }
     }
-    uint GetOpenFileNum( const char *secondName  )
-    {
-        std::string name = std::string(getKeywd())+"."+secondName;
-        return dbfiles_list.file_name_index(name);
-    }
-    void GetFileList(int mode, std::vector<std::string>& names,
-                     std::vector<int>& indeces,
-                     std::vector<int>& sel);
-    void OpenAllFiles( bool only_kernel = false );
-    void OpenOnlyFromList( TCStringArray& names );
-    bool SetNewOpenFileList( const TCStringArray& aFlNames );
-    void  MakeInNewProfile(const std::string& dir,
-                          const std::string& prfName, const std::string& f_name={});
-    void GetProfileFileKeywds( const char *name, TCStringArray& aFlkey )
-    {
-        aFlkey = dbfiles_list.file_keywds_according_name(name);
-    }
-    bool ifDefaultOpen() const
-    {
-        return dbfiles_list.check_special_open();
-    }
-    void RebildFile(const TCIntArray& indx);
-    void AddFileToList(const std::string &path)
-    {
-        dbfiles_list.open_new_file(nRT2, path, ind);
-    }
-    void AddOpenFile(const TCIntArray& indx);
+
+    /**
+     * @brief Creates a new project database file and closes all other active files.
+     * @param dir          The target project destination directory.
+     * @param project_name The unique name identifier of the new project.
+     * @param fname        Optional specific layout filename.
+     */
+    void addProjectFile(const std::string& dir, const std::string& project_name, const std::string& fname = "");
+
+    /**
+     * @brief Removes specified database files from the system and updates operational indices.
+     * @param path_list Collection of database file paths earmarked for removal.
+     */
+    void removeFiles(const std::vector<std::string>& path_list);
+
+    /**
+     * @brief Returns the zero-based index of the currently active database file.
+     * @return size_t The active file index slot.
+     */
     size_t activeFileIndex() const
     {
         return dbfiles_list.active_file_index();
     }
 
+    /**
+     * @brief Returns the relative file path of the currently active database file.
+     * @return std::string The relative file path string.
+     */
     std::string activeFileName() const
     {
         return dbfiles_list.active_file_relpath();
     }
 
+    /**
+     * @brief Checks whether any system-default or core database files are currently open.
+     * @return true If core/default files are locked in the stream, false otherwise.
+     */
+    bool isDefaultOpened() const
+    {
+        return dbfiles_list.check_special_open();
+    }
+
+    /**
+     * @brief Finds the tracking index of a file by its short name variant among open files.
+     *
+     * Automatically compounds the complete operational lookup name using the current system keyword mask.
+     *
+     * @param second_name The secondary suffix name of the database file.
+     * @return size_t The valid file index, or std::string::npos if the file does not exist.
+     */
+    size_t indexOfName(const std::string &second_name)
+    {
+        std::string name = std::string(getKeywd()) + "." + second_name;
+        size_t file_ndx = dbfiles_list.file_name_index(name);
+        if (file_ndx == std::string::npos) {
+            Error(name, "Database access error: Attempted to reference a non-existent file.");
+            return std::string::npos;
+        }
+        return file_ndx;
+    }
+
+    /**
+     * @brief Rebuilds, compresses, and defragments specified database files by recycling deleted blocks.
+     * @param indices Vector collection of target file numeric indices to process.
+     */
+    void rebuildsFiles(const std::vector<int>& indices);
+
+    /**
+     * @brief Appends a collection of database files by their indices into the active open files set.
+     * @param indices Vector tracking slot codes to be opened.
+     */
+    void openAdditionalFiles(const std::vector<int>& indices);
+
+    /**
+     * @brief Opens all registered database files matching the system workspace profile.
+     * @param only_kernel If true, filters and restricts the load operation strictly to core/kernel files.
+     */
+    void openAllFiles(bool only_kernel = false);
+
+    /**
+     * @brief Restricts and opens only files whose names match a specific wildcard sub-pattern '.<name>.'.
+     * @param names Collection of match pattern sub-strings.
+     */
+    void openOnlyWith(const std::vector<std::string>& names);
+
+    /**
+     * @brief Opens database files matching given functional system keywords.
+     * @param keywords Collection of filtering system keyword strings.
+     * @return true If all targeted files were successfully located and opened, false otherwise.
+     */
+    bool openOnlyWithKeywords(const std::vector<std::string>& keywords);
+
+    /**
+     * @brief Populates a vector with project file keywords containing a specific name fragment match.
+     * @param name_part The sub-string pattern to scan for.
+     * @param keywords  Output reference vector to store matching keyword results.
+     */
+    void getProjectFilesKeywds(const std::string& name_part, std::vector<std::string>& keywords)
+    {
+        keywords = dbfiles_list.file_keywds_according_name(name_part);
+    }
+
+    /**
+     * @brief Retrieves the complete immutable collection of currently opened file names.
+     * @param[out] active Output string populated with the relative path of the active file.
+     * @return const std::vector<std::string>& Read-only reference to the internal files vector.
+     */
+    const std::vector<std::string>& getOpenFiles(std::string &active) const
+    {
+        active = activeFileName();
+        return dbfiles_list.opened_files_list;
+    }
+
+    /**
+     * @brief Evaluates and generates paths along with selection status matrices for GUI representations.
+     *
+     * @param mode    Operational selection filtering mode.
+     * @param names   Output container for generated file layout name strings.
+     * @param indices Output container for generated physical file tracking indices.
+     * @param sel     Output selection state matrix flags (e.g., used to check rows in Qt views).
+     */
+    void selectionFilesList(int mode,
+                            std::vector<std::string>& names,
+                            std::vector<int>& indices,
+                            std::vector<int>& sel);
 
 
-    //---Other
-    void addFiles(const std::string &folder, const std::vector<std::string> &path_list);
-    void removeFiles(const std::vector<std::string>& path_list);
+
+    //--- Working with Json
     void toJsonObject( QJsonObject& obj ) const;
     std::string fromJsonObject( const QJsonObject& obj );
     void toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const;
     std::string fromJsonObjectNew( const QJsonObject& obj );
-    void RenameList( const char* newName,
-                    const char *oldName );
-
-
 
     //--- Could be moved to db internal
     int GetObjFirst() const
@@ -613,6 +756,8 @@ public:
 protected:
     void Get( int i);
     void Del( int i);
+    void Rep( int i);
+    void ReplaceRecordwithQuestion(QWidget *window, const std::string& key, int &quest_reply);
 
 
     /// Object count written to the record header. The extended-settings objects of the project
@@ -633,45 +778,10 @@ protected:
 
     std::string gen_new_project_file_name(const std::string& dir,
                                           const std::string& project_name, const std::string& f_name) const;
-    void check_record_key(const char *pkey);
+    void check_record_key(const std::string& key);
     bool check_rt_name(const std::string &file_name) const;
 
-
-
-    // void RecKey( uint i, std::string& kbuf )
-    // {
-    //     ind.RecKey(i,kbuf);
-    // }
-
-
-
     bool KeyTest( const char* key );
-
-    // void SetFldKey( uint i, const char *fld )
-    // {
-    //     ind.SetFldKey( i, fld );
-    // }
-
-
-
-    //--- Information about of open file list
-
-    //--- Manipulation Data Base
-    //void Create1( uint nF );
-
-    //  RecStatus TryRec( RecStatus rs, char *key, int mode = 1);
-
-    //--- Manipulation list of records
-
-    // const TCStringArray& KeyList() const
-    // {
-    //     return ind.KeyList();
-    // }
-    // const TCIntArray& RnList() const
-    // {
-    //     return ind.RnList();
-    // }
-
     std::string make_key_template(const std::vector<std::string>& first_fields) const;
 
 };
@@ -697,4 +807,5 @@ public:
 extern DataBaseList rt;
 
 #endif	// V_DBM_H_
+
 

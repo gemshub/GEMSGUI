@@ -1172,24 +1172,24 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
 
     //Get lists
     TCStringArray aDclist;
-    TCIntArray anRDc;
+    //TCIntArray anRDc;
     TCStringArray aRclist;
-    TCIntArray anRRc;
+    //TCIntArray anRRc;
     int Ndc, Nrc, iic=0, i;
 
     if( useLst == false )
     {
         //DCOMP key list
-        Ndc = rt[RT_DCOMP]->GetKeyList( part, aDclist, anRDc );
+        Ndc = rt[RT_DCOMP]->GetKeyList( part, aDclist);
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
-          TCIntArray anRDc1;
-          Ndc += rt[RT_DCOMP]->GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          //TCIntArray anRDc1;
+          Ndc += rt[RT_DCOMP]->GetKeyList( "p:*:*:*:", aDclist1);
           for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
             aDclist.push_back(aDclist1[kk]);
-            anRDc.push_back(anRDc1[kk]);
+            //anRDc.push_back(anRDc1[kk]);
           }
         }
         size_t ii=0;
@@ -1199,7 +1199,7 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
                     !memcmp( aDclist[ii].c_str()+MAXSYMB+MAXDRGROUP, "e-", 2 ) )
             {
                 aDclist.erase(aDclist.begin() +ii);
-                anRDc.erase( anRDc.begin()+ii);
+                //anRDc.erase( anRDc.begin()+ii);
                 Ndc--;
             }
             else
@@ -1207,22 +1207,22 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
                         !memcmp( aDclist[ii].c_str(), aDclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
                 {
                     aDclist.erase(aDclist.begin() +ii);
-                    anRDc.erase( anRDc.begin()+ii);
+                    //anRDc.erase( anRDc.begin()+ii);
                     Ndc--;
                 }
                 else ii++;
         }
         //REACDC  key list
-        Nrc = rt[RT_REACDC]->GetKeyList( part, aRclist, anRRc );
+        Nrc = rt[RT_REACDC]->GetKeyList( part, aRclist);
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
-          TCIntArray anRDc1;
-          Nrc += rt[RT_REACDC]->GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          //TCIntArray anRDc1;
+          Nrc += rt[RT_REACDC]->GetKeyList( "p:*:*:*:", aDclist1);
           for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
             aRclist.push_back(aDclist1[kk]);
-            anRRc.push_back(anRDc1[kk]);
+            //anRRc.push_back(anRDc1[kk]);
           }
         }
         ii=0;
@@ -1232,7 +1232,7 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
                     !memcmp( aRclist[ii].c_str(), aRclist[ii-1].c_str(), DC_RKLEN-MAXSYMB ) )
             {
                 aRclist.erase(aRclist.begin() +ii);
-                anRRc.erase( anRRc.begin()+ii);
+                //anRRc.erase( anRRc.begin()+ii);
                 Nrc--;
             }
             else ii++;
@@ -1331,10 +1331,9 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
    // Calculating the phase record and saving it to database
     CalcPhaseRecord( /*true*/ );
 
-    int  Rnum = db->Find(key.c_str());
-
-    if( Rnum<0 )
-        db->AddRecordToFile1(key.c_str(), file);
+    bool rexist = db->existsRecord(key);
+    if(!rexist)
+        db->addRecord(key, file);
     else
       {
         std::string mess = key;
@@ -1342,7 +1341,7 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
         mess+=  "This record exists! Overwrite?";
         if( !vfQuestion( window(), "Automatically generated aq or gas/fluid", mess) )
             Error( key, "Cancel automatically generated aq or gas/fluid!");
-        db->Rep( Rnum );
+        db->updateRecord(key);
        }
 		// contentsChanged = false;
 }

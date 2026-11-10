@@ -790,24 +790,22 @@ void TSysEq::RenameList( const char* newName,
             str_old += "*:";
 
     TCStringArray arKey;
-    TCIntArray arR;
+    //TCIntArray arR;
 
-    auto Nrec = db->GetKeyList( str_old.c_str(), arKey, arR );
+    auto Nrec = db->GetKeyList( str_old.c_str(), arKey);
     if( Nrec < 1)
       return;
 
-    int nrec;
     std::string str;
 
     for(uint i=0; i<Nrec; i++ )
     {
-        nrec =  db->Find( arKey[i].c_str() );
-        db->Get( nrec );
+        db->readRecord(arKey[i]);
         dyn_set();
         // changing record key
         str = db->PackKey();
-        db->Del( nrec );
-        replace( str, oldName, newName);
+        db->deleteRecord(arKey[i]);
+        replace(str, oldName, newName);
         // change tPhEQ key (o_ssphst,PhmKey)
         std::string tPhkey = char_array_to_string( ssp->PhmKey, EQ_RKLEN );
         if( tPhkey.find(oldName) != std::string::npos)
@@ -817,7 +815,7 @@ void TSysEq::RenameList( const char* newName,
          replace( tPhkey, oldName, newName );
          memcpy( ssp->PhmKey, tPhkey.c_str(), EQ_RKLEN );
         }
-        db->AddRecordToFile1( str.c_str(), db->activeFileIndex() );
+        db->addRecord(str, db->activeFileIndex());
     }
 }
 

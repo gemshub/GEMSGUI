@@ -1380,7 +1380,6 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
 {
 
     TCStringArray aDclist;
-    TCIntArray anRDc;
     if (save)
     if( ! MessageToSave() )
 	return;
@@ -1395,8 +1394,8 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
     switch( iRet )
     {
     case MANY_:    // Get Key list
-        db->GetKeyList(  str_key.c_str(), aDclist, anRDc );
-        db->Get(anRDc[0]);
+        db->GetKeyList(str_key.c_str(), aDclist);
+        db->readRecord(aDclist[0]);
         [[fallthrough]];
     case ONEF_:
         dyn_set(q);
@@ -1455,19 +1454,19 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
 void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
  elmWindowData el_data, dcSetupData st_data, std::set<std::string>& SDlist)
 {
-    TCIntArray anR;
+    //TCIntArray anR;
     TCStringArray aDCkey;
 
     // open selected kernel files
-    // db->OpenOnlyFromList(el_data.flNames);
-    int fnum_ = db->GetOpenFileNum( prfName );
+    // db->openOnlyWith(el_data.flNames);
+    int fnum_ = db->indexOfName( prfName );
 
      // delete the equvalent keys
      TCStringArray aICkey_new;         // 30/11/2006
      aICkey_new.clear();
 
    // get list of records
-    db->GetKeyList( "*:*:*:*:", aDCkey, anR );
+    db->GetKeyList( "*:*:*:*:", aDCkey);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
@@ -1575,7 +1574,7 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
     // close all no project files
     TCStringArray names1;
     names1.push_back(prfName);
-    db->OpenOnlyFromList(names1);
+    db->openOnlyWith(names1);
 }
 
 // ------------------ End of m_dcomp.cpp ----------------------------

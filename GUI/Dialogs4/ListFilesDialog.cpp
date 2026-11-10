@@ -89,7 +89,7 @@ ListFilesDialog::ListFilesDialog(QWidget* parent, const char* prfName, const cha
         TCStringArray names;
         TCIntArray indx;
         TCIntArray sel;
-        rt[i]->GetFileList(closef|openf|oldself, names, indx, sel);
+        rt[i]->selectionFilesList(closef|openf|oldself, names, indx, sel);
         for( ii=0; ii<names.size(); ii++ )
         {
             // select only Projecte files

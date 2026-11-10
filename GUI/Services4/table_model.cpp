@@ -42,11 +42,10 @@ void KeyModel::set_old_selection(const TCStringArray &sel)
 
 void KeyModel::set_full_list()
 {
-    TCIntArray temp;
     TCStringArray keyList;
     all_species.clear();
 
-    rt[iRt]->GetKeyList( key_filter.c_str(), keyList, temp);
+    rt[iRt]->GetKeyList( key_filter.c_str(), keyList);
     for( const auto& rec_key: keyList)
         all_species.append( split_key(rec_key.c_str()) );
 }
@@ -163,21 +162,20 @@ void RDKeyModel::set_old_selection(const TCStringArray &sel)
 
 void RDKeyModel::set_full_list()
 {
-    TCIntArray temp;
     TCStringArray keyList;
     all_species.clear();
 
     // ReacDC list
     if( NsuT_selection )  // template for adsorption
         key_filter[0] = CP_SSPC;
-    rt[RT_REACDC]->GetKeyList( key_filter.c_str(), keyList, temp);
+    rt[RT_REACDC]->GetKeyList( key_filter.c_str(), keyList);
     for( const auto& rec_key: keyList)
         all_species.append( add_key(SRC_REACDC, rec_key.c_str()) );
 
     // Dcomp list
     if( NsuT_selection )  // template for adsorption
         key_filter[0] = CP_SOLID;
-    rt[RT_DCOMP]->GetKeyList( key_filter.c_str(), keyList, temp);
+    rt[RT_DCOMP]->GetKeyList( key_filter.c_str(), keyList);
     for( const auto& rec_key: keyList)
         all_species.append( add_key(SRC_DCOMP, rec_key.c_str()) );
 }

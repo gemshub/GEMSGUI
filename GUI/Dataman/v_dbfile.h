@@ -19,6 +19,7 @@
 #ifndef V_DBFILE_H_
 #define V_DBFILE_H_
 
+#include <cstddef>
 #include <set>
 #include "v_file.h"
 #include "GEMS3K/verror.h"
@@ -33,54 +34,126 @@ extern const char* ALLKEY;
 class TDBKeyList;
 class TDataBase;
 
-// header of PDB file
+#pragma pack(push, 1) // Enforces tight byte-packing to eliminate compiler-inserted structure padding
+
+/**
+ * @struct VDBhead
+ * @brief Represents the master control header of a binary database file (.pdb).
+ *
+ * Contains critical file metadata, including validation credentials, record counters,
+ * file geometric layouts/offsets, and the current operational state of the space recycling system.
+ */
 struct VDBhead
 {
-    char VerP[8];
-    char PassWd[8];
-    char Date[11];
-    char Time[5];
-    int nRT;                 // type of PDB chain
-    int nRec;                // number records in file
-    int stacOver;
-    int FPosTRT;
-    char isDel;
-    int MinDrLen, MaxDrLen; // min and max size of deleted block
-    int curDr;               // number of deleted blocks
+    char VerP[8];           ///< Database engine compatibility version string (exactly 8 bytes)
+    char PassWd[8];         ///< Database security access password encrypted string (exactly 8 bytes)
+    char Date[11];          ///< File creation or last modification date string (formatted as DD/MM/YYYY)
+    char Time[5];           ///< File creation or last modification time string (formatted as HH:MM)
+    int32_t nRT;            ///< Core operational mode code or identifier of the database chain
+    int32_t nRec;           ///< Total number of active physical records currently stored in the file
+    int32_t stacOver;       ///< Overflow indicator or allocation ceiling offset for the deleted blocks stack
+    int32_t FPosTRT;        ///< Physical stream offset marking the start of the records or relation tables payload
+    char isDel;             ///< Configuration flag: 1 if deleted records tracking is active, 0 otherwise
+    int32_t MinDrLen;       ///< Minimum payload size among all currently tracked recycled blocks
+    int32_t MaxDrLen;       ///< Maximum payload size among all currently tracked recycled blocks
+    int32_t curDr;          ///< Current count of active recycled slots occupied in the deleted blocks array
 
     void read(GemDataStream& is);
-    void write(GemDataStream& is);
+    void write(GemDataStream& os);
 
-    static int data_size()
+    /**
+     * @brief Computes the precise binary signature footprint size of the header layout on the disk.
+     * @return The exact size of the packed structure (strictly 61 bytes).
+     */
+    static constexpr size_t data_size()
     {
-        return sizeof(char[8])*2
-               + sizeof(char[11]) + sizeof(char[5])
-               + sizeof(int)*4
-               + sizeof(char) + sizeof(int)*2
-               + sizeof(int);
+        return sizeof(VerP) + sizeof(PassWd) + sizeof(Date) + sizeof(Time) +
+               sizeof(nRT) + sizeof(nRec) + sizeof(stacOver) + sizeof(FPosTRT) +
+               sizeof(isDel) + sizeof(MinDrLen) + sizeof(MaxDrLen) + sizeof(curDr);
     }
 };
 
-// position and size of deleted block
+/**
+ * @struct DBentry
+ * @brief Represents a single recycled space allocation slot (sfe element) on the disk.
+ *
+ * Tracks the exact physical location and raw bounds of a previously deleted record block
+ * so that the space can be safely matched and reused for subsequent write transactions.
+ */
 struct DBentry
 {
-    int pos, len;
+    int32_t pos;            ///< Absolute file stream pointer location of the recycled block
+    int32_t len;            ///< Full raw physical span of the recycled block (including its binary header)
+
     void read(GemDataStream& is);
-    void write(GemDataStream& is);
-    static size_t data_size()
+    void write(GemDataStream& os);
+
+    /**
+     * @brief Computes the binary size of a single recycling descriptor slot.
+     * @return The exact size on disk (strictly 8 bytes).
+     */
+    static constexpr size_t data_size()
     {
-        return sizeof(int)*2;
+        return sizeof(pos) + sizeof(len);
     }
 };
 
-// Record entry  position, size and file number of record
+/**
+ * @struct RecEntry
+ * @brief Represents memory-resident index coordinates and sizing metadata for an active record.
+ *
+ * Serves as a high-level tracking descriptor used within caching components, memory indices,
+ * and cross-reference table collections to locate data without performing a disk scan.
+ */
 struct RecEntry
 {
-    int     pos, len;
-    unsigned char nFile;
+    int32_t pos;            ///< Absolute physical stream address allocation within the database file
+    int32_t len;            ///< Pure payload chunk size (excluding the overhead of the record binary header)
+    unsigned char nFile;    ///< File identification tracking code within the global database manager list
+
     void read(GemDataStream& is);
-    void write(GemDataStream& is);
+    void write(GemDataStream& os);
+
+    /**
+     * @brief Computes the serial footprint size of the in-memory coordinate entry block.
+     * @return The structural index footprint size (strictly 9 bytes).
+     */
+    static constexpr size_t data_size()
+    {
+        return sizeof(pos) + sizeof(len) + sizeof(nFile);
+    }
 };
+
+/**
+ * @struct RecHead
+ * @brief Represents the binary header preceding every data record inside the database file (.pdb).
+ *
+ * Stores validation markers, record formatting metadata, total physical length,
+ * and structural creation/modification timestamps.
+ */
+struct RecHead
+{
+    char bgm[2];          ///< Record beginning marker flags (exactly 2 bytes, e.g., MARKRECHEAD)
+    unsigned char nRT;    ///< Core record type or relation table identifier code
+    unsigned char Nobj;   ///< Total number of objects or data components packed inside this record
+    int32_t rlen;         ///< Full physical length of the record on disk, including this header (strictly 4 bytes)
+    uint32_t time_crt;    ///< Unsigned 32-bit creation/update timestamp (safe until the year 2106, strictly 4 bytes)
+    char endm[2];         ///< Record ending marker flags (exactly 2 bytes, e.g., MARKRECHEAD)
+
+    void read(GemDataStream& is);
+    void write(GemDataStream& os);
+
+    /**
+     * @brief Computes the precise binary footprint size of the record header layout on the disk.
+     * @return The exact size of the packed structure (strictly 14 bytes).
+     */
+    static constexpr size_t data_size()
+    {
+        return sizeof(bgm) + sizeof(nRT) + sizeof(Nobj) + sizeof(rlen) + sizeof(time_crt) + sizeof(endm);
+    }
+};
+
+#pragma pack(pop) // Restores the default compiler structure alignment rules
 
 
 /**
@@ -438,7 +511,7 @@ public:
 
     /**
      * @brief Find the index of a file by its relative path (searches only among open files).
-     * @return The file index, or static_cast<size_t>(-1) / npos if not found.
+     * @return The file index, or std::string::npos if not found.
      */
     size_t file_path_index(const std::string &file_path) const;
 
@@ -481,6 +554,22 @@ public:
     * @note Uses 'int' to allow returning -1 as a cancel signal. Ensure to check for -1 before casting to size_t.
     */
     int file_to_add_record(QWidget *window, const std::string &record_key, bool multi, bool& ok_to_all);
+
+    size_t active_file_index() const
+    {
+        return last_used_file;
+    }
+
+    std::string active_file_relpath() const
+    {
+        return check_index(last_used_file) ?
+                   all_dbfiles[last_used_file]->relativePath() : "";
+    }
+
+    bool empty_files_list() const
+    {
+        return all_dbfiles.empty();
+    }
 
 protected:
 

@@ -44,7 +44,6 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
     QObject::connect(ui->pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(accept()));
     setWindowTitle( caption );
 
-    TCIntArray temp;
     TCStringArray keyList;
 
     ErrorIf(!key, "KeyDialog", "pkey is null");
@@ -59,7 +58,7 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
     ui->pLabel->setText(s.c_str());
 
     s  = std::string(rt[irt]->UnpackKey());
-    auto n = rt[irt]->GetKeyList( keyFilter.c_str(), keyList, temp);
+    auto n = rt[irt]->GetKeyList( keyFilter.c_str(), keyList);
     uint sel = 0;
 
     for( uint ii=0; ii<n; ii++ )
@@ -135,14 +134,13 @@ void KeyDialog::CmHelp()
 
 void KeyDialog::SetList()
 {
-    TCIntArray temp;
     TCStringArray keyList;
 
     std::string s = "Please, mark one or more record keys. Filter: ";
     s +=  keyFilter;
     ui->pLabel->setText(s.c_str());
 
-    auto n = rt[iRt]->GetKeyList( keyFilter.c_str(), keyList, temp);
+    auto n = rt[iRt]->GetKeyList( keyFilter.c_str(), keyList);
 
     for( uint ii=0; ii<n; ii++ )
         ui->pList->addItem(keyList[ii].c_str());
@@ -308,7 +306,6 @@ QString RDKeyDialog::makeKey( char type, const char *key )
 
 void RDKeyDialog::SetList()
 {
-    TCIntArray temp;
     TCStringArray keyList;
     int jj=0;
 
@@ -318,7 +315,7 @@ void RDKeyDialog::SetList()
     // ReacDC list
     if( NsuT > 0 )  // template for adsorption
         keyFilter[0] = CP_SSPC;
-    auto n = rt[RT_REACDC]->GetKeyList( keyFilter.c_str(), keyList, temp);
+    auto n = rt[RT_REACDC]->GetKeyList( keyFilter.c_str(), keyList);
 
     for( uint ii=0; ii<n; ii++ )
         ui->pList->addItem( makeKey( SRC_REACDC, keyList[ii].c_str()));
@@ -330,7 +327,7 @@ void RDKeyDialog::SetList()
         s+= keyFilter;
     }
 
-    n = rt[RT_DCOMP]->GetKeyList( keyFilter.c_str(), keyList, temp);
+    n = rt[RT_DCOMP]->GetKeyList( keyFilter.c_str(), keyList);
 
     for( uint ii=0; ii<n; ii++ )
         ui->pList->addItem( makeKey( SRC_DCOMP, keyList[ii].c_str()));

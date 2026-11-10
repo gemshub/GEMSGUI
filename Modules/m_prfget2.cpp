@@ -348,7 +348,7 @@ void TProfil::TestChangeProfile()
         return;
 
     TCStringArray aList;
-    TCIntArray anR;
+    //TCIntArray anR;
 
     TSysEq* aSE= dynamic_cast<TSysEq *>(aMod[RT_SYSEQ].get());
     aSE->ods_link(0);
@@ -358,11 +358,10 @@ void TProfil::TestChangeProfile()
     if( aIComp.size()>=1 || aPhase.size()>=1 || aDComp.size()>=1 )
     {
         aList.clear();
-        anR.clear();
 
         rt[RT_GEM2MT]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                                 K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-        rt[RT_GEM2MT]->GetKeyList( pkey, aList, anR );
+        rt[RT_GEM2MT]->GetKeyList( pkey, aList);
 
         TGEM2MT* aMT= dynamic_cast<TGEM2MT *>(aMod[RT_GEM2MT].get());
         aMT->ods_link(0);
@@ -383,12 +382,11 @@ void TProfil::TestChangeProfile()
     }
 
     aList.clear();
-    anR.clear();
 
     // Insert changes to SYSEQ
     rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList(pkey, aList);
 
     for(uint i=0; i< aList.size(); i++)
     {
@@ -407,11 +405,10 @@ void TProfil::TestChangeProfile()
     if( aIComp.size()>=1  )
     {
         aList.clear();
-        anR.clear();
 
         rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                                 K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-        rt[RT_DUALTH]->GetKeyList( pkey, aList, anR );
+        rt[RT_DUALTH]->GetKeyList( pkey, aList);
 
         TDualTh* aDU= dynamic_cast<TDualTh *>(aMod[RT_DUALTH].get());
         aDU->ods_link(0);
@@ -430,10 +427,9 @@ void TProfil::TestChangeProfile()
     if( aIComp.size()<1 &&  aPhase.size()<1 && aDComp.size()<1 )
         return;
     aList.clear();
-    anR.clear();
     rt[RT_UNSPACE]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                              K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_UNSPACE]->GetKeyList( pkey, aList, anR );
+    rt[RT_UNSPACE]->GetKeyList(pkey, aList);
 
     TUnSpace* aPB=dynamic_cast<TUnSpace *>(aMod[RT_UNSPACE].get());
     aPB->ods_link(-1); //0
@@ -482,7 +478,6 @@ void TProfil::CalcAllSystems( int SIA_or_AIA, bool make_dump_file )
     char tbuf[150];
     std::string str_file;
     TCStringArray aList;
-    TCIntArray anR;
     bool outFile = make_dump_file;
     uint i=0, nbad=0;
     int iRet;
@@ -490,7 +485,7 @@ void TProfil::CalcAllSystems( int SIA_or_AIA, bool make_dump_file )
 
     rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList);
     std::string ProfName(pkey);
 
     if( outFile )
@@ -646,13 +641,11 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 //    Save list of phases from template profile:
     TCStringArray names1;
     names1.push_back(prfName);
-    rt[RT_ICOMP]->OpenOnlyFromList(names1);
-    rt[RT_PHASE]->OpenOnlyFromList(names1);
+    rt[RT_ICOMP]->openOnlyWith(names1);
+    rt[RT_PHASE]->openOnlyWith(names1);
 
    TCStringArray PHkeys;
-   TCIntArray    ICcnt;
-   rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", PHkeys, ICcnt );
-
+   rt[RT_PHASE]->GetKeyList("*:*:*:*:*:", PHkeys);
 
    // get template project configuration
    if( internalBufer )
@@ -680,7 +673,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     // close all kernel files
     TIComp* aICdata=  dynamic_cast<TIComp *>(aMod[RT_ICOMP].get());
     aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
-    ICcnt.clear();
+    TCIntArray    ICcnt;
     for( ii=0; ii<elm_data.ICrds.size(); ii++ )
        ICcnt.push_back(0);
 
@@ -1225,13 +1218,12 @@ void TProfil::allSystems2GEMS3K( TCStringArray& savedSystems, int calc_mode, con
 
     char pkey[200];
     TCStringArray aList;
-    TCIntArray anR;
     std::string packkey;
     std::string systemname;
 
     rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ]->GetKeyList( pkey, aList, anR );
+    rt[RT_SYSEQ]->GetKeyList( pkey, aList);
 
     aMod[RT_SYSEQ]->ods_link(0);
 
@@ -1277,12 +1269,11 @@ void TProfil::allProcess2GEMS3K( TCStringArray& savedSystems, const std::string&
 
     char pkey[200];
     TCStringArray aList;
-    TCIntArray anR;
     std::string process_name;
 
     rt[RT_PROCES]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROCES]->GetKeyList( pkey, aList, anR );
+    rt[RT_PROCES]->GetKeyList( pkey, aList);
     aMod[RT_PROCES]->ods_link(0);
 
 
