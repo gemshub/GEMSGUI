@@ -20,6 +20,7 @@
 #ifndef V_DBM_H_
 #define V_DBM_H_
 
+#include <initializer_list>
 #include <ctime>
 #include "v_object.h"
 #include "v_dbfile.h"
@@ -28,13 +29,195 @@ class GemDataStream;
 
 const int	MAXRKFRMSTR = 20;  // max fields in key
 const size_t IND_PLUS = 112;    // augment of index key buf
+extern const char* ALLKEY;
 
 enum keyctrl {   // codes key bild
     K_END = -5, K_EMP, K_ANY, K_IMM, K_ACT
 };
 
-extern const char* ALLKEY;
+struct KeyArg {
+    int32_t command;
+    std::string str_value;
+    uint32_t field_index = 0;
 
+    KeyArg(int32_t cmd):
+        command(cmd), str_value(""), field_index(0) {}
+
+    KeyArg(int32_t cmd, int32_t fld_idx):
+        command(cmd), str_value(""), field_index(static_cast<uint32_t>(fld_idx)) {}
+
+    KeyArg(int32_t cmd, const char* str):
+        command(cmd), str_value(str ? str : ""), field_index(0) {}
+
+    KeyArg(int32_t cmd, std::string str):
+        command(cmd), str_value(str), field_index(0) {}
+};
+
+/**
+ * @class TDBKeyNew
+ * @brief Manages structured, multi-field compound database index keys.
+ *
+ * This class handles the parsing, packing, unpacking, formatting, and dynamic compilation
+ * of multi-segment search and sort database keys separated by a colon utility character.
+ */
+class TDBKeyNew
+{
+public:
+    /**
+     * @brief Constructs a key layout descriptor from raw data geometry arrays.
+     *
+     * @param nRkflds Number of individual sub-fields constituting the compound key.
+     * @param rkfrm   Pointer to an array defining the maximum byte lengths for each sub-field.
+     */
+    explicit TDBKeyNew(unsigned char nRkflds, const unsigned char* rkfrm);
+
+    /**
+     * @brief Restores the key metadata configuration state directly from an active file stream.
+     * @param f Reference to the active binary or text file input stream.
+     */
+    TDBKeyNew(std::fstream& f);
+
+    /**
+     * @brief Explicitly defaults the standard copy constructor.
+     */
+    TDBKeyNew(const TDBKeyNew& other) = default;
+
+    /**
+     * @brief Explicitly defaults the standard move constructor.
+     */
+    TDBKeyNew(TDBKeyNew&& other) noexcept = default;
+
+    /**
+     * @brief Explicitly defaults the copy assignment operator.
+     */
+    TDBKeyNew& operator=(const TDBKeyNew& other) = default;
+
+    /**
+     * @brief Explicitly defaults the move assignment operator.
+     */
+    TDBKeyNew& operator=(TDBKeyNew&& other) noexcept = default;
+
+    /**
+     * @brief Virtual destructor to ensure clean cleanup in polymorphically inherited classes.
+     */
+    virtual ~TDBKeyNew() = default;
+
+    // --- Selectors (Getters) ---
+
+    /**
+     * @brief Serializes the composite key into its tight, packed string representation.
+     * @return std::string The packed key structure.
+     */
+    std::string packKey() const;
+
+    /**
+     * @brief Deserializes the key into an expanded, space-padded unpacked layout.
+     * @return std::string The unpacked formatted key.
+     */
+    std::string unpackKey() const;
+
+    /**
+     * @brief Returns the total static maximum buffer size reserved for the fixed key layout.
+     * @return size_t The exact byte length constraint.
+     */
+    size_t length() const
+    {
+        return fixed_keys_len;
+    }
+
+    /**
+     * @brief Returns the total number of sub-fields registered in this compound key structure.
+     * @return size_t The length count of the fields vector.
+     */
+    size_t fieldsInKey() const
+    {
+        return flds_len.size();
+    }
+
+    /**
+     * @brief Safely retrieves the maximum byte limit of a specific sub-field by its index.
+     * @param ndx The zero-based index of the target sub-field.
+     * @return size_t The maximum allowed length, or 0 if the index is out of bounds.
+     */
+    size_t fieldLength(size_t ndx) const
+    {
+        return ndx < fieldsInKey() ? flds_len[ndx] : 0;
+    }
+
+    /**
+     * @brief Safely fetches the current value of a specific sub-field without modification.
+     * @param ndx The zero-based index of the target sub-field.
+     * @return std::string The raw field string literal value, or an empty string if out of bounds.
+     */
+    std::string fieldKey(size_t ndx) const
+    {
+        return ndx < flds_value.size() ? flds_value[ndx] : "";
+    }
+
+    /**
+     * @brief Unpacks, expands, and aligns a specific sub-field with blank spaces matching its specification.
+     * @param ndx The zero-based index of the target sub-field.
+     * @return std::string The space-padded unpacked field key value string.
+     */
+    std::string unpackFieldKey(size_t ndx) const
+    {
+        if (ndx >= flds_value.size()) {
+            return "";
+        }
+        auto unpack_fld = flds_value[ndx];
+        unpack_fld.resize(flds_len[ndx], ' ');
+        return unpack_fld;
+    }
+
+    // --- Manipulation Keys (Setters) ---
+
+    /**
+     * @brief Parses and overrides the entire composite key from a raw composite input string.
+     * @param new_key The incoming raw packed or unpacked key string.
+     */
+    void setKey(const std::string& new_key);
+
+    /**
+     * @brief Safely overrides the literal value of a single specific sub-field slot.
+     * @param ndx     The zero-based index of the target sub-field slot.
+     * @param new_fld The incoming new string value for the specified field.
+     */
+    void setFieldKey(size_t ndx, const std::string& new_fld);
+
+    /**
+     * @brief Compiles a type-safe multi-segment compound index key from structured command parameters.
+     *
+     * Iterates through a flat list of formatting arguments, processes wildcard tokens (*, `),
+     * pulls dynamic values from active relation tables, and merges them using colon delimiters.
+     *
+     * @param nrt   The active operational relation table context code.
+     * @param args  Initializer list containing structured KeyArg configuration options.
+     * @return std::string The safely compiled, formatted index key.
+     */
+    std::string makeKey(uint8_t nrt, std::initializer_list<KeyArg> args) const;
+
+protected:
+    /// Maximum allowed physical capacity bounds for each independent key segment field.
+    std::vector<size_t> flds_len;
+
+    /// Current alphanumeric buffer values for each sub-field component segment.
+    std::vector<std::string> flds_value;
+
+    /// The aggregated ceiling byte capacity constraint for the combined packed/unpacked key.
+    size_t fixed_keys_len;
+
+    void set_packed(const std::string& key);
+    void set_unpacked(const std::string& key);
+    void set_all()
+    {
+        for (auto& val : flds_value) {
+            val = "*";
+        }
+    }
+};
+
+/// Table key -> the selector, which must be an object containing the key attribute.
+using keysmap_t = std::map<std::string, RecEntry>;
 
 // This is struct contened the key of record
 class TDBKey
@@ -131,10 +314,10 @@ public:
     //--- Selectors
     RecEntry* RecPosit(uint i);
 
-    int iRec() const
-    {
-        return nI;
-    }
+    // int iRec() const
+    // {
+    //     return nI;
+    // }
     size_t RecCount() const
     {
         return recInDB;
@@ -182,27 +365,6 @@ enum RecStatus {   // states of keys record Data Base
     /* NONELIST_ * no records to part */
 };
 
-struct RecHead
-{  // head the record in DB file
-    char bgm[2];
-    unsigned char nRT, Nobj;
-// Sveta 64   long rlen;    // full len the record in file
-    int rlen;    // full len the record in file
-// Sveta 64    time_t crt;
-    int crt;
-    char endm[2];
-
-    void read(GemDataStream& is);
-    void write(GemDataStream& os);
-
-    static int data_size()
-    {
-        return sizeof(char[2]) + sizeof(char)*2
-// Sveta 64               + sizeof(long) + sizeof(time_t) + sizeof(char[2]);
-               + sizeof(int) + sizeof(int) + sizeof(char[2]);
-    }
-};
-
 enum modeList { openf = 0x01, closef = 0x02, oldself = 0x04 };
 
 // Structure of Data Base
@@ -214,8 +376,6 @@ class TDataBase
     char Keywd[MAXKEYWD];
     unsigned char nRT2;
     RecStatus status;
-    //bool rclose2;
-    //bool isDelete2;
     int frstOD;
     unsigned char nOD;
     int frstODjson;
@@ -226,41 +386,26 @@ class TDataBase
     //work param
     time_t crt;
 
-
-protected:
-
-    //--- check
-    int reclen( );
-    int putrec( RecEntry& re, GemDataStream& f, int crt );
-    //int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
-    int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
-    int getExtendedSettings( GemDataStream& f, int nRead, int StillLen );
-    void opfils();
-    int scanfile( uint nF, int& fPos, int& fLen,
-	    GemDataStream& inStream, GemDataStream& outStream);
-    void fromCFG(std::fstream& f);
-
-    std::string gen_new_project_file_name(const std::string& dir,
-                                          const std::string& project_name, const std::string& f_name) const;
-    void check_record_key(const char *pkey);
-    bool check_rt_name(const std::string &file_name) const;
 public:
-    ///int specialFilesNum;
-    ///int fNum;
-    ///TCStringArray fOpenNameBuf;
 
-    //  TDateBase();
     TDataBase( size_t nrt, const char* name, bool Rclose, bool isDel,
-               int nOf, unsigned char Nobj, int filesNum,
-               unsigned char nRkflds, const unsigned char* rkfrm );
+              int nOf, unsigned char Nobj, int filesNum,
+              unsigned char nRkflds, const unsigned char* rkfrm );
     TDataBase( std::fstream& f );
     ~TDataBase();
     //put state to cfg file
     void toCFG( std::fstream& f );
-    void removeFiles(const std::vector<std::string>& path_list);
-    /// Object count written to the record header. The extended-settings objects of the project
-    /// record are not counted, so that older GEMSGUI versions still read the record.
-    unsigned char headerObjCount() const;
+
+    //--- Selectors
+    RecStatus GetStatus() const
+    {
+        return status;
+    }
+    void SetStatus( RecStatus stt )
+    {
+        status = stt;
+    }
+
     /// Sets the number of objects of the record (cached configurations may hold an older count).
     void setObjectCount(unsigned char n)
     {
@@ -274,45 +419,35 @@ public:
         lastODjson =lastOD;
     }
 
-
-    //--- Selectors
-    RecStatus GetStatus() const
-    {
-     return status;
-    }
-    void SetStatus( RecStatus stt )
-    {
-      status = stt;
-    }
-
     std::string getKeywd() const
     {
         return char_array_to_string(Keywd, MAXKEYWD);
+    }
+
+    size_t RecCount() const
+    {
+        return ind.RecCount();
+    }
+    const char *PackKey()
+    {
+        return ind.PackKey();
+    }
+    const char *UnpackKey()
+    {
+        return ind.UnpackKey();
+    }
+    void SetKey( const char *key )
+    {
+        ind.SetKey(key);
+    }
+    const TDBKey& GetDBKey() const
+    {
+        return ind;
     }
     uint KeyLen() const
     {
         return ind.KeyLen();
     }
-    void RecKey( uint i, std::string& kbuf )
-    {
-        ind.RecKey(i,kbuf);
-    }
-
-    const char *PackKey()
-    {
-        return ind.PackKey();
-    }
-
-    const char *UnpackKey()
-    {
-        return ind.UnpackKey();
-    }
-
-    time_t Rtime() const
-    {
-        return crt;
-    }  // time current record
-    time_t GetTime(size_t record_ndx);               // time record number i
     char *FldKey( uint i ) const
     {
         return ind.FldKey(i);
@@ -325,26 +460,146 @@ public:
     {
         return ind.KeyNumFlds();
     }
-    bool KeyTest( const char* key );
-    const TDBKey& GetDBKey() const
+    void MakeKey( unsigned char nRtwrk, char *pkey, ...);
+
+    void Open( bool type, FileStatus mode, const TCIntArray& indx);
+    void Close();
+
+    //--- Manipulation records
+    /// Checks whether a document exists.
+    bool existsRecord(const std::string& key)
     {
-        return ind;
-    }
-    const std::vector<std::string>& getOpenFiles(std::string &active) const;
-    void SetKey( const char *key )
-    {
-        ind.SetKey(key);
-    }
-    void SetFldKey( uint i, const char *fld )
-    {
-        ind.SetFldKey( i, fld );
+        auto Rfind = Find(key.c_str());
+        if(Rfind <0 )
+            return false;
+        return true;
     }
 
-    void MakeKey( unsigned char nRtwrk, char *pkey, ...);
-    size_t RecCount() const
+    /// Creates a new document in the collection from the current data.
+    /// \param key      - key of document
+    std::string addRecord(const std::string& key, size_t file_ndx)
     {
-        return ind.RecCount();
+        std::string rid = key;
+
+        return rid;
     }
+
+    /// Retrive one document from the collection
+    ///  \param key      - key of document
+    void readRecord(const std::string& key)
+    {
+        int Rnum = Find(key.c_str());
+        if(Rnum<0)  {
+            std::string msg = "Record ";
+            msg += std::string(key, 0, KeyLen());
+            msg += " not found!" ;
+            Error( getKeywd(), msg );
+        }
+        Get( Rnum );
+    }
+
+    /// Updates an existing document described by the key.
+    ///  \param key      - key of document
+    std::string updateRecord(const std::string& key)
+    {
+        std::string rid = key;
+        auto Rnum = Find(key.c_str());
+        Rep(Rnum);
+        return rid;
+    }
+
+    /// Removes document from the collection
+    /// \param key      - key of document
+    void deleteRecord(const std::string& key, bool err_if_no=true)
+    {
+        int Rnum = Find(key.c_str());
+        if(Rnum>=0)  {
+            Del(Rnum);
+        }
+        else if(err_if_no) {
+            std::string msg = "Record ";
+            msg += std::string(key, 0, KeyLen());
+            msg += " not found!" ;
+            Error( getKeywd(), msg );
+        }
+    }
+
+
+    uint AddRecordToFile1(const char *key, int file);
+    void Rep( int i);
+    int Find( const char *key);
+    int FindCurrent( const char *key);
+    RecStatus Rtest( const char *key, int mode = 1);
+    bool FindPart( const char *key_, uint field );
+    time_t GetTime(size_t record_ndx);               // time record number i
+    time_t Rtime() const
+    {
+        return crt;
+    }  // time current record
+
+    size_t GetKeyList(const char *keypat, TCStringArray& aKey);
+    size_t GetKeyListOld( const char *keypat,TCStringArray& aKey,TCIntArray& anR);
+    void addRecord(QWidget *window, const char *pkey);
+    void addRecord(QWidget *window, const char *pkey, int &fnum);
+
+    //--- Manipulation files of Data Base
+    const std::vector<std::string>& getOpenFiles(std::string &active) const
+    {
+        active = activeFileName();
+        return dbfiles_list.opened_files_list;
+    }
+    uint GetOpenFileNum( const char *secondName  )
+    {
+        std::string name = std::string(getKeywd())+"."+secondName;
+        return dbfiles_list.file_name_index(name);
+    }
+    void GetFileList(int mode, std::vector<std::string>& names,
+                     std::vector<int>& indeces,
+                     std::vector<int>& sel);
+    void OpenAllFiles( bool only_kernel = false );
+    void OpenOnlyFromList( TCStringArray& names );
+    bool SetNewOpenFileList( const TCStringArray& aFlNames );
+    void  MakeInNewProfile(const std::string& dir,
+                          const std::string& prfName, const std::string& f_name={});
+    void GetProfileFileKeywds( const char *name, TCStringArray& aFlkey )
+    {
+        aFlkey = dbfiles_list.file_keywds_according_name(name);
+    }
+    bool ifDefaultOpen() const
+    {
+        return dbfiles_list.check_special_open();
+    }
+    void RebildFile(const TCIntArray& indx);
+    void AddFileToList(const std::string &path)
+    {
+        dbfiles_list.open_new_file(nRT2, path, ind);
+    }
+    void AddOpenFile(const TCIntArray& indx);
+    size_t activeFileIndex() const
+    {
+        return dbfiles_list.active_file_index();
+    }
+
+    std::string activeFileName() const
+    {
+        return dbfiles_list.active_file_relpath();
+    }
+
+
+
+    //---Other
+    void addFiles(const std::string &folder, const std::vector<std::string> &path_list);
+    void removeFiles(const std::vector<std::string>& path_list);
+    void toJsonObject( QJsonObject& obj ) const;
+    std::string fromJsonObject( const QJsonObject& obj );
+    void toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const;
+    std::string fromJsonObjectNew( const QJsonObject& obj );
+    void RenameList( const char* newName,
+                    const char *oldName );
+
+
+
+    //--- Could be moved to db internal
     int GetObjFirst() const
     {
         return  frstOD;
@@ -355,74 +610,70 @@ public:
     }
 
 
+protected:
+    void Get( int i);
+    void Del( int i);
+
+
+    /// Object count written to the record header. The extended-settings objects of the project
+    /// record are not counted, so that older GEMSGUI versions still read the record.
+    unsigned char headerObjCount() const;
+
+
+    //--- check
+    int reclen( );
+    int putrec( RecEntry& re, GemDataStream& f, uint32_t crt );
+    //int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
+    int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
+    int getExtendedSettings( GemDataStream& f, int nRead, int StillLen );
+    void opfils();
+    int scanfile( uint nF, int& fPos, int& fLen,
+	    GemDataStream& inStream, GemDataStream& outStream);
+    void fromCFG(std::fstream& f);
+
+    std::string gen_new_project_file_name(const std::string& dir,
+                                          const std::string& project_name, const std::string& f_name) const;
+    void check_record_key(const char *pkey);
+    bool check_rt_name(const std::string &file_name) const;
+
+
+
+    // void RecKey( uint i, std::string& kbuf )
+    // {
+    //     ind.RecKey(i,kbuf);
+    // }
+
+
+
+    bool KeyTest( const char* key );
+
+    // void SetFldKey( uint i, const char *fld )
+    // {
+    //     ind.SetFldKey( i, fld );
+    // }
+
+
+
     //--- Information about of open file list
-    uint GetOpenFileNum( const char *secondName  );
-    bool SetNewOpenFileList( const TCStringArray& aFlNames );
-    void GetFileList(int mode, std::vector<std::string>& names,
-                     std::vector<int>& indeces,
-                     std::vector<int>& sel);
-    int numFiles() { return dbfiles_list.all_dbfiles.size(); }
-    void  MakeInNewProfile(const std::string& dir,
-                          const std::string& prfName, const std::string& f_name={});
-    void OpenOnlyFromList( TCStringArray& names );
-    void GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey );
-    bool ifDefaultOpen() const;
 
     //--- Manipulation Data Base
-    void Create1( uint nF );
-    void Open( bool type, FileStatus mode, const TCIntArray& indx);
-    void OpenAllFiles( bool only_kernel = false );
-    void Close();
+    //void Create1( uint nF );
 
-    //--- Manipulation files of Data Base
-    void RebildFile(const TCIntArray& indx);
-    void AddFileToList(const std::string &path);
-    void AddOpenFile(const TCIntArray& indx);
-
-    //--- Manipulation records
-    uint AddRecordToFile1(const char *key, int file);
-    void Rep( int i);
-    void Del( int i);
-    void Get( int i);
-    int Find( const char *key);
-    int FindCurrent( const char *key);
-    RecStatus Rtest( const char *key, int mode = 1);
-    bool FindPart( const char *key_, uint field );
     //  RecStatus TryRec( RecStatus rs, char *key, int mode = 1);
 
     //--- Manipulation list of records
-    size_t GetKeyList( const char *keypat,TCStringArray& aKey,TCIntArray& anR);
-    const TCStringArray& KeyList() const
-    {
-        return ind.KeyList();
-    }
-    const TCIntArray& RnList() const
-    {
-        return ind.RnList();
-    }
-    void RenameList( const char* newName,
-        const char *oldName );
 
-    void toJsonObject( QJsonObject& obj ) const;
-    std::string fromJsonObject( const QJsonObject& obj );
-    void toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const;
-    std::string fromJsonObjectNew( const QJsonObject& obj );
+    // const TCStringArray& KeyList() const
+    // {
+    //     return ind.KeyList();
+    // }
+    // const TCIntArray& RnList() const
+    // {
+    //     return ind.RnList();
+    // }
 
     std::string make_key_template(const std::vector<std::string>& first_fields) const;
-    void addRecord(QWidget *window, const char *pkey);
-    void addRecord(QWidget *window, const char *pkey, int &fnum);
 
-    size_t activeFileIndex() const
-    {
-        return dbfiles_list.last_used_file;
-    }
-
-    std::string activeFileName() const
-    {
-        return dbfiles_list.check_index(dbfiles_list.last_used_file) ?
-                   dbfiles_list[dbfiles_list.last_used_file]->relativePath() : "";
-    }
-    void addFiles(const std::string &folder, const std::vector<std::string> &path_list);
 };
 
 // Data Base container : rt
@@ -446,5 +697,4 @@ public:
 extern DataBaseList rt;
 
 #endif	// V_DBM_H_
-
 

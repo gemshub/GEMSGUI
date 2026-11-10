@@ -24,32 +24,175 @@
 #include "v_dbm.h"
 #include "GEMS3K/gdatastream.h"
 
-// read DB record head
-void
-RecHead::read(GemDataStream& is)
+
+TDBKeyNew::TDBKeyNew(unsigned char nflds, const unsigned char* rkfrm)
+    : fixed_keys_len(0)
 {
-    is.readArray (bgm, 2);
-    is >> nRT;
-    is >> Nobj;
-    is >> rlen;
-    is >> crt;
-    is.readArray (endm, 2);
+    ErrorIf(rkfrm == nullptr, "TDBKey", "Error: Configuration geometry source pointer is null.");
+    ErrorIf(nflds == 0 || nflds > MAXRKFRMSTR,
+            "TDBKey", "Error: Invalid number of fields in record key specification (1).");
+
+    flds_len.reserve(nflds);
+    flds_value.reserve(nflds);
+
+    for(size_t ii = 0; ii < nflds; ++ii) {
+        flds_len.push_back(rkfrm[ii]);
+        flds_value.push_back("*");
+        fixed_keys_len += rkfrm[ii];
+    }
 }
 
-// write DB record head
-void
-RecHead::write(GemDataStream& is)
+TDBKeyNew::TDBKeyNew(std::fstream& in_stream)
+    : fixed_keys_len(0)
 {
-    is.writeArray (bgm, 2);
-    is << nRT;
-    is << Nobj;
-    is << rlen;
-    is << crt;
-    is.writeArray (endm, 2);
+    unsigned int nflds = 0;
+    in_stream >> nflds;
+    ErrorIf(nflds == 0 || nflds > MAXRKFRMSTR,
+            "TDBKey", "Error: Invalid number of fields in record key specification (2).");
+
+    flds_len.reserve(nflds);
+    flds_value.reserve(nflds);
+
+    for(size_t ii = 0; ii < nflds; ++ii) {
+        unsigned int tmp = 0;
+        in_stream >> tmp;
+        ErrorIf(!in_stream.good(), "TDBKey", "Error: Stream corrupted while parsing key sub-field limits.");
+        flds_len.push_back(tmp);
+        flds_value.push_back("*");
+        fixed_keys_len += tmp;
+    }
 }
 
-// class TDBFile, TDBKey, TDBKeyList
+void TDBKeyNew::setKey(const std::string& new_key)
+{
+    if(new_key.empty() || new_key == ALLKEY) {
+        set_all(); // Скидає всі поля у стан маски "*"
+    }
+    else if(new_key.find(':') != std::string::npos) {
+        set_packed(new_key);
+    }
+    else {
+        set_unpacked(new_key);
+    }
+}
 
+void TDBKeyNew::setFieldKey(size_t ndx, const std::string& new_fld)
+{
+    if(ndx < flds_value.size()) {
+        std::string new_val = new_fld.substr(0, flds_len[ndx]);
+        strip(new_val);
+        flds_value[ndx] = std::move(new_val);
+    }
+}
+
+void TDBKeyNew::set_packed(const std::string& key)
+{
+    const std::string& pack_key = key;
+
+    size_t pbegin = 0;
+    size_t total_fields = fieldsInKey();
+    for(size_t ii = 0; ii < total_fields; ++ii) {
+        if (pbegin >= pack_key.size()) {
+            setFieldKey(ii, "");
+            continue;
+        }
+        size_t pend = pack_key.find(':', pbegin);
+        if(pend == std::string::npos) {
+            size_t token_len = std::min(pack_key.size() - pbegin, flds_len[ii]);
+            setFieldKey(ii, pack_key.substr(pbegin, token_len));
+            pbegin += token_len;
+        }
+        else {
+            size_t pure_len = pend - pbegin;
+            size_t token_len = std::min(pure_len, flds_len[ii]);
+            setFieldKey(ii, pack_key.substr(pbegin, token_len));
+            pbegin = pend + 1;
+        }
+    }
+}
+
+void TDBKeyNew::set_unpacked(const std::string& key)
+{
+    std::string unpack_key = key;
+    if(unpack_key.size() < fixed_keys_len) {
+        unpack_key.resize(fixed_keys_len, ' ');
+    }
+
+    size_t pbegin = 0;
+    size_t total_fields = fieldsInKey();
+    for(size_t ii = 0; ii < total_fields; ++ii) {
+        setFieldKey(ii, unpack_key.substr(pbegin, flds_len[ii]));
+        pbegin += flds_len[ii];
+    }
+}
+
+std::string TDBKeyNew::makeKey(uint8_t rt_current, std::initializer_list<KeyArg> args) const
+{
+    std::string compiled_key;
+
+    size_t total_fields = fieldsInKey();
+    compiled_key.reserve(fixed_keys_len+total_fields);
+    auto it = args.begin();
+
+    for(size_t i = 0; i < total_fields; ++i) {
+        if (it == args.end() || it->command == K_END) {
+            compiled_key += S_ANY;
+            compiled_key += ":";
+            continue;
+        }
+
+        size_t rkflen = flds_len[i];
+
+        switch(it->command) {
+        case K_EMP: compiled_key += S_EMPTY; break;
+        case K_ANY: compiled_key += S_ANY;   break;
+        case K_IMM:
+            compiled_key += it->str_value.substr(0, rkflen);
+            break;
+        case K_ACT:
+        default:  {
+            int32_t rts = (it->command == K_ACT) ? rt_current : it->command;
+            uint32_t nkf = it->field_index;
+
+            std::string fld_raw_key = rt[rts]->FldKey(nkf);
+            if (fld_raw_key.empty()) {
+                compiled_key += S_ANY;
+            }
+            else {
+                size_t read_limit = std::min(static_cast<size_t>(rt[rts]->FldLen(nkf)), rkflen);
+                std::string str(fld_raw_key, read_limit);
+                strip(str);
+                compiled_key += str;
+            }
+        }
+        break;
+        }
+        compiled_key += ":";
+        ++it;
+    }
+    return compiled_key;
+}
+
+std::string TDBKeyNew::packKey() const
+{
+    std::string pack_key;
+    size_t total_fields = fieldsInKey();
+    pack_key.reserve(fixed_keys_len+total_fields);
+    for(size_t ii=0; ii<total_fields; ++ii) {
+        pack_key.append(fieldKey(ii)+":");
+    }
+    return pack_key;
+}
+
+std::string TDBKeyNew::unpackKey() const
+{
+    std::string unpack_key;
+    unpack_key.reserve(fixed_keys_len);
+    for(size_t ii=0; ii<fieldsInKey(); ++ii) {
+        unpack_key.append(unpackFieldKey(ii));
+    }
+    return unpack_key;
+}
 
 
 //-------------------------------------------------------------
@@ -189,52 +332,6 @@ TDBKey::SetFldKey( uint i, const char *key )
     strncpy(uKey+rkInd[i], key, rkLen[i]);
 }
 
-/*
-// unpack key
-void
-TDBKey::unpack( char *key )
-{
-    int i;
-    unsigned ln;
-    char *sp, *sp1;
-
-    check();
-    if( strchr( key, ':' ) )  // key in packed form
-    {
-        strncpy( pKey, key, fullLen);
-        pKey[fullLen] = '\0';
-        memset( uKey, ' ', fullLen );
-        uKey[fullLen]= '\0';
-        for( i=0, sp=pKey; i<rkFlds; i++)
-        {
-            sp1 = strchr( sp, ':' );
-            if( !sp1 )
-            {
-                if( strncmp( sp, S_ANY, 1 ))
-                {
-                    ln = strlen( sp );
-                    ErrorIf( ln==0, key, "Invalid packed record key.");
-                }
-                else
-                { // end '*'
-                    ln = 1;
-                    strncpy( uKey+rkInd[i], sp, ln );
-                    break;
-                }
-            }
-            else  ln = ( sp1- sp);
-            ln = min( ln, (unsigned int)rkLen[i] );
-            strncpy( uKey+rkInd[i], sp, ln );
-            if( *(sp+ln) == ':' ) ln++;
-            sp += ln;
-        }
-        uKey[fullLen]= '\0';
-        strncpy( key, uKey, fullLen );
-    }
-}
-*/
-
-
 // unpack key
 void
 TDBKey::unpack( const char *key )
@@ -281,43 +378,6 @@ TDBKey::unpack( const char *key )
         //// strncpy( key, uKey, fullLen );
     }
 }
-
-/*
-// pack key
-void
-TDBKey::pack( char *key )
-{
-    int i, len, ln;
-    char *sp;
-
-    check();
-    if( !strchr( key, ':' ))  // key in unpacked form
-    {
-        strncpy( uKey, key, fullLen);
-        uKey[fullLen] ='\0';
-        memset( pKey, '\0', fullLen+1 );
-        for( i=0, len=0; i<rkFlds; i++)
-        {
-            sp = FldKey(i);
-            for( ln = rkLen[i]-1; ln>=0; ln--)
-                if(  *(sp+ln) != ' ' ) break;
-            ln++;
-            if( ln < rkLen[i] )
-            {
-                strncpy( pKey+len, sp, ln );
-                len += ln+1;
-                pKey[len-1]=':';
-            }
-            else
-            {
-                strncpy(pKey+len, sp, rkLen[i] );
-                len += rkLen[i];
-            }
-        }
-        strncpy( key, pKey, fullLen );
-    }
-}
-*/
 
 // pack key
 void
