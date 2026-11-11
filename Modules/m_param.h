@@ -153,15 +153,6 @@ protected:
     /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
     void CurrentSystem2GEMS3K( const std::string& filepath, bool brief_mode, bool add_mui = false );
 
-    /// Load&Calculate system and Generate MULTI, DATACH and DATABR files structure prepared from GEMS.
-    /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
-    /// \param key - loads system record before generate
-    /// \param calcMode - system calculate mode: 0 - no calculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
-    /// \param filepath - IPM work structure file path&name
-    /// \param brief_mode - Do not write data items that contain only default values
-    /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
-    void System2GEMS3K( const std::string key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui = false );
-
     /// For all processes in project generate MULTI, DATACH and DATABR files structure prepared from GEMS.
     /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
     /// \param savedSystems - system records key to be ignored
@@ -186,6 +177,15 @@ protected:
 public:
 
     static TProfil* pm;
+
+    /// Load&Calculate system and Generate MULTI, DATACH and DATABR files structure prepared from GEMS.
+    /// Prints files for separate coupled FMT-GEM programs that use GEMS3K module
+    /// \param key - loads system record before generate
+    /// \param calcMode - system calculate mode: 0 - no calculation; 2- NEED_GEM_SIA; 1-NEED_GEM_AIA
+    /// \param filepath - IPM work structure file path&name
+    /// \param brief_mode - Do not write data items that contain only default values
+    /// \param add_mui - Print internal indices in RMULTS to IPM file for reading into Gems back
+    void System2GEMS3K( const std::string key, int calcMode, const std::string& filepath, bool brief_mode, bool add_mui = false );
 
     bool userCancel1;
     bool stepWise1;
