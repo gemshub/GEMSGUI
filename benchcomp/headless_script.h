@@ -11,7 +11,7 @@ struct HeadlessScript
 {
     // New Modelling Project with the element dialog (Basis configuration, step 1 and 2)
     std::string projectKey;                 // key of the new project record, e.g. "TestTHERE:comment:"
-    std::string tdbFilter;                  // built-in database files taken: those named <type>.<tdbFilter>.*
+    std::string tdbFilter;                  // built-in database files taken: those named <type>.<filter>.* (comma-separated filters)
     std::vector<std::string> elements;      // independent components taken, by name (Na, Cl, ... N_atm)
 
     // Key answered to the next "enter a new record key" dialog of a module other than the project

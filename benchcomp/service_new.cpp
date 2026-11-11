@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <map>
+#include <sstream>
 #include <cctype>
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -201,8 +202,9 @@ bool vfExcludeFillEdit(QWidget*, const char* caption, TCStringArray& aICkeys, st
     return false;
 }
 
-// The element dialog with the answers of HeadlessScript: the built-in database files named <type>.<tdbFilter>.*
-// (the SDref and Const files of that database too), the listed elements, the default phase-type filters.
+// The element dialog with the answers of HeadlessScript: the built-in database files named <type>.<filter>.* for each
+// comma-separated filter of tdbFilter (the SDref and Const files of those databases too), the listed elements, the
+// default phase-type filters.
 bool vfElements(QWidget*, const char* prfName, elmWindowData& elm_data, setFiltersData& sf_data)
 {
     gui_logger->info("vfElements {}", prfName);
@@ -211,7 +213,14 @@ bool vfElements(QWidget*, const char* prfName, elmWindowData& elm_data, setFilte
         return false;
 
     // files of the built-in database that are selected (the dialog's openFilesSelection())
-    const std::string prefix = hs.tdbFilter.front() == '.' ? hs.tdbFilter.substr(1) : hs.tdbFilter;
+    std::vector<std::string> prefixes;
+    {
+        std::stringstream ss(hs.tdbFilter);
+        std::string item;
+        while (std::getline(ss, item, ','))
+            if (!item.empty())
+                prefixes.push_back(item.front() == '.' ? item.substr(1) : item);
+    }
     for (size_t i = RT_SDATA; i <= RT_PHASE; i++) {
         if (aMod[i]->IsSubModule())
             continue;
@@ -225,9 +234,13 @@ bool vfElements(QWidget*, const char* prfName, elmWindowData& elm_data, setFilte
             const auto sl = nm.rfind('/');
             const std::string fname = nm.substr(sl + 1);
             const std::string kw = nm.substr(0, sp);
-            const std::string tag = std::string(rt[i]->GetKeywd()) + "." + prefix;
-            if (fname.compare(0, tag.size(), tag) == 0)
-                selKeywds.push_back(kw);
+            for (const auto& prefix : prefixes) {
+                const std::string tag = std::string(rt[i]->GetKeywd()) + "." + prefix;
+                if (fname.compare(0, tag.size(), tag) == 0) {
+                    selKeywds.push_back(kw);
+                    break;
+                }
+            }
         }
         rt[i]->GetProfileFileKeywds(prfName, selKeywds);
         rt[i]->SetNewOpenFileList(selKeywds);
@@ -257,7 +270,10 @@ bool vfElements(QWidget*, const char* prfName, elmWindowData& elm_data, setFilte
     sf_data = setFiltersData();
     sf_data.ic_d.newIComps = elm_data.ICrds;
     elm_data.aSelNames = elm_data.getFlags();
-    elm_data.aSelNames += "<TDBfilters> = " + hs.tdbFilter + ";\n";
+    std::string filters;
+    for (const auto& prefix : prefixes)
+        filters += (filters.empty() ? "." : ",\n.") + prefix;
+    elm_data.aSelNames += "<TDBfilters> = " + filters + ";\n";
     TProfil::pm->useAqPhase = elm_data.flags[cbAqueous_];
     TProfil::pm->useGasPhase = elm_data.flags[cbGaseous_];
     return true;
