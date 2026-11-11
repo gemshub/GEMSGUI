@@ -344,11 +344,13 @@ bool ProgressDialog::requestCancel()
     ui->pClose->setEnabled( false );
     ui->pStepAccept->hide();
     ui->pResume->hide();
-    connect( calcThread, &QThread::finished, this, [this]() {
+    // one connection only, also when Cancel is pressed again
+    disconnect( cancelConnection );
+    cancelConnection = connect( calcThread, &QThread::finished, this, [this]() {
         calcThread->wait();
         ui->pClose->setEnabled( true );
         close();
-    }, Qt::UniqueConnection );
+    } );
     ThreadControl::wakeAll();
     return true;
 #else

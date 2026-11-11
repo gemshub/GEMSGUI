@@ -68,6 +68,7 @@ class ProgressDialog : public QDialog
     CalcThread* calcThread=nullptr;
     QTimer* timer=nullptr;
     clock_t t_start;
+    QMetaObject::Connection cancelConnection;  // calcThread finished -> close, set by requestCancel()
 #endif
 
     void switchToAccept(bool isAccept, bool stepwise);
