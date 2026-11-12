@@ -2,6 +2,7 @@
 //   gems-project -s <Resources dir> -u <user dir> new  <project key> <database filter> <components,comma separated>
 //   gems-project -s <Resources dir> -u <user dir> dump <project key> <out.json>
 //   gems-project -s <Resources dir> -u <user dir> replay <project key> <dump.json> <out.tsv> [solver mode aia|sia|aop|hop]
+//     an equilibrium in dump.json may also have "elements" (all entries of these elements on) and "offPhases" (phase names off)
 // "new" is the Project > New command with the element dialog (Basis configuration): database files named
 // <type>.<filter>.*, listed elements and default phase-type filters. Other commands are in the sections below.
 #include <chrono>
@@ -324,6 +325,25 @@ int replaySystems(const std::vector<std::string>& args)
                     if (nOkDc) syp->Pcl[k] = S_ON;
                     jj += mupS->Ll[k];
                 }
+            }
+            // "offPhases": phase names (without type and group code) switched off with all their species, every phase of that name
+            if (rec.contains("offPhases")) {
+                std::set<std::string> off;
+                for (const auto& pv : rec["offPhases"].toArray()) off.insert(pv.toString().toStdString());
+                std::set<std::string> found;
+                size_t jj = 0;
+                for (short k = 0; k < mupS->Fi; k++) {
+                    std::string nm(mupS->SF[k] + MAXSYMB + MAXPHSYMB, MAXPHNAME);
+                    strip(nm);
+                    if (off.count(nm)) {
+                        found.insert(nm);
+                        syp->Pcl[k] = S_OFF;
+                        for (short l = 0; l < mupS->Ll[k]; l++) syp->Dcl[jj + l] = S_OFF;
+                    }
+                    jj += mupS->Ll[k];
+                }
+                for (const auto& nm : off)
+                    if (!found.count(nm)) hs.skipped.push_back("offPhases " + nm);
             }
             countOn("after switches");
             // title and comment of the recipe dialog
