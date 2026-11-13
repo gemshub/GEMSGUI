@@ -19,6 +19,7 @@
 //
 
 #include "m_syseq.h"
+#include "m_phase.h"
 #include "visor.h"
 
 const char A_EMPTY='`';
@@ -702,6 +703,24 @@ void TSyst::SyTestSizes()
 //#define ms(i,j) (sy.MaSdj[(j)+(i)*D_F_CD_NP])
 // added 25.10.2004 by KD
 
+// A phase record whose comment (PhNote) starts with this tag is switched off (with its species) in a new system.
+// Phases without the tag, and databases that do not use it, stay on.
+static const char* PHASE_DEFAULT_OFF_TAG = "[off]";
+
+// true if the comment of the phase record with this key starts with PHASE_DEFAULT_OFF_TAG (case-insensitive)
+static bool phaseDefaultOff( TPhase* aPH, const char* phKey )
+{
+    time_t crt;
+    aPH->TryRecInp( phKey, crt, 0 );
+    const char* note = aPH->php->notes;
+    while( *note == ' ' )
+        note++;
+    for( const char* tag = PHASE_DEFAULT_OFF_TAG; *tag; tag++, note++ )
+        if( tolower( (unsigned char)*note ) != *tag )
+            return false;
+    return true;
+}
+
 // Set default informations to arrays
 void TSyst::setDefData()
 {
@@ -732,6 +751,24 @@ void TSyst::setDefData()
         sy.PbDC = S_ON;
     }
     memset( sy.Pcl, S_REM, mup->Fi );
+    {
+        TPhase* aPH = dynamic_cast<TPhase*>( aMod[RT_PHASE].get() );
+        aPH->ods_link( 0 );
+        long jj = 0;
+        for( k=0; k<mup->Fi; k++ )
+        {
+            if( phaseDefaultOff( aPH, mup->SF[k] ) )
+            {
+                sy.Pcl[k] = S_OFF;
+                gui_logger->info( "Phase switched off by the {} tag: {}", PHASE_DEFAULT_OFF_TAG,
+                                  std::string( mup->SF[k], MAXSYMB+MAXPHSYMB+MAXPHNAME ) );
+                if( sy.Dcl )
+                    for( j=0; j<mup->Ll[k]; j++ )
+                        sy.Dcl[jj+j] = S_OFF;
+            }
+            jj += mup->Ll[k];
+        }
+    }
     if( sy.PbPH != S_OFF )
     {
         //       memset( sy.Pcl, S_REM, mup->Fi );
