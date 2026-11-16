@@ -31,7 +31,7 @@ extern const char* MARKRECHEAD;
 extern const char MARKRKEY;
 extern const char* ALLKEY;
 
-class TDBKeyList;
+class TDBKeyMap;
 class TDataBase;
 
 #pragma pack(push, 1) // Enforces tight byte-packing to eliminate compiler-inserted structure padding
@@ -45,21 +45,26 @@ class TDataBase;
  */
 struct VDBhead
 {
-    char VerP[8];           ///< Database engine compatibility version string (exactly 8 bytes)
-    char PassWd[8];         ///< Database security access password encrypted string (exactly 8 bytes)
-    char Date[11];          ///< File creation or last modification date string (formatted as DD/MM/YYYY)
-    char Time[5];           ///< File creation or last modification time string (formatted as HH:MM)
-    int32_t nRT;            ///< Core operational mode code or identifier of the database chain
-    int32_t nRec;           ///< Total number of active physical records currently stored in the file
-    int32_t stacOver;       ///< Overflow indicator or allocation ceiling offset for the deleted blocks stack
-    int32_t FPosTRT;        ///< Physical stream offset marking the start of the records or relation tables payload
-    char isDel;             ///< Configuration flag: 1 if deleted records tracking is active, 0 otherwise
-    int32_t MinDrLen;       ///< Minimum payload size among all currently tracked recycled blocks
-    int32_t MaxDrLen;       ///< Maximum payload size among all currently tracked recycled blocks
-    int32_t curDr;          ///< Current count of active recycled slots occupied in the deleted blocks array
+    char VerP[8]{};         ///< Database engine compatibility version string (exactly 8 bytes)
+    char PassWd[8]{};       ///< Database security access password encrypted string (exactly 8 bytes)
+    char Date[11]{};        ///< File creation or last modification date string (formatted as DD/MM/YYYY)
+    char Time[5]{};         ///< File creation or last modification time string (formatted as HH:MM)
+    int32_t nRT = 0;        ///< Core operational mode code or identifier of the database chain
+    int32_t nRec = 0;       ///< Total number of active physical records currently stored in the file
+    int32_t stacOver = 0;   ///< Overflow indicator or allocation ceiling offset for the deleted blocks stack
+    int32_t FPosTRT = 0;    ///< Physical stream offset marking the start of the records or relation tables payload
+    char isDel = 0;         ///< Configuration flag: 1 if deleted records tracking is active, 0 otherwise
+    int32_t MinDrLen = 0;   ///< Minimum payload size among all currently tracked recycled blocks
+    int32_t MaxDrLen = 0;   ///< Maximum payload size among all currently tracked recycled blocks
+    int32_t curDr = 0;      ///< Current count of active recycled slots occupied in the deleted blocks array
+
+    /**
+     * @brief Default constructor that safely zero-initializes all header fields and character buffers.
+     */
+    VDBhead() = default;
 
     void read(GemDataStream& is);
-    void write(GemDataStream& os);
+    void write(GemDataStream& os) const;
 
     /**
      * @brief Computes the precise binary signature footprint size of the header layout on the disk.
@@ -82,11 +87,12 @@ struct VDBhead
  */
 struct DBentry
 {
-    int32_t pos;            ///< Absolute file stream pointer location of the recycled block
-    int32_t len;            ///< Full raw physical span of the recycled block (including its binary header)
+    int32_t pos=0;            ///< Absolute file stream pointer location of the recycled block
+    int32_t len=0;            ///< Full raw physical span of the recycled block (including its binary header)
 
     void read(GemDataStream& is);
-    void write(GemDataStream& os);
+    void write(GemDataStream& os) const;
+    DBentry() = default;
 
     /**
      * @brief Computes the binary size of a single recycling descriptor slot.
@@ -107,12 +113,13 @@ struct DBentry
  */
 struct RecEntry
 {
-    int32_t pos;            ///< Absolute physical stream address allocation within the database file
-    int32_t len;            ///< Pure payload chunk size (excluding the overhead of the record binary header)
-    unsigned char nFile;    ///< File identification tracking code within the global database manager list
+    int32_t pos=0;            ///< Absolute physical stream address allocation within the database file
+    int32_t len=0;            ///< Pure payload chunk size (excluding the overhead of the record binary header)
+    unsigned char nFile=0;    ///< File identification tracking code within the global database manager list
 
     void read(GemDataStream& is);
-    void write(GemDataStream& os);
+    void write(GemDataStream& os) const;
+    RecEntry() = default;
 
     /**
      * @brief Computes the serial footprint size of the in-memory coordinate entry block.
@@ -133,15 +140,16 @@ struct RecEntry
  */
 struct RecHead
 {
-    char bgm[2];          ///< Record beginning marker flags (exactly 2 bytes, e.g., MARKRECHEAD)
-    unsigned char nRT;    ///< Core record type or relation table identifier code
-    unsigned char Nobj;   ///< Total number of objects or data components packed inside this record
-    int32_t rlen;         ///< Full physical length of the record on disk, including this header (strictly 4 bytes)
-    uint32_t time_crt;    ///< Unsigned 32-bit creation/update timestamp (safe until the year 2106, strictly 4 bytes)
-    char endm[2];         ///< Record ending marker flags (exactly 2 bytes, e.g., MARKRECHEAD)
+    char bgm[2]{};          ///< Record beginning marker flags (exactly 2 bytes, e.g., MARKRECHEAD)
+    unsigned char nRT = 0;  ///< Core record type or relation table identifier code
+    unsigned char Nobj = 0; ///< Total number of objects or data components packed inside this record
+    int32_t rlen = 0;       ///< Full physical length of the record on disk, including this header (strictly 4 bytes)
+    uint32_t time_crt = 0;  ///< Unsigned 32-bit creation/update timestamp (safe until the year 2106, strictly 4 bytes)
+    char endm[2]{};         ///< Record ending marker flags (exactly 2 bytes, e.g., MARKRECHEAD)
 
     void read(GemDataStream& is);
-    void write(GemDataStream& os);
+    void write(GemDataStream& os) const;
+    RecHead() = default;
 
     /**
      * @brief Computes the precise binary footprint size of the record header layout on the disk.
@@ -218,9 +226,9 @@ public:
      * @param nRT    Records type.
      * @param isDel  Flag to enable or disable the deleted records tracking system (sfe).
      * @param nF     Database file index within the global file list.
-     * @param ind    Reference to the constant TDBKeyList containing the index structure to be saved.
+     * @param ind    Reference to the constant TDBKeyMap containing the index structure to be saved.
      */
-    void create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyList& ind);
+    void create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyMap& ind);
 
     /**
      * @brief High-level method to open a database file, load its indexes, and handle stack overflow.
@@ -231,12 +239,12 @@ public:
      * @param mode     The operational file status/mode to connect with (e.g., UPDATE_DBV, RDONLY_DBV).
      * @param rclose   If true, automatically closes the physical file immediately after loading indexes.
      * @param nF       Database file index within the global file list.
-     * @param ind      Output reference to populate with the loaded TDBKeyList.
+     * @param ind      Output reference to populate with the loaded TDBKeyMap.
      *
      * @return true If the database index/file structure requires a rebuild/compression.
      * @return false If the database file is healthy and ready for operations.
      */
-    bool open_file(FileStatus mode, bool rclose, size_t nF, TDBKeyList &ind);
+    bool open_file(FileStatus mode, bool rclose, size_t nF, TDBKeyMap &ind);
 
     /**
      * @brief Saves or updates a database record, manages deleted blocks allocation, and synchronizes indexes.
@@ -274,7 +282,7 @@ public:
      * @param rh       Pointer to the RecEntry structure holding the record's physical file position and geometry.
      * @param database Pointer to the active TDataBase context that executes the record unpacking logic.
      */
-    void read_record_from_file(RecEntry *rh, TDataBase *database);
+    void read_record_from_file(const RecEntry *rh, TDataBase *database);
 
     /**
      * @brief Reads the last update/creation timestamp of a specific record from the database file.
@@ -285,7 +293,7 @@ public:
      * @param ree Pointer to the RecEntry containing the physical file position of the target record.
      * @return time_t The timestamp (crt) stored inside the record header.
      */
-    time_t get_time(RecEntry *ree);
+    time_t get_time(const RecEntry *ree);
 
     /**
      * @brief Rebuilds (compresses/defragments) the database file by removing all deleted records.
@@ -301,13 +309,13 @@ public:
 
 protected:
     /// Current length of the physical file on the disk (free position append offset)
-    int FPosFree;
+    int32_t FPosFree;
 
-    /// Pointer to the allocated database file header structure
-    VDBhead *dh;
+    /// The database file header structure
+    VDBhead dh;
 
-    /// Pointer to the allocated deleted records stack array (reusable blocks list)
-    DBentry *sfe;
+    /// The deleted records stack array (reusable blocks list)
+    std::vector<DBentry> sfe;
 
     /**
      * @brief Current operational mode/status for the active database connection.
@@ -328,8 +336,6 @@ protected:
     // --- Internal Sanity Checks ---
     /// Validates if the sfe array memory is correctly allocated.
     void check_sfe();
-    /// Validates if the file header structure memory is correctly allocated.
-    void check_dh();
 
     // --- Header & Memory Synchronization ---
     /// Stamps the current system date and time into the file header structure.
@@ -359,9 +365,9 @@ protected:
     /// Cross-platform utility that returns the active file path with its extension changed to .ndx
     std::string index_file_name() const;
     /// Serializes and writes the complete active key indexing list table to the .ndx file.
-    void put_ndx(size_t nF, const TDBKeyList &ind);
+    void put_ndx(size_t nF, const TDBKeyMap &ind);
     /// De-serializes and reads the complete key indexing list table from the .ndx file.
-    void get_ndx(size_t nF, TDBKeyList &ind);
+    void get_ndx(size_t nF, TDBKeyMap &ind);
 };
 
 /**
@@ -407,7 +413,7 @@ public:
      * @brief Saves and writes current configuration to a file stream.
      * @param f Output file stream.
      */
-    void to_cfg(std::fstream& f);
+    void to_cfg(std::fstream& f) const;
 
     /// Check if the file index is within the valid vector range
     bool check_index(size_t file_ndx) const
@@ -473,7 +479,7 @@ public:
      * @param ind           Reference to the active key/index table structure to load records into.
      * @return std::vector<size_t> A list of indices of the files that requires a rebuild/compression.
      */
-    std::vector<int> open_files(int record_type, FileStatus mode, const std::vector<int> &nff, TDBKeyList &ind);
+    std::vector<int> open_files(int record_type, FileStatus mode, const std::vector<int> &nff, TDBKeyMap &ind);
 
     /**
      * @brief Add files with specified indices to the set of open files for a specific record type.
@@ -483,7 +489,7 @@ public:
      * @param ind           Reference to the key list structure for synchronization.
      * @return std::vector<size_t> A list of indices of the files that requires a rebuild/compression.
      */
-    std::vector<int> add_open_files(int record_type, const std::vector<int> &nff, TDBKeyList &ind);
+    std::vector<int> add_open_files(int record_type, const std::vector<int> &nff, TDBKeyMap &ind);
 
     /**
      * @brief Add a completely new database file to the system and open it for the specified record type.
@@ -493,10 +499,10 @@ public:
      * @param ind           Reference to the active key list to initialize new index allocations.
      * @return size_t       The newly allocated file index within the file manager.
      */
-    size_t open_new_file(int record_type, const std::string &path, TDBKeyList &ind);
+    size_t open_new_file(int record_type, const std::string &path, TDBKeyMap &ind);
 
     /// Remove specified files from the system and update indices.
-    void remove_files(const std::set<std::string>& target_names, TDBKeyList& ind);
+    void remove_files(const std::set<std::string>& target_names, TDBKeyMap& ind);
 
     /// Close all currently open database files.
     void close_all();
@@ -596,7 +602,7 @@ protected:
     size_t last_used_file=0;
 
     void reset_open_list();
-    void reset_index_list(TDBKeyList &ind);
+    void reset_index_list(TDBKeyMap &ind);
 };
 
 #endif  // V_DBFILE_H_

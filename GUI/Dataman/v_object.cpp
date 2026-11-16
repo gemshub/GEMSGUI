@@ -795,7 +795,7 @@ int  TObject::ofDB( GemDataStream& f )
 
 
 //Puts data object to backup format TXT file
-void TObject::toTXT( std::fstream& to )
+void TObject::toTXT(std::ostream& to)
 {
     int dimM, i, j;
 
@@ -857,7 +857,7 @@ void TObject::toTXT( std::fstream& to )
  }
 
 //Gets data object from backup format TXT file
-void TObject::ofTXT( std::fstream& of )
+void TObject::ofTXT(std::istream& of )
 {
     int rdimN, rdimM, i, j;
     int r_otype;

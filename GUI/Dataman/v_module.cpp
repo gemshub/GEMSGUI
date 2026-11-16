@@ -181,7 +181,7 @@ bool TCModule::MessageToSave()
 }
 
 // get key of record (existing key, new key or key temlate )
-std::string TCModule::GetKeyofRecord(const char *oldKey, const char *strTitle, int keyType)
+std::string TCModule::GetKeyofRecord(const std::string& oldKey, const std::string& strTitle, int keyType)
 {
     if(db==nullptr) {
         return "";
@@ -193,11 +193,12 @@ std::string TCModule::GetKeyofRecord(const char *oldKey, const char *strTitle, i
 
     std::string key;
 
-    if( oldKey == nullptr )
+    if( oldKey.empty() )
     {
         if(Filter.empty())
             key = ALLKEY;
-        else key = Filter;
+        else
+            key = Filter;
     }
     else key = oldKey;
 
@@ -208,13 +209,13 @@ std::string TCModule::GetKeyofRecord(const char *oldKey, const char *strTitle, i
     switch( keyType )
     {
     case KEY_OLD:
-        return vfKeyEdit(par/*window()*/, str.c_str(), nRT, key.c_str() );
+        return vfKeyEdit(par/*window()*/, str, nRT, key );
     case KEY_NEW:
     case KEY_NEW_SAVEAS:
-        return vfKeyTemplEdit(par/*window()*/, str.c_str(), nRT, key.c_str(), false );
+        return vfKeyTemplEdit(par/*window()*/, str, nRT, key, false );
     case KEY_TEMP:
     {
-        std::string stt = vfKeyTemplEdit(par/*window()*/, str.c_str(), nRT, key.c_str() );
+        std::string stt = vfKeyTemplEdit(par/*window()*/, str, nRT, key);
         if( !stt.empty())
             Filter = stt;
         return Filter;
@@ -292,7 +293,7 @@ bool TCModule::CheckEqText(const char *erscan, const char *msg)
 std::string TCModule::CurrentKey()
 {
     std::string str=db->PackKey();
-    if( str.find_first_of("*?" ) != std::string::npos
+    if( db->isPattern(str)
         || ( db->GetStatus()== UNDF_ && db->RecCount() &&
             nRT != RT_SDATA ))  // 09/11/2004 Sveta
         Error( GetName(), "E4 Cannot save under record key template, or record contents are not yet loaded!");
@@ -330,7 +331,7 @@ void TCModule::SaveM()
     }
 
     std::string str=db->PackKey();
-    if( str.find_first_of("*?" ) != std::string::npos
+    if( db->isPattern(str)
         || ( db->GetStatus() == UNDF_  && db->RecCount() &&  // 09/11/2004 Sveta
             nRT != RT_SDATA ) )   // oct 2005  Sveta
         Error( GetName(), "E1 Cannot save under record key template, or record contents are not yet loaded!");
@@ -343,9 +344,9 @@ void TCModule::SaveCurrentKey()
         return;
     }
     std::string str = db->PackKey();
-    if( str.find_first_of("*?" ) != std::string::npos )
+    if( db->isPattern(str) )
     {
-        str = GetKeyofRecord(str.c_str(), "Insert new record keyed ", KEY_NEW);
+        str = GetKeyofRecord(str, "Insert new record keyed ", KEY_NEW);
         if(  str.empty() )
             return ;
     }
@@ -359,15 +360,13 @@ void TCModule::SaveAs()
         Error( GetName(), "Please, do it in Database mode!");
 
     std::string str=db->PackKey();
-    int  Rnum;
 
 AGN:
-    str = GetKeyofRecord( str.c_str(),"Insert new record key ", KEY_NEW_SAVEAS );
+    str = GetKeyofRecord( str, "Insert new record key ", KEY_NEW_SAVEAS );
     if(  str.empty() )
         return;
 
-    Rnum = db->Find( str.c_str() );
-    if( Rnum>=0 ) // name of exist record
+    if(db->existsRecord(str)) // name of exist record
     {
 
         switch( vfQuestion3( window(), str,
@@ -402,7 +401,7 @@ void TCModule::DeleteCurrent()
         Error( GetName(), "Please, do it in Database mode!");
 
     std::string str=db->PackKey();
-    if( str.find_first_of("*?" ) != std::string::npos )
+    if( db->isPattern(str) )
         Error( GetName(), "Current record key not defined!");
     if( !vfQuestion(window(), GetName(),
                     "Confirm deletion of data record keyed "+str ))
@@ -428,13 +427,12 @@ void TCModule::RecInput(const char *key)
 void TCModule::RunFilter()
 {
     std::string str = Filter;
-    str = GetKeyofRecord( str.c_str(),
-                         "Please, give a record key template", KEY_TEMP );
+    str = GetKeyofRecord( str, "Please, give a record key template", KEY_TEMP );
     if(  str.empty() )
         return;
 
     TCStringArray aKey;
-    auto Nrec = db->GetKeyList( Filter.c_str(), aKey);
+    auto Nrec = db->getKeysList(Filter, aKey);
     if( Nrec >= 1 )
     {
         if( pVisor->ProfileMode )
@@ -495,13 +493,13 @@ void TCModule::RunDerive()
         ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
         Error( GetName(), "Please, do it in Database mode!");
 
-    std::string str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
+    std::string str = db->UnpackKey();
         //db->PackKey();
-    if( str.find_first_of("*?" ) != std::string::npos
+    if( db->isPattern(str)
         || ( db->GetStatus() == UNDF_ && nRT != RT_SDATA) )   // 09/11/2004 Sveta
         Error( GetName(), "E2 Cannot save under record key template, or record contents are not yet loaded!");
 
-    check_input( db->UnpackKey(), 0 );  // SD 18/11/2008
+    check_input( db->UnpackKey().c_str(), 0 );  // SD 18/11/2008
     RecBuild( str.c_str(), VF_REMAKE );
     set_string("Remake finished OK. "
                " It is recommended to re-calculate the data.");
@@ -521,11 +519,11 @@ void  TCModule::RunCalc()
         Error( GetName(), "Please, do it in Project mode!");
 
     std::string str=db->PackKey();
-    if( str.find_first_of("*?" ) != std::string::npos
+    if( db->isPattern(str)
         || ( db->GetStatus()== UNDF_ && db->RecCount()
             && nRT != RT_SDATA ))  // 09/11/2004 Sveta
         Error( GetName(), "E3 Cannot save under record key template, or record contents are not yet loaded!");
-    str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
+    str = db->UnpackKey();
     check_input( str.c_str() );
     set_string("Calculation... ");
     clock_t t_start11, t_end11;
@@ -550,21 +548,19 @@ void TCModule::RunNew()
 
     std::string dlgName = "Please, set a new record key ";
     std::string str = db->PackKey();
-    int  Rnum;
 
 AGN:
-    str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
+    str = GetKeyofRecord( str, dlgName, KEY_NEW);
     if(  str.empty() )
         return;
 
-    Rnum = db->Find( str.c_str() );
-    if( Rnum>=0 ) // name of exist record
+    if(db->existsRecord(str)) // name of exist record
     {
         dlgName = "This record already exists! Please, enter another name.";
         goto AGN;
     } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
 
-    str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
+    str = db->UnpackKey();
     check_input( str.c_str(), 0 ); // SD 18/11/2008
     RecBuild( str. c_str(), VF_REMAKE );
     set_string("Remake of the new record finished OK. "
@@ -578,22 +574,19 @@ void TCModule::RunCreate()
 
     std::string dlgName = "Please, set a new record key ";
     std::string str = db->PackKey();
-    int  Rnum;
-
 AGN:
-    str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
+    str = GetKeyofRecord( str, dlgName, KEY_NEW);
     if(  str.empty() )
         return;
 
-    Rnum = db->Find( str.c_str() );
-    if( Rnum>=0 ) // name of exist record
+    if(db->existsRecord(str)) // name of exist record
     {
         dlgName = "This record already exists! Please, enter another name.";
         goto AGN;
     } // ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
 
 
-    str = char_array_to_string( db->UnpackKey(), db->KeyLen() );
+    str = db->UnpackKey();
     check_input( str.c_str() , 0 ); // SD 18/11/2008
     RecBuild( str.c_str(), VF_CLEARALL );
     set_string("Remake of the new record finished OK. "
@@ -614,7 +607,7 @@ void TCModule::TryRecInp(const char *_key, time_t& time_s, int q, bool save)
             return;
     }
 
-    RecStatus iRet = db->Rtest( key.c_str(), 1 );
+    RecStatus iRet = db->Rtest(key, 1);
     std::string msg;
 
     switch( iRet )
@@ -646,15 +639,14 @@ void TCModule::TryRecInp(const char *_key, time_t& time_s, int q, bool save)
             Error( GetName(), "Record creation rejected!");
         std::string str = key;
 
-        if( str.find_first_of("*?" ) != std::string::npos)  // pattern
-            str = GetKeyofRecord( str.c_str(),
+        if( db->isPattern(str))  // pattern
+            str = GetKeyofRecord( str,
                                  "Please, set a new record key ", KEY_NEW);
         if(  str.empty() )
             Error( GetName(), "Record creation rejected!");
-        int  Rnum = db->Find( str.c_str() );
-        ErrorIf( Rnum>=0, GetName(), "A record with such key already exists!");
+        ErrorIf(db->existsRecord(str), GetName(), "A record with such key already exists!");
         pVisor->OpenModule(pVisor->window(), nRT);
-        std::string str1 = char_array_to_string( db->UnpackKey(), db->KeyLen() );
+        std::string str1 = db->UnpackKey();
         check_input( str1.c_str() );
         RecBuild( str.c_str() );
         set_string("Remake of the new record finished OK. "
@@ -687,7 +679,7 @@ void TCModule::RecordLoadinProfile( const char *key )
     if( key==nullptr )
     {
         str = getFilter();
-        str = GetKeyofRecord( str.c_str(), "Please, select a record key ", KEY_OLD );
+        str = GetKeyofRecord( str, "Please, select a record key ", KEY_OLD );
     }
     else str=std::string(key);
     // get record
@@ -705,15 +697,13 @@ void TCModule::NewinProfile()
     // Get record key
     std::string str = makeKeyFilter();
     std::string dlgName = "Please, set a new record key ";
-    int  Rnum;
 
 AGN:
-    str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
+    str = GetKeyofRecord( str, dlgName, KEY_NEW);
     if(  str.empty() )
         return;
 
-    Rnum = db->Find( str.c_str() );
-    if( Rnum>=0 ) // name of exist record
+    if( db->existsRecord(str)) // name of exist record
     {
         dlgName = "This record already exists! Please, enter another name.";
         goto AGN;
@@ -733,15 +723,13 @@ void TCModule::CreateinProfile()
     // Get record key
     std::string str = makeKeyFilter();
     std::string dlgName = "Please, set a new record key ";
-    int  Rnum;
 
 AGN:
-    str = GetKeyofRecord( str.c_str(), dlgName.c_str(), KEY_NEW);
+    str = GetKeyofRecord( str, dlgName, KEY_NEW);
     if(  str.empty() )
         return;
 
-    Rnum = db->Find( str.c_str() );
-    if( Rnum>=0 ) // name of exist record
+    if(db->existsRecord(str)) // name of exist record
     {
         dlgName = "This record already exists! Please, enter another name.";
         goto AGN;
@@ -823,10 +811,10 @@ void TCModule::RecordPrint(const char* key)
         sd_key += "*";
         sd_key += ":";
     }
-    if( sd_key.find_first_of("*?" ) != std::string::npos )
+    if(db->isPattern(sd_key))
     {
         sd_key = aMod[RT_SDATA]->GetKeyofRecord(
-            sd_key.c_str(), "Please, select a print script", KEY_OLD);
+            sd_key, "Please, select a print script", KEY_OLD);
     }
 
     if( sd_key.empty() )
@@ -908,8 +896,8 @@ void TCModule::ReOpenFileList()
                         "No database files selected to open! Continue?" ))
             return;
 
-    db->Close();
-    db->Open( true, UPDATE_DBV, arr );
+    db->closeDatabase();
+    db->openDatabase(UPDATE_DBV, arr );
     db->SetKey( ALLKEY );
     //       SetString("Command finished OK");
     dyn_set();
@@ -937,15 +925,13 @@ int TCModule::AddRecordTest(const char* key, int& fnum )
     if(db==nullptr) {
         return 0;
     }
-
-    int  Rnum;
     std::string str = key;
 
-AGN: Rnum = db->Find( str.c_str() );
-    if( Rnum>=0 ) // name of exist record
+AGN:
+    if(db->existsRecord(str)) // name of exist record
     {
         str=db->PackKey();
-        str = GetKeyofRecord( str.c_str(),
+        str = GetKeyofRecord( str,
                              "This key record already exists! Replace please?", KEY_NEW );
         if(str.empty())
             return 0;
@@ -1002,10 +988,7 @@ void TCModule::RecToTXT()
     for(size_t i=0; i<aKey.size(); i++ )
     {
         db->readRecord(aKey[i]);
-        aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>(aKey[i].c_str())) );
-        aObj[o_reckey]->toTXT(f);
-        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
-            aObj[no]->toTXT(f);
+        db->recordToTxt(aKey[i], f);
     }
 
     ErrorIf( !f.good() , GetName(), "Filewrite error");
@@ -1017,8 +1000,7 @@ void TCModule::RecToTXT()
 void TCModule::RecOfTXT()
 {
     char buf[150];
-
-    std::string s = std::string( GetName() )+" : Please, select file with unloaded records";
+    std::string key, s = std::string( GetName() )+" : Please, select file with unloaded records";
     std::string filename;
     if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
@@ -1029,16 +1011,10 @@ void TCModule::RecOfTXT()
     int quest_reply = VF_UNDEF;
     while( !f.eof() )
     {
-        aObj[o_reckey]->SetPtr(buf);
-        aObj[o_reckey]->ofTXT(f);
-        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
-            aObj[no]->ofTXT(f);
-        buf[db->KeyLen()] = '\0';
-
-        if(db->saveRecordQuestion(window(), std::string(buf), quest_reply, fnum)) {
+        auto key = db->recordFromTxt(f);
+        if(db->saveRecordQuestion(window(), key, quest_reply, fnum)) {
             break; // VF_CANCEL
         }
-        s = std::string( buf );
         do
         {
             f.get(buf[0]);
@@ -1053,7 +1029,7 @@ void TCModule::RecOfTXT()
     {
         std::string str = "File read error! \n";
         str += "Last good record :";
-        str += s;
+        str += key;
         Error( GetName(), str );
     }
     dyn_set();
@@ -1068,7 +1044,7 @@ void TCModule::RecExport()
     sd_key += "*";
     sd_key += ":";
     sd_key = aMod[RT_SDATA]->GetKeyofRecord(
-        sd_key.c_str(), "Select key of escript format", KEY_OLD);
+        sd_key, "Select key of escript format", KEY_OLD);
     if( sd_key.empty() )
         return;
     aMod[RT_SDATA]->RecInput( sd_key.c_str() );
@@ -1126,7 +1102,7 @@ void TCModule::RecImport()
     sd_key += "*";
     sd_key += ":";
     sd_key = aMod[RT_SDATA]->GetKeyofRecord(
-        sd_key.c_str(), "Select key of iscript format", KEY_OLD);
+        sd_key, "Select key of iscript format", KEY_OLD);
     if( sd_key.empty() )
         return;
     aMod[RT_SDATA]->RecInput( sd_key.c_str() );
@@ -1182,7 +1158,7 @@ void TCModule::RecListToJSON(const char *pattern, const std::string& filename, b
 {
     TCStringArray aKey;
     if( all_records ) {
-        db->GetKeyList(pattern, aKey);
+        db->getKeysList(pattern, aKey);
     }
     else {
         aKey = vfMultiKeys(window(), "Please, mark records to be unloaded to JSON", nRT, pattern);
@@ -1288,7 +1264,6 @@ void TCModule::DelList()
 // (ever used???)  Has to be re-implemented, indeed !
 void TCModule::Transfer()
 {
-    int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
     TCStringArray aKey = vfMultiKeys( window(),
@@ -1315,7 +1290,6 @@ void TCModule::Transfer()
 // (Sveta 15/06/01)
 void TCModule::CopyRecordsList(bool if_rename)
 {
-    int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
     std::string str;
 
@@ -1362,7 +1336,7 @@ void TCModule::CopyRecordsList(bool if_rename)
         if( rn_type ==  1)
         {
             str= aKey[i];
-            str = GetKeyofRecord( str.c_str(),
+            str = GetKeyofRecord( str,
                                  "Insert new record key", KEY_NEW_SAVEAS );
             if(  str.empty() )
                 return ;

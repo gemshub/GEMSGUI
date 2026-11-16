@@ -20,9 +20,18 @@
 #include <cstdlib>
 #include <cstdarg>
 #include <ctime>
-#include "v_mod.h"
+#include <string_view>
 #include "v_dbm.h"
+#include "v_mod.h"
+#include "m_param.h"
 #include "GEMS3K/gdatastream.h"
+
+static const char MARKEXTOBJ[] = "PAX1";   // precedes the extended-settings objects of a project record
+const char* ALLKEY  = "*";
+const char* MARKRECDEL = "##";
+const char* MARKRECHEAD = "$$";
+const char MARKRKEY  = '#';
+const int	MAXRKFRMSTR = 20;  // max fields in key
 
 
 TDBKeyNew::TDBKeyNew(unsigned char nflds, const unsigned char* rkfrm)
@@ -66,7 +75,7 @@ TDBKeyNew::TDBKeyNew(std::fstream& in_stream)
 void TDBKeyNew::setKey(const std::string& new_key)
 {
     if(new_key.empty() || new_key == ALLKEY) {
-        set_all(); // Скидає всі поля у стан маски "*"
+        set_all();
     }
     else if(new_key.find(':') != std::string::npos) {
         set_packed(new_key);
@@ -194,612 +203,453 @@ std::string TDBKeyNew::unpackKey() const
     return unpack_key;
 }
 
-
 //-------------------------------------------------------------
-// TDBKey  - working with DB record key
-//-------------------------------------------------------------
-
-// default configuration
-TDBKey::TDBKey( unsigned char nRkflds, const unsigned char* rkfrm ):
-        rkFlds( nRkflds )
-{
-    ErrorIf( rkFlds<=0 || rkFlds>MAXRKFRMSTR,
-             "TDBKey", "Error: Invalid number of fields in record key (1).");
-    rkLen = new unsigned char[rkFlds];
-    rkInd = new unsigned char[rkFlds];
-    int i;
-    for( fullLen=0, i=0; i<rkFlds; i++)
-    {
-        rkLen[i] = rkfrm[i];
-        if( i==0 )
-            rkInd[i]=0;
-        else
-            rkInd[i] = (rkInd[i-1] + rkLen[i-1]);
-        fullLen += rkLen[i];
-    }
-    pKey = new char[fullLen+rkFlds+1+10];
-    uKey = new char[fullLen+1+10];
-    SetKey( ALLKEY);
-    //pKey[0]='*'; pKey[1]='\0';
-    //strcpy( uKey, pKey );
-}
-
-//configuration from cfg file
-
-TDBKey::TDBKey(std::fstream& in_stream)
-{
-//    f.read( (char*)&rkFlds, sizeof(unsigned char) );
-    int ii;
-    // SD 23/12/2009 unsigned char tmp;
-    unsigned int tmp;
-
-    in_stream >> tmp;
-    rkFlds = tmp;
-    ErrorIf( rkFlds<=0 || rkFlds > MAXRKFRMSTR,
-             "TDBKey", "Error: Invalid number of fields in record key (2).");
-    rkLen = new unsigned char[rkFlds];
-    rkInd = new unsigned char[rkFlds];
-//    f.read( (char*)rkLen, rkFlds*sizeof(unsigned char) );
-   for( ii=0; ii<rkFlds; ii++)
-   {
-     in_stream >> tmp;
-     rkLen[ii] = tmp;
-   }
-
-   ErrorIf( !in_stream.good(), "TDBKey",
-             "Error reading TDBKey from configurator.");
-   for( fullLen=0, ii=0; ii<rkFlds; ii++)
-   {
-        if( ii == 0 )
-            rkInd[ii] = 0;
-        else
-            rkInd[ii] = (rkInd[ii-1]+rkLen[ii-1]);
-        fullLen += rkLen[ii];
-    }
-    pKey = new char[fullLen+rkFlds+1+10];
-    uKey = new char[fullLen+1+10];
-    SetKey( ALLKEY);
-    //  pKey[0]='*'; pKey[1]='\0';
-    //  strcpy( uKey, pKey );
-}
-
-// copy struct
-
-TDBKey::TDBKey( const TDBKey& dbKey ):
-        rkFlds( dbKey.rkFlds ),fullLen( dbKey.fullLen)
-{
-    rkLen = new unsigned char[rkFlds];
-    rkInd = new unsigned char[rkFlds];
-    pKey = new char[fullLen+rkFlds+1+10];
-    uKey = new char[fullLen+1+10];
-    for(int i=0; i<rkFlds; i++)
-    {
-        rkLen[i] = dbKey.rkLen[i];
-        rkInd[i] = dbKey.rkInd[i];
-    }
-    strncpy(pKey, dbKey.pKey, fullLen+rkFlds+1);
-    strncpy(uKey, dbKey.uKey, fullLen+1);
-}
-
-TDBKey::~TDBKey()
-{
-    delete[] rkLen;
-    delete[] rkInd;
-    delete[] pKey;
-    delete[] uKey;
-}
-
-void
-TDBKey::check()
-{
-    ErrorIf( pKey==nullptr || uKey==nullptr || rkLen==nullptr || rkInd==nullptr,
-             "TDBkey", "No memory for key struct.");
-}
-
-
-// Putting DB record key key to internal structure
-// in pack and unpack forms
-void
-TDBKey::SetKey( const char *key )
-{
-    ErrorIf( key==nullptr,"TDBKey", "No key buf.");
-
-    //vvstr sp(fullLen+rkFlds+1);
-    std::string sp;
-    if( strncmp( key, ALLKEY, fullLen )==0 )
-    {
-        std::string st;
-        for(int i=0; i<rkFlds; i++)
-            st += "*:";
-        sp = std::string( st, 0, fullLen);
-    }
-    else
-        sp = char_array_to_string( key, fullLen);
-
-    if( strchr( sp.c_str(), ':' ))  // key in packed form
-        unpack( sp.c_str() );
-    else
-        pack( sp.c_str() );
- }
-
-// Change i-th field of DBkey to key
-void
-TDBKey::SetFldKey( uint i, const char *key )
-{
-    ErrorIf( i>= rkFlds, key, "Invalid key field number");
-
-    memset(uKey+rkInd[i], ' ' , rkLen[i]);
-    strncpy(uKey+rkInd[i], key, rkLen[i]);
-}
-
-// unpack key
-void
-TDBKey::unpack( const char *key )
-{
-    int i;
-    size_t ln;
-    char *sp, *sp1;
-
-    check();
-    if( strchr( key, ':' ) )  // key in packed form
-    {
-        strncpy( pKey, key, fullLen);
-        pKey[fullLen] = '\0';
-        memset( uKey, ' ', fullLen );
-        uKey[fullLen]= '\0';
-        for( i=0, sp=pKey; i<rkFlds; i++)
-        {
-            sp1 = strchr( sp, ':' );
-            if( !sp1 )
-            {
-                if( strncmp( sp, S_ANY, 1 ))
-                {
-                    ln = strlen( sp );
-                    ErrorIf( ln==0, key, "Invalid packed record key.");
-                }
-                else
-                { // end '*'
-                    ln = 1;
-                    strncpy( uKey+rkInd[i], sp, ln );
-                    break;
-                }
-            }
-            else  ln = ( sp1- sp);
-            ln = std::min<size_t>( ln, rkLen[i] );
-            strncpy( uKey+rkInd[i], sp, ln );
-            if( *(sp+ln) == ':' )
-                  ln++;
-            else
-              if( *(sp+ln+1) == ':' )
-                  ln+=2;
-            sp += ln;
-        }
-        uKey[fullLen]= '\0';
-        //// strncpy( key, uKey, fullLen );
-    }
-}
-
-// pack key
-void
-TDBKey::pack( const char *key )
-{
-    uint i;
-    int len, ln;
-    char *sp;
-
-    check();
-    if( !strchr( key, ':' ))  // key in unpacked form
-    {
-        strncpy( uKey, key, fullLen);
-        uKey[fullLen] ='\0';
-        memset( pKey, '\0', fullLen+1 );
-        for( i=0, len=0; i<rkFlds; i++)
-        {
-            sp = FldKey(i);
-            for( ln = rkLen[i]-1; ln>=0; ln--)
-                if(  *(sp+ln) != ' ' ) break;
-            ln++;
-            if( ln < rkLen[i] )
-            {
-                strncpy( pKey+len, sp, ln );
-                len += ln+1;
-                pKey[len-1]=':';
-            }
-            else
-            {
-                strncpy(pKey+len, sp, rkLen[i] );
-                len += rkLen[i]+1;
-                pKey[len-1]=':';
-            }
-        }
-       //// strncpy( key, pKey, fullLen );
-    }
-}
-
-// make packed key to seach.
-void
-TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
-{
-    va_list Marker;
-    unsigned char rkflen;
-    uint i, nkf;
-    int rts;
-    char /**sp,*/ *imf;
-
-    ErrorIf( pkey==nullptr,"MakeKey", "No key buf to make key.");
-    *pkey = 0;
-    va_start( Marker, pkey );
-    for( i=0; i<ind.KeyNumFlds(); i++ )
-    {
-        //sp= pkey+strlen(pkey);
-        rkflen = ind.FldLen(i);
-        rts = va_arg( Marker, int );
-        switch( rts )
-        {
-        case K_END:
-            strcat( pkey, S_ANY );
-            va_end( Marker );
-            return;
-        case K_EMP:  // field "`"
-            strcat( pkey, S_EMPTY );
-            break;
-        case K_ANY:  // field  "*"
-            strcat( pkey, S_ANY );
-            break;
-        case K_IMM:  // field in string
-            imf = va_arg( Marker, char * );
-            strncat(pkey, imf, rkflen);
-            break;
-        case K_ACT:  // get field from  PRIE request
-            rts = nRTwrk;
-            [[fallthrough]];
-        default:     // get field from enathe chain key
-            nkf = va_arg( Marker, uint );
-            if( !*rt[rts]->FldKey( nkf ))
-                strcat( pkey, S_ANY );
-            else
-            {
-                std::string str=  char_array_to_string( rt[rts]->FldKey( nkf ), std::min( rt[rts]->FldLen(nkf), rkflen ));
-                StripLine( str );
-                strncat( pkey, str.c_str(), rkflen );
-            }
-            break;
-        }
-//04/09/01 ????        if( strlen(sp) < rkflen )
-            strcat( pkey, ":" );
-    }
-    va_end( Marker );
-}
-
-//-------------------------------------------------------------
-// TDBKeyList - working with DB keys list
+// TDBKeyMap - working with DB keys list
 //-------------------------------------------------------------
 
-// default configuration
-TDBKeyList::TDBKeyList( unsigned char nRkflds, const unsigned char* rkfrm ):
-        TDBKey( nRkflds, rkfrm )
+void  TDBKeyMap::initnew()
 {
-    init();
+    key_record_map.clear();
+    current_key.setKey(ALLKEY);
 }
 
-//configuration from cfg file
-TDBKeyList::TDBKeyList(std::fstream& f):
-        TDBKey(f)
+void TDBKeyMap::delfile(size_t nF)
 {
-    init();
+    std::erase_if(key_record_map, [nF](const auto& item) {
+        return static_cast<size_t>(item.second.nFile) == nF;
+    });
 }
 
-void
-TDBKeyList::check_ndx()
+bool TDBKeyMap::delkey(const std::string& unpack_key)
 {
-    ErrorIf( ndx[0]==nullptr || re==nullptr ,"TDBMKeyList",
-             "No memory for list of indexes.");
+    return key_record_map.erase(unpack_key)>0;
 }
 
-void
-TDBKeyList::check_i(uint i)
+void TDBKeyMap::putkey(const std::string& unpack_key, const RecEntry& entry)
 {
-    if( i>recInDB )
-        Error( "TDBMKeyList","Invalid record index in the chain.");
+    key_record_map.insert_or_assign(unpack_key, entry);
 }
 
-//initialization of DB keys list state
-void
-TDBKeyList::init()
+bool TDBKeyMap::haskey(const std::string& unpack_key) const
 {
-    nI = -1;
-    recInDB = 0;
-    nBuf = IND_PLUS;
-    size_t k;
+    return key_record_map.contains(unpack_key);
+}
 
-    for(uint i=0; i<KeyNumFlds(); i++)
-    {
-        k = nBuf * FldLen(i);
-        ndx[i] = new char[k];
+const RecEntry* TDBKeyMap::findkey(const std::string& unpack_key) const
+{
+    auto it = key_record_map.find(unpack_key);
+    if (it != key_record_map.end()) {
+        return &(it->second);
     }
-    re = new RecEntry[nBuf];
+    return nullptr;
 }
 
-// reset index key list
-void
-TDBKeyList::initnew()
+RecEntry* TDBKeyMap::findkey(const std::string& unpack_key)
 {
-    nI = -1;
-    recInDB = 0;
-    for(uint j=0; j<KeyNumFlds(); j++)
-        memset( ndx[j], 0, FldLen(j)*nBuf*sizeof(char) );
-    memset( re, 0, nBuf*sizeof(RecEntry) );
-    aKey.clear();
-    anR.clear();
-}
-
-// delete the keys of records file nF
-void
-TDBKeyList::delfile( uint nF )
-{
-    uint i=0;
-    while( i < recInDB )
-    {
-        if( re[i].nFile == nF )
-            delndx( i );
-        else i++;
+    auto it = key_record_map.find(unpack_key);
+    if (it != key_record_map.end()) {
+        return &(it->second);
     }
+    return nullptr;
 }
 
-TDBKeyList::~TDBKeyList()
+void TDBKeyMap::save_keys_ndxs(size_t nF, GemDataStream& f, const std::string& file_name) const
 {
-    for(int i=0; i<KeyNumFlds(); i++)
-        delete[] ndx[i];
-    delete[] re;
-}
-
-RecEntry*
-TDBKeyList::RecPosit(uint i)
-{
-    return &re[i];
-}
-
-// compare key i record and work key
-int
-TDBKeyList::keycom( uint i )
-{
-    int l = 0;
-    for( uint j=0; j<KeyNumFlds(); j++)
-    {
-        l = memcmp( FldKey(j), RecKeyFld( i,j ), FldLen(j) );
-        if( l )
-           return l;
-    }
-    return l;
-}
-
-//Add new key of record in list. Realloc memory if nessasery.
-uint
-TDBKeyList::addndx( uint nF, int len, const char *key )
-{
-    int i, l;
-    uint j;
-
-    SetKey( key );
-    if( recInDB >= nBuf ) // realloc buf
-    {
-        nBuf += IND_PLUS;
-        for( j=0; j<KeyNumFlds(); j++)
-        {
-            char* new_sp = new char[nBuf*FldLen(j)];
-            memcpy(new_sp, ndx[j], (nBuf-IND_PLUS)*FldLen(j));
-            delete[] ndx[j];
-            ndx[j] = new_sp;
-        }
-        RecEntry* new_sp = new RecEntry[nBuf];
-        memcpy(new_sp, re, (nBuf-IND_PLUS)*sizeof(RecEntry));
-        delete[] re;
-        re = new_sp;
-    }
-    i = recInDB;
-    if( i )  l = keycom( i-1 );
-    else l = 1;
-    while( l < 0 )
-    {
-        i--;
-        if(!i) break;
-        l = keycom( i-1 );
-    }
-    if(l==0) {
-       Error( key, "Two records with the same key (AddNewKey).");
-    }
-    uint ii=i;
-    for( j=0; j<KeyNumFlds(); j++)
-        memmove( RecKeyFld(ii+1,j), RecKeyFld(ii,j),
-                 FldLen(j)*(recInDB-ii)*sizeof(char) );
-    memmove( re+ii+1, re+ii, (recInDB-ii)*sizeof(RecEntry) );
-    for( j=0; j<KeyNumFlds(); j++)
-        memcpy( RecKeyFld(ii,j), FldKey(j), FldLen(j) );
-    re[i].len = len;
-    re[i].nFile = nF;   //warning
-    nI = i;
-    recInDB++;
-    return ii;
-}
-
-// Delete i-th record from list
-void
-TDBKeyList::delndx( uint i )
-{
-    uint j;
-
-    check_i(i);
-    for( j=0; j<KeyNumFlds(); j++)
-        memmove( RecKeyFld(i,j), RecKeyFld(i+1,j),
-                 FldLen(j)*(recInDB-i)*sizeof(char) );
-    memmove( re+i, re+i+1, (recInDB-i)*sizeof(RecEntry) );
-    recInDB--;
-    if( i == recInDB )  i--;
-    nI = i;
-}
-
-// find record in list
-int
-TDBKeyList::findx( const char *key )
-{
-    int l;
-
-    SetKey( key );
-    if( recInDB <= 0 ) return -1;
-    for(uint i=0; i< recInDB; i++ )
-    {
-        l = keycom(i);
-        if( l < 0 ) // No record
-            break;
-        if( l == 0 )
-        {
-            nI = i;
-            return nI;
+    const size_t key_len = current_key.length();
+    for(const auto& [key, entry] : key_record_map) {
+        if(static_cast<size_t>(entry.nFile) == nF) {
+            std::string fixed_buf = key;
+            fixed_buf.resize(key_len, ' ');
+            f.writeArray(fixed_buf.data(), key_len);
+            entry.write(f);
         }
     }
-    return -1;
+    ErrorIf(!f.good(), file_name, "Index file write error: Failed to flush key entries to disk.");
 }
 
-//Set key i - record to work key structure
-void
-TDBKeyList::PutKey( uint i)
+void TDBKeyMap::get_keys_ndxs(size_t nF, size_t nRec, GemDataStream& f, const std::string& file_name)
 {
-    uint j;
-    TDBKey::check();
-    for( j=0; j<KeyNumFlds(); j++)
-        memcpy( FldKey(j), RecKeyFld(i,j), FldLen(j) );
-    SetKey( FldKey(0) );
+    const size_t key_len = current_key.length();
+    std::string key_buf(key_len, '\0');
+    RecEntry re;
+
+    for(size_t i = 0; i < nRec; ++i) {
+        f.readArray(key_buf.data(), key_len);
+        ErrorIf(!f.good(), "TDBKeyMap", file_name + ": Index file read error while parsing key.");
+        re.read(f);
+        ErrorIf(!f.good(), "TDBKeyMap", file_name + ": Index file read error while parsing record entry.");
+        re.nFile = static_cast<unsigned char>(nF);
+        putkey(key_buf, re);
+    }
+    current_key.setKey(ALLKEY);
 }
 
-//Put key i record to kbuf in unpack form.
-void
-TDBKeyList::RecKey(uint i, std::string& kbuf )
-{
-    uint j;
-    check_i(i);
-    kbuf = "";
-    for( j=0; j<KeyNumFlds(); j++)
-        kbuf += char_array_to_string( RecKeyFld(i,j), FldLen(j) );
-}
 
-// write the keys of records to ndx file
-void
-TDBKeyList::PutKeyList( uint nF, GemDataStream& f) const
+/**
+ * @brief Matches a target string against a wildcard pattern supporting '*' and '?'.
+ *
+ * Uses an iterative two-pointer algorithm with O(1) space complexity, avoiding
+ * the overhead and special-character escaping issues of std::regex.
+ *
+ * @param str     The target string to evaluate.
+ * @param pattern The wildcard pattern ('*' matches any sequence, '?' matches any single character).
+ * @return true   If the string matches the pattern, false otherwise.
+ */
+constexpr bool match_wildcard(std::string_view str, std::string_view pattern) noexcept
 {
-    unsigned char j;
-    for(uint i=0; i< recInDB; i++ )
-        if( re[i].nFile == nF )
-        {
-            for( j=0; j<KeyNumFlds(); j++)
-                f.writeArray(  RecKeyFld(i,j), FldLen(j) );
-            //        f.write( (char *)(re+i), sizeof(RecEntry) );
-            re[i].write (f);
+    size_t s_idx = 0;
+    size_t p_idx = 0;
+    size_t star_idx = std::string_view::npos;
+    size_t match_idx = 0;
+
+    while(s_idx < str.size()) {
+        if(p_idx < pattern.size() && (pattern[p_idx] == '?' || pattern[p_idx] == str[s_idx])) {
+            ++s_idx;
+            ++p_idx;
         }
-    ErrorIf( !f.good(), "TDBKeyList",  "Index file write error.");
-}
-
-// read the keys of records from ndx file
-void TDBKeyList::GetKeyList_i(uint nF, int nRec, GemDataStream& f, const std::string& file_name)
-{
-    RecEntry re_;
-    //vvstr key(KeyLen()+1);
-    char key[MAXRKEYLEN+10];
-    memset( key, 0, KeyLen()+1);
-    for( int i=0; i< nRec; i++ )
-    {
-        f.readArray( key, KeyLen());
-        //     f.read( (char *)&re_, sizeof(RecEntry));
-        ErrorIf( !f.good(), "TDBKeyList", file_name+ " index file read error.");
-        re_.read (f);
-        auto indRec = addndx( nF, re_.len, key);
-        re[indRec].pos = re_.pos;
-    }
-    SetKey(ALLKEY); // bugfix: current key for not readed record
-    ErrorIf( !f.good(), "TDBKeyList", file_name+ " index file read error.");
-}
-
-// compare key ni record and pattern in work key
-uint
-TDBKeyList::keycmp( uint ni )
-{
-    if( !(strchr(UnpackKey(),'*') || strchr(UnpackKey(),'?')))
-        return  keycom(ni);      // no pattern
-
-    for( uint j=0; j<KeyNumFlds(); j++)
-    {
-        char *sp = FldKey(j);
-        if( *(sp) == '*' )
-	    continue; //to next field
-
-        for( uint i=0; i<FldLen(j); i++ )
-        {
-            switch( *(sp+i) )
-            {
-            case '?': // no ' '
-                if( *(RecKeyFld(ni,j)+i) == ' ' )
-		    return( j+1 );
-                break;
-
-            case '*':
-                goto NEXTKF;
-
-            default:
-                if( *(sp+i) != *(RecKeyFld(ni,j)+i) )
-                    return( j+1 );
-            }
+        else if(p_idx < pattern.size() && pattern[p_idx] == '*') {
+            star_idx = p_idx;
+            match_idx = s_idx;
+            ++p_idx;
         }
-NEXTKF:
-        ;
+        else if(star_idx != std::string_view::npos) {
+            p_idx = star_idx + 1;
+            ++match_idx;
+            s_idx = match_idx;
+        }
+        else {
+            return false;
+        }
     }
 
-    return 0;
+    while(p_idx < pattern.size() && pattern[p_idx] == '*') {
+        ++p_idx;
+    }
+    return p_idx == pattern.size();
 }
 
-//add records key in key list for a wildcard search
-void
-TDBKeyList::arec_add( uint ni )
+constexpr std::string_view rtrim_spaces(std::string_view sv) noexcept
 {
-    std::string s;
-    RecKey( ni, s);
-    aKey.push_back( s );
-    anR.push_back( ni );
+    size_t last = sv.find_last_not_of(' ');
+    return (last == std::string_view::npos) ? std::string_view{} : sv.substr(0, last + 1);
 }
 
-//get key list for a wildcard search
-size_t
-TDBKeyList::xlist( const char *pattern )
+/*
+ * @brief Checks if a fixed-width unpacked record key matches a parsed wildcard key template field-by-field.
+ *
+ * Slices the unpacked key according to the field lengths defined in current_key,
+ * trims trailing padding spaces from each segment, and evaluates it against the field pattern.
+ *
+ * @param unpacked_key The fixed-width unpacked key stored in key_record_map.
+ * @param pattern_key  The parsed TDBKeyNew object representing the search template.
+ * @return true        If every sub-field matches its corresponding wildcard pattern.
+ */
+bool TDBKeyMap::match_unpacked_key(std::string_view unpacked_key, const TDBKeyNew& pattern_key) const noexcept
 {
-    bool OneRec, AllRecs;
-    SetKey( pattern );
+    size_t offset = 0;
+    const size_t total_fields = pattern_key.fieldsInKey();
 
-    // analyze pattern
-    if( strchr( UnpackKey(), '*' ) || strchr( UnpackKey(), '?' ))
-        OneRec = false;
-    else
-    {
-        OneRec = true;/* AllRecs = false; */
+    for(size_t i = 0; i < total_fields; ++i) {
+        const size_t fld_len = pattern_key.fieldLength(i);
+        if(offset + fld_len > unpacked_key.size()) {
+            return false;
+        }
+        std::string_view key_field = rtrim_spaces(unpacked_key.substr(offset, fld_len));
+        std::string pat_field = pattern_key.fieldKey(i);
+        if(pat_field != "*" && !match_wildcard(key_field, pat_field)) {
+            return false;
+        }
+
+        offset += fld_len;
     }
-    if( !OneRec && strspn(UnpackKey(),"* :") < strlen(UnpackKey()) )
-        AllRecs = false;
-    else
-        AllRecs = true;
-    aKey.clear();
-    anR.clear();
-    if( OneRec )
-    {
-       auto i = findx( pattern );
-        if( i >= 0 )
-            arec_add( i );
-        return aKey.size();
+    return true;
+}
+
+std::vector<std::string> TDBKeyMap::xlist(const std::string& keypat) const
+{
+    std::vector<std::string> found_keys;
+    TDBKeyNew pattern_key = current_key;
+    pattern_key.setKey(keypat);
+
+    for (const auto& [unpacked_key, entry] : key_record_map) {
+        if (match_unpacked_key(unpacked_key, pattern_key)) {
+            found_keys.push_back(unpacked_key);
+        }
     }
-    for(uint ii=0; ii<RecCount(); ii++ )
+
+    return found_keys;
+}
+
+
+//-------------------------------------------------------------
+// Database - low level
+//-------------------------------------------------------------
+
+
+// get record length in the PDB file
+int TDataBase::reclen()
+{
+    int objs_len=0;
+    for(uint j=0; j<nOD; ++j) {
+        objs_len += aObj[j+frstOD]->lenDB();
+    }
+    if(headerObjCount() != nOD) {
+        objs_len += 4;          // marker before the extended-settings objects
+    }
+    return objs_len;
+}
+
+/**
+ * @brief Serializes the record header, packed key, and all data objects into a binary database stream.
+ *
+ * Positions the output stream at the allocated file offset, writes the 14-byte RecHead,
+ * appends the packed key terminated by MARKRKEY, writes all associated data objects
+ * (inserting MARKEXTOBJ before extended objects if present), and returns remaining unused bytes.
+ *
+ * @param rep  Pointer to the RecEntry specifying the target file offset and allocated length.
+ * @param f    Target binary database stream (GemDataStream).
+ * @param tcrt Unsigned 32-bit creation/modification timestamp to embed in the record header.
+ * @return int32_t Remaining unallocated bytes (StillLen); 0 indicates an exact size match.
+ */
+int32_t TDataBase::putrec(const RecEntry* rep, GemDataStream& f, uint32_t tcrt)
+{
+    ErrorIf(rep == nullptr, getKeywd(), "Internal error: Null RecEntry pointer passed to putrec.");
+
+    const std::string pack_key = PackKey();
+    RecHead rh{};
+
+    std::memcpy(rh.bgm, MARKRECHEAD, 2);
+    std::memcpy(rh.endm, MARKRECHEAD, 2);
+    rh.nRT = record_type;
+    rh.Nobj = static_cast<unsigned char>(headerObjCount());
+    rh.rlen = rep->len;
+    rh.time_crt = tcrt;
+
+    int32_t StillLen = rep->len;
+
+    f.seekp(rep->pos, std::ios::beg);
+    rh.write(f);
+
+    const size_t key_len = pack_key.length();
+    f.writeArray(pack_key.data(), key_len);
+    char marker = MARKRKEY;
+    f.writeArray(&marker, 1);
+    StillLen -= static_cast<int32_t>(key_len + 1);
+    ErrorIf(!f.good(), getKeywd(), "PDB file write error while writing record header and key.");
+
+    const size_t hdr_obj_cnt = static_cast<size_t>(headerObjCount());
+    for(size_t j = 0; j < nOD; ++j) {
+        if(j == hdr_obj_cnt && j != nOD) {
+            f.writeArray(const_cast<char*>(MARKEXTOBJ), 4);
+            StillLen -= 4;
+        }
+        StillLen -= static_cast<int32_t>(aObj[j + frstOD]->toDB(f));
+    }
+    ErrorIf(!f.good(), getKeywd(), "PDB file write error while writing record data objects.");
+
+    crt_time = static_cast<std::time_t>(rh.time_crt);
+    return StillLen;
+}
+
+
+unsigned char TDataBase::headerObjCount() const
+{
+    return frstOD == o_spppar ? nOD-NUM_PAXOBJ : nOD;
+}
+
+// Reads the objects stored after the ones counted in the header of a project record: the extended
+// numerical settings. A record saved by an older GEMSGUI has none, and then the defaults are set.
+// An older GEMSGUI stops after its own objects and ignores this tail, so such a record stays
+// readable by it. Returns the number of bytes read.
+int TDataBase::getExtendedSettings( GemDataStream& f, int nRead, int StillLen )
+{
+    int len = 0;
+    char mark[4] = { 0, 0, 0, 0 };
+    if( nRead == headerObjCount() )
     {
-        if( !AllRecs )
-            if( keycmp(ii) != 0 )
+        auto pos = f.tellg();
+        f.readArray( mark, 4 );
+        if( !f.good() )
+        {
+            f.clear();
+            f.seekg( pos, std::ios::beg );
+            memset( mark, 0, 4 );
+        }
+    }
+    if( TProfil::pm )
+        TProfil::pm->resetExtendedSettings();   // objects the record does not hold keep the defaults
+    if( memcmp( mark, MARKEXTOBJ, 4 ) == 0 )
+    {
+        len = 4;
+        // a record written when the tail had fewer objects ends early: stop there
+        for( uint j = nRead; j < nOD && StillLen-len >= aObj[j+frstOD]->lenDB(); j++ )
+            len += aObj[j+frstOD]->ofDB(f);
+    }
+    return len;
+}
+
+/**
+ * @brief Reads and deserializes a record header, packed key, and data objects from a binary stream.
+ *
+ * Seeks to the physical file offset specified in rep, validates the 14-byte RecHead markers
+ * and object count, extracts the MARKRKEY-terminated key into the active key state,
+ * deserializes all associated data objects (including extended settings if applicable),
+ * and verifies that the actual read byte count matches the header specification.
+ *
+ * @param[in]  rep Pointer to the RecEntry specifying the record's file offset and expected length.
+ * @param[in]  f   Source binary database stream (GemDataStream).
+ * @param[out] rh  Reference to a RecHead structure populated with the read header metadata.
+ * @return int32_t Remaining unread bytes (0 indicates exact match; negative during raw scanfile).
+ */
+int32_t TDataBase::getrec(const RecEntry* rep, GemDataStream& f, RecHead& rh)
+{
+    ErrorIf(rep == nullptr, getKeywd(), "Internal error: Null RecEntry pointer passed to getrec.");
+
+    int32_t StillLen = rep->len;
+
+    f.seekg(rep->pos, std::ios::beg);
+    rh.read(f);
+    ErrorIf(!f.good(), getKeywd(), "PDB file read error while reading record header.");
+
+    if(std::strncmp(rh.bgm, MARKRECHEAD, 2) != 0 ||
+        std::strncmp(rh.endm, MARKRECHEAD, 2) != 0 ||
+        (rh.Nobj != nOD && (nOD + frstOD - 1) != o_tpstr &&
+         (rh.Nobj + frstOD - 1) != o_phsdval && !(frstOD == o_spppar && rh.Nobj <= nOD))) {
+        gui_logger->info("Record header format error {} {} {} {}", getKeywd(), rh.Nobj, nOD, frstOD);
+        Error(getKeywd(), "Record header format error");
+    }
+
+    const size_t max_len = static_cast<size_t>(KeyLen() + KeyNumFlds()) + 1;
+    std::string key(max_len, '\0');
+    f.getline(key.data(), static_cast<std::streamsize>(max_len), MARKRKEY);
+    ErrorIf(!f.good(), getKeywd(), "Database record key read error.");
+
+    const size_t actual_len = key.find('\0');
+    if (actual_len != std::string::npos) {
+        key.resize(actual_len);
+    }
+    SetKey(key);
+    StillLen -= static_cast<int32_t>(f.gcount());
+
+    // 4. Десеріалізуємо об'єкти даних запису
+    bool flag_spppar = false;
+    for(int32_t j = 0; j < rh.Nobj; ++j) {
+        if(j + frstOD == o_tpstr && StillLen < 28) {
+            continue;
+        }
+        if(j + frstOD == o_sptext && StillLen < 10) {
+            continue;
+        }
+        StillLen -= static_cast<int32_t>(aObj[j + frstOD]->ofDB(f));
+        if(j + frstOD == o_spppar) {
+            flag_spppar = true;
+        }
+    }
+
+    if (frstOD == o_spppar) {
+        StillLen -= static_cast<int32_t>(getExtendedSettings(f, rh.Nobj, StillLen));
+    }
+
+    ErrorIf(!f.good(), getKeywd(), "PDB file read error while reading record data objects.");
+
+    if(StillLen != 0 && rep->len != 0 && !flag_spppar) {
+        Error(getKeywd(), "Actual record length differs from that specified in the header");
+    }
+
+    crt_time = static_cast<std::time_t>(rh.time_crt);
+    return StillLen;
+}
+
+/**
+ * @brief Scans a database file stream for valid records, copies them to a clean stream, and rebuilds indices.
+ *
+ * Iterates through raw bytes starting at fPos up to fLen, locates record header markers (MARKRECHEAD),
+ * extracts healthy records, resolves duplicate key conflicts interactively, writes compacted records
+ * into outStream, and updates the in-memory index map with new file offsets.
+ *
+ * @param[in]     nF        Target database file index in dbfiles_list.
+ * @param[in,out] fPos      Starting byte offset for scanning; updated as records are processed.
+ * @param[in,out] fLen      Input upper byte bound of the source file; updated to the new compacted file size.
+ * @param[in,out] inStream  Source binary stream containing fragmented/raw database records.
+ * @param[in,out] outStream Destination binary stream receiving compacted healthy records.
+ * @return int32_t Total number of valid records restored and written to outStream.
+ */
+int32_t TDataBase::scanfile(size_t nF, int32_t& fPos, int32_t& fLen,
+                            GemDataStream& inStream, GemDataStream& outStream)
+{
+    RecEntry recordEntry{};
+    RecHead recordHead{};
+    int32_t fEnd = fPos;
+    int32_t nRec = 0;
+
+    recordEntry.nFile = static_cast<unsigned char>(nF);
+    recordEntry.len = 0;
+
+    while(fPos < fLen) {
+        char ch = 0;
+        inStream.seekg(fPos, std::ios::beg);
+        inStream.get(ch);
+        if (!inStream.good() || ch != MARKRECHEAD[0]) {
+            fPos++;
+            continue;
+        }
+
+        inStream.get(ch);
+        if (!inStream.good() || ch != MARKRECHEAD[1]) {
+            fPos++;
+            continue;
+        }
+
+        recordEntry.pos = fPos;
+        int32_t raw_len = 0;
+        try {
+            raw_len = getrec(&recordEntry, inStream, recordHead);
+        }
+        catch (TError& xcpt) {
+            gui_logger->warn("scan error : {}", xcpt.mess);
+            fPos += 2;
+            continue;
+        }
+
+        fPos += (-raw_len) + static_cast<int32_t>(RecHead::data_size());
+        const int32_t len = static_cast<int32_t>(reclen() + PackKey().length() + 1);
+
+        std::string unpack_key = UnpackKey();
+        const RecEntry* rh = keys_map.findkey(unpack_key);
+        if(rh != nullptr) {
+            std::string resolved_key = aMod[record_type]->GetKeyofRecord(
+                unpack_key,
+                "This key record already exists! Replace please?",
+                KEY_NEW
+                );
+            if(resolved_key.empty()) {
                 continue;
-        arec_add(ii);
+            }
+            SetKey(resolved_key);
+            unpack_key = UnpackKey();
+        }
+
+        RecEntry new_rh{};
+        new_rh.nFile = static_cast<unsigned char>(nF);
+        new_rh.len = len;
+        new_rh.pos = fEnd;
+        keys_map.putkey(unpack_key, new_rh);
+
+        try {
+            putrec(keys_map.findkey(unpack_key), outStream, static_cast<std::time_t>(recordHead.time_crt));
+            nRec++;
+            fEnd += len + static_cast<int32_t>(RecHead::data_size());
+            gui_logger->debug("restore record: {}", PackKey());
+        }
+        catch (...) {
+            keys_map.delkey(unpack_key);
+            SetKey(ALLKEY);
+            throw;
+        }
     }
-    return aKey.size();
+
+    fLen = fEnd;
+    return nRec;
 }
 
 //--------------------- End of v_dbm1.cpp ---------------------------

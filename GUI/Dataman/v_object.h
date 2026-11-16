@@ -230,8 +230,8 @@ public:
     int lenDB() const;
     int toDB(GemDataStream& f);
     int ofDB(GemDataStream& f);
-    void toTXT(std::fstream& f);
-    void ofTXT(std::fstream& f);
+    void toTXT(std::ostream& f);
+    void ofTXT(std::istream& f);
 
     void toJsonObject( QJsonObject& obj ) const;
     void fromJsonObject( const QJsonObject& obj );

@@ -45,7 +45,7 @@ void VDBhead::read(GemDataStream& is)
 }
 
 // Writing header of DB file
-void VDBhead::write(GemDataStream& is)
+void VDBhead::write(GemDataStream& is) const
 {
     is.writeArray (VerP, 8 );
     is.writeArray (PassWd, 8);
@@ -70,7 +70,7 @@ void DBentry::read(GemDataStream& is)
 }
 
 // write deleted block description
-void DBentry::write(GemDataStream& is)
+void DBentry::write(GemDataStream& is) const
 {
     is << pos;
     is << len;
@@ -85,7 +85,7 @@ void RecEntry::read(GemDataStream& is)
 }
 
 // write DBrecord description
-void RecEntry::write(GemDataStream& is)
+void RecEntry::write(GemDataStream& is) const
 {
     is << pos;
     is << len;
@@ -104,7 +104,7 @@ void RecHead::read(GemDataStream& is)
 }
 
 // write DB record head
-void RecHead::write(GemDataStream& is)
+void RecHead::write(GemDataStream& is) const
 {
     is.writeArray (bgm, 2);
     is << nRT;
@@ -120,9 +120,7 @@ void RecHead::write(GemDataStream& is)
 
 TDBFile::TDBFile(const std::string& path, const std::string& the_relative):
     TBinaryFile(path),
-    FPosFree(-1),
-    dh(nullptr),
-    sfe(nullptr)
+    FPosFree(-1)
 {
     if(!the_relative.empty()) {
         relative_path = the_relative;
@@ -131,31 +129,24 @@ TDBFile::TDBFile(const std::string& path, const std::string& the_relative):
 
 void TDBFile::check_sfe()
 {
-    ErrorIf(sfe == nullptr, relativePath(),
-            "Critical error: Failed to allocate memory for the deleted records structure.");
-}
-
-void TDBFile::check_dh()
-{
-    ErrorIf(dh == nullptr, relativePath(),
-            "Critical error: Failed to allocate memory for the database file header.");
+    ErrorIf(sfe.size() < MAXFESTACK, relativePath(),
+            "Critical error: Deleted records stack is not initialized.");
 }
 
 // Set date and time in header of file.
 void TDBFile::vdbh_setdt()
 {
-    strncpy(dh->Date, curDate().c_str(), 11);
-    strncpy(dh->Time, curTime().c_str(), 5);
+    strncpy(dh.Date, curDate().c_str(), 11);
+    strncpy(dh.Time, curTime().c_str(), 5);
 }
 
-//Clear the header of PDB file.
 void TDBFile::clear_dh_sfe()
 {
+    dh = VDBhead{};
     FPosFree = -1;
-    if(sfe) {
-        std::fill_n(sfe, MAXFESTACK, DBentry{});
+    if(!sfe.empty()) {
+        std::ranges::fill(sfe, DBentry{});
     }
-    *dh = VDBhead{};
 }
 
 /**
@@ -164,40 +155,35 @@ void TDBFile::clear_dh_sfe()
  * Allocates necessary memory, resets counters to zero, sets up version/password safety,
  * and calculates internal file structure offsets based on whether the deleted records stack is enabled.
  *
- * @param version Pointer to an 8-character version string.
- * @param passwd  Pointer to an 8-character password string.
  * @param nRT     Record type.
  * @param if_del  Flag to enable or disable the deleted records tracking system (sfe).
  */
 void TDBFile::initialize_header(int nRT, bool if_del)
 {
-    if(dh == nullptr) {
-        dh = new VDBhead;
-    }
     if(if_del) {
-        if (sfe == nullptr) {
-            sfe = new DBentry[MAXFESTACK];
+        if(sfe.empty()) {
+            sfe.assign(MAXFESTACK, DBentry{});
         }
     }
     clear_dh_sfe();
 
-    std::strncpy(dh->VerP, TBinaryFile::VV(), 8);
-    dh->VerP[7] = '\0';
-    std::strncpy(dh->PassWd, TBinaryFile::PA(), 8);
-    dh->PassWd[7] = '\0';
+    std::strncpy(dh.VerP, TBinaryFile::VV(), 8);
+    dh.VerP[7] = '\0';
+    std::strncpy(dh.PassWd, TBinaryFile::PA(), 8);
+    dh.PassWd[7] = '\0';
 
     vdbh_setdt();
-    dh->nRT = nRT;
-    dh->isDel = if_del;
-    dh->FPosTRT = VDBhead::data_size();
-    dh->stacOver = VDBhead::data_size();
-    if (if_del) {
-        dh->FPosTRT += DBentry::data_size() * MAXFESTACK;
+    dh.nRT = nRT;
+    dh.isDel = if_del;
+    dh.FPosTRT = VDBhead::data_size();
+    dh.stacOver = VDBhead::data_size();
+    if(if_del) {
+        dh.FPosTRT += DBentry::data_size() * MAXFESTACK;
     }
-    dh->nRec = 0;
-    dh->curDr = 0;
-    dh->MinDrLen = 0;
-    dh->MaxDrLen = 0;
+    dh.nRec = 0;
+    dh.curDr = 0;
+    dh.MinDrLen = 0;
+    dh.MaxDrLen = 0;
 }
 
 /**
@@ -214,7 +200,7 @@ void TDBFile::initialize_header(int nRT, bool if_del)
 void TDBFile::force_update_header(int fLen, int nRec, int nRT, char is_del)
 {
     initialize_header(nRT, is_del);
-    dh->nRec = nRec;
+    dh.nRec = nRec;
     FPosFree = fLen;
     put_head(0);
 
@@ -225,46 +211,41 @@ void TDBFile::force_update_header(int fLen, int nRec, int nRT, char is_del)
             std::filesystem::resize_file(file_path, static_cast<uint64_t>(fLen));
         }
     }
-    catch (const std::filesystem::filesystem_error& e) {
+    catch(const std::filesystem::filesystem_error& e) {
         Error(relativePath(), "Failed to resize database file physically: " + std::string(e.what()));
     }
 }
-
 
 // Add a new deleted record to the sfe list and mark it as deleted in the file
 void TDBFile::add_sfe(RecEntry& re)
 {
     RecHead rh;
+    int32_t Ndr = dh.curDr;
 
-    check_dh();
-    int Ndr = dh->curDr;
-
-    if(dh->isDel) {
+    if(dh.isDel) {
         check_sfe();
 
         if(Ndr >= MAXFESTACK) {
-            if(dh->stacOver >= 0) {
-                dh->stacOver = -1;
-                // vfMessage(0, GetPath(), "Stack of deleted records overflow.");
+            if (dh.stacOver >= 0) {
+                dh.stacOver = -1;
             }
         }
         else {
             sfe[Ndr].len = re.len;
             sfe[Ndr].pos = re.pos;
-            dh->curDr++;
+            dh.curDr++;
 
             if(Ndr > 0) {
-                std::sort(sfe, sfe + Ndr + 1, [](const DBentry& a, const DBentry& b) {
-                    return a.len < b.len;
-                });
+                std::ranges::sort(sfe.begin(), sfe.begin() + Ndr + 1, {}, &DBentry::len);
             }
-            dh->MinDrLen = sfe[0].len;
-            dh->MaxDrLen = sfe[Ndr].len;
+            dh.MinDrLen = sfe[0].len;
+            dh.MaxDrLen = sfe[Ndr].len;
         }
     }
+
     fstream->seekg(re.pos, std::ios::beg);
     rh.read(*fstream);
-    if (std::strncmp(rh.bgm, MARKRECHEAD, 2) == 0) {
+    if(std::strncmp(rh.bgm, MARKRECHEAD, 2) == 0) {
         std::strncpy(rh.bgm, MARKRECDEL, 2);
         std::strncpy(rh.endm, MARKRECDEL, 2);
     }
@@ -272,6 +253,7 @@ void TDBFile::add_sfe(RecEntry& re)
     rh.write(*fstream);
     ErrorIf(!fstream->good(), relativePath(), "Database file write error (failed to mark record as deleted).");
 }
+
 
 void TDBFile::allocate_new_block(RecEntry& re)
 {
@@ -282,17 +264,16 @@ void TDBFile::allocate_new_block(RecEntry& re)
 // Find a deleted block in the sfe list to put the record there
 void TDBFile::find_sfe(RecEntry& re)
 {
-    check_dh();
-    int Ndr = dh->curDr;
-
-    if(!dh->isDel || Ndr == 0 || dh->MaxDrLen < re.len) {
+    int32_t Ndr = dh.curDr;
+    if(!dh.isDel || Ndr == 0 || dh.MaxDrLen < re.len) {
         allocate_new_block(re);
         return;
     }
 
-    auto* start = sfe;
-    auto* end = sfe + Ndr;
-    auto* it = std::lower_bound(start, end, re.len, [](const DBentry& block, int target_len) {
+    check_sfe();
+    auto start = sfe.begin();
+    auto end = sfe.begin() + Ndr;
+    auto it = std::lower_bound(start, end, re.len, [](const DBentry& block, int32_t target_len) {
         return block.len < target_len;
     });
     if(it == end) {
@@ -300,19 +281,28 @@ void TDBFile::find_sfe(RecEntry& re)
         return;
     }
 
-    int j = static_cast<int>(it - start);
+    size_t j = static_cast<size_t>(std::distance(start, it));
     re.pos = sfe[j].pos;
+
     RecEntry rn;
     rn.pos = re.pos + re.len;
     rn.len = sfe[j].len - re.len;
     rn.nFile = re.nFile;
-    int items_to_move = Ndr - 1 - j;
-    if (items_to_move > 0) {
-        std::memmove(sfe + j, sfe + j + 1, items_to_move * sizeof(DBentry));
+
+    std::rotate(it, it + 1, end);
+    dh.curDr--;
+    sfe[dh.curDr] = DBentry{};
+
+    if(dh.curDr > 0) {
+        dh.MinDrLen = sfe[0].len;
+        dh.MaxDrLen = sfe[dh.curDr - 1].len;
     }
-    dh->curDr--;
-    sfe[dh->curDr] = DBentry{};
-    if(rn.len >= dh->MinDrLen) {
+    else {
+        dh.MinDrLen = 0;
+        dh.MaxDrLen = 0;
+    }
+
+    if(rn.len >= dh.MinDrLen) {
         add_sfe(rn);
     }
 }
@@ -320,17 +310,13 @@ void TDBFile::find_sfe(RecEntry& re)
 // Read the control structure of the database file (file header and deleted records stack)
 void TDBFile::get_head()
 {
-    if(dh == nullptr) {
-        dh = new VDBhead;
-    } else {
-        *dh = VDBhead{};
-    }
+    dh = VDBhead{};
     fstream->seekg(0L, std::ios::beg);
-    dh->read(*fstream);
+    dh.read(*fstream);
 
-    if(dh->isDel) {
-        if(sfe == nullptr) {
-            sfe = new DBentry[MAXFESTACK];
+    if(dh.isDel) {
+        if(sfe.empty()) {
+            sfe.assign(MAXFESTACK, DBentry{});
         }
         for(int ii=0; ii<MAXFESTACK; ++ii) {
             sfe[ii].read(*fstream);
@@ -352,14 +338,12 @@ void TDBFile::get_head()
 // Write the control structure of PDB file.
 void TDBFile::put_head(int delta_rec)
 {
-    check_dh();
-
-    dh->nRec += delta_rec;
+    dh.nRec += delta_rec;
     vdbh_setdt();
     //fstream->flush();
     fstream->seekp(0L, std::ios::beg);
-    dh->write(*fstream);
-    if(dh->isDel) {
+    dh.write(*fstream);
+    if(dh.isDel) {
         check_sfe();
         for(int ii = 0; ii < MAXFESTACK; ii++) {
             sfe[ii].write(*fstream);
@@ -376,11 +360,11 @@ void TDBFile::createFile(int nRT, bool is_del)
 {
     GemDataStream ff;
     initialize_header(nRT, is_del);
-    FPosFree = dh->FPosTRT;
+    FPosFree = dh.FPosTRT;
     ff.open(fullPath().c_str(), WRITE_B);
-    dh->write(ff);
-    if (dh->isDel) {
-        for (int ii = 0; ii < MAXFESTACK; ii++) {
+    dh.write(ff);
+    if(dh.isDel) {
+        for(int ii = 0; ii < MAXFESTACK; ii++) {
             sfe[ii].write(ff);
         }
     }
@@ -407,10 +391,7 @@ void TDBFile::openFile(FileStatus ios_mode)
 //Close PDB file
 void TDBFile::closeFile()
 {
-    delete dh;
-    delete[] sfe;
-    dh = nullptr;
-    sfe = nullptr;
+    //sfe.clear();
     FPosFree = 0;
     TBinaryFile::closeFile();
 }
@@ -423,21 +404,20 @@ std::string TDBFile::index_file_name() const
 }
 
 // put information to index file
-void TDBFile::put_ndx(size_t nF, const TDBKeyList& ind)
+void TDBFile::put_ndx(size_t nF, const TDBKeyMap& ind)
 {
     GemDataStream ndx_f;
     auto path = index_file_name();
     ndx_f.open(path.c_str(), WRITE_B);
     ErrorIf(!ndx_f.good(), path,
             "Index file write error: Failed to open or create the index file for writing.");
-    check_dh();
     vdbh_setdt();
-    dh->write(ndx_f);
-    ind.PutKeyList(nF, ndx_f);
+    dh.write(ndx_f);
+    ind.save_keys_ndxs(nF, ndx_f, path);
 }
 
 // get information from index file
-void TDBFile::get_ndx(size_t nF, TDBKeyList& ind)
+void TDBFile::get_ndx(size_t nF, TDBKeyMap& ind)
 {
     VDBhead dh;
     GemDataStream ndx_f;
@@ -446,10 +426,10 @@ void TDBFile::get_ndx(size_t nF, TDBKeyList& ind)
     ErrorIf(!ndx_f.good(), path,
             "Index file read error: Failed to open the index file. File may be missing or corrupted.");
     dh.read(ndx_f);
-    ind.GetKeyList_i(nF, dh.nRec, ndx_f, path);
+    ind.get_keys_ndxs(nF, dh.nRec, ndx_f, path);
 }
 
-void TDBFile::create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyList& ind)
+void TDBFile::create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyMap& ind)
 {
     if(!exist()) {
         createFile(nRT, isDel);
@@ -457,7 +437,7 @@ void TDBFile::create_with_ndx(int nRT, bool isDel, size_t nF, const TDBKeyList& 
     }
 }
 
-bool TDBFile::open_file(FileStatus mode, bool is_close, size_t nF, TDBKeyList& ind)
+bool TDBFile::open_file(FileStatus mode, bool is_close, size_t nF, TDBKeyMap& ind)
 {
     connect_db_mode = mode;
     rclose = is_close;
@@ -466,8 +446,7 @@ bool TDBFile::open_file(FileStatus mode, bool is_close, size_t nF, TDBKeyList& i
     openFile(mode);
 
     try {
-        check_dh();
-        if (dh->stacOver < 0) {
+        if(dh.stacOver < 0) {
             std::string prompt = "Stack of deleted records has overflowed.\nWould you like to compress the database?";
             if (vfQuestion(nullptr, relativePath(), prompt)) {
                 need_rebuilding = true;
@@ -488,7 +467,7 @@ bool TDBFile::open_file(FileStatus mode, bool is_close, size_t nF, TDBKeyList& i
     return need_rebuilding;
 }
 
-time_t TDBFile::get_time(RecEntry* ree)
+time_t TDBFile::get_time(const RecEntry* ree)
 {
     if(status == NOT_OPEN) {
         openFile(connect_db_mode);
@@ -532,7 +511,7 @@ void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* data
             add_sfe(old_block);
         }
 
-        size_t key_len = std::strlen(database->ind.PackKey()) + 1;
+        size_t key_len = database->PackKey().length() + 1;
         size_t payload_len = database->reclen();
         size_t total_required_len = payload_len + key_len + RecHead::data_size();
 
@@ -542,7 +521,7 @@ void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* data
         long int old_flen = FPosFree;
         time_t current_time = std::time(nullptr);
 
-        long int still_len = database->putrec(*rh, *fstream, static_cast<uint32_t>(current_time));
+        long int still_len = database->putrec(rh, *fstream, static_cast<uint32_t>(current_time));
         if(still_len != 0) {
             if (FPosFree != old_flen) {
                 FPosFree -= still_len;
@@ -551,7 +530,7 @@ void TDBFile::save_record_to_file(bool new_record, RecEntry* rh, TDataBase* data
         }
 
         put_head(new_record ? 1 : 0);
-        put_ndx(rh->nFile, database->ind);
+        put_ndx(rh->nFile, database->keys_map);
     }
     catch(...) {
         if(rclose) {
@@ -575,7 +554,7 @@ void TDBFile::delete_record_from_file(RecEntry* rh, TDataBase* database)
         rh->len += RecHead::data_size();
         add_sfe(*rh);
         put_head(-1);
-        put_ndx(rh->nFile, database->ind);
+        put_ndx(rh->nFile, database->keys_map);
     }
     catch(...) {
         if(rclose) {
@@ -588,14 +567,14 @@ void TDBFile::delete_record_from_file(RecEntry* rh, TDataBase* database)
     }
 }
 
-void TDBFile::read_record_from_file(RecEntry* rh, TDataBase* database)
+void TDBFile::read_record_from_file(const RecEntry* rh, TDataBase* database)
 {
     if(status == NOT_OPEN) {
         openFile(connect_db_mode);
     }
     RecHead rhh;
     try {
-        database->getrec(*rh, *fstream, rhh);
+        database->getrec(rh, *fstream, rhh);
     }
     catch(...) {
         if (rclose) {
@@ -612,10 +591,10 @@ void TDBFile::rebuild_file(size_t nF, TDataBase* database)
 {
     openFile(UPDATE_DBV);
 
-    int fPos = dh->FPosTRT;
+    int fPos = dh.FPosTRT;
     int fLen = FPosFree;
-    int nRT1 = dh->nRT;
-    char isDel = dh->isDel;
+    int nRT1 = dh.nRT;
+    char isDel = dh.isDel;
 
     std::string tmp_file_name = full_path + ".tmp";
     GemDataStream out_stream(tmp_file_name, std::ios::out | std::ios::binary);
@@ -648,7 +627,7 @@ void TDBFile::rebuild_file(size_t nF, TDataBase* database)
         fstream->seekg(0L, std::ios::end);
         int new_physical_len = static_cast<int>(fstream->tellg());
         force_update_header(new_physical_len, nRec, nRT1, isDel);
-        put_ndx(nF, database->ind);
+        put_ndx(nF, database->keys_map);
     }
     catch(...) {
             closeFile();
@@ -674,7 +653,7 @@ void TDBFileList::close_all()
 }
 
 //put state to cfg file
-void TDBFileList::to_cfg(std::fstream& out_stream)
+void TDBFileList::to_cfg(std::fstream& out_stream) const
 {
     out_stream << special_files_num <<  "  ";
     out_stream << opened_files.size() << "  ";
@@ -717,7 +696,7 @@ void TDBFileList::reset_open_list()
 }
 
 // reload records list from settings
-void TDBFileList::reset_index_list(TDBKeyList& ind)
+void TDBFileList::reset_index_list(TDBKeyMap& ind)
 {
     ind.initnew(); // clear loaded
     for(auto ndx: opened_files) {
@@ -759,7 +738,7 @@ void TDBFileList::add_files(const std::string &folder, const std::vector<std::st
 }
 
 // open files in PDB
-std::vector<int> TDBFileList::open_files(int nRT1, FileStatus mode, const std::vector<int>& nff, TDBKeyList& ind)
+std::vector<int> TDBFileList::open_files(int nRT1, FileStatus mode, const std::vector<int>& nff, TDBKeyMap& ind)
 {
     std::vector<int> list_to_rebuld;
     size_t current_ndx;
@@ -800,7 +779,7 @@ std::vector<int> TDBFileList::open_files(int nRT1, FileStatus mode, const std::v
     }
 }
 
-size_t TDBFileList::open_new_file(int nRT1, const std::string &path, TDBKeyList& ind)
+size_t TDBFileList::open_new_file(int nRT1, const std::string &path, TDBKeyMap& ind)
 {
     auto ndx = all_dbfiles.size();
 
@@ -822,14 +801,14 @@ size_t TDBFileList::open_new_file(int nRT1, const std::string &path, TDBKeyList&
 }
 
 // add open PDB files
-std::vector<int> TDBFileList::add_open_files(int nRT1, const std::vector<int>& nff, TDBKeyList& ind)
+std::vector<int> TDBFileList::add_open_files(int nRT1, const std::vector<int>& nff, TDBKeyMap& ind)
 {
     auto files_to_open = nff;
     files_to_open.insert(files_to_open.end(), opened_files.begin(), opened_files.end());
     return open_files(nRT1, open_mode, files_to_open, ind);
 }
 
-void TDBFileList::remove_files(const std::set<std::string>& target_names, TDBKeyList& ind)
+void TDBFileList::remove_files(const std::set<std::string>& target_names, TDBKeyMap& ind)
 {
     try {
         for(size_t ii = all_dbfiles.size(); ii > 0; --ii)  {

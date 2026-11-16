@@ -87,7 +87,7 @@ TPrintData::TPrintData(const char *sd_key,
                }
             catch( TError& xcpt )
             {
-               if( vfQuestion(nullptr, xcpt.title.c_str(), (xcpt.mess+" \nContinue?").c_str() ))
+               if( vfQuestion(nullptr, xcpt.title, (xcpt.mess+" \nContinue?") ))
                 {
                    ifcond = false;
                 }

@@ -316,9 +316,7 @@ TReadData::readData( std::fstream& fin, RFormat& fmt, RData& dt )
   {
       if( dt.i < rt[nRT]->KeyNumFlds() )
       {
-          memset( rt[nRT]->FldKey( dt.i ), ' ', rt[nRT]->FldLen( dt.i ));
-          strncpy( rt[nRT]->FldKey( dt.i ), dat_str.c_str(),
-                   std::min( static_cast<size_t>(rt[nRT]->FldLen( dt.i )), dat_str.length() ));
+          rt[nRT]->setFieldKey(dt.i, dat_str);
       }
   }
   else if(  dt.objNum > 0  )

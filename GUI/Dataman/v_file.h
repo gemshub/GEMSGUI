@@ -160,7 +160,7 @@ public:
     virtual void closeFile();
 
     virtual void from_cfg(std::fstream& config_stream);
-    virtual void to_cfg(std::fstream& config_stream);
+    virtual void to_cfg(std::fstream& config_stream) const;
 
     static const char* VV()
     {

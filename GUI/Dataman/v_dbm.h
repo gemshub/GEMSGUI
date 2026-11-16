@@ -27,13 +27,28 @@
 
 class GemDataStream;
 
-const int	MAXRKFRMSTR = 20;  // max fields in key
-const size_t IND_PLUS = 112;    // augment of index key buf
 extern const char* ALLKEY;
 
 enum keyctrl {   // codes key bild
     K_END = -5, K_EMP, K_ANY, K_IMM, K_ACT
 };
+
+enum RecStatus {   // states of keys record Data Base
+    UNDF_=-7 /* undefined state */, FAIL_=-1 /* access error */,
+    NONE_=0 /* no records */, ONEF_ ,
+    MANY_ , EMPC_, /* empty chain */
+    /* NONELIST_ * no records to part */
+};
+
+enum modeList { openf = 0x01, closef = 0x02, oldself = 0x04 };
+
+/**
+ * @typedef keysmap_t
+ * @brief Associative map linking an unpacked record key string to its physical file metadata.
+ *
+ * Maps `<unpacked record key>` to `<memory-resident index coordinates and sizing metadata (RecEntry)>`.
+ */
+using keysmap_t = std::map<std::string, RecEntry>;
 
 struct KeyArg {
     int32_t command;
@@ -155,13 +170,22 @@ public:
     }
 
     /**
+     * @brief Returns a read-only reference to all sub-field values of the compound key.
+     * @return const std::vector<std::string>& Vector containing the current string values for all key segments.
+     */
+    const std::vector<std::string>& allFields() const noexcept
+    {
+        return flds_value;
+    }
+
+    /**
      * @brief Unpacks, expands, and aligns a specific sub-field with blank spaces matching its specification.
      * @param ndx The zero-based index of the target sub-field.
      * @return std::string The space-padded unpacked field key value string.
      */
     std::string unpackFieldKey(size_t ndx) const
     {
-        if (ndx >= flds_value.size()) {
+        if(ndx >= flds_value.size()) {
             return "";
         }
         auto unpack_fld = flds_value[ndx];
@@ -216,201 +240,227 @@ protected:
     }
 };
 
-/// Table key -> the selector, which must be an object containing the key attribute.
-using keysmap_t = std::map<std::string, RecEntry>;
-
-// This is struct contened the key of record
-class TDBKey
+/**
+ * @class TDBKeyMap
+ * @brief Manages the in-memory associative map of loaded database record keys and their file offsets.
+ *
+ * Provides fast logarithmic lookups, wildcard filtering, and binary index (.ndx) serialization
+ * for active database records.
+ */
+class TDBKeyMap
 {
-    char *pKey;                  // packed key of record
-    char *uKey;                  // unpacked key
-    unsigned char rkFlds;        // number fields in key
-    unsigned char *rkLen;        // len of fields
-    unsigned char *rkInd;        // index of fields
-    unsigned char fullLen;       // full length of records key
-
-    const TDBKey& operator=(const TDBKey&);
-
-protected:
-    void unpack( const char *key );
-    void pack( const char *key );
+    friend class TDataBase;
 
 public:
-    TDBKey(unsigned char nRkflds,const unsigned char* rkfrm );
-    TDBKey(std::fstream& f);
-    TDBKey( const TDBKey& dbKey );
-    virtual ~TDBKey();
-    void check();
+    /**
+     * @brief Constructs a key map manager with an explicit key field layout specification.
+     *
+     * @param nRkflds Number of sub-fields constituting the compound key.
+     * @param rkfrm   Pointer to an array defining the maximum byte lengths for each sub-field.
+     */
+    TDBKeyMap(unsigned char nRkflds, const unsigned char* rkfrm)
+        : current_key(nRkflds, rkfrm), key_record_map() {}
 
-    //--- Selectors
-    const char *PackKey()
+    /**
+     * @brief Constructs and configures a key map manager directly from a configurator file stream.
+     *
+     * @param f Reference to the active configuration input stream.
+     */
+    explicit TDBKeyMap(std::fstream& f)
+        : current_key(f), key_record_map() {}
+
+    /**
+     * @brief Virtual destructor to ensure proper cleanup of derived classes.
+     */
+    virtual ~TDBKeyMap() = default;
+
+    // Disable copy semantics to prevent accidental duplication of large in-memory index maps
+    TDBKeyMap(const TDBKeyMap&) = delete;
+    TDBKeyMap& operator=(const TDBKeyMap&) = delete;
+
+    /**
+     * @brief Returns the total number of indexed records stored in the map.
+     * @return size_t The exact count of active record entries.
+     */
+    size_t count() const noexcept
     {
-        pKey[fullLen+rkFlds] = '\0';
-        return pKey;
-    }
-    const char *UnpackKey() const
-    {
-        uKey[fullLen] = '\0';
-        return uKey;
-    }
-    unsigned char KeyLen() const
-    {
-        return fullLen;
-    }
-    unsigned char KeyNumFlds() const
-    {
-        return rkFlds;
-    }
-    char *FldKey( uint i) const
-    {
-        return uKey+rkInd[i];
-    }
-    unsigned char FldLen(uint i) const
-    {
-        return rkLen[i];
-    }
-    unsigned char* RkFrm() const
-    {
-        return rkLen;
+        return key_record_map.size();
     }
 
-    //--- Manipulation keys
-    void SetKey( const char *key );
-    void SetFldKey( uint i, const char *fld );
-    //  void MakeKey( int nRtwrk, char *pkey, ...);	// !!!!!!
-}
-;
-
-//This class contened the list of indexes
-class TDBKeyList:
-            public TDBKey
-{
-    int nI;
-    size_t recInDB;  // records in DB
-    size_t nBuf;
-    RecEntry *re;
-    char *ndx[MAXRKFRMSTR];
-
-    //key list for a wildcard search
-    TCStringArray aKey;
-    TCIntArray anR;
-
-    TDBKeyList(const TDBKeyList&);
-    const TDBKeyList operator=(const TDBKeyList&);
-
-protected:
-    void init();
-    int keycom( uint );
-    uint keycmp( uint );
-    void arec_add( uint );
-    void check_ndx();
-
-public:
-    TDBKeyList( unsigned char nRkflds, const unsigned char* rkfrm );
-    TDBKeyList( std::fstream& f );
-    ~TDBKeyList();
-    void check_i(uint i);
-
-    //--- Selectors
-    RecEntry* RecPosit(uint i);
-
-    // int iRec() const
-    // {
-    //     return nI;
-    // }
-    size_t RecCount() const
+    /**
+     * @brief Checks whether the index key map contains no records.
+     * @return true If the map is completely empty, false otherwise.
+     */
+    bool empty() const noexcept
     {
-        return recInDB;
-    }
-    char *RecKeyFld(uint i, uint j) const
-    {
-        return ndx[j]+i*FldLen(j);
-    }
-    const TCStringArray& KeyList() const
-    {
-        return aKey;
-    }
-    const TCIntArray& RnList() const
-    {
-        return anR;
-    }
-    size_t KeyInList()
-    {
-        return aKey.size();
+        return key_record_map.empty();
     }
 
-    //--- Manipulation records
-    uint  addndx( uint nF, int len, const char *key );
-    void delndx(uint i);
-    int  findx( const char *key );
-    size_t  xlist( const char *pattern );
-    void PutKeyList( uint nF, GemDataStream& f) const;
-    void GetKeyList_i( uint nF,int nRec, GemDataStream& f, const std::string& file_name );
-    void delfile( uint nF );
-
-    //--- Manipulation key
-    void PutKey(uint i);
-    void RecKey(uint i, std::string& kbuf );
-
-    //--- reset class
+    /**
+     * @brief Resets the in-memory index key map and restores the default wildcard search key.
+     */
     void initnew();
+
+    /**
+     * @brief Checks whether a specific unpacked key exists in the index map.
+     * @param unpack_key The unpacked string key to look up.
+     * @return true If the key exists in the map, false otherwise.
+     */
+    bool haskey(const std::string& unpack_key) const;
+
+    /**
+     * @brief Retrieves a pointer to the RecEntry associated with the given unpacked key.
+     *
+     * @param unpack_key The unpacked string key to search for.
+     * @return const RecEntry* Pointer to the found entry, or nullptr if the key does not exist.
+     */
+    const RecEntry* findkey(const std::string& unpack_key) const;
+
+    /**
+     * @brief Retrieves a mutable pointer to the RecEntry associated with the given unpacked key.
+     *
+     * Useful when updating the physical position or length of an existing record in-place.
+     *
+     * @param unpack_key The unpacked string key to search for.
+     * @return RecEntry* Mutable pointer to the found entry, or nullptr if not found.
+     */
+    RecEntry* findkey(const std::string& unpack_key);
+
+    /**
+     * @brief Inserts a new record entry or updates an existing one in the index map.
+     * @param unpack_key The unpacked string key identifying the record.
+     * @param entry      The RecEntry metadata (file position, length, file index) to store.
+     */
+    void putkey(const std::string& unpack_key, const RecEntry& entry);
+
+    /**
+     * @brief Removes a single record index entry from the map by its unpacked key.
+     * @param unpack_key The unpacked string key identifying the record to remove.
+     */
+    bool delkey(const std::string& unpack_key);
+
+    /**
+     * @brief Removes all record index entries belonging to a specific database file.
+     * @param nF The database file index whose record keys should be purged from memory.
+     */
+    void delfile(size_t nF);
+
+    /**
+     * @brief Serializes all index keys belonging to a specific database file into a binary index stream (.ndx).
+     * @param nF        The database file index to filter records by.
+     * @param f         Output binary stream for the .ndx file.
+     * @param file_name File path used for error reporting diagnostics.
+     */
+    void save_keys_ndxs(size_t nF, GemDataStream& f, const std::string& file_name) const;
+
+    /**
+     * @brief Deserializes record index entries from a binary index stream (.ndx) into the in-memory map.
+     * @param nF        The database file index assigned to all loaded records.
+     * @param nRec      Total number of records expected in the index file.
+     * @param f         Input binary stream for the .ndx file.
+     * @param file_name File path used for error reporting diagnostics.
+     */
+    void get_keys_ndxs(size_t nF, size_t nRec, GemDataStream& f, const std::string& file_name);
+
+    /**
+     * @brief Filters all indexed records matching the provided wildcard key template.
+     *
+     * Parses the incoming pattern into field segments and evaluates every entry in the
+     * index map, returning a standalone vector of matched unpacked keys.
+     *
+     * @param keypat Wildcard pattern string (e.g., "aq:*:H2O*:*").
+     * @return std::vector<std::string> A vector containing all matched unpacked keys.
+     */
+    std::vector<std::string> xlist(const std::string& keypat) const;
+
+protected:
+
+    ///Current (last accessed) database record key
+    TDBKeyNew current_key;
+    /// List all loaded keys for database (internal loaded data from opened files)
+    keysmap_t key_record_map;
+
+    /**
+     * @brief Checks if a fixed-width unpacked record key matches a parsed wildcard key template field-by-field.
+     *
+     * @param unpacked_key The fixed-width unpacked key stored in key_record_map.
+     * @param pattern_key  The parsed TDBKeyNew object representing the search template.
+     * @return true        If every sub-field matches its corresponding wildcard pattern.
+     */
+    bool match_unpacked_key(std::string_view unpacked_key, const TDBKeyNew& pattern_key) const noexcept;
 };
 
 //-------------------------------------------------------------
 
-enum RecStatus {   // states of keys record Data Base
-    UNDF_=-7 /* undefined state */, FAIL_=-1 /* access error */,
-    NONE_=0 /* no records */, ONEF_ ,
-    MANY_ , EMPC_, /* empty chain */
-    /* NONELIST_ * no records to part */
-};
-
-enum modeList { openf = 0x01, closef = 0x02, oldself = 0x04 };
-
-// Structure of Data Base
-
+/**
+ * @class TDataBase
+ * @brief High-level manager for a structured database chain, coordinating record CRUD operations,
+ *        in-memory key indexing, and multi-file binary storage (.pdb / .ndx).
+ */
 class TDataBase
 {
     friend TDBFile;
 
-    char Keywd[MAXKEYWD];
-    unsigned char nRT2;
-    RecStatus status;
-    int frstOD;
-    unsigned char nOD;
-    int frstODjson;
-    int lastODjson;
-    TDBKeyList ind;
-    TDBFileList dbfiles_list;
-
-    //work param
-    time_t crt;
-
 public:
 
-    TDataBase( size_t nrt, const char* name, bool Rclose, bool isDel,
-              int nOf, unsigned char Nobj, int filesNum,
-              unsigned char nRkflds, const unsigned char* rkfrm );
-    TDataBase( std::fstream& f );
-    ~TDataBase();
-    //put state to cfg file
-    void toCFG( std::fstream& f );
+    /**
+     * @brief Checks whether the given key string contains wildcard or path-separator pattern characters.
+     *
+     * Evaluates the input key view in-place without memory allocations for the presence
+     * of '*', '?', or '/' characters.
+     *
+     * @param key The key string view to evaluate.
+     * @return true If the key contains at least one wildcard/pattern character, false otherwise.
+    */
+    static constexpr bool isPattern(std::string_view key) noexcept
+    {
+        return key.find_first_of("*?/") != std::string_view::npos;
+    }
 
-    //--- Selectors
-    RecStatus GetStatus() const
-    {
-        return status;
-    }
-    void SetStatus( RecStatus stt )
-    {
-        status = stt;
-    }
+    /**
+     * @brief Constructs and initializes a new database chain manager with explicit parameters.
+     *
+     * @param rt_type  Record type identifier for this database chain.
+     * @param name     Keyword/name identifier of the database chain.
+     * @param Rclose   If true, automatically closes files after each read/write transaction.
+     * @param isDel    If true, enables deleted records tracking and space recycling (sfe).
+     * @param nOf      Index of the first data object in the global object list.
+     * @param Nobj     Total number of data objects packed in a single record.
+     * @param filesNum Initial capacity or number of files in the database chain.
+     * @param nRkflds  Number of sub-fields constituting the compound record key.
+     * @param rkfrm    Pointer to an array defining maximum byte lengths for each key sub-field.
+     */
+    TDataBase(size_t rt_type, std::string_view name, bool Rclose, bool isDel,
+              int32_t nOf, unsigned char Nobj, int32_t filesNum,
+              unsigned char nRkflds, const unsigned char* rkfrm);
+
+    /**
+     * @brief Constructs and restores the database chain configuration from an active file stream.
+     * @param f Reference to the input configuration file stream.
+     */
+    explicit TDataBase(std::fstream& f);
+
+    /**
+     * @brief Virtual destructor ensuring proper resource cleanup for derived classes.
+     */
+    virtual ~TDataBase();
+
+    // Disable copy semantics to prevent accidental duplication of active file handles and index maps
+    TDataBase(const TDataBase&) = delete;
+    TDataBase& operator=(const TDataBase&) = delete;
+
+    /**
+     * @brief Serializes the current database configuration state to a configuration file stream.
+     * @param f Reference to the output configuration file stream.
+     */
+    void toCFG(std::fstream& f) const;
 
     /// Sets the number of objects of the record (cached configurations may hold an older count).
     void setObjectCount(unsigned char n)
     {
-        if( lastODjson == frstODjson+nOD-1 )
+        if(lastODjson == frstODjson+nOD-1) {
             lastODjson = frstODjson+n-1;
+        }
         nOD = n;
     }
     void updateJsonOD(int frstOD, int lastOD)
@@ -424,46 +474,115 @@ public:
         return char_array_to_string(Keywd, MAXKEYWD);
     }
 
+    /**
+     * @brief Opens a specific subset of database files and automatically triggers defragmentation if required.
+     *
+     * @param mode      The target file status/mode to switch to (e.g., READ, WRITE, UPDATE_DBV).
+     * @param files_ndx Vector collection containing the numeric tracking indices of the files to be opened.
+    */
+    void openDatabase(FileStatus mode, const std::vector<int>& files_ndx);
+
+    /**
+     * @brief Closes all currently opened database files and resets the active index collections.
+    */
+    void closeDatabase();
+
+
+    //--- Selectors
+    RecStatus GetStatus() const
+    {
+        return status;
+    }
+    void SetStatus( RecStatus stt )
+    {
+        status = stt;
+    }
     size_t RecCount() const
     {
-        return ind.RecCount();
+        return keys_map.count();
     }
-    const char *PackKey()
+    std::string PackKey()
     {
-        return ind.PackKey();
+        return keys_map.current_key.packKey();
     }
-    const char *UnpackKey()
+    std::string UnpackKey()
     {
-        return ind.UnpackKey();
+        return keys_map.current_key.unpackKey();
     }
-    void SetKey( const char *key )
+    void SetKey(const std::string& key)
     {
-        ind.SetKey(key);
+        keys_map.current_key.setKey(key);
     }
-    const TDBKey& GetDBKey() const
+    /**
+     * @brief Safely overrides the literal value of a single specific sub-field slot.
+     * @param ndx     The zero-based index of the target sub-field slot.
+     * @param new_fld The incoming new string value for the specified field.
+     */
+    void setFieldKey(size_t ndx, const std::string& new_fld)
     {
-        return ind;
+        keys_map.current_key.setFieldKey(ndx, new_fld);
     }
-    uint KeyLen() const
-    {
-        return ind.KeyLen();
-    }
-    char *FldKey( uint i ) const
-    {
-        return ind.FldKey(i);
-    }
-    unsigned char FldLen(uint i) const
-    {
-        return ind.FldLen(i);
-    }
-    unsigned char KeyNumFlds() const
-    {
-        return ind.KeyNumFlds();
-    }
-    void MakeKey( unsigned char nRtwrk, char *pkey, ...);
 
-    void Open( bool type, FileStatus mode, const TCIntArray& indx);
-    void Close();
+
+    const TDBKeyNew& GetDBKey() const
+    {
+        return keys_map.current_key;
+    }
+    size_t KeyLen() const
+    {
+        return keys_map.current_key.length();
+    }
+    std::string FldKey(size_t i) const
+    {
+        return keys_map.current_key.fieldKey(i);
+    }
+    size_t FldLen(size_t i) const
+    {
+        return keys_map.current_key.fieldLength(i);
+    }
+    size_t KeyNumFlds() const
+    {
+        return keys_map.current_key.fieldsInKey();
+    }
+
+    /**
+     * @brief Splits a composite record key string into its individual sub-field segments.
+     *
+     * @param key The composite packed or unpacked record key string to split.
+     * @return std::vector<std::string> A vector of individual key sub-field values.
+     */
+    std::vector<std::string> key2fields(const std::string& key) const
+    {
+        TDBKeyNew temp_key = keys_map.current_key;
+        temp_key.setKey(key);
+        return temp_key.allFields();
+    }
+
+    /**
+     * @brief Assembles a composite record key string from a vector of individual sub-field values.
+     *
+     * @param fields A vector containing the string values for the key sub-fields.
+     * @param packed If true (default), returns a colon-delimited packed key; otherwise, returns a space-padded unpacked key.
+     * @return std::string The assembled composite record key.
+     */
+    std::string fields2key(const std::vector<std::string>& fields, bool packed = true) const;
+
+    //void MakeKey( unsigned char nRtwrk, char *pkey, ...);
+
+    /**
+     * @brief Compiles a type-safe multi-segment compound index key from structured command parameters.
+     *
+     * Iterates through a flat list of formatting arguments, processes wildcard tokens (*, `),
+     * pulls dynamic values from active relation tables, and merges them using colon delimiters.
+     *
+     * @param nrt   The active operational relation table context code.
+     * @param args  Initializer list containing structured KeyArg configuration options.
+     * @return std::string The safely compiled, formatted index key.
+     */
+    std::string makeKey(uint8_t nrt, std::initializer_list<KeyArg> args) const
+    {
+        return keys_map.current_key.makeKey(nrt, args);
+    }
 
     // =========================================================================
     // --- Database Records Manipulation Methods ---
@@ -476,7 +595,10 @@ public:
      */
     bool existsRecord(const std::string& key)
     {
-        return Find(key.c_str()) >= 0;
+        TDBKeyNew temp_key = keys_map.current_key;
+        temp_key.setKey(key);
+        const std::string unpack_key = temp_key.unpackKey();
+        return keys_map.haskey(unpack_key);
     }
 
     /**
@@ -494,16 +616,7 @@ public:
      * @param key The unique key string identifier of the target record.
      * @throws Critical exception/Error if the record is non-existent.
      */
-    void readRecord(const std::string& key)
-    {
-        int Rnum = Find(key.c_str());
-        if(Rnum < 0) {
-            std::string msg = "Database access error: Record '" + key + "' was not found!";
-            Error(getKeywd(), msg);
-            return;
-        }
-        Get(Rnum);
-    }
+    void readRecord(const std::string& key);
 
     /**
      * @brief Updates the payload content of an existing record matched by its key.
@@ -511,17 +624,7 @@ public:
      * @param key The unique key identifier the record to be modified.
      * @return std::string The validated record identifier string.
      */
-    std::string updateRecord(const std::string& key)
-    {
-        int Rnum = Find(key.c_str());
-        if(Rnum < 0) {
-            Error(getKeywd(), "Failed to update record: '" + key + "' does not exist.");
-            return key;
-        }
-
-        Rep(Rnum);
-        return key;
-    }
+    std::string updateRecord(const std::string& key);
 
     /**
      * @brief Removes a specific record from the database collection physically or marks it as recycled.
@@ -529,17 +632,75 @@ public:
      * @param key       The unique key identifier string of the record earmarked for deletion.
      * @param err_if_no If true, triggers a system Error diagnostic if the target record was missing.
      */
-    void deleteRecord(const std::string& key, bool err_if_no = true)
+    void deleteRecord(const std::string& key, bool err_if_no = true);
+
+    /**
+     * @brief Retrieves the creation or last modification timestamp of a specific record.
+     * @param key The unique packed or unpacked key string identifying the target record.
+     * @return std::time_t The record timestamp, or 0 if the record does not exist in the index map.
+     */
+    std::time_t getTime(const std::string& key);
+
+    /**
+     * @brief Returns the creation or last modification timestamp of the currently loaded record.
+     * @return std::time_t The cached timestamp value (crt_time).
+     */
+    std::time_t Rtime() const noexcept
     {
-        int Rnum = Find(key.c_str());
-        if(Rnum >= 0) {
-            Del(Rnum);
-        }
-        else if(err_if_no) {
-            std::string msg = "Database access error: Record '" + key + "' not found for deletion!";
-            Error(getKeywd(), msg);
-        }
+        return crt_time;
     }
+
+    /**
+     * @brief Tests the existence and multiplicity state of records matching the given key or wildcard pattern.
+     *
+     * @param pkey The packed or unpacked record key or wildcard pattern to test.
+     * @param mode Operational mode: if 1 and exactly one record matches, automatically calls readRecord().
+     * @return RecStatus The resulting record state (EMPC_, NONE_, ONEF_, MANY_, or UNDF_).
+     */
+    RecStatus Rtest(const std::string& pkey, int mode);
+
+    /**
+     * @brief Replaces a specific field segment in the given record key with a wildcard ("*").
+     * @param pkey  The source packed or unpacked record key string.
+     * @param field The zero-based index of the key field to replace with "*".
+     * @return std::string The modified unpacked key pattern.
+     */
+    std::string patternToField(const std::string& pkey, size_t field) const;
+
+    /**
+     * @brief Checks if any records match the given key when a specific field segment is wildcarded.
+     *
+     * @note Updates the internal database access status as a side effect of calling Rtest().
+     *
+     * @param pkey  The source packed or unpacked record key string.
+     * @param field The zero-based index of the key field to ignore (replace with "*").
+     * @return true If at least one matching record exists (status is ONEF_ or MANY_), false otherwise.
+     */
+    bool findPart(const std::string& pkey, size_t field);
+
+    /**
+     * @brief Generates a filtered list of unique record keys matching a specified wildcard layout pattern.
+     *
+     * Scans the active compound index tree using the provided template pattern (e.g., containing '*' or '?'),
+     * populates the output vector with all matched valid string keys, and returns the total collection size.
+     *
+     * @param[in]  keypat The wildcard lookup pattern or key template used to filter records.
+     * @param[out] keys   Output reference vector to be populated with the generated matching key strings.
+     * @return size_t The exact total count of unique keys loaded into the output vector container.
+    */
+    size_t getKeysList(const std::string& keypat, std::vector<std::string>& keys)
+    {
+        keys = keys_map.xlist(keypat);
+        return keys.size();
+    }
+
+    /**
+     * @brief Batch-renames records by updating strictly the first field of all keys matching oldName.
+     *
+     * @param newName The new identifier string for the first key field.
+     * @param oldName The existing first-field identifier to search for and replace.
+     */
+    void renameList(const std::string& newName, const std::string& oldName);
 
     /**
      * @brief Prompts the user via a graphical interface dialog to confirm saving or overriding a record.
@@ -569,20 +730,6 @@ public:
      */
     void addRecord(QWidget *window, const std::string& key, int &fnum);
 
-    int Find( const char *key);
-    RecStatus Rtest( const char *key, int mode = 1);
-    bool FindPart( const char *key_, uint field );
-    time_t GetTime(size_t record_ndx);               // time record number i
-    time_t Rtime() const
-    {
-        return crt;
-    }  // time current record
-
-    size_t GetKeyList(const char *keypat, TCStringArray& aKey);
-    void RenameList( const char* newName,
-                    const char *oldName );
-
-
     // =========================================================================
     // --- Database File Manipulation Methods ---
     // =========================================================================
@@ -600,13 +747,7 @@ public:
      */
     void addNewFile(const std::string &path)
     {
-        try {
-            dbfiles_list.open_new_file(nRT2, path, ind);
-        }
-        catch (...) {
-            Error(path, "Failed to initialize and open new database file structure.");
-            throw;
-        }
+        dbfiles_list.open_new_file(record_type, path, keys_map);
     }
 
     /**
@@ -658,16 +799,7 @@ public:
      * @param second_name The secondary suffix name of the database file.
      * @return size_t The valid file index, or std::string::npos if the file does not exist.
      */
-    size_t indexOfName(const std::string &second_name)
-    {
-        std::string name = std::string(getKeywd()) + "." + second_name;
-        size_t file_ndx = dbfiles_list.file_name_index(name);
-        if (file_ndx == std::string::npos) {
-            Error(name, "Database access error: Attempted to reference a non-existent file.");
-            return std::string::npos;
-        }
-        return file_ndx;
-    }
+    size_t indexOfName(const std::string &second_name);
 
     /**
      * @brief Rebuilds, compresses, and defragments specified database files by recycling deleted blocks.
@@ -732,58 +864,92 @@ public:
     void selectionFilesList(int mode,
                             std::vector<std::string>& names,
                             std::vector<int>& indices,
-                            std::vector<int>& sel);
-
-
+                            std::vector<int>& sel)
+    {
+        return dbfiles_list.files_list(mode, names, indices, sel);
+    }
 
     //--- Working with Json
-    void toJsonObject( QJsonObject& obj ) const;
-    std::string fromJsonObject( const QJsonObject& obj );
+    void toJsonObject(QJsonObject& obj) const;
+    std::string fromJsonObject(const QJsonObject& obj);
     void toJsonObjectNew(QJsonObject &obj, const std::string& project_name) const;
     std::string fromJsonObjectNew( const QJsonObject& obj );
 
-    //--- Could be moved to db internal
-    int GetObjFirst() const
-    {
-        return  frstOD;
-    }
-    unsigned char GetObjCount() const
-    {
-        return nOD;
-    }
-
+    /**
+     * @brief Unloads (exports) a specific database record and its nested objects into a formatted text stream.
+     *
+     * Retrieves the record payload into the system buffers, synchronizes the record key pointer,
+     * and sequentially serializes all associated chemical or thermodynamic data objects into the text output.
+     *
+     * @param[in] key The unique key string identifier of the record to export.
+     * @param[out] f  The destination target text output stream (e.g., std::ofstream or std::stringstream).
+    */
+    void recordToTxt(const std::string& key, std::ostream& f);
+    /**
+     * @brief Loads (imports) data records and nested sub-objects configuration from a formatted text stream.
+     *
+     * Dynamically allocates a type-safe input buffer to avoid stack smashing, parses the record identifiers
+     * along with its serialized sub-components, and returns the safely extracted and validated record key.
+     *
+     * @param[in] f   The source text input stream (e.g., std::ifstream or std::stringstream).
+     * @return std::string The successfully parsed, formatted, and null-terminated record key string.
+     */
+    std::string recordFromTxt(std::istream& f);
 
 protected:
-    void Get( int i);
-    void Del( int i);
-    void Rep( int i);
-    void ReplaceRecordwithQuestion(QWidget *window, const std::string& key, int &quest_reply);
+    /// Keyword identifier of the database chain type (zero-initialized)
+    char Keywd[MAXKEYWD]{};
 
+    /// Record type code associated with this database chain
+    unsigned char record_type = 0;
+
+    /// First object index in the global object list for this chain
+    int32_t frstOD = 0;
+
+    /// Number of data objects stored within a single record
+    unsigned char nOD = 0;
+
+    /// First object index used during JSON serialization/export
+    int32_t frstODjson = 0;
+
+    /// Last object index used during JSON serialization/export
+    int32_t lastODjson = 0;
+
+    /// In-memory associative map linking unpacked record keys to their physical file coordinates
+    TDBKeyMap keys_map;
+
+    /// Collection manager for low-level binary database files (.pdb) and index tables (.ndx)
+    TDBFileList dbfiles_list;
+
+    // --- Runtime Operational Parameters ---
+
+    /// Status flag reflecting the outcome of the last record access operation
+    RecStatus status{};
+
+    /// Creation or last modification timestamp of the last accessed record
+    std::time_t crt_time = 0;
+
+    void fromCFG(std::fstream& f);
+
+    int reclen();
+    int putrec(const RecEntry* re, GemDataStream& f, uint32_t crt);
+    int getrec(const RecEntry* re, GemDataStream& f, RecHead& rh);
+    int scanfile(size_t nF, int32_t& fPos, int32_t& fLen,
+                            GemDataStream& inStream, GemDataStream& outStream);
 
     /// Object count written to the record header. The extended-settings objects of the project
     /// record are not counted, so that older GEMSGUI versions still read the record.
     unsigned char headerObjCount() const;
-
-
-    //--- check
-    int reclen( );
-    int putrec( RecEntry& re, GemDataStream& f, uint32_t crt );
-    //int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
-    int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
     int getExtendedSettings( GemDataStream& f, int nRead, int StillLen );
-    void opfils();
-    int scanfile( uint nF, int& fPos, int& fLen,
-	    GemDataStream& inStream, GemDataStream& outStream);
-    void fromCFG(std::fstream& f);
 
+    std::string make_key_template(const std::vector<std::string>& first_fields) const;
     std::string gen_new_project_file_name(const std::string& dir,
-                                          const std::string& project_name, const std::string& f_name) const;
+                                          const std::string& project_name,
+                                          const std::string& f_name) const;
     void check_record_key(const std::string& key);
     bool check_rt_name(const std::string &file_name) const;
 
-    bool KeyTest( const char* key );
-    std::string make_key_template(const std::vector<std::string>& first_fields) const;
-
+    void ReplaceRecordwithQuestion(QWidget *window, const std::string& key, int &quest_reply);
 };
 
 // Data Base container : rt
@@ -807,5 +973,6 @@ public:
 extern DataBaseList rt;
 
 #endif	// V_DBM_H_
+
 
 

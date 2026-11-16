@@ -136,9 +136,9 @@ public:
     {
         return ( ni<aFldKeysHelp.size() ? aFldKeysHelp[ni] : "");
     }
-    const char* GetKey() const
+    std::string GetKey() const
     {
-        return (db ? db->PackKey(): nullptr);
+        return (db ? db->PackKey(): "");
     }
 
     /// Test input data (necessary recalculations)
@@ -146,7 +146,7 @@ public:
     {
         return false;
     }
-    virtual std::string GetKeyofRecord(const char *oldKey, const char *strTitle, int keyType);
+    virtual std::string GetKeyofRecord(const std::string& oldKey, const std::string& strTitle, int keyType);
     /// opens window with 'Remake record' parameters
     virtual void MakeQuery(); //!!??
     virtual void RecSave(const char *key, bool onOld= true);

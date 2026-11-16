@@ -256,7 +256,7 @@ void TBinaryFile::from_cfg(std::fstream &config_stream)
     fnv1a_64_hash = fnv1a_64(normalized);
 }
 
-void TBinaryFile::to_cfg(std::fstream &config_stream)
+void TBinaryFile::to_cfg(std::fstream &config_stream) const
 {
     config_stream << Keywd << "  ";
     config_stream << fnv1a_64_hash << "  ";
