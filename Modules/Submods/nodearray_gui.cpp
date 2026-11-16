@@ -35,7 +35,7 @@ std::string TNodeArrayGUI::PutGEM2MTFiles(  QWidget* par, long int nIV,
                                           bool putNodT1, bool addMui )
 {
     // Get name of filenames structure
-    std::string path = char_array_to_string( rt[RT_SYSEQ]->FldKey(2), rt[RT_SYSEQ]->FldLen(2));
+    std::string path = rt[RT_SYSEQ]->FldKey(2);
     strip(path);
     GEMS3KGenerator::IOModes type_f=GEMS3KGenerator::f_key_value;
     switch( type_b)

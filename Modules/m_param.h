@@ -129,7 +129,7 @@ protected:
     void RenameFN( const char * prfName, const char* prfTemplate );
     bool GetFN( const char * prfName, bool show_dlg=true );
     void SetFN();
-    bool rCopyFilterProfile( const char * prfName );
+    bool rCopyFilterProfile( const std::string& prfName );
 
     void OpenProfileMode(
             const char* key, bool changeAqGas, bool addFile,  bool remakeRec );
@@ -210,7 +210,7 @@ public:
 
     static std::string projectName()
     {
-        auto strfilt = char_array_to_string( rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
+        auto strfilt = rt[RT_PARAM]->FldKey(0);
         StripLine(strfilt);
         return strfilt;
     }

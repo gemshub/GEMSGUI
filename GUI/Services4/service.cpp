@@ -375,8 +375,8 @@ TCStringArray vfMultiKeysSet(QWidget* par, const char* caption,
     return dbk.allSelectedKeys();
 }
 
-TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
-                    const char* key, TCStringArray& sel, short NsuT )
+TCStringArray vfRDMultiKeysSet(QWidget* par, const std::string& caption,
+                    const std::string& key, TCStringArray& sel, short NsuT )
 {
     RDKeyDialog dbk(par, sel, key, caption, NsuT);
     dbk.exec();
@@ -386,7 +386,7 @@ TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
 //----------------------------------------------------------------
 // System remake dialog
 bool
-vfExcludeFillEdit(QWidget* par, const char* caption,
+vfExcludeFillEdit(QWidget* par, const std::string& caption,
    TCStringArray& aICkeys, std::vector<bool>& sel, double& fill_data )
 {
   if( pThread != QThread::currentThreadId() )
@@ -420,8 +420,7 @@ vfExcludeFillEdit(QWidget* par, const char* caption,
 // KeyEdit dialogs
 //=============================================
 
-std::string
-vfKeyEdit(QWidget* par, const char* caption, uint iRt, const char* key)
+std::string vfKeyEdit(QWidget* par, const std::string& caption, uint iRt, const std::string& key)
 {
     KeyDialog dbk(par, iRt, key, caption);
     if( !dbk.exec() )
@@ -456,8 +455,7 @@ std::string vfKeyProfile( QWidget* par, const char* caption, int iRt,
     return dbk.getKey();
 }
 
-std::string
-vfKeyTemplEdit(QWidget* par, const char* caption, uint iRt, const char* key,
+std::string vfKeyTemplEdit(QWidget* par, const std::string& caption, uint iRt, const std::string& key,
                bool allowTemplate)
 {
   if( pThread != QThread::currentThreadId() )
@@ -682,7 +680,7 @@ BACK:
 //            TCStringArray& rds, TCStringArray& names,
 //            bool& aAqueous, bool& aGaseous, bool& aSorption)
 bool
-vfElements(QWidget* par, const char * prfName,
+vfElements(QWidget* par, const std::string& prfName,
            elmWindowData& elm_data, setFiltersData& sf_data )
 {
     ElementsDialog eldlg( par, prfName, elm_data );
@@ -695,8 +693,7 @@ vfElements(QWidget* par, const char * prfName,
     return true;
 }
 
-bool
-vfSystemInput(QWidget* par, const char * p_key,
+bool  vfSystemInput(QWidget* par, const std::string& p_key,
               std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
               std::vector<pagesSetupData>& scalarsList )
 {
@@ -709,15 +706,14 @@ vfSystemInput(QWidget* par, const char * p_key,
 }
 
 
-bool
-vfProcessSet(QWidget* par, const char * p_key,
+bool vfProcessSet(QWidget* par, const std::string& p_key,
              char flgs[24], int size[8], short tabInt[6], double tabDoubl[24],
 std::string& calcScript, std::string& outScript, TCStringArray& names,
 std::string& xName, std::string& yName )
 {
     ProcessWizard pdlg( p_key, flgs, size,  tabInt, tabDoubl,
-                        calcScript.c_str(), outScript.c_str(),
-                        xName.c_str(), yName.c_str(), par );
+                        calcScript, outScript,
+                        xName, yName, par );
     if( !pdlg.exec() )
         return false;
 
@@ -732,15 +728,14 @@ std::string& xName, std::string& yName )
     return true;
 }
 
-bool
-vfGEM2MTSet(QWidget* par, const char * p_key,
+bool vfGEM2MTSet(QWidget* par, const std::string& p_key,
             char flgs[32], int size[20],  double Tai[4], double Pai[4], double Tau[3],
 std::string& calcScript, std::string& outScript, TCStringArray& names,
 std::string& xName, std::string& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
 {
     GEM2MTWizard pdlg( p_key, flgs, size, Tai, Pai, Tau,
-                       calcScript.c_str(), outScript.c_str(),
-                       xName.c_str(), yName.c_str(), vtk1, vtk2, par );
+                       calcScript, outScript,
+                       xName, yName, vtk1, vtk2, par );
     if( !pdlg.exec() )
         return false;
 
@@ -758,8 +753,7 @@ std::string& xName, std::string& yName, TCIntArray& vtk1, TCIntArray& vtk2 )
     return true;
 }
 
-bool
-vfUnSpaceSet(QWidget* par, const char * p_key,
+bool vfUnSpaceSet(QWidget* par, const std::string& p_key,
              char flgs[38], int size[10] )
 {
     UnSpaceWizard pdlg( p_key, flgs, size, par );
@@ -772,7 +766,7 @@ vfUnSpaceSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool vfGtDemoSet( QWidget* par, const char * p_key, char flgs[16], int size[8],
+bool vfGtDemoSet( QWidget* par, const std::string& p_key, char flgs[16], int size[8],
                   std::string& prkey, std::string& script, TCStringArray& names,
                   std::string& xName, std::string& yName, TCStringArray& keys )
 {
@@ -788,8 +782,7 @@ bool vfGtDemoSet( QWidget* par, const char * p_key, char flgs[16], int size[8],
     return true;
 }
 
-bool
-vfComposSet(QWidget* par, const char * p_key,
+bool vfComposSet(QWidget* par, const std::string& p_key,
             char flgs[6], int size[2], double& r2  )
 {
      ComposWizard cdlg( p_key, flgs, size, r2, par );
@@ -802,8 +795,7 @@ vfComposSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool
-vfDCompSet(QWidget* par, const char * p_key,
+bool vfDCompSet(QWidget* par, const std::string& p_key,
             char flgs[15], int size[4]  )
 {
      DCompWizard cdlg( p_key, flgs, size, par );
@@ -815,7 +807,7 @@ vfDCompSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool vfReacDCSet(QWidget* par, const char * p_key,
+bool vfReacDCSet(QWidget* par, const std::string& p_key,
                  char flgs[12], int size[4], TCStringArray& sel  )
 {
     ReacDCWizard cdlg( p_key, flgs, size, sel, par );
@@ -828,15 +820,14 @@ bool vfReacDCSet(QWidget* par, const char * p_key,
 }
 
 
-bool
-vfRTparmSet(QWidget* par, const char * p_key,
+bool vfRTparmSet(QWidget* par, const std::string& p_key,
             char flgs[10], int size[7], double val[6],
             std::string& script, std::string& xName,  std::string& yName,
             TCStringArray& names )
 {
     std::string axName;
-    RTparmWizard cdlg( p_key, flgs, size, val, script.c_str(),
-                       xName.c_str(), yName.c_str(), par );
+    RTparmWizard cdlg( p_key, flgs, size, val, script,
+                       xName, yName, par );
      if( !cdlg.exec() )
        return false;
     cdlg.getFlags( flgs, xName  );
@@ -849,7 +840,7 @@ vfRTparmSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool vfPhaseSet( QWidget* par, const char * p_key,
+bool vfPhaseSet( QWidget* par, const std::string& p_key,
                  char flgs[37], int size[30], double& r2, TCStringArray& rd_sel,
                  TCStringArray& phase_sel, TCStringArray& lDCr_sel  )
 {
@@ -863,8 +854,7 @@ bool vfPhaseSet( QWidget* par, const char * p_key,
     return true;
 }
 
-bool
-vfDualThSet(QWidget* par, const char * p_key,
+bool vfDualThSet(QWidget* par, const std::string& p_key,
             char flgs[20], int size[8]  )
 {
      DualThWizard cdlg( p_key, flgs, size, par );
@@ -876,8 +866,7 @@ vfDualThSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool
-vfProjectSet(QWidget* par, const char * p_key,
+bool vfProjectSet(QWidget* par, const std::string& p_key,
               char flgs[38], int&  taskset )
 {
      ProjectWizard pdlg( p_key, flgs, par );
@@ -890,8 +879,7 @@ vfProjectSet(QWidget* par, const char * p_key,
     return true;
 }
 
-bool
-vfSystemSet(QWidget* par, const char * p_key,
+bool vfSystemSet(QWidget* par, const std::string& p_key,
             char flgs[40],  std::string& name, std::string& comment, std::string& EQkey )
 {
      SystemWizard pdlg( p_key, flgs, name, comment,  EQkey, par );
@@ -908,7 +896,7 @@ vfSystemSet(QWidget* par, const char * p_key,
 
 // call to AutoPhaseDialog  added 18.07.03
 bool
-vfAutoPhaseSet(QWidget* wpar, const char *pr_key, std::string& a_key, std::string& g_key,
+vfAutoPhaseSet(QWidget* wpar, const std::string& pr_key, std::string& a_key, std::string& g_key,
          char& acode, char& gcode, float apar[8]  )
 {
      AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );

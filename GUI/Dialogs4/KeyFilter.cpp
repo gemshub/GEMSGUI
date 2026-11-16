@@ -29,8 +29,8 @@
 // KeyEdit dialog
 //============================================================
 
-KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
-                     const char* caption, bool allowTempl ):
+KeyFilter::KeyFilter(QWidget* win, size_t irt, const std::string& key,
+                     const std::string& caption, bool allowTempl ):
     QDialog( win ),
     iRt(irt),
     allowTemplates(allowTempl)
@@ -39,28 +39,28 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
     QLabel* pLabel;
 
     setWindowModality(Qt::WindowModal);
-    setWindowTitle(caption);
+    setWindowTitle(QString::fromStdString(caption));
 
-    TDBKey dbKey( rt[irt]->GetDBKey() );
-
-    if( key )
-        dbKey.SetKey(key);
+    std::string rkey = key;
+    if(rkey.empty()) {
+        rkey = rt[iRt]->PackKey();
+    }
+    auto fields = rt[iRt]->key2fields(rkey);
 
     QGridLayout* editBox = new QGridLayout();
     auto editLine = aMod[iRt]->keyEditField();
     
-    for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
+    for( uint ii=0; ii<fields.size(); ii++)
     {
+        const int fld_len = rt[iRt]->FldLen(ii);
         pEdit = new QLineEdit(this);
         aEdit.push_back( std::shared_ptr<QLineEdit>(pEdit) );
         QString str = aMod[irt]->GetFldHelp(ii).c_str();
         pEdit->setToolTip( str);
-        pEdit->setMaxLength( dbKey.FldLen(ii) );
-        pEdit->setMaximumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
-        pEdit->setMinimumWidth( (dbKey.FldLen(ii)+2) * pVisorImp->getCharWidth() );
-        std::string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
-        StripLine(s);
-        pEdit->setText( s.c_str() );
+        pEdit->setMaxLength(fld_len);
+        pEdit->setMaximumWidth( (fld_len+2) * pVisorImp->getCharWidth() );
+        pEdit->setMinimumWidth( (fld_len+2) * pVisorImp->getCharWidth() );
+        pEdit->setText(QString::fromStdString(fields[ii]) );
         connect( pEdit, SIGNAL(editingFinished()), this, SLOT(setKeyLine()) );
 
         editBox->addWidget( pEdit, ii, 0, Qt::AlignRight);
@@ -105,7 +105,7 @@ KeyFilter::KeyFilter(QWidget* win, size_t irt, const char* key,
     buttonBox->addWidget( btn );
 
     fullKey = new QLineEdit(this);
-    fullKey->setText(dbKey.PackKey());
+    fullKey->setText(QString::fromStdString(rkey));
     fullKey->setFocusPolicy( Qt::ClickFocus );
     fullKey->setReadOnly( true );
 
@@ -140,7 +140,7 @@ void KeyFilter::CmHelp()
 
 void KeyFilter::CmOk()
 {
-    if( allowTemplates || SetKeyString().find_first_of("*?") == std::string::npos )
+    if( allowTemplates || !TDataBase::isPattern(SetKeyString()) )
     {
         accept();
         return;
@@ -185,15 +185,9 @@ void KeyFilter::EvGetList()
     if( !dlg.exec() )
         return;
 
-    TDBKey dbKey( rt[iRt]->GetDBKey() );
-
-    dbKey.SetKey(dlg.getKey().c_str());
-
-    for( uint ii=0; ii<dbKey.KeyNumFlds(); ii++)
-    {
-        std::string s(dbKey.FldKey(ii), 0, dbKey.FldLen(ii));
-        StripLine(s);
-        aEdit[ii]->setText( s.c_str() );
+    auto fields = rt[iRt]->key2fields(dlg.getKey());
+    for( uint ii=0; ii<fields.size(); ++ii) {
+        aEdit[ii]->setText( QString::fromStdString(fields[ii]) );
     }
     setKeyLine();
 }

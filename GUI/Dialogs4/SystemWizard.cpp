@@ -57,7 +57,7 @@ void 	SystemWizard::resetBackButton()
     ui->pBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
-SystemWizard::SystemWizard( const char* pkey, char flgs[40],
+SystemWizard::SystemWizard( const std::string& pkey, char flgs[40],
 std::string name, std::string comment, std::string EQkey,  QWidget* parent):
     QDialog( parent ),
     ui(new Ui::SystemWizardData)
@@ -66,7 +66,7 @@ std::string name, std::string comment, std::string EQkey,  QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor System Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
     QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));
@@ -77,8 +77,8 @@ std::string name, std::string comment, std::string EQkey,  QWidget* parent):
     resetBackButton();
 
     // page1
-    ui->pName->setText(name.c_str());
-    ui->pComment->setText(comment.c_str());
+    ui->pName->setText( QString::fromStdString(name));
+    ui->pComment->setText( QString::fromStdString(comment));
 
     if( flgs[15] != '-' || flgs[17] != '-')
         ui->pPLim->setChecked( true );

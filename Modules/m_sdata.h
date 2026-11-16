@@ -77,7 +77,7 @@ public:
     bool ImplementedPrint() const override
     { return true; }
     void RecordPrint( const char *key=0 ) override; //sddata key
-    void CopyRecords( const char * prfName, std::set<std::string>& SDlist );
+    void CopyRecords( const std::string& prfName, std::set<std::string>& SDlist );
     void TryRecInp( const char *key_, time_t& time_s, int q, bool save = true ) override;
 
 

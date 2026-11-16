@@ -145,7 +145,7 @@ void TCModuleImp::CmShow( const char *key )
         // get key of record
         std::string str;
         if( key == nullptr )    {
-            str = aMod[nrt_db]->GetKeyofRecord( /*db->PackKey()*/nullptr, "Select data record key ", KEY_OLD );
+            str = aMod[nrt_db]->GetKeyofRecord( /*db->PackKey()*/"", "Select data record key ", KEY_OLD );
             if(str.empty() )
                 return;
         }
@@ -320,7 +320,7 @@ void TCModuleImp::CmPlot()
             return;
 
         std::string str=aMod[nrt_db]->CurrentKey();
-        if( str.find_first_of("*?" ) != std::string::npos )
+        if( TDataBase::isPattern(str) )
            // || ( db->GetStatus()== UNDF_ && db->RecCount() && nrt_db != RT_SDATA ))
             Error( aMod[nrt_db]->GetName(), "E4 Cannot save under record key template, or record contents are not yet loaded!");
 

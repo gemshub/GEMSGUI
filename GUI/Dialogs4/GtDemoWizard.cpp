@@ -107,7 +107,7 @@ GtDemoWizard::GtDemoWizard( const std::string& pkey, char flgs[16], int size[8],
 
     std::string str1= "GEM-Selektor GtDemo Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     allButtons = new QButtonGroup( ui->groupBox_7 );
     allButtons->addButton(ui->psIC, 0);
@@ -156,7 +156,7 @@ GtDemoWizard::GtDemoWizard( const std::string& pkey, char flgs[16], int size[8],
     QObject::connect( ui->checkFull, SIGNAL(stateChanged(int)), this, SLOT(selSelectionChanged(int)));
 
     // Page4
-    reset_page_list(size[0], aXname.c_str(), aYname.c_str());
+    reset_page_list(size[0], aXname, aYname);
 
     // Page5
     ui->pGraphY->setValue(size[6]);
@@ -260,7 +260,7 @@ equatSetupData eqd( "x0", "y0", "jR", "jR", true );
 
 
 // work with lists
-void GtDemoWizard::reset_page_list( int newRT,const char* aXname, const char* aYname )
+void GtDemoWizard::reset_page_list( int newRT,const std::string& aXname, const std::string& aYname )
 {
 
     std::vector<pagesSetupData> scalarsList;
@@ -276,7 +276,7 @@ void GtDemoWizard::reset_page_list( int newRT,const char* aXname, const char* aY
         if(  rt[RT_SYSEQ]->GetStatus() != ONEF_)
         {
             TCStringArray aRklist;
-            auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist);
+            auto Nr = rt[RT_SYSEQ]->getKeysList(ALLKEY, aRklist);
             if( Nr > 0 )
                 TProfil::pm->loadSystat( aRklist[0].c_str() );
         }
@@ -298,7 +298,7 @@ void GtDemoWizard::reset_page_list( int newRT,const char* aXname, const char* aY
     else
     {
         pageScript = new EquatSetup( ui->page_3, eqd, equatRT, pgData, scalarsList,
-                                     script.c_str(), aXname, aYname  );
+                                     script, aXname, aYname  );
         ui->verticalLayout_2->addWidget(pageScript);
     }
 }
@@ -359,7 +359,7 @@ void GtDemoWizard::alloc_keys_model(int cRT)
             if( !process_key.empty() && process_key.find_first_of('*') == std::string::npos )
                 key_p= process_key.c_str();
             TProcess::pm->RecordLoadinProfile(key_p);
-            process_old_selection = char_array_to_string( rt[RT_PROCES]->PackKey(), MAXRKEYLEN );
+            process_old_selection = rt[RT_PROCES]->PackKey();
         }
         catch( TError& xcpt )
         {

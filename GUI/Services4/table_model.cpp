@@ -11,33 +11,35 @@
 #include "model_w.h"
 #include "service.h"
 
-QStringList KeyModel::split_key(const char *add_key )
+QStringList KeyModel::split_key(const std::string& add_key )
 {
+    auto vec = rt[iRt]->key2fields(add_key);
     QStringList list;
-    TDBKey dbKey( rt[iRt]->GetDBKey() );
-    dbKey.SetKey(add_key);
-    for( int ii=0; ii < dbKey.KeyNumFlds(); ii++)
-        list.append(  char_array_to_string( dbKey.FldKey(ii), dbKey.FldLen( ii )).c_str() );
-    return list;
+    list.reserve(static_cast<qsizetype>(vec.size()));
 
+    for(const auto& str : vec) {
+        list.append(QString::fromStdString(str));
+    }
+
+    return list;
 }
 
 std::string KeyModel::line_key( const QStringList& table_row ) const
 {
-    std::string key;
-    TDBKey dbKey( rt[iRt]->GetDBKey() );
-    for( int ii=0; ii < dbKey.KeyNumFlds(); ii++)
-        dbKey.SetFldKey(ii, table_row[ii].toUtf8().data());
-    key += dbKey.UnpackKey();
-    return key;
+    std::vector<std::string> vec;
+    vec.reserve(static_cast<size_t>(table_row.size()));
+
+    for(const auto& qstr : table_row) {
+        vec.emplace_back(qstr.toStdString());
+    }
+    return rt[iRt]->fields2key(vec, false);
 }
 
 void KeyModel::set_old_selection(const TCStringArray &sel)
 {
-    TDBKey dbKey( rt[iRt]->GetDBKey() );
     selected_species.clear();
     for( const auto& key_data: sel )
-        selected_species.append( split_key( key_data.c_str() ));
+        selected_species.append( split_key( key_data ));
 }
 
 void KeyModel::set_full_list()
@@ -45,9 +47,9 @@ void KeyModel::set_full_list()
     TCStringArray keyList;
     all_species.clear();
 
-    rt[iRt]->GetKeyList( key_filter.c_str(), keyList);
+    rt[iRt]->getKeysList(key_filter, keyList);
     for( const auto& rec_key: keyList)
-        all_species.append( split_key(rec_key.c_str()) );
+        all_species.append( split_key(rec_key) );
 }
 
 TCStringArray KeyModel::selected_keys(const std::set<int> &rows) const
@@ -136,7 +138,7 @@ RDKeyModel::RDKeyModel(QObject *parent, const std::string& akey_filter, short Ns
     NsuT_selection( NsuT>0)
 { }
 
-QStringList RDKeyModel::add_key(char type, const char *unpack_key)
+QStringList RDKeyModel::add_key(char type, const std::string& unpack_key)
 {
     auto list = split_key( unpack_key );
     list.insert( 0, QString(type) );
@@ -146,10 +148,7 @@ QStringList RDKeyModel::add_key(char type, const char *unpack_key)
 std::string RDKeyModel::line_key( const QStringList& table_row ) const
 {
     std::string key = table_row[0].toStdString()+" ";
-    TDBKey dbKey( rt[RT_DCOMP]->GetDBKey() );
-    for( int ii=0; ii < dbKey.KeyNumFlds(); ii++)
-        dbKey.SetFldKey(ii, table_row[ii+1].toUtf8().data());
-    key += dbKey.UnpackKey();
+    key += KeyModel::line_key(table_row.mid(1));
     return key;
 }
 
@@ -168,23 +167,23 @@ void RDKeyModel::set_full_list()
     // ReacDC list
     if( NsuT_selection )  // template for adsorption
         key_filter[0] = CP_SSPC;
-    rt[RT_REACDC]->GetKeyList( key_filter.c_str(), keyList);
+    rt[RT_REACDC]->getKeysList(key_filter, keyList);
     for( const auto& rec_key: keyList)
-        all_species.append( add_key(SRC_REACDC, rec_key.c_str()) );
+        all_species.append( add_key(SRC_REACDC, rec_key) );
 
     // Dcomp list
     if( NsuT_selection )  // template for adsorption
         key_filter[0] = CP_SOLID;
-    rt[RT_DCOMP]->GetKeyList( key_filter.c_str(), keyList);
+    rt[RT_DCOMP]->getKeysList(key_filter, keyList);
     for( const auto& rec_key: keyList)
-        all_species.append( add_key(SRC_DCOMP, rec_key.c_str()) );
+        all_species.append( add_key(SRC_DCOMP, rec_key) );
 }
 
 void FixedKeyModel::define_all_list(const TCStringArray &keys_to_select)
 {
     all_species.clear();
     for( const auto& rec_key: keys_to_select)
-        all_species.append( split_key(rec_key.c_str()) );
+        all_species.append( split_key(rec_key) );
 }
 
 //-------------------------------------------------------------------------------

@@ -81,8 +81,8 @@ void 	RTparmWizard::resetBackButton()
     ui->pBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
-RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
-double val[6],  const char *acalcScript, const char* aXname, const char* aYname,
+RTparmWizard::RTparmWizard( const std::string& pkey, char flgs[10], int size[7],
+double val[6],  const std::string& acalcScript, const std::string& aXname, const std::string& aYname,
 QWidget* parent):
     QDialog( parent ),
     ui(new Ui::RTparmWizardData),
@@ -99,7 +99,7 @@ QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor RTparm Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
     ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();
@@ -334,7 +334,7 @@ static equatSetupData eq( "", "yF", "jTP", "" );
 //static equatSetupData eqP( "xP", "yF", "jTP", "twP" );
 
 // work with lists
-void RTparmWizard::resetPageList(const char* aXname, const char* aYname)
+void RTparmWizard::resetPageList(const std::string& aXname, const std::string& aYname)
 {
 
     std::vector<pagesSetupData> scalarsList;
@@ -353,7 +353,7 @@ void RTparmWizard::resetPageList(const char* aXname, const char* aYname)
    }
 */
     pageScript = new EquatSetup( ui->page_3, eq,
-                                 RT_PROCES, pgData, scalarsList, calcScript.c_str(), aXname, aYname  );
+                                 RT_PROCES, pgData, scalarsList, calcScript, aXname, aYname  );
     ui->verticalLayout_5->addWidget(pageScript);
 
 }

@@ -59,7 +59,7 @@ void 	ProjectWizard::resetBackButton()
     ui->pBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
-ProjectWizard::ProjectWizard( const char* pkey, char flgs[38], QWidget* parent):
+ProjectWizard::ProjectWizard( const std::string& pkey, char flgs[38], QWidget* parent):
     QDialog( parent ),
     ui(new Ui::ProjectWizardData)
 {
@@ -69,7 +69,7 @@ ProjectWizard::ProjectWizard( const char* pkey, char flgs[38], QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor Project Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
     QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));

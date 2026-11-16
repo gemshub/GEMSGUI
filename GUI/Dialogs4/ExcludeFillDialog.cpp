@@ -26,13 +26,13 @@
 #include "service.h"
 
 
-ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
+ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const std::string& caption,
                                      TCStringArray& aICkeys, double fill_data ):
     QDialog(win )
 {
     setWindowModality(Qt::WindowModal);
     
-    setWindowTitle( caption );
+    setWindowTitle( QString::fromStdString(caption) );
 
     // set up labels
     QVBoxLayout* labelsBox = new QVBoxLayout();

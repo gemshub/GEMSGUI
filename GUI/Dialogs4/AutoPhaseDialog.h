@@ -34,7 +34,7 @@ public slots:
 
 public:
     AutoPhaseDialog(
-            const char* pr_key, char acode, char gcode, QWidget* parent = nullptr);
+            const std::string& pr_key, char acode, char gcode, QWidget* parent = nullptr);
     virtual ~AutoPhaseDialog();
 
     void set_apar( float apar[8] );

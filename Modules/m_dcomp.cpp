@@ -196,7 +196,7 @@ void TDComp::dyn_set(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
              "E00DCrem: Invalid access to dc in dyn_set()");
-    memcpy( dcp->pstate, rt[nRT]->UnpackKey(), DC_RKLEN );
+    memcpy( dcp->pstate, rt[nRT]->UnpackKey().c_str(), DC_RKLEN );
     dc[q].TCint= (float *)aObj[ o_dccpint ]->GetPtr();
     dc[q].Cp =   (float *)aObj[ o_dccp ]->GetPtr();
     dc[q].CpFS = (float *)aObj[ o_dccpfs ]->GetPtr();
@@ -357,7 +357,7 @@ void TDComp::set_def( int q)
     dc[q].NeCp = 1;
     dc[q].Nft = dc[q].Nemp = 0;
     dc[q].Nsd = 1;
-    strncpy( dc[q].name, rt[rtNum()]->FldKey(2), MAXDCNAME );
+    strncpy( dc[q].name, rt[rtNum()]->FldKey(2).c_str(), MAXDCNAME );
     dc[q].name[MAXDCNAME] = '\0';
     if( dc[q].pstate[0] == CP_AQU )
     {
@@ -427,11 +427,10 @@ void TDComp::RecInput( const char *key )
 void TDComp::MakeQuery()
 {
 //    pImp->MakeQuery();
-    const char * p_key;
     char flgs[15];
     int size[4];
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     memcpy( flgs, dcp->pct, 15);
     size[0] = dcp->NeCp;
     size[1] = dcp->Nft;
@@ -456,7 +455,7 @@ int TDComp::RecBuild( const char *key, int mode  )
     int CM, CE, CV;
     //  int q=0;
 
-    memcpy( dcp->pstate, rt[nRT]->UnpackKey(), DC_RKLEN );
+    memcpy( dcp->pstate, rt[nRT]->UnpackKey().c_str(), DC_RKLEN );
     switch( dcp->pstate[0] )
     {
     case  CP_LIQID: // EoS liquid component
@@ -485,7 +484,7 @@ AGAIN:
     if( ret == VF3_1 )
     {
         strncpy( dcp->rmtm, curDateSmol().c_str(), 9);
-        strncpy( dcp->name, db->FldKey(2), db->FldLen(2));
+        strncpy( dcp->name, db->FldKey(2).c_str(), db->FldLen(2));
         dcp->name[db->FldLen(2)] = '\0';
     }
 
@@ -728,7 +727,7 @@ NEXT:
                 G = H - T * S + TrfoS;
                 std::string s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
                 s += std::to_string(G);
-                if( vfQuestion( window(), GetName(), s.c_str() ))
+                if( vfQuestion( window(), GetName(), s ))
                     dcp->Gs[0] = G;
                 else
                     Error( GetName(), "E09DCrun: Inconsistent DC standard properties - bailing out...");
@@ -1384,24 +1383,21 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
     if( ! MessageToSave() )
 	return;
 
-    TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key_);
-    dbKey.SetFldKey(3,"*");
-    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
-    RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
+    auto pattern_key = db->patternToField(key_, 3);
+    RecStatus iRet = db->Rtest(pattern_key, 1 );
     std::string msg;
 
     switch( iRet )
     {
     case MANY_:    // Get Key list
-        db->GetKeyList(str_key.c_str(), aDclist);
+        db->getKeysList(pattern_key, aDclist);
         db->readRecord(aDclist[0]);
         [[fallthrough]];
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();
         if(aObj[ o_dcsdref ]->GetN() != dc[q].Nsd) {
-            gui_logger->warn("record {} illegal Nsd {}", str_key, dc[q].Nsd);
+            gui_logger->warn("record {} illegal Nsd {}", pattern_key, dc[q].Nsd);
         }
         return;
     case UNDF_:
@@ -1421,15 +1417,14 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
                 Error( GetName(), "E17DCrun: New record creation dismissed...");
             std::string str = key_;
 
-            if( str.find_first_of("*?" ) != std::string::npos)  // pattern
-                str = GetKeyofRecord( str.c_str(),
+            if(TDataBase::isPattern(str))  // pattern
+                str = GetKeyofRecord( str,
                                       "Enter a new record key, please ", KEY_NEW);
             if(  str.empty() )
                 Error( GetName(), "E18DCrun: Record creation dismissed...");
-            int  Rnum = db->Find( str.c_str() );
-            ErrorIf( Rnum>=0, GetName(), " E19DCrun: This record alredy exists!");
+            ErrorIf( db->existsRecord(str), GetName(), " E19DCrun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT,0,true);
-            auto str1 = char_array_to_string( db->UnpackKey(), db->KeyLen());
+            auto str1 = db->UnpackKey();
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
             set_string(" W20DCrun: Remake of the new record finished OK. "
@@ -1451,7 +1446,7 @@ void TDComp::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
 }
 
 
-void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
+void TDComp::CopyRecords( const std::string& prfName, TCIntArray& cnt,
  elmWindowData el_data, dcSetupData st_data, std::set<std::string>& SDlist)
 {
     //TCIntArray anR;
@@ -1466,7 +1461,7 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
      aICkey_new.clear();
 
    // get list of records
-    db->GetKeyList( "*:*:*:*:", aDCkey);
+    db->getKeysList( "*:*:*:*:", aDCkey);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )

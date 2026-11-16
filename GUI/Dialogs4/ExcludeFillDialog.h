@@ -35,7 +35,7 @@ protected slots:
     void CmHelp();
 
 public:
-    ExcludeFillDialog(QWidget* win, const char* caption,
+    ExcludeFillDialog(QWidget* win, const std::string& caption,
                       TCStringArray& aICkeys, double fill_data );
     ~ExcludeFillDialog();
 

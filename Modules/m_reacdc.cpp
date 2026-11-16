@@ -168,7 +168,7 @@ bool TReacDC::ods_check(int q)
 void TReacDC::dyn_set(int q)
 {
     ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Invalid access to rc in dyn_set()");
-    memcpy( rcp->pstate, rt[nRT]->UnpackKey(), RE_RKLEN );
+    memcpy( rcp->pstate, rt[nRT]->UnpackKey().c_str(), RE_RKLEN );
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ]->GetPtr();
     rc[q].rDC =   (char *)aObj[ o_rerdc ]->GetPtr();
     rc[q].scDC =  (double *)aObj[ o_rescdc ]->GetPtr();
@@ -398,11 +398,10 @@ void
 TReacDC::MakeQuery()
 {
 //    pImp->MakeQuery();
-    const char * p_key;
     char flgs[12];
     int size[4];
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     memcpy( flgs, rcp->pct, 12);
     size[0] = rcp->nDC;
     size[1] = rcp->nTp;
@@ -426,13 +425,12 @@ TReacDC::MakeQuery()
 int TReacDC::RecBuild( const char *key, int mode  )
 {
     int  Nc1=0, Nn1=0, Nf1=0, Nr1=0;
-    char pkey[81];
     int CM,CE,CV;
 
     //TCStringArray aDclist;
     aDclist.clear();
     //REACDC&DCOMP  keypart
-    rt[RT_REACDC]->MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    const std::string pkey = rt[RT_REACDC]->makeKey(RT_REACDC, {K_ANY, K_ANY, K_ANY, K_ANY, K_END});
 
     if( mode != VF3_3 ) { // not clear all mode
         if( rcp->rDC )
@@ -474,7 +472,7 @@ int TReacDC::RecBuild( const char *key, int mode  )
                     key_dr  = std::string(1, rcp->rDC[i]);
                     key_dr += ' ';
                     key_dr += char_array_to_string( rcp->DCk[i], DC_RKLEN/*-MAXSYMB*/ );
-                    aDclist.push_back( key_dr.c_str() );
+                    aDclist.push_back( key_dr );
                 }
             }
         }
@@ -487,7 +485,7 @@ AGAIN_MOD:
     if( ret == VF3_1 )
     {
         strncpy( rcp->rmtm, curDateSmol().c_str(), 9);
-        strncpy( rcp->name, db->FldKey(2), db->FldLen(2));
+        strncpy( rcp->name, db->FldKey(2).c_str(), db->FldLen(2));
         rcp->name[db->FldLen(2)] = '\0';
         Nn1++;
     }
@@ -1746,24 +1744,21 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
           return;
     }
 
-    TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key_);
-    dbKey.SetFldKey(3,"*");
-    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen() );
-    RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
+    auto pattern_key = db->patternToField(key_, 3);
+    RecStatus iRet = db->Rtest(pattern_key, 1);
     std::string msg;
 
     switch( iRet )
     {
     case MANY_:    // Get Key list
-        db->GetKeyList( str_key.c_str(), aDclist);
+        db->getKeysList(pattern_key, aDclist);
         db->readRecord(aDclist[0]);
         [[fallthrough]];
     case ONEF_:
         dyn_set(q);
         time_s = db->Rtime();
         if(aObj[ o_resdref ]->GetN() != rc[q].Nsd) {
-            gui_logger->warn("record {} illegal Nsd {}", str_key, rc[q].Nsd);
+            gui_logger->warn("record {} illegal Nsd {}", pattern_key, rc[q].Nsd);
         }
         return;
     case UNDF_:
@@ -1783,13 +1778,12 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
                 Error( GetName(), " E18RErun: New record create action dismissed...");
             std::string str = key_;
 
-            if( str.find_first_of("*?" ) != std::string::npos)  // pattern
-                str = GetKeyofRecord( str.c_str(),
+            if( TDataBase::isPattern(str))  // pattern
+                str = GetKeyofRecord( str,
                             "Enter a new data record key, please!", KEY_NEW);
             if(  str.empty() )
                 Error( GetName(), " E19RErun: Record create action dismissed (no key)...");
-            int  Rnum = db->Find( str.c_str() );
-            ErrorIf( Rnum>=0, GetName(), " W20RErun: This record alredy exists!");
+            ErrorIf(db->existsRecord(str), GetName(), " W20RErun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT,0,true);
             std::string str1 = db->UnpackKey();
             check_input( str1.c_str() );
@@ -1812,7 +1806,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q, bool save )
     }
 }
 
-void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
+void TReacDC::CopyRecords( const std::string& prfName, TCIntArray& cnt,
  elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist)
 {
     //TCIntArray anR;
@@ -1827,7 +1821,7 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
     aICkey_new.clear();
 
     // get list of records
-    db->GetKeyList( "*:*:*:*:", aDCkey);
+    db->getKeysList("*:*:*:*:", aDCkey);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )

@@ -554,12 +554,12 @@ static void thf_check_reaction( const std::string& key, const std::string& symbo
 
 void TDComp::thf_keys( TCStringArray& keys )
 {
-   db->GetKeyList( "*:*:*:*:", keys);
+   db->getKeysList( "*:*:*:*:", keys);
 }
 
 void TReacDC::thf_keys( TCStringArray& keys )
 {
-    db->GetKeyList( "*:*:*:*:", keys);
+    db->getKeysList( "*:*:*:*:", keys);
 }
 
 QJsonArray TIComp::all_to_thermofun()
@@ -567,7 +567,7 @@ QJsonArray TIComp::all_to_thermofun()
     QJsonArray allArray;
     TCStringArray aIC1;
     std::string fld_key;
-    db->GetKeyList( "*:*:*:", aIC1);
+    db->getKeysList( "*:*:*:", aIC1);
     QJsonArray datasources( {"GEMS3gui"} );
 
     for( size_t ii=0; ii<aIC1.size(); ii++ )
@@ -575,8 +575,8 @@ QJsonArray TIComp::all_to_thermofun()
        RecInput( aIC1[ii].c_str() );
        QJsonObject thermo_data;
        thermo_data["datasources"] = datasources;
-       thermo_data["symbol"] = thf_string(db->FldKey(0), db->FldLen(0)).c_str();
-       thermo_data["class_"] = thf_convert_icomp_class(*db->FldKey(1));
+       thermo_data["symbol"] = db->FldKey(0).c_str();
+       thermo_data["class_"] = thf_convert_icomp_class(db->FldKey(1)[0]);
        thermo_data["atomic_mass"] = QJsonObject( {{"name","M0i"},
                                                   {"values",QJsonArray({icp->awt})}});
        thermo_data["entropy"] = QJsonObject( {{"name","S0i"},
@@ -608,7 +608,7 @@ QJsonArray TDComp::all_to_thermofun()
         thermo_data["formula"] = thf_string(dcp->form, MAXFORMULA).c_str();
         thermo_data["formula_charge"] = dcp->Zz;
         thermo_data["mass_per_mole"] = QJsonObject({{"values", QJsonArray({dcp->mwt})}, {"units",QJsonArray({"g/mol"})}});
-        thermo_data["aggregate_state"] = thf_convert_dcomp_aggregate_state(*db->FldKey(0));
+        thermo_data["aggregate_state"] = thf_convert_dcomp_aggregate_state(db->FldKey(0)[0]);
         thermo_data["class_"] = thf_convert_dcomp_class(dcp->PdcC);
         thermo_data["Tst"] = dcp->TCst+273.15;
         thermo_data["Pst"] = dcp->Pst*1e05;
@@ -788,7 +788,7 @@ QJsonArray TReacDC::all_to_thermofun( QJsonArray& subsArray )
         thermo_data["formula"] = thf_string(rcp->form, MAXFORMULA).c_str();
         thermo_data["formula_charge"] = rcp->Zz;
         thermo_data["mass_per_mole"] = QJsonObject({{"values", QJsonArray({rcp->mwt})}, {"units",QJsonArray({"g/mol"})}});
-        thermo_data["aggregate_state"] = thf_convert_dcomp_aggregate_state(*db->FldKey(0));
+        thermo_data["aggregate_state"] = thf_convert_dcomp_aggregate_state(db->FldKey(0)[0]);
         thermo_data["class_"] = thf_convert_dcomp_class(rcp->PreC);
         thermo_data["Tst"] = rcp->TCst+273.15;
         thermo_data["Pst"] = rcp->Pst*1e05;

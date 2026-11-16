@@ -51,12 +51,12 @@ TUnSpace::TUnSpace( uint nrt ):
 
 // get key of record
 std::string
-TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
+TUnSpace::GetKeyofRecord( const std::string& oldKey, const std::string& strTitle,
                           int keyType )
 {
     std::string str;
 
-    if( oldKey == 0 )
+    if( oldKey.empty() )
     {
         if(Filter.empty())
             str = ALLKEY;
@@ -66,11 +66,10 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
-        char pkey[MAXRKEYLEN+10];
         rt[RT_UNSPACE]->SetKey(str.c_str());
-        rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
-                               RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
-                               RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
+        auto pkey = rt[RT_SYSEQ]->makeKey( RT_UNSPACE, {{RT_UNSPACE, 0}, {RT_UNSPACE, 1},
+                               {RT_UNSPACE, 2}, {RT_UNSPACE, 3}, {RT_UNSPACE, 4},
+                               {RT_UNSPACE, 5}, {RT_UNSPACE, 6}, {RT_UNSPACE, 7}, K_END});
         str = TSysEq::pm->GetKeyofRecord( pkey,
           "Please, select a parent System for a new UnSpace ", KEY_OLD );
         if(  str.empty() )
@@ -81,10 +80,10 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
         else
             str += "*:*:";
     }
-    str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
+    str = TCModule::GetKeyofRecord( str, strTitle, keyType );
     if(  str.empty() )
         return str;
-    rt[RT_UNSPACE]->SetKey(str.c_str());
+    rt[RT_UNSPACE]->SetKey(str);
      if( keyType != KEY_TEMP )
          keyTest( str.c_str() );
     return str;
@@ -93,8 +92,6 @@ TUnSpace::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test TUnSpace key to calc mode
 void TUnSpace::keyTest( const char *key )
 {
-    char pkey[MAXRKEYLEN+10];
-
     if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = TProfil::pm->projectName();
@@ -102,10 +99,12 @@ void TUnSpace::keyTest( const char *key )
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Invalid record key (another Modelling Project)!");
-        rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
-                               RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
-                               RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
-        if( rt[RT_SYSEQ]->Find(pkey) <0 )
+        const std::string pkey = rt[RT_SYSEQ]->makeKey(RT_UNSPACE, {
+                                                {RT_UNSPACE, 0}, {RT_UNSPACE, 1},
+                                                {RT_UNSPACE, 2}, {RT_UNSPACE, 3}, {RT_UNSPACE, 4},
+                                                {RT_UNSPACE, 5}, {RT_UNSPACE, 6}, {RT_UNSPACE, 7},
+                                                K_END });
+        if( !rt[RT_SYSEQ]->existsRecord(pkey) )
             Error( key, "E07PErem: Invalid record key (no system)!");
     }
 }
@@ -997,17 +996,17 @@ void TUnSpace::set_def( int q)
 // return true if nessasary recalc base SYSEQ
 bool TUnSpace::check_input( const char* /*key*/, int /*Level*/ )
 {
-  char pkey[MAXRKEYLEN+10];
-  if( !pVisor->ProfileMode )
+    if( !pVisor->ProfileMode )
         return true;
 
-  TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
-  //Get base SysEq key from UnSpace key
-  rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
-                           RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
-                           RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
+    TProfil* PRof = dynamic_cast<TProfil *>( aMod[RT_PARAM].get());
+    //Get base SysEq key from UnSpace key
+    const std::string pkey = rt[RT_SYSEQ]->makeKey(RT_UNSPACE, {
+                            {RT_UNSPACE, 0}, {RT_UNSPACE, 1},
+                            {RT_UNSPACE, 2}, {RT_UNSPACE, 3}, {RT_UNSPACE, 4},
+                            {RT_UNSPACE, 5}, {RT_UNSPACE, 6}, {RT_UNSPACE, 7}, K_END });
     // read SysEq record and unpack data
-    PRof->loadSystat( pkey );
+    PRof->loadSystat( pkey.c_str() );
     // test changes in system after unspace calc
     if( rt[RT_SYSEQ]->Rtime() > rt[nRT]->Rtime() )
         return true;
@@ -1026,11 +1025,10 @@ void
 TUnSpace::MakeQuery()
 {
 //    pImp->MakeQuery();
-    const char * p_key;
     char flgs[38];
     int size[10];
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     memcpy( flgs, &usp->PunE, 38);
     size[0] = usp->Q;
     size[1] = (int)(usp->quan_lev*100);
@@ -1168,12 +1166,12 @@ TUnSpace::RecCalc( const char *key )
 
 // Get startup syseq record for fitting
   //Get base SysEq key from UnSpace key
-  char pkey[MAXRKEYLEN+10];
-  rt[RT_SYSEQ]->MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
-                           RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
-                           RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
-    // read SysEq record and unpack data
-  TProfil::pm->loadSystat( pkey );
+  const std::string pkey = rt[RT_SYSEQ]->makeKey(RT_UNSPACE, {
+                            {RT_UNSPACE, 0}, {RT_UNSPACE, 1},
+                            {RT_UNSPACE, 2}, {RT_UNSPACE, 3}, {RT_UNSPACE, 4},
+                            {RT_UNSPACE, 5}, {RT_UNSPACE, 6}, {RT_UNSPACE, 7}, K_END });
+  // read SysEq record and unpack data
+  TProfil::pm->loadSystat( pkey.c_str() );
 
   TCModule::RecCalc(key);
 }

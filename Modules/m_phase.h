@@ -324,7 +324,7 @@ public:
     void AssemblePhase( const std::string& key, const char* part, float *param,
                         int file, bool useLst = false, TCStringArray lst = {}, int Npar = 4 );
 
-    void CopyRecords( const char * prfName, TCStringArray& aPHnoused,
+    void CopyRecords( const std::string& prfName, TCStringArray& aPHnoused,
                       TCStringArray& aPHtmp, elmWindowData el_data,
                       phSetupData st_data,  std::set<std::string>& SDlist);
     bool CompressRecord( int nDCused, TCIntArray& DCused, const TCStringArray& sys_form_array ={}, bool onlyIPX=false );

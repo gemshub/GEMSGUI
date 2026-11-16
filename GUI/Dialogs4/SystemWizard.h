@@ -35,7 +35,7 @@ class SystemWizard : public QDialog
 
 public:
 
-    SystemWizard( const char* pkey, char flgs[40],
+    SystemWizard( const std::string& pkey, char flgs[40],
     std::string name, std::string comment, std::string EQkey,  QWidget* parent = nullptr);
     virtual ~SystemWizard();
 

@@ -360,7 +360,7 @@ void TCompos::bc_work_dyn_new()
     {
         TCStringArray aKey;
         //TCIntArray anR;
-        auto Nic = rt[RT_ICOMP]->GetKeyList( "*:*:*:", aKey);
+        auto Nic = rt[RT_ICOMP]->getKeysList( "*:*:*:", aKey);
         ErrorIf( Nic<1, GetName(),
                  "W05BCrem: ICOMP data record keys are not selected \n"
                  "(maybe, some PDB chain files are not linked)");
@@ -435,12 +435,11 @@ void
 TCompos::MakeQuery()
 {
 //    pImp->MakeQuery();
-    const char * p_key;
     char flgs[6];
     int size[2];
     double r2 = bcp->R2;
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     memcpy( flgs, &bcp->PcIC, 6);
     size[0] = bcp->La;
     size[1] = bcp->Nsd;
@@ -462,9 +461,8 @@ int
 TCompos::RecBuild( const char *key, int mode  )
 {
     int oldIC=0, oldDC=0;
-    char pkey[81];
     int i;
-    std::string str;
+    std::string str, pkey;
     TCStringArray aIclist;
     TCStringArray aDclist;
     //TCStringArray aRclist;
@@ -481,7 +479,7 @@ TCompos::RecBuild( const char *key, int mode  )
         return ret;
     if( ret == VF3_1 )
     {
-        strncpy( bcp->name, db->FldKey(2), db->FldLen(2));
+        strncpy( bcp->name, db->FldKey(2).c_str(), db->FldLen(2));
         bcp->name[db->FldLen(2)] = '\0';
         oldIC = 0;
         oldDC = 0;
@@ -510,7 +508,7 @@ LOOP_MARKIC:
        RT_ICOMP, "*:*:*:", aIclist_old );
 
     bcp->Nmax = aIclist.size();
-    // must be Nic = rt[RT_ICOMP]->GetKeyList("*:*:*:",.,.);
+    // must be Nic = rt[RT_ICOMP]->getKeysList("*:*:*:",.,.);
     bcp->PcIC = S_REM;
     if( aIclist.size() < 1 )
         switch ( vfQuestion3( window(), GetName(),
@@ -540,7 +538,7 @@ LOOP_MARKIC:
         aDclist.clear();
         goto COMP_COUNT; //goto RE_SELECT;
     }
-    rt[RT_DCOMP]->MakeKey( RT_COMPOS, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    pkey = rt[RT_DCOMP]->makeKey( RT_COMPOS, {K_ANY, K_ANY, K_ANY, K_ANY, K_END});
     aDclist_old.clear();
 
     /*
@@ -1229,7 +1227,7 @@ const char* TCompos::GetHtml()
 }
 
 
-void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
+void TCompos::CopyRecords( const std::string& prfName, TCStringArray& aCMnoused,
             elmWindowData el_data, cmSetupData st_data, std::set<std::string>& SDlist )
 {
     //TCIntArray anR;
@@ -1245,7 +1243,7 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
    aICkey_new.clear();
 
     // get list of records
-    db->GetKeyList( "*:*:*:", aComp);
+    db->getKeysList( "*:*:*:", aComp);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )

@@ -58,7 +58,7 @@ void ComposWizard::resetBackButton()
 }
 
 
-ComposWizard::ComposWizard( const char* pkey, char flgs[6], int size[2],
+ComposWizard::ComposWizard( const std::string& pkey, char flgs[6], int size[2],
 double r2, QWidget* parent):
     QDialog( parent ),
     ui(new Ui::ComposWizardData)
@@ -66,7 +66,7 @@ double r2, QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor Compos Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
     ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();
     resetBackButton();

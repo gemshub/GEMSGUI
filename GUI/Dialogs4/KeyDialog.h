@@ -48,10 +48,10 @@ protected slots:
 
 public:
 
-    KeyDialog(QWidget* win, size_t irt, const char* key = "*",
-              const char* caption = nullptr, bool filter=true);
+    KeyDialog(QWidget* win, size_t irt, const std::string& key = "*",
+              const std::string& caption = nullptr, bool filter=true);
     KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
-              const char* key = "*", const char* caption = nullptr );
+              const std::string& key = "*", const std::string& caption = "");
 
     virtual ~KeyDialog();
 
@@ -70,7 +70,7 @@ class RDKeyDialog : public QDialog
     QStringList old_sel;
     short NsuT;     // N of surface site types (to set up on remake)
     void SetList();
-    QString makeKey( char type, const char *key );
+    QString makeKey( char type, const std::string& key );
 
 protected slots:
     virtual void CmSelectAll();
@@ -81,7 +81,7 @@ protected slots:
 public:
 
     RDKeyDialog(QWidget* win, TCStringArray& sel,
-                const char* key = "*", const char* caption = nullptr, short NsuT=0 );
+                const std::string& key = "*", const std::string& caption = "", short NsuT=0 );
     virtual ~RDKeyDialog();
     TCStringArray allSelectedKeys();
     //    string getKey();

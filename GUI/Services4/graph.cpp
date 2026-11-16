@@ -83,7 +83,7 @@ void TPlotLine::write(GemDataStream& stream)
     stream.writeArray(name, sizeof(name));
 }
 
-void TPlotLine::read(std::fstream& stream)
+void TPlotLine::read(std::istream& stream)
 {
     char buf[256];
     stream >> type;
@@ -95,7 +95,7 @@ void TPlotLine::read(std::fstream& stream)
     name[15] = '\0';
 }
 
-void TPlotLine::write(std::fstream& stream)
+void TPlotLine::write(std::ostream& stream)
 {
     stream << type << " ";
     stream << sizes << " ";

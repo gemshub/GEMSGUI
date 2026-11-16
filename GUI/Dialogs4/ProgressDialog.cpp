@@ -387,7 +387,7 @@ void ProgressDialog::Update(bool force)
     //str.sprintf( "%*g", 8, pData->IC );
     ui->pIC->setText(  QString("%1").arg(pData->IC,8) );
 
-    ui->pKey->setText(rt[RT_SYSEQ]->PackKey());
+    ui->pKey->setText(  QString::fromStdString(rt[RT_SYSEQ]->PackKey()));
 
     double g=0, a=0, s=0, l=0;
     for( int ii=0; ii<pData->FI; ii++ )

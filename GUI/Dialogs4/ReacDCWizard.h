@@ -40,7 +40,7 @@ class ReacDCWizard : public QDialog
 
 public:
 
-    ReacDCWizard( const char* pkey, char flgs[12], int size[4],
+    ReacDCWizard( const std::string& pkey, char flgs[12], int size[4],
     const TCStringArray& sel, QWidget* parent = nullptr);
     virtual ~ReacDCWizard();
 

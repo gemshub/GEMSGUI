@@ -27,7 +27,7 @@
 
 EquatSetup::EquatSetup( QWidget* parent, equatSetupData aEqData,
                         int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList,
-                        const char* script, const char* aXname, const char* aYname ):
+                        const std::string& script, const std::string& aXname, const std::string& aYname ):
     QWidget( parent ),
     ui(new Ui::EquatWidgetForm),
     cPage(-1), cnRT(-1), eqData(aEqData), useCalc(false)
@@ -35,11 +35,11 @@ EquatSetup::EquatSetup( QWidget* parent, equatSetupData aEqData,
 
     ui->setupUi(this);
 
-    if( aXname )
+    if( !aXname.empty() )
         xNam = aXname;
     else
         xNam = eqData.xName;
-    if( aYname )
+    if( !aYname.empty() )
         yNam = aYname;
     else
         yNam = eqData.yName;
@@ -51,7 +51,7 @@ EquatSetup::EquatSetup( QWidget* parent, equatSetupData aEqData,
     resetPageList( nRT,wnData, scalarsList );
 
     // define Script
-    ui->textScript->setText(script);
+    ui->textScript->setText(QString::fromStdString(script));
 
     // define commands
     QObject::connect( ui->keywdList, SIGNAL(currentRowChanged(int)),

@@ -215,8 +215,8 @@ public:
 
     void read(GemDataStream& stream);
     void write(GemDataStream& stream);
-    void read(std::fstream& stream);
-    void write(std::fstream& stream);
+    void read(std::istream& stream);
+    void write(std::ostream& stream);
 };
 
 

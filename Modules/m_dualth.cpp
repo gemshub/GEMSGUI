@@ -49,12 +49,12 @@ TDualTh::TDualTh( uint nrt ):
 
 // get key of record
 std::string
-TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
+TDualTh::GetKeyofRecord( const std::string& oldKey, const std::string& strTitle,
                           int keyType )
 {
     std::string str;
 
-    if( oldKey == 0 )
+    if( oldKey.empty() )
     {
         if(Filter.empty())
             str = ALLKEY;
@@ -64,11 +64,10 @@ TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
-        char pkey[MAXRKEYLEN+10];
-        rt[RT_DUALTH]->SetKey(str.c_str());
-        rt[RT_SYSEQ]->MakeKey( RT_DUALTH, pkey, RT_DUALTH, 0, RT_DUALTH, 1,
-                               RT_DUALTH, 2, RT_DUALTH, 3, RT_DUALTH, 4,
-                               RT_DUALTH, 5, RT_DUALTH, 6, RT_DUALTH, 7, K_END);
+        rt[RT_DUALTH]->SetKey(str);
+        auto pkey = rt[RT_SYSEQ]->makeKey( RT_DUALTH, {{RT_DUALTH, 0}, {RT_DUALTH, 1},
+                               {RT_DUALTH, 2}, {RT_DUALTH, 3}, {RT_DUALTH, 4},
+                               {RT_DUALTH, 5}, {RT_DUALTH, 6}, {RT_DUALTH, 7}, K_END});
         str = TSysEq::pm->GetKeyofRecord( pkey,
           "Please, select a parent System for a new DualTh ", KEY_OLD );
         if(  str.empty() )
@@ -79,7 +78,7 @@ TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
         else
             str += "*:*:";
     }
-    str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
+    str = TCModule::GetKeyofRecord( str, strTitle, keyType );
     if(  str.empty() )
         return str;
     rt[RT_DUALTH]->SetKey(str.c_str());
@@ -91,8 +90,6 @@ TDualTh::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test DualTh key to calc mode
 void TDualTh::keyTest( const char *key )
 {
-    char pkey[MAXRKEYLEN+10];
-
     if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = TProfil::pm->projectName();
@@ -100,10 +97,10 @@ void TDualTh::keyTest( const char *key )
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08PErem: Invalid record key (another Modelling Project)!");
-        rt[RT_SYSEQ]->MakeKey( RT_DUALTH, pkey, RT_DUALTH, 0, RT_DUALTH, 1,
-                               RT_DUALTH, 2, RT_DUALTH, 3, RT_DUALTH, 4,
-                               RT_DUALTH, 5, RT_DUALTH, 6, RT_DUALTH, 7, K_END);
-        if( rt[RT_SYSEQ]->Find(pkey) <0 )
+        auto pkey = rt[RT_SYSEQ]->makeKey( RT_DUALTH, {{RT_DUALTH, 0}, {RT_DUALTH, 1},
+                               {RT_DUALTH, 2}, {RT_DUALTH, 3}, {RT_DUALTH, 4},
+                               {RT_DUALTH, 5}, {RT_DUALTH, 6}, {RT_DUALTH, 7}, K_END});
+        if(!rt[RT_SYSEQ]->existsRecord(pkey))
             Error( key, "E07PErem: Invalid record key (no system)!");
     }
 }
@@ -668,16 +665,15 @@ void TDualTh::set_def( int q)
 // return true if nesessary, recalc base SYSEQ
 bool TDualTh::check_input( const char * /*key*/, int /*Level*/ )
 {
-    char pkey[MAXRKEYLEN+10];
-    if( !pVisor->ProfileMode )
+     if( !pVisor->ProfileMode )
         return true;
 
     //Get base SysEq key from process key
-    rt[RT_SYSEQ]->MakeKey( RT_DUALTH, pkey, RT_DUALTH, 0, RT_DUALTH, 1,
-                           RT_DUALTH, 2, RT_DUALTH, 3, RT_DUALTH, 4,
-                           RT_DUALTH, 5, RT_DUALTH, 6, RT_DUALTH, 7, K_END);
+    auto pkey = rt[RT_SYSEQ]->makeKey( RT_DUALTH, {{RT_DUALTH, 0}, {RT_DUALTH, 1},
+                           {RT_DUALTH, 2}, {RT_DUALTH, 3}, {RT_DUALTH, 4},
+                           {RT_DUALTH, 5}, {RT_DUALTH, 6}, {RT_DUALTH, 7}, K_END});
     // read SysEq record and unpack data
-    TProfil::pm->loadSystat( pkey );
+    TProfil::pm->loadSystat( pkey.c_str() );
    // test changes in system after process calc
     if( rt[RT_SYSEQ]->Rtime() > rt[nRT]->Rtime() )
         return true;
@@ -698,11 +694,10 @@ void
 TDualTh::MakeQuery()
 {
 //    pImp->MakeQuery();
-    const char * p_key;
     char flgs[20];
     int size[8];
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     memcpy( flgs, &dtp->PunE, 20);
     size[0] = dtp->nQ;
     size[1] = dtp->La_b;

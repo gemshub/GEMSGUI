@@ -35,7 +35,7 @@ class UnSpaceWizard : public QDialog
 
 public:
 
-    UnSpaceWizard( const char* pkey, char flgs[38], int sizes[10],
+    UnSpaceWizard( const std::string& pkey, char flgs[38], int sizes[10],
     QWidget* parent = nullptr);
     virtual ~UnSpaceWizard();
 

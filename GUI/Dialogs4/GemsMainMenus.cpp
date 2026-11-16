@@ -560,7 +560,7 @@ void TVisorImp::CmScript()
         sd_key += "*";
         sd_key += ":";
         sd_key =aMod[RT_SDATA]->GetKeyofRecord(
-            sd_key.c_str(), "Please, select an appropriate script", KEY_OLD);
+            sd_key, "Please, select an appropriate script", KEY_OLD);
         if( sd_key.empty() )
             return;
         aMod[RT_SDATA]->RecInput( sd_key.c_str() );

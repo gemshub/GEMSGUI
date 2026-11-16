@@ -496,11 +496,10 @@ void TProfil::set_def( int )
 */
 void TProfil::MakeQuery()
 {
-    const char * p_key;
     char flgs[38];
     int tasktype = 0;
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     // flgs 0-9 MSpmv, 10-29 TPptv, 30-33  TPun, 34-37 TPsv
     memcpy( flgs, &rmults->GetMU()->PmvSA, 10);
     memcpy( flgs+10, &mtparm->GetTP()->PtvG, 20);
@@ -576,8 +575,8 @@ void TProfil::makeGEM2MTFiles(QWidget* par )
 bool TProfil::CompareProjectName( const char* SysKey )
 {
     auto len = rt[RT_PARAM]->FldLen(0);
-    const char* proj_key = db->UnpackKey();
-    if( memcmp( SysKey, proj_key, len ) )
+    auto proj_key = db->UnpackKey();
+    if( memcmp( SysKey, proj_key.c_str(), len ) )
         return true;
     else
       return false;
@@ -594,21 +593,21 @@ void TProfil::ChangeTPinKey( double T, double P )
     Gcvt( T, 6, bT );
     Gcvt( P, 6, bP );
     rt[RT_SYSEQ]->SetKey( pmp->stkey );
-    rt[RT_SYSEQ]->MakeKey( RT_SYSEQ, pmp->stkey, RT_SYSEQ, 0, RT_SYSEQ, 1,
-                           RT_SYSEQ, 2, RT_SYSEQ, 3, RT_SYSEQ, 4,
-                           K_IMM, bP, K_IMM, bT, RT_SYSEQ, 7, K_END);
+    auto str = rt[RT_SYSEQ]->makeKey( RT_SYSEQ, {{RT_SYSEQ, 0}, {RT_SYSEQ, 1},
+                           {RT_SYSEQ, 2}, {RT_SYSEQ, 3}, {RT_SYSEQ, 4},
+                           {K_IMM, bP}, {K_IMM, bT}, {RT_SYSEQ, 7}, K_END});
 
-    std::string str = pmp->stkey;
+    copy_to_cstr(pmp->stkey, str);
     std::string capName = "Change the key read from GEMS3K I/O files";
 AGAIN:
-    str = TSysEq::pm->GetKeyofRecord( str.c_str(),capName.c_str(), KEY_NEW );
+    str = TSysEq::pm->GetKeyofRecord( str, capName, KEY_NEW );
     if( str.empty() )
          Error( GetName(), "Record creation rejected!");
     if(rt[RT_SYSEQ]->existsRecord(str))  {
         capName = "This record already exists! Please, enter another name.";
         goto AGAIN;
     }
-    rt[RT_SYSEQ]->SetKey( str.c_str() );
+    rt[RT_SYSEQ]->SetKey(str);
 }
 
 
@@ -776,7 +775,6 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 {
     TCStringArray aList;
     //TCIntArray anR;
-    char pkey[81];
     uint i;
 
     rt[RT_PARAM]->readRecord(key); // read record
@@ -786,37 +784,37 @@ TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 
     // Delete all records connected to project
     aList.clear();    //SYSEQ
-    rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_SYSEQ]->GetKeyList( pkey, aList);
+    std::string pkey = rt[RT_SYSEQ]->makeKey(RT_PARAM, {{RT_PARAM, 0},
+                K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END });
+    rt[RT_SYSEQ]->getKeysList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TSysEq::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //PROCES
-    rt[RT_PROCES]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROCES]->GetKeyList( pkey, aList);
+    pkey = rt[RT_PROCES]->makeKey(RT_PARAM, {{RT_PARAM, 0},
+               K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END });
+    rt[RT_PROCES]->getKeysList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TProcess::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //UNSPACE
-    rt[RT_UNSPACE]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-      K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_UNSPACE]->GetKeyList( pkey, aList);
+    pkey = rt[RT_UNSPACE]->makeKey(RT_PARAM, {{RT_PARAM, 0},
+            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END });
+    rt[RT_UNSPACE]->getKeysList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TUnSpace::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //GTDEMO
-    rt[RT_GTDEMO]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                            K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_GTDEMO]->GetKeyList( pkey, aList);
+    pkey = rt[RT_GTDEMO]->makeKey(RT_PARAM, {{RT_PARAM, 0},
+                K_ANY, K_ANY, K_ANY, K_ANY, K_END});
+    rt[RT_GTDEMO]->getKeysList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TGtDemo::pm->DeleteRecord(aList[i].c_str());
 
     aList.clear();    //DUALTH
-    rt[RT_DUALTH]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_DUALTH]->GetKeyList( pkey, aList);
+    pkey = rt[RT_DUALTH]->makeKey(RT_PARAM, {{RT_PARAM, 0},
+        K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END });
+    rt[RT_DUALTH]->getKeysList( pkey, aList);
     for( i=0; i< aList.size(); i++)
         TDualTh::pm->DeleteRecord(aList[i].c_str());
 

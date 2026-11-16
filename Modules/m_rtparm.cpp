@@ -29,7 +29,7 @@ TRTParm* TRTParm::pm;
 
 // get key of record
 std::string
-TRTParm::GetKeyofRecord( const char *oldKey, const char *strTitle,
+TRTParm::GetKeyofRecord( const std::string& oldKey, const std::string& strTitle,
                          int keyType )
 {
     std::string str;
@@ -51,7 +51,7 @@ TRTParm::GetKeyofRecord( const char *oldKey, const char *strTitle,
         case VF3_3:
             break;
         }
-        str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
+        str = TCModule::GetKeyofRecord( str, strTitle, keyType );
     }
     else str = TCModule::GetKeyofRecord( oldKey, strTitle, keyType );
 
@@ -300,25 +300,25 @@ void TRTParm::set_def( int q)
 // return true if recalc is necessary
 bool TRTParm::check_input( const char *key, int Level )
 {
-    char pkey[MAXRKEYLEN+10];
     const char *srec;
     time_t tr, tra;
     bool iRet= false;
 
-    rt[RT_REACDC]->MakeKey( RT_RTPARM, pkey,  RT_RTPARM, 0, RT_RTPARM, 1,
-                            RT_RTPARM, 2, RT_RTPARM, 3, K_END );
+    const std::string pkey = rt[RT_REACDC]->makeKey(RT_RTPARM, {
+        {RT_RTPARM, 0}, {RT_RTPARM, 1},
+        {RT_RTPARM, 2}, {RT_RTPARM, 3}, K_END });
     srec = key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB;
     if( *srec == SRC_DCOMP )
     {
         TDComp* aDC=   dynamic_cast<TDComp *>(aMod[RT_DCOMP].get());
         aDC->ods_link(0);
-        aDC->TCModule::TryRecInp( pkey, tr, 0 );
+        aDC->TCModule::TryRecInp( pkey.c_str(), tr, 0 );
     }
     else
     {
         TReacDC* aRC= dynamic_cast<TReacDC *>(aMod[RT_REACDC].get());
         aRC->ods_link(0); //Sveta 16/11/99
-        aRC->TCModule::TryRecInp( pkey, tr, 0 );
+        aRC->TCModule::TryRecInp( pkey.c_str(), tr, 0 );
     }
     if( abs(Level) == 1 )
     {
@@ -345,12 +345,11 @@ void
 TRTParm::MakeQuery()
 {
 //    pImp->MakeQuery();
-    const char * p_key;
     char flgs[10];
     int size[7];
     double val[6];
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     memcpy( flgs, &rpp->What, 10);
     size[0] = rpp->NP;
     size[1] = rpp->NT;
@@ -425,7 +424,7 @@ AGAIN_SETUP:
     {
         int ilx;
         size_t len;
-        strncat( rpp->name, db->FldKey(2), db->FldLen(2));
+        strncat( rpp->name, db->FldKey(2).c_str(), db->FldLen(2));
         len = strlen( rpp->name );
         for( ilx=len-1; ilx>0; ilx-- )
         { // remove tail spaces

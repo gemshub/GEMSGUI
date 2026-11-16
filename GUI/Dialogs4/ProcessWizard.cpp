@@ -83,10 +83,10 @@ void 	ProcessWizard::resetBackButton()
 }
 
 
-ProcessWizard::ProcessWizard( const char* pkey, char flgs[24], int size[8],
+ProcessWizard::ProcessWizard( const std::string& pkey, char flgs[24], int size[8],
 short tabInt[6], double tabDoubl[24],
-const char *acalcScript, const char *aoutScript,
-const char* aXname, const char* aYname, QWidget* parent):
+const std::string& acalcScript, const std::string& aoutScript,
+const std::string& aXname, const std::string& aYname, QWidget* parent):
     QDialog( parent ),
     ui(new Ui::ProcessWizardData),
     curType('-'), calcScript(acalcScript),
@@ -1840,7 +1840,7 @@ int  ProcessWizard::getNPoints( int col )
     if( (nP < 1 || nP > 9999) && nP != -1 )
     {
         std::string str = ui->tIters->horizontalHeaderItem( col )->text().toStdString();
-        vfMessage(this, str.c_str(), "Wrong number of steps - please, check values in this iterator!");
+        vfMessage(this, str, "Wrong number of steps - please, check values in this iterator!");
         return nP;
     }
     return nP;
@@ -1884,7 +1884,7 @@ void  ProcessWizard::setIterColumn( int col, int from, int until, int step )
 static equatSetupData eqPr( "xp", "yp", "J", "J", true );
 
 // work with lists
-void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
+void ProcessWizard::resetPageList(const std::string& aXname, const std::string& aYname)
 {
 
     std::vector<pagesSetupData> scalarsList;
@@ -1893,7 +1893,7 @@ void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
     if(  rt[RT_SYSEQ]->GetStatus() != ONEF_) // read first record in DB
     {
         TCStringArray aRklist;
-        auto Nr = rt[RT_SYSEQ]->GetKeyList( ALLKEY, aRklist);
+        auto Nr = rt[RT_SYSEQ]->getKeysList(ALLKEY, aRklist);
         if( Nr > 0 )
             TProfil::pm->loadSystat( aRklist[0].c_str() );
     }
@@ -1909,7 +1909,7 @@ void ProcessWizard::resetPageList(const char* aXname, const char* aYname)
     //    else
     {
         pageScript = new EquatSetup( ui->page_5, eqPr,
-                                     RT_PROCES, pgData1, scalarsList, outScript.c_str(), aXname, aYname  );
+                                     RT_PROCES, pgData1, scalarsList, outScript, aXname, aYname  );
         ui->verticalLayout->addWidget(pageScript);
     }
 

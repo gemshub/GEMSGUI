@@ -36,7 +36,7 @@ class DCompWizard : public QDialog
 
 public:
 
-    DCompWizard( const char* pkey, char flgs[15], int size[4],
+    DCompWizard( const std::string& pkey, char flgs[15], int size[4],
     QWidget* parent = nullptr);
     virtual ~DCompWizard();
 

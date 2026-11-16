@@ -76,7 +76,7 @@ void 	PhaseWizard::resetBackButton()
     ui->pBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
-PhaseWizard::PhaseWizard( const char* pkey, char flgs[37], int size[30],
+PhaseWizard::PhaseWizard( const std::string& pkey, char flgs[37], int size[30],
 double r2, const TCStringArray& rd_sel,
 const TCStringArray& phase_sel, const TCStringArray& lDCr_sel,
 QWidget* parent):
@@ -89,7 +89,7 @@ QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor Phase Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
     QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));

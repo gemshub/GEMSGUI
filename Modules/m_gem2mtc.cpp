@@ -103,7 +103,7 @@ bool TGEM2MT::test_sizes( )
 
    if( !err_str.empty() )
     {
-        vfMessage(window(), GetName(), err_str.c_str(), vfErr);
+        vfMessage(window(), GetName(), err_str, vfErr);
         return false;
     }
     return true;
@@ -258,10 +258,18 @@ void TGEM2MT::calc_eqstat( bool startSys )
     Gcvt( mtp->cP, 6, mtp->Pp );
     Gcvt( mtp->cV, 6, mtp->Bnamep );
 
-    rt[RT_SYSEQ]->MakeKey( RT_GEM2MT,  mtp->sykey, RT_GEM2MT, 0, RT_GEM2MT,1,
-         RT_GEM2MT, 2, K_IMM, mtp->timep, K_IMM, mtp->Bnamep,
-         K_IMM, mtp->Pp, K_IMM, mtp->TCp, K_IMM, mtp->NVp, K_END );
-//    rt[RT_SYSEQ].Find(mtp->sykey); // do we need this in RMT_MODE_S ?
+    const std::string compiled_key = rt[RT_SYSEQ]->makeKey(RT_GEM2MT, {   {RT_GEM2MT, 0},
+                                                                          {RT_GEM2MT, 1},
+                                                                          {RT_GEM2MT, 2},
+                                                                          {K_IMM, mtp->timep},
+                                                                          {K_IMM, mtp->Bnamep},
+                                                                          {K_IMM, mtp->Pp},
+                                                                          {K_IMM, mtp->TCp},
+                                                                          {K_IMM, mtp->NVp},
+                                                                          K_END
+                                                                      });
+
+    copy_to_cstr(mtp->sykey, compiled_key);
 
     if( mtp->PsMode == RMT_MODE_S ) // S mode - avoid calculating equilibrium, just set b vector
     {
@@ -278,7 +286,7 @@ void TGEM2MT::calc_eqstat( bool startSys )
            }
     }
     else {
-           rt[RT_SYSEQ]->Find(mtp->sykey);
+           rt[RT_SYSEQ]->SetKey(mtp->sykey);
            // calculate current EqStat
            if( startSys == true )    // This is for initialization of nodes in RMT simulation
            {

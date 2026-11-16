@@ -335,7 +335,7 @@ bool NewSystemDialog::MessageToSave()
 {
     clearEditFocus();
     std::string key_str = rt[RT_SYSEQ]->PackKey();
-    if( TSysEq::pm->isCellChanged() && key_str.find_first_of("*?") == std::string::npos )
+    if( TSysEq::pm->isCellChanged() && !TDataBase::isPattern(key_str) )
     {
         int res = vfQuestion3(this, key_str,
                               "Data record has been changed!",
@@ -636,7 +636,7 @@ void NewSystemDialog::CmSave()
         {
             std::string key_s = rt[RT_SYSEQ]->PackKey();
             if(!rt[RT_SYSEQ]->existsRecord(key_s)) {
-                vfMessage(this, key_s.c_str(),
+                vfMessage(this, key_s,
                          "Please, calculate the equilibrium state before saving this record!");
                 return;
             }
@@ -691,11 +691,11 @@ void NewSystemDialog::CmNext()
         std::string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
-        auto Nrec = rt[RT_SYSEQ]->GetKeyList(TSysEq::pm->getFilter().c_str(), aKey);
+        auto Nrec = rt[RT_SYSEQ]->getKeysList(TSysEq::pm->getFilter(), aKey);
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != std::string::npos) )
+        if( !TDataBase::isPattern(str) )
             //Current record key is defined!
         {
             for(size_t i=0; i<aKey.size(); i++ )
@@ -732,11 +732,11 @@ void NewSystemDialog::CmPrevious()
         std::string str=rt[RT_SYSEQ]->UnpackKey();
         // select scroll list
         TCStringArray aKey;
-        auto Nrec = rt[RT_SYSEQ]->GetKeyList( TSysEq::pm->getFilter().c_str(), aKey);
+        auto Nrec = rt[RT_SYSEQ]->getKeysList(TSysEq::pm->getFilter(), aKey);
         if( Nrec <= 0 )
             return; // no records to scroll
         // get current record key
-        if( !(str.find_first_of("*?" ) != std::string::npos) )
+        if( !TDataBase::isPattern(str) )
             //Current record key is defined!
         {
             for(size_t i=0; i<aKey.size(); i++ )

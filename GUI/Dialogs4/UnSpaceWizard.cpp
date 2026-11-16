@@ -57,7 +57,7 @@ void UnSpaceWizard::resetBackButton()
 }
 
 
-UnSpaceWizard::UnSpaceWizard( const char* pkey, char flgs[38],
+UnSpaceWizard::UnSpaceWizard( const std::string& pkey, char flgs[38],
 int size[10], QWidget* parent):
     QDialog( parent ),
     ui(new Ui::UnSpaceWizardData)
@@ -66,7 +66,7 @@ int size[10], QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor UnSpace Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
     QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));

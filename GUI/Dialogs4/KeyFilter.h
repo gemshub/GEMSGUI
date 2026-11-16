@@ -49,8 +49,8 @@ protected:
     std::string SetKeyString();
 
 public:
-    KeyFilter(QWidget* win, size_t iRt, const char* keyFilter,
-              const char* caption, bool allowTemplates=true );
+    KeyFilter(QWidget* win, size_t iRt, const std::string& keyFilter,
+              const std::string& caption, bool allowTemplates=true );
 
     std::string getFilter();
 };

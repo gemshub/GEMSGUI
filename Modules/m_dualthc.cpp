@@ -148,11 +148,12 @@ void TDualTh::calc_eqstat()
     Gcvt( dtp->cP, 6, dtp->Pp );
     Gcvt( dtp->cV, 6, dtp->Bnamep );
 
-   rt[RT_SYSEQ]->MakeKey( RT_DUALTH,  dtp->sykey, RT_DUALTH, 0, RT_DUALTH,1,
-         RT_DUALTH, 2, K_IMM, dtp->timep, K_IMM, dtp->Bnamep,
-         K_IMM, dtp->Pp, K_IMM, dtp->TCp, K_IMM, dtp->NVp, K_END );
+   auto pkey = rt[RT_SYSEQ]->makeKey( RT_DUALTH,  {{RT_DUALTH, 0}, {RT_DUALTH,1},
+         {RT_DUALTH, 2}, {K_IMM, dtp->timep}, {K_IMM, dtp->Bnamep},
+         {K_IMM, dtp->Pp}, {K_IMM, dtp->TCp}, {K_IMM, dtp->NVp}, K_END} );
 
-   rt[RT_SYSEQ]->Find(dtp->sykey);
+   copy_to_cstr(dtp->sykey, pkey);
+   rt[RT_SYSEQ]->SetKey(dtp->sykey);
 // calc current SyStat
    TProfil::pm->CalcEqstat( dummy );
    if( dtp->PsSYd == S_ON )
@@ -593,7 +594,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
             str += " finds more than one solution for experiment ";
             str +=  dtp->nam_b[ii];
             str += "\n Please, check its non-basis bulk composition.";
-            vfMessage( 0,  "W01SLrun: CalcMoleFractNS", str.c_str() );
+            vfMessage( 0,  "W01SLrun: CalcMoleFractNS", str );
      }
     // calculate new bn
      task_Axb.CalcB( true, bb );
@@ -612,7 +613,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
             str +=  dtp->nam_b[ii];
             str += ".\nLeast-squares solution Residuals ";
             str += "will be incremented in the CIn table.";
-            vfMessage( 0,  "W02SLrun: CalcMoleFractNS", str.c_str() );
+            vfMessage( 0,  "W02SLrun: CalcMoleFractNS", str );
      }
     // normalise
      double cnt=0.;
@@ -750,7 +751,7 @@ TDualTh::Calc_muo_n( char eState )
             str += dtp->nam_n[j];
             str += ".\n Please, check end-member stoichiometries.";
             str += ".\n Click Ok to continue...";
-            vfMessage( 0,  "W04SLrun: CalcMuoNS", str.c_str() );
+            vfMessage( 0,  "W04SLrun: CalcMuoNS", str );
         }
        else
           lnChi = log(dtp->chi[ii*dtp->nM+j]);

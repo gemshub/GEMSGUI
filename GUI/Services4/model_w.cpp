@@ -863,9 +863,9 @@ void TObjectTable::CmSDRef()
         if( !strcmp( fld.pObj->GetKeywd(), "SDrefs") )
             sd_key = std::string( TSData::pm->GetKey() );
 
-        if( str.find_first_of("*?") != std::string::npos )  // pattern
+        if( TDataBase::isPattern(str) )  // pattern
         { // Sveta
-            str = TSData::pm->GetKeyofRecord( str.c_str(), "Get key", KEY_NEW);
+            str = TSData::pm->GetKeyofRecord( str, "Get key", KEY_NEW);
             if( str.empty() )
                 return;
             patt = true;
@@ -880,7 +880,7 @@ void TObjectTable::CmSDRef()
             if( !strcmp(fld.pObj->GetKeywd(), "SDrefs") )
             {
                 // setValue();
-                if( sd_key.find_first_of("*?") == std::string::npos )  // pattern
+                if( !TDataBase::isPattern(str) )  // pattern
                     TSData::pm->RecSave( sd_key.c_str(), false );
             }
         }

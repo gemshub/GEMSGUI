@@ -46,7 +46,7 @@ KeyProfile::KeyProfile( QWidget* win, uint irt, const char* caption):
     //    string s = "Select Project record";
     //    pLabel->setText(s.c_str());
 
-    auto n = rt[irt]->GetKeyList( "*", keyList);
+    auto n = rt[irt]->getKeysList("*", keyList);
     for( size_t ii=0; ii<n; ii++ )
         ui->pList->addItem(keyList[ii].c_str());
     if( ui->pList->count()>0) {

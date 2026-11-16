@@ -72,7 +72,7 @@ void TConst::dyn_new(int)
     CA = aObj[o_const]->Alloc( Dim[0]*Dim[1], Dim[2], Dim[3] );
 }
 
-void TConst::CopyRecords( const char *prfName )
+void TConst::CopyRecords( const std::string& prfName )
 {
     // close all no project files
     TCStringArray names1;

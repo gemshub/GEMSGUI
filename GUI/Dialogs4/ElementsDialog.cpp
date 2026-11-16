@@ -66,10 +66,10 @@ void 	ElementsDialog::resetBackButton()
     ui->bBack->setEnabled( ui->stackedWidget->currentIndex() > 0 );
 }
 
-ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
-                               elmWindowData  data1,   const char* /*caption*/):
+ElementsDialog::ElementsDialog(QWidget* win, const std::string& prfName,
+                               elmWindowData  data1):
     QDialog( win ),
-    prf_name ( prfName ),
+    prf_name (prfName),
     el_data( data1 ),
     ui(new Ui::ElementsDialogData)
 {
@@ -78,7 +78,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     std::string str =
             "Basis configuration of a new Modelling Project  ";
     str +=  TProfil::pm->projectName();
-    setWindowTitle( str.c_str() );
+    setWindowTitle( QString::fromStdString(str));
 
     QObject::connect( ui->bBack, SIGNAL(clicked()), this, SLOT(CmBack()));
     ui->stackedWidget->setCurrentIndex (0);

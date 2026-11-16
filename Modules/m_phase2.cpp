@@ -1180,12 +1180,12 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
     if( useLst == false )
     {
         //DCOMP key list
-        Ndc = rt[RT_DCOMP]->GetKeyList( part, aDclist);
+        Ndc = rt[RT_DCOMP]->getKeysList( part, aDclist);
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
           //TCIntArray anRDc1;
-          Ndc += rt[RT_DCOMP]->GetKeyList( "p:*:*:*:", aDclist1);
+          Ndc += rt[RT_DCOMP]->getKeysList( "p:*:*:*:", aDclist1);
           for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
             aDclist.push_back(aDclist1[kk]);
@@ -1213,12 +1213,12 @@ strncpy( php->kin_t, "NNNNNNNN", 8 );
                 else ii++;
         }
         //REACDC  key list
-        Nrc = rt[RT_REACDC]->GetKeyList( part, aRclist);
+        Nrc = rt[RT_REACDC]->getKeysList( part, aRclist);
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
         {
           TCStringArray aDclist1;
           //TCIntArray anRDc1;
-          Nrc += rt[RT_REACDC]->GetKeyList( "p:*:*:*:", aDclist1);
+          Nrc += rt[RT_REACDC]->getKeysList( "p:*:*:*:", aDclist1);
           for(size_t kk=0; kk<aDclist1.size(); kk++)
           {
             aRclist.push_back(aDclist1[kk]);

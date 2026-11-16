@@ -60,12 +60,12 @@ const std::string& TGtDemo::GetString()
 }
 
 // get key of record
-std::string TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
+std::string TGtDemo::GetKeyofRecord( const std::string& oldKey, const std::string& strTitle,
                                      int keyType )
 {
     std::string str;
 
-    if( oldKey == nullptr )
+    if( oldKey.empty() )
     {
         if(Filter.empty())
             str = ALLKEY;
@@ -78,10 +78,10 @@ std::string TGtDemo::GetKeyofRecord( const char *oldKey, const char *strTitle,
         str = TProfil::pm->projectName();
         str+= ":*:*:*:*:";
     }
-    str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
+    str = TCModule::GetKeyofRecord( str, strTitle, keyType );
     if(  str.empty() )
         return str;
-    rt[RT_GTDEMO]->SetKey(str.c_str());
+    rt[RT_GTDEMO]->SetKey(str);
     if( keyType != KEY_TEMP )
         keyTest( str.c_str() );
     return str;
@@ -363,7 +363,6 @@ int TGtDemo::rt_flags_get()
 // opens window with 'Remake record' parameters
 void TGtDemo::MakeQuery()
 {
-    const char * p_key;
     TCStringArray namesLines;
     TCStringArray rkeyList;
     int size[8];
@@ -376,7 +375,7 @@ void TGtDemo::MakeQuery()
     std::string xName = gdp->xNames;
     std::string yName = gdp->yNames;
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     size[0] = rt_flags_get();//gdp->nRT;
     size[1] = gdp->Nsd;
     size[2] = gdp->Nwc;
@@ -679,10 +678,10 @@ void TGtDemo::RecCalc( const char *key )
                  "Sampling the results into GtDemo x0, y0 arrays. "
                  "Please, wait...", gdp->jR, gdp->Nlrk);
         gd_rec_read( gdp->jR );
-        if( strcmp( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey() ))
+        if( strcmp( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey().c_str() ))
         {  /* retranslate the math script text */
             gd_text_analyze();
-            strncpy( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey(), EQ_RKLEN );
+            strncpy( gdp->SYS_key, rt[RT_SYSEQ]->UnpackKey().c_str(), EQ_RKLEN );
         }
         rpn[0].CalcEquat( gdp->PsIPNCalc == S_ON );
         aMod[RT_GTDEMO]->ModUpdate("GtDemo data sampling in progress...");

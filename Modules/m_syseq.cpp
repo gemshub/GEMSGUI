@@ -98,12 +98,11 @@ void TSysEq::keyTest( const char *key )
 */
 void TSysEq::MakeQuery()
 {
-    const char * p_key;
     std::string name = std::string(ssp->name, 0, MAXFORMULA);
     std::string notes = std::string(ssp->notes, 0, MAXFORMULA);
     std::string EQkey = std::string(ssp->PhmKey, 0, EQ_RKLEN);
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
 
 
     if( !vfSystemSet( window(), p_key, ssp->switches, name,notes,EQkey ))
@@ -792,7 +791,7 @@ void TSysEq::RenameList( const char* newName,
     TCStringArray arKey;
     //TCIntArray arR;
 
-    auto Nrec = db->GetKeyList( str_old.c_str(), arKey);
+    auto Nrec = db->getKeysList(str_old, arKey);
     if( Nrec < 1)
       return;
 

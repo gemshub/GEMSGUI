@@ -103,7 +103,7 @@ class InputSystemDialog : public QDialog
 
 public:
 
-    InputSystemDialog( QWidget* parent, const char* pkey,
+    InputSystemDialog( QWidget* parent, const std::string& pkey,
                        const std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
                        const std::vector<pagesSetupData>& scalarsList );
     virtual ~InputSystemDialog();

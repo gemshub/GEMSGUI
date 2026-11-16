@@ -35,7 +35,7 @@ class DualThWizard : public QDialog
 
 public:
 
-    DualThWizard( const char* pkey, char flgs[20], int sizes[8],
+    DualThWizard( const std::string& pkey, char flgs[20], int sizes[8],
     QWidget* parent = nullptr);
     virtual ~DualThWizard();
 

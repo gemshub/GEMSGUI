@@ -67,7 +67,7 @@ class TVisor
         //  pm->dyn_set();
 
         TCIntArray arr;
-        rt[pm->rtNum()]->Open(false, UPDATE_DBV, arr);
+        rt[pm->rtNum()]->openDatabase(UPDATE_DBV, arr);
         rt[pm->rtNum()]->SetKey(ALLKEY);
     }
 

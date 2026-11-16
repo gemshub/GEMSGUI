@@ -1045,7 +1045,7 @@ int TMulti::find_phnum( char *name, int LNmode )
 
     //sprintf( pbuf_, "%d of Phase indices found for the phase name %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    if( !vfQuestion(window(), "W21MSPrep: ", pbuf.c_str() ))
+    if( !vfQuestion(window(), "W21MSPrep: ", pbuf ))
         Error( "E21MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( kf[0] );
@@ -1084,7 +1084,7 @@ int TMulti::find_acnum( char *name, int LNmode )
     pbuf += pbuf_;
     pbuf +="Take the first one and continue (Y) or cancel (N)?";
 
-    if( !vfQuestion(window(), "W08MSPrep: ", pbuf.c_str() ))
+    if( !vfQuestion(window(), "W08MSPrep: ", pbuf ))
         Error( "E08MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( jf[0] );
@@ -1123,7 +1123,7 @@ int TMulti::find_mgpnum( const char *name1 )
     pbuf += name;
     pbuf +="Take the first one and continue (Y) or cancel (N)?";
 
-    if( !vfQuestion(window(), "W08MSPrep: ", pbuf.c_str() ))
+    if( !vfQuestion(window(), "W08MSPrep: ", pbuf ))
         Error( "E08MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( jf[0] );
@@ -1153,15 +1153,13 @@ int TMulti::find_flnum( const char *name1 )
     /* more then one matching index */
     //sprintf( pbuf, "%d of flux indices found for the flux ID %s (->%d) \n"
     //         "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    char pbuf_[164];
     std::string pbuf;
-    sprintf( pbuf_, "%d", ii);
-    pbuf = pbuf_;
+    pbuf = std::to_string(ii);
     pbuf += " of flux indices found for the flux ID ";
     pbuf += name;
     pbuf +="Take the first one and continue (Y) or cancel (N)?";
 
-    if( !vfQuestion(window(), "W08MSPrep: ", pbuf.c_str() ))
+    if( !vfQuestion(window(), "W08MSPrep: ", pbuf ))
         Error( "E08MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( jf[0] );

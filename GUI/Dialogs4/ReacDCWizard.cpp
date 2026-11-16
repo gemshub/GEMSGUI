@@ -62,7 +62,7 @@ void 	ReacDCWizard::resetBackButton()
 }
 
 
-ReacDCWizard::ReacDCWizard( const char* pkey, char flgs[12], int size[4],
+ReacDCWizard::ReacDCWizard( const std::string& pkey, char flgs[12], int size[4],
 const TCStringArray& sel, QWidget* parent):
     QDialog( parent ),
     ui(new Ui::ReacDCWizardData), old_selection(sel)
@@ -70,7 +70,7 @@ const TCStringArray& sel, QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor ReacDC Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     QObject::connect( ui->pCancel, SIGNAL(clicked()), this, SLOT(reject()));
     QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));

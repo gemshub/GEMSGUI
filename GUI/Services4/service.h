@@ -55,8 +55,7 @@ int vfQuestionYesNoAll(QWidget* par, const std::string& title, const std::string
 
 enum WarnType { vfInfo=0, vfWarn, vfErr };
 
-void
-vfMessage(QWidget* par, const std::string& title, const std::string& mess, WarnType type=vfWarn);
+void vfMessage(QWidget* par, const std::string& title, const std::string& mess, WarnType type=vfWarn);
 
 int vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel=0);
 int vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
@@ -64,44 +63,34 @@ int vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
 int vfChoice(QWidget* par, const char* title, const char* prompt,
          int nVal, int *arr, int sel=0);
 
-TCIntArray
-vfMultiChoice(QWidget* par, TCStringArray& arr, const char* prompt);
+TCIntArray vfMultiChoice(QWidget* par, TCStringArray& arr, const char* prompt);
 
-TCIntArray
-vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArray& sel);
+TCIntArray vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArray& sel);
 
-TCStringArray
-vfMultiKeys(QWidget* par, const char* caption,
+TCStringArray vfMultiKeys(QWidget* par, const char* caption,
         unsigned int iRt, const char* key );
 
-TCStringArray
-vfMultiKeysSet(QWidget* par, const char* caption,
+TCStringArray vfMultiKeysSet(QWidget* par, const char* caption,
         unsigned int iRt, const char* key, TCStringArray& sel );
-TCStringArray vfRDMultiKeysSet(QWidget* par, const char* caption,
-         const char* key, TCStringArray& sel, short NsuT=0 );
+TCStringArray vfRDMultiKeysSet(QWidget* par, const std::string& caption,
+         const std::string& key, TCStringArray& sel, short NsuT=0 );
 
-bool
-vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
+bool vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt );
 
-std::string
-vfKeyEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0);
+std::string vfKeyEdit(QWidget* par, const std::string& title, unsigned int iRt, const std::string& key={});
 
-std::string
-vfKeyProfile( QWidget* par, const char* caption, int iRt,
+std::string vfKeyProfile( QWidget* par, const char* caption, int iRt,
               bool& chAqGas, bool& addFiles, bool& remake,
               std::string& key_templ,
               int& recalc_all, int& genGEMS3k, int& makeCalc  );
 
-std::string
-vfKeyTemplEdit(QWidget* par, const char* title, unsigned int iRt, const char* key=0,
+std::string vfKeyTemplEdit(QWidget* par, const std::string& title, unsigned int iRt, const std::string& key={},
                bool allowTemplate=true);
-bool
-vfKeyCanged(QWidget* par, const char* caption,
+bool vfKeyCanged(QWidget* par, const char* caption,
             std::string& from_str, std::string& to_str, int fldLen );
 
-bool
-vfExcludeFillEdit(QWidget* par, const char* caption,
+bool vfExcludeFillEdit(QWidget* par, const std::string& caption,
    TCStringArray& aICkeys, std::vector<bool>& sel, double& fill_data );
 
 
@@ -141,64 +130,57 @@ struct pagesSetupData
 
 };
 
-bool
-vfElements(QWidget* par, const char * prfName,
+bool vfElements(QWidget* par, const std::string& prfName,
            elmWindowData& elm_data, setFiltersData& sf_data );
 
-bool  vfSystemInput(QWidget* par, const char * p_key,
+bool vfSystemInput(QWidget* par, const std::string& p_key,
     std::vector<windowSetupData>& wnData, std::vector<tableSetupData>& tbData,
     std::vector<pagesSetupData>& scalarsList );
 
-bool
-vfProcessSet(QWidget* par, const char * p_key,
+bool vfProcessSet(QWidget* par, const std::string& p_key,
               char flds[24], int size[8], short tabInt[6], double tabDoubl[24],
               std::string& calcScript, std::string& outScript, TCStringArray& names,
               std::string& xName, std::string& yName );
-bool
-vfGEM2MTSet(QWidget* par, const char * p_key,
+
+bool vfGEM2MTSet(QWidget* par, const std::string& p_key,
               char flds[32], int size[20],  double Tai[4], double Pai[4],double Tau[3],
             std::string& calcScript, std::string& outScript, TCStringArray& names,
             std::string& xName, std::string& yName, TCIntArray& vtk1, TCIntArray& vtk2 );
-bool
-vfUnSpaceSet(QWidget* par, const char * p_key,
+
+bool vfUnSpaceSet(QWidget* par, const std::string& p_key,
               char flds[38], int size[10] );
-bool
-vfGtDemoSet(QWidget* par, const char * p_key, char flgs[16], int size[8],
+
+bool vfGtDemoSet(QWidget* par, const std::string& p_key, char flgs[16], int size[8],
             std::string& prkey, std::string& script, TCStringArray& names,
             std::string& xName, std::string& yName, TCStringArray& keys );
 
-bool
-vfComposSet(QWidget* par, const char * p_key,
+bool vfComposSet(QWidget* par, const std::string& p_key,
             char flgs[6], int sizes[2], double& r2 );
-bool
-vfDCompSet(QWidget* par, const char * p_key,
+
+bool vfDCompSet(QWidget* par, const std::string& p_key,
             char flgs[15], int sizes[4] );
-bool
-vfReacDCSet(QWidget* par, const char * p_key,
+
+bool vfReacDCSet(QWidget* par, const std::string& p_key,
             char flgs[12], int sizes[4], TCStringArray& sel );
 
-bool
-vfRTparmSet(QWidget* par, const char * p_key,
+bool vfRTparmSet(QWidget* par, const std::string& p_key,
             char flgs[10], int sizes[7], double val[6],
             std::string& script, std::string& xName, std::string& yName, TCStringArray& names  );
 
-bool
-vfPhaseSet( QWidget* par, const char * p_key,
+bool vfPhaseSet( QWidget* par, const std::string& p_key,
             char flgs[37], int sizes[30], double& r2, TCStringArray& rd_sel,
             TCStringArray& phase_sel, TCStringArray& lDCr_sel );
 
-bool
-vfDualThSet(QWidget* par, const char * p_key,
+bool vfDualThSet(QWidget* par, const std::string& p_key,
             char flgs[20], int size[8]  );
 
-bool
-vfProjectSet(QWidget* par, const char * p_key,
+bool vfProjectSet(QWidget* par, const std::string& p_key,
               char flds[38], int&  taskset );
-bool
-vfSystemSet(QWidget* par, const char * p_key,
+
+bool vfSystemSet(QWidget* par, const std::string& p_key,
             char flgs[40],  std::string& name, std::string& comment, std::string& EQkey );
-bool
- vfAutoPhaseSet(QWidget* par, const char* pr_key, std::string& a_key, std::string& g_key,
+
+bool  vfAutoPhaseSet(QWidget* par, const std::string& pr_key, std::string& a_key, std::string& g_key,
         char& acode, char& gcode, float apar[8]);
 
 bool vfLookupDialogSet(QWidget* wpar, char flags[6],

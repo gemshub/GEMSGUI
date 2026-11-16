@@ -29,7 +29,7 @@
 #include "service.h"
 
 
-InputSystemDialog::InputSystemDialog( QWidget* parent, const char* pkey,
+InputSystemDialog::InputSystemDialog( QWidget* parent, const std::string& pkey,
                                       const std::vector<windowSetupData>& awnData, std::vector<tableSetupData>& atbData,
                                       const std::vector<pagesSetupData>& scalarsList ):
     QDialog( parent ),

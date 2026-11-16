@@ -343,7 +343,7 @@ void TPhase::dyn_set(int q)
 {
     ErrorIf( php!=&ph[q], GetName(),
              "E01PHrem: Invalid access to ph in dyn_set()");
-    memcpy( php->pst_, rt[nRT]->UnpackKey(), PH_RKLEN );
+    memcpy( php->pst_, rt[nRT]->UnpackKey().c_str(), PH_RKLEN );
     ph[q].SCMC =  static_cast<char *>(aObj[ o_phscmc ]->GetPtr());
     ph[q].FsiT =  static_cast<float *>(aObj[ o_phfsit ]->GetPtr());
     ph[q].XfIEC = static_cast<float *>(aObj[ o_phxfiec ]->GetPtr());
@@ -987,7 +987,7 @@ void TPhase::MakeQuery()
     size[28] = php->nAscC;
     size[29] = php->nSiT;
 
-    if( !vfPhaseSet( window(), p_key.c_str(), flgs, size, r2, aDclist, aPhlist, aDcSkrl ))
+    if( !vfPhaseSet( window(), p_key, flgs, size, r2, aDclist, aPhlist, aDcSkrl ))
     {
        db->SetKey(p_key.c_str());
        Error( p_key, "Phase record configuration cancelled by the user!" );
@@ -1083,13 +1083,13 @@ AGAIN_SETUP:
         return ret;
 
     // Change Phase key
-    memcpy( php->pst_, rt[nRT]->UnpackKey(), PH_RKLEN );
+    memcpy( php->pst_, rt[nRT]->UnpackKey().c_str(), PH_RKLEN );
     php->pst_[0] = php->PphC;
     db->SetKey(php->pst_);
 
     if( ret == VF3_1 )
     {
-        strncpy( php->name, db->FldKey(2), db->FldLen(2));
+        strncpy( php->name, db->FldKey(2).c_str(), db->FldLen(2));
         php->name[db->FldLen(2)] = '\0';
     }
 
@@ -1342,11 +1342,7 @@ void TPhase::RecordPrint(const char* /*key_*/)
         std::fstream f(GemsSettings::with_directory("noMg-test.txt"), std::ios::out);
         ErrorIf( !f.good() , GetName(), "File write error");
 
-        aObj[o_reckey]->SetPtr( const_cast<void*>(static_cast<const void *>("test")));
-        aObj[o_reckey]->toTXT(f);
-        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();  no++)
-            aObj[no]->toTXT(f);
-
+        db->recordToTxt("test", f);
         ErrorIf( !f.good() , GetName(), "Filewrite error");
 
     }
@@ -1358,7 +1354,7 @@ const char* TPhase::GetHtml()
    return GM_PHASE_HTML;
 }
 
-void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
+void TPhase::CopyRecords( const std::string& prfName, TCStringArray& aPHnoused,
                           TCStringArray& aPHtmp, elmWindowData el_data,
                           phSetupData st_data, std::set<std::string>& SDlist )
 {
@@ -1376,7 +1372,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     aICkey_new.clear();
 
     // get list of records
-    db->GetKeyList( "*:*:*:*:*:", aPHkey);
+    db->getKeysList( "*:*:*:*:*:", aPHkey);
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
@@ -1462,9 +1458,9 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
             // only 3 fields
             std::string key = char_array_to_string( php->SM[i], DC_RKLEN);
             if( php->DCS[i] == SRC_DCOMP )
-                nRec = rt[RT_DCOMP]->FindPart( php->SM[i], 3 );
+                nRec = rt[RT_DCOMP]->findPart( php->SM[i], 3 );
             else
-                nRec = rt[RT_REACDC]->FindPart( php->SM[i], 3 );
+                nRec = rt[RT_REACDC]->findPart( php->SM[i], 3 );
             if( nRec )
             { aDCused.push_back(cnt); cnt++; }
             else

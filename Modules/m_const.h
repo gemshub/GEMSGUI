@@ -52,7 +52,7 @@ public:
     void dyn_kill( int i=0) override;
     void dyn_new( int i=0) override;
     void set_def( int i=0) override;
-    void CopyRecords( const char *prfName );
+    void CopyRecords( const std::string& prfName );
     const char* GetHtml() override;
     void *CA;
 

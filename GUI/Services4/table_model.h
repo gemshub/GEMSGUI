@@ -46,7 +46,7 @@ protected:
     QVector<QStringList> all_species;
     QStringList headers;
 
-    QStringList split_key( const char* key );
+    QStringList split_key( const std::string& key );
     virtual std::string line_key(const QStringList &table_row) const;
     virtual int compare_size() const
     {
@@ -117,7 +117,7 @@ protected:
 
     bool NsuT_selection = false;
 
-    QStringList add_key( char type, const char *key );
+    QStringList add_key( char type, const std::string& key );
     std::string line_key(const QStringList &table_row) const override;
     int compare_size() const override
     {

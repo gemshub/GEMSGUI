@@ -50,7 +50,7 @@ PhaseInfoDialog::PhaseInfoDialog( QWidget* parent, bool system, int xph, std::st
         ui->labelDC->setText( QString("             %1  Depended Component(s):").arg(xdclist.size()));
     }
 
-    ui->systKey->setText(tr (rt[RT_SYSEQ]->PackKey()));
+    ui->systKey->setText(QString::fromStdString(rt[RT_SYSEQ]->PackKey()));
 
     // define ui->tablePh
     ui->tablePh->setEditTriggers( QAbstractItemView::NoEditTriggers );

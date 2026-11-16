@@ -58,7 +58,7 @@ void DualThWizard::resetBackButton()
 }
 
 
-DualThWizard::DualThWizard( const char* pkey, char flgs[20], int size[8],
+DualThWizard::DualThWizard( const std::string& pkey, char flgs[20], int size[8],
 QWidget* parent):
     QDialog( parent ),
     ui(new Ui::DualThWizardData)
@@ -69,7 +69,7 @@ QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor DualTh Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();

@@ -405,7 +405,7 @@ public:
     void set_def( int i=0) override;
     bool check_input( const char *key, int level=1 ) override;
 
-    std::string   GetKeyofRecord( const char *oldKey, const char *strTitle,
+    std::string   GetKeyofRecord( const std::string& oldKey, const std::string& strTitle,
                               int keyType ) override;
 
     void RecInput( const char *key ) override;

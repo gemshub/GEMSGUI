@@ -49,7 +49,7 @@ const char * dfFluKeyU = "f   FLUID   fluid_spec      gm  User-Provided   ";
 
 
 AutoPhaseDialog::AutoPhaseDialog (
-        const char *pr_key, char acode, char gcode, QWidget* parent):
+        const std::string& pr_key, char acode, char gcode, QWidget* parent):
     QDialog( parent ),
     ui(new Ui::AutoPhaseDialogData)
 {
@@ -57,7 +57,7 @@ AutoPhaseDialog::AutoPhaseDialog (
     ui->setupUi(this);
     std::string str= "Setup of aqueous and gas phases in project:  ";
     str += pr_key;
-    setWindowTitle( str.c_str() );
+    setWindowTitle( QString::fromStdString(str));
 
     aqu_code = acode;
     switch( acode )

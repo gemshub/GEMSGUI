@@ -82,10 +82,10 @@ class ProcessWizard : public QDialog
 
 public:
 
-    ProcessWizard( const char* pkey, char flgs[24], int sizes[8],
+    ProcessWizard( const std::string& pkey, char flgs[24], int sizes[8],
     short tabInt[6], double tabDoubl[24],
-    const char *acalcScript, const char *aoutScript,
-    const char* aXname, const char* aYname,  QWidget* parent = nullptr);
+    const std::string& acalcScript, const std::string& aoutScript,
+    const std::string& aXname, const std::string& aYname,  QWidget* parent = nullptr);
     virtual ~ProcessWizard();
 
     void   getSizes( int size[8] );
@@ -106,7 +106,7 @@ protected slots:
     void CmNext();
     void CmBack();
 
-    void resetPageList(const char* aXname, const char* aYname);
+    void resetPageList(const std::string& aXname, const std::string& aYname);
     void setMode(QAbstractButton*);
     void CmItersEdit(int , int );
     void CmSetMode();

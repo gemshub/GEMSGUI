@@ -82,10 +82,10 @@ class GEM2MTWizard : public QDialog
 
 public:
 
-    GEM2MTWizard( const char* pkey, char flgs[32], int sizes[20],
+    GEM2MTWizard( const std::string& pkey, char flgs[32], int sizes[20],
     double Tai[4], double Pai[4], double Tau[3],
-    const char *acalcScript, const char *aoutScript,
-    const char* aXname, const char* aYname,
+    const std::string& acalcScript, const std::string& aoutScript,
+    const std::string& aXname, const std::string& aYname,
     TCIntArray vtk1, TCIntArray vtk2, QWidget* parent = nullptr);
 
     virtual ~GEM2MTWizard();
@@ -115,7 +115,7 @@ protected slots:
     void help();
     void CmNext();
     void CmBack();
-    void resetPageList(const char* aXname, const char* aYname);
+    void resetPageList(const std::string& aXname, const std::string& aYname);
     void setTScript( bool c_PvMSt_checked );
     void ScriptChange(QAbstractButton*);
     void changePage( int nPage );

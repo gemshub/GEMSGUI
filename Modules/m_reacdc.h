@@ -195,7 +195,7 @@ public:
 
     void RCthermo( int q, int p );
 
-    void CopyRecords( const char * prfName, TCIntArray& cnt,
+    void CopyRecords( const std::string& prfName, TCIntArray& cnt,
     elmWindowData el_data, rdSetupData st_data, std::set<std::string>& SDlist );
 
     QJsonArray all_to_thermofun(QJsonArray &subsArray);

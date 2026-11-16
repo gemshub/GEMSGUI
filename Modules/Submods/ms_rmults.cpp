@@ -305,8 +305,8 @@ void TRMults::set_def( int /*q*/)
 //    strcpy( mu.notes, "`");
     fillValue( mu.name, '\0', MAXFORMULA);
     fillValue( mu.notes, '\0', MAXFORMULA);
-    strncpy( mu.name, rt[RT_PARAM]->FldKey(0), rt[RT_PARAM]->FldLen(0) );
-    strncpy( mu.notes, rt[RT_PARAM]->FldKey(1), rt[RT_PARAM]->FldLen(1) );
+    strncpy( mu.name, rt[RT_PARAM]->FldKey(0).c_str(), rt[RT_PARAM]->FldLen(0) );
+    strncpy( mu.notes, rt[RT_PARAM]->FldKey(1).c_str(), rt[RT_PARAM]->FldLen(1) );
     memset( &mu.N, 0, 14*sizeof(short));
     mu.SF  = 0;
     mu.SM  = 0;
@@ -351,7 +351,7 @@ void TRMults::DCListLoad(  TCStringArray AqKey, TCStringArray GasKey,
     //TCIntArray anRPhase;
     if( useLst == false )
     {
-        rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", aPhaseList);
+        rt[RT_PHASE]->getKeysList( "*:*:*:*:*:", aPhaseList);
         uint ii=0;
         while( ii < aPhaseList.size() )
         {
@@ -469,7 +469,7 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
     // Get all records of IComp
     TCStringArray aICList;
     //TCIntArray anRIC;
-    rt[RT_ICOMP]->GetKeyList( "*:*:*:", aICList);
+    rt[RT_ICOMP]->getKeysList( "*:*:*:", aICList);
     if( aICList.size()<1 )
         Error("RMULT", "No records of Independent component!");
     mu.N  = aICList.size();
@@ -481,7 +481,7 @@ void TRMults::MakeRecordLists( TCStringArray AqKey, TCStringArray GasKey )
     // Get all records of Compos
     TCStringArray aCompList;
     //TCIntArray anRComp;
-    rt[RT_COMPOS]->GetKeyList( "*:*:*:", aCompList);
+    rt[RT_COMPOS]->getKeysList( "*:*:*:", aCompList);
     mu.La = aCompList.size();
     if( mu.La<1 )
         mu.PmvSA = S_OFF;
@@ -737,7 +737,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 NEW_PHASE_AGAIN:
 
         // Calling the wizard to set generated aq and gas phases
-        if( !vfAutoPhaseSet( pVisor->window()/*window()*/, prfName.c_str(),
+        if( !vfAutoPhaseSet( pVisor->window()/*window()*/, prfName,
                              AqKey1, GasKey1, amod, gmod, aparam ) )
         {
             if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
@@ -867,7 +867,7 @@ void TRMults::SelectAqGasPhase( char AqGasType, TCStringArray& AqGasKey )
      // Get all records of Phase for type
     for(ii=0; ii<aPhaseType.size(); ii++ )
     {
-        rt[RT_PHASE]->GetKeyList( aPhaseType[ii].c_str(), aPhaseList);
+        rt[RT_PHASE]->getKeysList( aPhaseType[ii].c_str(), aPhaseList);
         for( jj=0; jj<aPhaseList.size(); jj++ )
             aKeysList.push_back( aPhaseList[jj]);
     }
@@ -950,7 +950,7 @@ string TRMults::SelectAqPhase(const char * dfKey )
     TCIntArray anRPhase;
 
      // Get all records of Phase
-    rt[RT_PHASE]->GetKeyList( "a:*:*:*:*:", aPhaseList, anRPhase );
+    rt[RT_PHASE]->getKeysList( "a:*:*:*:*:", aPhaseList, anRPhase );
     if( aPhaseList.GetCount()<1 ) //no aqueous phase in open data base files
     {
         if( vfQuestion( window(), "Project: Choice of aqueous phase?",
@@ -1000,10 +1000,10 @@ string TRMults::SelectGasPhase(const char * dfKey )
     TCIntArray anRPhase;
 
     // Get all records of PHase
-    rt[RT_PHASE]->GetKeyList( "g:*:*:*:*:", aPhaseList, anRPhase );
+    rt[RT_PHASE]->getKeysList( "g:*:*:*:*:", aPhaseList, anRPhase );
     if( aPhaseList.GetCount()<1 ) //no gas phase in open data base files
     { // Sveta 17/05/99  mu.PmvGas = S_ON;  goto DEF_KEY;
-       rt[RT_PHASE]->GetKeyList( "f:*:*:*:*:", aPhaseList, anRPhase );
+       rt[RT_PHASE]->getKeysList( "f:*:*:*:*:", aPhaseList, anRPhase );
        if( aPhaseList.GetCount()<1 )
        {
           if( vfQuestion( window(), "Project: Choice of gas/fluid phase?",
@@ -1019,7 +1019,7 @@ string TRMults::SelectGasPhase(const char * dfKey )
     if( aPhaseList.GetCount() == 1 )
         return  aPhaseList[0];
     // select phase
-    rt[RT_PHASE]->GetKeyList( "*:*:*:*:*:", aPhaseList, anRPhase );
+    rt[RT_PHASE]->getKeysList( "*:*:*:*:*:", aPhaseList, anRPhase );
     // get selected phase  added Sveta 18/06/04
     for(uint ii=0; ii <aPhaseList.GetCount(); ii++)
     {

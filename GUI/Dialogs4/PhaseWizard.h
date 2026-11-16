@@ -50,7 +50,7 @@ class PhaseWizard : public QDialog
 
 public:
 
-    PhaseWizard( const char* pkey, char flgs[37], int size[30],
+    PhaseWizard( const std::string& pkey, char flgs[37], int size[30],
                  double r2, const TCStringArray& rd_sel,
                  const TCStringArray& phase_sel, const TCStringArray& lDCr_sel,
                  QWidget* parent = nullptr);

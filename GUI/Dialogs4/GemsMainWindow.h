@@ -111,7 +111,7 @@ struct DThread
             list.push_back( arr[ii]);
     }
     //vfExcludeFillEdit
-    void setDThread( const char* caption, TCStringArray& aICkeys,
+    void setDThread( const std::string& caption, TCStringArray& aICkeys,
                      double fill_data_ )
     {
         res = 0;

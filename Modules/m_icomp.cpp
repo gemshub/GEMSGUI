@@ -93,7 +93,7 @@ void TIComp::set_def( int q)
     ErrorIf( icp!=&ic[q], GetName(), "Invalid access to IC in set_def()");
     strcpy( ic[q].sst, "s" );
     strcpy( ic[q].name, "Independent Component");
-    strncpy( ic[q].form, rt[rtNum()]->FldKey(0), MAXICNAME );
+    strncpy( ic[q].form, rt[rtNum()]->FldKey(0).c_str(), MAXICNAME );
     strcpy( ic[q].dc_ref, "`" );
     ic[q].awt   =  FLOAT_EMPTY;
     ic[q].aSs   =  FLOAT_EMPTY;
@@ -134,7 +134,7 @@ db->SetStatus(ONEF_);
     }
     if( retType == VF3_1 )
     {
-        strncpy( icp->name, db->FldKey(2), db->FldLen(2));
+        strncpy( icp->name, db->FldKey(2).c_str(), db->FldLen(2));
         icp->name[db->FldLen(2)] = '\0';
     }
     return  retType;
@@ -155,30 +155,31 @@ const char* TIComp::GetHtml()
 void TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
 {
 
- //TCIntArray anR;
- TCStringArray aIC1;
+    //TCIntArray anR;
+    TCStringArray aIC1;
 
- //open selected files in kernel database
- //db->openOnlyWith(names);
- //db->OpenAllFiles(true);
- db->GetKeyList( "*:*:*:", aIC1);
+    //open selected files in kernel database
+    //db->openOnlyWith(names);
+    //db->OpenAllFiles(true);
+    db->getKeysList( "*:*:*:", aIC1);
 
- for( uint ii=0; ii<aIC1.size(); ii++ )
- {
-    RecInput( aIC1[ii].c_str() );
-    if( *db->FldKey( 1 ) == 'a' || *db->FldKey( 1 ) == 'v' ) // addition
-      aIndMT.push_back( -1 );
-    else
-      if( isotopes || *db->FldKey( 1 ) == 'e' || *db->FldKey( 1 ) == 'z' ||
-          *db->FldKey( 1 ) == 'h' || *db->FldKey( 1 ) == 'o' )
-        aIndMT.push_back( icp->num );
-      else
-        continue;
-   aIC.push_back(aIC1[ii]);
- }
+    for( uint ii=0; ii<aIC1.size(); ii++ )
+    {
+        RecInput( aIC1[ii].c_str() );
+        char fld_key = db->FldKey(1)[0];
+        if( fld_key == 'a' || fld_key == 'v' ) // addition
+            aIndMT.push_back( -1 );
+        else
+            if( isotopes || fld_key == 'e' || fld_key == 'z' ||
+                fld_key == 'h' ||fld_key == 'o' )
+                aIndMT.push_back( icp->num );
+            else
+                continue;
+        aIC.push_back(aIC1[ii]);
+    }
 }
 
-void TIComp::CopyElements( const char * prfName,
+void TIComp::CopyElements( const std::string& prfName,
          elmWindowData el_data, icSetupData st_data )
 {
     // open selected kernel files

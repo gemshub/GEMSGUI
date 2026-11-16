@@ -77,7 +77,7 @@ protected:
     void  resetNextButton();
     void  resetBackButton();
     int   get_nRT();
-    void reset_page_list( int newRT, const char* aXname=nullptr, const char* aYname=nullptr );
+    void reset_page_list( int newRT, const std::string& aXname="", const std::string& aYname="");
     void reset_process_list( int newRT );
     void reset_keys_list(int newRT);
     void alloc_keys_model(int cRT);

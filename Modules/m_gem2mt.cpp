@@ -56,12 +56,11 @@ TGEM2MT::TGEM2MT(size_t nrt):
 
 // get key of record
 std::string
-TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
-                          int keyType )
+TGEM2MT::GetKeyofRecord(const std::string& oldKey, const std::string& strTitle, int keyType )
 {
     std::string str;
 
-    if( oldKey == 0 )
+    if( oldKey.empty() )
     {
         if(Filter.empty())
             str = ALLKEY;
@@ -71,11 +70,10 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
 
     if( keyType==KEY_NEW  )
     { // Get key of base SyStat
-        char pkey[MAXRKEYLEN+10];
         rt[RT_GEM2MT]->SetKey(str.c_str());
-        rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
-                               RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
-                               RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
+        auto pkey = rt[RT_SYSEQ]->makeKey( RT_GEM2MT, {{RT_GEM2MT, 0}, {RT_GEM2MT, 1},
+                               {RT_GEM2MT, 2}, {RT_GEM2MT, 3}, {RT_GEM2MT, 4},
+                               {RT_GEM2MT, 5}, {RT_GEM2MT, 6}, {RT_GEM2MT, 7}, K_END});
         str = TSysEq::pm->GetKeyofRecord( pkey,
           "Please, select a parent System for a new GEM2MT ", KEY_OLD );
         if(  str.empty() )
@@ -86,7 +84,7 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
         else
             str += "*:*:";
     }
-    str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
+    str = TCModule::GetKeyofRecord( str, strTitle, keyType );
     if(  str.empty() )
         return str;
     rt[RT_GEM2MT]->SetKey(str.c_str());
@@ -98,8 +96,6 @@ TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
 // test GEM2MT key to calc mode
 void TGEM2MT::keyTest( const char *key )
 {
-    char pkey[MAXRKEYLEN+10];
-
     if( pVisor->ProfileMode )
     { // test project key
         std::string prfKey = TProfil::pm->projectName();
@@ -107,10 +103,10 @@ void TGEM2MT::keyTest( const char *key )
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM]->FldLen(0) )  )
             Error( key, "E08GTrem: Invalid record key (another Modelling Project)!");
-        rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
-                               RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
-                               RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
-        if( rt[RT_SYSEQ]->Find(pkey) <0 )
+        auto pkey = rt[RT_SYSEQ]->makeKey( RT_GEM2MT, {{RT_GEM2MT, 0}, {RT_GEM2MT, 1},
+                               {RT_GEM2MT, 2}, {RT_GEM2MT, 3}, {RT_GEM2MT, 4},
+                               {RT_GEM2MT, 5}, {RT_GEM2MT, 6}, {RT_GEM2MT, 7}, K_END});
+        if( !rt[RT_SYSEQ]->existsRecord(pkey))
             Error( key, "E07GTrem: Invalid record key (no system)!");
     }
 }
@@ -734,16 +730,15 @@ if( mtp->PvFDL == S_OFF )
 // return true if nesessary, recalc base SYSEQ
 bool TGEM2MT::check_input( const char * /*key*/, int /*Level*/ )
 {
-    char pkey[MAXRKEYLEN+10];
     if( !pVisor->ProfileMode )
         return true;
 
     //Get base SysEq key from process key
-    rt[RT_SYSEQ]->MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
-                           RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
-                           RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
+    auto pkey = rt[RT_SYSEQ]->makeKey( RT_GEM2MT, {{RT_GEM2MT, 0}, {RT_GEM2MT, 1},
+                           {RT_GEM2MT, 2}, {RT_GEM2MT, 3}, {RT_GEM2MT, 4},
+                           {RT_GEM2MT, 5}, {RT_GEM2MT, 6}, {RT_GEM2MT, 7}, K_END});
     // read SysEq record and unpack data
-    TProfil::pm->loadSystat( pkey );
+    TProfil::pm->loadSystat( pkey.c_str() );
     // test changes in system after process calc
     if( rt[RT_SYSEQ]->Rtime() > rt[nRT]->Rtime() )
         return true;
@@ -762,7 +757,6 @@ void TGEM2MT::RecInput( const char *key )
 void TGEM2MT::MakeQuery()
 {
 //    pImp->MakeQuery();
-    const char * p_key;
     char flgs[32];
     int size[20];
 
@@ -786,7 +780,7 @@ void TGEM2MT::MakeQuery()
     LinkNode0(0);
     LinkNode1(0);
 
-    p_key  = db->PackKey();
+    auto p_key  = db->PackKey();
     memcpy( flgs, &mtp->PunE, 32);
     size[0] = mtp->nC;
     size[1] = mtp->nIV;
@@ -972,10 +966,10 @@ void TGEM2MT::RecCalc( const char * key )
 
    if( mtp->PsVTK != S_OFF )
    {
-     prefixVTK = char_array_to_string( db->FldKey(8), db->FldLen(8) );
+     prefixVTK = db->FldKey(8);
      strip( prefixVTK );
      prefixVTK += "_";
-     prefixVTK += char_array_to_string( db->FldKey(9), db->FldLen(9) );
+     prefixVTK += db->FldKey(9);
      strip( prefixVTK );
      prefixVTK += "_";
      nameVTK = db->PackKey();
@@ -1136,7 +1130,7 @@ GEMS3KGenerator TGEM2MT::GEMS3k_generator()
     }
     if( error_lst_path.empty() )
     {
-        error_lst_path = char_array_to_string( rt[RT_SYSEQ]->FldKey(2), rt[RT_SYSEQ]->FldLen(2));;
+        error_lst_path = rt[RT_SYSEQ]->FldKey(2);
         strip(error_lst_path);
         error_lst_path += "-err.lst";
         // open file to output
@@ -1171,7 +1165,7 @@ void TGEM2MT::RecordPrint( const char* key )
                              "Please, enter the TGEM2MT work structure file name", std::string("*."+f_ext).c_str() ) )
         {
             if( fileExist(filename) )
-                if( !vfQuestion( window(), filename.c_str(), "This file exists! Overwrite?") )
+                if( !vfQuestion( window(), filename, "This file exists! Overwrite?") )
                     return;
             //mtp->PsScom=S_OFF;
             std::fstream ff( filename, std::ios::out );

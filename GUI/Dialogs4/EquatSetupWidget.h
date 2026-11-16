@@ -43,8 +43,8 @@ struct equatSetupData
     bool useSeveral; // More then one Abscissa is permitted
     TCStringArray abscissaLines;  // Abscissa object names (if more then one Abscissa)
 
-    equatSetupData( const char * axName, const char * ayName,
-                    const char * aiName, const char * aitName, bool useMore = false):
+    equatSetupData( const std::string& axName, const std::string& ayName,
+                    const std::string& aiName, const std::string& aitName, bool useMore = false):
         xName(axName), yName(ayName), indexName(aiName), abscissaEquat(aitName), useSeveral(useMore)
     { }
 
@@ -69,9 +69,9 @@ struct scriptSetupData
     std::string ndxName;
     std::string lineText;
 
-    scriptSetupData( int aWin, int aobj, const char * oName,
-                     int aIdx, const char * ndName,
-                     const char * alineText ):
+    scriptSetupData( int aWin, int aobj, const std::string& oName,
+                     int aIdx, const std::string& ndName,
+                     const std::string& alineText ):
         nWin(aWin), nObj(aobj), nIdx(aIdx),
         objName(oName), ndxName(ndName), lineText(alineText)
     { strip( ndxName ); }
@@ -118,17 +118,17 @@ public:
 
     EquatSetup( QWidget* parent, equatSetupData aEqData,
                 int nRT, std::vector<pagesSetupData>& wnData, std::vector<pagesSetupData>& scalarsList,
-                const char* script = nullptr, const char* aXname = nullptr, const char* aYname = nullptr  );
+                const std::string& script = "", const std::string& aXname = "", const std::string &aYname = ""  );
     virtual ~EquatSetup();
 
     std::string getScript() const;
     TCStringArray getNames( std::string& xName, std::string& yName ) const;
     void setNames(TCStringArray lst );
-    void setXname( const char* name )
+    void setXname( const std::string name )
     {
         xNam =name;
     }
-    void setYname( const char* name )
+    void setYname( const std::string name )
     {
         yNam =name;
     }

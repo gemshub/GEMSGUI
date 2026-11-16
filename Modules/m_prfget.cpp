@@ -72,7 +72,7 @@ TProfil::initCalcMode(const char * profileKey)
     }
     else
     {
-        if( rt[RT_PARAM]->Find(profileKey) < 0)
+        if( !rt[RT_PARAM]->existsRecord(profileKey))
             return false;
         str = std::string(profileKey);
     }
@@ -121,9 +121,8 @@ TProfil::initCalcMode(const char * profileKey)
         }
     }
     // Get first  SYSEQ
-    char pkey[81];
-    rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                          K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    auto pkey = rt[RT_SYSEQ]->makeKey( RT_PARAM, {{RT_PARAM, 0},
+                          K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END});
     rt[RT_SYSEQ]->SetKey( pkey );
 
     // update windows informations
@@ -211,7 +210,7 @@ AGAIN:
         if( key_str.empty() )
             return false; // cancel command
 
-        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str );
         std::string fstKeyFld = projectName();
         new_project_dir_name = fstKeyFld;
 
@@ -221,9 +220,9 @@ AGAIN:
         TCStringArray aKey__;
         //TCIntArray anR__;
 
-        if(  db->GetKeyList( templ_str.c_str(), aKey__) >0 )
+        if(  db->getKeysList(templ_str, aKey__) >0 )
         {
-            vfMessage(window(), fstKeyFld.c_str(),
+            vfMessage(window(), fstKeyFld,
                       "Project cannot be created - such directory already exists."
                       "\nPlease, enter another name.");
             goto AGAIN;
@@ -240,7 +239,7 @@ AGAIN:
         }
         else
         {
-            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            rt[RT_PARAM]->SetKey( key_str );
             dyn_kill();
             set_def(); // set default data or zero if necessary
         }
@@ -254,7 +253,7 @@ AGAIN:
         pVisor->Message("Loading Modelling Project",
                          "Opening database files to Project", 5  );
 
-        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str );
 
         if( templ_key == false  )
             InitFN( fstKeyFld, ""); // make Project directory
@@ -266,7 +265,7 @@ AGAIN:
             RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
         }
 
-        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str );
         // get opens files list
         if( !GetFN( fstKeyFld.c_str() ) )
             Error( key_str,  "Project configuration aborted by the user!" );
@@ -274,7 +273,7 @@ AGAIN:
 
         if( templ_key == true  )
         {
-            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            rt[RT_PARAM]->SetKey( key_str );
             SaveOldList();
 
             // delete auto-generated aq and gas phases if already created
@@ -285,7 +284,7 @@ AGAIN:
                          "  and DComp/ReacDC record keys", 10);
 
         // load lists of ICOMP, COMPOS, PHASE and DCOMP&REACT recordc keys
-        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str );
         rmults->LoadRmults( !templ_key /*true*/, true );
 
         pVisor->Message("Loading Modelling Project",
@@ -329,7 +328,7 @@ AGAIN:
         if( key_str.empty() )
             return false; // cancel command
 
-        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str );
         std::string fstKeyFld = projectName();
         new_project_dir_name = fstKeyFld;
 
@@ -339,9 +338,9 @@ AGAIN:
         TCStringArray aKey__;
         //TCIntArray anR__;
 
-        if(  db->GetKeyList( templ_str.c_str(), aKey__) >0 )
+        if(  db->getKeysList(templ_str, aKey__) >0 )
         {
-            vfMessage(window(), fstKeyFld.c_str(),
+            vfMessage(window(), fstKeyFld,
                       "Project cannot be created - such directory already exists."
                       "\nPlease, enter another name.");
             goto AGAIN;
@@ -359,7 +358,7 @@ AGAIN:
         }
         else
         {
-            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            rt[RT_PARAM]->SetKey( key_str );
             dyn_kill();
             set_def(); // set default data or zero if necessary
         }
@@ -378,14 +377,14 @@ AGAIN:
             InitFN(fstKeyFld, ""); // make Project directory
         else  // using existing Project
         {
-            rt[RT_PARAM]->SetKey( templ_str.c_str() );
+            rt[RT_PARAM]->SetKey( templ_str );
             std::string fstKeyFld_t = projectName();
             InitFN(fstKeyFld, fstKeyFld_t); // make Project directory
             RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
         }
-        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str );
 
-        if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
+        if( !rCopyFilterProfile( fstKeyFld ) )
             Error( key_str, "Project configuration aborted by the user!" );//goto BACK;
 
         // get opens files list
@@ -395,7 +394,7 @@ AGAIN:
 
         if( templ_key == true  )
         {
-            rt[RT_PARAM]->SetKey( key_str.c_str() );
+            rt[RT_PARAM]->SetKey( key_str );
             SaveOldList();
 
             // delete auto-generated aq and gas phases if already created
@@ -406,7 +405,7 @@ AGAIN:
                          "  and DComp/ReacDC record keys", 10);
 
         // load lists of ICOMP, COMPOS, PHASE and DCOMP&REACT recordc keys
-        rt[RT_PARAM]->SetKey( key_str.c_str() );
+        rt[RT_PARAM]->SetKey( key_str );
         rmults->LoadRmults( !templ_key /*true*/, true );
 
         pVisor->Message("Loading Modelling Project",
@@ -451,7 +450,7 @@ void TProfil::loadSystat( const char *key )
         //rt[RT_SYSEQ]->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
         //                       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
         str = STat->getFilter();
-        str = STat->GetKeyofRecord( str.c_str(),//pkey,
+        str = STat->GetKeyofRecord( str,//pkey,
            "Existing CSD and equilibria records in project database", KEY_OLD );
         ErrorIf( str.empty(), GetName(), "Operation cancelled!");
     }
@@ -467,7 +466,7 @@ void TProfil::loadSystat( const char *key )
 
     // Test MULTY for change (if new System cfg or T, P - new)
     pmp->pESU = 0;  //  new record was readed
-    std::string keyp = char_array_to_string( rt[RT_SYSEQ]->UnpackKey(), rt[RT_SYSEQ]->KeyLen() );
+    std::string keyp = rt[RT_SYSEQ]->UnpackKey();
     PMtest( keyp.c_str() );
     //pmp->pTPD = 0;   // workaround 26.02.2008  DK SD 24/05/2010
     //if( pmp->pBAL < 2 || pmp->pTPD < 2)
@@ -493,7 +492,7 @@ void TProfil::deriveSystat()
      TSysEq::pm->setCalcFlag( false );
 
     std::string keyp = rt[RT_SYSEQ]->UnpackKey();
-    if( keyp.find_first_of( "*?") != std::string::npos )
+    if(TDataBase::isPattern(keyp))
         Error("SyStat", "Undefined current record!");
     int ret = TSysEq::pm->RecBuild( keyp.c_str(), VF_REMAKE );
 
@@ -531,7 +530,7 @@ void TProfil::newSystat( int mode )
     std::string key_str = rt[RT_SYSEQ]->PackKey();
     if( key_str.find("*") != std::string::npos )
     {
-        key_str = char_array_to_string( db->FldKey(0), db->FldLen(0) );
+        key_str = db->FldKey(0);
         strip( key_str );
         key_str += ":G:MySystem:0:0:1:25:0:";
     }
@@ -539,10 +538,10 @@ void TProfil::newSystat( int mode )
     std::string capName = "Please, enter a new record key: ";
 
 AGAIN:
-    str = TSysEq::pm->GetKeyofRecord( str.c_str(),  capName.c_str(), KEY_NEW );
+    str = TSysEq::pm->GetKeyofRecord( str,  capName, KEY_NEW );
     if( str.empty() )
         return;
-    if( rt[RT_SYSEQ]->Find( str.c_str() ) >= 0 )
+    if(rt[RT_SYSEQ]->existsRecord(str))
     {
         capName = "This record already exists! Please, enter another name.";
         goto AGAIN;
@@ -761,7 +760,7 @@ void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
     {
         if( aMod[i]->IsSubModule() )
             continue;
-        rt[i]->RenameList(prfName, prfTemplate);
+        rt[i]->renameList(prfName, prfTemplate);
     }
 }
 // Save file configuration to Project structure

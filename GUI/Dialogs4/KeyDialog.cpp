@@ -26,8 +26,8 @@
 #include "v_mod.h"
 #include "service.h"
 
-KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
-                     const char* caption, bool filter):
+KeyDialog::KeyDialog(QWidget* win, size_t irt, const std::string& key,
+                     const std::string& caption, bool filter):
     QDialog( win),
     ui(new Ui::KeyDialogData),
     multi(false), iRt(irt)
@@ -42,23 +42,23 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
     QObject::connect(ui->pButton2, SIGNAL(clicked()), this, SLOT(CmSelectAll()));
     QObject::connect(ui->pButton3, SIGNAL(clicked()), this, SLOT(CmClearAll()));
     QObject::connect(ui->pList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(accept()));
-    setWindowTitle( caption );
+    setWindowTitle( QString::fromStdString(caption) );
 
     TCStringArray keyList;
 
-    ErrorIf(!key, "KeyDialog", "pkey is null");
+    ErrorIf(key.empty(), "KeyDialog", "pkey is null");
 
-    if( strpbrk(key, "*?") == nullptr )
+    if( !TDataBase::isPattern(key) )
         keyFilter = "*";
     else
         keyFilter = key;
 
     std::string s = "Please, select one record key. Filter: ";
     s +=  keyFilter;
-    ui->pLabel->setText(s.c_str());
+    ui->pLabel->setText( QString::fromStdString(s));
 
-    s  = std::string(rt[irt]->UnpackKey());
-    auto n = rt[irt]->GetKeyList( keyFilter.c_str(), keyList);
+    s  = rt[irt]->UnpackKey();
+    auto n = rt[irt]->getKeysList(keyFilter, keyList);
     uint sel = 0;
 
     for( uint ii=0; ii<n; ii++ )
@@ -83,7 +83,7 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, const char* key,
 }
 
 KeyDialog::KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
-                     const char* key, const char* caption):
+                     const std::string& key, const std::string& caption):
     QDialog( win),
     ui(new Ui::KeyDialogData),
     multi(true), iRt(irt)
@@ -108,11 +108,11 @@ KeyDialog::KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
     
     ui->pList->setFont( pVisorImp->getCellFont() );
     ui->pList->setSelectionMode(QAbstractItemView::MultiSelection);  // ui->pList->setMultiSelection(true);
-    setWindowTitle( caption );
+    setWindowTitle( QString::fromStdString(caption) );
     QObject::connect( ui->bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
-    ErrorIf(!key, "KeyDialog", "pkey is null");
-    if( strpbrk(key, "*?") == nullptr )
+    ErrorIf(key.empty(), "KeyDialog", "pkey is null");
+    if( !TDataBase::isPattern(key) )
         keyFilter = "*";
     else
         keyFilter = key;
@@ -140,7 +140,7 @@ void KeyDialog::SetList()
     s +=  keyFilter;
     ui->pLabel->setText(s.c_str());
 
-    auto n = rt[iRt]->GetKeyList( keyFilter.c_str(), keyList);
+    auto n = rt[iRt]->getKeysList(keyFilter, keyList);
 
     for( uint ii=0; ii<n; ii++ )
         ui->pList->addItem(keyList[ii].c_str());
@@ -241,7 +241,7 @@ TCStringArray KeyDialog::allSelectedKeys()
 //------------------------------------------------------
 // RDKeyDialog - work with ReacDC&DComp keys lists
 RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
-                         const char* key, const char* caption, short aNsuT):
+                         const std::string& key, const std::string& caption, short aNsuT):
     QDialog( win),
     ui(new Ui::KeyDialogData), NsuT(aNsuT)
 {
@@ -255,7 +255,7 @@ RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
     old_sel.clear();
 
     for(size_t ii=0; ii<sel.size(); ii++)
-    {   if( strchr( sel[ii].c_str(), ':' ))  // key in packed form
+    {   if(sel[ii].find(':') != std::string::npos)  // key in packed form
         {
             if( sel[ii][0] == SRC_REACDC )
             {  rt[RT_REACDC]->SetKey( sel[ii].c_str()+2 );
@@ -272,11 +272,11 @@ RDKeyDialog::RDKeyDialog(QWidget* win, TCStringArray& sel,
 
     ui->pList->setFont( pVisorImp->getCellFont() );
     ui->pList->setSelectionMode(QAbstractItemView::MultiSelection);
-    setWindowTitle( caption );
+    setWindowTitle( QString::fromStdString(caption) );
     QObject::connect( ui->bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
 
-    ErrorIf(!key, "KeyDialog", "pkey is null");
-    if( strpbrk(key, "*?") == nullptr )
+    ErrorIf(key.empty(), "KeyDialog", "pkey is null");
+    if(!TDataBase::isPattern(key))
         keyFilter = "*";
     else
         keyFilter = key;
@@ -296,7 +296,7 @@ void RDKeyDialog::CmHelp()
     pVisorImp->OpenHelp( GEMS_SELECT_HTML );
 }
 
-QString RDKeyDialog::makeKey( char type, const char *key )
+QString RDKeyDialog::makeKey( char type, const std::string& key )
 {
     QString str = QString(type);
     str += ' ';
@@ -315,10 +315,10 @@ void RDKeyDialog::SetList()
     // ReacDC list
     if( NsuT > 0 )  // template for adsorption
         keyFilter[0] = CP_SSPC;
-    auto n = rt[RT_REACDC]->GetKeyList( keyFilter.c_str(), keyList);
+    auto n = rt[RT_REACDC]->getKeysList(keyFilter, keyList);
 
     for( uint ii=0; ii<n; ii++ )
-        ui->pList->addItem( makeKey( SRC_REACDC, keyList[ii].c_str()));
+        ui->pList->addItem( makeKey( SRC_REACDC, keyList[ii]));
 
     // Dcomp list
     if( NsuT > 0 )  // template for adsorption
@@ -327,10 +327,10 @@ void RDKeyDialog::SetList()
         s+= keyFilter;
     }
 
-    n = rt[RT_DCOMP]->GetKeyList( keyFilter.c_str(), keyList);
+    n = rt[RT_DCOMP]->getKeysList(keyFilter, keyList);
 
     for( uint ii=0; ii<n; ii++ )
-        ui->pList->addItem( makeKey( SRC_DCOMP, keyList[ii].c_str()));
+        ui->pList->addItem( makeKey( SRC_DCOMP, keyList[ii]));
 
     for( jj=0; jj<old_sel.count(); jj++)
     {

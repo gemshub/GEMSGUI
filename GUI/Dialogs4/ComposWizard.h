@@ -36,7 +36,7 @@ class ComposWizard : public QDialog
 
 public:
 
-    ComposWizard( const char* pkey, char flgs[6], int sizes[2],
+    ComposWizard( const std::string& pkey, char flgs[6], int sizes[2],
     double r2, QWidget* parent = nullptr);
     virtual ~ComposWizard();
 

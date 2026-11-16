@@ -136,8 +136,8 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF ) override;
     void RecCalc( const char *key ) override;
     void RecordPlot( const char *key ) override;
-    virtual std::string  GetKeyofRecord( const char *oldKey,
-       const char *strTitle, int keyType ) override;
+    std::string  GetKeyofRecord( const std::string& oldKey,
+       const std::string& strTitle, int keyType ) override;
 
     //void CmHelp();
     const char* GetHtml() override;

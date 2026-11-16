@@ -60,7 +60,7 @@ void DCompWizard::resetBackButton()
 }
 
 
-DCompWizard::DCompWizard( const char* pkey, char flgs[15], int size[4],
+DCompWizard::DCompWizard( const std::string& pkey, char flgs[15], int size[4],
 QWidget* parent):
     QDialog( parent ),
     ui(new Ui::DCompWizardData)
@@ -69,7 +69,7 @@ QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor DComp Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle( QString::fromStdString(str1));
 
     ui->stackedWidget->setCurrentIndex (0);
     resetNextButton();

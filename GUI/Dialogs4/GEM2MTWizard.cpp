@@ -191,10 +191,10 @@ void 	GEM2MTWizard::resetBackButton()
 }
 
 
-GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[32],
+GEM2MTWizard::GEM2MTWizard( const std::string& pkey, char flgs[32],
 int size[20], double Tai[4], double Pai[4],double Tau[3],
-const char *acalcScript, const char *aoutScript,
-const char* aXname, const char* aYname,
+const std::string& acalcScript, const std::string& aoutScript,
+const std::string& aXname, const std::string& aYname,
 TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
     QDialog( parent ),
     ui(new Ui::GEM2MTWizardData),
@@ -207,7 +207,7 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
     ui->setupUi(this);
     std::string str1= "GEM-Selektor GEM2MT Setup:  ";
     str1 += pkey;
-    setWindowTitle( str1.c_str() );
+    setWindowTitle(  QString::fromStdString(str1));
 
     QObject::connect( ui->pHelp, SIGNAL(clicked()), this, SLOT(help()));
     QObject::connect( ui->pBack, SIGNAL(clicked()), this, SLOT(CmBack()));
@@ -368,7 +368,7 @@ TCIntArray vtk1, TCIntArray vtk2, QWidget* parent):
     connect( GroupBox1, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(ScriptChange(QAbstractButton*)) );
 
     if( flgs[6] =='+' )
-        ui->pScript_t->setPlainText(calcScript.c_str());
+        ui->pScript_t->setPlainText(  QString::fromStdString(calcScript));
 
     //Page 6
 
@@ -888,7 +888,7 @@ void GEM2MTWizard::ScriptChange(QAbstractButton*)
 static equatSetupData eqMT( "xt", "yt", "qc", "qc" );
 
 // work with lists
-void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
+void GEM2MTWizard::resetPageList(const std::string& aXname, const std::string& aYname)
 {
 
     std::vector<pagesSetupData> scalarsList;
@@ -898,7 +898,7 @@ void GEM2MTWizard::resetPageList(const char* aXname, const char* aYname)
     GetListsnRT( RT_GEM2MT, pgData1,  scalarsList );
 
     pageScript = new EquatSetup( ui->page_6, eqMT,
-                                 RT_GEM2MT, pgData1, scalarsList, outScript.c_str(), aXname, aYname  );
+                                 RT_GEM2MT, pgData1, scalarsList, outScript, aXname, aYname  );
     ui->verticalLayout_9->addWidget(pageScript);
 
 

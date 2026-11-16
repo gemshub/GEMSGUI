@@ -146,9 +146,8 @@ void TSData::RecordPrint( const char* /*key*/ )
 }
 
 
-void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
+void TSData::CopyRecords( const std::string& prfName, std::set<std::string>& SDlist )
 {
-    int Rnum;
     uint ii;
 
     // open selected kernel files
@@ -157,15 +156,14 @@ void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
     // add scripts for list to copy
     //TCIntArray anR;
     TCStringArray aScripts;
-    db->GetKeyList( "?script*:*:*:", aScripts);
+    db->getKeysList( "?script*:*:*:", aScripts);
     for(ii=0; ii<aScripts.size(); ii++ )
        SDlist.insert(aScripts[ii]);
 
     // rename records from list
     for( const auto& sdkey: SDlist )
     {
-      Rnum = db->Find( sdkey.c_str() );
-      if( Rnum < 0 )
+      if(!db->existsRecord(sdkey))
         continue;
       RecInput( sdkey.c_str() );
 
@@ -184,10 +182,9 @@ void TSData::CopyRecords( const char *prfName, std::set<std::string>& SDlist )
       str = str1 + ":" + str;
 
       //Point SaveRecord
-      Rnum = db->Find( str.c_str() );
-      if(Rnum < 0 )
+      if(!db->existsRecord(str)) {
         AddRecordTest( str.c_str(), fnum_ );
-
+      }
     }
 
     // close all no project files
@@ -203,21 +200,14 @@ void TSData::TryRecInp( const char *key_, time_t& time_s, int q, bool )
     if( ! MessageToSave() )
         return;
 
-    TDBKey dbKey(db->GetDBKey());
-    dbKey.SetKey(key_);
-    std::string fld2 = std::string(dbKey.FldKey(2), 0, dbKey.FldLen(2));
-    strip( fld2 );
-    fld2 += "*";
-    gui_logger->debug("TSData {} ", fld2);
-    dbKey.SetFldKey(2,fld2.c_str());
-    std::string str_key( dbKey.UnpackKey(), 0, db->KeyLen());
-    RecStatus iRet = db->Rtest( str_key.c_str(), 1 );
+    auto pattern_key = db->patternToField(key_, 2);
+    RecStatus iRet = db->Rtest(pattern_key, 1);
     std::string msg;
 
     switch( iRet )
     {
     case MANY_:    // Get Key list
-        db->GetKeyList(str_key.c_str(), aSDlist);
+        db->getKeysList(pattern_key, aSDlist);
         db->readRecord(aSDlist[0]);
         [[fallthrough]];
     case ONEF_:

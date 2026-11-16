@@ -132,7 +132,7 @@ public:
     //void CmHelp();
     const char* GetHtml() override;
 
-    void CopyRecords( const char * prfName, TCStringArray& aCMnoused,
+    void CopyRecords( const std::string& prfName, TCStringArray& aCMnoused,
        elmWindowData el_data, cmSetupData st_data, std::set<std::string>& SDlist );
 }
 ;

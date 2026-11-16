@@ -385,7 +385,7 @@ TVisorImp::TVisorImp(int c, char** v):
         {
             ui->action_calcMode->setChecked(true);
             // load last system
-            if( rt[RT_SYSEQ]->Find( pVisor->lastSystemKey.c_str()) >= 0 ) {
+            if(rt[RT_SYSEQ]->existsRecord(pVisor->lastSystemKey)) {
             //  CmShow( pVisor->lastSystemKey.c_str() );
                  NewSystemDialog::pDia->CmSelect( pVisor->lastSystemKey.c_str());
             }
@@ -470,7 +470,7 @@ void TVisorImp::defineModuleKeysList( size_t nRT )
     std::string keyFilter = pFilterKey->text().toStdString();
     TCIntArray colSizes;
     TCStringArray keyList;
-    int nKeys = rt[nRT]->GetKeyList( keyFilter.c_str(), keyList);
+    int nKeys = rt[nRT]->getKeysList(keyFilter, keyList);
 
     for(jj=0; jj<rt[nRT]->KeyNumFlds(); jj++)
         colSizes.push_back( 0/*rt[nRT]->FldLen(jj)*/ );
@@ -535,7 +535,7 @@ void TVisorImp::changeModulesKeys( int nRT )
 {
 
     if( nRT >=0 )
-        pLine->setText(tr(rt[nRT]->PackKey()));
+        pLine->setText( QString::fromStdString(rt[nRT]->PackKey()));
     else
         pLine->setText(tr(""));
 
@@ -646,7 +646,7 @@ void TVisorImp::OpenModule(QWidget* /*par*/, uint irt, int page, int viewmode, b
     }
     catch(TError& e)
     {
-        vfMessage(this, "Error opening module", e.mess.c_str() );
+        vfMessage(this, "Error opening module", e.mess );
     }
 }
 

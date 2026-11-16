@@ -760,8 +760,8 @@ void TVisor::toSettingsCFG()
     win_cfg_object["local_dir"] = QString::fromStdString(LocalDir);
     win_cfg_object["local_doc_dir"] = QString::fromStdString(LocalDocDir);
     win_cfg_object["current_mode"] = ProfileMode;
-    win_cfg_object["current_project"] = rt[RT_PARAM]->PackKey();
-    win_cfg_object["current_system"] = rt[RT_SYSEQ]->PackKey();
+    win_cfg_object["current_project"] = QString::fromStdString(rt[RT_PARAM]->PackKey());
+    win_cfg_object["current_system"] = QString::fromStdString(rt[RT_SYSEQ]->PackKey());
     win_cfg_object["default_built_in_TDB"] = QString::fromStdString(DefaultBuiltinTDB);
 
     std::fstream f_win_ini(fname_ini, std::ios::out);

@@ -89,7 +89,7 @@ public:
     //void RecCalc( const char *key );
 
     void GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT );
-    void CopyElements( const char * prfName,
+    void CopyElements( const std::string& prfName,
                        elmWindowData el_data, icSetupData st_data );
 
     QJsonArray all_to_thermofun();

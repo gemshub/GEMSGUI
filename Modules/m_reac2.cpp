@@ -229,7 +229,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
         msgbuf += " with previous values in >0.01 logK units.\n\n";
         msgbuf += "Replace with calculated values (Y)\n";
         msgbuf += " or keep the previous values (N)?";
-        if( vfQuestion(window(), GetName(), msgbuf.c_str() ))
+        if( vfQuestion(window(), GetName(), msgbuf ))
         {
             rcp->Ss[0] = Sr;
             rcp->Hs[0] = Hr;

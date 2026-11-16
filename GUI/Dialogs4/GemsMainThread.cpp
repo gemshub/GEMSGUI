@@ -157,7 +157,7 @@ void TVisorImp::startGEMServer()
     catch(TError& e)
     {
         gui_logger->error("Start gems3 server error: {}", e.mess.c_str());
-        vfMessage(this, e.title.c_str(), e.mess.c_str() );
+        vfMessage(this, e.title, e.mess );
     }
     catch(...)
     {
@@ -228,7 +228,7 @@ void TVisorImp::Update(bool force)
 
     int nrt = nRTofActiveSubWindow();
     if( nrt>=0 )
-        pLine->setText(tr(rt[nrt]->PackKey()));
+        pLine->setText(QString::fromStdString(rt[nrt]->PackKey()));
 }
 
 bool TVisorImp::Message(const char* name, const char* msg, int prog, int total)
@@ -310,7 +310,7 @@ void TVisorImp::theadService( int nFunction, QWidget* par )
                                 thdata.seli, thdata.all_no  );
         break;
     case thExcludeFillEdit:
-        thdata.res = vfExcludeFillEdit( par, thdata.title.c_str(),
+        thdata.res = vfExcludeFillEdit( par, thdata.title,
                                         thdata.list, thdata.sel, thdata.fill_data );
         break;
     case thQuestionYesNoAll:

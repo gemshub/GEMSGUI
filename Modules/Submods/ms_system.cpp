@@ -666,7 +666,7 @@ void TSyst::SyTest()
     RMULTS* mup = TRMults::sm->GetMU();
     //  if( contentsChanged == false )     // no changes
     //      return;
-    if( strchr( rt[RT_SYSEQ]->PackKey(), '*') != NULL )
+    if( rt[RT_SYSEQ]->PackKey().find('*') != std::string::npos )
         Error( "The system is not defined! ",
                "Please, create a new record key\n and specify bulk composition of the system");
 
@@ -688,7 +688,7 @@ void TSyst::SyTestSizes()
 {
     //  if( contentsChanged == false )     // no changes
     //      return;
-    if( strchr( rt[RT_SYSEQ]->PackKey(), '*') != NULL )
+    if( rt[RT_SYSEQ]->PackKey().find('*') != std::string::npos )
         Error( "The system is not defined! ",
                "Please, create a new record key\n and specify bulk composition of the system");
     mark_ic_to_dc();

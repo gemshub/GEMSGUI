@@ -42,8 +42,8 @@ class RTparmWizard : public QDialog
 
 public:
 
-    RTparmWizard( const char* pkey, char flgs[10], int sizes[7], double val[6],
-    const char *acalcScript, const char* aXname, const char* aYname,
+    RTparmWizard( const std::string& pkey, char flgs[10], int sizes[7], double val[6],
+    const std::string& acalcScript, const std::string& aXname, const std::string& aYname,
     QWidget* parent = nullptr);
     virtual ~RTparmWizard();
 
@@ -61,7 +61,7 @@ protected slots:
     void help();
     void CmNext();
     void CmBack();
-    void resetPageList(const char* aXname, const char* aYname);
+    void resetPageList(const std::string& aXname, const std::string& aYname);
     void PChange();
     void TChange();
     void PairwiseChecked();
