@@ -20,14 +20,9 @@
 #include <QJsonArray>
 
 #include "v_dbm.h"
-//#include "v_mod.h"
 #include "visor.h"
 #include "service.h"
 #include "m_param.h"
-#include "v_service.h"
-
-//#include "GEMS3K/gdatastream.h"
-
 
 //-------------------------------------------------------------
 // TDataBase

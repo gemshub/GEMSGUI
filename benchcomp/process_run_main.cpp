@@ -121,9 +121,8 @@ int main(int argc, char* argv[])
             }
             // the T,P of the system records of the project (key fields 7 and 8), with P = 0 read as 1 bar
             {
-                TCIntArray anS;
                 TCStringArray skeys;
-                TSysEq::pm->db->GetKeyList("*:*:*:*:*:*:*:*:", skeys, anS);
+                TSysEq::pm->db->getKeysList("*:*:*:*:*:*:*:*:", skeys);
                 for (const auto& sk : skeys) {
                     std::vector<std::string> f;
                     std::stringstream sks(sk);
@@ -149,9 +148,8 @@ int main(int argc, char* argv[])
             auto sym = [](TCModule* m) { return std::string(m->db->FldKey(2), m->db->FldLen(2)); };
             for (int kind = 0; kind < 2; ++kind) {
                 TCModule* mod2 = kind == 0 ? static_cast<TCModule*>(TDComp::pm) : static_cast<TCModule*>(TReacDC::pm);
-                TCIntArray anR;
                 TCStringArray keys;
-                mod2->db->GetKeyList("*:*:*:*:", keys, anR);
+                mod2->db->getKeysList("*:*:*:*:", keys);
                 for (const auto& key2 : keys) {
                     // only the records that are in the file
                     std::string trimmed = key2;

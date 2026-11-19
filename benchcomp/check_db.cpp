@@ -2,10 +2,10 @@
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/fmt/ranges.h>
 #include "visor.h"
-#include "service.h"
 
 
 int check_current(TCModule* mod, int nfile);
+std::string extract_part1(std::string_view filepath);
 void show_usage(const std::string &name);
 int extract_args(int argc, char* argv[], bool& only_special_files, std::string& folder);
 
@@ -38,27 +38,29 @@ int main(int argc, char *argv[])
                 if(aMod[ii]->IsSubModule()) {
                     continue;
                 }
-                int num_of_files = (only_special_files? rt[aMod[ii]->rtNum()]->specialFilesNum : rt[aMod[ii]->rtNum()]->numFiles());
-                for(int ff=0; ff<num_of_files; ++ff) {
+                std::string active;
+                auto *db = rt[aMod[ii]->rtNum()].get();
+                db->openAllFiles(only_special_files);
+                auto files_rel_paths = db->getOpenFiles(active);
+                for(const auto& file: files_rel_paths) {
+                    auto ff = db->indexOfPath(file);
                     ret += check_current(aMod[ii].get(), ff);
                 }
             }
         }
         else {
             gui_logger->info("Check: {}", check_folder);
-            auto files = vfFiles(check_folder, ".pdb");
-
+            auto dbfiles = folderFiles(check_folder, ".pdb");
             for(size_t ii=0; ii<aMod.size(); ++ii)  {
                 if(aMod[ii]->IsSubModule()) {
                     continue;
                 }
                 auto *db = rt[aMod[ii]->rtNum()].get();
-                for(const auto& file: files) {
-                    std::string flnm = std::string(file, 0, file.find("."));
-                    if(flnm == db->GetKeywd()) {
-                        std::string path = check_folder+"/"+file;
-                        db->AddFile(path.c_str());
-                        ret += check_current(aMod[ii].get(), db->numFiles()-1);
+                for(const auto& file: dbfiles) {
+                    std::string flnm = extract_part1(file);
+                    if(flnm == db->getKeywd()) {
+                        db->addNewFile(file);
+                        ret += check_current(aMod[ii].get(), db->filesCount()-1);
                     }
                 }
             }
@@ -93,24 +95,24 @@ int check_current(TCModule* mod, int nfile)
     TCIntArray sel;
 
     TDataBase* db = rt[mod->rtNum()].get();
-    db->Close();
-    db->Open(true, UPDATE_DBV, {nfile});
+    db->closeDatabase();
+    db->openDatabase(UPDATE_DBV, {nfile});
     db->SetKey(ALLKEY);
 
     // check current file name
-    db->GetFileList(openf, names, indx, sel);
+    db->selectionFilesList(openf, names, indx, sel);
     gui_logger->info("File {} {}", fmt::join(names, " "), db->RecCount());
 
     // get all record keys
-    db->GetKeyList("*", names, indx);
+    db->getKeysList("*", names);
     //gui_logger->info("Records {}", fmt::join(names, " "));
 
-    for(size_t ii=0; ii<indx.size(); ++ii) {
+    for(size_t ii=0; ii<names.size(); ++ii) {
 
         try {
-            gui_logger->debug("Record {} {}", indx[ii], names[ii]);
+            gui_logger->debug("Record {}", names[ii]);
             // Try read
-            db->Get(indx[ii]);
+            db->readRecord(names[ii]);
             // Check the difference between the dynamic object size and the defined sizes
             if(!mod->ods_check()) {
                 gui_logger->error("{} illegal object size", names[ii]);
@@ -131,6 +133,19 @@ int check_current(TCModule* mod, int nfile)
         }
     }
     return ret;
+}
+
+std::string extract_part1(std::string_view filepath)
+{
+    const size_t slash_pos = filepath.find_last_of("/\\");
+    const std::string_view filename = (slash_pos == std::string_view::npos)
+                                          ? filepath
+                                          : filepath.substr(slash_pos + 1);
+    const size_t dot_pos = filename.find('.');
+    if (dot_pos == std::string_view::npos) {
+        return {};
+    }
+    return std::string(filename.substr(0, dot_pos));
 }
 
 void show_usage(const std::string &name)

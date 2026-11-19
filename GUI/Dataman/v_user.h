@@ -91,5 +91,22 @@ inline std::string curDateTime()
 
 // reads line to string class from istream with a delimiter
 std::istream& u_getline(std::istream& instream, std::string& dst_string, char delimit = '\n');
+
+/**
+ * @brief Safely copies a string view into a fixed-size C-style char array,
+ *        zero-filling the remaining buffer to prevent memory leaks or garbage data.
+ *
+ * @tparam N   Automatically deduced size of the destination char array.
+ * @param dst  Reference to the destination fixed-size character buffer.
+ * @param src  Source string or string_view to copy.
+ */
+template <size_t N>
+constexpr void copy_to_cstr(char (&dst)[N], std::string_view src) noexcept
+{
+    static_assert(N > 0, "Destination character buffer must have a non-zero size.");
+    std::ranges::fill(dst, '\0');
+    src.copy(dst, N - 1);
+}
+
 #endif // _v_user_h_
 

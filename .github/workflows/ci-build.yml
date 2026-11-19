@@ -4,7 +4,7 @@ on:
     branches:
       - help_generation_ci1
       - master
-      - develop_gems3kv5   # TEMPORARY: branch test
+      - db_defaults   # TEMPORARY: branch test
   pull_request:
     branches:
       - main

@@ -206,7 +206,7 @@ void CurrentSystem2GEMS3K(const std::string& filepath, const ExportTask& setting
 void System2GEMS3K(const std::string& key, const std::string& files_dir, const ExportTask& settings)
 {
     // test exists
-    if(rt[RT_SYSEQ]->Find(key.c_str()) < 0) {
+    if(!rt[RT_SYSEQ]->existsRecord(key)) {
         gui_logger->error("System not exists: {}", key);
         return;
     }

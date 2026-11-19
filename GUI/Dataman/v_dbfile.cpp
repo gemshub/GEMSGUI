@@ -670,6 +670,7 @@ void TDBFileList::to_cfg(std::fstream& out_stream) const
 void TDBFileList::from_cfg(std::fstream& in_stream)
 {
     size_t ii, tmp_size = 0;
+    max_keywd_len = 0;
     in_stream >> special_files_num;
 
     in_stream >> tmp_size;
@@ -683,6 +684,7 @@ void TDBFileList::from_cfg(std::fstream& in_stream)
         auto dbfile = std::make_shared<TDBFile>();
         dbfile->from_cfg(in_stream);
         all_dbfiles.push_back(dbfile);
+        max_keywd_len = std::max(max_keywd_len, all_dbfiles.back()->getFKeywd().size());
     }
 }
 
@@ -724,6 +726,7 @@ void TDBFileList::add_file(const std::string &path, const std::string &folder)
     }
     gui_logger->debug("Adding file: {} {}", combined_path.string(), rpath);
     all_dbfiles.push_back(std::make_shared<TDBFile>(combined_path.string(), rpath));
+    max_keywd_len = std::max(max_keywd_len, all_dbfiles.back()->getFKeywd().size());
 }
 
 void TDBFileList::add_files(const std::string &folder, const std::vector<std::string> &path_list)
@@ -855,7 +858,10 @@ void TDBFileList::files_list(int mode, std::vector<std::string>& names,
         bool isopened = check_open(ii);
 
         if( (!isopened&&(mode&closef)) || (isopened&&(mode&openf)) )  {
-            names.push_back(std::string(all_dbfiles[ii]->getFKeywd())+std::string(" ")+all_dbfiles[ii]->relativePath());
+            auto name = all_dbfiles[ii]->getFKeywd();
+            name.resize(max_keywd_len+1, ' ');
+            name += all_dbfiles[ii]->relativePath();
+            names.push_back(name);
             indeces.push_back(ii);
             if((mode&oldself) && isopened) { //select already open files
                 sel.push_back(indeces.size()-1);

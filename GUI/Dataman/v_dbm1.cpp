@@ -169,7 +169,7 @@ std::string TDBKeyNew::makeKey(uint8_t rt_current, std::initializer_list<KeyArg>
             }
             else {
                 size_t read_limit = std::min(static_cast<size_t>(rt[rts]->FldLen(nkf)), rkflen);
-                std::string str(fld_raw_key, read_limit);
+                std::string str = fld_raw_key.substr(0, read_limit);
                 strip(str);
                 compiled_key += str;
             }

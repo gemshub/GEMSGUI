@@ -4,27 +4,6 @@
 #include "service.h"
 #include "visor.h"
 
-// TCStringArray vfFiles(const std::string& dir_name, const std::string& ext) {
-//     TCStringArray files;
-//     fs::path dir_path(dir_name);
-//     std::error_code ec;
-//     for (fs::directory_iterator it(dir_path, ec), end; !ec && it != end; it.increment(ec)) {
-//         if (it->is_regular_file(ec) && (ext.empty() || it->path().extension() == ext)) {
-//             std::string file = it->path().filename().string();
-//             gui_logger->trace("Adding file: {}", file);
-//             files.push_back(file);
-//         }
-//     }
-//     return files;
-// }
-
-
-// bool vfExist(const std::string &file_path)
-// {
-//     // return !(::access(file_path.c_str(), 0 ));
-//     fs::path ps(file_path);
-//     return fs::exists(ps);
-// }
 
 int vfQuestYesNoCancel(QWidget*, const std::string& title, const std::string& mess)
 {
@@ -100,8 +79,8 @@ TCStringArray vfMultiKeysSet(QWidget*, const char* caption,
     return {};
 }
 
-TCStringArray vfRDMultiKeysSet(QWidget*, const char* caption,
-                               const char* key, TCStringArray&, short)
+TCStringArray vfRDMultiKeysSet(QWidget*, const std::string& caption,
+                               const std::string& key, TCStringArray&, short)
 {
     gui_logger->info("vfRDMultiKeysSet {} {}", caption, key);
     return {};
@@ -114,7 +93,7 @@ bool vfListFiles(QWidget*, bool show_dlg, const char* prfName,
     return false;
 }
 
-std::string vfKeyEdit(QWidget*, const char* title, unsigned int iRt, const char* key)
+std::string vfKeyEdit(QWidget*, const std::string& title, unsigned int iRt, const std::string& key)
 {
     gui_logger->info("vfKeyEdit {} {} {}", title, iRt, key);
     return "";
@@ -128,7 +107,7 @@ std::string vfKeyProfile(QWidget*, const char* caption, int iRt,
 }
 
 
-std::string vfKeyTemplEdit(QWidget*, const char* title, unsigned int iRt, const char* key, bool)
+std::string vfKeyTemplEdit(QWidget*, const std::string& title, unsigned int iRt, const std::string& key, bool)
 {
     gui_logger->info("vfKeyTemplEdit {} {} {}", title, iRt, key);
     return "";
@@ -140,103 +119,103 @@ bool vfKeyCanged(QWidget*, const char* caption, std::string& from_str, std::stri
     return false;
 }
 
-bool vfExcludeFillEdit(QWidget*, const char* caption, TCStringArray& aICkeys, std::vector<bool>&, double&)
+bool vfExcludeFillEdit(QWidget*, const std::string& caption, TCStringArray& aICkeys, std::vector<bool>&, double&)
 {
     gui_logger->info("vfExcludeFillEdit {} {}", caption, aICkeys.size());
     return false;
 }
 
-bool vfElements(QWidget*, const char* prfName, elmWindowData&, setFiltersData&)
+bool vfElements(QWidget*, const std::string& prfName, elmWindowData&, setFiltersData&)
 {
     gui_logger->info("vfElements {}", prfName);
     return false;
 }
 
-bool vfSystemInput(QWidget*, const char* p_key, std::vector<windowSetupData>&,
+bool vfSystemInput(QWidget*, const std::string& p_key, std::vector<windowSetupData>&,
                    std::vector<tableSetupData>&, std::vector<pagesSetupData>&)
 {
     gui_logger->info("vfSystemInput {}", p_key);
     return false;
 }
 
-bool vfProcessSet(QWidget*, const char* p_key, char [24], int [8], short [6], double [24],
+bool vfProcessSet(QWidget*, const std::string& p_key, char [24], int [8], short [6], double [24],
                   std::string&, std::string&, TCStringArray&,  std::string&, std::string&)
 {
     gui_logger->info("vfProcessSet {}", p_key);
     return false;
 }
 
-bool vfGEM2MTSet(QWidget*, const char* p_key, char [32], int [20], double [4], double [4], double [3],
+bool vfGEM2MTSet(QWidget*, const std::string& p_key, char [32], int [20], double [4], double [4], double [3],
                  std::string&, std::string&, TCStringArray&, std::string&, std::string&, TCIntArray&, TCIntArray&)
 {
     gui_logger->info("vfGEM2MTSet {}", p_key);
     return false;
 }
 
-bool vfUnSpaceSet(QWidget*, const char* p_key, char [38], int [10])
+bool vfUnSpaceSet(QWidget*, const std::string& p_key, char [38], int [10])
 {
     gui_logger->info("vfUnSpaceSet {}", p_key);
     return false;
 }
 
-bool vfGtDemoSet(QWidget*, const char* p_key, char [16], int [8], std::string&, std::string&,
+bool vfGtDemoSet(QWidget*, const std::string& p_key, char [16], int [8], std::string&, std::string&,
                  TCStringArray&, std::string&, std::string&, TCStringArray&)
 {
     gui_logger->info("vfGtDemoSet {}", p_key);
     return false;
 }
 
-bool vfComposSet(QWidget*, const char* p_key, char [6], int [2], double&)
+bool vfComposSet(QWidget*, const std::string& p_key, char [6], int [2], double&)
 {
     gui_logger->info("vfComposSet {}", p_key);
     return false;
 }
 
-bool vfDCompSet(QWidget*, const char* p_key, char [15], int [4])
+bool vfDCompSet(QWidget*, const std::string& p_key, char [15], int [4])
 {
     gui_logger->info("vfDCompSet {}", p_key);
     return false;
 }
 
-bool vfReacDCSet(QWidget*, const char* p_key, char [12], int [4], TCStringArray&)
+bool vfReacDCSet(QWidget*, const std::string& p_key, char [12], int [4], TCStringArray&)
 {
     gui_logger->info("vfReacDCSet {}", p_key);
     return false;
 }
 
-bool vfRTparmSet(QWidget*, const char* p_key, char [10], int [7], double [6],
+bool vfRTparmSet(QWidget*, const std::string& p_key, char [10], int [7], double [6],
                  std::string&, std::string&, std::string&, TCStringArray&)
 {
     gui_logger->info("vfRTparmSet {}", p_key);
     return false;
 }
 
-bool vfPhaseSet(QWidget*, const char* p_key, char [37], int [30], double&,
+bool vfPhaseSet(QWidget*, const std::string& p_key, char [37], int [30], double&,
                 TCStringArray&, TCStringArray&, TCStringArray&)
 {
     gui_logger->info("vfPhaseSet {}", p_key);
     return false;
 }
 
-bool vfDualThSet(QWidget*, const char* p_key, char [20], int [8])
+bool vfDualThSet(QWidget*, const std::string& p_key, char [20], int [8])
 {
     gui_logger->info("vfDualThSet {}", p_key);
     return false;
 }
 
-bool vfProjectSet(QWidget*, const char* p_key, char [38], int&)
+bool vfProjectSet(QWidget*, const std::string& p_key, char [38], int&)
 {
     gui_logger->info("vfProjectSet {}", p_key);
     return false;
 }
 
-bool vfSystemSet(QWidget*, const char* p_key, char [40], std::string&, std::string&, std::string&)
+bool vfSystemSet(QWidget*, const std::string& p_key, char [40], std::string&, std::string&, std::string&)
 {
     gui_logger->info("vfSystemSet {}", p_key);
     return false;
 }
 
-bool vfAutoPhaseSet(QWidget*, const char* pr_key, std::string& a_key,
+bool vfAutoPhaseSet(QWidget*, const std::string& pr_key, std::string& a_key,
                     std::string& g_key, char&, char&, float [8])
 {
     gui_logger->info("vfAutoPhaseSet {} {} {}", pr_key, a_key, g_key);

@@ -16,7 +16,7 @@ DEFINES += USE_THERMO_LOG
 #!win32:!macx-clang:DEFINES += OVERFLOW_EXCEPT  #compile with nan inf exceptions
 
 CONFIG +=sdk_no_version_check
-CONFIG += c++17 cmdline
+CONFIG += c++2a cmdline
 CONFIG += warn_on
 CONFIG += thread
 QT += core
@@ -121,8 +121,10 @@ SOURCES += \
     ../GUI/charts/chart_model.cpp \
     ../GUI/charts/graph_data.cpp \
     #check_db.cpp \
-    export_main.cpp \
+    #export_main.cpp \
     graph_window_new.cpp \
+    #json2db_main.cpp \
+    process_run_main.cpp \
     service_new.cpp
 
 HEADERS += \

@@ -802,6 +802,26 @@ public:
     size_t indexOfName(const std::string &second_name);
 
     /**
+     * @brief Finds the tracking index of a file by its relative path among open files.
+     *
+     * @param relative_path The relative file system path of the database file to look up.
+     * @return size_t The valid zero-based file index, or std::string::npos if the file is not found.
+     */
+    size_t indexOfPath(const std::string& relative_path) const
+    {
+        return dbfiles_list.file_path_index(relative_path);
+    }
+
+    /**
+     * @brief Returns the total number of database files registered in the system list.
+     * @return size_t The exact count of files managed by dbfiles_list.
+     */
+    size_t filesCount() const noexcept
+    {
+        return dbfiles_list.all_dbfiles.size();
+    }
+
+    /**
      * @brief Rebuilds, compresses, and defragments specified database files by recycling deleted blocks.
      * @param indices Vector collection of target file numeric indices to process.
      */

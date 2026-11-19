@@ -13,7 +13,6 @@
 #include <QJsonObject>
 
 #include "visor.h"
-#include "service.h"
 #include "v_dbfile.h"
 
 namespace {
@@ -106,15 +105,16 @@ int main(int argc, char* argv[])
         // askOverwrite=0: only create the directory if missing. Passing a
         // nonzero value here wipes it first (fs::remove_all in service_new.cpp)
         // -- fatal for this tool since multiple keywords share one output dir.
-        vfMakeDirectory(nullptr, outDir.c_str(), 0);
-        std::string path = outDir + "/" + db->GetKeywd() + "." + name + "." + PDB_EXT;
+        makeDirectory(nullptr, outDir, 0);
+        std::string path = outDir + "/" + db->getKeywd() + "." + name + "." + PDB_EXT;
 
         // Attach a brand-new, empty .pdb/.ndx pair to the target database.
         // AddFileToList() creates both files on disk (TDataBase::Create())
         // and returns the file's slot ("fnum") for direct, non-interactive
         // use below -- this is what lets AddRecordToFile() skip the
         // GUI's "choose a database file" dialog entirely.
-        int fnum = db->AddFileToList(new TDBFile(path));
+        db->addNewFile(path);
+        auto fnum = db->filesCount()-1;
         std::cout << "Created " << path << " (and matching .ndx)" << std::endl;
 
         QFile jf(QString::fromStdString(jsonFile));
@@ -129,15 +129,14 @@ int main(int argc, char* argv[])
             mod->dyn_kill();
             mod->set_def(); // defaults, mirrors TCModule::RecListFromJSON()
             std::string key = db->fromJsonObjectNew(val.toObject());
-            int Rnum = db->Find(key.c_str());
-            if (Rnum >= 0)
-                db->Rep(Rnum);
+            if (db->existsRecord(key))
+                db->updateRecord(key);
             else
-                db->AddRecordToFile(key.c_str(), fnum);
+                db->addRecord(key, fnum);
             ++written;
         }
         mod->dyn_set();
-        db->Close();
+        db->closeDatabase();
 
         std::cout << "Wrote " << written << " record(s) from " << jsonFile
                    << " into " << path << std::endl;

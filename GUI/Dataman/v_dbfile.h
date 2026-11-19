@@ -601,6 +601,9 @@ protected:
     /// Current (last accessed) database file index
     size_t last_used_file=0;
 
+    /// Max getFKeywd
+    size_t max_keywd_len=0;
+
     void reset_open_list();
     void reset_index_list(TDBKeyMap &ind);
 };
