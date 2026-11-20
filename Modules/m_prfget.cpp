@@ -726,7 +726,7 @@ void TProfil::InitFN(const std::string& prfName, const std::string& prfTemplate)
             f_tmp += aFiles[ii];
             std::string f_new = Path;
             f_new += "/";
-            replace( aFiles[ii], prfTemplate, prfName);
+            replace( aFiles[ii], prfTemplate.c_str(), prfName.c_str());
             f_new += aFiles[ii];
 
             if ( !(std::string( aFiles[ii], 0, aFiles[ii].find(".")) ==  db->getKeywd() ))
