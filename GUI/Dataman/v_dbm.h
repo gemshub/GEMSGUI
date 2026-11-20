@@ -20,6 +20,7 @@
 #ifndef V_DBM_H_
 #define V_DBM_H_
 
+#include <map>
 #include <initializer_list>
 #include <ctime>
 #include "v_object.h"
@@ -972,23 +973,145 @@ protected:
     void ReplaceRecordwithQuestion(QWidget *window, const std::string& key, int &quest_reply);
 };
 
-// Data Base container : rt
-
-class DataBaseList:
-            public std::vector<std::shared_ptr<TDataBase>>
+/**
+ * @class DataBaseList
+ * @brief Container managing the collection of active database chains (commonly accessed as 'rt').
+ *
+ * Encapsulates a vector of shared pointers to TDataBase instances, providing direct indexed access,
+ * standard C++20 range-based iteration, and configuration file serialization.
+ */
+class DataBaseList
 {
 public:
-    DataBaseList():
-           std::vector<std::shared_ptr<TDataBase>>()
-    { }
+    using container_type = std::vector<std::shared_ptr<TDataBase>>;
+    using iterator = container_type::iterator;
+    using const_iterator = container_type::const_iterator;
 
-    ~DataBaseList();
+    /**
+     * @brief Default constructor initializing an empty database collection.
+     */
+    DataBaseList() = default;
 
+    /**
+     * @brief Virtual destructor.
+     */
+    virtual ~DataBaseList() = default;
+
+    /**
+     * @brief Provides read-only indexed access to a database chain (no bounds checking).
+     * @param index Zero-based index of the database chain (e.g., RT_SYSEQ, RT_PARAM).
+     * @return const std::shared_ptr<TDataBase>& Const reference to the database pointer.
+     */
+    const std::shared_ptr<TDataBase>& operator[](size_t index) const noexcept
+    {
+        return all_databases[index];
+    }
+
+    /**
+     * @brief Provides mutable indexed access to a database chain (no bounds checking).
+     * @param index Zero-based index of the database chain.
+     * @return std::shared_ptr<TDataBase>& Reference to the database pointer.
+     */
+    std::shared_ptr<TDataBase>& operator[](size_t index) noexcept
+    {
+        return all_databases[index];
+    }
+    /**
+     * @brief Appends a shared pointer to a database chain to the end of the container.
+     * @param db Const reference to the shared pointer to append.
+     */
+    void push_back(const std::shared_ptr<TDataBase>& db)
+    {
+        all_databases.push_back(db);
+    }
+
+    /**
+     * @brief Moves a shared pointer to a database chain to the end of the container.
+     * @param db Rvalue reference to the shared pointer to move (e.g., from std::make_shared).
+     */
+    void push_back(std::shared_ptr<TDataBase>&& db)
+    {
+        all_databases.push_back(std::move(db));
+    }
+
+    /**
+     * @brief Returns a mutable reference to the last database chain in the container.
+     * @return std::shared_ptr<TDataBase>& Reference to the last element.
+     */
+    std::shared_ptr<TDataBase>& back() noexcept
+    {
+        return all_databases.back();
+    }
+
+    /**
+     * @brief Returns a read-only reference to the last database chain in the container.
+     * @return const std::shared_ptr<TDataBase>& Const reference to the last element.
+     */
+    const std::shared_ptr<TDataBase>& back() const noexcept
+    {
+        return all_databases.back();
+    }
+
+    // =========================================================================
+    // --- Standard Iterators (enables range-based 'for' & std::ranges) ---
+    // =========================================================================
+
+    iterator begin() noexcept { return all_databases.begin(); }
+    iterator end() noexcept { return all_databases.end(); }
+
+    const_iterator begin() const noexcept { return all_databases.begin(); }
+    const_iterator end() const noexcept { return all_databases.end(); }
+
+    const_iterator cbegin() const noexcept { return all_databases.cbegin(); }
+    const_iterator cend() const noexcept { return all_databases.cend(); }
+
+    /**
+     * @brief Returns the total number of database chains registered in the container.
+     * @return size_t The exact count of TDataBase entries.
+     */
+    size_t size() const noexcept { return all_databases.size(); }
+
+    /**
+     * @brief Checks whether the database container is empty.
+     * @return true If no database chains are registered, false otherwise.
+     */
+    bool empty() const noexcept { return all_databases.empty(); }
+
+    /**
+     * @brief Removes all database chains from the container, releasing their shared pointers.
+     */
+    void clear() noexcept
+    {
+        all_databases.clear();
+    }
+
+
+    // =========================================================================
+    // --- Lifecycle & Configuration Serialization ---
+    // =========================================================================
+
+    /**
+     * @brief Initializes and populates the default set of system database chains.
+     */
     void Init();
-    void fromCFG( std::fstream& f );
-    void toCFG(std::fstream& f);
 
+    /**
+     * @brief Restores the database chains collection from an input configuration file stream.
+     * @param f Reference to the input configuration file stream.
+     */
+    void fromCFG(std::fstream& f);
+
+    /**
+     * @brief Serializes the current database chains collection into an output configuration file stream.
+     * @param f Reference to the output configuration file stream.
+     */
+    void toCFG(std::fstream& f) const;
+
+protected:
+    /// Underlying storage holding shared pointers to all active database chains
+    container_type all_databases;
 };
+
 
 extern DataBaseList rt;
 

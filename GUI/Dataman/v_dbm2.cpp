@@ -767,21 +767,21 @@ void DataBaseList::Init()
 {
     // RT_SDATA default
     unsigned char sdref_rkfrm[3] = { 20, 5, 7 };
-    push_back( std::make_shared<TDataBase>( RT_SDATA, "sdref", false, true,
+    all_databases.push_back( std::make_shared<TDataBase>( RT_SDATA, "sdref", false, true,
                                           o_sdauthr, 9, 3, 3, sdref_rkfrm ) );
     // RT_CONST default
     unsigned char const_rkfrm[2] = { 8, 24 };
-    push_back( std::make_shared<TDataBase>( RT_CONST, "const", false, true,
+    all_databases.push_back( std::make_shared<TDataBase>( RT_CONST, "const", false, true,
                                           o_constlab, 3, 1, 2, const_rkfrm ) );
 }
 
 // configuration to file
-void DataBaseList::toCFG(std::fstream& out_stream)
+void DataBaseList::toCFG(std::fstream& out_stream) const
 {
-    int nR = size();
+    int nR = all_databases.size();
     out_stream << nR << std::endl;
-    for(size_t ii=0; ii<size(); ++ii) {
-        at(ii)->toCFG(out_stream);
+    for(size_t ii=0; ii<all_databases.size(); ++ii) {
+        all_databases.at(ii)->toCFG(out_stream);
     }
 }
 
@@ -791,12 +791,10 @@ void DataBaseList::fromCFG(std::fstream& in_stream)
     int nDB;
     in_stream >> nDB;
     for(int ii=0; ii<nDB; ++ii) {
-        push_back(std::make_shared<TDataBase>(in_stream));
+        all_databases.push_back(std::make_shared<TDataBase>(in_stream));
     }
 }
 
-DataBaseList::~DataBaseList()
-{}
 
 DataBaseList rt;
 
