@@ -441,7 +441,7 @@ TPrintData::prnData( std::fstream& fout, int ind, PFormat& fmt, PData& dt )
                  fout << strbuf << " ";
                  break;
     case rkey_d: fmt.type = 's';
-                 sprintf( strbuf, format.c_str(), rt[nRT]->PackKey() );
+                 sprintf( strbuf, format.c_str(), rt[nRT]->PackKey().c_str() );
                  fout << strbuf << " ";
                  break;
     case date_d: fmt.type = 's';

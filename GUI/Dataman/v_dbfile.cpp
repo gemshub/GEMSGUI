@@ -807,7 +807,9 @@ size_t TDBFileList::open_new_file(int nRT1, const std::string &path, TDBKeyMap& 
 std::vector<int> TDBFileList::add_open_files(int nRT1, const std::vector<int>& nff, TDBKeyMap& ind)
 {
     auto files_to_open = nff;
-    files_to_open.insert(files_to_open.end(), opened_files.begin(), opened_files.end());
+    for(auto& nf: opened_files) {
+        files_to_open.push_back(static_cast<int>(nf));
+    }
     return open_files(nRT1, open_mode, files_to_open, ind);
 }
 

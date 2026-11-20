@@ -253,7 +253,11 @@ size_t TDataBase::indexOfName(const std::string &second_name)
 
 void TDataBase::rebuildsFiles(const std::vector<int>& indx)
 {
-    std::vector<int> old_sel(dbfiles_list.opened_files.begin(), dbfiles_list.opened_files.end());
+    std::vector<int> old_sel;
+    old_sel.reserve(dbfiles_list.opened_files.size());
+    std::ranges::transform(dbfiles_list.opened_files, std::back_inserter(old_sel), [](size_t idx) {
+        return static_cast<int>(idx);
+    });
     closeDatabase();
     for(auto file_ndx: indx) {
         try {

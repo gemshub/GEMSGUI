@@ -49,7 +49,7 @@ protected slots:
 public:
 
     KeyDialog(QWidget* win, size_t irt, const std::string& key = "*",
-              const std::string& caption = nullptr, bool filter=true);
+              const std::string& caption = "", bool filter=true);
     KeyDialog(QWidget* win, size_t irt, TCStringArray& sel,
               const std::string& key = "*", const std::string& caption = "");
 
