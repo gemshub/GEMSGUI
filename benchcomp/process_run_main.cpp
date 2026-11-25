@@ -13,6 +13,7 @@
 // GEMS values (G0, H0, S0, Cp0, V0) of every DComp and ReacDC record. PROCESS_RUN_TP="T;P,T;P" lists the points in
 // deg C and bar (default 25;1,50;1,100;1,200;200,25;1000). The key argument is not used.
 // PROCESS_RUN_EXPORT=<path>-dat.lst exports the system as GEMS3K files after it.
+// PROCESS_RUN_MODULE=list writes the keys of the SysEq (S) and Process (P) records of the project to <out.tsv>.
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
@@ -204,6 +205,18 @@ int main(int argc, char* argv[])
                 }
             }
             std::cout << "thermofun: wrote " << out << " and " << out << ".gems\n";
+            pVisor->CanClose();
+            return 0;
+        }
+        if (const char* mod = std::getenv("PROCESS_RUN_MODULE"); mod && std::string(mod) == "list") {
+            // writes the keys of the SysEq ("S") and Process ("P") records of the project to <out.tsv>, one per line
+            std::ofstream f(out);
+            if (!f) throw std::runtime_error("cannot write " + out);
+            TCStringArray skeys, pkeys; TCIntArray ns, np;
+            TSysEq::pm->db->GetKeyList("*:*:*:*:*:*:*:*:", skeys, ns);
+            TProcess::pm->db->GetKeyList("*:*:*:*:*:*:*:*:*:*:", pkeys, np);
+            for (const auto& k : skeys) f << "S\t" << k << "\n";
+            for (const auto& k : pkeys) f << "P\t" << k << "\n";
             pVisor->CanClose();
             return 0;
         }
