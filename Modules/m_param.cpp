@@ -1433,6 +1433,11 @@ double TProfil::ComputeEquilibriumState( /*long int& NumPrecLoops,*/ long int& N
 #endif
   //outMultiTxt( "Reaktoro_after.dump.txt"  );
 
+  // The stability index of each phase from this result. Without this, Falps keeps the value of the result
+  // before the calculation.
+  for( long int k = 0; k < multi_internal->GetPM()->FI; k++ )
+      multi_internal->GetPM()->Falps[k] = multi_internal->GetPM()->Falp[k];
+
   calcFinished = true;
   STat->setCalcFlag( true );
   // STat->CellChanged(); // SD 28/11/2011 to protect MessageToSave()
