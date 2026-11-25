@@ -116,6 +116,8 @@ contains(DEFINES, USE_GEMS3K_SOURCE) {
     # (or set the environment variable OPTIMA_PREFIX). EIGEN_INCLUDE overrides the Eigen location.
     # USE_OPTIMA_SOLVER changes the class layouts in the GEMS3K headers: rebuild everything.
     isEmpty(OPTIMA_PREFIX): OPTIMA_PREFIX = $$(OPTIMA_PREFIX)
+    # Default: the Optima install next to this repository, if it exists
+    isEmpty(OPTIMA_PREFIX):exists($$PWD/../optima/install-sys-jump/lib/libOptima.so): OPTIMA_PREFIX = $$PWD/../optima/install-sys-jump
     isEmpty(EIGEN_INCLUDE): EIGEN_INCLUDE = /usr/local/include/eigen3
     !isEmpty(OPTIMA_PREFIX) {
         message("Optima solver enabled: $$OPTIMA_PREFIX")
