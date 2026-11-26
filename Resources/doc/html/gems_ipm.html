@@ -1635,6 +1635,289 @@ investigating a difficult case.</p>
           <td style="vertical-align: top;">Rarely needs changing.</td>
           <td style="vertical-align: top;">Any small positive number.</td>
         </tr>
+        <tr>
+          <td style="vertical-align: top;"><small>not on the Controls page</small></td>
+          <td style="vertical-align: top;"><tt>pa_FailRescue</tt></td>
+          <td style="vertical-align: top;">2 (on)</td>
+          <td style="vertical-align: top;">A call can end with an error or a BAD result. Then GEMS3K tries it again in steps. The steps are: a warm restart from the previous result, compositions that are changed by a very small amount, a walk from the previous result, looser settings, and the other solver. GEMS3K finishes each successful step at the exact composition with the normal settings. With the value 2, you get the best attempt that keeps the element totals if no step succeeds. Its status is BAD. If there is a pH target or an Eh target, GEMS3K keeps only an attempt that meets the target.</td>
+          <td style="vertical-align: top;">Keep the value 2. This is important for transport codes, which need a result for each node. It costs more iterations only on calls that fail. A call that no step can save stops soon after 100000 iterations (<tt>pa_RescueBudget</tt>, in [Advanced settings](SOLVER-ADVANCED-SETTINGS.md)).</td>
+          <td style="vertical-align: top;">0 = off. 1 = steps 1 to 5 only.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><small>not on the Controls page</small></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaCallCap</tt></td>
+          <td style="vertical-align: top;">0 (no cap)</td>
+          <td style="vertical-align: top;">Sets the largest number of iterations for one calculation (AOP, SOP). After that number, the solver repeats the calculation with amounts that are changed by a very small amount.</td>
+          <td style="vertical-align: top;">Batch runs where a calculation sometimes runs for a very long time.</td>
+          <td style="vertical-align: top;">-1 = chosen from the size of the system. A positive number = that number of iterations.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><small>not on the Controls page</small></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaDryOut</tt></td>
+          <td style="vertical-align: top;">0 (off)</td>
+          <td style="vertical-align: top;">The water can run out during a calculation. Then the solver takes the water phase out and solves the solids alone. It compares this result with a solve that keeps the water. It keeps the result with the lower energy. If the dry solve fails, the calculation continues with the water back. The solver does not use this if an element can only be in the water. It needs <tt>pa_OptimaStallWindow</tt> to be on.</td>
+          <td style="vertical-align: top;">Use 1 for systems where the water is used up by design, for example cement hydration with little water. It is off by default. If the water only becomes low during a calculation, the dry result can be wrong.</td>
+          <td style="vertical-align: top;">0 = off. 1 = on.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><small>not on the Controls page</small></td>
+          <td style="vertical-align: top;"><tt>pa_OptimaRedoxFree</tt></td>
+          <td style="vertical-align: top;">1 (write to the log)</td>
+          <td style="vertical-align: top;">Checks before the calculation if the bulk fixes the redox level. This is the case if each element has one oxidation state and no spare oxidant or reductant exists. If the bulk does not fix the level, the solver writes this in the log.</td>
+          <td style="vertical-align: top;">Systems with no redox buffer. In these systems, the input does not fix Eh and the species that depend on it.</td>
+          <td style="vertical-align: top;">0 = off. 2 = also aim the calculation at pe 4 when you give no pH target or Eh target.</td>
+        </tr>
+      </tbody>
+    </table>
+
+<h4><a name="SOLVER_EXPERT"></a>Expert settings</h4>
+<p>These settings are for tests of GEMS3K. Do not change them. Use the default value.
+Each setting switches a correctness fix or a speed tuning on or off, or sets an internal limit.
+GEM-Selektor does not show them on the Controls page. A project file keeps a setting only if its value is not the default.
+The full list, with the settings that have no effect, is in the GEMS3K
+<a href="https://github.com/gemshub/GEMS3K/blob/develop_optima/Docs/SOLVER-ADVANCED-SETTINGS.md">advanced settings</a>.</p>
+    <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style="vertical-align: top;"><b>Setting</b></td>
+          <td style="vertical-align: top;"><b>Default</b></td>
+          <td style="vertical-align: top;"><b>What it does</b></td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFastRises</tt></td>
+          <td style="vertical-align: top;">10 (on)</td>
+          <td style="vertical-align: top;">The quick first try of a cold-start calculation stops after this number of steps where the energy goes up by more than 1 %. The full calculation then runs.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFastCollapse</tt></td>
+          <td style="vertical-align: top;">1000 (on)</td>
+          <td style="vertical-align: top;">The quick first try stops at once when its energy grows to more than this number of times its start value.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFrozenCut</tt></td>
+          <td style="vertical-align: top;">20 (on)</td>
+          <td style="vertical-align: top;">Stops a calculation when its energy and error do not change at all for this number of iterations. The finishing step and the new tries then take over.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaTailStop</tt></td>
+          <td style="vertical-align: top;">100 (on)</td>
+          <td style="vertical-align: top;">Stops a calculation when its energy does not change for this number of iterations and the remaining error is only on trace amounts. The solver checks the stop point for phase stability. If the check passes, the solver takes the point as the result.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaTailStopWarm</tt></td>
+          <td style="vertical-align: top;">10 (on)</td>
+          <td style="vertical-align: top;">The same, for a warm calculation (SOP, SHP).</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaTailDryOnly</tt></td>
+          <td style="vertical-align: top;">2 (on)</td>
+          <td style="vertical-align: top;">Sets where the tail stop acts.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaWaterKeep</tt></td>
+          <td style="vertical-align: top;">2 (on)</td>
+          <td style="vertical-align: top;">The value 1: the solver keeps a converged result when the new try with more water fails.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaSnapLeaving</tt></td>
+          <td style="vertical-align: top;">2 (on)</td>
+          <td style="vertical-align: top;">In a warm restart, a species that goes to zero can limit the step many times in a row. After this number of steps, the solver puts the species on its floor. The species then does not become smaller a little at a time.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFastFirst</tt></td>
+          <td style="vertical-align: top;">60 (on)</td>
+          <td style="vertical-align: top;">A cold-start calculation (AOP) first tries a quick solve that takes full steps. If the quick solve does not end well, the normal calculation runs from the same start.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFastFrozen</tt></td>
+          <td style="vertical-align: top;">3 (on)</td>
+          <td style="vertical-align: top;">The quick first try stops when this number of steps in a row change almost nothing.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFastDiverge</tt></td>
+          <td style="vertical-align: top;">10 (on)</td>
+          <td style="vertical-align: top;">The quick first try stops when its energy jumps far above the start and its error does not improve by this factor.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaColdLevel</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">If the reduced first solve is not used, a cold-start calculation starts from a simple energy-minimising estimate. Two copies of one solid solution start at different compositions.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaLevelStart</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">For systems with only solids and other mixed condensed phases, a cold-start calculation first finds which mixed phases form and what their compositions are. It then starts from that result.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaPreSolveSeed</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The first pass of the reduced first solve starts from the simple energy-minimising estimate. If a pass needs more than 300 steps, the solver drops the reduced first solve for that calculation.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaEmptyPreSolveSkip</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The reduced first solve can find no usable set of species in a calculation. Then the new tries of that calculation do not use it.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaCapNudges</tt></td>
+          <td style="vertical-align: top;">3 (used only with <tt>pa_OptimaCallCap</tt>)</td>
+          <td style="vertical-align: top;">Sets how many times the solver repeats a calculation that hit its cap. Each repeat changes the amounts by a very small amount.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFinishFirst</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">After a stuck calculation fails, the solver first runs the finishing step on the point where the calculation stopped. It keeps that result if no phase tends to form.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaCollapseCheck</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">When the solver checks a result, it judges a phase that disappeared by its pure species. A phase that must come back is then not accepted as correctly absent. A pure solid below the presence limit (<tt>pa_DS</tt>) is judged by its chemical potential. A water phase that has almost vanished is judged as absent.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaTpdVeto</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The direct check that accepts a result that is not fully converged (<tt>pa_OptimaTpdAccept</tt>) cannot overrule the phase stability check. This is for a mixed phase that the direct check cannot test, for example a water phase that disappeared.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaTwinReadmit</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The solver can switch off a mixed phase because a second copy of it took over. After the calculation, the solver tries that phase again if the phase stability check says that it must form.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaTwinLabel</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">Two copies of one solid solution can be present at two different compositions. After an Optima calculation, each composition goes into the copy whose major end-members (class M) it holds most. This is done only when the two copies have the same species, standard energies, limits and mixing parameters. G does not change. 0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFloorCurvature</tt></td>
+          <td style="vertical-align: top;">3 (on)</td>
+          <td style="vertical-align: top;">Uses the exact curvature of the logarithm term for each species in a mixed phase. The numerical estimate is too low for very small amounts.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaEmptySolvent</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">If the water in a cold-start calculation is at or below its minimum amount, the solver adds water. This is the case when the dissolved amounts are larger than the water.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaDryRetry</tt></td>
+          <td style="vertical-align: top;">0 (off)</td>
+          <td style="vertical-align: top;">A calculation can end with almost no liquid water while the bulk can form much more. Then the solver solves again from a start that first puts hydrogen and oxygen into water.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFastAcceptCut</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The quick first try (<tt>pa_OptimaFastFirst</tt>) can use all its iterations and still end OK.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaLevelFinish</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The leveled start of a cold-start calculation can hold mixed phases. Then the finishing step first runs on that start.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFinishStall</tt></td>
+          <td style="vertical-align: top;">15 (on)</td>
+          <td style="vertical-align: top;">The finishing step stops after this number of steps without progress.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaLSWarmTrials</tt></td>
+          <td style="vertical-align: top;">5 (on)</td>
+          <td style="vertical-align: top;">On a warm calculation (SOP, SHP), the line search tries at most this number of step lengths.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaPartialPivLU</tt></td>
+          <td style="vertical-align: top;">100 (on)</td>
+          <td style="vertical-align: top;">Optima uses a faster method for its linear equations when there are at least this number of equations.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaFDPureSkip</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The solver sets the curvature of a pure phase to exactly zero. It does not do an activity calculation.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaTraceRespread</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">After the calculation, an element that only the floor amounts of its species hold gets its real amount back.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_TpdStrongBasins</tt></td>
+          <td style="vertical-align: top;">4 (on)</td>
+          <td style="vertical-align: top;">Both solvers: the thorough check of whether a mixed phase can form tries each start composition one time.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_IpmNoProgress</tt></td>
+          <td style="vertical-align: top;">500 (on)</td>
+          <td style="vertical-align: top;">Needs a build with Optima. The GEMS3K IPM solver stops if the energy does not improve for this number of iterations.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_IpmLevelStart</tt></td>
+          <td style="vertical-align: top;">2 (on)</td>
+          <td style="vertical-align: top;">A cold-start calculation (AIA) on a system without aqueous, gas or sorption phases starts from the leveled solution. This is a linear calculation with the mixed phases at their best compositions.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_IpmQrSortPivot</tt></td>
+          <td style="vertical-align: top;">100 (on)</td>
+          <td style="vertical-align: top;">A step with at least this number of active species uses a faster and more accurate method for its equations.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_RescueWalkSteps</tt></td>
+          <td style="vertical-align: top;">8</td>
+          <td style="vertical-align: top;">Sets the number of equal steps in the walk from the previous result to the new composition.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_RescueBudget</tt></td>
+          <td style="vertical-align: top;">100000 (on)</td>
+          <td style="vertical-align: top;">The rescue (<tt>pa_FailRescue</tt>) skips steps 1 to 4 after the call has used this number of iterations. The count includes the first attempt and both solvers. Step 5, the other solver, still runs one time. 0 = no limit.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaStallNetFactor</tt></td>
+          <td style="vertical-align: top;">5 (on)</td>
+          <td style="vertical-align: top;">After a stall, Optima solves one more time with the stall check off. This last solve gets at most this number times the iterations of the solve that stalled, and at least 2000. 0 = the normal limit.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_IpmTwinSplit</tt></td>
+          <td style="vertical-align: top;">1e-6 (on)</td>
+          <td style="vertical-align: top;">After a warm GEMS3K IPM calculation, two copies of one solid solution can keep one composition where they should split into two phases. The solver then tests that composition. If a split is lower by more than this value (RT per mole), the calculation is solved again from a cold start. 0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_PhaseSmoothing</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">The GEMS3K IPM solver damps the change of the non-ideal corrections of a solid or melt solution between iterations by 1/(1 + sum of x·|ln γ|). It damps a species only when its correction changes direction; a steady change is not damped. The aqueous, sorption and polyelectrolyte phases keep the <tt>pa_AG</tt> / <tt>pa_DGC</tt> rule. 0 = the <tt>pa_AG</tt> / <tt>pa_DGC</tt> rule for every phase.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_IpmBalanceStep</tt></td>
+          <td style="vertical-align: top;">2</td>
+          <td style="vertical-align: top;">After each step, the GEMS3K IPM solver adds a small correction that restores the mass balance. 2 = the correction is solved on its own, with each element scaled to the same size; a species below 1e-10 of its phase gets no correction, except when only such species hold an element. A pure phase, or a phase that holds below 1e-10 of each of its elements, gets no correction while the step makes it smaller. If nothing in the system fixes the redox state and each element has one valence in all species (no H2 or O2), the hydrogen balance follows from the oxygen and charge balances. 3 = as 2, but only after a step that leaves the balance outside its tolerance. 1 = the correction uses the equations of the step. 0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_PsscCleanupBudget</tt></td>
+          <td style="vertical-align: top;">3</td>
+          <td style="vertical-align: top;">Phase selection can raise a species of a present mixed phase that was set to zero. 3 = as 2, and a present pure phase that stays oversaturated and is limited by a trace element gets that element from its dissolved species, up to saturation. 2 = all raises of one pass together use at most the amount of each element that the system has, and a species is not raised when its estimated mole fraction is above 1. 1 = each raise can use the full amount of each element. 0 = a fixed raise.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_DcMinMolecule</tt></td>
+          <td style="vertical-align: top;">0 (off)</td>
+          <td style="vertical-align: top;">On a cold start (AIA), the GEMS3K IPM solver removes a species only when it is less than one molecule in real moles. Without this setting, the limit is <tt>pa_DcMin</tt>. Use it together with <tt>pa_IpmBalanceStep</tt>. 0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_IpmJumpAhead</tt></td>
+          <td style="vertical-align: top;">0 (off)</td>
+          <td style="vertical-align: top;">Two successive steps of the GEMS3K IPM solver can point in the same direction and become shorter at a steady ratio. Then the solver tries a longer step in that direction. It keeps the longer step only if the energy becomes lower and the mass balance does not become worse. 1 = on.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_OptimaJumpAhead</tt></td>
+          <td style="vertical-align: top;">1 (on)</td>
+          <td style="vertical-align: top;">Two successive steps of the Optima solver can point in the same direction and become shorter at a steady ratio. Then the solver tries one longer step. It does not try the step if an amount would go past its limit. It keeps the step only if the error becomes smaller. 0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_TracePolish</tt></td>
+          <td style="vertical-align: top;">1e-5 (on)</td>
+          <td style="vertical-align: top;">After the GEMS3K IPM solver stops, the solver calculates each trace element again. A trace element has less than this fraction of the total amount in the system. The potentials of all other elements stay fixed. A pure solid of the element can limit its potential at saturation. The solver keeps the result only if the energy does not increase. The mass balance must also stay within its tolerance, or not become worse than before. A dissolved species that the input switches off stays at zero. Each phase must stay dilute in the trace species. 0 = off.</td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;"><tt>pa_NativeOptimaFinish</tt></td>
+          <td style="vertical-align: top;">500 (on)</td>
+          <td style="vertical-align: top;">Needs a build with Optima. A solid can be left out or be in a trace amount and still tend to form. Then Optima finishes the result. The solver keeps the new result only if it is better. The calculation can stop at its iteration limit, or it can fail to solve its equations. Then Optima finishes it from the point where it stopped. A dissolved species can also have an activity that differs from its molality times its activity coefficient by more than 0.01 in log10. Then Optima also finishes the result.</td>
+        </tr>
       </tbody>
     </table>
 
@@ -1651,8 +1934,10 @@ investigating a difficult case.</p>
   <li>Solid solutions near a miscibility gap and duplicated twin phases cost many more iterations; the twin labels can swap between modes. The energy is the same.</li>
 </ul>
 <p>The steps each mode runs, and the retries made before a failure is reported,
-are described in the GEMS3K documents "SOLVER-OPTIONS-GUIDE" and "SOLVER-PATH-GRAPH" that
-come with the GEMS3K source.</p>
+are described in the GEMS3K documents
+<a href="https://github.com/gemshub/GEMS3K/blob/develop_optima/Docs/SOLVER-OPTIONS-GUIDE.md">SOLVER-OPTIONS-GUIDE</a> and
+<a href="https://github.com/gemshub/GEMS3K/blob/develop_optima/Docs/SOLVER-PATH-GRAPH.md">SOLVER-PATH-GRAPH</a>
+that come with the GEMS3K source.</p>
 <br>
 <hr size="2" width="100%">
 <h2><a name="GEMIPM3_ERRORS"></a>5. Warnings and Error Messages</h2>
